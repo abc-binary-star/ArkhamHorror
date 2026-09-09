@@ -89,24 +89,10 @@ instance HasChaosTokenValue HarmsWay where
 
 instance RunMessage HarmsWay where
   runMessage msg s@(HarmsWay attrs) = runQueueT $ scenarioI18n "harmsWay" $ case msg of
-    PreScenarioSetup -> do
-      scope "intro" do
-        storyWithChooseOneM (h "title" >> p "body") do
-          labeled "faster" $ addChaosToken Cultist
-          labeled "caution" $ addChaosToken Tablet
-      -- Opening hands and mulligans finish before Setup. Reserve these cards
-      -- now so AdditionalStartingCards can actually add them to the hand.
-      owners <- catMaybes <$> sequence [getAmaltheaWeaverOwner, getDeCultusBestiaeOwner]
-      scope "startingCards" do
-        for_ owners \(iid, def) -> do
-          deck <- field InvestigatorDeck iid
-          for_ (find ((== def) . toCardDef) (unDeck deck)) \card -> do
-            focusCards [card] do
-              chooseOneM iid do
-                labeled "take" do
-                  push $ ObtainCard (toCardId card)
-                  setupModifier ScenarioSource iid (AdditionalStartingCards [toCard card])
-                labeled "leave" nothing
+    PreScenarioSetup -> scope "intro" do
+      storyWithChooseOneM (h "title" >> p "body") do
+        labeled "faster" $ addChaosToken Cultist
+        labeled "caution" $ addChaosToken Tablet
       pure s
     Setup -> runScenarioSetup HarmsWay attrs do
       gather Set.HarmsWay
@@ -160,6 +146,16 @@ instance RunMessage HarmsWay where
 
       setAside [Locations.campOutskirtsGuardedClosely, Locations.campOutskirtsQuietForNow]
 
+      -- "The investigators with Amalthea Weaver and De Cultus Bestiae in their
+      -- decks may begin the game with those cards in their opening hands as
+      -- additional cards."
+      owners <- catMaybes <$> sequence [getAmaltheaWeaverOwner, getDeCultusBestiaeOwner]
+      for_ owners \(iid, def) -> do
+        deck <- field InvestigatorDeck iid
+        for_ (find ((== def) . toCardDef) (unDeck deck)) \card -> do
+          push $ ObtainCard (toCardId card)
+          setupModifier ScenarioSource iid (AdditionalStartingCards [toCard card])
+
       setAgendaDeck [Agendas.theCircusSleeps, Agendas.treadingOnEggshells, Agendas.sleepWhenYoureDead]
       setActDeck [act1, Acts.overdueDeparture]
     ResolveChaosToken _ Cultist iid -> do
@@ -185,9 +181,8 @@ instance RunMessage HarmsWay where
           resolution "resolution1"
           -- "Remove 2 copies of Kidnapped Citizen from the victory display, if
           -- possible", so they neither count for X nor pay out their Victory 1.
-          let (freed, stillCaptive) = splitAt 2 citizens
-          for_ freed removeCardFromGame
-          recordCount GroupsOfCitizensWereSavedFromTheCircus (length stillCaptive)
+          for_ (take 2 $ mapMaybe (preview _EncounterCard) citizens) (push . AddToEncounterDiscard)
+          recordCount GroupsOfCitizensWereSavedFromTheCircus $ max 0 (length citizens - 2)
           push R3
         Resolution 2 -> do
           resolution "resolution2"
