@@ -203,10 +203,11 @@ async function takeSeat() {
   justify-content: space-between;
   gap: 10px;
   padding: 16px;
-  color: #bebebe;
-  border: 2px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  border: var(--edge-width) solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  background: var(--surface-panel);
+  box-shadow: var(--shadow-3);
 
   @media (max-width: 800px) {
     flex-direction: column;
@@ -227,15 +228,15 @@ async function takeSeat() {
 .scenario-info {
   h3 {
     margin: 0 0 4px;
-    color: rgba(255, 255, 255, 0.55);
+    color: var(--text-dim);
     font-size: 0.8em;
     text-transform: uppercase;
     letter-spacing: 0.08em;
   }
   h2 {
     margin: 0;
-    color: white;
-    font-family: "Teutonic", sans-serif;
+    color: var(--title);
+    font-family: Arno, "Noto Serif SC", serif;
     font-size: 1.8em;
   }
 }
@@ -261,7 +262,7 @@ async function takeSeat() {
   font-size: 0.78em;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-dim);
 }
 
 .invite-link {
@@ -271,9 +272,9 @@ async function takeSeat() {
   input {
     flex: 1;
     min-width: 0;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.7);
+    background: var(--surface-raised);
+    border: var(--edge-width) solid var(--edge-dim);
+    color: var(--text);
     padding: 6px 10px;
     border-radius: 6px;
     font-size: 0.8em;
@@ -282,20 +283,21 @@ async function takeSeat() {
 
   button {
     padding: 6px 12px;
-    background: rgba(0, 0, 0, 0.35);
-    border: 0;
-    color: white;
+    background: var(--button-2);
+    border: var(--edge-width) solid var(--edge-dim);
+    color: var(--button-2-text);
     border-radius: 6px;
     cursor: pointer;
     font-size: 0.82em;
     white-space: nowrap;
-    &:hover { background: rgba(0, 0, 0, 0.55); }
+    &:hover { background: var(--button-2-highlight); }
   }
 }
 
 .investigators {
   padding: 10px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   display: flex;
   gap: 10px;
   flex-direction: column;
@@ -303,9 +305,9 @@ async function takeSeat() {
 }
 
 .claim-btn {
-  background: rgba(110, 134, 64, 0.85);
-  border: 0;
-  color: white;
+  background: var(--button-1);
+  border: var(--edge-width) solid var(--edge-on-accent);
+  color: var(--button-1-text);
   padding: 7px 18px;
   border-radius: 6px;
   cursor: pointer;
@@ -314,7 +316,7 @@ async function takeSeat() {
   white-space: nowrap;
   transition: background 0.15s;
 
-  &:hover:not(:disabled) { background: rgba(110, 134, 64, 1); }
+  &:hover:not(:disabled) { background: var(--button-1-highlight); }
   &:disabled { opacity: 0.45; cursor: not-allowed; }
 }
 
@@ -329,15 +331,15 @@ async function takeSeat() {
   white-space: nowrap;
 
   &.joined {
-    background: rgba(110, 134, 64, 0.2);
-    color: rgba(168, 208, 128, 0.9);
-    border: 1px solid rgba(110, 134, 64, 0.35);
+    background: var(--status-success-bg);
+    color: var(--status-success-text);
+    border: var(--edge-width) solid var(--status-success-border);
   }
 
   &.open {
-    background: rgba(255, 255, 255, 0.06);
-    color: rgba(255, 255, 255, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--surface-paper);
+    color: var(--text-dim);
+    border: var(--edge-width) solid var(--edge-dim);
   }
 }
 
@@ -347,29 +349,29 @@ async function takeSeat() {
 }
 
 .continue-btn {
-  border: 0;
-  background: rgba(0, 0, 0, 0.3);
-  color: white;
+  border: var(--edge-width) solid var(--edge-dim);
+  background: var(--button-2);
+  color: var(--button-2-text);
   font-size: 1.2em;
   padding: 10px 20px;
   border-radius: 8px;
   width: 100%;
   cursor: pointer;
 
-  &:hover { background: rgba(0, 0, 0, 0.5); }
+  &:hover { background: var(--button-2-highlight); }
 }
 
 .take-seat-btn {
-  background: rgba(110, 134, 64, 0.9);
+  background: var(--button-1);
   font-weight: 600;
 
-  &:hover:not(:disabled) { background: rgba(110, 134, 64, 1); }
+  &:hover:not(:disabled) { background: var(--button-1-highlight); }
   &:disabled { opacity: 0.5; cursor: not-allowed; }
 }
 
 .player-count {
   text-align: center;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--text-dim);
   font-size: 0.9em;
   padding: 10px;
 }

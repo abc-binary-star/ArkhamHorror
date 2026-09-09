@@ -190,8 +190,10 @@ onUnmounted(() => {
 .abilities {
   position: fixed;
   padding: min(3px, 1vw);
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: calc(10px - min(3px, 1vw));
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-float);
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -239,8 +241,8 @@ onUnmounted(() => {
 .abilities.anchored.right { position-area: right span-bottom; margin-left: 8px; }
 
 .play-card-button {
-  border: 0;
-  color: #fff;
+  border: var(--edge-width) solid var(--edge-dim);
+  color: var(--text);
   cursor: pointer;
   border-radius: 4px;
   background-color: var(--button);
@@ -261,6 +263,6 @@ onUnmounted(() => {
   justify-content: center;
   align-self: stretch;
   padding: 3px 6px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--surface-raised);
 }
 </style>

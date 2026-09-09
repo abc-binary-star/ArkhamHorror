@@ -82,17 +82,17 @@ const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1)
 }
 
 button {
-  border: 0;
+  border: var(--edge-width) solid var(--edge-dim);
   margin: 0 10px;
   padding: 10px;
   text-transform: uppercase;
   background-color: var(--button-2);
   font-weight: bold;
   border-radius: 0.6em;
-  color: #EEE;
+  color: var(--button-2-text);
   font: Arial, sans-serif;
   &:hover {
-    background-color: #311b3e;
+    background-color: var(--button-2-highlight);
   }
   @media (max-width: 800px) and (orientation: portrait) {
     font-size: smaller;
@@ -101,8 +101,9 @@ button {
 }
 
 .pick-supplies-container {
-  background: #DCD6D0;
-  box-shadow: inset 0 0 170px rgba(0,0,0,0.5), 1px 1px 3px rgba(0,0,0,0.6);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
+  box-shadow: var(--shadow-3);
   width: calc(100% - 20px);
   margin: 0 auto;
   gap: 10px;
@@ -114,8 +115,9 @@ button {
 }
 
 .pick-supplies {
-  background: #DCD6D0;
-  box-shadow: inset 0 0 170px rgba(0,0,0,0.5), 1px 1px 3px rgba(0,0,0,0.6);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
+  box-shadow: var(--shadow-3);
   width: calc(100% - 20px);
   margin: 0 auto;
   border-radius: 10px;
@@ -137,18 +139,18 @@ button {
 .done-button {
   margin: 0;
   width: 100%;
-  border: 0;
+  border: var(--edge-width) solid var(--edge-dim);
   text-align: center;
   padding: 10px;
   text-transform: uppercase;
   border-radius: 0;
   background-color: var(--button-2);
   font-weight: bold;
-  color: #EEE;
+  color: var(--button-2-text);
   font: Arial, sans-serif;
   margin-top: 20px;
   &:hover {
-    background-color: #311b3e;
+    background-color: var(--button-2-highlight);
   }
 
   i {
@@ -170,7 +172,8 @@ ul {
 
 ul li {
   text-transform: uppercase;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   padding: 10px;
   margin: 0 10px;
   margin-bottom: 5px;
@@ -190,9 +193,10 @@ ul li {
   justify-content: flex-start;
   text-align: left;
   padding: 10px;
-  background: #DCD6D0;
-  border-radius: 10px;
-  box-shadow: inset 0 0 170px rgba(0, 0, 0, 0.5), 1px 1px 3px rgba(0, 0, 0, 0.6);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
 
   :deep(p) {
     font-size: 1.2em !important;
@@ -209,7 +213,7 @@ ul li {
 
   img {
     border-radius: 10px;
-    box-shadow: inset 0 0 170px rgba(0, 0, 0, 0.5), 1px 1px 3px rgba(0, 0, 0, 0.6);
+    box-shadow: var(--shadow-2);
   }
 }
 

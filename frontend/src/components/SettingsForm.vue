@@ -8,6 +8,7 @@ import { useSettings } from '@/stores/settings'
 import { checkImageExists } from '@/arkham/helpers'
 import { isDevBuild } from '@/arkham/displayRules'
 import { loadLocaleMessages, normalizeLocale } from '@/locales/messages'
+import { useToast } from 'vue-toastification'
 
 const props = defineProps<{
   user: User
@@ -19,7 +20,8 @@ const store = useDbCardStore()
 const settings = useSettings()
 const { epicMultiplayerStored, customCardsEnabled } = storeToRefs(settings)
 const dev = isDevBuild()
-const { availableLocales, locale, setLocaleMessage } = useI18n({ useScope: 'global' })
+const { t, availableLocales, locale, setLocaleMessage } = useI18n({ useScope: 'global' })
+const toast = useToast()
 const language = ref(localStorage.getItem('language') || locale.value)
 const beta = ref(props.user.beta ? "On" : "Off")
 const showDeleteConfirm = ref(false)
@@ -42,16 +44,27 @@ const updateLanguage = async (a: Event) => {
   const selectedLanguage = target.value
   const uiLocale = normalizeLocale(selectedLanguage)
 
-  if (!availableLocales.includes(uiLocale)) {
-    const messages = await loadLocaleMessages(uiLocale)
-    setLocaleMessage(messages.locale, messages.messages)
-  }
+  try {
+    if (!availableLocales.includes(uiLocale)) {
+      const messages = await loadLocaleMessages(uiLocale)
+      setLocaleMessage(messages.locale, messages.messages)
+    }
 
-  language.value = selectedLanguage
-  locale.value = uiLocale
-  localStorage.setItem('language', selectedLanguage)
-  await store.initDbCards()
-  await checkImageExists()
+    language.value = selectedLanguage
+    locale.value = uiLocale
+    localStorage.setItem('language', selectedLanguage)
+
+    // Card names come from a separate per-language database. If it does not
+    // arrive, the UI is in the new language while every card name stays in the
+    // old one -- say so rather than leaving the mismatch unexplained.
+    const cardsLoaded = await store.initDbCards()
+    if (!cardsLoaded) toast.error(t('loadState.cardDataFailed'))
+
+    await checkImageExists()
+  } catch (err) {
+    console.error('[settings] language switch failed', err)
+    toast.error(t('loadState.cardDataFailed'))
+  }
 }
 </script>
 
@@ -170,13 +183,22 @@ p {
 }
 
 select {
-  background-color: var(--background-dark);
-  color: var(--title);
-  border: 1px solid var(--box-border);
-  border-radius: 4px;
-  padding: 6px 10px;
+  background-color: var(--input-background);
+  color: var(--text);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-md);
+  padding: 8px 34px 8px 10px;
   font-size: 1em;
   width: fit-content;
+  min-height: 40px;
+
+  &:hover { border-color: var(--edge); }
+  &:focus { border-color: var(--spooky-green); box-shadow: var(--shadow-2); }
+
+  option {
+    background: var(--surface-raised);
+    color: var(--text);
+  }
 }
 
 input[type="radio"] {

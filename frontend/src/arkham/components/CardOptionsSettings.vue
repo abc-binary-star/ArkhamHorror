@@ -179,8 +179,8 @@ const { groups, label, isOn, valueOf, valuesOf, valueLabel, inputId, set } =
   max-height: 190px;
   overflow-y: auto;
   overscroll-behavior: contain;
-  background: var(--background-dark);
-  border: 1px solid var(--box-border);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 5px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }
@@ -212,7 +212,7 @@ const { groups, label, isOn, valueOf, valuesOf, valueLabel, inputId, set } =
 
 .card-options-suggestions button.highlighted {
   background: var(--button-1);
-  color: var(--text);
+  color: var(--button-1-text);
 }
 
 .card-options-selection {

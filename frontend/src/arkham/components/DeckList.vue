@@ -461,9 +461,10 @@ watch(deckRef, (el) => {
 .deck {
   display: flex;
   padding: 12px 20px;
-  color: #f0f0f0;
-  background: #1a1a1a;
-  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.45);
+  color: var(--text);
+  background: var(--surface-panel);
+  border-bottom: var(--edge-width) solid var(--border-panel);
+  box-shadow: var(--shadow-2);
   position: sticky;
   position: -webkit-sticky;
   top: -1px;
@@ -480,8 +481,8 @@ watch(deckRef, (el) => {
 .deck--view-options {
   display: flex;
   gap: 2px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 6px;
   padding: 2px;
   width: fit-content;
@@ -491,12 +492,12 @@ watch(deckRef, (el) => {
     border: none;
     border-radius: 4px;
     padding: 5px 9px;
-    color: #777;
+    color: var(--text-dim);
     cursor: pointer;
     transition: background 0.12s, color 0.12s;
 
-    &:hover { color: #ccc; }
-    &.pressed { background: rgba(255,255,255,0.12); color: #eee; }
+    &:hover { color: var(--spooky-green); }
+    &.pressed { background: var(--button-1); color: var(--button-1-text); }
   }
 }
 
@@ -507,12 +508,12 @@ watch(deckRef, (el) => {
 }
 
 .action-btn {
-  color: #8a93a8;
+  color: var(--spooky-green);
   font-size: 0.9em;
   text-decoration: none;
   transition: color 0.15s;
 
-  &:hover { color: #fff; }
+  &:hover { color: var(--highlight); }
 }
 
 /* ── Card table ──────────────────────────────────────────── */
@@ -537,9 +538,9 @@ watch(deckRef, (el) => {
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: #666;
-      background: var(--box-background);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      color: var(--text-dim);
+      background: var(--surface-raised);
+      border-bottom: var(--edge-width) solid var(--edge-dim);
 
       &:first-child { padding-left: 20px; }
     }
@@ -547,10 +548,10 @@ watch(deckRef, (el) => {
 
   tbody tr {
     color: var(--title);
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+    border-bottom: var(--edge-width) solid var(--edge-faint);
     transition: background 0.1s;
 
-    &:hover { background: rgba(255,255,255,0.04); }
+    &:hover { background: color-mix(in srgb, var(--surface-raised) 70%, var(--spooky-green) 30%); }
 
     td {
       padding: 6px 10px;
@@ -572,9 +573,9 @@ watch(deckRef, (el) => {
   min-width: 30px;
   height: 20px;
   padding: 0 6px;
-  color: #cfcfcf;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: var(--text);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 6px;
   font-size: 0.68rem;
   font-weight: 800;

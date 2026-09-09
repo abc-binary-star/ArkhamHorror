@@ -1,14 +1,22 @@
 html {
-  color-scheme: dark;
+  color-scheme: light;
   interpolate-size: allow-keywords;
 }
 
 body {
   margin: 0;
   padding: 0;
-  color: var(--neutral-extra-dark);
+  color: var(--text);
   min-height: 100vh;
-  background: var(--background);
+  /* Warm archive ground. Night atmosphere belongs to artwork and chrome,
+     not to every pixel behind the content. */
+  background-color: var(--background);
+  background-image:
+    radial-gradient(var(--texture-dot) 0.8px, transparent 0.8px),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 42%);
+  background-size: var(--texture-grid) var(--texture-grid), 100% 100%;
+  background-repeat: repeat, no-repeat;
+  background-attachment: fixed;
   font-size: min(16px, 2vw);
   @media (max-width: 800px) and (orientation: portrait) {
     font-size: initial;
@@ -26,31 +34,160 @@ body {
   flex-direction: column;
 }
 
+::selection {
+  background: rgba(47, 111, 120, 0.22);
+  color: var(--text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring, #225f68);
+  outline-offset: 2px;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────
+   Controls are physical paper/metal objects, with a small contact shadow and
+   a clear border instead of the previous hard sticker shadow. */
 button {
-  padding: 0px 5px;
-  font-family: Arial;
-  font-size: min(12px, 2vw);
-  transition: transform 80ms ease;
+  min-height: var(--control-height);
+  padding: 8px 12px;
+  font-size: min(13px, 2vw);
+  font-weight: var(--font-bold);
+  color: var(--button-text);
+  background-color: var(--button);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.03)),
+    url('/assets/veiled-harbour/C02-象牙档案纸微纹理.jpg');
+  background-size: 100% 100%, 256px 256px;
+  background-repeat: no-repeat, repeat;
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--control-radius);
+  box-shadow: var(--shadow-1);
+  cursor: pointer;
+  transition: transform 80ms ease, background-color 120ms ease, border-color 120ms ease, box-shadow 80ms ease, filter 120ms ease;
   i { display: contents; font-style: italic; }
 }
 
-/* The press shrinks the button under the pointer, so a click aimed at its outer
+button:hover:not(:disabled) {
+  background-color: var(--button-highlight);
+  border-color: var(--edge);
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  filter: var(--button-disabled-filter);
+  opacity: 0.72;
+  box-shadow: var(--shadow-1);
+}
+
+button[aria-pressed='true'],
+button[aria-selected='true'] {
+  border-color: var(--brass);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brass) 72%, transparent), var(--shadow-1);
+}
+
+/* The press shifts the button under the pointer, so a click aimed at its outer
  * few pixels -- a dropdown caret sitting at the right edge -- lands outside the
  * button by mouseup and never becomes a click. Fine on the big game buttons,
  * wrong in the dense editors, which are exempt. */
 button:active:not(:disabled):not(.new-campaign-content button):not(.card-builder button):not(.overlay-editor button) {
-  transform: scale(0.97);
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+/* ── Form fields ───────────────────────────────────────────────────────── */
+input,
+select,
+textarea {
+  background-color: var(--input-background);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  padding: 6px 10px;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-faint);
+}
+
+input:hover:not(:disabled),
+select:hover:not(:disabled),
+textarea:hover:not(:disabled) {
+  border-color: var(--edge);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--focus-ring, #225f68);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(34, 95, 104, 0.18);
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+select {
+  appearance: none;
+  background-image: var(--select-caret);
+  background-size: var(--select-caret-size);
+  background-repeat: no-repeat;
+  background-position: right 9px center;
+  padding-right: 26px;
+}
+
+/* ── Scrollbars ────────────────────────────────────────────────────────── */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--edge-dim) var(--background);
+}
+
+::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--edge-dim);
+  border: 2px solid var(--background);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--edge);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--background);
 }
 
 footer {
   margin: 0 auto;
   font-size: 0.5em;
-  color: var(--title);
+  color: var(--text-dim);
   position: fixed;
   bottom: 0;
   width: 100%;
   text-align: center;
   z-index: var(--z-index-100);
+
+  a {
+    color: var(--text-dim);
+    transition: color 120ms ease;
+    &:hover { color: var(--teal); }
+  }
+
   @media (max-width: 800px) and (orientation: portrait) {
     display: none;
   }
@@ -94,4 +231,15 @@ footer {
 ::view-transition-old(main-header),
 ::view-transition-new(main-header) {
   mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

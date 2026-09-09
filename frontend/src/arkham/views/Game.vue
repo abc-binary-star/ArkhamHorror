@@ -2025,7 +2025,7 @@ onUnmounted(() => {
   <LoadState v-else-if="!ready" />
   <div class="tabletop-shell" v-else-if="ready && game && playerId" :style="{ '--epic-bar-height': epicBarHeight + 'px' }">
     <dialog v-if="error" class="error-dialog">
-      <img class="status-seal status-seal--danger" src="/assets/veiled-harbour/20-危险等待印章.png" alt="" aria-hidden="true" />
+      <span class="status-seal status-seal--danger" aria-hidden="true"></span>
       <h2>{{ $t('error') }}</h2>
       <p class="error-message">{{ error }}</p>
       <p>{{ $t('errorContent') }}</p>
@@ -2193,7 +2193,7 @@ onUnmounted(() => {
     <div v-if="socketError" class="socketWarning">
       <!-- frontend/src/locales/en/gameBoard/base.json -->
       <div class="socket-warning-card">
-        <img class="status-seal" src="/assets/veiled-harbour/20-危险等待印章.png" alt="" aria-hidden="true" />
+        <span class="status-seal status-seal--waiting" aria-hidden="true"></span>
         <p>{{ $t('outOfSyncHint') }}</p>
       </div>
     </div>
@@ -2881,16 +2881,23 @@ onUnmounted(() => {
 }
 
 .status-seal {
+  display: block;
   width: 62px;
   height: 62px;
   flex: 0 0 auto;
-  object-fit: cover;
-  border-radius: 50%;
+  background-image: url('/assets/veiled-harbour/34-案件状态印章组-v2.png');
+  background-repeat: no-repeat;
+  background-size: 400% 100%;
+  background-position: 100% center;
   box-shadow: 0 8px 20px rgb(0 0 0 / 0.28);
 }
 
 .status-seal--danger {
   margin: 4px auto 2px;
+}
+
+.status-seal--waiting {
+  background-position: 66.666% center;
 }
 
 .sidebar {
@@ -2900,8 +2907,8 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   background:
-    linear-gradient(rgba(232, 225, 210, 0.86), rgba(232, 225, 210, 0.86)),
-    #d0d9dc url('/assets/veiled-harbour/27-侧栏档案抽屉.png') center / cover no-repeat;
+    linear-gradient(rgba(232, 225, 210, 0.56), rgba(232, 225, 210, 0.56)),
+    #d0d9dc url('/assets/veiled-harbour/32-侧栏档案抽屉-v2.png') center / cover no-repeat;
   border-left: 1px solid rgba(165, 130, 75, 0.5);
 
   @media (max-width: 800px) {
@@ -3662,8 +3669,8 @@ header {
   margin: 0;
   padding: 0;
   background:
-    linear-gradient(180deg, rgb(29 46 45 / 0.96), rgb(12 25 25 / 0.98)),
-    url('/assets/veiled-harbour/02-牌桌材质.png') center / cover no-repeat;
+    linear-gradient(180deg, rgb(29 46 45 / 0.24), rgb(12 25 25 / 0.42)),
+    url('/assets/veiled-harbour/31-牌桌行动托盘-v2.png') center / 100% 100% no-repeat;
   border-bottom: 1px solid rgba(208, 180, 123, 0.42);
   box-shadow: 0 3px 12px rgba(8, 14, 15, 0.24);
   color: var(--text-on-dark, #f4efe4);
@@ -3680,9 +3687,8 @@ header {
     }
     > button,
     > div > button {
-      background-color: transparent;
-      background-image: none;
-      border: 0;
+      background: url('/assets/veiled-harbour/30-行动按钮铭牌-v2.png') center / 100% 100% no-repeat;
+      border: 1px solid transparent;
       color: var(--text-on-dark, #f4efe4);
       font-weight: 700;
       min-height: var(--control-height-icon);
@@ -3697,15 +3703,14 @@ header {
         width: 15px;
       }
       &:hover {
-        background-color: rgb(255 255 255 / 0.08);
+        filter: brightness(1.12) saturate(0.92);
         color: var(--text-on-dark, #f4efe4);
       }
       &:active {
-        background-color: rgb(0 0 0 / 0.12);
+        filter: brightness(0.92);
       }
       &:disabled {
-        background-color: rgb(0 0 0 / 0.08);
-        filter: var(--button-disabled-filter);
+        filter: brightness(0.68) saturate(0.45) var(--button-disabled-filter);
       }
       &:focus-visible {
         outline: 2px solid var(--button-focus-ring);

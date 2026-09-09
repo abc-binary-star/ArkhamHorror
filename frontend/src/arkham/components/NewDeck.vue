@@ -22,7 +22,12 @@ const store = useCardStore()
 const investigators = ref<string[]>([])
 const { cards }  = storeToRefs(store)
 
-investigators.value = await fetchInvestigators()
+// Deliberately not awaited at the top level: a rejection there would keep the
+// whole panel behind Suspense and never render it. The list is only consulted
+// once the user submits a deck list, long after this resolves.
+fetchInvestigators()
+  .then((result) => { investigators.value = result })
+  .catch(() => { investigators.value = [] })
 
 interface UnimplementedCardError {
   tag: string
@@ -76,8 +81,13 @@ const deckName = ref<string | null>(null)
 const deckUrl = ref<string | null>(null)
 const deckList = ref<ArkhamDbDecklist | null>(null)
 const normalizeCode = (code: string) => code.replace(/^c/, '')
+// An empty list means the fetch failed or has not landed yet -- that is
+// "unknown", not "nothing is implemented", so let the deck through rather than
+// rejecting every import.
 const isInvestigatorImplemented = (code: string) =>
-  investigators.value.includes(code) || investigators.value.includes(normalizeCode(code))
+  investigators.value.length === 0
+  || investigators.value.includes(code)
+  || investigators.value.includes(normalizeCode(code))
 const maybeSetPortrait = (code: string | null | undefined) => {
   if (!code || !props.setPortrait) return
   props.setPortrait(imgsrc(`portraits/${normalizeCode(code)}.jpg`))
@@ -120,7 +130,7 @@ function loadDeckFromFile(e: Event) {
         }
 
       } else {
-        investigatorError.value = `${data.investigator_name} is not yet implemented, please use a different deck ${data}`
+        investigatorError.value = t('newDeck.investigatorUnimplemented', { name: data.investigator_name })
       }
       deckId.value = data.id.toString()
       deckName.value = data.name
@@ -150,8 +160,7 @@ async function loadDeck() {
     investigator.value = invCode
     maybeSetPortrait(invCode)
   } else {
-    investigatorError.value =
-      `${dl.investigator_name} is not yet implemented, please use a different deck ${JSON.stringify(dl)}`
+    investigatorError.value = t('newDeck.investigatorUnimplemented', { name: dl.investigator_name })
   }
 
   deckId.value = String(dl.id)
@@ -180,10 +189,12 @@ async function runValidations() {
   }
 }
 
+const saving = ref(false)
+
 async function createDeck() {
   errors.value = []
   requestFailed.value = false
-  if (!valid.value || !deckList.value) return
+  if (saving.value || !valid.value || !deckList.value) return
 
   if (!saveDeck.value) {
     const dl = deckList.value
@@ -198,6 +209,7 @@ async function createDeck() {
 
   if (!(deckId.value && deckName.value)) return
 
+  saving.value = true
   try {
     const created = await newDeck(deckId.value, deckName.value, deckUrl.value, deckList.value)
     deckId.value = null
@@ -208,6 +220,8 @@ async function createDeck() {
     emit('newDeck', created)
   } catch (err: unknown) {
     errors.value = validationErrorsFromResponse(err)
+  } finally {
+    saving.value = false
   }
 }
 </script>
@@ -229,7 +243,7 @@ async function createDeck() {
             <div class="save-option-thumb" />
           </div>
         </div>
-        <button :disabled="!valid" @click.prevent="createDeck" class="primary-action">{{ alwaysSave ? t('newDeck.save') : saveDeck ? t('newDeck.saveAndUse') : t('newDeck.useWithoutSaving') }}</button>
+        <button :disabled="!valid || saving" @click.prevent="createDeck" class="primary-action">{{ alwaysSave ? t('newDeck.save') : saveDeck ? t('newDeck.saveAndUse') : t('newDeck.useWithoutSaving') }}</button>
       </div>
     </div>
     <div class="errors" v-if="investigatorError">
@@ -256,29 +270,30 @@ async function createDeck() {
   }
   :deep(input) {
     outline: 0;
-    border: 1px solid rgba(255,255,255,0.10);
-    border-radius: 5px;
+    border: var(--edge-width) solid var(--edge-dim);
+    border-radius: var(--radius-md);
     padding: 12px 14px;
-    color: #e0e0e0;
-    background: var(--background-dark);
+    color: var(--text);
+    background: var(--input-background);
     width: 100%;
     font-size: 0.92em;
     transition: border-color 120ms ease;
 
     &:focus {
-      border-color: rgba(110, 134, 64, 0.7);
+      border-color: var(--spooky-green);
+      box-shadow: var(--shadow-2);
     }
   }
   :deep(input[type=file]) {
     padding: 8px 12px;
-    color: #888;
+    color: var(--text-dim);
     cursor: pointer;
 
     &::file-selector-button {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 4px;
-      color: #ccc;
+      background: var(--surface-raised);
+      border: var(--edge-width) solid var(--edge-dim);
+      border-radius: var(--radius-sm);
+      color: var(--text);
       padding: 5px 12px;
       font-size: 0.82em;
       text-transform: uppercase;
@@ -288,7 +303,7 @@ async function createDeck() {
       transition: background 150ms ease;
 
       &:hover {
-        background: rgba(255,255,255,0.14);
+        background: var(--surface-panel);
       }
     }
   }
@@ -304,9 +319,10 @@ async function createDeck() {
     gap: 10px;
   }
   .errors {
-    background-color: rgba(100, 0, 0, 0.85);
-    border: 1px solid rgba(255,80,80,0.2);
-    border-radius: 6px;
+    background-color: color-mix(in srgb, var(--delete) 12%, var(--surface-panel));
+    border: var(--edge-width) solid color-mix(in srgb, var(--delete) 45%, transparent);
+    border-radius: var(--radius-md);
+    color: var(--status-danger-text);
     width: 100%;
     margin-top: 10px;
     padding: 14px 16px;
@@ -317,21 +333,21 @@ async function createDeck() {
     align-items: center;
     gap: 12px;
     padding: 12px 14px;
-    border-radius: 6px;
-    border: 1px solid rgba(255,255,255,0.10);
-    background: rgba(255,255,255,0.04);
+    border-radius: var(--radius-md);
+    border: var(--edge-width) solid var(--edge-dim);
+    background: var(--surface-raised);
     cursor: pointer;
     user-select: none;
     transition: background 150ms ease, border-color 150ms ease;
     width: 100%;
 
     &:hover {
-      background: rgba(255,255,255,0.08);
+      background: var(--surface-panel);
     }
 
     &.active {
-      border-color: rgba(110, 134, 64, 0.6);
-      background: rgba(110, 134, 64, 0.10);
+      border-color: var(--spooky-green);
+      background: color-mix(in srgb, var(--spooky-green) 10%, var(--surface-raised));
     }
   }
 
@@ -345,29 +361,29 @@ async function createDeck() {
   .save-option-title {
     font-size: 0.88em;
     font-weight: 600;
-    color: #ddd;
+    color: var(--text);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
 
   .save-option-desc {
     font-size: 0.76em;
-    color: #888;
+    color: var(--text-dim);
   }
 
   .save-option-toggle {
     width: 38px;
     height: 22px;
     border-radius: 11px;
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.15);
+    background: var(--surface-panel);
+    border: var(--edge-width) solid var(--edge-dim);
     position: relative;
     flex-shrink: 0;
     transition: background 200ms ease, border-color 200ms ease;
 
     &.on {
-      background: rgba(110, 134, 64, 0.9);
-      border-color: rgba(110, 134, 64, 0.6);
+      background: var(--spooky-green);
+      border-color: var(--spooky-green-dark);
     }
   }
 
@@ -394,20 +410,20 @@ async function createDeck() {
     height: 48px;
     border-radius: 5px;
     margin-top: 8px;
-    border: 1px solid rgba(255,255,255,0.10);
-    background: rgba(110, 134, 64, 0.95);
-    color: white;
+    border: var(--edge-width) solid var(--edge-on-accent);
+    background: var(--spooky-green);
+    color: var(--button-1-text);
     letter-spacing: 0.08em;
     text-transform: uppercase;
     font-size: 0.88em;
     cursor: pointer;
-    box-shadow: 0 5px 18px rgba(0,0,0,0.3);
+    box-shadow: var(--shadow-3);
     transition: transform 120ms ease, background 160ms ease, box-shadow 160ms ease;
 
     &:hover:not(:disabled) {
       transform: translateY(-1px);
-      background: rgba(110, 134, 64, 1);
-      box-shadow: 0 10px 28px rgba(0,0,0,0.4);
+      background: var(--highlight);
+      box-shadow: var(--shadow-4);
     }
 
     &:active:not(:disabled) {
@@ -423,10 +439,10 @@ async function createDeck() {
   }
   display: flex;
   flex-direction: column;
-  color: #FFF;
+  color: var(--text);
   border-radius: 3px;
   a {
-    color: #365488;
+    color: var(--spooky-green-dark);
     font-weight: bolder;
   }
 }

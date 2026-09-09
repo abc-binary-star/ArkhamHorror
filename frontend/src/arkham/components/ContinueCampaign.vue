@@ -593,10 +593,11 @@ const setIcon = computed(() => {
     text-align: center;
   }
   padding: 16px;
-  color: #bebebe;
-  border: 2px solid var(--line);
+  color: var(--text);
+  border: var(--edge-width) solid var(--border-panel);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--surface-panel);
+  box-shadow: var(--shadow-3);
   img {
     max-height: 150px;
   }
@@ -606,8 +607,8 @@ const setIcon = computed(() => {
 
 .scenario-info {
   h2 {
-    color: white;
-    font-family: "Teutonic", sans-serif;
+    color: var(--title);
+    font-family: Arno, "Noto Serif SC", serif;
     font-size: 1.8em;
   }
 }
@@ -624,16 +625,16 @@ const setIcon = computed(() => {
     gap: 10px;
     justify-content: flex-end;
     button {
-      border: 0;
-      background: rgba(0, 0, 0, 0.3);
-      color: white;
+      border: var(--edge-width) solid var(--edge-dim);
+      background: var(--button-2);
+      color: var(--button-2-text);
       font-size: 1.2em;
       padding: 10px 20px;
       border-radius: 8px;
       width: 100%;
       justify-self: end;
       &:hover {
-        background: rgba(0, 0, 0, 0.5);
+        background: var(--button-2-highlight);
         cursor: pointer;
       }
     }
@@ -667,8 +668,8 @@ const setIcon = computed(() => {
 
 .side-story-selection {
   > h2 {
-    color: white;
-    font-family: "Teutonic", sans-serif;
+    color: var(--title);
+    font-family: Arno, "Noto Serif SC", serif;
     font-size: 1.5em;
     margin-bottom: 10px;
   }
@@ -676,15 +677,15 @@ const setIcon = computed(() => {
   flex-direction: column;
   gap: 10px;
   .side-story-option {
-    border: 1px solid var(--line);
+    border: var(--edge-width) solid var(--border-panel);
     border-radius: 8px;
     padding: 10px;
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--surface-panel);
     display: flex;
     gap: 10px;
     h3 {
       margin: 0;
-      color: white;
+      color: var(--title);
     }
     img {
       max-height: 60px;
@@ -700,14 +701,14 @@ const setIcon = computed(() => {
 }
 
 button {
-  border: 0;
-  background: rgba(0, 0, 0, 0.3);
-  color: white;
+  border: var(--edge-width) solid var(--edge-dim);
+  background: var(--button-2);
+  color: var(--button-2-text);
   font-size: 1em;
   padding: 8px 16px;
   border-radius: 8px;
   &:hover {
-    background: rgba(0, 0, 0, 0.5);
+    background: var(--button-2-highlight);
     cursor: pointer;
   }
 }
@@ -751,10 +752,10 @@ button {
     width: 100%;
     height: 100%;
     border-radius: 9999px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: var(--edge-width) solid var(--edge-dim);
     overflow: hidden;
     box-sizing: border-box;
-    background: rgba(0, 0, 0, 0.4);
+    background: var(--surface-raised);
   }
 
   &__circle {
@@ -806,7 +807,8 @@ button {
 
 #investigators {
   padding: 10px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   display: flex;
   gap: 10px;
   flex-direction: column;
@@ -825,14 +827,14 @@ button {
   flex-direction: column;
   gap: 8px;
   padding: 10px;
-  border: 1px solid var(--line);
+  border: var(--edge-width) solid var(--border-panel);
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--surface-panel);
 }
 
 .roster-hint {
   margin: 0;
-  color: #bebebe;
+  color: var(--text-dim);
   font-size: 0.85em;
 }
 
@@ -842,10 +844,10 @@ button {
   input {
     flex: 1;
     min-width: 0;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid var(--line);
+    background: var(--surface-raised);
+    border: var(--edge-width) solid var(--edge-dim);
     border-radius: 8px;
-    color: #e0e0e0;
+    color: var(--text);
     padding: 8px;
   }
 }

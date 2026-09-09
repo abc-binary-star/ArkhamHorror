@@ -127,6 +127,12 @@ const choose = (idx: number) => emit('choose', idx)
 
 <template>
   <div class="chaos-bag">
+    <img
+      class="chaos-seal"
+      src="/assets/veiled-harbour/11-混沌袋仪式纹章.png"
+      alt=""
+      aria-hidden="true"
+    />
     <div class="chaos-bag-contents">
       <Token v-for="revealedToken in revealedChaosTokens" :key="revealedToken.id" :token="revealedToken" :playerId="playerId" :game="game" @choose="choose" />
       <img
@@ -299,11 +305,27 @@ const choose = (idx: number) => emit('choose', idx)
 }
 
 .chaos-bag {
+  position: relative;
   padding: 10px;
-  background: rgba(0,0,0,0.5);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.chaos-seal {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  opacity: 0.36;
+  pointer-events: none;
+  filter: sepia(0.2) saturate(0.8);
 }
 
 .stats-bar-anchor {
@@ -315,17 +337,17 @@ const choose = (idx: number) => emit('choose', idx)
   align-items: center;
   gap: 8px;
   padding: 5px 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(0, 0, 0, 0.35);
-  color: rgba(255, 255, 255, 0.7);
+  border-top: var(--edge-width) solid var(--edge-dim);
+  background: var(--surface-raised);
+  color: var(--text-dim);
   font-family: sans-serif;
   font-size: 11px;
   line-height: 16px;
   cursor: pointer;
   user-select: none;
   &:hover {
-    background: rgba(0, 0, 0, 0.55);
-    color: rgba(255, 255, 255, 0.95);
+    background: var(--surface-paper);
+    color: var(--text);
   }
 }
 
@@ -345,7 +367,7 @@ const choose = (idx: number) => emit('choose', idx)
 
 .stats-bar__reveal {
   padding: 0 6px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 999px;
   background: transparent;
   color: inherit;
@@ -353,7 +375,7 @@ const choose = (idx: number) => emit('choose', idx)
   line-height: 14px;
   cursor: pointer;
   &:hover {
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: var(--spooky-green);
   }
 }
 
@@ -390,14 +412,14 @@ const choose = (idx: number) => emit('choose', idx)
 
 .stats__reveal {
   padding: 4px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 999px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text);
   font: inherit;
   cursor: pointer;
   &:hover {
-    border-color: rgba(255, 255, 255, 0.5);
+    border-color: var(--spooky-green);
   }
 }
 
@@ -413,26 +435,26 @@ const choose = (idx: number) => emit('choose', idx)
     display: flex;
     align-items: center;
     gap: 4px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-dim);
   }
 
   input {
     width: 46px;
     padding: 2px 4px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: var(--edge-width) solid var(--edge-dim);
     border-radius: 4px;
-    background: rgba(0, 0, 0, 0.4);
-    color: #fff;
+    background: var(--surface-raised);
+    color: var(--text);
     font-variant-numeric: tabular-nums;
   }
 }
 
 .stats__reset {
   padding: 2px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 999px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text);
   cursor: pointer;
 }
 
@@ -456,7 +478,7 @@ const choose = (idx: number) => emit('choose', idx)
 }
 
 .stats__multiplier {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-dim);
   font-variant-numeric: tabular-nums;
 }
 
@@ -468,7 +490,7 @@ const choose = (idx: number) => emit('choose', idx)
 
 .stats__caveat {
   margin: 0;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-dim);
   font-size: 10px;
   line-height: 1.4;
 }
@@ -490,10 +512,10 @@ const choose = (idx: number) => emit('choose', idx)
   min-width: 0;
   /* symmetric vertical padding on a 1.0 line box centres the glyphs */
   padding: 2px 5px;
-  border-color: rgba(255, 255, 255, 0.12);
-  background: rgba(0, 0, 0, 0.3);
+  border-color: var(--edge-dim);
+  background: var(--surface-raised);
   box-shadow: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-dim);
   font-size: 8px;
   font-weight: 400;
   line-height: 1;
@@ -510,19 +532,18 @@ const choose = (idx: number) => emit('choose', idx)
 
 <style>
 .v-popper--theme-chaos-bag-stats-popover .v-popper__inner {
-  background: rgba(15, 15, 20, 0.94);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  color: #fff;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  color: var(--text);
+  box-shadow: var(--shadow-float);
 }
 
 .v-popper--theme-chaos-bag-stats-popover .v-popper__arrow-outer {
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--border-panel);
 }
 
 .v-popper--theme-chaos-bag-stats-popover .v-popper__arrow-inner {
-  border-color: rgba(15, 15, 20, 0.94);
+  border-color: var(--surface-panel);
 }
 </style>

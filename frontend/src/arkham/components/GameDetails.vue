@@ -71,16 +71,18 @@ h2 {
 }
 .game {
   display: flex;
-  background-color: #15192C;
+  background-image: var(--panel-gradient);
+  border: var(--edge-width) solid var(--edge-dim);
   border-left: 10px solid var(--button-1);
-  color: #f0f0f0;
-  border-radius: 3px;
+  color: var(--text);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-3);
   margin-bottom: 10px;
   a {
-    color: #4a6594;
+    color: var(--spooky-green-dark);
     font-weight: bolder;
     &:hover {
-      color: #5e76a0;
+      color: var(--spooky-green);
     }
   }
 }
@@ -92,14 +94,14 @@ h2 {
 }
 
 .campaign-icon {
-  filter: invert(28%) sepia(100%) hue-rotate(-180deg) saturate(3);
+  filter: none;
   max-height: 50px;
 }
 
 .scenario-icon {
   height: 30px;
   margin: 0 20px 0 10px;
-  filter: invert(100%);
+  filter: none;
 }
 
 .game-details {
@@ -120,7 +122,7 @@ h2 {
 
 .scenario-details {
   display: flex;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: color-mix(in srgb, var(--spooky-green) 8%, var(--surface-raised));
   padding: 5px 10px;
   margin-left: 10px;
   margin-right: 10px;
@@ -134,7 +136,8 @@ h2 {
 
 .title {
   flex: 1;
-  font-family: teutonic, sans-serif;
+  font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
+  font-weight: 600;
   font-size: 1.6em;
   a {
     text-decoration: none;
@@ -231,11 +234,11 @@ h2 {
 
 .finished-game {
   border-left: 10px solid #999;
-  background: var(--neutral-extra-dark);
-  color: #999;
+  background: var(--surface-panel);
+  color: var(--text-dim);
 
   a {
-    color: #494949;
+    color: var(--text-dim);
   }
 
   .campaign-icon {
@@ -247,7 +250,8 @@ h2 {
 .other-investigators {
   border-radius: 10px;
   text-transform: uppercase;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   flex: 1;
   display: flex;
   padding: 10px;
@@ -256,7 +260,9 @@ h2 {
 
 .game-difficulty {
   padding: 5px 15px;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  color: var(--text);
   border-radius: 10px;
   text-transform: uppercase;
 }

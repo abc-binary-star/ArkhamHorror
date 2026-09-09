@@ -90,7 +90,7 @@ function startDrag(event: DragEvent, card: (CardContents | CardT.Card)) {
 
 <style scoped>
 .card-row {
-  background: #759686;
+  background: var(--surface-table);
   width: 100%;
   overflow-x: auto;
   text-align: center;
@@ -120,7 +120,7 @@ function startDrag(event: DragEvent, card: (CardContents | CardT.Card)) {
 }
 
 button {
-  border: 0;
+  border: var(--edge-width) solid var(--edge-dim);
   padding: 10px;
   text-transform: uppercase;
   background-color: var(--button-2);
@@ -128,7 +128,7 @@ button {
   border-radius: 0.6em;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  color: #EEE;
+  color: var(--button-2-text);
   font: Arial, sans-serif;
   width: 100%;
   &:hover {
@@ -142,15 +142,15 @@ button {
   max-width: 80%;
   top: 50%;
   left: 50%;
-  background: hsl(150.9 13.6% 52.4% / 80%);
+  background: color-mix(in srgb, var(--surface-panel) 94%, transparent);
   transform: translateX(-50%) translateY(-50%);
 
   background: rgba(94,123,115,0.5);
   border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-5);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: var(--edge-width) solid var(--border-panel);
   z-index: var(--z-index-9998);
 }
 

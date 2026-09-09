@@ -321,13 +321,22 @@ const unsavedDeckError = computed(() => {
 
 const investigators = computed(() => props.game.investigators)
 
-fetchDecks().then((result) => {
-  decks.value = result;
-  if (result.length == 0) {
+const decksError = ref(false)
+
+fetchDecks()
+  .then((result) => {
+    decks.value = result;
+    if (result.length == 0) {
+      deckType.value = "LoadNewDeck"
+    }
+  })
+  .catch(() => {
+    // Without the saved list there is nothing to pick, but game setup should not
+    // be a dead end -- fall through to pasting/building a deck instead.
+    decksError.value = true
     deckType.value = "LoadNewDeck"
-  }
-  ready.value = true;
-})
+  })
+  .finally(() => { ready.value = true; })
 
 const settings = useSettings()
 const { customCardsEnabled } = storeToRefs(settings)
@@ -482,7 +491,8 @@ const needsReply = computed(() => {
                   v-model:sortBy="sortBy"
                 />
                 <div class="deck-list">
-                  <div v-if="filteredDecks.length === 0" class="deck-list-empty">{{ $t('noDecksMatchFilters') }}</div>
+                  <div v-if="decksError" class="deck-list-empty">{{ $t('loadState.failed') }}</div>
+                  <div v-else-if="filteredDecks.length === 0" class="deck-list-empty">{{ $t('noDecksMatchFilters') }}</div>
                   <template v-for="deck in filteredDecks" :key="deck.id">
                     <div
                       class="deck-item"

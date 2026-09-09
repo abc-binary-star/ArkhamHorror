@@ -1,10 +1,11 @@
 <script lang="ts" setup>
 import * as Arkham from '@/arkham/types/Game'
-import { shallowRef, computed, onMounted, onUnmounted } from 'vue'
+import { shallowRef, ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchGame } from '@/arkham/api'
 import { useCardStore } from '@/stores/cards'
 import CampaignLog from '@/arkham/components/CampaignLog.vue'
+import LoadState from '@/components/LoadState.vue'
 
 export interface Props {
   gameId: string
@@ -15,12 +16,18 @@ const store = useCardStore()
 const router = useRouter()
 store.fetchCards()
 const game = shallowRef<Arkham.Game | null>(null)
+const loaded = ref(false)
+const loadError = ref(false)
 
 const cards = computed(() => store.cards)
 
-const refreshGame = () => fetchGame(props.gameId, false).then(({ game: newGame }) => {
-  game.value = newGame
-})
+const refreshGame = () => fetchGame(props.gameId, false)
+  .then(({ game: newGame }) => {
+    game.value = newGame
+    loadError.value = false
+  })
+  .catch(() => { loadError.value = true })
+  .finally(() => { loaded.value = true })
 
 refreshGame()
 
@@ -36,7 +43,9 @@ onUnmounted(() => document.removeEventListener('keydown', onKeyDown))
 
 <template>
   <div class="campaign-log-view">
-    <CampaignLog v-if="game !== null" :game="game" :cards="cards" :player-id="game.activePlayerId" @refresh="refreshGame">
+    <LoadState v-if="loadError && game === null" error @retry="refreshGame" />
+    <LoadState v-else-if="!loaded" />
+    <CampaignLog v-else-if="game !== null" :game="game" :cards="cards" :player-id="game.activePlayerId" @refresh="refreshGame">
       <template #header-leading>
         <router-link :to="{ name: 'Game', params: { gameId }}" class="back-button">
           <font-awesome-icon icon="arrow-left" class="back-icon" />
@@ -61,10 +70,10 @@ onUnmounted(() => document.removeEventListener('keydown', onKeyDown))
   gap: 8px;
   padding: 8px 16px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
-  font-family: teutonic, sans-serif;
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  color: var(--text-dim);
+  font-family: "Noto Sans", Avenir, Helvetica, Arial, sans-serif;
   font-size: 0.95em;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -77,9 +86,9 @@ onUnmounted(() => document.removeEventListener('keydown', onKeyDown))
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #f0f0f0;
+    background: var(--surface-panel);
+    border-color: var(--spooky-green);
+    color: var(--spooky-green-dark);
 
     .back-icon {
       transform: translateX(-3px);

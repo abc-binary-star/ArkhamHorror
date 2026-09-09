@@ -289,11 +289,12 @@ const displayKey = (key: string) => {
   margin: 0 auto;
   margin-top: 10px;
   padding: 10px;
-  background-color: #3E485C;
-  border-radius: 5px;
+  background-color: var(--surface-raised);
+  border: var(--edge-width) solid var(--border-panel);
+  border-radius: var(--radius-lg);
   font-size: 1.5em;
-  color: #B6B6B6;
-  box-shadow: 1px 1px 6px rgba(15,17,23,0.45);
+  color: var(--text);
+  box-shadow: var(--shadow-4);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -302,18 +303,22 @@ const displayKey = (key: string) => {
 h2 {
   padding: 0;
   margin: 0;
-  text-transform: uppercase;
-  font-family: Teutonic;
+  text-transform: none;
+  font-family: Arno, 'Noto Serif SC', serif;
+  font-weight: 600;
   font-size: 1.5em;
 }
 
 button {
   width: 100%;
   background-color: var(--button-1);
-  border: 0;
+  border: var(--edge-width) solid var(--edge-on-accent);
+  border-radius: var(--radius-md);
   text-transform: uppercase;
-  color: white;
+  color: var(--button-1-text);
   padding: 10px;
+  box-shadow: var(--shadow-2);
+  &:hover { background-color: var(--button-1-highlight); }
 }
 
 .options {
@@ -335,15 +340,20 @@ input[type=radio] {
 input[type=radio] + label {
   display:inline-block;
   padding: 4px 12px;
-  background-color: hsl(80, 5%, 39%);
-  border-color: #ddd;
+  background-color: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  cursor: pointer;
   &:hover {
-    background-color: hsl(80, 15%, 39%);
+    background-color: var(--surface-raised);
   }
 }
 
 input[type=radio]:checked + label {
   background: var(--button-1);
+  color: var(--button-1-text);
+  border-color: var(--edge-on-accent);
 }
 
 input[type=checkbox] {
@@ -354,9 +364,13 @@ input[type=checkbox] {
 input[type=checkbox] + label {
   display:inline-block;
   padding: 4px 12px;
-  background-color: hsl(80, 5%, 39%);
+  background-color: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  cursor: pointer;
   &:hover {
-    background-color: hsl(80, 15%, 39%);
+    background-color: var(--surface-raised);
   }
 
   &.invert {
@@ -365,13 +379,15 @@ input[type=checkbox] + label {
       background: var(--button-1);
     }
   }
-  border-color: #ddd;
 }
 
 input[type=checkbox]:checked + label {
   background: var(--button-1);
+  color: var(--button-1-text);
+  border-color: var(--edge-on-accent);
   &.invert {
-    background-color: hsl(80, 5%, 39%);
+    background-color: var(--surface-panel);
+    color: var(--text);
   }
 }
 
@@ -383,14 +399,16 @@ input[type=checkbox]:checked + label {
 }
 
 .invert[type=checkbox]:checked + label {
-  background-color: hsl(80, 15%, 39%);
+  background-color: var(--surface-raised);
+  color: var(--text);
 }
 
 .partner {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
   padding: 10px;
   border-radius: 5px;
   .options {
@@ -410,7 +428,8 @@ input[type=checkbox]:checked + label {
 }
 
 .records {
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 5px;
   padding: 10px;
   display: flex;

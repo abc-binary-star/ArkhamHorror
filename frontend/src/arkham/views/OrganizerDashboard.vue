@@ -18,6 +18,7 @@ import {
   type GroupDigest,
 } from '@/arkham/types/EpicEvent'
 import EventCountdown from '@/arkham/components/EventCountdown.vue'
+import LoadState from '@/components/LoadState.vue'
 
 // Organizer dashboard. Loads the event over REST, then subscribes to the event
 // websocket (via the store) so group state stays live as players act. Shared
@@ -277,9 +278,19 @@ async function removeEvent() {
   }
 }
 
-onMounted(async () => {
+const loadError = ref(false)
+
+const load = async () => {
+  loadError.value = false
   void dbStore.initDbCards()
-  await store.load(props.id)
+
+  try {
+    await store.load(props.id)
+  } catch (err) {
+    console.error('[organizer] could not load the event', err)
+    loadError.value = true
+    return
+  }
 
   // Frictionless entry: a seated organizer landing on the dashboard is dropped
   // straight into their group's game (where the in-game OrganizerBar gives them a
@@ -296,7 +307,9 @@ onMounted(async () => {
 
   store.connect(props.id)
   ready.value = true
-})
+}
+
+onMounted(load)
 
 onUnmounted(() => {
   if (copiedTimer) clearTimeout(copiedTimer)
@@ -325,7 +338,8 @@ onUnmounted(() => {
       </button>
     </header>
 
-    <p v-if="!ready" class="loading">{{ $t('event.loading') }}</p>
+    <LoadState v-if="loadError" error @retry="load" />
+    <p v-else-if="!ready" class="loading">{{ $t('event.loading') }}</p>
 
     <template v-else>
       <p v-if="socketError" class="socket-error">{{ $t('event.disconnected') }}</p>
@@ -551,8 +565,7 @@ onUnmounted(() => {
 
 h2 {
   color: var(--title);
-  text-transform: uppercase;
-  font-family: Teutonic;
+  font-family: "Arno", "Noto Sans", sans-serif;
   font-size: 2.1em;
   margin: 6px 0 0;
 }
@@ -601,7 +614,7 @@ h2 {
   gap: 4px;
   padding: 8px 10px;
   border-radius: 5px;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(48, 58, 61, 0.06);
 }
 
 .advance-group-label {
@@ -627,8 +640,8 @@ h2 {
   padding: 8px 10px;
   border-radius: 5px;
   border: 1px solid var(--box-border, rgba(255, 255, 255, 0.18));
-  background: var(--background-dark, #12151f);
-  color: #fff;
+  background: var(--surface-raised, #f4efe4);
+  color: var(--text);
   font-variant-numeric: tabular-nums;
 }
 
@@ -742,7 +755,7 @@ h2 {
 
 .seat-status {
   padding: 5px 12px;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(48, 58, 61, 0.08);
   border-radius: 10px;
   font-size: 0.85em;
   font-variant-numeric: tabular-nums;
@@ -761,15 +774,15 @@ h2 {
 }
 
 .status-badge.joinable {
-  background: rgba(110, 134, 64, 0.25);
-  color: rgba(180, 210, 120, 0.95);
-  border: 1px solid rgba(110, 134, 64, 0.55);
+  background: color-mix(in srgb, var(--spooky-green) 12%, var(--surface-panel));
+  color: var(--spooky-green-dark);
+  border: 1px solid color-mix(in srgb, var(--spooky-green) 45%, var(--box-border));
 }
 
 .status-badge.full {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(48, 58, 61, 0.06);
+  color: var(--text-dim);
+  border: 1px solid var(--box-border);
 }
 
 .group-subdetails {
@@ -777,7 +790,7 @@ h2 {
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(48, 58, 61, 0.035);
   padding: 10px 10px 10px 18px;
 }
 
@@ -802,7 +815,7 @@ h2 {
   border-radius: 5px;
   flex-shrink: 0;
   box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.45);
-  background: var(--background-dark);
+  background: var(--surface-table, #626e70);
 }
 
 .investigator-portrait {
@@ -815,7 +828,7 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-dim);
   font-weight: 700;
   font-size: 1.4em;
 }

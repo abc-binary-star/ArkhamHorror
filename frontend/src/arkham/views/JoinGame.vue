@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router'
 import { joinGame, fetchJoinGame} from '@/arkham/api'
 import GameDetails from '@/arkham/components/GameDetails.vue';
+import LoadState from '@/components/LoadState.vue';
 
 export interface Props {
   gameId: string
@@ -13,19 +14,35 @@ const props = defineProps<Props>()
 const route = useRoute()
 const router = useRouter()
 const game = ref<Game | null>(null)
+const loaded = ref(false)
+const loadError = ref(false)
+const joining = ref(false)
+const joinError = ref(false)
 
-fetchJoinGame(props.gameId).then((result: Game) => game.value = result)
+const load = () => {
+  loadError.value = false
+  fetchJoinGame(props.gameId)
+    .then((result: Game) => { game.value = result })
+    .catch(() => { loadError.value = true })
+    .finally(() => { loaded.value = true })
+}
+
+load()
 
 async function join() {
     // Preserve an Epic Multiplayer event context if present, so an organizer who
     // joins their own group lands in the game with the organizer bar intact.
     const eventId = typeof route.query.event === 'string' ? route.query.event : null
+    joining.value = true
+    joinError.value = false
     joinGame(props.gameId)
       .then((game) => router.push(
         eventId
           ? { name: 'Game', params: { gameId: game.id }, query: { event: eventId } }
           : `/games/${game.id}`
-      ));
+      ))
+      .catch(() => { joinError.value = true })
+      .finally(() => { joining.value = false });
 }
 </script>
 
@@ -36,9 +53,12 @@ async function join() {
         <h2>{{ $t('joinGame') }}</h2>
       </header>
 
-      <GameDetails v-if="game" :game="game">
+      <LoadState v-if="loadError" error @retry="load" />
+      <LoadState v-else-if="!loaded" />
+      <GameDetails v-else-if="game" :game="game">
         <form id="join-game" @submit.prevent="join">
-          <button type="submit">{{ $t('join') }}</button>
+          <p v-if="joinError" class="join-error">{{ $t('loadState.failed') }}</p>
+          <button type="submit" :disabled="joining">{{ $t('join') }}</button>
         </form>
       </GameDetails>
     </div>
@@ -55,72 +75,114 @@ async function join() {
 
 #join-game {
   width: 100%;
-  color: #FFF;
-  background-color: #15192C;
-  padding: 10px;
-  border-radius: 3px;
+  color: var(--text);
+  background-image: var(--panel-gradient);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-4);
+  padding: 14px;
+
   button {
     outline: 0;
-    padding: 15px;
-    background: var(--button-1);
-    text-transform: uppercase;
-    color: white;
-    border: 0;
     width: 100%;
-    &:hover {
-      background: hsl(80, 35%, 32%);
+    padding: 12px;
+    background: var(--spooky-green);
+    border: var(--edge-width) solid var(--edge-on-accent);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--button-1-text);
+    font-weight: var(--font-black);
+    cursor: pointer;
+    transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease;
+
+    &:hover:not([disabled]) {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    &:active:not([disabled]) {
+      transform: translate(1px, 1px);
+      box-shadow: none;
     }
   }
+
   button[disabled] {
-    background: #999;
+    background: var(--button);
+    border-color: var(--edge-faint);
+    box-shadow: var(--shadow-1);
+    color: var(--text-faint);
     cursor: not-allowed;
-    &:hover {
-      background: #999;
-    }
+    filter: none;
+    transform: none;
   }
+
   input[type=text] {
     outline: 0;
-    border: 1px solid #000;
-    padding: 15px;
-    background: #F2F2F2;
     width: 100%;
     margin-bottom: 10px;
+    padding: 12px;
+    background: var(--input-background);
+    border: var(--edge-width) solid var(--edge-dim);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    transition: border-color 120ms ease, box-shadow 80ms ease;
+
+    &:hover { border-color: var(--edge); }
+    &:focus { border-color: var(--spooky-green); box-shadow: var(--shadow-2); }
   }
+
   select {
     outline: 0;
-    border: 1px solid #000;
-    padding: 15px;
-    background: #F2F2F2;
     width: 100%;
     margin-bottom: 10px;
-    background-image:
-      linear-gradient(45deg, transparent 50%, gray 50%),
-      linear-gradient(135deg, gray 50%, transparent 50%),
-      linear-gradient(to right, #ccc, #ccc);
-    background-position:
-      calc(100% - 25px) calc(1.3em + 2px),
-      calc(100% - 20px) calc(1.3em + 2px),
-      calc(100% - 3.5em) 0.5em;
-    background-size:
-      5px 5px,
-      5px 5px,
-      1px 2.5em;
+    padding: 12px 34px 12px 12px;
+    background-color: var(--input-background);
+    border: var(--edge-width) solid var(--edge-dim);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    appearance: none;
+    background-image: var(--select-caret);
+    background-size: var(--select-caret-size);
     background-repeat: no-repeat;
+    background-position: right 11px center;
+    transition: border-color 120ms ease, box-shadow 80ms ease;
+
+    &:hover { border-color: var(--edge); }
+    &:focus { border-color: var(--spooky-green); box-shadow: var(--shadow-2); }
   }
+
   a {
-    color: #365488;
-    font-weight: bolder;
+    color: var(--spooky-green);
+    font-weight: var(--font-bold);
   }
+
   p {
     margin: 0;
     padding: 0;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    font-weight: var(--font-bold);
+    letter-spacing: 0.06em;
     text-transform: uppercase;
+  }
+
+  p.join-error {
+    color: var(--delete);
+    font-size: 0.9rem;
+    letter-spacing: normal;
+    margin-bottom: 10px;
+    text-transform: none;
   }
 }
 
 h2 {
-  color: #656A84;
+  color: var(--title);
   margin-left: 10px;
-  text-transform: uppercase;
+  font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-shadow: none;
 }
 </style>

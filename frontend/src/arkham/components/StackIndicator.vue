@@ -151,11 +151,10 @@ const tooltip = computed(() => {
   gap: 5px;
   padding: 8px 5px;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(4px);
+  background: var(--surface-raised);
   user-select: none;
   align-self: center;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: var(--edge-width) solid var(--edge-dim);
   transition: background 0.15s ease, border-color 0.15s ease;
 }
 
@@ -164,27 +163,27 @@ const tooltip = computed(() => {
 }
 
 .stack-indicator.is-expandable:hover {
-  background: rgba(0, 0, 0, 0.55);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--surface-paper);
+  border-color: var(--spooky-green);
 }
 
 .pip {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.55);
+  border: var(--edge-width) solid var(--edge);
   background: transparent;
   transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
 
 .pip--completed {
-  background: rgba(255, 255, 255, 0.55);
-  border-color: rgba(255, 255, 255, 0.55);
+  background: var(--spooky-green);
+  border-color: var(--spooky-green);
 }
 
 .pip--current {
-  background: #fff;
-  border-color: #fff;
+  background: var(--brass);
+  border-color: var(--brass-dim);
   transform: scale(1.2);
   box-shadow: 0 0 3px rgba(255, 255, 255, 0.3);
 }
@@ -219,15 +218,15 @@ const tooltip = computed(() => {
 }
 
 .stack-popover__group--multi {
-  border-color: rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--edge-dim);
+  background: var(--surface-raised);
 }
 
 .stack-popover__group-label {
   font-size: 0.75rem;
   font-weight: 700;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--text);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -246,19 +245,18 @@ const tooltip = computed(() => {
 
 <style>
 .v-popper--theme-stack-indicator-popover .v-popper__inner {
-  background: rgba(15, 15, 20, 0.92);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 10px;
-  color: #fff;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  color: var(--text);
+  box-shadow: var(--shadow-float);
 }
 
 .v-popper--theme-stack-indicator-popover .v-popper__arrow-outer {
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--border-panel);
 }
 
 .v-popper--theme-stack-indicator-popover .v-popper__arrow-inner {
-  border-color: rgba(15, 15, 20, 0.92);
+  border-color: var(--surface-panel);
 }
 </style>

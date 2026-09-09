@@ -170,22 +170,33 @@ const scenarioIcon = computed(() => {
 
 <style scoped>
 h2 {
-  color: #6e8644;
+  color: var(--brass);
   font-size: 2em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-family: "Arno", "Noto Sans", sans-serif;
 }
 .game {
   display: flex;
-  color: var(--title);
-  background-color: var(--box-background);
-  border: 1px solid var(--box-border);
-  border-radius: 3px;
-  margin-bottom: 10px;
+  color: var(--text);
+  background-image: var(--panel-gradient);
+  border: var(--edge-width) solid var(--box-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: border-color 120ms ease, transform 120ms ease;
+
+  &:hover {
+    border-color: var(--edge);
+    transform: translateY(-1px);
+  }
+
   a {
-    color: var(--title);
-    font-weight: bolder;
+    color: var(--text);
+    font-weight: var(--font-bold);
     &:hover {
-      color: #5e76a0;
+      color: var(--spooky-green);
     }
   }
 }
@@ -197,8 +208,6 @@ h2 {
 }
 
 .campaign-icon {
-  /*filter: invert(28%) sepia(100%) hue-rotate(-180deg) saturate(3);*/
-  filter: invert(100%) brightness(85%);
   max-height: 50px;
   width: 100%;
   object-fit: contain;
@@ -206,11 +215,11 @@ h2 {
 
 .scenario-icon {
   height: 30px;
-  filter: invert(100%);
 }
 
 .game-details {
   flex: 1;
+  min-width: 0;
 }
 
 .game-delete {
@@ -222,7 +231,7 @@ h2 {
     font-size: 1.2em;
     color: var(--delete);
     &:hover {
-      color: #990000;
+      color: var(--survivor);
     }
   }
 }
@@ -231,7 +240,7 @@ h2 {
   justify-content: flex-end;
   display: flex;
   gap: 10px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   align-items: center;
   span {
     line-height: 25px;
@@ -240,9 +249,9 @@ h2 {
   @media (max-width: 600px) {
     justify-content: flex-start;
     width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    border-left: 3px solid rgba(255, 255, 255, 0.15);
-    border-radius: 4px;
+    background: rgba(48, 58, 61, 0.06);
+    border-left: 3px solid var(--edge-dim);
+    border-radius: var(--radius-sm);
     padding: 5px 8px;
     box-sizing: border-box;
     img {
@@ -253,22 +262,24 @@ h2 {
 
 .title {
   flex: 1;
-  font-family: teutonic, sans-serif;
+  font-family: "Arno", "Noto Sans", sans-serif;
   font-size: 1.6em;
+  font-weight: var(--font-black);
+  letter-spacing: 0.02em;
   text-decoration: none;
   a {
     text-decoration: none;
   }
 
   &:hover {
-    color: var(--title);
+    color: var(--spooky-green);
   }
 }
 
 .investigator {
   display: inline;
   padding: 5px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   @media (max-width: 768px) {
     padding: 2px;
   }
@@ -278,8 +289,8 @@ h2 {
   width: 50px;
   height: 50px;
   overflow: hidden;
-  border-radius: 5px;
-  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.45);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
   @media (max-width: 768px) {
     width: 36px;
     height: 36px;
@@ -306,7 +317,7 @@ h2 {
   }
 
   &.neutral {
-    border: 3px solid var(--neutral);
+    border: 3px solid var(--neutral-dark);
   }
 }
 
@@ -319,7 +330,7 @@ h2 {
 
 .game-subdetails {
   display: flex;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(48, 58, 61, 0.035);
   flex-grow: 1;
   position: relative;
 
@@ -332,7 +343,7 @@ h2 {
 .current-subdetails {
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(48, 58, 61, 0.035);
   flex: 1;
   position: relative;
   gap: 10px;
@@ -341,17 +352,18 @@ h2 {
   }
 
   h2 {
-    color: var(--title);
-    font-size: 1em;
+    color: var(--text-dim);
+    font-size: 0.72em;
+    font-weight: var(--font-black);
+    letter-spacing: 0.12em;
     margin: 0;
-    padding: 0;
-    background: var(--background-dark);
-    padding: 2px 5px;
+    background: rgba(48, 58, 61, 0.08);
+    padding: 3px 8px;
   }
 }
 
 .investigators {
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   display: flex;
   padding: 10px;
   flex: 1;
@@ -369,6 +381,7 @@ h2 {
 
 .main-details {
   flex: 1;
+  min-width: 0;
 }
 
 .game-title {
@@ -376,9 +389,9 @@ h2 {
   gap: 10px;
   flex-direction: row;
   align-items: center;
-  padding: 10px;
+  padding: 12px;
   position: relative;
-  border-bottom: 1px solid var(--box-border);
+  border-bottom: var(--edge-width) solid var(--edge-faint);
 
   @media (max-width: 600px) {
     display: flex;
@@ -406,7 +419,6 @@ h2 {
     width: 100%;
     height: 100%;
     opacity: 0.1;
-    /*background-image: v-bind(box);*/
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -426,49 +438,69 @@ h2 {
   display: flex;
   flex: 1;
   flex-direction: column;
-  background: var(--box-background);
+  background: rgba(125, 148, 132, 0.035);
 
   h2 {
-    background: rgba(255, 255, 255, 0.02);
-    color: var(--title);
-    font-size: 1em;
+    background: var(--panel-inset);
+    color: var(--text-dim);
+    font-size: 0.72em;
+    font-weight: var(--font-black);
+    letter-spacing: 0.12em;
     margin: 0;
-    padding: 0;
-    padding: 2px 5px;
+    padding: 3px 8px;
   }
 }
 
 .other-investigators {
-  background: var(--background-dark);
+  background: var(--panel-inset);
   display: flex;
   padding: 10px;
   flex: 1;
 }
 
 .game-difficulty {
-  padding: 5px 15px;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
+  padding: 2px 10px;
+  background: var(--panel-inset);
+  border: 1px solid var(--edge-dim);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-1);
+  color: var(--text-dim);
+  font-size: 0.72em;
+  font-weight: var(--font-black);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .solo {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-faint);
+  font-size: 0.75em;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .claim-seat-link {
-  padding: 3px 10px;
+  padding: 4px 11px;
   background: var(--spooky-green);
-  color: white !important;
-  border-radius: 3px;
+  border: var(--edge-width) solid var(--edge-on-accent);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  color: var(--button-1-text) !important;
   text-decoration: none;
-  font-size: 0.8em;
+  font-size: 0.78em;
   text-transform: uppercase;
-  font-weight: bold;
+  letter-spacing: 0.05em;
+  font-weight: var(--font-black);
+  transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease;
 
   &:hover {
-    background: hsl(80, 35%, 32%);
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+  }
+
+  &:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
   }
 }
 </style>

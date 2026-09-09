@@ -686,17 +686,51 @@ const title = computed(() => {
 .body {
   font-size: 1.3em;
   font-family: "Noto Sans", sans-serif;
-  color: var(--title);
-  background: rgba(0, 0, 0, 0.6);
+  color: var(--text);
+  background:
+    linear-gradient(rgba(233, 225, 210, 0.86), rgba(233, 225, 210, 0.86)),
+    url('/assets/veiled-harbour/14-选择弹窗纸面.png') center / cover no-repeat;
   padding: 10px;
   border-radius: 10px;
-  border: 1px solid #111;
+  border: 1px solid color-mix(in srgb, var(--brass) 54%, var(--border-panel));
+  box-shadow: var(--shadow-4);
 }
 
 .choice-modal-wrapper {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 18px;
+  background:
+    linear-gradient(rgb(233 225 210 / 0.82), rgb(233 225 210 / 0.82)),
+    url('/assets/veiled-harbour/29-故事抉择内框-v2.png') center / cover no-repeat;
+  border: 1px solid color-mix(in srgb, var(--brass) 62%, var(--border-panel));
+  border-radius: 8px;
+  box-shadow: var(--shadow-4), inset 0 0 0 1px rgb(255 255 255 / 0.18);
+}
+
+.choice-modal-wrapper::before,
+.choice-modal-wrapper::after {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  content: '';
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.choice-modal-wrapper::before {
+  top: 0;
+  left: 0;
+  background-image: url('/assets/veiled-harbour/C04-黄铜压线角件-左上.svg');
+}
+
+.choice-modal-wrapper::after {
+  right: 0;
+  bottom: 0;
+  background-image: url('/assets/veiled-harbour/C04-黄铜压线角件-右下.svg');
 }
 
 .choice-modal-wrapper--processing {
@@ -706,6 +740,9 @@ const title = computed(() => {
 .choice-modal-wrapper .body {
   text-align: center;
   margin: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
 /* The card pool picker's panels carry the framing, so its lede stays plain text. */
@@ -713,7 +750,7 @@ const title = computed(() => {
   padding: 2px 2px 0;
   border: 0;
   background: none;
-  color: #e7dcc2;
+  color: var(--text);
   font-size: 1.05em;
 }
 </style>

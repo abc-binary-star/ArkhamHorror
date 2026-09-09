@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320">
+  <title>诡镇奇谈档案纸纹理</title>
+  <filter id="paper" x="-10%" y="-10%" width="120%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="17" result="grain"/>
+    <feColorMatrix in="grain" type="saturate" values="0" result="mono"/>
+    <feComponentTransfer in="mono">
+      <feFuncA type="table" tableValues="0 0.11"/>
+    </feComponentTransfer>
+    <feBlend in="SourceGraphic" in2="mono" mode="multiply"/>
+  </filter>
+  <rect width="320" height="320" fill="#e9e1d2" filter="url(#paper)"/>
+  <path d="M0 48H320M0 176H320M64 0V320M232 0V320" stroke="#9d947f" stroke-opacity=".055" stroke-width="1"/>
+  <path d="M22 8C80 31 135 2 195 21S273 39 320 12M0 282C52 264 103 299 161 280s103-5 159 10" fill="none" stroke="#756f63" stroke-opacity=".04"/>
+</svg>

@@ -177,9 +177,9 @@ onUnmounted(() => {
   max-height: 70vh;
   background: var(--background);
   color: var(--text);
-  border: 1px solid var(--box-border);
-  border-radius: 5px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-float);
   overflow: hidden;
 }
 
@@ -194,7 +194,7 @@ onUnmounted(() => {
   margin: 0;
   font-family: Teutonic, serif;
   font-size: 17px;
-  color: var(--text);
+  color: var(--text-on-dark);
   text-transform: none;
 }
 

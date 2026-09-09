@@ -136,7 +136,7 @@ onUnmounted(() => clearInterval(interval.value))
           <p>{{currentStep}} / {{totalSteps}}</p>
         </div>
       </div>
-      <div v-if="gameOver">
+      <div v-if="gameOver" class="replay-outcome">
         <p>{{ $t('game.gameOver') }}</p>
 
         <div v-for="entry in recorded" :key="entry.tag">
@@ -189,7 +189,8 @@ onUnmounted(() => clearInterval(interval.value))
   max-width: 500px;
   display: flex;
   flex-direction: column;
-  background: #d0d9dc;
+  background: var(--surface-table);
+  border-left: var(--edge-width) solid var(--border-panel);
 }
 
 .processing {
@@ -209,6 +210,13 @@ onUnmounted(() => clearInterval(interval.value))
     flex: 1;
     width: 30px;
     height: 30px;
+    border: var(--edge-width) solid var(--edge-dim);
+    border-radius: var(--radius-md);
+    background: var(--surface-raised);
+    color: var(--text);
+    cursor: pointer;
+    &:hover:not(:disabled) { background: var(--surface-paper); }
+    &:disabled { opacity: 0.45; cursor: default; }
     :deep(svg) {
       width: 25px;
     }
@@ -223,5 +231,20 @@ onUnmounted(() => clearInterval(interval.value))
   p {
     margin: 0;
   }
+}
+
+.replay-outcome {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  width: min(520px, calc(100vw - 40px));
+  padding: 12px 16px;
+  transform: translateX(-50%);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-4);
+  color: var(--text);
+  z-index: var(--z-index-20);
 }
 </style>

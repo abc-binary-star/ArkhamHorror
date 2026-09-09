@@ -144,7 +144,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
   display: grid;
   place-items: center;
   padding: 20px;
-  background: rgba(0, 0, 0, 0.72);
+  background: color-mix(in srgb, var(--surface-chrome) 78%, transparent);
 }
 
 /* The faces and the details are one wrapping row: when the window can't fit
@@ -159,10 +159,10 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
   max-height: 100%;
   padding: 20px;
   overflow: auto;
-  background: color-mix(in srgb, var(--background) 92%, black 8%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-5);
 
   @media (max-width: 768px) {
     gap: 14px;
@@ -180,13 +180,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 
   button {
     padding: 0;
-    color: #aaa;
+    color: var(--text-dim);
     line-height: 1;
     background: transparent;
     border: 0;
     cursor: pointer;
 
-    &:hover:not(:disabled) { color: #fff; }
+    &:hover:not(:disabled) { color: var(--spooky-green); }
 
     &:disabled {
       opacity: 0.3;
@@ -224,24 +224,24 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
   flex: 1 1 260px;
   min-width: 260px;
   max-width: 380px;
-  color: #ccc;
+  color: var(--text);
 
   h2 {
     margin: 0;
     /* Clear of the prev/next/close cluster. */
     padding-right: 64px;
-    color: #f0e2c0;
+    color: var(--title);
     font-size: 1.2rem;
   }
 
   .level {
-    color: #ccc;
+    color: var(--text-dim);
     font-weight: 400;
   }
 
   .subtitle {
     margin: 2px 0 0;
-    color: #aaa;
+    color: var(--text-dim);
     font-size: 0.86rem;
     font-style: italic;
   }
@@ -250,9 +250,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
     display: inline-block;
     margin: 10px 0 0;
     padding: 2px 8px;
-    color: #d8c48a;
-    background: rgba(200, 169, 110, 0.16);
-    border: 1px solid rgba(200, 169, 110, 0.4);
+    color: var(--brass-dim);
+    background: color-mix(in srgb, var(--brass) 16%, var(--surface-raised));
+    border: var(--edge-width) solid var(--brass);
     border-radius: 999px;
     font-size: 0.72rem;
     font-weight: 700;
@@ -268,7 +268,7 @@ dl {
 }
 
 dt {
-  color: #888;
+  color: var(--text-dim);
   font-weight: 600;
 }
 
@@ -283,12 +283,12 @@ dd {
 
   a {
     padding: 6px 12px;
-    color: #ccc;
+    color: var(--text);
     font-size: 0.8rem;
     font-weight: 600;
     text-decoration: none;
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: var(--surface-raised);
+    border: var(--edge-width) solid var(--edge-dim);
     border-radius: 8px;
 
     &:hover {

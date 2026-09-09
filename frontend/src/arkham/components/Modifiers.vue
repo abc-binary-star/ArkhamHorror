@@ -24,7 +24,9 @@ defineEmits<{ close: [] }>()
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
+  box-shadow: var(--shadow-2);
   padding: 6px 10px;
   gap: 5px;
   font-size: 1em;

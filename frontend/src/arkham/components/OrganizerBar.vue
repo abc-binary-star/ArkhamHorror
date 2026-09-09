@@ -207,21 +207,29 @@ function playSeat(group: GroupDigest) {
 }
 
 .play-seat-btn {
-  background: var(--spooky-green, #6e8644);
-  border: 0;
-  border-radius: 4px;
-  color: #fff;
+  background: var(--spooky-green);
+  border: var(--edge-width) solid var(--edge-on-accent);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  color: var(--button-1-text);
   cursor: pointer;
-  padding: 7px 14px;
+  padding: 6px 13px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 0.82em;
-  font-weight: 700;
+  font-weight: var(--font-black);
   white-space: nowrap;
+  transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease;
 }
 
 .play-seat-btn:hover {
-  background: hsl(80, 35%, 32%);
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.play-seat-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: none;
 }
 
 .bar-metrics {

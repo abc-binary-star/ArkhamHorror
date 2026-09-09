@@ -435,10 +435,6 @@ const totalHandSize = computed(() => {
   return playerHandSize + treacheryHandSize + enemyHandSize
 })
 
-const actualHandSize = computed(() => {
-  return playerHand.value.length + inHandTreacheries.value.length + inHandEnemies.value.length
-})
-
 const handSizeClasses = computed(() => ({
   'hand-size-ok': (props.investigator.handSize ?? 8) > totalHandSize.value,
   'hand-size-warn': (props.investigator.handSize ?? 8) == totalHandSize.value,
@@ -1443,7 +1439,8 @@ function closeHand() {
   align-self: safe center;
   align-items: flex-start;
   padding: 10px;
-  background: var(--background-dark);
+  min-width: 0;
+  background: linear-gradient(180deg, rgb(18 34 32 / 0.12), rgb(8 18 18 / 0.3));
   @media (max-width: 800px) and (orientation: portrait) {
     padding-bottom: 0;
   }
@@ -1482,7 +1479,7 @@ function closeHand() {
   height: 12px;
   align-items: center;
   justify-content: center;
-  background: #1e2235;
+  background: color-mix(in srgb, var(--surface-table, #626e70) 78%, var(--ink));
   border: none;
   box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.4);
   cursor: pointer;
@@ -1522,9 +1519,9 @@ function closeHand() {
   align-self: stretch;
   flex-shrink: 0;
   padding: 10px 10px 10px 5px;
-  background: var(--background-dark);
-  border-top: 1px solid var(--background);
-  border-bottom: 1px solid var(--background);
+  background: rgb(10 23 22 / 0.72);
+  border: 1px solid rgb(205 175 107 / 0.28);
+  border-radius: 5px;
 }
 
 /* Overlaid on each card in the Hidden popover. Muted grey while the card still
@@ -1570,10 +1567,10 @@ function closeHand() {
   flex-wrap: nowrap;
   overflow: auto;
   gap: 5px;
-  background: var(--background-dark);
+  background: rgb(10 23 22 / 0.62);
   padding: 10px;
-  border-bottom: 1px solid var(--background);
-  border-top: 1px solid var(--background);
+  border: 1px solid rgb(205 175 107 / 0.28);
+  border-radius: 5px;
   max-height: 300px;
   transition: max-height 0.15s cubic-bezier(0.4, 0, 0.2, 1), padding 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.1s ease;
 
@@ -1872,29 +1869,33 @@ function closeHand() {
 }
 
 .hand-size {
-  padding: 3px;
+  align-self: flex-start;
+  padding: 3px 8px;
   justify-items: center;
   font-size: 0.7rem;
-  color: white;
-  background-color: var(--neutral-dark);
+  color: var(--text-dim-on-dark, #c7cfcc);
+  background: transparent;
+  border-top: 1px solid rgb(205 175 107 / 0.28);
   display: grid;
   grid-template-columns: 1fr;
-  width: calc((v-bind(actualHandSize) * var(--card-width)) + ((v-bind(actualHandSize) - 1) * 5px));
+  width: auto;
   max-width: 100%;
-  min-width: fit-content;
+  min-width: 0;
 
 }
 
 .hand-size-ok {
-  background-color: var(--rogue-dark);
+  color: var(--text-dim-on-dark, #c7cfcc);
 }
 
 .hand-size-warn {
-  background-color: var(--seeker-dark);
+  color: #e3c26b;
+  border-top-color: color-mix(in srgb, #e3c26b 72%, transparent);
 }
 
 .hand-size-alert {
-  background-color: var(--survivor-dark);
+  color: #e08a83;
+  border-top-color: color-mix(in srgb, #e08a83 72%, transparent);
 }
 
 .hand-area {
@@ -1904,21 +1905,26 @@ function closeHand() {
   align-items: flex-start;
   flex: 1;
   max-width: 100%;
+  min-width: 0;
+  padding: 0 10px 10px;
+  border: 1px solid rgb(205 175 107 / 0.28);
+  border-radius: 5px;
+  background: rgb(10 23 22 / 0.48);
 }
 
 .hand-debug-actions button,
 .hand-debug-add-button {
   border: 1px solid var(--button-highlight);
   border-radius: 4px;
-  background: rgba(0, 0, 0, 0.65);
-  color: white;
+  background: var(--surface-raised, #f4efe4);
+  color: var(--text);
   cursor: pointer;
   padding: 4px 8px;
 }
 
 .hand-debug-actions button:hover,
 .hand-debug-add-button:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(48, 58, 61, 0.1);
 }
 
 .hand-area-IsMobile {
@@ -1930,7 +1936,10 @@ function closeHand() {
   flex-direction: column;
   align-items: stretch;
   height: calc(var(--card-height) * 4);
-  background: var(--background-dark);
+  background:
+    linear-gradient(180deg, rgb(18 36 34 / 0.12), rgb(8 18 18 / 0.72)),
+    url('/assets/veiled-harbour/T02-调查员皮革桌垫.png') center / cover no-repeat;
+  border-top: 1px solid rgb(205 175 107 / 0.52);
   transition: bottom 0.3s ease;
   overflow: hidden;
   :deep(.card){
@@ -1955,8 +1964,8 @@ function closeHand() {
   height: 32px;
   border: none;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.65);
-  color: white;
+  background: var(--surface-raised, #f4efe4);
+  color: var(--text);
   display: flex;
   align-items: center;
   justify-content: center;

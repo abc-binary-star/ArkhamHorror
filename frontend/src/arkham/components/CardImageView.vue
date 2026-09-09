@@ -206,11 +206,53 @@ const cardName = (card: Arkham.CardDef) => {
   gap: 8px;
   align-self: start;
   position: relative;
+  padding: 7px;
+  border: 1px solid color-mix(in srgb, var(--brass) 38%, transparent);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(rgba(233, 225, 210, 0.46), rgba(233, 225, 210, 0.46)),
+    url('/assets/veiled-harbour/13-卡槽纸面.png') center / cover no-repeat;
+  box-shadow: var(--shadow-2);
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: var(--brass);
+    box-shadow: var(--shadow-4);
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    bottom: 2px;
+    height: 28px;
+    pointer-events: none;
+    background: url('/assets/veiled-harbour/33-卡牌交互状态带-v2.png') center / 100% 100% no-repeat;
+    mix-blend-mode: multiply;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 160ms ease, transform 160ms ease;
+  }
+
+  &:hover::after,
+  &:focus-within::after {
+    opacity: 0.78;
+    transform: translateY(0);
+  }
 
   > a {
     position: relative;
+    z-index: 1;
     display: flex;
     justify-content: center;
+  }
+
+  > .overlay-controls,
+  > .attachments-panel {
+    position: relative;
+    z-index: 1;
   }
 }
 
@@ -223,6 +265,18 @@ const cardName = (card: Arkham.CardDef) => {
     opacity: 0.85;
     filter: grayscale(0);
   }
+}
+
+.card-tile--unimplemented::before,
+.card-tile--out::before {
+  content: '';
+  position: absolute;
+  inset: 22% 28%;
+  z-index: 0;
+  pointer-events: none;
+  background: url('/assets/veiled-harbour/16-卡牌背面纹章.png') center / contain no-repeat;
+  opacity: 0.16;
+  mix-blend-mode: multiply;
 }
 
 .card-badges {
@@ -241,9 +295,9 @@ const cardName = (card: Arkham.CardDef) => {
   min-width: 30px;
   height: 26px;
   padding: 0 7px;
-  color: #d7d7d7;
-  background: rgba(0, 0, 0, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 7px;
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.45);
   font-size: 0.82rem;
@@ -260,9 +314,9 @@ const cardName = (card: Arkham.CardDef) => {
   min-width: 30px;
   height: 26px;
   padding: 0 7px;
-  color: #c8a96e;
-  background: rgba(0, 0, 0, 0.72);
-  border: 1px solid rgba(200, 169, 110, 0.46);
+  color: var(--brass-dim);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--brass);
   border-radius: 7px;
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.45);
   font-size: 0.82rem;
@@ -270,8 +324,8 @@ const cardName = (card: Arkham.CardDef) => {
 }
 
 .spirit-badge {
-  color: #b8d7ff;
-  border-color: rgba(120, 170, 255, 0.5);
+  color: var(--teal);
+  border-color: var(--teal);
 }
 
 .has-attachments {
@@ -292,8 +346,8 @@ const cardName = (card: Arkham.CardDef) => {
 
 .attachments-panel {
   padding: 8px;
-  background: rgba(0, 0, 0, 0.26);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 9px;
 }
 
@@ -321,7 +375,7 @@ const cardName = (card: Arkham.CardDef) => {
 
 .attachment-card {
   min-width: 0;
-  color: #f0e2c0;
+  color: var(--text);
   text-decoration: none;
   font-size: 0.68rem;
   font-weight: 700;
@@ -373,17 +427,17 @@ const cardName = (card: Arkham.CardDef) => {
 }
 
 .overlay-controls button {
-  background: rgba(0, 0, 0, 0.75);
-  border: 1px solid var(--box-border);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 3px;
-  color: #eee;
+  color: var(--text);
   cursor: pointer;
   font-size: 0.85rem;
   line-height: 1;
   padding: 0.1rem 0.45rem;
 
   &:hover:not(:disabled) {
-    background: rgba(0, 0, 0, 0.95);
+    background: var(--surface-paper);
   }
 
   &:disabled {

@@ -160,7 +160,11 @@ const drownedCityTaskRecommendation = (body: string) => {
       <a
         v-if="choice.tag === MessageType.SKILL_LABEL"
         class="button"
+        role="button"
+        tabindex="0"
         @click="choose(index)"
+        @keydown.enter.prevent="choose(index)"
+        @keydown.space.prevent="choose(index)"
       >
         Use <i :class="`icon${choice.skillType}`"></i>
       </a>
@@ -168,7 +172,11 @@ const drownedCityTaskRecommendation = (body: string) => {
       <a
         v-if="choice.tag === MessageType.SKILL_LABEL_WITH_LABEL"
         class="button"
+        role="button"
+        tabindex="0"
         @click="choose(index)"
+        @keydown.enter.prevent="choose(index)"
+        @keydown.space.prevent="choose(index)"
       >
         Use <i :class="`icon${choice.skillType}`"></i>: {{ t(choice.label) }}
       </a>
@@ -179,10 +187,10 @@ const drownedCityTaskRecommendation = (body: string) => {
 <style scoped>
 
 a.button {
-  display: block;
-  background-color: var(--neutral-dark);
-  color: white;
-  border: 1px solid #666;
+  display: flex;
+  background-color: var(--button);
+  color: var(--text);
+  border: var(--edge-width) solid var(--edge-dim);
   cursor: pointer;
   align-content: center;
   align-items: center;
@@ -209,38 +217,45 @@ a.button {
 }
 
 a.button:hover {
-  background-color: #111;
+  background-color: var(--surface-panel);
+  border-color: var(--spooky-green);
 }
 
 a.button:active {
-  background-color: #666;
-  border-color: #111;
+  background-color: var(--panel-inset);
+  border-color: var(--edge);
 }
 
 button, a.button {
-  background-color: var(--button-2);
-  border-radius: 0.6em;
-  border: 0;
-  color: #DDD;
-  font-size: 1.2em;
-  font-weight: bold;
+  min-height: var(--control-height);
+  background-color: var(--button);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.03)),
+    url('/assets/veiled-harbour/C02-象牙档案纸微纹理.jpg');
+  background-size: 100% 100%, 256px 256px;
+  background-repeat: no-repeat, repeat;
+  border-radius: var(--control-radius);
+  border: var(--edge-width) solid var(--edge-dim);
+  color: var(--button-text);
+  font-size: 1em;
+  font-weight: var(--font-bold);
   font-family: "Noto Sans", sans-serif;
-  padding: 10px;
-  text-align: justify;
-  transition: all 0.3s ease-in;
+  padding: 9px 12px;
+  text-align: left;
+  transition: transform 80ms ease, background-color 120ms ease, box-shadow 80ms ease, filter 120ms ease;
   white-space: break-spaces;
   width: 100%;
-  text-transform: uppercase;
   display: flex;
 
   &:deep(strong) {
     display: contents;
-    color: #FFF;
+    color: inherit;
   }
 
   &[disabled] {
     cursor: not-allowed;
-    background-color: #999 !important;
+    filter: var(--button-disabled-filter);
+    opacity: 0.72;
   }
 
   &::before {
@@ -254,6 +269,27 @@ button, a.button {
     align-items: flex-start;
     text-align: left;
   }
+}
+
+button:hover:not(:disabled),
+a.button:hover {
+  background-color: var(--button-highlight);
+  border-color: var(--edge);
+  filter: brightness(1.03);
+  transform: translateY(-1px);
+}
+
+button:active:not(:disabled),
+a.button:active {
+  background-color: var(--panel-inset);
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+button:focus-visible,
+a.button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
 }
 
 .choice-content,
@@ -292,14 +328,6 @@ button, a.button {
 .choice-subtext :deep(.rogue-icon)::before { content: "\0054"; }
 .choice-subtext :deep(.mystic-icon)::before { content: "\0057"; }
 .choice-subtext :deep(.survivor-icon)::before { content: "\0052"; }
-
-  button:hover, a.button:hover {
-  background-color: #311b3e;
-
-  &[disabled] {
-    background-color: #999 !important;
-  }
-}
 
 i {
   font-family: 'Arkham';

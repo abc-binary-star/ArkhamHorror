@@ -2,3 +2,172 @@
  * Highest-priority layer: single-purpose helper classes that must win over
  * the layers below (but not over unlayered scoped component styles).
  */
+
+/* All-caps micro label used above sections and inside HUD strips. */
+.micro-label {
+  font-size: 0.62rem;
+  font-weight: var(--font-black);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+/* Outlined status chip: the smallest unit of the sticker system. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 7px;
+  border: 1px solid var(--edge-dim);
+  border-radius: var(--radius-sm);
+  background: var(--panel-inset);
+  box-shadow: var(--shadow-1);
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  font-weight: var(--font-black);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.chip--accent {
+  border-color: var(--spooky-green-dark);
+  color: var(--spooky-green);
+}
+
+.chip--brass {
+  border-color: var(--brass-dim);
+  color: var(--brass);
+}
+
+.chip--danger {
+  border-color: var(--survivor-extra-dark);
+  color: var(--survivor);
+}
+
+/* Filled pill, used for the selected item inside a segmented control. */
+.chip--solid {
+  border-color: var(--edge-on-accent);
+  background: var(--spooky-green);
+  box-shadow: var(--shadow-2);
+  color: var(--button-1-text);
+}
+
+/* Primary call to action: the one bright surface on screen. */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 120px;
+  min-height: var(--control-height-primary);
+  padding: 10px 24px;
+  border: var(--edge-width) solid var(--edge-on-accent);
+  border-radius: var(--control-radius);
+  background: var(--spooky-green);
+  background-image:
+    linear-gradient(180deg, rgba(53, 84, 76, 0.62), rgba(20, 40, 37, 0.58)),
+    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg');
+  background-size: 100% 100%, 256px 256px;
+  background-repeat: no-repeat, repeat;
+  box-shadow: var(--shadow-3);
+  color: var(--button-1-text);
+  font-weight: var(--font-black);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease;
+}
+
+.cta:hover:not(:disabled) {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.cta:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.cta:disabled {
+  cursor: not-allowed;
+  filter: var(--button-disabled-filter);
+  opacity: 0.72;
+  box-shadow: var(--shadow-1);
+}
+
+/* Ghost counterpart: no shadow until hovered, so it reads as secondary. */
+.cta--ghost {
+  background: transparent;
+  border-color: var(--edge-dim);
+  box-shadow: none;
+  color: var(--text-dim);
+}
+
+.cta--ghost:hover:not(:disabled) {
+  border-color: var(--edge);
+  color: var(--text);
+  filter: none;
+  box-shadow: var(--shadow-2);
+}
+
+.cta--danger {
+  background: var(--survivor-dark);
+  color: #fff2f0;
+}
+
+/* Segmented control: a bordered tray holding flush tab buttons. */
+.segmented {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
+  background-color: var(--panel-inset);
+  background-image:
+    linear-gradient(rgba(48, 58, 61, 0.18), rgba(48, 58, 61, 0.18)),
+    url('/assets/veiled-harbour/C03-深绿布面书脊.jpg');
+  background-size: 100% 100%, 128px 128px;
+  background-repeat: no-repeat, repeat;
+  box-shadow: var(--shadow-3);
+}
+
+.segmented > * {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 12px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  box-shadow: none;
+  color: var(--text-faint);
+  font-size: 0.78rem;
+  font-weight: var(--font-bold);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 120ms ease, color 120ms ease;
+}
+
+.segmented > *:hover {
+  background: rgba(48, 58, 61, 0.08);
+  color: var(--text);
+  transform: none;
+}
+
+.segmented > .router-link-active,
+.segmented > [aria-current='page'],
+.segmented > .is-active {
+  background: var(--spooky-green);
+  color: var(--button-1-text);
+  font-weight: var(--font-black);
+}
+
+.segmented > *:active {
+  transform: none;
+  box-shadow: none;
+}

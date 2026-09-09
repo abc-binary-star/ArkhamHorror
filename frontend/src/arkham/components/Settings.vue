@@ -503,7 +503,7 @@ onBeforeUnmount(() => {
   margin-top: 4px;
   font-size: 12px;
   line-height: 1.4;
-  color: var(--background-light);
+  color: var(--text-dim);
 }
 
 /* Grow past 150px when the labels need it ("Default", "Chapter 1", …) rather
@@ -526,8 +526,8 @@ onBeforeUnmount(() => {
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   border-radius: 5px;
-  background: var(--background-dark);
-  border: 1px solid var(--box-border);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   padding: 2px;
   gap: 2px;
 }
@@ -549,7 +549,7 @@ onBeforeUnmount(() => {
   user-select: none;
   cursor: pointer;
   border-radius: 3px;
-  color: var(--background-light);
+  color: var(--text-dim);
   margin: 0;
 }
 
@@ -559,7 +559,7 @@ onBeforeUnmount(() => {
 
 .segmented input[type='radio']:checked + label {
   background: var(--button-1);
-  color: var(--text);
+  color: var(--button-1-text);
 }
 
 .segmented input[type='radio']:checked + label:hover {
@@ -578,7 +578,7 @@ onBeforeUnmount(() => {
   border: none;
   border-top: 1px solid var(--box-border);
   background: var(--button-2);
-  color: var(--text);
+  color: var(--button-2-text);
   font-family: Teutonic, serif;
   font-size: 14px;
   letter-spacing: 0.08em;

@@ -239,7 +239,9 @@ const deckLabel = computed(() => {
   border-radius: 3px;
   padding: 0 2px;
   transform: translateX(-50%) translateY(50%);
-  background: rgba(255,255,255,0.8);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  color: var(--text);
 }
 
 .deck-size {
@@ -250,8 +252,9 @@ const deckLabel = computed(() => {
   height: 1.3em;
   border-radius: 1.3em;
   text-align: center;
-  color: rgba(255, 255, 255, 0.7);
-  background-color: rgba(0, 0, 0, 0.8);
+  color: var(--text);
+  background-color: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   left: 50%;
   bottom: 0%;
   transform: translateX(-50%) translateY(-50%);
@@ -271,9 +274,10 @@ const deckLabel = computed(() => {
   padding: 0 0.35em;
   border-radius: 999px;
   font-size: 0.95em;
-  color: white;
-  background: rgba(0, 0, 0, 0.75);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  color: var(--text);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  box-shadow: var(--shadow-2);
 }
 
 .can-interact {

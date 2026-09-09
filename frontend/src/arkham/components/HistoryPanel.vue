@@ -581,15 +581,15 @@ function damagedFallbackText(view: DamagedTargetView): string {
 }
 
 .history-panel {
-  background: #1a1a2e;
-  border: 1px solid var(--button-highlight);
-  border-radius: 8px;
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
   padding: 1rem 1.25rem 1.25rem;
   width: min(90vw, 900px);
   height: 65vh;
   display: flex;
   flex-direction: column;
-  color: #eee;
+  color: var(--text);
 }
 
 .history-header {
@@ -601,14 +601,14 @@ function damagedFallbackText(view: DamagedTargetView): string {
   h3 {
     margin: 0;
     font-size: 1.1rem;
-    color: #adf;
+    color: var(--spooky-green-dark);
   }
 }
 
 .close-btn {
   background: transparent;
   border: none;
-  color: #eee;
+  color: var(--text-dim);
   font-size: 1.5rem;
   cursor: pointer;
   line-height: 1;
@@ -623,9 +623,9 @@ function damagedFallbackText(view: DamagedTargetView): string {
 }
 
 .scope-tab, .investigator-tab {
-  background: #232346;
-  border: 1px solid var(--neutral-dark);
-  color: #ccc;
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
+  color: var(--text-dim);
   padding: 0.35rem 0.75rem;
   border-radius: 4px;
   cursor: pointer;
@@ -633,9 +633,9 @@ function damagedFallbackText(view: DamagedTargetView): string {
 }
 
 .scope-tab--active {
-  background: #345;
-  color: #fff;
-  border-color: #67a;
+  background: var(--spooky-green);
+  color: var(--button-1-text);
+  border-color: var(--spooky-green-dark);
 }
 
 .investigator-tabs {
@@ -691,9 +691,9 @@ function damagedFallbackText(view: DamagedTargetView): string {
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    color: #adf;
+    color: var(--spooky-green-dark);
     opacity: 0.85;
-    border-left: 3px solid #345;
+    border-left: 3px solid var(--spooky-green);
     padding-left: 0.5rem;
     display: flex;
     align-items: center;
@@ -708,8 +708,8 @@ function damagedFallbackText(view: DamagedTargetView): string {
   height: 1.05rem;
   padding: 0 0.4rem;
   border-radius: 999px;
-  background: #2c2c52;
-  color: #d8e8ff;
+  background: var(--panel-inset);
+  color: var(--text);
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0;
@@ -739,8 +739,8 @@ function damagedFallbackText(view: DamagedTargetView): string {
 }
 
 .pills li, .chips li {
-  background: #232346;
-  border: 1px solid var(--neutral-dark);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 999px;
   padding: 0.2rem 0.65rem;
   font-size: 0.85rem;
@@ -750,8 +750,8 @@ function damagedFallbackText(view: DamagedTargetView): string {
 }
 
 .rows li {
-  background: #232346;
-  border: 1px solid var(--neutral-dark);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 4px;
   padding: 0.2rem 0.5rem;
   font-size: 0.85rem;
@@ -766,7 +766,7 @@ function damagedFallbackText(view: DamagedTargetView): string {
 
 .pill-value {
   font-weight: 600;
-  color: #fff;
+  color: var(--text);
 }
 
 .pill-icon {
@@ -920,8 +920,8 @@ function damagedFallbackText(view: DamagedTargetView): string {
 }
 
 .chip {
-  background: #232346;
-  border: 1px solid var(--neutral-dark);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 999px;
   padding: 0.2rem 0.65rem;
   font-size: 0.85rem;

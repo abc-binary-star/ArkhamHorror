@@ -99,9 +99,9 @@ watchEffect(() => {
   height: 15px;
   padding: 0;
   border-radius: 50%;
-  border: 1px solid var(--box-border);
-  background: rgba(0, 0, 0, 0.7);
-  color: rgba(255, 255, 255, 0.75);
+  border: var(--edge-width) solid var(--edge-dim);
+  background: var(--surface-raised);
+  color: var(--text);
   cursor: pointer;
   transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
@@ -114,15 +114,15 @@ watchEffect(() => {
 /* Neutral, not --select: magenta means the game is waiting on a choice, and
    turning a resolved card over is optional chrome. */
 .slot__flip:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.45);
-  color: #fff;
+  background: var(--surface-paper);
+  border-color: var(--spooky-green);
+  color: var(--text);
 }
 
 .slot__flip:focus-visible {
-  outline: 1px solid rgba(255, 255, 255, 0.7);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
-  color: #fff;
+  color: var(--text);
 }
 
 .slot__flip--hidden {

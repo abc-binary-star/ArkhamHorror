@@ -43,7 +43,7 @@ const format = (str: string) => {
 </script>
 
 <template>
-  <dialog ref="dialogRef" @cancel.prevent="handleCancel" @keydown.enter.prevent="handleYes">
+  <dialog ref="dialogRef" @cancel.prevent="handleCancel">
     <button class="close-btn" @click.prevent="handleCancel" aria-label="Close">
       <font-awesome-icon icon="times" />
     </button>
@@ -59,14 +59,14 @@ const format = (str: string) => {
 dialog {
   position: fixed;
   margin: auto;
-  padding: 32px;
+  padding: 28px;
   width: 90%;
   max-width: 400px;
-  background: #1e2030;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-  color: #f0f0f0;
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--control-radius);
+  box-shadow: var(--shadow-5);
+  color: var(--text);
   opacity: 0;
   transform: scale(0.94) translateY(-10px);
   transition: opacity 0.2s ease, transform 0.2s ease,
@@ -112,21 +112,24 @@ dialog[open]::backdrop {
   right: 12px;
   background: transparent;
   border: none;
-  color: #666;
+  color: var(--text-faint);
   font-size: 1rem;
   cursor: pointer;
+  min-width: var(--control-height-icon);
+  min-height: var(--control-height-icon);
   padding: 4px 8px;
-  border-radius: 4px;
-  transition: color 0.15s;
+  border-radius: var(--control-radius);
+  transition: color 0.15s, background-color 0.15s;
 
-  &:hover { color: #ccc; }
+  &:hover { color: var(--text); background: var(--panel-inset); }
+  &:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 }
 
 .prompt-text {
   margin: 0 0 28px;
   font-size: 1rem;
   line-height: 1.5;
-  color: #d0d0d0;
+  color: var(--text);
   padding-right: 20px;
 }
 
@@ -137,26 +140,36 @@ dialog[open]::backdrop {
 }
 
 .btn {
-  padding: 8px 22px;
-  border: none;
-  border-radius: 6px;
+  min-width: 88px;
+  min-height: var(--control-height);
+  padding: 8px 18px;
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--control-radius);
   font-size: 0.88rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease, border-color 120ms ease;
 
-  &:hover { opacity: 0.85; }
+  &:hover { filter: brightness(1.04); border-color: var(--edge); transform: translateY(-1px); }
+  &:active { transform: translate(1px, 1px); box-shadow: none; }
+  &:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 }
 
 .btn--confirm {
-  background: #c0392b;
+  background: var(--delete);
+  border-color: var(--survivor-extra-dark);
   color: #fff;
 }
 
 .btn--cancel {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ccc;
+  background: var(--button);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.03)),
+    url('/assets/veiled-harbour/C02-象牙档案纸微纹理.jpg');
+  background-size: 100% 100%, 256px 256px;
+  background-repeat: no-repeat, repeat;
+  color: var(--text);
 }
 </style>

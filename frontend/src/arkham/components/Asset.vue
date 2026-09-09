@@ -283,7 +283,11 @@ const showAbilities = ref<boolean>(false)
 async function clicked() {
   if(cardAction.value !== -1) {
     emits('choose', cardAction.value)
-  } else if (abilities.value.length > 0) {
+  } else if (abilities.value.length === 1) {
+    // Unambiguous single ability: fire it directly instead of making the
+    // player open the abilities menu just to confirm.
+    chooseAbility(abilities.value[0].index)
+  } else if (abilities.value.length > 1) {
     showAbilities.value = !showAbilities.value
   }
 }

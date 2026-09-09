@@ -9,6 +9,7 @@
 <template>
   <div class="event-start-barrier" role="status" aria-live="polite">
     <div class="barrier-panel">
+      <span class="barrier-seal barrier-seal--waiting" aria-hidden="true"></span>
       <div class="barrier-spinner" aria-hidden="true"></div>
       <p class="barrier-message">{{ $t('event.waitingForGroups') }}</p>
     </div>
@@ -44,6 +45,17 @@
   border: 3px solid rgba(255, 255, 255, 0.18);
   border-top-color: var(--spooky-green, #6e8644);
   animation: barrier-spin 0.9s linear infinite;
+}
+
+.barrier-seal {
+  display: block;
+  width: 74px;
+  height: 74px;
+  background-image: url('/assets/veiled-harbour/34-案件状态印章组-v2.png');
+  background-repeat: no-repeat;
+  background-size: 400% 100%;
+  background-position: 66.666% center;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.34);
 }
 
 .barrier-message {

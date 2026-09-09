@@ -202,9 +202,9 @@ defineExpose({
   align-items: center;
   gap: 10px;
   padding: 10px 14px;
-  background: var(--background-dark);
-  border: 1px dashed var(--box-border);
-  border-radius: 4px;
+  background: var(--surface-raised);
+  border: 1px dashed var(--edge-dim);
+  border-radius: var(--radius-md);
   cursor: pointer;
   color: var(--title);
   font-size: 0.9em;
@@ -224,15 +224,15 @@ defineExpose({
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
 }
 
 .preview-icon {
   flex-shrink: 0;
   width: 28px;
-  filter: invert(100%) brightness(60%);
+  filter: none;
 
   img { width: 100%; display: block; }
 }
@@ -262,15 +262,15 @@ defineExpose({
 
 .preview-scenario {
   font-size: 0.8em;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-dim);
 }
 
 .preview-difficulty {
   font-size: 0.75em;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-dim);
+  background: var(--panel-inset);
   padding: 2px 7px;
   border-radius: 999px;
 }
@@ -318,7 +318,7 @@ defineExpose({
 
   &:hover {
     opacity: 0.85;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--surface-panel);
   }
 }
 
@@ -336,8 +336,8 @@ defineExpose({
 
 .select-btn {
   padding: 7px 16px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   color: var(--title);
   border-radius: 6px;
   cursor: pointer;
@@ -346,13 +346,13 @@ defineExpose({
   transition: background 0.15s, border-color 0.15s, color 0.15s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--surface-panel);
   }
 
   &.selected {
-    background: rgba(110, 134, 64, 0.85);
-    border-color: rgba(110, 134, 64, 0.6);
-    color: white;
+    background: var(--spooky-green);
+    border-color: var(--edge-on-accent);
+    color: var(--button-1-text);
   }
 }
 
@@ -373,21 +373,32 @@ defineExpose({
 .btn-submit {
   padding: 8px 18px;
   background: var(--spooky-green);
-  border: 0;
-  color: white;
-  border-radius: 3px;
+  border: var(--edge-width) solid var(--edge-on-accent);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  color: var(--button-1-text);
   cursor: pointer;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
   font-size: 0.9em;
-  font-weight: bold;
-  transition: background 0.2s;
+  font-weight: var(--font-black);
+  transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease;
 
   &:hover:not(:disabled) {
-    background: hsl(80, 35%, 32%);
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translate(1px, 1px);
+    box-shadow: none;
   }
 
   &:disabled {
     background: var(--button);
+    border-color: var(--edge-faint);
+    box-shadow: var(--shadow-1);
+    color: var(--text-faint);
     cursor: not-allowed;
   }
 }

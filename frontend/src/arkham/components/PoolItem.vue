@@ -39,6 +39,29 @@ const image = computed(() => {
 .poolItem {
   --width: var(--pool-token-width);
   pointer-events: inherit;
+  position: relative;
+  isolation: isolate;
+}
+
+.poolItem::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  z-index: -1;
+  pointer-events: none;
+  border: 1px solid rgb(205 175 107 / 0.28);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(28 54 51 / 0.7) 0 58%, transparent 72%);
+  box-shadow: inset 0 0 0 1px rgb(244 239 228 / 0.08);
+  opacity: 0.8;
+  filter: drop-shadow(0 2px 3px rgb(0 0 0 / 0.24));
+}
+
+.resource--can-take::before,
+.clue--can-spend::before,
+.health--can-interact::before,
+.sanity--can-interact::before {
+  opacity: 0.56;
 }
 
 .poolItem.poolItem-resource {

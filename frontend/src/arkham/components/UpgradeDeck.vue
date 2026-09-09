@@ -742,23 +742,23 @@ h2 {
 
 input[type=url] {
   outline: 0;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 6px;
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-md);
   padding: 10px 14px;
-  color: #f2f2f2;
-  background: var(--background-dark);
+  color: var(--text);
+  background: var(--input-background);
   width: 100%;
   font-size: 0.95em;
   margin: 0;
   transition: border-color 150ms ease, box-shadow 150ms ease;
 
   &::placeholder {
-    color: #777;
+    color: var(--text-faint);
   }
 
   &:focus {
-    border-color: rgba(110, 134, 64, 0.7);
-    box-shadow: 0 0 0 3px rgba(110, 134, 64, 0.18);
+    border-color: var(--spooky-green);
+    box-shadow: var(--shadow-2);
   }
 }
 
@@ -831,8 +831,8 @@ input[type=url] {
   justify-content: center;
   min-width: 32px;
   padding: 0 10px;
-  background: rgba(0, 0, 0, 0.3);
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--panel-inset);
+  border-right: var(--edge-width) solid var(--edge-dim);
   font-size: 0.95em;
   font-weight: 700;
   letter-spacing: 0;
@@ -840,8 +840,8 @@ input[type=url] {
 }
 
 .step.primary .step-number {
-  background: rgba(0, 0, 0, 0.25);
-  border-right-color: rgba(255, 255, 255, 0.18);
+  background: color-mix(in srgb, var(--spooky-green) 12%, var(--panel-inset));
+  border-right-color: var(--spooky-green);
 }
 
 .step-label {
@@ -892,12 +892,12 @@ button {
 }
 
 button.secondary {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: #ddd;
+  background: var(--surface-raised);
+  border-color: var(--edge-dim);
+  color: var(--text);
 
   &:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--surface-panel);
   }
 }
 
@@ -950,9 +950,9 @@ button.skip {
   gap: 12px;
   padding: 10px 14px;
   border-radius: 6px;
-  border: 1px dashed rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.02);
-  color: #888;
+  border: 1px dashed var(--edge-dim);
+  background: var(--surface-raised);
+  color: var(--text-dim);
   font-size: 0.72em;
   text-transform: uppercase;
   letter-spacing: 0.07em;
@@ -960,9 +960,9 @@ button.skip {
   transition: border-color 150ms ease, background 150ms ease, color 150ms ease;
 
   &:hover {
-    border-color: rgba(255, 255, 255, 0.22);
-    background: rgba(255, 255, 255, 0.04);
-    color: #aaa;
+    border-color: var(--spooky-green);
+    background: var(--surface-panel);
+    color: var(--text);
   }
 }
 
@@ -981,10 +981,10 @@ button.skip {
   width: auto;
 
   &::file-selector-button {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 4px;
-    color: #ccc;
+    background: var(--surface-panel);
+    border: var(--edge-width) solid var(--edge-dim);
+    border-radius: var(--radius-sm);
+    color: var(--text);
     padding: 4px 10px;
     font-size: 1em;
     text-transform: uppercase;
@@ -994,7 +994,7 @@ button.skip {
     transition: background 150ms ease;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.14);
+      background: var(--surface-raised);
     }
   }
 }

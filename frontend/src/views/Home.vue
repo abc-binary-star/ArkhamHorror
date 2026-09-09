@@ -3,6 +3,7 @@ import { ref, computed, Ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useRouter, useRoute } from 'vue-router';
 import { deleteEvent, deleteGame, fetchGames, fetchEvents, fetchNotifications } from '@/arkham/api';
+import LoadState from '@/components/LoadState.vue';
 import { cullGameLocalStorage, removeGameLocalStorage } from '@/arkham/localStorage';
 import type { GameDetails } from '@/arkham/types/Game';
 import type { EventListEntry } from '@/arkham/types/EpicEvent';
@@ -12,6 +13,8 @@ import EventRow from '@/arkham/components/EventRow.vue';
 import NewGame from '@/arkham/views/NewCampaign.vue';
 import ImportGame from '@/arkham/components/ImportGame.vue';
 import PrimaryButton from '@/components/PrimaryButton.vue';
+import { useToast } from 'vue-toastification';
+import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 
 const route = useRoute()
@@ -26,39 +29,70 @@ const dismissedNotifications = JSON.parse(localStorage.getItem('dismissedNotific
 
 const activeGames = computed(() => games.value.filter(g => g.gameState.tag !== 'IsOver'))
 const finishedGames = computed(() => games.value.filter(g => g.gameState.tag === 'IsOver'))
+const leadGame = computed(() => activeGames.value[0] ?? null)
 
-fetchGames().then((result) => {
-  const availableGames = result.filter((g) => g.tag === 'game') as GameDetails[]
-  cullGameLocalStorage(availableGames)
-  games.value = availableGames
-})
+const gamesLoaded = ref(false)
+const eventsLoaded = ref(false)
+const loadError = ref(false)
+const lobbyLoaded = computed(() => gamesLoaded.value && eventsLoaded.value)
 
-// Epic Multiplayer events surface as a single entry each, inline with regular
-// games (group games are hidden from fetchGames by the backend). A user who is
-// both organizer and player of an event gets duplicate membership rows; collapse
-// to one entry, preferring the organizer role.
-fetchEvents().then((result) => {
-  const byId = new Map<string, EventListEntry>()
-  for (const entry of result) {
-    const existing = byId.get(entry.id)
-    if (!existing || entry.role === 'organizer') byId.set(entry.id, entry)
-  }
-  events.value = [...byId.values()]
-})
+const loadLobby = () => {
+  loadError.value = false
+  gamesLoaded.value = false
+  eventsLoaded.value = false
 
-fetchNotifications().then((result) => notifications.value = result.filter((n: AppNotification) => !dismissedNotifications.includes(n.id)))
+  fetchGames()
+    .then((result) => {
+      const availableGames = result.filter((g) => g.tag === 'game') as GameDetails[]
+      cullGameLocalStorage(availableGames)
+      games.value = availableGames
+    })
+    .catch(() => { loadError.value = true })
+    .finally(() => { gamesLoaded.value = true })
+
+  // Epic Multiplayer events surface as a single entry each, inline with regular
+  // games (group games are hidden from fetchGames by the backend). A user who is
+  // both organizer and player of an event gets duplicate membership rows; collapse
+  // to one entry, preferring the organizer role.
+  fetchEvents()
+    .then((result) => {
+      const byId = new Map<string, EventListEntry>()
+      for (const entry of result) {
+        const existing = byId.get(entry.id)
+        if (!existing || entry.role === 'organizer') byId.set(entry.id, entry)
+      }
+      events.value = [...byId.values()]
+    })
+    .catch(() => { loadError.value = true })
+    .finally(() => { eventsLoaded.value = true })
+}
+
+loadLobby()
+
+fetchNotifications()
+  .then((result) => notifications.value = result.filter((n: AppNotification) => !dismissedNotifications.includes(n.id)))
+  .catch(() => { /* a missing bell is not worth interrupting the lobby for */ })
+
+const toast = useToast()
+const { t } = useI18n()
 
 async function deleteGameEvent(game: GameDetails) {
-  deleteGame(game.id).then(() => {
+  try {
+    await deleteGame(game.id)
     removeGameLocalStorage(game.id)
     games.value = games.value.filter((g) => g.id !== game.id);
-  });
+  } catch {
+    toast.error(t('pleaseTryAgainLater'))
+  }
 }
 
 async function deleteEpicEvent(event: EventListEntry) {
-  deleteEvent(event.id).then(() => {
+  try {
+    await deleteEvent(event.id)
     events.value = events.value.filter((e) => e.id !== event.id)
-  })
+  } catch {
+    toast.error(t('pleaseTryAgainLater'))
+  }
 }
 
 const newGame = ref(route.path === "/new-game" || false)
@@ -111,23 +145,46 @@ const dismissNotification = (notification: AppNotification) => {
       </template>
     </NewGame>
 
-    <div v-if="!newGame" class="home page-content">
+    <div v-if="!newGame" class="home page-content archive-shell">
       <div class="notification" v-for="notification in notifications" :key="notification.id">
         <p v-html="notification.body"></p>
         <a @click.prevent="dismissNotification(notification)" href="#">{{ $t('home.dismiss') }}</a>
       </div>
 
-      <div class="container">
-        <section>
-          <header class="main-header">
-            <h2>{{$t('activeGames')}}</h2>
-            <div class="header-actions">
-              <button v-if="currentUser" class="secondary-cta" type="button" @click="toggleImportGame">
-                {{ $t('home.loadGame') }}
-              </button>
-              <PrimaryButton :label="$t('newGame')" @click="toggleNewGame" />
-            </div>
-          </header>
+      <section class="home-hero" aria-labelledby="home-hero-title">
+        <div class="home-hero-wash" aria-hidden="true"></div>
+        <div class="home-hero-content">
+          <div class="archive-kicker"><span class="archive-rule"></span>{{ $t('home.archiveKicker') }}<span class="archive-rule"></span></div>
+          <p class="archive-index">{{ $t('home.archiveIndex') }}</p>
+          <h1 id="home-hero-title">{{ $t('home.heroTitle') }}</h1>
+          <p class="hero-subtitle">{{ leadGame?.name || $t('home.heroSubtitle') }}</p>
+          <p class="hero-caption">{{ $t('home.heroCaption') }}</p>
+          <div class="hero-actions">
+            <PrimaryButton :label="leadGame ? $t('continue') : $t('newGame')" @click="leadGame ? router.push(`/games/${leadGame.id}`) : toggleNewGame()" />
+            <button v-if="currentUser" class="hero-secondary" type="button" @click="toggleImportGame">{{ $t('home.loadGame') }}</button>
+          </div>
+        </div>
+        <div class="home-hero-seal" aria-hidden="true">
+          <img src="/assets/veiled-harbour/C05-档案压印.svg" alt="" />
+          <span>ARCHIVE<br />04—17</span>
+        </div>
+      </section>
+
+      <div class="archive-heading">
+        <div>
+          <p class="archive-kicker archive-kicker--dark">{{ $t('home.caseKicker') }}</p>
+          <h2>{{$t('activeGames')}}</h2>
+        </div>
+        <div class="header-actions">
+          <button v-if="currentUser" class="secondary-cta" type="button" @click="toggleImportGame">
+            {{ $t('home.loadGame') }}
+          </button>
+          <PrimaryButton :label="$t('newGame')" @click="toggleNewGame" />
+        </div>
+      </div>
+
+      <div class="archive-layout">
+        <section class="archive-main-column">
           <Transition name="slide">
             <div v-if="currentUser && showImportGame" class="load-game-panel">
               <div class="panel-header">
@@ -148,8 +205,10 @@ const dismissNotification = (notification: AppNotification) => {
               <ImportGame ref="importGameRef" />
             </div>
           </Transition>
-          <div v-if="activeGames.length === 0 && events.length === 0" class="box">
-            <p>{{ $t('home.noActiveGames') }}</p>
+          <LoadState v-if="loadError" error @retry="loadLobby" />
+          <div v-else-if="lobbyLoaded && activeGames.length === 0 && events.length === 0" class="empty-archive box">
+            <img src="/assets/veiled-harbour/06-诡镇奇谈徽记.svg" alt="" aria-hidden="true" />
+            <div><p class="empty-archive-title">{{ $t('home.emptyTitle') }}</p><p>{{ $t('home.noActiveGames') }}</p></div>
           </div>
           <EventRow
             v-for="event in events"
@@ -160,13 +219,25 @@ const dismissNotification = (notification: AppNotification) => {
           <GameRow v-for="game in activeGames" :key="game.id" :game="game" :deleteGame="() => deleteGameEvent(game)" />
         </section>
 
-        <section>
-          <header><h2 v-if="finishedGames.length > 0">{{$t('finishedGames')}}</h2></header>
-          <GameRow v-for="game in finishedGames" :key="game.id" :game="game" :deleteGame="() => deleteGameEvent(game)" />
-
-        </section>
+        <aside class="archive-side-column" :aria-label="$t('home.sideLabel')">
+          <div class="archive-note">
+            <p class="archive-note-label">{{ $t('home.sideLabel') }}</p>
+            <p class="archive-note-title">{{ $t('home.sideTitle') }}</p>
+            <p class="archive-note-body">{{ $t('home.sideBody') }}</p>
+            <div class="archive-note-line"></div>
+            <span class="archive-note-code">M—17 / CASEWORK</span>
+          </div>
+          <div v-if="finishedGames.length > 0" class="finished-summary">
+            <span>{{ $t('finishedGames') }}</span><strong>{{ finishedGames.length }}</strong>
+          </div>
+        </aside>
       </div>
-    </div>
+
+      <section v-if="finishedGames.length > 0" class="finished-archive">
+        <header><h2>{{$t('finishedGames')}}</h2><span class="archive-count">{{ finishedGames.length }} {{ $t('home.records') }}</span></header>
+        <GameRow v-for="game in finishedGames" :key="game.id" :game="game" :deleteGame="() => deleteGameEvent(game)" />
+      </section>
+      </div>
   </div>
 
 </template>
@@ -175,8 +246,9 @@ const dismissNotification = (notification: AppNotification) => {
 h2 {
   color: var(--title);
   font-size: 2em;
-  text-transform: uppercase;
-  font-family: teutonic, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-family: "Arno", "Noto Sans", sans-serif;
   margin: 0;
   @media (max-width: 768px) {
     font-size: 1.5em;
@@ -185,17 +257,18 @@ h2 {
 
 .new-game {
   button {
-    border-radius: 3px;
+    border-radius: var(--radius-md);
     outline: 0;
     padding: 10px 15px;
     background: var(--spooky-green);
+    border: var(--edge-width) solid var(--edge-on-accent);
+    box-shadow: var(--shadow-2);
     text-transform: uppercase;
-    color: white;
-    border: 0;
+    letter-spacing: 0.05em;
+    color: var(--button-1-text);
+    font-weight: var(--font-black);
     width: 100%;
-    &:hover {
-      background: hsl(80, 35%, 32%);
-    }
+    &:hover { filter: brightness(1.1); }
   }
 }
 
@@ -226,27 +299,23 @@ h2 {
   opacity: 0;
 }
 
-button {
-  transition: background-color 0.3s linear;
-}
-
 button.cancel-new-game-button {
   height: fit-content;
   align-self: center;
   font-size: 1em;
-  font-weight: bolder;
+  font-weight: var(--font-black);
+  letter-spacing: 0.05em;
   width: fit-content;
-  background-color: var(--survivor);
-  &:hover {
-    background-color: var(--survivor-extra-dark);
-  }
+  background-color: var(--survivor-dark);
+  border-color: var(--survivor);
+  color: #fff2f0;
 }
 
 button.new-game-button {
   height: fit-content;
   align-self: center;
   font-size: 1em;
-  font-weight: bolder;
+  font-weight: var(--font-black);
   width: fit-content;
   margin-block: 10px;
 }
@@ -257,11 +326,12 @@ p {
 }
 
 .box {
-  background-color: var(--box-background);
-  border: 1px solid var(--box-border);
-  color: var(--title);
-  padding: 10px;
-  border-radius: 5px;
+  background-image: var(--panel-gradient);
+  border: var(--edge-width) solid var(--box-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
+  color: var(--text);
+  padding: 14px;
 }
 
 form.box {
@@ -277,7 +347,7 @@ form.box {
 
 header {
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   align-items: center;
   gap: 12px;
   h2 {
@@ -287,17 +357,19 @@ header {
   button {
     height: fit-content;
     align-self: center;
-    background-color: var(--button-1);
-    border-radius: 3px;
+    background-color: var(--spooky-green);
+    border: var(--edge-width) solid var(--edge-on-accent);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-2);
     outline: 0;
-    padding: 10px 15px;
+    padding: 9px 16px;
     text-transform: uppercase;
-    color: white;
-    border: 0;
+    letter-spacing: 0.05em;
+    color: var(--button-1-text);
     font-size: 1em;
-    font-weight: bolder;
+    font-weight: var(--font-black);
     &:hover {
-      background: hsl(80, 35%, 32%);
+      filter: brightness(1.1);
     }
   }
 }
@@ -305,7 +377,7 @@ header {
 .games {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .header-actions {
@@ -316,23 +388,28 @@ header {
   justify-content: flex-end;
 }
 
+/* Ghost buttons carry no shadow until hovered, so they read as secondary
+   next to the filled CTA. */
 .secondary-cta {
   align-self: center;
   background: transparent;
-  border: 1px solid var(--box-border);
-  border-radius: 3px;
-  color: var(--title);
+  border: var(--edge-width) solid var(--box-border);
+  border-radius: var(--radius-md);
+  box-shadow: none;
+  color: var(--text-dim);
   cursor: pointer;
   font-size: 0.85em;
-  font-weight: 700;
-  opacity: 0.8;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.04em;
   outline: 0;
   padding: 8px 12px;
   text-transform: uppercase;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.06);
-    opacity: 1;
+    border-color: var(--edge);
+    background: rgba(48, 58, 61, 0.08);
+    box-shadow: var(--shadow-2);
+    color: var(--text);
   }
 
   @media (max-width: 768px) {
@@ -342,27 +419,29 @@ header {
 }
 
 .load-game-panel {
-  background: var(--box-background);
-  border: 1px solid var(--box-border);
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  background-image: var(--panel-gradient);
+  border: var(--edge-width) solid var(--box-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-4);
+  padding: 14px;
+  margin-bottom: 14px;
 }
 
 .panel-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .panel-header h3 {
   flex: 1;
   margin: 0;
   color: var(--title);
-  font-family: teutonic, sans-serif;
+  font-family: "Arno", "Noto Sans", sans-serif;
   font-size: 1.4em;
+  font-weight: var(--font-black);
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -374,61 +453,73 @@ header {
 
 .panel-load,
 .panel-close {
-  border: 1px solid var(--box-border);
-  border-radius: 3px;
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-md);
   cursor: pointer;
   font-size: 0.8em;
-  font-weight: bolder;
-  padding: 7px 10px;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.04em;
+  padding: 7px 12px;
   text-transform: uppercase;
 }
 
 .panel-load {
   background: var(--spooky-green);
-  border-color: var(--spooky-green);
-  color: white;
+  border-color: var(--edge-on-accent);
+  box-shadow: var(--shadow-2);
+  color: var(--button-1-text);
+  font-weight: var(--font-black);
 
   &:hover:not(:disabled) {
-    background: hsl(80, 35%, 32%);
+    filter: brightness(1.1);
   }
 
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.55;
+    opacity: 0.45;
+    box-shadow: var(--shadow-1);
   }
 }
 
 .panel-close {
   background: transparent;
-  color: var(--title);
+  box-shadow: none;
+  color: var(--text-dim);
 
   &:hover {
-    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--edge);
+    background: rgba(48, 58, 61, 0.08);
+    color: var(--text);
   }
 }
 
+/* Brass notice strip. Deliberately does not shadow the global --text /
+   --background tokens the way the old light-yellow version did. */
 .notification {
-  --text: #816F3A;
-  --border: var(--text);
-  --background: #FFF8E6;
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  padding: 10px;
-  border: 2px solid var(--border);
+  padding: 12px 14px;
+  border: var(--edge-width) solid var(--brass-dim);
+  border-radius: var(--radius-lg);
+  background-image: linear-gradient(
+    to bottom,
+    rgba(176, 141, 63, 0.18),
+    rgba(176, 141, 63, 0.05)
+  );
+  box-shadow: var(--shadow-2);
   color: var(--text);
-  margin-block: 10px;
-  font-size: 1.2em;
-  border-radius: 5px;
-  background-color: var(--background);
-  gap: 5px;
+  margin-block: 12px;
+  font-size: 1.05em;
+  gap: 8px;
 
   > p {
     flex: 1;
   }
 
   :deep(a) {
-    color: var(--seeker-dark);
+    color: var(--brass);
+    font-weight: var(--font-bold);
     text-decoration: underline;
   }
 }
@@ -441,5 +532,207 @@ header.main-header {
   .primary-btn {
     view-transition-name: main-header-button;
   }
+}
+
+/* ── Arkham Horror archive surface ─────────────────────────────────────── */
+.archive-shell {
+  width: min(1240px, calc(100% - 48px));
+  max-width: none;
+  min-width: 0;
+  padding-top: 24px;
+  padding-bottom: 72px;
+}
+
+.home-hero {
+  position: relative;
+  isolation: isolate;
+  min-height: clamp(320px, 34vw, 440px);
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+  margin: 0 0 30px;
+  border: 1px solid rgba(45, 55, 54, 0.5);
+  border-radius: 8px;
+  background: #bfc0b8 url('/assets/veiled-harbour/01-诡镇奇谈主视觉.png') center / cover no-repeat;
+  box-shadow: 0 18px 40px rgba(34, 40, 38, 0.22), 0 2px 5px rgba(34, 40, 38, 0.14);
+}
+
+.home-hero-wash {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(248, 244, 234, 0.88) 0%, rgba(248, 244, 234, 0.67) 27%, rgba(248, 244, 234, 0.16) 52%, rgba(29, 42, 43, 0.08) 100%);
+}
+
+.home-hero-content {
+  width: min(430px, 48%);
+  padding: clamp(28px, 5vw, 60px) clamp(24px, 4vw, 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: var(--ink);
+}
+
+.archive-kicker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--harbour-teal, #28615d);
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.archive-kicker--dark { color: var(--brass-dim); }
+
+.archive-rule {
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.72;
+}
+
+.archive-index {
+  margin: 22px 0 8px;
+  color: var(--text-dim);
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.home-hero h1 {
+  margin: 0;
+  color: #202827;
+  font-family: 'Arno', 'Source Han Serif', serif;
+  font-size: clamp(2.25rem, 4.6vw, 4.25rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1.08;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.hero-subtitle {
+  margin: 16px 0 0;
+  max-width: 25em;
+  color: #344541;
+  font-family: 'Source Han Serif', 'Arno', serif;
+  font-size: clamp(1.05rem, 1.6vw, 1.36rem);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.hero-caption {
+  max-width: 28em;
+  margin: 8px 0 22px;
+  color: #5b625b;
+  font-family: 'Source Han Serif', 'Arno', serif;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.hero-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+.hero-secondary {
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid rgba(45, 55, 54, 0.48);
+  border-radius: 4px;
+  background: rgba(247, 241, 230, 0.42);
+  box-shadow: 0 1px 2px rgba(25, 32, 30, 0.1);
+  color: #2c3936;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.hero-secondary:hover { background: rgba(247, 241, 230, 0.72); color: var(--harbour-teal, #28615d); }
+
+.home-hero-seal {
+  position: absolute;
+  right: 22px;
+  bottom: 20px;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  color: rgba(244, 239, 228, 0.86);
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
+  line-height: 1.45;
+  text-align: center;
+  text-shadow: 0 1px 3px rgba(24, 33, 33, 0.72);
+}
+
+.home-hero-seal img { width: 54px; height: 54px; filter: brightness(1.2) sepia(0.16); opacity: 0.92; }
+
+.archive-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 0 0 14px;
+  padding: 0 2px 14px;
+  border-bottom: 1px solid var(--box-border);
+}
+
+.archive-heading h2 { margin: 6px 0 0; font-family: 'Arno', 'Source Han Serif', serif; font-size: 1.75rem; letter-spacing: 0.02em; }
+.archive-layout { display: grid; grid-template-columns: minmax(0, 1fr) 250px; align-items: start; gap: 22px; }
+.archive-main-column { min-width: 0; }
+.archive-side-column { display: grid; gap: 14px; }
+
+.archive-note {
+  position: relative;
+  overflow: hidden;
+  padding: 20px;
+  border: 1px solid var(--box-border);
+  border-radius: 5px;
+  background: var(--paper, #e9e1d2) url('/assets/veiled-harbour/03-档案纸纹理.svg') repeat;
+  box-shadow: var(--shadow-2);
+}
+
+.archive-note::before { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(165, 130, 75, 0.45); pointer-events: none; }
+.archive-note > * { position: relative; }
+.archive-note-label { margin: 0 0 18px; color: var(--brass-dim); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
+.archive-note-title { margin: 0; color: var(--ink); font-family: 'Arno', 'Source Han Serif', serif; font-size: 1.38rem; font-weight: 600; line-height: 1.3; }
+.archive-note-body { margin: 12px 0 18px; color: var(--text-dim); font-family: 'Source Han Serif', 'Arno', serif; font-size: 0.9rem; line-height: 1.75; }
+.archive-note-line { height: 1px; margin: 0 0 10px; background: var(--brass); opacity: 0.55; }
+.archive-note-code { color: var(--brass-dim); font-family: 'Noto Sans', sans-serif; font-size: 0.6rem; letter-spacing: 0.14em; }
+.finished-summary { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-top: 1px solid var(--box-border); border-bottom: 1px solid var(--box-border); color: var(--text-dim); font-size: 0.8rem; }
+.finished-summary strong { color: var(--ink); font-family: 'Noto Sans', sans-serif; font-size: 1.2rem; }
+
+.empty-archive { display: flex; align-items: center; gap: 16px; min-height: 110px; background: var(--paper, #e9e1d2) url('/assets/veiled-harbour/03-档案纸纹理.svg') repeat; }
+.empty-archive img { width: 48px; height: 48px; opacity: 0.72; }
+.empty-archive-title { margin-bottom: 4px; color: var(--ink); font-family: 'Arno', serif; font-size: 1.12rem; font-weight: 600; }
+.finished-archive { margin-top: 34px; padding-top: 18px; border-top: 1px solid var(--box-border); }
+.finished-archive > header { margin-bottom: 14px; }
+.archive-count { color: var(--text-dim); font-size: 0.72rem; letter-spacing: 0.08em; }
+
+@media (max-width: 900px) {
+  .archive-layout { grid-template-columns: 1fr; }
+  .archive-side-column { grid-template-columns: minmax(0, 1fr) minmax(180px, 0.42fr); }
+  .home-hero-content { width: min(480px, 62%); }
+}
+
+@media (max-width: 640px) {
+  .archive-shell { width: calc(100% - 28px); padding-top: 14px; }
+  .home-hero {
+    min-height: 430px;
+    margin-bottom: 24px;
+    background-image: linear-gradient(180deg, rgba(248, 244, 234, 0.22), rgba(29, 42, 43, 0.22)), url('/assets/veiled-harbour/15-移动端诡镇奇谈竖版.png');
+    background-position: center;
+    background-size: cover;
+  }
+  .home-hero-wash { background: linear-gradient(180deg, rgba(248, 244, 234, 0.9) 0%, rgba(248, 244, 234, 0.66) 54%, rgba(29, 42, 43, 0.12) 100%); }
+  .home-hero-content { width: auto; max-width: 100%; padding: 28px 22px; justify-content: flex-start; }
+  .home-hero h1 { font-size: 2.5rem; }
+  .home-hero-seal { right: 14px; bottom: 12px; }
+  .archive-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
+  .archive-heading .header-actions { width: 100%; justify-content: flex-start; }
+  .archive-side-column { grid-template-columns: 1fr; }
 }
 </style>

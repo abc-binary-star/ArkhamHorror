@@ -20,6 +20,7 @@ const store = useEventStore()
 <template>
   <div class="event-act-advance-barrier" role="status" aria-live="polite">
     <div class="barrier-panel">
+      <span class="barrier-seal barrier-seal--waiting" aria-hidden="true"></span>
       <div class="barrier-spinner" aria-hidden="true"></div>
       <p class="barrier-message">{{ $t('event.awaitingOrganizer') }}</p>
       <RouterLink
@@ -65,6 +66,17 @@ const store = useEventStore()
   animation: barrier-spin 0.9s linear infinite;
 }
 
+.barrier-seal {
+  display: block;
+  width: 74px;
+  height: 74px;
+  background-image: url('/assets/veiled-harbour/34-案件状态印章组-v2.png');
+  background-repeat: no-repeat;
+  background-size: 400% 100%;
+  background-position: 66.666% center;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.34);
+}
+
 .barrier-message {
   margin: 0;
   font-family: teutonic, sans-serif;
@@ -76,7 +88,7 @@ const store = useEventStore()
   display: inline-block;
   padding: 10px 22px;
   border-radius: 6px;
-  background: var(--select, #6a3d9a);
+  background: var(--spooky-green, #28534d);
   color: #fff;
   font-family: teutonic, sans-serif;
   font-size: 1.05em;
@@ -87,7 +99,7 @@ const store = useEventStore()
 }
 
 .barrier-dashboard-link:hover {
-  background: var(--select-hover, #7d4cb5);
+  background: var(--highlight, #34675e);
 }
 
 @keyframes barrier-spin {

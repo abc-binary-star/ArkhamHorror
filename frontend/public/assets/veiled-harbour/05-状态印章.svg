@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="176" viewBox="0 0 720 176" fill="none">
+  <title>诡镇奇谈状态印章图标</title>
+  <g stroke="#a5824b" stroke-width="2">
+    <circle cx="88" cy="88" r="60"/><circle cx="88" cy="88" r="49" stroke-dasharray="3 7"/>
+    <path d="M61 91l18 18 37-43" stroke="#28615d" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="264" cy="88" r="60"/><circle cx="264" cy="88" r="49" stroke-dasharray="3 7"/>
+    <path d="M264 52v43M264 111v5" stroke="#9b4d45" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="440" cy="88" r="60"/><circle cx="440" cy="88" r="49" stroke-dasharray="3 7"/>
+    <path d="M408 88h64M440 56v64" stroke="#75668a" stroke-width="4"/>
+    <circle cx="616" cy="88" r="60"/><circle cx="616" cy="88" r="49" stroke-dasharray="3 7"/>
+    <path d="M616 53v35l22 17" stroke="#657174" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <g fill="#5d625c" font-family="Source Han Sans, Noto Sans CJK SC, sans-serif" font-size="16" text-anchor="middle">
+    <text x="88" y="166">已归档</text><text x="264" y="166">危险</text><text x="440" y="166">调查中</text><text x="616" y="166">待处理</text>
+  </g>
+</svg>

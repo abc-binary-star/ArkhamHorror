@@ -611,13 +611,15 @@ function resetLocationsLayout() {
   if (!hasAnyOffset.value) return
   pendingOffsets.value = {}
   if (props.scenario.id === 'c10651') clearCosmicEmissaryCompactStyles()
-  void resetLocationOffsets(props.game.id).finally(() => {
-    if (props.scenario.id === 'c10651') {
-      requestCosmicEmissaryCompact(true)
-      setTimeout(() => requestCosmicEmissaryCompact(true), 100)
-      setTimeout(() => requestCosmicEmissaryCompact(true), 500)
-    }
-  })
+  void resetLocationOffsets(props.game.id)
+    .catch((err) => { console.error('[scenario] could not reset location offsets', err) })
+    .finally(() => {
+      if (props.scenario.id === 'c10651') {
+        requestCosmicEmissaryCompact(true)
+        setTimeout(() => requestCosmicEmissaryCompact(true), 100)
+        setTimeout(() => requestCosmicEmissaryCompact(true), 500)
+      }
+    })
 }
 
 let holdTimer: ReturnType<typeof setTimeout> | null = null
@@ -3057,9 +3059,11 @@ async function addChaosToken(face: any){
   width: 100%;
   gap: 10px;
   z-index: var(--z-index-neg-2);
-  background: rgba(0, 0, 0, 0.14);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18);
+  background:
+    linear-gradient(180deg, rgb(16 31 32 / 0.94), rgb(24 44 43 / 0.88)),
+    url('/assets/veiled-harbour/T01-调查地图底场.png') center / cover no-repeat;
+  border-bottom: 1px solid rgb(205 175 107 / 0.42);
+  box-shadow: 0 4px 14px rgb(5 12 13 / 0.3);
 
   @media (max-width: 800px) and (orientation: portrait) {
     padding-top: 10px;
@@ -3103,7 +3107,7 @@ async function addChaosToken(face: any){
 }
 
 .scenario-body {
-  background: var(--background);
+  background: transparent;
   z-index: var(--z-index-1);
   width: 100%;
   flex: 1;
@@ -3210,13 +3214,13 @@ async function addChaosToken(face: any){
   flex-direction: column;
   gap: 6px;
   padding: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.28);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--surface-raised) 94%, transparent);
 
   h3 {
     margin: 0;
-    color: white;
+    color: var(--text);
     font-size: 0.85rem;
     font-weight: 600;
     text-align: center;
@@ -3265,6 +3269,10 @@ async function addChaosToken(face: any){
   overflow: hidden;
   flex: 1;
   position: relative;
+  background:
+    linear-gradient(180deg, rgb(16 35 34 / 0.18), rgb(9 22 22 / 0.28)),
+    url('/assets/veiled-harbour/T01-调查地图底场.png') center / cover no-repeat;
+  border-bottom: 1px solid rgb(205 175 107 / 0.22);
   @media (max-width: 800px) and (orientation: portrait) {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -3275,7 +3283,9 @@ async function addChaosToken(face: any){
   position: fixed;
   inset: 0;
   z-index: var(--z-index-50);
-  background: var(--background);
+  background:
+    linear-gradient(180deg, rgb(16 35 34 / 0.14), rgb(9 22 22 / 0.32)),
+    url('/assets/veiled-harbour/T01-调查地图底场.png') center / cover no-repeat;
 }
 
 /* Split view: docked to the bottom of the locations board. Positioned against
@@ -3291,7 +3301,8 @@ async function addChaosToken(face: any){
   z-index: var(--z-index-10, 10);
   padding: 4px 6px;
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.55);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
 }
 
 .zoom-control--fullscreen {
@@ -3302,7 +3313,8 @@ async function addChaosToken(face: any){
   display: flex !important;
   padding: 4px 6px;
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.55);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
 }
 
 /* Keep the player zone (hand + in-play assets) usable while the board is a
@@ -4027,9 +4039,9 @@ async function addChaosToken(face: any){
 }
 
 .button{
-  border: 0;
+  border: var(--edge-width) solid var(--edge-dim);
   margin-top: 2px;
-  color: #fff;
+  color: var(--button-text);
   cursor: pointer;
   border-radius: 4px;
   background-color: var(--button);
@@ -4334,11 +4346,15 @@ async function addChaosToken(face: any){
 }
 
 #player-zone {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: row;
-  background: #181c2a;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.4);
+  background:
+    linear-gradient(180deg, rgb(17 29 27 / 0.12), rgb(11 20 19 / 0.38)),
+    url('/assets/veiled-harbour/T02-调查员皮革桌垫.png') center / cover no-repeat;
+  border-top: 1px solid rgb(205 175 107 / 0.6);
+  box-shadow: 0 -6px 18px rgb(5 12 13 / 0.36);
   .player-info {
     flex: 1;
   }
@@ -4352,10 +4368,11 @@ async function addChaosToken(face: any){
   flex-direction: column;
   gap: 5px;
   padding: 5px;
-  background: darkslategrey;
-  margin-top: 10px;
-  border-top-left-radius: 10px;
-  box-shadow: -1px 1px 3px rgba(0, 0, 0, 0.8);
+  background: rgb(12 24 23 / 0.76);
+  margin: 10px 8px 10px 0;
+  border: 1px solid rgb(205 175 107 / 0.42);
+  border-radius: 5px;
+  box-shadow: 0 3px 10px rgb(5 12 13 / 0.24);
 }
 
 .tri-button {

@@ -403,13 +403,14 @@ watch(choices, async (newChoices) => {
 }
 
 .deck-size {
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   padding: 5px;
   border-radius: 20px;
   pointer-events: none;
   position: absolute;
   font-weight: bold;
-  color: var(--title);
+  color: var(--text);
   inset: 0;
   width: fit-content;
   height: fit-content;
@@ -440,15 +441,13 @@ watch(choices, async (newChoices) => {
   gap: 6px;
   padding: 5px 8px;
   border-radius: 999px;
-  border: 1px solid color-mix(in srgb, var(--select) 45%, rgba(255, 255, 255, 0.3));
-  background: rgba(0, 0, 0, 0.46);
-  color: rgba(255, 255, 255, 0.92);
+  border: var(--edge-width) solid color-mix(in srgb, var(--select) 55%, var(--edge-dim));
+  background: var(--surface-raised);
+  color: var(--text);
   pointer-events: none;
   z-index: var(--z-index-max);
   transform: translate(18px, -50%);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(2px);
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
+  box-shadow: var(--shadow-2);
 }
 
 .deck-drop-indicator__icon {
@@ -459,7 +458,7 @@ watch(choices, async (newChoices) => {
   height: 18px;
   border-radius: 50%;
   background: color-mix(in srgb, var(--select) 45%, transparent);
-  border: 1px solid rgba(255, 255, 255, 0.48);
+  border: var(--edge-width) solid var(--edge);
   font-size: 0.9rem;
   font-weight: 700;
   line-height: 18px;

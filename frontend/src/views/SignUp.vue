@@ -14,11 +14,13 @@ const registration = reactive<Registration>({
   password: '',
 })
 const signUpError = ref<string|null>(null)
+const registering = ref(false)
 
 const { t } = useI18n()
 
 async function register() {
   signUpError.value = null
+  registering.value = true
   try {
     await store.register(registration)
     const { nextUrl } = route.query
@@ -29,6 +31,8 @@ async function register() {
     }
   } catch {
     signUpError.value = t("usernameOrEmailAlreadyTaken")
+  } finally {
+    registering.value = false
   }
 }
 </script>
@@ -36,6 +40,7 @@ async function register() {
 <template>
   <form @submit.prevent="register">
     <header><i class="secret"></i></header>
+    <div class="error" v-if="signUpError">{{signUpError}}</div>
     <section>
       <div>
         <input
@@ -59,7 +64,7 @@ async function register() {
         />
       </div>
       <div>
-        <button>{{$t('register')}}</button>
+        <button :disabled="registering">{{$t('register')}}</button>
       </div>
     </section>
   </form>
@@ -67,41 +72,77 @@ async function register() {
 
 <style scoped>
 form {
-  margin: 0 auto;
-  margin-top: 10vh;
-  width: 50vw;
-  max-width: 400px;
+  margin: 10vh auto 0;
+  width: min(90vw, 400px);
+  flex: 0 0 auto;
+  padding: 22px;
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
+  background-image: var(--panel-gradient);
+  box-shadow: var(--shadow-5);
 }
 
 section {
-  border-radius: 3px;
-  padding: 10px;
+  padding: 0;
 }
 
 header {
   text-align: center;
+  margin-bottom: 14px;
 }
 
 input {
   outline: 0;
-  border: 0;
-  padding: 15px;
-  background: var(--background-dark);
   width: 100%;
   margin-bottom: 10px;
+  padding: 12px;
+  background: var(--input-background);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  font-size: 0.9rem;
+  transition: border-color 120ms ease, box-shadow 80ms ease;
+
+  &:hover { border-color: var(--edge); }
+  &:focus { border-color: var(--spooky-green); box-shadow: var(--shadow-2); }
 }
 
 button {
   outline: 0;
-  padding: 15px;
-  background: var(--button-1);
-  text-transform: uppercase;
-  color: white;
-  border: 0;
   width: 100%;
+  padding: 12px;
+  background: var(--spooky-green);
+  border: var(--edge-width) solid var(--edge-on-accent);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--button-1-text);
+  font-weight: var(--font-black);
+  cursor: pointer;
+  transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease;
+
   &:hover {
-      background: hsl(80, 35%, 32%);
+    filter: brightness(1.1);
+    transform: translateY(-2px);
   }
+
+  &:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+  }
+}
+
+.error {
+  background: var(--survivor-extra-dark);
+  color: #ffe3df;
+  border: var(--edge-width) solid var(--survivor-dark);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  margin-bottom: 14px;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: var(--font-bold);
 }
 
 i.secret {
@@ -112,7 +153,8 @@ i.secret {
   text-transform: none;
   line-height: 1;
   font-size: 5em;
-  color: #15192C;
+  color: var(--brass);
+  text-shadow: 0 0 22px rgba(176, 141, 63, 0.32), 3px 3px 0 var(--ink);
   -webkit-font-smoothing: antialiased;
   position: relative;
 

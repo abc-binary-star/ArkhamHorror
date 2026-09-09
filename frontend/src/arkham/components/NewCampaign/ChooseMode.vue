@@ -249,8 +249,8 @@ input[type='radio'] {
   --segmented-padding: 2px;
   display: grid;
   border-radius: 5px;
-  background: var(--background-dark);
-  border: 1px solid var(--box-border);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   padding: var(--segmented-padding);
   gap: var(--segmented-gap);
   position: relative;
@@ -317,7 +317,7 @@ input[type='radio'] {
   justify-content: center;
   padding: 8px 10px;
   border-bottom: 2px solid transparent;
-  color: var(--background-light);
+  color: var(--text-dim);
   cursor: pointer;
   font-size: 11px;
   font-weight: 700;
@@ -339,10 +339,10 @@ input[type='radio'] {
   width: min(100%, 560px);
   margin: 14px auto 4px;
   padding: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 7px;
-  background: rgba(0, 0, 0, 0.18);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-1);
 }
 
 .scenario-select label {
@@ -354,8 +354,8 @@ input[type='radio'] {
   padding: 6px 14px;
   border: 1px solid transparent;
   border-radius: 4px;
-  color: rgba(206, 206, 206, 0.58);
-  font-family: Teutonic, sans-serif;
+  color: var(--text-dim);
+  font-family: "Noto Sans", Avenir, Helvetica, Arial, sans-serif;
   font-size: clamp(0.76rem, 1.1vw, 0.9rem);
   text-align: center;
   cursor: pointer;
@@ -366,22 +366,22 @@ input[type='radio'] {
   width: 6px;
   height: 6px;
   flex: 0 0 6px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: var(--edge-width) solid var(--edge-faint);
   border-radius: 50%;
   content: '';
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .scenario-select label:hover {
-  color: rgba(255, 255, 255, 0.82);
-  background: rgba(255, 255, 255, 0.035);
+  color: var(--text);
+  background: var(--surface-panel);
 }
 
 .scenario-select input[type='radio']:checked + label {
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: var(--spooky-green);
   color: var(--text);
-  background: rgba(255, 255, 255, 0.09);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.24);
+  background: color-mix(in srgb, var(--spooky-green) 10%, var(--surface-raised));
+  box-shadow: var(--shadow-1);
 }
 
 .scenario-select input[type='radio']:checked + label::before {
@@ -401,7 +401,7 @@ input[type='radio'] {
   user-select: none;
   cursor: pointer;
   border-radius: 3px;
-  color: var(--background-light);
+  color: var(--text-dim);
   margin: 0;
   position: relative;
   transition: color 0.15s ease;
@@ -413,7 +413,7 @@ input[type='radio'] {
 }
 
 .segmented input[type='radio']:disabled + label {
-  color: rgba(206, 206, 206, 0.3);
+  color: var(--text-faint);
   cursor: not-allowed;
 }
 

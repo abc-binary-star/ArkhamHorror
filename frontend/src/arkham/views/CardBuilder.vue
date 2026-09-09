@@ -375,9 +375,10 @@ async function onImport(event: Event) {
       display: none;
     }
   }
-  background: var(--background-dark);
-  border: 1px solid var(--box-border);
-  border-radius: 8px;
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
   padding: 1rem;
   max-height: calc(100vh - var(--nav-height) - 3rem);
   overflow: auto;
@@ -394,8 +395,8 @@ async function onImport(event: Event) {
 
 .library-collapse,
 .library-expand {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--box-border);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 4px;
   color: var(--title);
   cursor: pointer;
@@ -413,16 +414,17 @@ async function onImport(event: Event) {
   margin-bottom: 0.6rem;
 
   h2 {
-    font-family: teutonic, sans-serif;
+    font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
     font-size: 1.3em;
+    font-weight: 600;
     margin: 0;
   }
 }
 
 .new-card {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--box-border);
-  border-radius: 4px;
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-sm);
   color: var(--title);
   cursor: pointer;
   font-size: 0.8rem;
@@ -430,7 +432,7 @@ async function onImport(event: Event) {
   white-space: nowrap;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.14);
+    background: var(--surface-panel);
   }
 }
 
@@ -444,9 +446,9 @@ async function onImport(event: Event) {
 }
 
 .tool {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--box-border);
-  border-radius: 4px;
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-sm);
   color: var(--title);
   cursor: pointer;
   font-size: 0.75rem;
@@ -454,7 +456,7 @@ async function onImport(event: Event) {
   text-align: center;
 
   &:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--surface-panel);
   }
 
   &:disabled {
@@ -522,11 +524,11 @@ async function onImport(event: Event) {
     padding: 0.3rem 0.35rem;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.04);
+      background: color-mix(in srgb, var(--spooky-green) 6%, var(--surface-raised));
     }
 
     &.editing {
-      background: rgba(255, 255, 255, 0.06);
+      background: color-mix(in srgb, var(--spooky-green) 10%, var(--surface-raised));
       border-color: var(--spooky-green);
     }
   }
@@ -593,7 +595,7 @@ async function onImport(event: Event) {
   padding: 0.25rem 0.35rem;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--surface-panel);
     opacity: 1;
   }
 
@@ -608,9 +610,10 @@ async function onImport(event: Event) {
 }
 
 .builder {
-  background: var(--background-dark);
-  border: 1px solid var(--box-border);
-  border-radius: 8px;
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
   flex: 1 1 auto;
   min-width: 0;
   padding: 1rem;
@@ -638,8 +641,9 @@ async function onImport(event: Event) {
   margin-bottom: 0.75rem;
 
   h2 {
-    font-family: teutonic, sans-serif;
+    font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
     font-size: 1.3em;
+    font-weight: 600;
     margin: 0;
   }
 }
@@ -667,9 +671,9 @@ async function onImport(event: Event) {
 }
 
 button {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--box-border);
-  border-radius: 4px;
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-sm);
   color: var(--title);
   cursor: pointer;
   font-size: 0.85rem;
@@ -678,6 +682,11 @@ button {
   &:disabled {
     cursor: default;
     opacity: 0.4;
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--surface-panel);
+    border-color: var(--spooky-green);
   }
 }
 </style>

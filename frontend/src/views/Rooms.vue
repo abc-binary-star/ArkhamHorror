@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref } from 'vue'
 import api from '@/api'
 import Room from '@/components/admin/Room.vue'
+import LoadState from '@/components/LoadState.vue'
 
 interface RoomData {
   roomClients: number
@@ -9,18 +10,31 @@ interface RoomData {
   roomArkhamGameId: string
 }
 
-const request = await api.get<RoomData[]>('admin/rooms')
-const data = computed(() => request.data)
+const data = ref<RoomData[]>([])
+const loaded = ref(false)
+const loadError = ref(false)
+
+const load = () => {
+  loadError.value = false
+  api.get<RoomData[]>('admin/rooms')
+    .then((request) => { data.value = request.data })
+    .catch(() => { loadError.value = true })
+    .finally(() => { loaded.value = true })
+}
+
+load()
 </script>
 
 <template>
   <section class="admin-block">
       <header class="section-header">
         <h2>Open Rooms</h2>
-        <span class="count-badge" aria-label="Open rooms count">{{ data.length }}</span>
+        <span v-if="loaded && !loadError" class="count-badge" aria-label="Open rooms count">{{ data.length }}</span>
       </header>
 
-      <div v-if="data.length === 0" class="empty box">No rooms.</div>
+      <LoadState v-if="loadError" error @retry="load" />
+      <LoadState v-else-if="!loaded" />
+      <div v-else-if="data.length === 0" class="empty box">No rooms.</div>
       <div v-else class="room-list">
         <Room v-for="room in data" :room="room" :key="room.roomArkhamGameId" />
       </div>
@@ -36,11 +50,11 @@ const data = computed(() => request.data)
 }
 
 .admin-block {
-  background: color-mix(in srgb, var(--background-dark) 42%, transparent);
+  background: color-mix(in srgb, var(--surface-panel) 96%, transparent);
   border: 1px solid color-mix(in srgb, var(--box-border) 75%, transparent);
   border-radius: 6px;
   padding: 14px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-3);
 }
 
 .section-header {
@@ -52,20 +66,20 @@ const data = computed(() => request.data)
 .section-header h2 {
   color: var(--title);
   flex: 1;
-  font-family: teutonic, sans-serif;
+  font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
   font-size: 1.6rem;
   line-height: 1;
   margin: 0;
-  text-transform: uppercase;
+  font-weight: 600;
 }
 
 .count-badge {
   align-items: center;
-  background: var(--background-dark);
+  background: var(--surface-raised);
   border: 1px solid var(--spooky-green);
   border-left-width: 4px;
   border-radius: 3px;
-  color: color-mix(in srgb, var(--spooky-green) 78%, white);
+  color: var(--spooky-green-dark);
   display: inline-flex;
   font-size: 0.78rem;
   font-weight: 800;

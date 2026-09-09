@@ -137,6 +137,45 @@ const endTurnAction = computed(() => {
     .findIndex((c) => c.tag === MessageType.END_TURN_BUTTON && c.investigatorId === id.value);
 })
 
+// Two-step end turn: with actions still available a single click can waste
+// them, so arm-then-confirm instead of ending immediately. With 0 actions the
+// button behaves exactly as before.
+const endTurnArmed = ref(false)
+let endTurnArmTimer: ReturnType<typeof setTimeout> | null = null
+
+const endTurnNeedsConfirm = computed(() => props.investigator.remainingActions > 0)
+
+function disarmEndTurn() {
+  endTurnArmed.value = false
+  if (endTurnArmTimer) {
+    clearTimeout(endTurnArmTimer)
+    endTurnArmTimer = null
+  }
+}
+
+const endTurnLabel = computed(() => {
+  if (endTurnArmed.value) {
+    return isMobile.value
+      ? t('investigator.confirmEndTurnShort', { n: props.investigator.remainingActions })
+      : t('investigator.confirmEndTurn', { n: props.investigator.remainingActions })
+  }
+  return isMobile.value ? t('investigator.endTurnShort') : t('investigator.endTurn')
+})
+
+function endTurn() {
+  if (endTurnAction.value === -1) return
+  if (endTurnNeedsConfirm.value && !endTurnArmed.value) {
+    if (endTurnArmTimer) clearTimeout(endTurnArmTimer)
+    endTurnArmed.value = true
+    endTurnArmTimer = setTimeout(disarmEndTurn, 3000)
+    return
+  }
+  disarmEndTurn()
+  emit('choose', endTurnAction.value)
+}
+
+onUnmounted(disarmEndTurn)
+
 const skipTriggersAction = computed(() => {
   return props.choices
     .findIndex((c) => c.tag === MessageType.SKIP_TRIGGERS_BUTTON && c.investigatorId === id.value);
@@ -737,43 +776,55 @@ i.action {
 
 .guardianActionButton {
   background-color: var(--guardian) !important;
-  border: 0;
-  border-radius: 2px;
+  border: var(--edge-width) solid color-mix(in srgb, var(--guardian-dark) 72%, var(--edge-dim));
+  border-radius: var(--control-radius);
+  min-width: var(--control-height-icon);
+  min-height: var(--control-height-icon);
   margin: 0 2px;
 }
 
 .seekerActionButton {
   background-color: var(--seeker) !important;
-  border: 0;
-  border-radius: 2px;
+  border: var(--edge-width) solid color-mix(in srgb, var(--seeker-extra-dark) 72%, var(--edge-dim));
+  border-radius: var(--control-radius);
+  min-width: var(--control-height-icon);
+  min-height: var(--control-height-icon);
   margin: 0 2px;
 }
 
 .rogueActionButton {
   background-color: var(--rogue) !important;
-  border: 0;
-  border-radius: 2px;
+  border: var(--edge-width) solid color-mix(in srgb, var(--rogue-extra-dark) 72%, var(--edge-dim));
+  border-radius: var(--control-radius);
+  min-width: var(--control-height-icon);
+  min-height: var(--control-height-icon);
   margin: 0 2px;
 }
 
 .mysticActionButton {
   background-color: var(--mystic) !important;
-  border: 0;
-  border-radius: 2px;
+  border: var(--edge-width) solid color-mix(in srgb, var(--mystic-extra-dark) 72%, var(--edge-dim));
+  border-radius: var(--control-radius);
+  min-width: var(--control-height-icon);
+  min-height: var(--control-height-icon);
   margin: 0 2px;
 }
 
 .survivorActionButton {
   background-color: var(--survivor) !important;
-  border: 0;
-  border-radius: 2px;
+  border: var(--edge-width) solid color-mix(in srgb, var(--survivor-extra-dark) 72%, var(--edge-dim));
+  border-radius: var(--control-radius);
+  min-width: var(--control-height-icon);
+  min-height: var(--control-height-icon);
   margin: 0 2px;
 }
 
 .neutralActionButton {
   background-color: var(--neutral) !important;
-  border: 0;
-  border-radius: 2px;
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--control-radius);
+  min-width: var(--control-height-icon);
+  min-height: var(--control-height-icon);
   margin: 0 2px;
 }
 
@@ -943,7 +994,8 @@ i.action {
 }
 
 .activeButton {
-  border: 1px solid var(--select);
+  border-color: var(--brass);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brass) 72%, transparent), var(--shadow-1);
 }
 
 @keyframes become-ghost {
@@ -998,6 +1050,15 @@ i.action {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  width: 100%;
+  :deep(button) {
+    min-height: var(--control-height);
+    width: 100%;
+    height: auto;
+    line-height: 1.35;
+    white-space: normal;
+    box-sizing: border-box;
+  }
   @media (max-width: 800px) and (orientation: portrait) {
     flex-direction: column;
     align-items: flex-start;
@@ -1011,18 +1072,20 @@ i.action {
 }
 
 .button-group--skip-all-pending > :not(.skip-triggers-group) {
-  opacity: 0.35;
+  opacity: 0.58;
   filter: grayscale(1);
   pointer-events: none;
 }
 
 .button-group--skip-all-pending .skip-triggers-button {
-  opacity: 0.55;
+  opacity: 0.72;
   pointer-events: none;
 }
 
 .player-buttons {
   margin-left: 10px;
+  min-width: 128px;
+  flex-shrink: 0;
   display: flex;
   gap: 2px;
   flex-direction: column;
@@ -1050,12 +1113,12 @@ i.action {
   transition: all 0.2s ease-in;
   background-color: var(--select);
   color: white;
-  border: 0;
-  border-radius: 2px;
+  border: var(--edge-width) solid color-mix(in srgb, var(--select-dark) 76%, var(--edge-dim));
+  border-radius: var(--control-radius);
 
   &[disabled] {
-    background-color: #999;
-    color: #666;
+    filter: var(--button-disabled-filter);
+    opacity: 0.72;
   }
 
   &:not([disabled]):hover {
@@ -1071,9 +1134,9 @@ i.action {
   transition: all 0.2s ease-in;
   background-color: var(--select);
   color: white;
-  border: 0;
+  border: var(--edge-width) solid color-mix(in srgb, var(--select-dark) 76%, var(--edge-dim));
   border-left: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 0 2px 2px 0;
+  border-radius: 0 var(--control-radius) var(--control-radius) 0;
   padding-inline: 6px;
   display: inline-flex;
   align-items: center;
@@ -1188,10 +1251,11 @@ img.card.ability-target {
 
 button.active {
   background-color: var(--select-dark-20);
-  border-color: var(--select-dark-20);
-  border-radius: 2px;
+  border-color: var(--brass);
+  border-radius: var(--control-radius);
   border-style: solid;
   color: white;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brass) 72%, transparent), var(--shadow-1);
 }
 
 i.spade {

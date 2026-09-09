@@ -138,11 +138,11 @@ const allResolved = computed(() => {
 <style scoped>
 .token-choices {
   margin: 10px;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
+  border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
-  border: 1px solid rgba(255, 255, 255, 0.2);
   flex-grow: 0;
   min-width: fit-content;
   @media (max-width: 800px) and (orientation: portrait) {
@@ -175,23 +175,24 @@ const allResolved = computed(() => {
 }
 
 .token-prompt {
-  color: #EEE;
+  color: var(--text);
   width: 100%;
   text-align: center;
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--surface-raised);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   font-size: 1.2em;
 }
 
 .token-choice-multi {
-  border: 1px dashed #e0e0e0;
+  border: 1px dashed var(--edge);
   padding-inline: 10px;
   padding-block: 5px;
   color: var(--title);
   text-transform: uppercase;
   border-radius: 5px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--surface-raised);
   display: flex;
   gap: 5px;
   flex-direction: column;

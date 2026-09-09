@@ -2,7 +2,13 @@
 import { computed, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { clearAchievements, fetchAchievements, type ClearAchievementsScope } from '@/arkham/api'
-import { achievementCatalog, achievementChecklists, achievementSections, compareAchievementCampaignIds, type AchievementEntry } from '@/arkham/achievements'
+import {
+  achievementCatalog,
+  achievementChecklists,
+  achievementSections,
+  compareAchievementCampaignIds,
+  type AchievementEntry,
+} from '@/arkham/achievements'
 import type { Achievement } from '@/arkham/types/Achievement'
 import Prompt from '@/components/Prompt.vue'
 
@@ -13,16 +19,20 @@ const ready = ref(false)
 
 function reload() {
   fetchAchievements()
-    .then((r) => { rows.value = r })
+    .then((r) => {
+      rows.value = r
+    })
     .catch((e) => console.error(e))
-    .finally(() => { ready.value = true })
+    .finally(() => {
+      ready.value = true
+    })
 }
 
 onMounted(reload)
 
 // Clearing earned achievements (all / one campaign / one achievement) asks
 // for confirmation first; pendingClear holds the scope + prompt text.
-const pendingClear = ref<{ scope: ClearAchievementsScope, prompt: string } | null>(null)
+const pendingClear = ref<{ scope: ClearAchievementsScope; prompt: string } | null>(null)
 
 function requestClearAll() {
   pendingClear.value = { scope: { scope: 'all' }, prompt: t('achievements.clearAllConfirm') }
@@ -31,21 +41,28 @@ function requestClearAll() {
 function requestClearCampaign(campaignId: string) {
   pendingClear.value = {
     scope: { scope: 'campaign', campaign: campaignId },
-    prompt: t('achievements.clearCampaignConfirm', { campaign: t(`achievements.campaigns.${campaignId}`) }),
+    prompt: t('achievements.clearCampaignConfirm', {
+      campaign: t(`achievements.campaigns.${campaignId}`),
+    }),
   }
 }
 
 function requestClearOne(entry: AchievementEntry) {
   pendingClear.value = {
     scope: { scope: 'achievement', achievement: entry.tag },
-    prompt: t('achievements.clearOneConfirm', { name: t(`achievements.entries.${entry.tag}.name`) }),
+    prompt: t('achievements.clearOneConfirm', {
+      name: t(`achievements.entries.${entry.tag}.name`),
+    }),
   }
 }
 
 function confirmClear() {
   const pending = pendingClear.value
   pendingClear.value = null
-  if (pending) clearAchievements(pending.scope).then(reload).catch((e) => console.error(e))
+  if (pending)
+    clearAchievements(pending.scope)
+      .then(reload)
+      .catch((e) => console.error(e))
 }
 
 const anyEarned = computed(() => rows.value.some((r) => r.earnedAt !== null))
@@ -54,7 +71,9 @@ const campaignEarnedCount = (campaign: { entries: AchievementEntry[] }) =>
   campaign.entries.filter((entry) => !!earnedRow(entry)).length
 
 const campaignProgressPercent = (campaign: { entries: AchievementEntry[] }) =>
-  campaign.entries.length === 0 ? 0 : Math.round((campaignEarnedCount(campaign) / campaign.entries.length) * 100)
+  campaign.entries.length === 0
+    ? 0
+    : Math.round((campaignEarnedCount(campaign) / campaign.entries.length) * 100)
 
 const campaignHasEarned = (campaign: { entries: AchievementEntry[] }) =>
   campaignEarnedCount(campaign) > 0
@@ -109,23 +128,50 @@ const earnedDate = (row: Achievement): string | null => {
 </script>
 
 <template>
-  <div class="achievements-page">
+  <div class="achievements-page archive-page">
     <div class="achievements-column">
       <div class="page-header">
-        <h1>{{ t('achievements.pageTitle') }}</h1>
-        <button v-if="anyEarned" type="button" class="clear-btn" @click="requestClearAll">
+        <div class="page-heading">
+          <img
+            class="achievement-seal"
+            src="/assets/veiled-harbour/C05-档案压印.svg"
+            alt=""
+            aria-hidden="true"
+          />
+          <div>
+            <p class="archive-kicker"><span></span> CASE RECORD / PERSONAL ARCHIVE <span></span></p>
+            <h1>{{ t('achievements.pageTitle') }}</h1>
+          </div>
+        </div>
+        <button
+          v-if="anyEarned"
+          type="button"
+          class="clear-btn clear-all-btn"
+          @click="requestClearAll"
+        >
+          <font-awesome-icon icon="trash" aria-hidden="true" />
           {{ t('achievements.clearAll') }}
         </button>
       </div>
+
+      <div class="page-rule" aria-hidden="true"><span></span><i></i><span></span></div>
 
       <details v-for="campaign in campaigns" :key="campaign.campaignId" class="campaign-section">
         <summary class="campaign-header">
           <div class="campaign-title">
             <h2>{{ t(`achievements.campaigns.${campaign.campaignId}`) }}</h2>
-            <div class="campaign-progress" :aria-label="`${campaignEarnedCount(campaign)} of ${campaign.entries.length} achievements earned`">
-              <span class="progress-count">{{ campaignEarnedCount(campaign) }}/{{ campaign.entries.length }}</span>
+            <div
+              class="campaign-progress"
+              :aria-label="`${campaignEarnedCount(campaign)} of ${campaign.entries.length} achievements earned`"
+            >
+              <span class="progress-count"
+                >{{ campaignEarnedCount(campaign) }}/{{ campaign.entries.length }}</span
+              >
               <span class="progress-track" aria-hidden="true">
-                <span class="progress-fill" :style="{ width: `${campaignProgressPercent(campaign)}%` }" />
+                <span
+                  class="progress-fill"
+                  :style="{ width: `${campaignProgressPercent(campaign)}%` }"
+                />
               </span>
             </div>
           </div>
@@ -139,52 +185,57 @@ const earnedDate = (row: Achievement): string | null => {
           </button>
         </summary>
         <template v-for="section in campaign.sections" :key="section.part ?? 'all'">
-        <h3 v-if="section.part" class="part-header">
-          <span class="part-title">{{ t(`achievements.parts.${section.part}`) }}</span>
-          <span class="part-count">{{ campaignEarnedCount(section) }}/{{ section.entries.length }}</span>
-        </h3>
-        <ul class="entry-list">
-          <li
-            v-for="entry in section.entries"
-            :key="entry.tag"
-            class="entry"
-            :class="{ earned: !!earnedRow(entry) }"
-          >
-            <font-awesome-icon :icon="['fas', 'trophy']" class="entry-icon" aria-hidden="true" />
-            <div class="entry-body">
-              <span class="entry-name">{{ t(`achievements.entries.${entry.tag}.name`) }}</span>
-              <span class="entry-text">{{ t(`achievements.entries.${entry.tag}.text`) }}</span>
-              <ul v-if="checklist(entry)" class="checklist">
-                <li
-                  v-for="item in checklist(entry)"
-                  :key="item"
-                  class="checklist-item"
-                  :class="{ checked: isChecked(entry, item) }"
-                >
-                  <span class="checkbox" aria-hidden="true">{{ isChecked(entry, item) ? '☑' : '☐' }}</span>
-                  {{ t(`achievements.entries.${entry.tag}.items.${item}`) }}
-                </li>
-              </ul>
-              <span v-if="earnedRow(entry)" class="entry-earned">
-                {{ earnedDate(earnedRow(entry)!) }}
-                <router-link
-                  v-if="earnedRow(entry)!.arkhamGameId"
-                  :to="`/games/${earnedRow(entry)!.arkhamGameId}`"
-                >{{ t('achievements.viewGame') }}</router-link>
-                <span v-else class="game-deleted">{{ t('achievements.gameDeleted') }}</span>
-              </span>
-            </div>
-            <button
-              v-if="earnedRow(entry)"
-              type="button"
-              class="clear-btn entry-clear"
-              :title="t('achievements.clearOne')"
-              @click="requestClearOne(entry)"
+          <h3 v-if="section.part" class="part-header">
+            <span class="part-title">{{ t(`achievements.parts.${section.part}`) }}</span>
+            <span class="part-count"
+              >{{ campaignEarnedCount(section) }}/{{ section.entries.length }}</span
             >
-              <font-awesome-icon icon="trash" />
-            </button>
-          </li>
-        </ul>
+          </h3>
+          <ul class="entry-list">
+            <li
+              v-for="entry in section.entries"
+              :key="entry.tag"
+              class="entry"
+              :class="{ earned: !!earnedRow(entry) }"
+            >
+              <font-awesome-icon :icon="['fas', 'trophy']" class="entry-icon" aria-hidden="true" />
+              <div class="entry-body">
+                <span class="entry-name">{{ t(`achievements.entries.${entry.tag}.name`) }}</span>
+                <span class="entry-text">{{ t(`achievements.entries.${entry.tag}.text`) }}</span>
+                <ul v-if="checklist(entry)" class="checklist">
+                  <li
+                    v-for="item in checklist(entry)"
+                    :key="item"
+                    class="checklist-item"
+                    :class="{ checked: isChecked(entry, item) }"
+                  >
+                    <span class="checkbox" aria-hidden="true">{{
+                      isChecked(entry, item) ? '☑' : '☐'
+                    }}</span>
+                    {{ t(`achievements.entries.${entry.tag}.items.${item}`) }}
+                  </li>
+                </ul>
+                <span v-if="earnedRow(entry)" class="entry-earned">
+                  {{ earnedDate(earnedRow(entry)!) }}
+                  <router-link
+                    v-if="earnedRow(entry)!.arkhamGameId"
+                    :to="`/games/${earnedRow(entry)!.arkhamGameId}`"
+                    >{{ t('achievements.viewGame') }}</router-link
+                  >
+                  <span v-else class="game-deleted">{{ t('achievements.gameDeleted') }}</span>
+                </span>
+              </div>
+              <button
+                v-if="earnedRow(entry)"
+                type="button"
+                class="clear-btn entry-clear"
+                :title="t('achievements.clearOne')"
+                @click="requestClearOne(entry)"
+              >
+                <font-awesome-icon icon="trash" />
+              </button>
+            </li>
+          </ul>
         </template>
       </details>
 
@@ -192,7 +243,11 @@ const earnedDate = (row: Achievement): string | null => {
         v-if="pendingClear"
         :prompt="pendingClear.prompt"
         :yes="confirmClear"
-        :no="() => { pendingClear = null }"
+        :no="
+          () => {
+            pendingClear = null
+          }
+        "
       />
     </div>
   </div>
@@ -204,6 +259,8 @@ const earnedDate = (row: Achievement): string | null => {
   min-height: 0;
   width: 100%;
   overflow: auto;
+  background: var(--background-dark) url('/assets/veiled-harbour/29-档案页底图.png') center top /
+    cover fixed no-repeat;
 }
 
 .page-header,
@@ -215,20 +272,23 @@ const earnedDate = (row: Achievement): string | null => {
 }
 
 .clear-btn {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.55);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+  color: var(--text-dim);
   padding: 2px 7px;
   font-size: 0.72rem;
   line-height: 1.3;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 
   &:hover {
-    border-color: rgba(200, 70, 70, 0.45);
-    background: rgba(160, 60, 60, 0.24);
-    color: rgba(255, 210, 210, 0.95);
+    border-color: var(--delete);
+    background: color-mix(in srgb, var(--delete) 12%, var(--surface-raised));
+    color: var(--status-danger-text);
   }
 }
 
@@ -239,40 +299,137 @@ const earnedDate = (row: Achievement): string | null => {
 }
 
 .achievements-column {
-  width: min(900px, 90%);
+  width: min(1080px, calc(100% - 40px));
+  min-height: calc(100% - 40px);
   margin-inline: auto;
   box-sizing: border-box;
-  padding-top: 20px;
-  padding-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: clamp(24px, 4vw, 52px);
+  background: rgba(233, 225, 210, 0.92);
+  border: 1px solid color-mix(in srgb, var(--brass) 70%, var(--edge-dim));
+  box-shadow:
+    0 16px 42px rgba(25, 31, 30, 0.28),
+    inset 0 0 0 5px rgba(244, 239, 228, 0.3);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
+  position: relative;
+}
+
+.achievements-column::before,
+.achievements-column::after {
+  content: '';
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+  opacity: 0.55;
+  background: url('/assets/veiled-harbour/C04-黄铜压线角件-左上.svg') top left / contain no-repeat;
+}
+
+.achievements-column::before {
+  top: 12px;
+  left: 12px;
+}
+.achievements-column::after {
+  right: 12px;
+  bottom: 12px;
+  transform: rotate(180deg);
+}
+
+.page-heading {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-width: 0;
+}
+
+.achievement-seal {
+  width: 74px;
+  height: 74px;
+  padding: 7px;
+  box-sizing: border-box;
+  border: 1px solid color-mix(in srgb, var(--brass) 80%, transparent);
+  border-radius: 50%;
+  background: rgba(38, 55, 58, 0.08);
+  box-shadow: inset 0 0 0 5px rgba(244, 239, 228, 0.35);
+}
+
+.archive-kicker {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin: 0 0 7px;
+  color: var(--spooky-green);
+  font-family: Arno, 'Noto Serif SC', serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+
+  span {
+    width: 24px;
+    height: 1px;
+    background: var(--brass);
+  }
+}
+
+.page-rule {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: -4px 0 2px;
+  color: var(--brass);
+
+  span {
+    flex: 1;
+    height: 1px;
+    background: color-mix(in srgb, var(--brass) 45%, transparent);
+  }
+  i {
+    width: 7px;
+    height: 7px;
+    border: 1px solid var(--brass);
+    transform: rotate(45deg);
+  }
 }
 
 h1 {
-  font-family: teutonic, sans-serif;
-  font-size: 2.2em;
+  font-family: Arno, 'Noto Serif SC', 'Noto Serif CJK SC', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
   margin: 0;
   color: var(--title);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
 }
 
 .campaign-section {
   --accent: #b3922f;
-  background: var(--box-background);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 8px;
-  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(244, 239, 228, 0.9), rgba(232, 225, 210, 0.86));
+  border: 1px solid rgba(129, 123, 112, 0.72);
+  border-left: 3px solid var(--brass);
+  padding: 16px 18px;
+  box-shadow:
+    0 3px 10px rgba(37, 39, 37, 0.1),
+    inset 0 0 0 1px rgba(244, 239, 228, 0.42);
+  transition:
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.campaign-section[open] {
+  border-left-color: var(--accent);
+  box-shadow:
+    0 5px 14px rgba(37, 39, 37, 0.14),
+    inset 0 0 0 1px rgba(244, 239, 228, 0.42);
 }
 
 .campaign-header {
   cursor: pointer;
   list-style: none;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 2px 0 10px;
+  border-bottom: 1px solid rgba(129, 123, 112, 0.55);
 }
 
 .campaign-header::-webkit-details-marker {
@@ -281,7 +438,7 @@ h1 {
 
 .campaign-header::before {
   content: '▸';
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-faint);
   font-size: 0.85rem;
   transition: transform 0.15s ease;
 }
@@ -298,7 +455,7 @@ h1 {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-dim);
   font-size: 0.78rem;
   white-space: nowrap;
 }
@@ -311,7 +468,7 @@ h1 {
   width: 96px;
   height: 5px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--panel-inset);
   overflow: hidden;
 }
 
@@ -328,12 +485,11 @@ h1 {
 }
 
 h2 {
-  font-family: teutonic, sans-serif;
-  font-size: 1.2em;
-  font-weight: normal;
-  color: rgba(255, 255, 255, 0.75);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  font-family: Arno, 'Noto Serif SC', 'Noto Serif CJK SC', serif;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.02em;
   margin: 0;
 }
 
@@ -352,19 +508,19 @@ h2 {
   align-items: baseline;
   gap: 10px;
   margin: 16px 0 0;
-  font-family: teutonic, sans-serif;
+  font-family: 'Noto Sans', Avenir, Helvetica, Arial, sans-serif;
   font-size: 1em;
-  font-weight: normal;
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 
 .part-title {
-  color: rgba(217, 184, 69, 0.8);
+  color: #765f31;
 }
 
 .part-count {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-faint);
   font-family: inherit;
   font-size: 0.78rem;
   font-variant-numeric: tabular-nums;
@@ -374,10 +530,20 @@ h2 {
 .entry {
   display: flex;
   gap: 10px;
-  padding: 8px 12px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.04);
-  border-left: 3px solid rgba(255, 255, 255, 0.15);
+  padding: 10px 12px;
+  background: rgba(244, 239, 228, 0.66);
+  border: 1px solid rgba(169, 163, 152, 0.76);
+  border-left: 3px solid var(--edge-faint);
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 120ms ease;
+}
+
+.entry:hover {
+  background: rgba(244, 239, 228, 0.94);
+  border-color: var(--edge-dim);
+  transform: translateY(-1px);
 }
 
 .entry:not(.earned) > .entry-icon,
@@ -389,12 +555,12 @@ h2 {
 }
 
 .entry.earned {
-  background: rgba(179, 146, 47, 0.08);
+  background: color-mix(in srgb, var(--brass) 10%, var(--surface-raised));
   border-left-color: var(--accent);
 }
 
 .entry-icon {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-faint);
   flex-shrink: 0;
   margin-top: 3px;
 }
@@ -417,7 +583,7 @@ h2 {
 }
 
 .entry-text {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-dim);
   font-size: 0.85rem;
   line-height: 1.45;
 }
@@ -432,7 +598,7 @@ h2 {
 }
 
 .checklist-item {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-dim);
   font-size: 0.85rem;
   line-height: 1.45;
   display: flex;
@@ -441,7 +607,7 @@ h2 {
 }
 
 .checklist-item.checked {
-  color: rgba(217, 184, 69, 0.85);
+  color: #765f31;
 }
 
 .checkbox {
@@ -450,7 +616,7 @@ h2 {
 
 .entry-earned {
   font-size: 0.8rem;
-  color: rgba(217, 184, 69, 0.85);
+  color: #765f31;
   display: flex;
   gap: 8px;
   align-items: baseline;
@@ -458,12 +624,66 @@ h2 {
   a {
     color: var(--spooky-green);
     text-decoration: none;
-    &:hover { text-decoration: underline; }
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
 .game-deleted {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-faint);
   font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .achievements-column {
+    width: calc(100% - 20px);
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 26px 14px 24px;
+  }
+
+  .page-header {
+    align-items: flex-start;
+  }
+  .page-heading {
+    gap: 12px;
+  }
+  .achievement-seal {
+    width: 54px;
+    height: 54px;
+    padding: 5px;
+  }
+  .archive-kicker {
+    font-size: 0.55rem;
+    letter-spacing: 0.09em;
+  }
+  .archive-kicker span {
+    width: 14px;
+  }
+  .clear-all-btn {
+    padding-inline: 8px;
+  }
+  .campaign-title {
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .progress-track {
+    width: 76px;
+  }
+  .campaign-section {
+    padding: 13px 12px;
+  }
+  .entry {
+    gap: 8px;
+    padding: 9px 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .campaign-section,
+  .entry {
+    transition: none;
+  }
 }
 </style>

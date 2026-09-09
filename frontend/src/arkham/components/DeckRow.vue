@@ -80,24 +80,45 @@ const tabooList = computed(() => {
 
 <style scoped>
 .decklist {
+  position: relative;
+  isolation: isolate;
   display: flex;
   gap: 16px;
-  color: #f0f0f0;
+  color: var(--text);
   border-left: 4px solid transparent;
+  overflow: hidden;
+  background: var(--surface-panel) url('/assets/veiled-harbour/03-档案纸纹理.svg') repeat;
+  box-shadow: 0 8px 18px rgba(37, 39, 37, 0.12);
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s;
+  transition: background-color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
 
-  &.guardian { border-left-color: var(--guardian-dark); &:hover { background-color: var(--guardian-extra-dark); .deck-name { color: oklch(from var(--guardian-dark) calc(l + 0.2) c h); } } }
-  &.seeker   { border-left-color: var(--seeker-dark);   &:hover { background-color: var(--seeker-extra-dark);   .deck-name { color: oklch(from var(--seeker-dark)   calc(l + 0.2) c h); } } }
-  &.rogue    { border-left-color: var(--rogue-dark);    &:hover { background-color: var(--rogue-extra-dark);    .deck-name { color: oklch(from var(--rogue-dark)    calc(l + 0.2) c h); } } }
-  &.mystic   { border-left-color: var(--mystic-dark);   &:hover { background-color: var(--mystic-extra-dark);   .deck-name { color: oklch(from var(--mystic-dark)   calc(l + 0.2) c h); } } }
-  &.survivor { border-left-color: var(--survivor-dark); &:hover { background-color: var(--survivor-extra-dark); .deck-name { color: oklch(from var(--survivor-dark) calc(l + 0.2) c h); } } }
-  &.neutral  { border-left-color: var(--neutral-dark);  &:hover { background-color: var(--neutral-extra-dark);  .deck-name { color: oklch(from var(--neutral-dark)  calc(l + 0.2) c h); } } }
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    z-index: -1;
+    border: 1px solid color-mix(in srgb, var(--brass) 26%, transparent);
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(37, 39, 37, 0.17);
+  }
+
+  &.guardian { border-left-color: var(--guardian-dark); &:hover { background-color: color-mix(in srgb, var(--guardian-dark) 10%, var(--surface-panel)); .deck-name { color: var(--guardian-dark); } } }
+  &.seeker   { border-left-color: var(--seeker-dark);   &:hover { background-color: color-mix(in srgb, var(--seeker-dark) 10%, var(--surface-panel));   .deck-name { color: var(--seeker-dark); } } }
+  &.rogue    { border-left-color: var(--rogue-dark);    &:hover { background-color: color-mix(in srgb, var(--rogue-dark) 10%, var(--surface-panel));    .deck-name { color: var(--rogue-dark); } } }
+  &.mystic   { border-left-color: var(--mystic-dark);   &:hover { background-color: color-mix(in srgb, var(--mystic-dark) 10%, var(--surface-panel));   .deck-name { color: var(--mystic-dark); } } }
+  &.survivor { border-left-color: var(--survivor-dark); &:hover { background-color: color-mix(in srgb, var(--survivor-dark) 10%, var(--surface-panel)); .deck-name { color: var(--survivor-dark); } } }
+  &.neutral  { border-left-color: var(--neutral-dark);  &:hover { background-color: color-mix(in srgb, var(--neutral-dark) 10%, var(--surface-panel));  .deck-name { color: var(--neutral-dark); } } }
 }
 
 .portrait--decklist {
   width: 150px;
+  margin: 10px 0 10px 10px;
   border-radius: 5px;
+  border: 1px solid color-mix(in srgb, var(--brass) 55%, transparent);
   box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.45);
   flex-shrink: 0;
   align-self: flex-start;
@@ -141,9 +162,9 @@ const tabooList = computed(() => {
   line-height: 1.6;
   font-size: 0.75em;
   font-weight: 600;
-  color: #c8a96e;
-  background: rgba(200, 169, 110, 0.12);
-  border: 1px solid rgba(200, 169, 110, 0.25);
+  color: #765f31;
+  background: color-mix(in srgb, var(--brass) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brass) 46%, transparent);
   border-radius: 4px;
   letter-spacing: 0.02em;
 }
@@ -155,13 +176,13 @@ const tabooList = computed(() => {
 }
 
 .action-btn {
-  color: #8a93a8;
+  color: var(--text-dim);
   font-size: 0.9em;
   text-decoration: none;
   transition: color 0.15s;
 
-  &:hover { color: #fff; }
-  &.action-btn--delete { &:hover { color: #ff6666; } }
+  &:hover { color: var(--spooky-green); }
+  &.action-btn--delete { &:hover { color: var(--delete); } }
 }
 
 /* Sits before the name so a laid-over deck reads as such at a glance. The row

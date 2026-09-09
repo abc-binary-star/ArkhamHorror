@@ -182,14 +182,14 @@ onMounted(() => {
 }
 
 .admin-block {
-  background: color-mix(in srgb, var(--background-dark) 42%, transparent);
+  background: color-mix(in srgb, var(--surface-panel) 96%, transparent);
   border: 1px solid color-mix(in srgb, var(--box-border) 75%, transparent);
   border-radius: 6px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 14px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  box-shadow: var(--shadow-3);
 }
 
 .admin-block + .admin-block {
@@ -205,11 +205,11 @@ onMounted(() => {
 .section-header h2 {
   color: var(--title);
   flex: 1;
-  font-family: teutonic, sans-serif;
+  font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
   font-size: 1.6rem;
   line-height: 1;
   margin: 0;
-  text-transform: uppercase;
+  font-weight: 600;
 }
 
 .section-note {
@@ -222,11 +222,11 @@ onMounted(() => {
 
 .count-badge {
   align-items: center;
-  background: var(--background-dark);
+  background: var(--surface-raised);
   border: 1px solid var(--spooky-green);
   border-left-width: 4px;
   border-radius: 3px;
-  color: color-mix(in srgb, var(--spooky-green) 78%, white);
+  color: var(--spooky-green-dark);
   display: inline-flex;
   font-size: 0.78rem;
   font-weight: 800;

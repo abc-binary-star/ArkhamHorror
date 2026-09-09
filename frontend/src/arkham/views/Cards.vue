@@ -7,6 +7,7 @@ import * as Arkham from '@/arkham/types/CardDef';
 import CardListView from '@/arkham/components/CardListView.vue';
 import CardImageView from '@/arkham/components/CardImageView.vue';
 import CardDetailsModal from '@/arkham/components/CardDetailsModal.vue';
+import LoadState from '@/components/LoadState.vue';
 import sets from '@/arkham/data/sets.json'
 import cycles from '@/arkham/data/cycles.json'
 import { shallowRef } from 'vue';
@@ -177,6 +178,8 @@ const setCachedCards = (cards: Arkham.CardDef[]) => {
   } catch { /* ignore quota errors */ }
 }
 
+const loadError = ref(false)
+
 const fetchData = async () => {
   const cached = getCachedCards()
   if (cached) {
@@ -184,12 +187,22 @@ const fetchData = async () => {
     return
   }
 
-  const officialCards = await fetchCards('both')
-  const homebrewCards = dev ? await fetchHomebrewCards() : []
-  const sorted = sortCards([...officialCards, ...homebrewCards])
-  setCachedCards(sorted)
-  allCards.value = sorted
+  // Awaited at the top level, so a rejection here leaves the whole view blank
+  // with nothing to click. The official pool is required; homebrew is not --
+  // that endpoint 404s against backends that do not serve it.
+  try {
+    const officialCards = await fetchCards('both')
+    const homebrewCards = dev ? await fetchHomebrewCards().catch(() => []) : []
+    const sorted = sortCards([...officialCards, ...homebrewCards])
+    setCachedCards(sorted)
+    allCards.value = sorted
+    loadError.value = false
+  } catch {
+    loadError.value = true
+  }
 }
+
+const reload = () => fetchData()
 
 interface Filter {
   cardTypes: string[]
@@ -745,8 +758,9 @@ const stepCard = (delta: number) => {
 
 <template>
   <div class="container">
-    <div class="sidebar-overlay" :class="{ visible: showSidebar }" @click="showSidebar = false"></div>
-    <div class="sidebar" :class="{ open: showSidebar, collapsed: sidebarCollapsed }">
+    <LoadState v-if="loadError" error @retry="reload" />
+    <div v-if="!loadError" class="sidebar-overlay" :class="{ visible: showSidebar }" @click="showSidebar = false"></div>
+    <div v-if="!loadError" class="sidebar" :class="{ open: showSidebar, collapsed: sidebarCollapsed }">
       <button
         v-if="!sidebarCollapsed"
         class="sidebar-collapse"
@@ -829,7 +843,7 @@ const stepCard = (delta: number) => {
       </nav>
       </div>
     </div>
-    <div class="results">
+    <div v-if="!loadError" class="results">
       <header>
         <button
           v-if="sidebarCollapsed"
@@ -905,8 +919,8 @@ const stepCard = (delta: number) => {
   display: flex;
   flex-direction: column;
   width: clamp(260px, 21vw, 340px);
-  border-right: 1px solid rgba(255,255,255,0.08);
-  background: color-mix(in srgb, var(--background) 96%, black 4%);
+  border-right: 1px solid var(--box-border);
+  background: var(--surface-panel, #e8e1d2);
   overflow: visible;
   z-index: 3;
   transition: width 0.18s ease, border-color 0.18s ease;
@@ -928,8 +942,8 @@ const stepCard = (delta: number) => {
     width: min(340px, 88vw);
     max-height: unset;
     border-right: none;
-    border-left: 1px solid rgba(255,255,255,0.12);
-    background: var(--background);
+    border-left: 1px solid var(--box-border);
+    background: var(--surface-panel, #e8e1d2);
     z-index: var(--z-index-50);
     transform: translateX(100%);
     transition: transform 0.25s ease;
@@ -964,7 +978,7 @@ const stepCard = (delta: number) => {
   width: 18px;
   height: 100%;
   padding: 0;
-  color: #aaa;
+  color: var(--text-dim);
   background: transparent;
   border: 0;
   cursor: pointer;
@@ -974,7 +988,7 @@ const stepCard = (delta: number) => {
   &:hover,
   &:focus-visible {
     opacity: 1;
-    color: #fff;
+    color: var(--text);
   }
 
   .collapse-glyph {
@@ -992,17 +1006,17 @@ const stepCard = (delta: number) => {
     font-weight: 800;
     letter-spacing: 0;
     line-height: 1;
-    background: color-mix(in srgb, var(--background) 74%, white 26%);
-    border: 1px solid rgba(255,255,255,0.22);
+    background: var(--surface-raised, #f4efe4);
+    border: 1px solid var(--box-border);
     border-radius: 999px;
     box-shadow: 0 4px 14px rgba(0,0,0,0.3);
     transform: translate(-50%, -54%);
-    text-shadow: 0 1px 2px rgba(0,0,0,0.55);
+    text-shadow: none;
   }
 
   .collapse-glyph:hover,
   &:focus-visible .collapse-glyph {
-    background: color-mix(in srgb, var(--background) 72%, white 28%);
+    background: var(--surface-panel, #e8e1d2);
   }
 
   .collapse-glyph::after {
@@ -1012,7 +1026,7 @@ const stepCard = (delta: number) => {
     left: 28px;
     z-index: 2;
     padding: 5px 8px;
-    color: #eee;
+    color: var(--text-on-dark, #f4efe4);
     font-size: 0.72rem;
     font-weight: 600;
     line-height: 1;
@@ -1020,8 +1034,8 @@ const stepCard = (delta: number) => {
     text-shadow: none;
     white-space: nowrap;
     pointer-events: none;
-    background: rgba(12, 16, 18, 0.96);
-    border: 1px solid rgba(255,255,255,0.14);
+    background: var(--background-dark);
+    border: 1px solid rgba(244, 239, 228, 0.22);
     border-radius: 6px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.35);
     opacity: 0;
@@ -1042,7 +1056,7 @@ const stepCard = (delta: number) => {
 
 .sidebar:has(.sidebar-collapse:hover),
 .sidebar:has(.sidebar-collapse:focus-visible) {
-  border-right-color: rgba(255,255,255,0.35);
+  border-right-color: var(--edge);
 }
 
 .sidebar-overlay {
@@ -1052,7 +1066,7 @@ const stepCard = (delta: number) => {
       display: block;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(37, 39, 37, 0.38);
       z-index: var(--z-index-49);
     }
   }
@@ -1066,12 +1080,12 @@ const stepCard = (delta: number) => {
     margin: 8px auto 0 8px;
     background: transparent;
     border: none;
-    color: #777;
+    color: var(--text-dim);
     cursor: pointer;
     padding: 6px;
     font-size: 1.1em;
     flex-shrink: 0;
-    &:hover { color: #ccc; }
+    &:hover { color: var(--text); }
   }
 }
 
@@ -1084,12 +1098,12 @@ const stepCard = (delta: number) => {
   flex-shrink: 0;
   height: 32px;
   padding: 0 8px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(48, 58, 61, 0.06);
+  border: 1px solid var(--box-border);
   border-radius: 6px;
-  color: #aaa;
+  color: var(--text-dim);
   cursor: pointer;
-  &:hover { background: rgba(255,255,255,0.14); color: #eee; }
+  &:hover { background: rgba(48, 58, 61, 0.12); color: var(--text); }
 }
 
 .sidebar-toggle {
@@ -1164,7 +1178,7 @@ const stepCard = (delta: number) => {
     padding: 7px 6px 7px 0;
     font-size: 0.84rem;
     font-weight: 600;
-    color: #ccc;
+    color: var(--text);
     text-decoration: none;
     white-space: nowrap;
     overflow: hidden;
@@ -1175,7 +1189,7 @@ const stepCard = (delta: number) => {
   }
 
   &.active {
-    background: rgba(255,255,255,0.075);
+    background: rgba(48, 58, 61, 0.08);
 
     a,
     .set-icon,
@@ -1203,7 +1217,7 @@ const stepCard = (delta: number) => {
   }
 
   &:hover {
-    background: rgba(255,255,255,0.045);
+    background: rgba(48, 58, 61, 0.05);
   }
 }
 
@@ -1221,7 +1235,7 @@ const stepCard = (delta: number) => {
   width: 16px;
   flex-shrink: 0;
   margin-right: 4px;
-  color: #ccc;
+  color: var(--text-dim);
 }
 
 /* Icons are silhouettes masked out of a solid fill, so they take the row's
@@ -1231,7 +1245,7 @@ const stepCard = (delta: number) => {
   height: 16px;
   flex-shrink: 0;
   margin-right: 4px;
-  color: #ccc;
+  color: var(--text-dim);
   background: currentColor;
   mask: var(--set-icon-url) center / contain no-repeat;
   -webkit-mask: var(--set-icon-url) center / contain no-repeat;
@@ -1241,7 +1255,7 @@ const stepCard = (delta: number) => {
   width: 18px;
   height: 18px;
   margin-left: -1px;
-  color: #fff;
+  color: var(--text);
 }
 
 .nav-row--sub {
@@ -1254,7 +1268,7 @@ const stepCard = (delta: number) => {
     padding-bottom: 5px;
     font-size: 0.79rem;
     font-weight: 400;
-    color: #999;
+    color: var(--text-dim);
   }
 }
 
@@ -1273,9 +1287,8 @@ header {
   gap: 12px;
   flex-shrink: 0;
   padding: 14px 20px;
-  background: color-mix(in srgb, var(--background) 92%, transparent);
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  backdrop-filter: blur(6px);
+  background: var(--surface-panel, #e8e1d2);
+  border-bottom: 1px solid var(--box-border);
   z-index: var(--z-index-1);
 
   @media (max-width: 768px) {
@@ -1286,8 +1299,8 @@ header {
   form {
     display: flex;
     align-items: center;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--surface-raised, #f4efe4);
+    border: 1px solid var(--box-border);
     border-radius: 6px;
     overflow: hidden;
     flex: 1;
@@ -1304,7 +1317,7 @@ header {
       border: none;
       outline: none;
       padding: 6px 10px;
-      color: #ddd;
+      color: var(--text);
       font-size: 0.88rem;
 
       &::placeholder { color: var(--button); }
@@ -1314,7 +1327,7 @@ header {
       background: transparent;
       border: none;
       padding: 6px 10px;
-      color: #777;
+      color: var(--text-dim);
       cursor: pointer;
       transition: color 0.12s;
 
@@ -1326,8 +1339,8 @@ header {
 .view-controls {
   display: flex;
   gap: 3px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(48, 58, 61, 0.06);
+  border: 1px solid var(--box-border);
   border-radius: 8px;
   padding: 3px;
 
@@ -1336,11 +1349,11 @@ header {
     border: none;
     border-radius: 4px;
     padding: 5px 9px;
-    color: #777;
+    color: var(--text-dim);
     cursor: pointer;
     transition: background 0.12s, color 0.12s;
 
-    &:hover { color: #ccc; }
+    &:hover { color: var(--text); }
 
     :deep(svg) {
       display: block;
@@ -1352,8 +1365,8 @@ header {
     }
 
     &.active {
-      background: rgba(255,255,255,0.12);
-      color: #eee;
+      background: var(--spooky-green);
+      color: var(--button-1-text);
     }
   }
 }
@@ -1365,7 +1378,7 @@ header {
   --segmented-gap-total: 4px;
   display: grid;
   border-radius: 5px;
-  background: var(--background-dark);
+  background: var(--surface-panel, #e8e1d2);
   border: 1px solid var(--box-border);
   padding: var(--segmented-padding);
   gap: var(--segmented-gap);
@@ -1413,7 +1426,7 @@ header {
 .segmented label {
   align-items: center;
   border-radius: 3px;
-  color: var(--background-light);
+  color: var(--text-dim);
   cursor: pointer;
   display: flex;
   font-size: 11px;
@@ -1436,12 +1449,12 @@ header {
 }
 
 .segmented input[type='radio']:disabled + label {
-  color: color-mix(in srgb, var(--background-light) 45%, transparent);
+  color: color-mix(in srgb, var(--text-dim) 48%, transparent);
   cursor: not-allowed;
 }
 
 .segmented input[type='radio']:disabled + label:hover {
-  color: color-mix(in srgb, var(--background-light) 45%, transparent);
+  color: color-mix(in srgb, var(--text-dim) 48%, transparent);
 }
 
 .segmented:hover::before {

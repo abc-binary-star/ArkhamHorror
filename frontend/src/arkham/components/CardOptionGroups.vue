@@ -126,8 +126,8 @@ defineProps<{
   grid-auto-flow: column;
   grid-auto-columns: 1fr;
   border-radius: 5px;
-  background: var(--background-dark);
-  border: 1px solid var(--box-border);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   padding: 2px;
   gap: 2px;
 }
@@ -151,7 +151,7 @@ defineProps<{
   user-select: none;
   cursor: pointer;
   border-radius: 3px;
-  color: var(--background-light);
+  color: var(--text-dim);
   margin: 0;
 }
 
@@ -163,7 +163,7 @@ defineProps<{
 
 .segmented input[type='radio']:checked + label {
   background: var(--button-1);
-  color: var(--text);
+  color: var(--button-1-text);
 }
 
 

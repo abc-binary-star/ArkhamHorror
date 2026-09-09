@@ -475,11 +475,11 @@ const classObject = computed(() => {
 
 <style scoped>
 .button{
-  border: 0;
+  border: var(--edge-width) solid color-mix(in srgb, var(--edge-on-accent) 70%, transparent);
   margin-top: 2px;
-  color: #fff;
+  color: var(--text-on-dark);
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: var(--control-radius);
   background-color: var(--button);
   z-index: var(--z-index-1000);
   width: 100%;
@@ -490,6 +490,36 @@ const classObject = computed(() => {
   gap: 0;
   padding: 0;
   overflow: hidden;
+  min-height: var(--control-height);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.08)),
+    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg');
+  background-size: 100% 100%, 256px 256px;
+  background-repeat: no-repeat, repeat;
+  box-shadow: var(--shadow-1);
+  transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease, border-color 120ms ease;
+}
+
+.button:hover:not(:disabled) {
+  border-color: var(--edge-on-accent);
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+.button:active:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  filter: var(--button-disabled-filter);
+  opacity: 0.72;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--button-focus-ring);
+  outline-offset: 2px;
 }
 
 .button-label {
@@ -526,8 +556,8 @@ const classObject = computed(() => {
   gap: 3px;
   align-self: stretch;
   padding: 3px 6px;
-  background: rgba(0, 0, 0, 0.14);
-  border-left: 1px solid rgba(255, 255, 255, 0.18);
+  background: color-mix(in srgb, var(--edge-on-accent) 22%, transparent);
+  border-left: var(--edge-width) solid color-mix(in srgb, var(--text-on-dark) 22%, transparent);
   white-space: nowrap;
 }
 
@@ -540,8 +570,8 @@ const classObject = computed(() => {
   align-self: stretch;
   margin: 0;
   padding: 0;
-  background: rgba(0, 0, 0, 0.34);
-  border-right: 1px solid rgba(255, 255, 255, 0.24);
+  background: color-mix(in srgb, var(--edge-on-accent) 38%, transparent);
+  border-right: var(--edge-width) solid color-mix(in srgb, var(--text-on-dark) 28%, transparent);
   border-radius: 4px 0 0 4px;
   color: #ffd166;
 }

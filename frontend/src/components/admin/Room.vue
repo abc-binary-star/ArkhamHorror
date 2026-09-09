@@ -82,9 +82,9 @@ strong {
 }
 
 .room-actions a {
-  background: var(--background-dark);
-  border: 1px solid var(--box-border);
-  border-radius: 3px;
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-sm);
   color: var(--title);
   font-size: 0.8rem;
   font-weight: 700;
@@ -94,13 +94,14 @@ strong {
 }
 
 .room-actions a:hover {
-  background: rgba(255, 255, 255, 0.06);
-  color: white;
+  background: var(--surface-panel);
+  border-color: var(--spooky-green);
+  color: var(--spooky-green-dark);
 }
 
 .room-actions .delete {
   border-color: color-mix(in srgb, var(--delete) 65%, var(--box-border));
-  color: color-mix(in srgb, var(--delete) 35%, white);
+  color: var(--status-danger-text);
 }
 
 @media (max-width: 620px) {

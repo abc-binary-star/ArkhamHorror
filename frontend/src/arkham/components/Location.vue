@@ -157,7 +157,11 @@ async function clicked(e: MouseEvent) {
     if (clickCount === 1) {
       if (cardAction.value !== -1) {
         choose(cardAction.value)
-      } else if (abilities.value.length > 0) {
+      } else if (abilities.value.length === 1) {
+        // Unambiguous single ability: fire it directly instead of making the
+        // player open the abilities menu just to confirm.
+        chooseAbility(abilities.value[0].index)
+      } else if (abilities.value.length > 1) {
         showAbilities.value = !showAbilities.value
         await nextTick()
         if (showAbilities.value === true) {
@@ -878,8 +882,9 @@ const hasAnyLocationVehicleAssets = computed(() =>
 
 .button {
   margin-top: 2px;
-  border: 0;
-  color: #fff;
+  border: var(--edge-width) solid var(--edge-dim);
+  color: var(--text);
+  background: var(--surface-raised);
   border-radius: 4px;
   padding: 5px 10px;
 }

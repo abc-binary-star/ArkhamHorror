@@ -584,10 +584,10 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
   align-items: center;
   justify-items: center;
   gap: 5px;
-  color: white;
-  background-color: rgb(0, 0, 0, 0.6);
-  backdrop-filter: blur(80px);
-  -webkit-backdrop-filter: blur(80px); /* Safari support */
+  color: var(--text);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  box-shadow: var(--shadow-4);
 }
 
 .test-status {
@@ -618,8 +618,8 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
 }
 
 .difficulty {
-  background-color: darkred;
-  color: white;
+  background-color: var(--delete);
+  color: var(--button-1-text);
   font-weight: bold;
   display: inline-flex;
   align-items: center;
@@ -630,8 +630,8 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
 }
 
 .skill {
-  background-color: darkgreen;
-  color: white;
+  background-color: var(--spooky-green);
+  color: var(--button-1-text);
   font-weight: bold;
   display: inline-flex;
   align-items: center;
@@ -670,11 +670,12 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
 }
 
 .committed-skills {
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--surface-panel);
+  border-top: var(--edge-width) solid var(--edge-dim);
 
   h2 {
-    background: #111;
-    color: #666;
+    background: var(--panel-inset);
+    color: var(--text);
     text-transform: uppercase;
     margin: 0
   }
@@ -713,7 +714,7 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
   border: 0;
   padding: 10px;
   background-color: var(--button-2);
-  color: #EEE;
+  color: var(--button-2-text);
 }
 
 button {
@@ -728,21 +729,21 @@ button {
   &:hover {
     background-color: var(--select-dark-20);
   }
-  color: #EEE;
+  color: var(--button-2-text);
 }
 
 .success {
-  background-color: darkgreen;
+  background-color: var(--spooky-green);
   text-transform: uppercase;
   text-align: center;
-  color: white;
+  color: var(--button-1-text);
 }
 
 .failure {
-  background-color: darkred;
+  background-color: var(--delete);
   text-transform: uppercase;
   text-align: center;
-  color: white;
+  color: #fff4f1;
 }
 
 i {
@@ -816,18 +817,18 @@ i.iconSkillAgility {
   display: inline-block;
   padding: 5px 10px;
   margin: 2px;
-  background-color: var(--neutral-dark);
-  color: white;
-  border: 1px solid #666;
+  background-color: var(--surface-raised);
+  color: var(--text);
+  border: var(--edge-width) solid var(--edge-dim);
   cursor: pointer;
 
   &:hover {
-    background-color: #111;
+    background-color: var(--surface-panel);
   }
 
   &:active {
-    background-color: #666;
-    border-color: #111;
+    background-color: var(--panel-inset);
+    border-color: var(--edge);
   }
 
   flex: 1;
@@ -860,7 +861,7 @@ i.iconSkillAgility {
     &:hover {
       background-color: var(--select-dark-20);
     }
-    color: #EEE;
+    color: var(--button-2-text);
   }
 }
 
@@ -890,13 +891,13 @@ i.iconSkillAgility {
   }
 
   .step:nth-child(odd) {
-    background: rgba(0, 0, 0, 0.4);
-    color: white;
+    background: var(--surface-table);
+    color: var(--text-on-table);
   }
 
   .step:nth-child(even) {
-    background: rgba(0, 0, 0, 0.2);
-    color: white;
+    background: color-mix(in srgb, var(--surface-table) 85%, white);
+    color: var(--text-on-table);
   }
 
   .step.active {
@@ -978,9 +979,9 @@ i.iconSkillAgility {
 .modifier {
   flex-shrink: 0;
   align-items: center;
-  background: #000;
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 100px;
-  border: none;
   color: var(--title);
   display: flex;
   gap: 4px;
@@ -1011,7 +1012,8 @@ i.iconSkillAgility {
   align-self: flex-start;
   display: flex;
   flex-wrap: wrap;
-  background: rgba(0, 0, 0, 0.6);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
   padding: 6px 10px;
   gap: 5px;
   font-size: 1em;
@@ -1024,11 +1026,12 @@ i.iconSkillAgility {
   justify-content: center;
   gap: 8px;
   padding: 8px;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--surface-panel);
+  border-top: var(--edge-width) solid var(--edge-dim);
 }
 
 .token-effects {
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--surface-panel);
 }
 
 .token-effect {

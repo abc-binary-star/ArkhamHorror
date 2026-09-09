@@ -229,6 +229,9 @@ const modifiedPlayingCard = computed(() => {
 
 })
 
+// Cached so every whole-game re-render does not re-serialize per card.
+const customizationsJson = computed(() => JSON.stringify(cardContents.value.customizations))
+
 function startDrag(event: DragEvent) {
   if (!debug.active) {
     event.preventDefault()
@@ -254,7 +257,8 @@ function startDrag(event: DragEvent) {
       :class="{'card--can-interact': cardAction !== -1, 'card--highlighted': isHighlighted && cardAction === -1, 'sideways': forceSideways}"
       class="card"
       :src="image"
-      :data-customizations="JSON.stringify(cardContents.customizations)"
+      loading="lazy"
+      :data-customizations="customizationsJson"
       :data-chained="cardContents.chained || undefined"
       :data-pc="modifiedPlayingCard ? modifiedPlayingCard : null"
       :draggable="debug.active"
@@ -330,6 +334,20 @@ function startDrag(event: DragEvent) {
   display: flex;
   flex-direction: column;
   position: relative;
+}
+
+.card-container:has(.card--can-interact)::after,
+.card-container:has(.card--highlighted)::after {
+  content: '';
+  position: absolute;
+  left: 6%;
+  right: 6%;
+  bottom: -8px;
+  height: 22px;
+  pointer-events: none;
+  background: url('/assets/veiled-harbour/33-卡牌交互状态带-v2.png') center / 100% 100% no-repeat;
+  mix-blend-mode: multiply;
+  opacity: 0.82;
 }
 
 .debug-customize {

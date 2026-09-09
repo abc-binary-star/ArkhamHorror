@@ -493,7 +493,7 @@ watch(
           v-else-if="isWaiting(investigator)"
           class="waiting-indicator"
           v-tooltip="$t('waitingOn.label')"
-        ><ArrowPathIcon class="waiting-spinner" aria-hidden="true" /></span>
+        ><ArrowPathIcon class="waiting-spinner" aria-hidden="true" /><span v-if="!isMobile" class="waiting-text">{{ $t('waitingOn.short') }}</span></span>
       </li>
       <li v-for='investigator in inactiveInvestigators'
         :key='investigator.name.title'
@@ -512,7 +512,7 @@ watch(
           v-else-if="isWaiting(investigator)"
           class="waiting-indicator"
           v-tooltip="$t('waitingOn.label')"
-        ><ArrowPathIcon class="waiting-spinner" aria-hidden="true" /></span>
+        ><ArrowPathIcon class="waiting-spinner" aria-hidden="true" /><span v-if="!isMobile" class="waiting-text">{{ $t('waitingOn.short') }}</span></span>
       </li>
     </ul>
     <slot />
@@ -599,6 +599,9 @@ ul.tabs__header > li {
 ul.tabs__header > li.tab--selected {
   font-weight: bold;
   opacity: 1;
+  background: color-mix(in srgb, var(--surface-table, #626e70) 72%, var(--surface-chrome, #303a3d));
+  border: 1px solid color-mix(in srgb, var(--accent-brass-bright, #d5bb83) 68%, transparent);
+  box-shadow: 0 2px 8px rgb(8 14 15 / 0.28), inset 0 0 0 1px rgb(244 239 228 / 0.1);
 }
 
 ul.tabs__header > li.tab--has-actions {
@@ -703,6 +706,16 @@ ul.tabs__header > li.tab--has-actions {
   flex-shrink: 0;
   filter: drop-shadow(0 0 3px color-mix(in srgb, var(--select) 60%, transparent));
   animation: waiting-on-spin 5s linear infinite;
+}
+
+/* Persistent label: the spinner alone was hover-only, which is unreachable on
+   touch devices. */
+.waiting-text {
+  margin-left: 5px;
+  font-size: 0.78em;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--select);
 }
 
 @keyframes waiting-on-spin {

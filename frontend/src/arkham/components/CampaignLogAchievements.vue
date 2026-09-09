@@ -105,7 +105,7 @@ const earnedDate = (row: Achievement | null): string | null => {
 .log-section {
   --accent: #b3922f;
   background: var(--box-background);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: var(--edge-width) solid var(--border-panel);
   border-radius: 8px;
   padding: 14px 16px;
 }
@@ -114,12 +114,12 @@ const earnedDate = (row: Achievement | null): string | null => {
   font-family: teutonic, sans-serif;
   font-size: 1.1em;
   font-weight: normal;
-  color: rgba(255, 255, 255, 0.75);
-  text-transform: uppercase;
+  color: var(--title);
+  text-transform: none;
   letter-spacing: 0.08em;
   margin: 0 0 10px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
 }
 
 .entry-list {
@@ -136,8 +136,8 @@ const earnedDate = (row: Achievement | null): string | null => {
   font-family: teutonic, sans-serif;
   font-size: 0.95em;
   font-weight: normal;
-  color: rgba(217, 184, 69, 0.8);
-  text-transform: uppercase;
+  color: var(--brass-dim);
+  text-transform: none;
   letter-spacing: 0.08em;
   margin: 14px 0 8px;
 }
@@ -151,10 +151,10 @@ const earnedDate = (row: Achievement | null): string | null => {
   align-items: flex-start;
   gap: 10px;
   padding: 10px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.18);
-  color: rgba(255, 255, 255, 0.5);
+  background: var(--surface-raised);
+  color: var(--text-dim);
   opacity: 0.72;
 }
 
@@ -164,7 +164,7 @@ const earnedDate = (row: Achievement | null): string | null => {
 }
 
 .entry-icon {
-  color: rgba(255, 255, 255, 0.22);
+  color: var(--edge);
   margin-top: 2px;
   flex-shrink: 0;
 }
@@ -182,22 +182,22 @@ const earnedDate = (row: Achievement | null): string | null => {
 
 .entry-name {
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.68);
+  color: var(--text);
 }
 
 .entry.earned .entry-name {
-  color: #f1e6bf;
+  color: var(--title);
 }
 
 .entry-date {
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--text-dim);
   font-size: 0.85em;
   font-weight: normal;
   margin-left: 8px;
 }
 
 .entry-text {
-  color: rgba(255, 255, 255, 0.52);
+  color: var(--text-dim);
   line-height: 1.35;
 }
 
@@ -211,7 +211,7 @@ const earnedDate = (row: Achievement | null): string | null => {
 }
 
 .checklist-item {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-dim);
   line-height: 1.45;
   display: flex;
   gap: 6px;
@@ -219,7 +219,7 @@ const earnedDate = (row: Achievement | null): string | null => {
 }
 
 .checklist-item.checked {
-  color: rgba(217, 184, 69, 0.85);
+  color: var(--brass-dim);
 }
 
 .checkbox {
@@ -227,6 +227,6 @@ const earnedDate = (row: Achievement | null): string | null => {
 }
 
 .entry.earned .entry-text {
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--text);
 }
 </style>

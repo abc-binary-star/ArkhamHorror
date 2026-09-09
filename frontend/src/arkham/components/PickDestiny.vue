@@ -102,11 +102,12 @@ h1 {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   padding: 10px;
-  color: var(--title);
+  color: var(--text);
   font-size: 2em;
-  text-transform: uppercase;
-  font-family: Teutonic;
-  background-color: var(--background-dark);
+  text-transform: none;
+  font-family: Arno, 'Noto Serif SC', serif;
+  background-color: var(--surface-raised);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
 }
 
 
@@ -137,17 +138,17 @@ h1 {
 }
 
 button {
-  border: 0;
+  border: var(--edge-width) solid var(--edge-dim);
   margin: 0 10px;
   padding: 10px;
   text-transform: uppercase;
   background-color: var(--button-2);
   font-weight: bold;
   border-radius: 0.6em;
-  color: #EEE;
+  color: var(--button-2-text);
   font: Arial, sans-serif;
   &:hover {
-    background-color: #311b3e;
+    background-color: var(--button-2-highlight);
   }
   @media (max-width: 800px) and (orientation: portrait) {
     font-size: smaller;
@@ -158,18 +159,18 @@ button {
 .done-button {
   margin: 0;
   width: 100%;
-  border: 0;
+  border: var(--edge-width) solid var(--edge-dim);
   text-align: center;
   padding: 10px;
   text-transform: uppercase;
   border-radius: 0;
   background-color: var(--button-2);
   font-weight: bold;
-  color: #EEE;
+  color: var(--button-2-text);
   font: Arial, sans-serif;
   margin-top: 20px;
   &:hover {
-    background-color: #311b3e;
+    background-color: var(--button-2-highlight);
   }
 
   i {

@@ -14,6 +14,11 @@ const store = useUserStore()
 const currentUser = computed<User | null>(() => store.currentUser)
 const { customCardsEnabled } = storeToRefs(useSettings())
 
+// The embedded deck builder is a separate static SPA served by nginx at
+// /build/, not a router route, and it is only packaged into a distribution.
+const deckBuilderAvailable = import.meta.env.PROD
+const deckBuilderHref = '/build/'
+
 async function logout() {
   await store.logout()
   router.push({ path: '/' })
@@ -26,9 +31,17 @@ async function logout() {
       <font-awesome-icon icon="bars" />
     </button>
 
-    <nav class="main-links">
-      <router-link to="/" class="home-link">{{$t('nav.home')}}</router-link>
+    <router-link to="/" class="home-plaque" :aria-label="$t('nav.home')">
+      <img class="brand-mark" src="/assets/veiled-harbour/06-诡镇奇谈徽记.svg" alt="" aria-hidden="true" />
+      <span class="brand-lockup">
+        <span class="brand-name">诡镇奇谈</span>
+        <span class="brand-subtitle">ARKHAM HORROR</span>
+      </span>
+    </router-link>
+
+    <nav v-if="currentUser" class="main-links">
       <router-link v-if="currentUser" to="/decks" class="nav-link">{{$t('nav.myDecks')}}</router-link>
+      <a v-if="currentUser && deckBuilderAvailable" :href="deckBuilderHref" class="nav-link" target="_blank" rel="noopener">{{$t('nav.deckBuilder')}}</a>
       <router-link v-if="currentUser" to="/cards" class="nav-link">{{$t('nav.cards')}}</router-link>
       <router-link v-if="currentUser" to="/achievements" class="nav-link">{{$t('nav.achievements')}}</router-link>
       <router-link v-if="currentUser && customCardsEnabled" to="/card-builder" class="nav-link">{{$t('nav.cardBuilder')}}</router-link>
@@ -58,6 +71,7 @@ async function logout() {
 
     <div v-if="mobileOpen" class="mobile-menu" @click="mobileOpen = false">
       <router-link to="/decks">{{$t('nav.myDecks')}}</router-link>
+      <a v-if="deckBuilderAvailable" :href="deckBuilderHref" target="_blank" rel="noopener">{{$t('nav.deckBuilder')}}</a>
       <router-link to="/cards">{{$t('nav.cards')}}</router-link>
       <router-link to="/achievements">{{$t('nav.achievements')}}</router-link>
       <router-link v-if="customCardsEnabled" to="/card-builder">{{$t('nav.cardBuilder')}}</router-link>
@@ -71,88 +85,150 @@ async function logout() {
 <style scoped>
 #nav {
   background: var(--background-dark);
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-  box-shadow: 0 1px 12px rgba(0,0,0,0.5);
-  color: #f2f2f2;
+  border-bottom: 1px solid rgba(244, 239, 228, 0.18);
+  box-shadow: 0 3px 10px rgba(37, 39, 37, 0.18);
+  color: var(--text-on-dark, #f4efe4);
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
   height: var(--nav-height);
   flex-shrink: 0;
   position: relative;
   z-index: var(--z-index-100);
 }
 
-/* ── Main nav links ─────────────────────────────────────── */
+/* ── Home plaque ──────────────────────────────────────────────────────────
+   Sits outside the tab tray on purpose: a tilted brass tag, the one warm
+   surface in the bar. Hovering swings it back square. */
 
-.main-links {
-  display: flex;
-  align-items: stretch;
-  flex: 1;
-}
-
-.home-link,
-.nav-link {
-  display: flex;
+.home-plaque {
+  display: inline-flex;
   align-items: center;
-  padding: 0 14px;
-  color: color-mix(in srgb, var(--spooky-green) 45%, #666);
-  font-size: 0.875rem;
-  font-weight: 500;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  gap: 8px;
+  min-width: 178px;
+  height: 40px;
+  padding: 0 10px 0 2px;
+  color: var(--text-on-dark, #f4efe4);
   text-decoration: none;
-  position: relative;
-  transition: color 0.15s;
-  white-space: nowrap;
+  transition: color 120ms ease, transform 120ms ease;
 
-  &:hover { color: var(--spooky-green); }
+  &:hover {
+    color: var(--accent-brass-bright, #c8ad78);
+    transform: translateY(-1px);
+  }
 
-  &.router-link-active {
-    color: var(--spooky-green);
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 8px;
-      right: 8px;
-      height: 2px;
-      background: var(--spooky-green);
-      border-radius: 2px 2px 0 0;
-    }
+  &:active {
+    transform: translateY(0);
   }
 }
 
-.home-link {
-  font-weight: 700;
-  color: color-mix(in srgb, var(--spooky-green) 70%, #ccc);
-  font-size: 0.925rem;
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  object-fit: contain;
+}
 
-  &:hover { color: color-mix(in srgb, var(--spooky-green) 85%, white); }
+.brand-lockup {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+  line-height: 1;
+}
+
+.brand-name {
+  font-family: "Arno", "Source Han Serif", serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.brand-subtitle {
+  color: var(--text-dim-on-dark, #c7cfcc);
+  font-family: "Arno", serif;
+  font-size: 0.48rem;
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+}
+
+/* ── Main nav: a segmented tray, not a row of bare links ────────────────── */
+
+.main-links {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  padding: 3px;
+  border: var(--edge-width) solid rgba(244, 239, 228, 0.2);
+  border-radius: var(--radius-lg);
+  background: rgba(244, 239, 228, 0.08);
+  box-shadow: var(--shadow-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+  color: var(--text-dim-on-dark, #c7cfcc);
+  font-size: 0.78rem;
+  font-weight: var(--font-bold);
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 120ms ease, color 120ms ease;
+
+  &:hover {
+    background: rgba(244, 239, 228, 0.1);
+    color: var(--text-on-dark, #f4efe4);
+  }
 
   &.router-link-active {
-    color: color-mix(in srgb, var(--spooky-green) 85%, white);
-    &::after { display: none; }
+    background: var(--spooky-green);
+    box-shadow: var(--shadow-1);
+    color: var(--button-1-text);
+    font-weight: var(--font-black);
   }
 }
 
 @media (max-width: 768px) {
+  .home-plaque { min-width: 0; padding-right: 2px; }
+  .brand-subtitle { display: none; }
+  .brand-name { font-size: 0.92rem; }
   .nav-link { display: none; }
+  .main-links { border-color: transparent; box-shadow: none; background: transparent; }
 }
 
-/* ── Mobile hamburger ───────────────────────────────────── */
+/* ── Mobile hamburger ───────────────────────────────────────────────────── */
 
 .mobile-menu-btn {
   display: none;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 100%;
-  background: transparent;
-  border: none;
-  color: color-mix(in srgb, var(--spooky-green) 45%, #666);
+  width: 34px;
+  height: 32px;
+  padding: 0;
+  background: rgba(244, 239, 228, 0.08);
+  border: var(--edge-width) solid rgba(244, 239, 228, 0.28);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  color: var(--text-dim-on-dark, #c7cfcc);
   font-size: 1rem;
   cursor: pointer;
-  transition: color 0.15s;
 
-  &:hover { color: var(--spooky-green); }
+  &:hover { color: var(--text-on-dark, #f4efe4); border-color: var(--accent-brass-bright, #c8ad78); }
 
   @media (max-width: 768px) {
     display: flex;
@@ -161,53 +237,72 @@ async function logout() {
 
 .mobile-menu {
   position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background: var(--background-dark);
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  top: calc(100% + 6px);
+  left: 12px;
+  right: 12px;
+  padding: 4px;
+  background: var(--surface-panel, #e8e1d2);
+  border: var(--edge-width) solid var(--border-panel, #817b70);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-4);
   display: flex;
   flex-direction: column;
+  gap: 2px;
 
   a {
-    padding: 14px 20px;
-    color: color-mix(in srgb, var(--spooky-green) 45%, #666);
-    font-size: 0.9rem;
-    font-weight: 500;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font-size: 0.85rem;
+    font-weight: var(--font-bold);
     text-decoration: none;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    transition: background 0.12s, color 0.12s;
+    transition: background 120ms ease, color 120ms ease;
 
-    &:last-child { border-bottom: none; }
-    &:hover { background: rgba(255,255,255,0.04); color: var(--spooky-green); }
-    &.router-link-active { color: var(--spooky-green); }
+    &:hover { background: rgba(48, 58, 61, 0.08); color: var(--spooky-green); }
+    &.router-link-active {
+      background: var(--spooky-green);
+      color: var(--button-1-text);
+      font-weight: var(--font-black);
+    }
   }
 }
 
-/* ── User section ──────────────────────────────────────── */
+/* ── User section ──────────────────────────────────────────────────────── */
 
 .user-links {
   display: flex;
   align-items: center;
-  height: 100%;
-  gap: 10px;
-  padding: 0 16px;
+  gap: 6px;
+  flex-shrink: 0;
   position: relative;
 
   a {
-    color: color-mix(in srgb, var(--spooky-green) 45%, #666);
-    font-size: 0.875rem;
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    height: 30px;
+    padding: 0 11px;
+    border: var(--edge-width) solid var(--edge-dim);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    font-weight: var(--font-bold);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     text-decoration: none;
-    transition: color 0.15s;
     white-space: nowrap;
-    &:hover { color: var(--spooky-green); }
+    transition: border-color 120ms ease, color 120ms ease, background-color 120ms ease;
+
+    &:hover {
+      border-color: var(--edge);
+      background: rgba(244, 239, 228, 0.1);
+      color: var(--text-on-dark, #f4efe4);
+    }
   }
 
   @media (max-width: 768px) {
-    padding: 0 10px;
-    gap: 6px;
+    gap: 4px;
+    a { padding: 0 8px; font-size: 0.7rem; }
   }
 }
 
@@ -215,18 +310,21 @@ async function logout() {
   display: flex;
   align-items: center;
   gap: 7px;
-  background: transparent;
-  border: none;
-  color: #fff;
-  font-size: 0.875rem;
-  font-weight: 500;
+  height: 32px;
+  padding: 0 11px;
+  background: rgba(244, 239, 228, 0.08);
+  border: var(--edge-width) solid rgba(244, 239, 228, 0.28);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  color: var(--text-on-dark, #f4efe4);
+  font-size: 0.78rem;
+  font-weight: var(--font-black);
   cursor: pointer;
-  padding: 0;
   white-space: nowrap;
-  transition: color 0.15s;
+  transition: border-color 120ms ease, color 120ms ease;
 
-  &:hover { color: #fff; }
-  &.open { color: #fff; }
+  &:hover { border-color: var(--accent-brass-bright, #c8ad78); color: var(--text-on-dark, #f4efe4); }
+  &.open { border-color: var(--accent-brass-bright, #c8ad78); color: var(--text-on-dark, #f4efe4); }
 }
 
 .dropdown-icon {
@@ -237,26 +335,35 @@ async function logout() {
 
 .user-dropdown {
   position: absolute;
-  top: calc(100% + 6px);
+  top: calc(100% + 8px);
   right: 0;
   min-width: 160px;
-  background: var(--background-dark);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: 8px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+  padding: 4px;
+  background: var(--surface-panel, #e8e1d2);
+  border: var(--edge-width) solid var(--border-panel, #817b70);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-4);
   overflow: hidden;
 
   a {
     display: block;
-    padding: 12px 16px;
-    color: color-mix(in srgb, var(--spooky-green) 45%, #666);
-    font-size: 0.875rem;
+    height: auto;
+    padding: 9px 11px;
+    border: 0;
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: var(--font-bold);
+    text-transform: none;
+    letter-spacing: 0;
     text-decoration: none;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    transition: background 0.12s, color 0.12s;
+    transition: background 120ms ease, color 120ms ease;
 
-    &:last-child { border-bottom: none; }
-    &:hover { background: rgba(255,255,255,0.04); color: var(--spooky-green); }
+    &:hover {
+      background: rgba(48, 58, 61, 0.08);
+      color: var(--spooky-green);
+    }
   }
 }
 </style>

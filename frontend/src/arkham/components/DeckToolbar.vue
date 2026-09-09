@@ -73,6 +73,11 @@ function toggleClass(c: string) {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid color-mix(in srgb, var(--brass) 40%, transparent);
+  border-bottom: 1px solid var(--box-border);
+  background: color-mix(in srgb, var(--surface-panel) 92%, var(--brass));
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.28);
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: stretch;
@@ -98,15 +103,15 @@ function toggleClass(c: string) {
   padding: 5px 10px;
   font-size: 0.78rem;
   font-weight: 600;
-  color: #666;
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
-  border-radius: 4px;
+  color: var(--text-dim);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background 0.12s, color 0.12s, border-color 0.12s;
   user-select: none;
 
-  &:hover { color: #aaa; border-color: var(--button-highlight); }
+  &:hover { color: var(--text); border-color: var(--spooky-green); }
 
   &.active.guardian { background: var(--guardian-extra-dark); border-color: var(--guardian-dark); color: #fff; }
   &.active.seeker   { background: var(--seeker-extra-dark);   border-color: var(--seeker-dark);   color: #fff; }
@@ -131,11 +136,11 @@ function toggleClass(c: string) {
   width: 36px;
   height: 36px;
   padding: 0;
-  background: rgba(0,0,0,0.3);
-  border-color: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.7);
+  background: var(--surface-raised);
+  border-color: var(--edge-dim);
+  color: var(--text-dim);
 
-  &:hover { border-color: rgba(255,255,255,0.2); color: white; }
+  &:hover { border-color: var(--spooky-green); color: var(--text); }
 
   span[class$="-icon"] { font-size: 1.15em; }
 
@@ -163,13 +168,13 @@ function toggleClass(c: string) {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   white-space: nowrap;
-  color: #888;
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
-  border-radius: 4px;
+  color: var(--text-dim);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-sm);
   cursor: pointer;
 
-  &:hover { color: #aaa; border-color: var(--button-highlight); }
+  &:hover { color: var(--text); border-color: var(--spooky-green); }
   &.active {
     color: #fff;
     background: rgba(110, 134, 64, 0.85);
@@ -178,8 +183,8 @@ function toggleClass(c: string) {
 }
 
 .compact .valid-filter {
-  background: rgba(0,0,0,0.3);
-  border-color: rgba(255,255,255,0.08);
+  background: var(--surface-raised);
+  border-color: var(--edge-dim);
 
   &.active {
     background: rgba(110, 134, 64, 0.85);
@@ -190,16 +195,16 @@ function toggleClass(c: string) {
 .search-input {
   padding: 6px 10px;
   font-size: 0.82rem;
-  color: #ccc;
-  background: #1a1a1a;
-  border: 1px solid #2a2a2a;
-  border-radius: 4px;
+  color: var(--text);
+  background: var(--input-background);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-sm);
   outline: none;
   width: 180px;
   transition: border-color 0.12s;
 
-  &::placeholder { color: var(--button-highlight); }
-  &:focus { border-color: var(--button-highlight); }
+  &::placeholder { color: var(--text-faint); }
+  &:focus { border-color: var(--spooky-green); box-shadow: var(--shadow-2); }
 
   @media (max-width: 768px) {
     flex: 1;
@@ -208,37 +213,37 @@ function toggleClass(c: string) {
 }
 
 .compact .search-input {
-  background: rgba(0,0,0,0.3);
-  border-color: rgba(255,255,255,0.08);
-  color: #ccc;
+  background: var(--input-background);
+  border-color: var(--edge-dim);
+  color: var(--text);
   width: 140px;
 
-  &::placeholder { color: var(--button); }
-  &:focus { border-color: rgba(255,255,255,0.2); }
+  &::placeholder { color: var(--text-faint); }
+  &:focus { border-color: var(--spooky-green); }
 }
 
 .sort-select {
   width: max-content;
   padding: 6px 32px 6px 10px;
   font-size: 0.82rem;
-  color: #ccc;
-  background-color: #1a1a1a;
+  color: var(--text);
+  background-color: var(--input-background);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 10px center;
-  border: 1px solid #2a2a2a;
-  border-radius: 4px;
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-sm);
   outline: none;
   cursor: pointer;
   appearance: none;
 
-  option { background: #1a1a1a; }
+  option { background: var(--surface-raised); color: var(--text); }
 }
 
 .compact .sort-select {
-  background-color: rgba(0,0,0,0.3);
-  border-color: rgba(255,255,255,0.08);
+  background-color: var(--input-background);
+  border-color: var(--edge-dim);
 
-  option { background: #1a1a1a; }
+  option { background: var(--surface-raised); color: var(--text); }
 }
 </style>

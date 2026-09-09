@@ -89,7 +89,9 @@ async function adjustAmount(delta: number) {
 
   section.main {
     padding: 2em;
-    background: #424242;
+    background: var(--surface-panel);
+    border: var(--edge-width) solid var(--border-panel);
+    border-radius: var(--radius-lg);
   }
 
   section.actions {
@@ -104,7 +106,7 @@ async function adjustAmount(delta: number) {
   flex-direction: column;
   align-items: center;
   gap: 0.5em;
-  color: whitesmoke;
+  color: var(--text);
   font-size: 1.2em;
   font-weight: bold;
   font-family: 'Arno', sans-serif;
@@ -121,19 +123,19 @@ async function adjustAmount(delta: number) {
     object-fit: cover;
     object-position: top;
     /* drop shadow */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+    box-shadow: var(--shadow-2);
   }
 
   .amount {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    box-shadow: var(--shadow-1);
     z-index: var(--z-index-neg-1);
     position: absolute;
     bottom: 0px;
-    color: #4a5844;
+    color: var(--spooky-green-dark);
     font-family: "Teutonic";
     letter-spacing: 0.1em;
     transform: translateY(calc(100% - 38px));
-    background: #96a78d; /*rgba(255, 0, 255, 0.4);*/
+    background: var(--surface-raised);
     padding: 20px 8px 2px 8px;
     border-radius: 2px;
   }
@@ -150,9 +152,9 @@ async function adjustAmount(delta: number) {
   button {
     position: absolute;
     font-size: 1.1em;
-    background: var(--neutral-dark);
-    color: var(--button);
-    border: none;
+    background: var(--surface-raised);
+    color: var(--text);
+    border: var(--edge-width) solid var(--edge-dim);
     padding: 2px 10px;
     cursor: pointer;
     &:first-of-type {
@@ -168,7 +170,7 @@ async function adjustAmount(delta: number) {
       transform: translateX(100%);
     }
     &:hover {
-      color: #CCC;
+      color: var(--spooky-green);
     }
   }
 }
@@ -178,9 +180,9 @@ async function adjustAmount(delta: number) {
     padding: 0.8em;
     font-size: 1em;
     font-weight: bold;
-    background-color: var(--neutral-extra-dark);
-    color: #CCC;
-    border: none;
+    background-color: var(--button-2);
+    color: var(--button-2-text);
+    border: var(--edge-width) solid var(--edge-dim);
     border-radius: 0.6em;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -189,14 +191,15 @@ async function adjustAmount(delta: number) {
     transition: all 0.3s ease;
 
     &:hover {
-      color: white;
+      color: var(--button-2-text);
     }
   }
 }
 
 .item {
   padding: 10px;
-  background-color: var(--neutral-dark);
+  background-color: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 100vw;
   width: fit-content;
   height: auto;

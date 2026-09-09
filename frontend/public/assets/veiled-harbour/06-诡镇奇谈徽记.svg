@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" fill="none">
+  <title>诡镇奇谈品牌徽记</title>
+  <circle cx="64" cy="64" r="53" stroke="#a5824b" stroke-width="2"/>
+  <circle cx="64" cy="64" r="44" stroke="#a5824b" stroke-opacity=".6" stroke-dasharray="2 7"/>
+  <path d="M64 24v80M28 76c13-8 24-8 36 0s23 8 36 0" stroke="#28615d" stroke-width="4" stroke-linecap="round"/>
+  <path d="M44 72V45h40v27M40 45h48M48 45l16-14 16 14M51 57h26" stroke="#a5824b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M64 17v8M64 103v8M17 64h8M103 64h8" stroke="#d0b47b" stroke-width="2"/>
+</svg>

@@ -281,12 +281,14 @@ const currentActPosition = computed(
 async function clicked() {
   if (interactAction.value !== -1) {
     emits('choose', interactAction.value)
+  } else if (abilities.value.length === 1) {
+    // Unambiguous single ability: fire it directly instead of making the
+    // player open the abilities menu just to confirm.
+    chooseAbility(abilities.value[0].index)
+  } else if (abilities.value.length > 1) {
+    showAbilities.value = !showAbilities.value
   } else {
-    if (abilities.value.length > 0) {
-      showAbilities.value = !showAbilities.value
-    } else {
-      showAbilities.value = false
-    }
+    showAbilities.value = false
   }
 }
 
@@ -610,7 +612,7 @@ const chooseFromStoryCollection = (choice: number) => {
 }
 
 .card-container {
-  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-2);
   position: relative;
   border-radius: 6px;
   height: var(--card-width);
@@ -652,8 +654,8 @@ const chooseFromStoryCollection = (choice: number) => {
 
 .button {
   margin-top: 2px;
-  border: 0;
-  color: #fff;
+  border: var(--edge-width) solid var(--edge-dim);
+  color: var(--text);
   border-radius: 4px;
 }
 
@@ -668,7 +670,8 @@ const chooseFromStoryCollection = (choice: number) => {
 
 .abilities {
   padding: 10px;
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 10px;
   button {
     padding: 4px;
@@ -699,20 +702,19 @@ const chooseFromStoryCollection = (choice: number) => {
   gap: 7px;
   height: 22px;
   padding: 0 7px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 999px;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.46);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  color: var(--text);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-2);
   cursor: pointer;
   line-height: 1;
-  backdrop-filter: blur(4px);
   transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
 }
 
 .cards-under-indicator:hover {
-  border-color: rgba(255, 255, 255, 0.32);
-  background: rgba(0, 0, 0, 0.68);
+  border-color: var(--spooky-green);
+  background: var(--surface-paper);
   transform: translateY(-1px);
 }
 

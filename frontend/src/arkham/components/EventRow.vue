@@ -230,22 +230,22 @@ onMounted(async () => {
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   gap: 10px;
   padding: 10px 12px 10px 18px;
-  background: rgba(255, 255, 255, 0.02);
+  background: color-mix(in srgb, var(--surface-panel) 84%, transparent);
 }
 
 .event-group-card {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid rgba(110, 134, 64, 0.28);
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.18);
+  border: var(--edge-width) solid color-mix(in srgb, var(--spooky-green) 45%, var(--edge-dim));
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
 }
 
 .event-group-card h2 {
   margin: 0;
   padding: 2px 6px;
-  background: var(--background-dark);
-  color: var(--title);
+  background: var(--panel-inset);
+  color: var(--text);
   font-size: 0.8em;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -257,7 +257,7 @@ onMounted(async () => {
   min-height: 54px;
   padding: 8px;
   align-items: center;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--surface-panel);
 }
 
 .investigator {

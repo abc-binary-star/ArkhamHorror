@@ -189,7 +189,8 @@ const forceDisabled = (setting: CampaignSetting, option: ChooseKey) => {
 
 <style scoped>
 .settings-group {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--edge-dim);
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
@@ -197,8 +198,9 @@ const forceDisabled = (setting: CampaignSetting, option: ChooseKey) => {
     h3 {
       padding: 0;
       margin: 0;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.3) !important;
+      text-transform: none;
+      color: var(--text-dim) !important;
+      font-family: Arno, 'Noto Serif SC', serif;
     }
   }
 }
@@ -211,15 +213,21 @@ input[type=radio] {
 input[type=radio] + label {
   display:inline-block;
   padding: 4px 12px;
-  background-color: hsl(80, 5%, 39%);
+  background-color: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  cursor: pointer;
   &:hover {
-    background-color: hsl(80, 15%, 39%);
+    background-color: var(--surface-paper);
   }
   border-color: #ddd;
 }
 
 input[type=radio]:checked + label {
   background: var(--button-1);
+  color: var(--button-1-text);
+  border-color: var(--edge-on-accent);
 }
 
 input[type=radio]:disabled + label {
@@ -237,9 +245,13 @@ input[type=checkbox] {
 input[type=checkbox] + label {
   display:inline-block;
   padding: 4px 12px;
-  background-color: hsl(80, 5%, 39%);
+  background-color: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  cursor: pointer;
   &:hover {
-    background-color: hsl(80, 15%, 39%);
+    background-color: var(--surface-paper);
   }
 
   &.invert {
@@ -248,13 +260,15 @@ input[type=checkbox] + label {
       background: var(--button-1);
     }
   }
-  border-color: #ddd;
 }
 
 input[type=checkbox]:checked + label {
   background: var(--button-1);
+  color: var(--button-1-text);
+  border-color: var(--edge-on-accent);
   &.invert {
-    background-color: hsl(80, 5%, 39%);
+    background-color: var(--surface-raised);
+    color: var(--text);
   }
 }
 
@@ -266,7 +280,7 @@ input[type=checkbox]:checked + label {
 }
 
 .invert[type=checkbox]:checked + label {
-  background-color: hsl(80, 5%, 39%);
+  background-color: var(--surface-paper);
 }
 
 .options {

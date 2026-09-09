@@ -1201,20 +1201,21 @@ section {
   display: inline-block;
   padding: 5px 10px;
   margin: 2px;
-  background-color: var(--neutral-dark);
-  color: white;
-  border: 1px solid #666;
+  background-color: var(--surface-raised);
+  color: var(--text);
+  border: var(--edge-width) solid var(--edge-dim);
   cursor: pointer;
   transition: transform 80ms ease;
 }
 
 .button:hover {
-  background-color: #111;
+  background-color: var(--surface-panel);
+  border-color: var(--spooky-green);
 }
 
 .button:active {
-  background-color: #666;
-  border-color: #111;
+  background-color: var(--panel-inset);
+  border-color: var(--edge);
   transform: scale(0.97);
 }
 
@@ -1370,7 +1371,7 @@ button {
   background-color: var(--button-2);
   text-align: justify;
   border-radius: 0.6em;
-  color: #EEE;
+  color: var(--button-2-text);
   font: Arial, sans-serif;
 
   &[disabled] {
@@ -1380,7 +1381,7 @@ button {
 }
 
 button:hover {
-  background-color: #311b3e;
+  background-color: var(--button-2-highlight);
 
   &[disabled] {
     background-color: #999 !important;
@@ -1441,6 +1442,12 @@ button:hover {
 
 .modal {
   transition: opacity 0.3s linear;
+  background:
+    linear-gradient(rgba(233, 225, 210, 0.68), rgba(233, 225, 210, 0.68)),
+    url('/assets/veiled-harbour/29-故事抉择内框-v2.png') center / cover no-repeat;
+  border: 1px solid color-mix(in srgb, var(--brass) 54%, var(--border-panel));
+  border-radius: 8px;
+  box-shadow: var(--shadow-4), inset 0 0 0 1px rgb(255 255 255 / 0.2);
 }
 
 .choices {
@@ -1764,15 +1771,15 @@ h2 {
   border: 0;
   padding: 10px;
   text-transform: uppercase;
-  background-color: var(--button-2);
+  background-color: var(--spooky-green);
   font-weight: bold;
-  border-radius: 0.6em;
+  border-radius: var(--radius-lg);
   color: #EEE;
-  font: Arial, sans-serif;
+  font-family: "Noto Sans", sans-serif;
 }
 
 .choices button:not(.amount-submit):hover {
-  background-color: #311b3e;
+  background-color: var(--spooky-green-dark);
 }
 
 .searched-cards {

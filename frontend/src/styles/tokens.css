@@ -1,58 +1,186 @@
+/*
+ * Midnight Archive — shared visual tokens.
+ *
+ * The application uses a warm, readable archive surface by default. The
+ * investigation table is a medium slate surface and the dark treatment is
+ * reserved for navigation and a small number of chrome elements. Boundaries
+ * are established by surface contrast and a real border first; shadows only
+ * describe physical elevation.
+ */
 :root {
   transition-behavior: allow-discrete;
 
-  --nav-height: 36px;
+  --nav-height: 52px;
 
-  --willpower: #2c7fc0;
-  --intellect: #7c3c85;
-  --combat: #ae4236;
-  --agility: #14854d;
+  /* ── Ink & edges ──────────────────────────────────────────────────────── */
+  --ink: #252725;
+  --ink-soft: rgba(37, 39, 37, 0.16);
+  --edge: #69665f;
+  --edge-dim: #817b70;
+  --edge-faint: #a9a398;
+  --edge-on-accent: #1e2f2d;
+  --edge-width: 1px;
 
-  --willpower-light: #C5DEF2;
-  --intellect-light: #EAD5EC;
-  --combat-light: #F1D3D0;
-  --agility-light: #8CEEBD;
+  /* Contact shadows are deliberately quiet on the light archive surface. */
+  --shadow-1: 0 1px 2px rgba(37, 39, 37, 0.12);
+  --shadow-2: 0 2px 5px rgba(37, 39, 37, 0.16);
+  --shadow-3: 0 4px 10px rgba(37, 39, 37, 0.18);
+  --shadow-4: 0 10px 24px rgba(37, 39, 37, 0.22);
+  --shadow-5: 0 16px 36px rgba(37, 39, 37, 0.26);
 
-  --important: rgba(212, 165, 10, 0.9);
+  /* Soft shadow is reserved for things that genuinely float above the table
+     (HUD overlays, dropdowns), never for cards. */
+  --shadow-float: 0 12px 32px rgba(37, 39, 37, 0.24);
+
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+
+  --font-black: 700;
+  --font-bold: 600;
+  --font-medium: 500;
+
+  /* ── Surfaces ───────────────────────────────────────────────────────── */
+  --background: #c7c0b2;
+  --background-dark: #303a3d;
+  --background-mid: #a39d91;
+  --background-light: #f4efe4;
+  --box-background: #e8e1d2;
+  --box-border: #817b70;
+  --surface-table: #626e70;
+  --surface-page: var(--background);
+  --surface-panel: var(--box-background);
+  --surface-raised: var(--background-light);
+  --surface-chrome: var(--background-dark);
+  --surface-paper: var(--box-background);
+  --border-panel: var(--box-border);
+
+  --panel-top: #f0eadf;
+  --panel-bottom: #e8e1d2;
+  --panel-gradient: linear-gradient(to bottom, var(--panel-top), var(--panel-bottom));
+  --panel-inset: #d5cec2;
+  --input-background: #f4efe4;
+
+  /* A paper grain that remains visible only at close range. */
+  --texture-dot: rgba(82, 77, 67, 0.055);
+  --texture-grid: 18px;
+
+  /* ── Type ───────────────────────────────────────────────────────────── */
+  --text: #252725;
+  --title: #252725;
+  --text-dim: #55594f;
+  --text-faint: #696a63;
+  --text-on-dark: #f4efe4;
+  --text-dim-on-dark: #c7cfcc;
+  --text-primary: var(--text);
+  --text-secondary: var(--text-dim);
+  --text-on-chrome: var(--text-on-dark);
+  --text-secondary-on-chrome: var(--text-dim-on-dark);
+  --text-on-table: #ffffff;
+  --text-on-paper: var(--text);
+  --text-muted-on-paper: var(--text-dim);
+  --focus-ring: #225f68;
+  --green-title: #28534d;
+
+  /* ── Accents ────────────────────────────────────────────────────────── */
+  --spooky-green: #28534d;
+  --spooky-green-dark: #1f443f;
+  --highlight: #34675e;
+  --important: rgba(138, 110, 53, 0.96);
+  --brass: #9b7d45;
+  --brass-dim: #786238;
+  --teal: #2f6f78;
+  --delete: #9d403c;
+  --status-success: #2d6b4f;
+  --status-success-bg: #dcebe1;
+  --status-success-border: #78a68b;
+  --status-success-text: #24553f;
+  --status-danger: var(--delete);
+  --status-danger-text: #873d39;
+  --status-danger-text-on-dark: #f1bcb5;
+  --accent-brass: var(--brass);
+  --accent-brass-bright: #c8ad78;
+  --bullet-red: #6f2825;
+
+  /* Interactive-card outline stays magenta so it can never be confused with
+     the teal highlight ring sitting next to it on the same table. */
+  --select: #875a9e;
+  --select-dark: #69407f;
+  --select-dark-20: #76498f;
+  --select-dark-30: #5b356d;
 
   /* The dropdown marker. Drawn here rather than left to the browser so that a
      native select and a custom picker button show the same shape: the browser's
      own is a chevron on some platforms and a triangle on others. */
-  --select-caret: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 0h10L5 6z' fill='%239ca3af'/%3E%3C/svg%3E");
+  --select-caret: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M0 0h10L5 6z' fill='%2397a49b'/%3E%3C/svg%3E");
   --select-caret-size: 9px 6px;
 
-  --wild: #8a7d5a;
-  --guardian: #5cb4fd;
-  --mystic: #ba81f2;
-  --rogue: #48b14f;
-  --seeker: #efa345;
-  --survivor: #ee4a53;
-  --multiclass: #e4d083;
-  --mythos: #d8dee9;
-  --neutral: #d8dee9;
-  --guardian-dark: #1072c2;
-  --guardian-extra-dark: #0c5693;
-  --seeker-dark: #db7c07;
-  --seeker-extra-dark: #aa6005;
-  --seeker-text: #603603;
-  --rogue-dark: #219428;
-  --rogue-extra-dark: #186a1d;
-  --mystic-dark: #7554ab;
-  --mystic-extra-dark: #5e4389;
-  --survivor-dark: #cc3038;
-  --survivor-extra-dark: #a3262d;
-  --neutral-dark: #333;
-  --neutral-extra-dark: #222;
-  --multiclass-dark: #a38c46;
-  --mythos-dark: #434c5e;
-  --taboo: #9869f5;
-  --health: #ae4236;
-  --sanity: #2c7fc0;
+  /* ── Buttons ────────────────────────────────────────────────────────── */
+  --control-height: 42px;
+  --control-height-primary: 48px;
+  --control-height-icon: 44px;
+  --control-radius: 3px;
+  --button-focus-ring: #c7dfc6;
+  --button-disabled-filter: saturate(0.45);
+  --button: #ded7ca;
+  --button-highlight: #f1eadf;
+  --button-text: var(--text);
 
-  --blessed: #6a5720;
+  --button-1: #28534d;
+  --button-1-highlight: #34675e;
+  --button-1-text: #f4efe4;
+
+  --button-2: #69407f;
+  --button-2-highlight: #7e5893;
+  --button-2-text: #f4efe4;
+
+  /* ── Skills & vitals ────────────────────────────────────────────────── */
+  --willpower: #2f7fb8;
+  --intellect: #7a4a8c;
+  --combat: #a8443a;
+  --agility: #1f8a56;
+
+  --willpower-light: #bcd8ec;
+  --intellect-light: #ddc9e6;
+  --combat-light: #eccdc8;
+  --agility-light: #a6e3c4;
+
+  --health: #a8443a;
+  --sanity: #2f7fb8;
+
+  /* ── Classes ────────────────────────────────────────────────────────── */
+  --wild: #8a7d5a;
+  --guardian: #4f9fd8;
+  --mystic: #a278e0;
+  --rogue: #5aa84f;
+  --seeker: #e0a04a;
+  --survivor: #e0524f;
+  --multiclass: #e4d083;
+  --mythos: #cfd6cd;
+  --neutral: #cfd6cd;
+  --guardian-dark: #1c6ea8;
+  --guardian-extra-dark: #14547f;
+  --seeker-dark: #c07d18;
+  --seeker-extra-dark: #94600f;
+  --seeker-text: #f0d9a8;
+  --rogue-dark: #2f7a34;
+  --rogue-extra-dark: #235c27;
+  --mystic-dark: #6a4bab;
+  --mystic-extra-dark: #523a86;
+  --survivor-dark: #b8332f;
+  --survivor-extra-dark: #8f2622;
+  --neutral-dark: #2a332e;
+  --neutral-extra-dark: #1a211d;
+  --multiclass-dark: #a38c46;
+  --mythos-dark: #3a4a44;
+  --taboo: #9869f5;
+
+  /* ── Chaos bag ──────────────────────────────────────────────────────── */
+  --blessed: #6a5a24;
   --cursed: #270F31;
   --blood: #2d2d2d;
-  --blood-red: #B53330;
+  --blood-red: #a8332f;
   --frost: #39394C;
   --auto-fail: #4A1216;
   --elder-sign: #4A6973;
@@ -61,29 +189,7 @@
   --tablet: #1E2A3A;
   --elder-thing: #2D1F25;
 
-  --delete: #c13131;
-  --background: #2e3440;
-  --background-dark: #242831;
-  --background-mid: #515a68;
-  --background-light: #c9ced8;
-  --box-background: #353b49;
-  --box-border: #434c5e;
-
-  --title: #cecece;
-  --green-title: #38615F;
-  --text: white;
-  --spooky-green: #879C5A;
-  --spooky-green-dark: #3A5144;
-
-  --button: #555;
-  --button-highlight: #444;
-
-  --button-1: #6E8640;
-  --button-1-highlight: #5a6e34;
-
-  --button-2: #532e61;
-  --button-2-highlight: #4d2b61;
-
+  /* ── Card geometry ──────────────────────────────────────────────────── */
   --card-width: min(calc(2.5vw + 20px), 60px);
   --card-height: min(calc(3.545vw + 28.36px), 85.08px);
   --card-aspect: 0.705;
@@ -91,16 +197,7 @@
   --card-sideways-aspect: 1.41844;
   --card-tarot-aspect: 0.571429;
 
-  --card-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-
-  --select: #ff00ff;
-  --select-dark: #d400d4;
-  --select-dark-20: #cc00cc;
-  --select-dark-30: #b200b2;
-
-  --highlight: #2dd4bf;
-
-  --bullet-red: #391714;
+  --card-shadow: var(--shadow-2);
 
   --pool-token-width: min(30px, 4vw);
   @media (max-width: 800px) and (orientation: portrait) {
@@ -110,8 +207,6 @@
   /* Size of damage/horror/clue/etc. tokens shown ON cards (assets, enemies,
      locations, ...). Kept as one knob so it's easy to tune. */
   --card-token-width: 25px;
-
-  --teal: #66C8D6;
 }
 
 @property --glow-rotation {

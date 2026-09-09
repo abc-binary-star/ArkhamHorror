@@ -345,15 +345,15 @@ const isBuildSpiritDeckQuestion = (q: Question): q is Question & { tag: Question
 
 .waiting-banner {
   width: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  color: #BBB;
+  background: var(--surface-chrome);
+  color: var(--text-on-dark);
   padding: 6px 16px;
   text-align: center;
   font-family: "Noto Sans", sans-serif;
   font-size: 0.85em;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: var(--edge-width) solid color-mix(in srgb, var(--text-on-dark) 20%, transparent);
   pointer-events: none;
   box-sizing: border-box;
 }
@@ -361,10 +361,10 @@ const isBuildSpiritDeckQuestion = (q: Question): q is Question & { tag: Question
 .choice-investigator {
   align-items: center;
   align-self: center;
-  background: rgba(0, 0, 0, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: var(--surface-panel);
+  border: var(--edge-width) solid var(--border-panel);
   border-radius: 999px;
-  color: #EEE;
+  color: var(--text);
   display: flex;
   font-family: "Noto Sans", sans-serif;
   font-size: 0.9em;
@@ -385,10 +385,14 @@ const isBuildSpiritDeckQuestion = (q: Question): q is Question & { tag: Question
 
 .question-content {
   width: 60%;
-  background: rgba(0, 0, 0, 0.3);
+  background:
+    linear-gradient(rgba(233, 225, 210, 0.68), rgba(233, 225, 210, 0.68)),
+    url('/assets/veiled-harbour/29-故事抉择内框-v2.png') center / cover no-repeat;
+  border: 1px solid color-mix(in srgb, var(--brass) 54%, var(--border-panel));
   padding: 20px;
-  color: white;
-  border-radius: 15px;
+  color: var(--text);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-4), inset 0 0 0 1px rgb(255 255 255 / 0.2);
   &:has(h2) { padding: 0; }
 }
 .question-label {
@@ -396,7 +400,7 @@ const isBuildSpiritDeckQuestion = (q: Question): q is Question & { tag: Question
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  background: #26283B;
+  background: var(--surface-page);
 }
 
 .question-label.spirit-deck-question.spirit-deck-question {
@@ -411,17 +415,17 @@ p {
 }
 
 button {
-  border: 0;
+  border: var(--edge-width) solid var(--edge-dim);
   margin: 0 10px;
   padding: 10px;
   text-transform: uppercase;
-  background-color: var(--button-2);
+  background-color: var(--spooky-green);
   font-weight: bold;
-  border-radius: 0.6em;
-  color: #EEE;
-  font: Arial, sans-serif;
+  border-radius: var(--radius-lg);
+  color: var(--button-2-text);
+  font-family: "Noto Sans", sans-serif;
   &:hover {
-    background-color: #311b3e;
+    background-color: var(--highlight);
   }
 }
 

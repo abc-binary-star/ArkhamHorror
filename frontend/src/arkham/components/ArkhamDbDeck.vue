@@ -20,21 +20,33 @@ async function loadDeck() {
   let matches
   if (matches = deck.value.match(arkhamDbRegex)) {
     deckUrl.value = `${localizeArkhamDBBaseUrl()}/api/public/${matches[1]}/${matches[4]}`
-    const response = await fetch(deckUrl.value)
-    const data = await response.json()
-    model.value = {...data, url: deckUrl.value}
+    try {
+      const response = await fetch(deckUrl.value)
+      if (!response.ok) {
+        error.value = "Could not find deck on ArkhamDB."
+        return
+      }
+      const data = await response.json()
+      model.value = {...data, url: deckUrl.value}
+    } catch {
+      error.value = "Could not reach ArkhamDB."
+    }
   } else if (matches = deck.value.match(arkhamBuildShareRegex)) {
     deckUrl.value = `https://api.arkham.build/v1/public/share/${matches[1]}`
-    const response = await fetch(deckUrl.value)
-    if (response.ok) {
-      const data = await response.json()
-      const deckData = processArkhamBuildDeck(data, deckUrl.value)
-      if (Object.keys(deckData.slots).length === 0) {
-        error.value = "Is this deck empty?"
-      } else{
-        model.value = deckData
+    try {
+      const response = await fetch(deckUrl.value)
+      if (response.ok) {
+        const data = await response.json()
+        const deckData = processArkhamBuildDeck(data, deckUrl.value)
+        if (Object.keys(deckData.slots).length === 0) {
+          error.value = "Is this deck empty?"
+        } else{
+          model.value = deckData
+        }
+      } else {
+        error.value = "Could not find deck, please make sure you have created a public share."
       }
-    } else {
+    } catch {
       error.value = "Could not find deck, please make sure you have created a public share."
     }
   } else if (matches = deck.value.match(arkhamBuildDecklistRegex)) {
@@ -75,24 +87,33 @@ function pasteDeck(evt: ClipboardEvent) {
     @paste.prevent="pasteDeck($event)"
     v-bind:placeholder="$t('create.deckUrlPlaceholder')"
   />
-  <div class="error" v-if="error && isArkhamBuild">
+  <div class="error" v-if="error">
     <p>{{ error }}</p>
-     <img :src="imgsrc('ui/arkham-build-public-share.jpg')" />
+     <img v-if="isArkhamBuild" :src="imgsrc('ui/arkham-build-public-share.jpg')" />
   </div>
 </template>
 
 <style scoped>
 input {
   outline: 0;
-  border: 1px solid #000;
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-md);
   padding: 15px;
-  background: #F2F2F2;
+  background: var(--input-background);
+  color: var(--text);
   width: 100%;
   margin-bottom: 10px;
+
+  &:focus {
+    border-color: var(--spooky-green);
+    box-shadow: var(--shadow-2);
+  }
 }
 
 .error {
-  background-color: var(--survivor-extra-dark);
+  background-color: color-mix(in srgb, var(--delete) 12%, var(--surface-panel));
+  color: var(--status-danger-text);
+  border: var(--edge-width) solid color-mix(in srgb, var(--delete) 45%, transparent);
   width: 100%;
   margin-bottom: 10px;
   padding: 10px;

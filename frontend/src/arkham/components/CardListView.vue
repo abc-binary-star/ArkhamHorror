@@ -230,10 +230,10 @@ const attachmentHeading = (card: Arkham.CardDef) => {
   z-index: var(--z-index-1);
   text-align: left;
   padding: 11px 12px;
-  color: #a8a8a8;
-  background: var(--box-background);
-  border-bottom: 2px solid rgba(255,255,255,0.1);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  color: var(--text-dim);
+  background: var(--surface-raised);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
+  box-shadow: var(--shadow-2);
   font-weight: 700;
   font-size: 0.68rem;
   letter-spacing: 0.1em;
@@ -252,8 +252,8 @@ const attachmentHeading = (card: Arkham.CardDef) => {
 
 .card-table td {
   padding: 7px 12px;
-  color: #d0d0d0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--text);
+  border-bottom: var(--edge-width) solid var(--edge-faint);
 
   &:first-child { padding-left: 20px; }
 
@@ -265,9 +265,9 @@ const attachmentHeading = (card: Arkham.CardDef) => {
 
 .card-table tbody tr {
   transition: background 0.1s;
-  &:hover { background: rgba(255,255,255,0.05); }
-  &:nth-child(even) { background: rgba(255,255,255,0.02); }
-  &:nth-child(even):hover { background: rgba(255,255,255,0.05); }
+  &:hover { background: color-mix(in srgb, var(--surface-raised) 70%, var(--spooky-green) 30%); }
+  &:nth-child(even) { background: var(--surface-paper); }
+  &:nth-child(even):hover { background: color-mix(in srgb, var(--surface-raised) 70%, var(--spooky-green) 30%); }
 }
 
 i { font-style: normal; }
@@ -298,9 +298,9 @@ a {
   min-width: 30px;
   height: 20px;
   padding: 0 6px;
-  color: #cfcfcf;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: var(--text);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 6px;
   font-size: 0.68rem;
   font-weight: 800;
@@ -379,13 +379,13 @@ a {
   gap: 8px;
   max-width: 240px;
   padding: 3px 5px 3px 8px;
-  color: #f0e2c0;
-  background: rgba(0, 0, 0, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 999px;
   font-size: 0.74rem;
   font-weight: 600;
-  &:hover { background: rgba(200, 169, 110, 0.16); opacity: 1; }
+  &:hover { background: color-mix(in srgb, var(--surface-raised) 70%, var(--brass) 30%); opacity: 1; }
 }
 
 .attachment-name {

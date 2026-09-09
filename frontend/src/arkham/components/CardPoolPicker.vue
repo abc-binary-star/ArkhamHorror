@@ -93,12 +93,10 @@ const candidatesLabel = computed(() => formatContent(t(props.candidatesKey)))
   flex-direction: column;
   gap: 10px;
   padding: 12px;
-  border: 1px solid rgba(214, 205, 174, 0.18);
-  border-radius: 10px;
-  background: rgba(18, 14, 11, 0.7);
-  box-shadow:
-    inset 0 0 0 1px rgba(0, 0, 0, 0.35),
-    0 6px 18px rgba(0, 0, 0, 0.24);
+  border: var(--edge-width) solid var(--border-panel);
+  border-radius: var(--radius-lg);
+  background: var(--surface-panel);
+  box-shadow: var(--shadow-3);
 }
 
 .pool-group h2 {
@@ -108,15 +106,14 @@ const candidatesLabel = computed(() => formatContent(t(props.candidatesKey)))
   gap: 12px;
   margin: -2px -2px 2px;
   padding-bottom: 7px;
-  border-bottom: 1px solid rgba(214, 205, 174, 0.16);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
   color: var(--title);
-  font-family: "Teutonic", serif;
+  font-family: Arno, "Noto Serif SC", serif;
   font-size: 1.05rem;
   font-weight: 400;
   letter-spacing: 0.04em;
   line-height: 1;
-  text-transform: uppercase;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  text-transform: none;
 }
 
 .pool-group__note {
