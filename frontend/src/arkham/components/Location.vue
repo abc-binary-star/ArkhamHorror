@@ -1008,10 +1008,21 @@ const hasAnyLocationVehicleAssets = computed(() =>
 .location-investigator-column {
   grid-area: investigators;
   justify-self: end;
+  padding-top: 4px;
 
   &:deep(.portrait) {
-    height: 25%;
-    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.45);
+    width: clamp(28px, calc(var(--card-width) * 0.58), 40px);
+    height: clamp(28px, calc(var(--card-width) * 0.58), 40px);
+    aspect-ratio: 1;
+    object-fit: cover;
+    padding: 2px;
+    box-sizing: border-box;
+    border: 2px solid rgb(205 175 107 / 0.86);
+    border-radius: 50%;
+    background: rgb(16 39 38 / 0.96);
+    box-shadow:
+      0 3px 7px rgb(4 14 15 / 0.5),
+      inset 0 0 0 1px rgb(244 239 228 / 0.18);
   }
 
   &:deep(img) {
@@ -1019,7 +1030,7 @@ const hasAnyLocationVehicleAssets = computed(() =>
   }
 
   div {
-    margin-top: -100%;
+    margin-top: -42%;
   }
 
   div:first-child {

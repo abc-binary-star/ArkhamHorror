@@ -2653,8 +2653,9 @@ onUnmounted(() => {
 }
 
 .action {
-  border: 5px solid var(--select);
-  border-radius: 15px;
+  border: 1px solid var(--brass);
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 0 0 1px rgb(200 173 120 / 0.22);
 }
 
 .undo-jump-group {
@@ -2794,6 +2795,7 @@ onUnmounted(() => {
 }
 
 .tabletop-shell {
+  --game-bar-height: 56px;
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -2833,6 +2835,7 @@ onUnmounted(() => {
   min-height: 0;
   display: flex;
   flex: 1 1 auto;
+  padding-bottom: calc(var(--game-bar-height) + env(safe-area-inset-bottom));
 }
 
 .game-main > .game {
@@ -3299,7 +3302,9 @@ header {
   position: fixed;
   inset: 0;
   z-index: calc(var(--z-index-1000) - 1);
-  background: rgba(0, 0, 0, 0.25);
+  background:
+    linear-gradient(rgba(3, 12, 14, 0.28), rgba(3, 12, 14, 0.34)),
+    url('/assets/veiled-harbour/38-调查揭示暗幕-v2.png') center / cover no-repeat;
   cursor: pointer;
 }
 
@@ -3314,12 +3319,8 @@ header {
   width: fit-content;
   height: fit-content;
   display: grid;
-  /* glow effect */
-  filter: drop-shadow(0 0 3vmin Indigo) drop-shadow(0 5vmin 4vmin Orchid)
-    drop-shadow(2vmin -2vmin 15vmin MediumSlateBlue) drop-shadow(0 0 7vmin MediumOrchid);
-  animation:
-    revelation 0.3s ease-in-out,
-    glow 4s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite;
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.48));
+  animation: revelation 0.3s ease-in-out;
 
   button {
     width: 100%;
@@ -3414,7 +3415,7 @@ header {
   h2 {
     color: #cad8bd;
     letter-spacing: 0.08em;
-    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.9), 0 0 24px rgba(72, 129, 105, 0.8);
+    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.9), 0 0 8px rgba(72, 129, 105, 0.42);
   }
 }
 
@@ -3427,12 +3428,12 @@ header {
   &:hover,
   &:focus-visible {
     transform: translateY(-5px) scale(1.025);
-    filter: drop-shadow(0 24px 28px rgba(0, 4, 5, 0.9)) drop-shadow(0 0 12px rgba(92, 148, 119, 0.5));
+    filter: drop-shadow(0 24px 28px rgba(0, 4, 5, 0.9));
   }
 
   &:focus-visible {
-    border-radius: 15px;
-    box-shadow: 0 0 0 3px #a8c3a5;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 0 0 2px var(--accent-brass-bright);
   }
 
   &:active {
@@ -3664,73 +3665,114 @@ header {
 }
 
 .game-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  height: calc(var(--game-bar-height) + env(safe-area-inset-bottom));
   margin: 0;
-  padding: 0;
+  padding: 0 12px env(safe-area-inset-bottom);
+  box-sizing: border-box;
+  overflow-x: auto;
+  overflow-y: hidden;
   background:
-    linear-gradient(180deg, rgb(29 46 45 / 0.24), rgb(12 25 25 / 0.42)),
-    url('/assets/veiled-harbour/31-牌桌行动托盘-v2.png') center / 100% 100% no-repeat;
-  border-bottom: 1px solid rgba(208, 180, 123, 0.42);
-  box-shadow: 0 3px 12px rgba(8, 14, 15, 0.24);
+    linear-gradient(180deg, rgb(26 42 41 / 0.96), rgb(9 18 18 / 0.98)),
+    url('/assets/veiled-harbour/35-底部行动托盘-v2.png') center / cover no-repeat;
+  border-top: 1px solid rgba(208, 180, 123, 0.42);
+  box-shadow: 0 -6px 18px rgba(8, 14, 15, 0.45);
   color: var(--text-on-dark, #f4efe4);
   > div {
     display: flex;
-    align-items: stretch;
+    align-items: center;
     flex: 0 0 auto;
-    transition: 0.3s;
-    min-height: var(--control-height-icon);
-    height: auto;
+    gap: 6px;
+    height: 100%;
     a {
       display: flex;
       align-items: center;
     }
-    > button,
-    > div > button {
-      background: url('/assets/veiled-harbour/30-行动按钮铭牌-v2.png') center / 100% 100% no-repeat;
-      border: 1px solid transparent;
+  }
+  /* Bar-level buttons only: direct children of the wrapper divs, or of a
+     child component's root div (Menu/NarrationMenu). :deep is required
+     because those buttons carry the child component's scope id, and Menu's
+     own scoped `button { background: none }` otherwise strips the plaque.
+     Dropdown panel buttons sit deeper and are deliberately not matched. */
+  > div > :deep(button),
+  > div > div > :deep(button) {
+    background-color: var(--spooky-green-dark);
+    background-image: url('/assets/veiled-harbour/36-行动按钮四态铭牌组-v2.png');
+    background-repeat: no-repeat;
+    background-size: 400% 100%;
+    background-position: 0 center;
+    border: 1px solid transparent;
+    border-radius: var(--radius-lg);
+    color: var(--text-on-dark, #f4efe4);
+    font-weight: 700;
+    height: 38px;
+    min-height: 38px;
+    min-width: 38px;
+    padding: 0 12px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    white-space: nowrap;
+    svg {
+      width: 15px;
+    }
+    &:hover {
+      background-position: 33.333% center;
+      filter: brightness(1.12) saturate(0.92);
       color: var(--text-on-dark, #f4efe4);
-      font-weight: 700;
-      min-height: var(--control-height-icon);
-      min-width: var(--control-height-icon);
-      padding: 5px 10px;
-      display: flex;
-      gap: 5px;
-      height: auto;
-      align-items: center;
-      white-space: nowrap;
-      svg {
-        width: 15px;
-      }
-      &:hover {
-        filter: brightness(1.12) saturate(0.92);
-        color: var(--text-on-dark, #f4efe4);
-      }
-      &:active {
-        filter: brightness(0.92);
-      }
-      &:disabled {
-        filter: brightness(0.68) saturate(0.45) var(--button-disabled-filter);
-      }
-      &:focus-visible {
-        outline: 2px solid var(--button-focus-ring);
-        outline-offset: -2px;
-      }
+    }
+    &:active {
+      background-position: 66.666% center;
+      filter: brightness(0.92);
+    }
+    &:disabled {
+      background-position: 100% center;
+      filter: brightness(0.68) saturate(0.45) var(--button-disabled-filter);
+    }
+    &.active {
+      background-position: 66.666% center;
+    }
+    &:focus-visible {
+      outline: 2px solid var(--button-focus-ring);
+      outline-offset: -2px;
     }
   }
   > .right {
     margin-left: auto;
     display: flex;
-    align-items: stretch;
-    gap: 2px;
+    align-items: center;
+    gap: 6px;
   }
   justify-content: flex-start;
 }
 
 .game-bar-item.active,
 .game-bar-item:hover {
-  background: rgba(48, 58, 61, 0.1);
+  background: transparent;
   color: var(--title);
+}
+
+@media (max-width: 800px) {
+  .tabletop-shell {
+    --game-bar-height: 60px;
+  }
+
+  .game-bar {
+    padding-inline: 6px;
+
+    > div > :deep(button),
+    > div > div > :deep(button) {
+      min-width: 44px;
+      padding-inline: 8px;
+    }
+  }
 }
 
 .shortcuts-modal {

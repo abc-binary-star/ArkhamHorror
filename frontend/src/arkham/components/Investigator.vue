@@ -1082,6 +1082,32 @@ i.action {
   pointer-events: none;
 }
 
+.button-group > button[data-game-actionable] {
+  background-color: var(--spooky-green-dark);
+  background-image: url('/assets/veiled-harbour/36-行动按钮四态铭牌组-v2.png');
+  background-repeat: no-repeat;
+  background-size: 400% 100%;
+  background-position: 0 center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  color: var(--text-on-dark, #f4efe4);
+
+  &:hover {
+    background-position: 33.333% center;
+    filter: brightness(1.1);
+  }
+
+  &:active,
+  &.active {
+    background-position: 66.666% center;
+  }
+
+  &:disabled {
+    background-position: 100% center;
+    filter: brightness(0.68) saturate(0.45) var(--button-disabled-filter);
+  }
+}
+
 .player-buttons {
   margin-left: 10px;
   min-width: 128px;
@@ -1111,9 +1137,13 @@ i.action {
 
 .skip-triggers-button {
   transition: all 0.2s ease-in;
-  background-color: var(--select);
-  color: white;
-  border: var(--edge-width) solid color-mix(in srgb, var(--select-dark) 76%, var(--edge-dim));
+  background-color: var(--spooky-green-dark);
+  background-image: url('/assets/veiled-harbour/36-行动按钮四态铭牌组-v2.png');
+  background-repeat: no-repeat;
+  background-size: 400% 100%;
+  background-position: 0 center;
+  color: var(--text-on-dark, #f4efe4);
+  border: 1px solid transparent;
   border-radius: var(--control-radius);
 
   &[disabled] {
@@ -1122,7 +1152,8 @@ i.action {
   }
 
   &:not([disabled]):hover {
-    background-color: var(--select-dark);
+    background-position: 33.333% center;
+    filter: brightness(1.1);
   }
 }
 
@@ -1132,9 +1163,9 @@ i.action {
 
 .skip-all-triggers-button {
   transition: all 0.2s ease-in;
-  background-color: var(--select);
-  color: white;
-  border: var(--edge-width) solid color-mix(in srgb, var(--select-dark) 76%, var(--edge-dim));
+  background-color: var(--spooky-green-dark);
+  color: var(--text-on-dark, #f4efe4);
+  border: 1px solid var(--brass-dim);
   border-left: 1px solid rgba(0, 0, 0, 0.25);
   border-radius: 0 var(--control-radius) var(--control-radius) 0;
   padding-inline: 6px;
@@ -1144,7 +1175,7 @@ i.action {
   cursor: pointer;
 
   &:hover {
-    background-color: var(--select-dark);
+    background-color: var(--spooky-green);
   }
 }
 

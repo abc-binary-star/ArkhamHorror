@@ -3,6 +3,7 @@
   "pleaseTryAgainLater": "Por favor, inténtalo de nuevo más tarde.",
   "nav": {
     "home": "Inicio",
+    "menu": "Abrir menú de navegación",
     "about": "Acerca de",
     "admin": "Admin",
     "cards": "Cartas",
@@ -44,7 +45,6 @@
 
   "Yes": "Sí",
   "No": "No",
-
 
   "Parley": "Negociar",
   "Resign": "Desistir",

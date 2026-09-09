@@ -20,6 +20,7 @@
   },
   "nav": {
     "home": "首页",
+    "menu": "打开导航菜单",
     "about": "关于",
     "achievements": "成就",
     "admin": "管理员",

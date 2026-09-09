@@ -310,8 +310,14 @@ function startDrag(event: DragEvent) {
 }
 
 .card--can-interact {
-  border: 2px solid var(--select);
+  border: 1px solid var(--brass);
   cursor: pointer;
+  box-shadow: 0 0 0 1px rgb(200 173 120 / 0.38), var(--shadow-2);
+}
+
+.card--can-interact:focus-visible {
+  outline: 2px solid var(--accent-brass-bright);
+  outline-offset: 2px;
 }
 
 .card--highlighted {
@@ -348,6 +354,15 @@ function startDrag(event: DragEvent) {
   background: url('/assets/veiled-harbour/33-卡牌交互状态带-v2.png') center / 100% 100% no-repeat;
   mix-blend-mode: multiply;
   opacity: 0.82;
+}
+
+.card-container:has(.card--can-interact)::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  z-index: 2;
+  pointer-events: none;
+  background: url('/assets/veiled-harbour/37-卡牌黄铜选中框-v2.png') center / 100% 100% no-repeat;
 }
 
 .debug-customize {

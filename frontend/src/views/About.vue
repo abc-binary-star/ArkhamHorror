@@ -61,11 +61,11 @@ const isSupportPage = computed(() => route.query.support !== undefined)
         </section>
       </div>
 
-      <footer class="about-footer" aria-hidden="true">
+      <div class="about-footer" aria-hidden="true">
         <span>THE RECORD REMAINS OPEN</span>
         <span class="footer-rule"></span>
         <span>ARCHIVE 04—17</span>
-      </footer>
+      </div>
     </div>
   </div>
 </template>
@@ -217,6 +217,13 @@ h1 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px 20px;
+  align-items: stretch;
+}
+
+.about-section {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
 }
 
 .about-section--wide {
@@ -245,7 +252,9 @@ h2 {
 }
 
 .about-card {
-  min-height: 100%;
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
   box-sizing: border-box;
   padding: 20px 22px;
   background: linear-gradient(135deg, rgba(244, 239, 228, 0.9), rgba(232, 225, 210, 0.86));
@@ -255,6 +264,7 @@ h2 {
     0 3px 10px rgba(37, 39, 37, 0.1),
     inset 0 0 0 1px rgba(244, 239, 228, 0.42);
   line-height: 1.75;
+  overflow-wrap: anywhere;
 
   p {
     margin: 0;
@@ -264,6 +274,13 @@ h2 {
   }
   a {
     color: var(--spooky-green);
+  }
+
+  :deep(a),
+  :deep(*) {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 }
 

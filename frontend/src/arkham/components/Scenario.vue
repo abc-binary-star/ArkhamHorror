@@ -1497,6 +1497,17 @@ const spentKeys = computed(() => props.scenario.keys)
 // (InPlayArea) are filtered out here.
 const locations = computed(() => Object.values(props.game.locations).
   filter((a) => (a.placement === null || a.placement.tag === 'AttachedToLocation') && a.label !== "cosmos"))
+const occupiedLocationIds = computed(() => new Set(
+  Object.values(props.game.investigators)
+    .map((investigator) => investigator.location)
+    .filter((locationId): locationId is string => Boolean(locationId)),
+))
+const currentPlayerLocationIds = computed(() => new Set(
+  Object.values(props.game.investigators)
+    .filter((investigator) => investigator.playerId === props.playerId)
+    .map((investigator) => investigator.location)
+    .filter((locationId): locationId is string => Boolean(locationId)),
+))
 watch(locations, updateScrollMargins, { flush: 'post' })
 watch(layoutPadding, updateScrollMargins, { flush: 'post' })
 watch([locations, rotationSteps, locationsZoom], updateCellDimensions, { flush: 'post' })
@@ -2804,7 +2815,11 @@ async function addChaosToken(face: any){
             v-for="location in locations"
             :key="location.id"
             class="location-cell"
-            :class="{ 'location-cell--can-interact': locationCanInteract(location) }"
+            :class="{
+              'location-cell--can-interact': locationCanInteract(location),
+              'location-cell--occupied': occupiedLocationIds.has(location.id),
+              'location-cell--current-player': currentPlayerLocationIds.has(location.id),
+            }"
             :data-location-id="location.id"
             :data-label="location.label"
             :style="[
@@ -3052,18 +3067,29 @@ async function addChaosToken(face: any){
 .scenario-cards {
   display: flex;
   align-self: center;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
-  padding: 10px 0;
+  padding: 8px 14px;
   position: relative;
   width: 100%;
-  gap: 10px;
+  gap: 12px;
   z-index: var(--z-index-neg-2);
   background:
     linear-gradient(180deg, rgb(16 31 32 / 0.94), rgb(24 44 43 / 0.88)),
     url('/assets/veiled-harbour/T01-调查地图底场.png') center / cover no-repeat;
   border-bottom: 1px solid rgb(205 175 107 / 0.42);
   box-shadow: 0 4px 14px rgb(5 12 13 / 0.3);
+
+  /* Three-zone tray: decks hug the left edge, the scenario guide hugs the
+     right edge, and the act/agenda cluster settles in the middle instead of
+     everything floating in a centered clump. */
+  .scenario-encounter-decks {
+    margin-right: auto;
+  }
+
+  .scenario-guide {
+    margin-left: auto;
+  }
 
   @media (max-width: 800px) and (orientation: portrait) {
     padding-top: 10px;
@@ -3115,7 +3141,8 @@ async function addChaosToken(face: any){
   position: relative;
 
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto minmax(300px, 1fr) auto;
+  min-height: 0;
 
   &.scenario-body--notifier-overlays {
     z-index: auto;
@@ -3270,9 +3297,21 @@ async function addChaosToken(face: any){
   flex: 1;
   position: relative;
   background:
-    linear-gradient(180deg, rgb(16 35 34 / 0.18), rgb(9 22 22 / 0.28)),
-    url('/assets/veiled-harbour/T01-调查地图底场.png') center / cover no-repeat;
+    linear-gradient(180deg, rgb(14 36 34 / 0.04), rgb(9 28 28 / 0.1)),
+    url('/assets/veiled-harbour/T04-地点地图底板-v2.png') center / cover no-repeat;
   border-bottom: 1px solid rgb(205 175 107 / 0.22);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    pointer-events: none;
+    border: 1px solid rgb(205 175 107 / 0.42);
+    border-radius: 4px;
+    box-shadow: inset 0 0 22px rgb(7 18 18 / 0.28), 0 0 0 1px rgb(8 20 20 / 0.22);
+    z-index: 0;
+  }
+
   @media (max-width: 800px) and (orientation: portrait) {
     padding-top: 5px;
     padding-bottom: 5px;
@@ -3284,8 +3323,8 @@ async function addChaosToken(face: any){
   inset: 0;
   z-index: var(--z-index-50);
   background:
-    linear-gradient(180deg, rgb(16 35 34 / 0.14), rgb(9 22 22 / 0.32)),
-    url('/assets/veiled-harbour/T01-调查地图底场.png') center / cover no-repeat;
+    linear-gradient(180deg, rgb(14 36 34 / 0.04), rgb(9 28 28 / 0.1)),
+    url('/assets/veiled-harbour/T04-地点地图底板-v2.png') center / cover no-repeat;
 }
 
 /* Split view: docked to the bottom of the locations board. Positioned against
@@ -3476,9 +3515,11 @@ async function addChaosToken(face: any){
   writing-mode: vertical-rl;
   text-orientation: mixed;
   justify-content: space-around;
-  background-color: #b8c1c6;
+  background:
+    linear-gradient(90deg, rgb(12 22 22 / 0.94), rgb(24 40 39 / 0.88));
+  border-left: 1px solid rgb(205 175 107 / 0.35);
+  color: rgb(214 186 128 / 0.85);
   text-transform: uppercase;
-  font-family: Arial;
   > div {
     flex: 1;
     text-align: center;
@@ -3507,12 +3548,12 @@ async function addChaosToken(face: any){
   flex-direction: column;
   height: 100%;
   justify-content: space-around;
-  color: #b8c1c6;
-  background: #484E51;
+  color: rgb(214 186 128 / 0.6);
+  background: rgb(8 16 16 / 0.72);
   text-transform: uppercase;
-  font-family: Arial;
   .current {
-    background: rgba(0, 0, 0, 0.5) !important;
+    background: rgba(205, 175, 107, 0.3) !important;
+    color: rgb(240 226 182);
     position: relative;
     span {
       position: absolute;
@@ -3535,13 +3576,13 @@ async function addChaosToken(face: any){
     flex: 1;
     align-items: center;
     &:hover {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(205, 175, 107, 0.18);
     }
   }
   > div:nth-of-type(2n) {
-    background: #5a6062;
+    background: rgb(255 255 255 / 0.05);
     &:hover {
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(205, 175, 107, 0.18);
     }
   }
 }
@@ -3556,7 +3597,8 @@ async function addChaosToken(face: any){
 
 .active-phase {
   font-weight: bold;
-  background-color: #8e9ca4;
+  background-color: rgba(205, 175, 107, 0.16);
+  color: rgb(240 226 182);
 }
 
 .scenario-guide {
@@ -4181,6 +4223,10 @@ async function addChaosToken(face: any){
   z-index: var(--z-index-20);
 }
 
+.location-cell--occupied {
+  z-index: var(--z-index-10);
+}
+
 /* While a swarm is fanned open (hovering the swarm, or its abilities menu is open),
    lift the whole cell above its neighbours so the fanned cards aren't occluded by an
    adjacent location's wrapper — otherwise sweeping across the fan would lose hover. */
@@ -4191,8 +4237,42 @@ async function addChaosToken(face: any){
 }
 
 .location-wrapper {
+  position: relative;
   width: fit-content;
-  padding-top: 5px;
+  padding: 10px 12px 11px;
+  border: 1px dashed rgb(205 175 107 / 0.48);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg, rgb(224 213 177 / 0.1), rgb(27 58 55 / 0.16)),
+    rgb(11 30 29 / 0.22);
+  box-shadow:
+    0 8px 16px rgb(4 14 15 / 0.28),
+    inset 0 0 0 1px rgb(244 239 228 / 0.06);
+  transition: border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.location-cell--occupied > .location-wrapper {
+  border-color: rgb(205 175 107 / 0.68);
+}
+
+.location-cell--current-player > .location-wrapper {
+  border-style: solid;
+  border-color: rgb(229 194 107 / 0.94);
+  background:
+    linear-gradient(180deg, rgb(229 194 107 / 0.16), rgb(27 58 55 / 0.2)),
+    rgb(11 30 29 / 0.24);
+  box-shadow:
+    0 0 0 2px rgb(229 194 107 / 0.12),
+    0 10px 20px rgb(4 14 15 / 0.36),
+    inset 0 0 0 1px rgb(244 239 228 / 0.1);
+}
+
+.location-cell--can-interact > .location-wrapper {
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--select, #d5bb83);
+  background: rgb(213 187 131 / 0.14);
+  box-shadow: 0 0 0 3px rgb(213 187 131 / 0.12), 0 10px 20px rgb(4 14 15 / 0.34);
 }
 
 .abyss-location-count {
@@ -4350,6 +4430,11 @@ async function addChaosToken(face: any){
   isolation: isolate;
   display: flex;
   flex-direction: row;
+  /* Player cards stay a step smaller than board cards so the hand and slot
+     rows leave enough viewport height for the location map. */
+  --card-width: min(calc(2.5vw + 14px), 52px);
+  max-height: 40vh;
+  min-height: 0;
   background:
     linear-gradient(180deg, rgb(17 29 27 / 0.12), rgb(11 20 19 / 0.38)),
     url('/assets/veiled-harbour/T02-调查员皮革桌垫.png') center / cover no-repeat;
@@ -4357,6 +4442,17 @@ async function addChaosToken(face: any){
   box-shadow: 0 -6px 18px rgb(5 12 13 / 0.36);
   .player-info {
     flex: 1;
+    min-height: 0;
+  }
+  /* Relax the flex chain down to the hand so the 40vh cap scrolls the hand
+     instead of clipping it. */
+  :deep(.player-info > *),
+  :deep(.player-container),
+  :deep(.player-cards) {
+    min-height: 0;
+  }
+  :deep(.player-cards) {
+    overflow-y: auto;
   }
   @media (max-width: 800px) {
     padding-bottom: 50px;

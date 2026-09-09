@@ -10,7 +10,7 @@
 :root {
   transition-behavior: allow-discrete;
 
-  --nav-height: 52px;
+  --nav-height: 60px;
 
   /* ── Ink & edges ──────────────────────────────────────────────────────── */
   --ink: #252725;
@@ -178,16 +178,16 @@
 
   /* ── Chaos bag ──────────────────────────────────────────────────────── */
   --blessed: #6a5a24;
-  --cursed: #270F31;
+  --cursed: #270f31;
   --blood: #2d2d2d;
   --blood-red: #a8332f;
-  --frost: #39394C;
-  --auto-fail: #4A1216;
-  --elder-sign: #4A6973;
-  --skull: #26110E;
+  --frost: #39394c;
+  --auto-fail: #4a1216;
+  --elder-sign: #4a6973;
+  --skull: #26110e;
   --cultist: #172615;
-  --tablet: #1E2A3A;
-  --elder-thing: #2D1F25;
+  --tablet: #1e2a3a;
+  --elder-thing: #2d1f25;
 
   /* ── Card geometry ──────────────────────────────────────────────────── */
   --card-width: min(calc(2.5vw + 20px), 60px);
@@ -207,6 +207,12 @@
   /* Size of damage/horror/clue/etc. tokens shown ON cards (assets, enemies,
      locations, ...). Kept as one knob so it's easy to tune. */
   --card-token-width: 25px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --nav-height: 56px;
+  }
 }
 
 @property --glow-rotation {

@@ -20,6 +20,7 @@
   },
   "nav": {
     "home": "Home",
+    "menu": "Open navigation menu",
     "about": "About",
     "achievements": "Achievements",
     "admin": "Admin",

@@ -1115,24 +1115,32 @@ onBeforeUnmount(()=> {
 
 .line{
   fill: none;
-  stroke-width: 6px;
-  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1.8px;
+  stroke: rgb(205 175 107 / 0.62);
+  stroke-dasharray: 7 9;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 1px 1px rgb(4 14 15 / 0.5));
 }
 .line.active:not(.mine-cart-next-line){
-  stroke: rgba(255, 255, 255, 0.7) !important;
+  stroke: rgb(229 194 107 / 0.94) !important;
+  stroke-width: 2.3px;
+  filter: drop-shadow(0 0 3px rgb(229 194 107 / 0.34));
 }
 
 .chevrons{
-  fill: rgba(255, 255, 255, 0.2);
+  fill: rgb(205 175 107 / 0.72);
   stroke: none;
+  filter: drop-shadow(0 1px 1px rgb(4 14 15 / 0.5));
 }
 .chevrons.active{
-  fill: rgba(255, 255, 255, 0.7);
+  fill: rgb(229 194 107 / 0.96);
 }
 
 .enemy-line{
-  stroke: rgba(255 0 0 / 0.4);
-  stroke-dasharray: unset;
+  stroke: rgb(166 80 69 / 0.78);
+  stroke-width: 2.4px;
+  stroke-dasharray: 5 7;
 }
 
 .mine-cart-next-line{
