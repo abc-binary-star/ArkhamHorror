@@ -57,6 +57,17 @@ frontend/public/img/arkham/customizations/
 frontend/public/img/arkham/seals/
 frontend/public/img/arkham/playing-cards/
 
+# Mirrors pulled back by scripts/fetch-assets.sh — regenerable, stay local.
+# Original artwork belongs under frontend/public/assets/, not here.
+frontend/public/img/arkham/homebrew/
+frontend/public/img/**/*.avif
+frontend/public/img/arkham/*.png
+frontend/public/img/arkham/*.jpg
+frontend/public/img/arkham/*.svg
+frontend/public/img/arkham/chaos-tokens/ct_*.png
+frontend/public/img/arkham/keys/
+frontend/public/img/arkham/arrows/
+
 **/postgres_password.txt
 k8s/
 
@@ -98,3 +109,9 @@ skills-lock.json
 # Local homebrew working data (guide transcriptions, codegen maps); the
 # checked-in guide is docs/homebrew.md
 docs/homebrew/
+
+# Design mockups are byte-identical to their runtime copies under
+# frontend/public/assets/veiled-harbour/ — version the docs, not the pixels.
+docs/design/**/*.png
+docs/design/**/*.jpg
+docs/design/**/*.svg
