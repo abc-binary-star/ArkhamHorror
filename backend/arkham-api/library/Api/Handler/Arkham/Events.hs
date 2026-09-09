@@ -687,7 +687,7 @@ createGroupGame gameName scenarioId difficulty includeTarotReadings playWithBlob
     ag = ArkhamGame gameName game 0 WithFriends now now
   runDB do
     gameId <- P.insert ag
-    P.insert_ $ ArkhamStep gameId (Choice mempty []) 0 (ActionDiff [])
+    P.insert_ $ ArkhamStep gameId (Choice mempty [] False) 0 (ActionDiff [])
     pure gameId
 
 {- | Initial shared counters for an event, by scenario. Frozen at event start

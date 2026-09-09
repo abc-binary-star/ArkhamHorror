@@ -4,12 +4,15 @@ import { useUserStore } from '@/stores/user'
 import { useRoute, useRouter } from 'vue-router'
 import * as Arkham from '@/arkham/types/Deck'
 import { fetchDecks, newGame, createEvent } from '@/arkham/api'
+import { useToast } from 'vue-toastification'
+import { useI18n } from 'vue-i18n'
 import { useEventStore } from '@/arkham/stores/event'
 import type { Difficulty } from '@/arkham/types/Difficulty'
 import { campaignChapter } from '@/arkham/data'
 import type { Scenario, Campaign } from '@/arkham/data'
 import { storeToRefs } from 'pinia'
 import type { GameMode, MultiplayerVariant, CampaignType } from '@/arkham/types/NewGame'
+import type { UndoMode } from '@/arkham/types/Game'
 
 import { ACHIEVEMENT_CAMPAIGN_IDS } from '@/arkham/achievements'
 import officialCampaignJSON from '@/arkham/data/campaigns'
@@ -69,6 +72,7 @@ const ultimatumsAndBoons = ref<string[]>([])
 // Achievement tracking (default on). Only honored for campaigns with an
 // achievement catalog; unsupported campaigns always send true.
 const achievementsEnabled = ref(true)
+const undoMode = ref<UndoMode>('full')
 
 // "Epic Multiplayer" side-story mode state (only meaningful for epic-capable
 // side stories; see GameOptions.vue / side-stories.json).
@@ -182,8 +186,12 @@ const canGoNextFromStep1 = computed(() => {
   return !!selectedCampaign.value
 })
 
+const creating = ref(false)
+const toast = useToast()
+const { t } = useI18n()
+
 const nextDisabled = computed(() =>
-  step.value === 'ChooseMode' ? !canGoNextFromStep1.value : disabled.value
+  creating.value || (step.value === 'ChooseMode' ? !canGoNextFromStep1.value : disabled.value)
 )
 
 function withViewTransition(fn: () => void) {
@@ -294,10 +302,10 @@ watch([selectedCampaign, fullCampaign], () => {
   fullCampaignOptionKey.value = opts?.[0]?.key ?? null
 })
 
-fetchDecks().then((result) => {
-  decks.value = result
-  ready.value = true
-})
+fetchDecks()
+  .then((result) => { decks.value = result })
+  .catch((err) => { console.error('[new-campaign] could not list saved decks', err) })
+  .finally(() => { ready.value = true })
 
 // The toggle is only rendered for supported campaigns; a stale "off" from a
 // supported selection must not leak into an unsupported one.
@@ -305,6 +313,19 @@ const achievementsForCreate = (campaignId: string | null) =>
   campaignId && ACHIEVEMENT_CAMPAIGN_IDS.includes(campaignId) ? achievementsEnabled.value : true
 
 async function start() {
+  if (creating.value) return
+  creating.value = true
+  try {
+    await createGame()
+  } catch (err) {
+    console.error('[new-campaign] could not create the game', err)
+    toast.error(t('pleaseTryAgainLater'))
+  } finally {
+    creating.value = false
+  }
+}
+
+async function createGame() {
   const enabledRecommendedOptions = Object.entries(recommendedOptionState.value)
     .filter(([, enabled]) => enabled)
     .map(([tag]) => ({ tag }))
@@ -360,7 +381,7 @@ async function start() {
         }
       }
 
-      newGame(
+      const game = await newGame(
         deckIds.value,
         playerCount.value,
         campaignId,
@@ -372,15 +393,17 @@ async function start() {
         options,
         strictAsIfAt.value,
         ultimatumsAndBoons.value,
-        achievementsForCreate(campaignId)
-      ).then((game) => router.push(`/games/${game.id}`))
+        achievementsForCreate(campaignId),
+        undoMode.value
+      )
+      router.push(`/games/${game.id}`)
     }
   } else {
     const c = campaign.value
     if (c && currentCampaignName.value) {
       const campaignId = returnTo.value && c.returnTo?.id ? c.returnTo.id : c.id
 
-      newGame(
+      const game = await newGame(
         deckIds.value,
         playerCount.value,
         campaignId,
@@ -392,8 +415,10 @@ async function start() {
         options,
         strictAsIfAt.value,
         ultimatumsAndBoons.value,
-        achievementsForCreate(campaignId)
-      ).then((game) => router.push(`/games/${game.id}`))
+        achievementsForCreate(campaignId),
+        undoMode.value
+      )
+      router.push(`/games/${game.id}`)
     }
   }
 }
@@ -436,6 +461,7 @@ async function start() {
           v-model:recommendedOptionState="recommendedOptionState"
           v-model:ultimatumsAndBoons="ultimatumsAndBoons"
           v-model:achievementsEnabled="achievementsEnabled"
+          v-model:undoMode="undoMode"
           v-model:epicMode="epicMode"
           v-model:epicGroupCount="epicGroupCount"
           v-model:epicGroups="epicGroups"
@@ -483,13 +509,16 @@ async function start() {
   box-sizing: border-box;
   padding-top: 20px;
   padding-bottom: 10px;
+  background:
+    linear-gradient(180deg, rgba(26, 40, 41, 0.72), rgba(26, 40, 41, 0.9)),
+    url('/assets/veiled-harbour/12-深海航图叠层.png') center / cover no-repeat;
 }
 
 #new-campaign {
   width: 70vw;
   max-width: 98vw;
   min-width: 60vw;
-  color: #fff;
+  color: var(--text);
   border-radius: 3px;
   margin: 0 auto 20px;
   display: grid;
@@ -498,50 +527,87 @@ async function start() {
 
 #new-campaign button {
   outline: 0;
-  padding: 15px;
-  background: var(--button-1);
-  text-transform: uppercase;
-  color: white;
-  border: 0;
   width: 100%;
+  padding: 12px;
+  background: var(--spooky-green);
+  border: var(--edge-width) solid var(--edge-on-accent);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-2);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--button-1-text);
+  font-weight: var(--font-black);
+  cursor: pointer;
+  transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease;
 }
 
-#new-campaign button:hover {
-  background: hsl(80, 35%, 32%);
+#new-campaign button:hover:not([disabled]) {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+#new-campaign button:active:not([disabled]) {
+  transform: translate(1px, 1px);
+  box-shadow: none;
 }
 
 #new-campaign button[disabled] {
-  background: #999;
+  background: var(--button);
+  border-color: var(--edge-faint);
+  box-shadow: var(--shadow-1);
+  color: var(--text-faint);
   cursor: not-allowed;
 }
 
 #new-campaign button[disabled]:hover {
-  background: #999;
+  background: var(--button);
+  filter: none;
+  transform: none;
 }
 
 #new-campaign button.secondary {
-  background: hsl(80, 5%, 39%);
+  background: transparent;
+  border-color: var(--edge-dim);
+  box-shadow: none;
+  color: var(--text-dim);
 }
 
-#new-campaign button.secondary:hover {
-  background: hsl(80, 15%, 39%);
+#new-campaign button.secondary:hover:not([disabled]) {
+  background: rgba(48, 58, 61, 0.08);
+  border-color: var(--edge);
+  box-shadow: var(--shadow-2);
+  color: var(--text);
+  filter: none;
 }
 
 #new-campaign input[type='text'] {
   outline: 0;
-  border: 1px solid var(--background);
-  padding: 15px;
-  background: var(--background-dark);
   width: 100%;
   margin-bottom: 10px;
+  padding: 12px;
+  background: var(--input-background);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-md);
+  color: var(--text);
+  transition: border-color 120ms ease, box-shadow 80ms ease;
+}
+
+#new-campaign input[type='text']:hover {
+  border-color: var(--edge);
+}
+
+#new-campaign input[type='text']:focus {
+  border-color: var(--spooky-green);
+  box-shadow: var(--shadow-2);
 }
 
 h2 {
   color: var(--title);
   margin-left: 10px;
-  text-transform: uppercase;
-  font-family: Teutonic;
+  font-family: "Arno", "Noto Sans", sans-serif;
   font-size: 2em;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   padding: 0;
   margin: 0;
 }
@@ -568,16 +634,19 @@ input[type='radio'] {
 input[type='radio'] + label {
   display: inline-block;
   padding: 4px 12px;
-  background-color: hsl(80, 5%, 39%);
-  border-color: #ddd;
+  background-color: var(--surface-raised, #f4efe4);
+  border: 1px solid var(--box-border);
+  color: var(--text);
 }
 
 input[type='radio'] + label:hover {
-  background-color: hsl(80, 15%, 39%);
+  background-color: var(--surface-panel, #e8e1d2);
 }
 
 input[type='radio']:checked + label {
   background: var(--button-1);
+  color: var(--button-1-text);
+  border-color: var(--edge-on-accent);
 }
 
 input[type='image'] {

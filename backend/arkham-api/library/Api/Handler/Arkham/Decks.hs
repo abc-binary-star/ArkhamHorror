@@ -4,6 +4,7 @@ module Api.Handler.Arkham.Decks (
   postApiV1ArkhamDecksR,
   postApiV1ArkhamDecksFetchR,
   postApiV1ArkhamDecksValidateR,
+  putApiV1ArkhamDeckR,
   deleteApiV1ArkhamDeckR,
   putApiV1ArkhamGameDecksR,
   postApiV1ArkhamSyncDeckR,
@@ -77,6 +78,26 @@ data CreateDeckPost = CreateDeckPost
   }
   deriving stock (Show, Generic)
   deriving anyclass FromJSON
+
+data UpdateDeckPost = UpdateDeckPost
+  { updateDeckName :: Maybe Text
+  -- Required, and null means "detach from any external source". aeson has no
+  -- operator that tells an absent key from an explicit null, so the key being
+  -- mandatory is what carries the distinction: both callers always state it.
+  , updateDeckUrl :: Maybe Text
+  , updateDeckList :: Maybe ArkhamDBDecklist
+  }
+  deriving stock (Show, Generic)
+
+-- The wire names match CreateDeckPost because the embedded deck builder posts
+-- the same shape to both endpoints; deriving these from the field names would
+-- have asked for `updateDeckName` and silently parsed as an empty update.
+instance FromJSON UpdateDeckPost where
+  parseJSON = withObject "UpdateDeckPost" $ \o ->
+    UpdateDeckPost
+      <$> o .:? "deckName"
+      <*> o .: "deckUrl"
+      <*> o .:? "deckList"
 
 newtype ValidateDeckPost = ValidateDeckPost
   { validateDeckList :: ArkhamDBDecklist
@@ -231,7 +252,7 @@ putApiV1ArkhamGameDecksR gameId = do
                   insert_
                     $ ArkhamStep
                       gameId
-                      (Choice diffDown updatedQueue)
+                      (Choice diffDown updatedQueue False)
                       (arkhamGameStep + 1)
                       (ActionDiff $ view actionDiffL ge)
 
@@ -348,6 +369,54 @@ getApiV1ArkhamDeckR deckId = do
     where_ $ decks.userId ==. val userId
     pure decks
   maybe notFound pure mDeck
+
+{- | Update a saved deck: its name, its source url, and/or its card list.
+
+Every field is optional so a rename does not have to resend the list -- the
+client's stored @DeckList@ is a projection that lacks the @id@ and
+@investigator_name@ an 'ArkhamDBDecklist' requires, so it could only comply by
+inventing them.
+
+Scoped by @(deckId, userId)@ and fetched before writing, so a caller can only
+ever rewrite their own deck. The existing overlay is deliberately preserved: it
+has its own PUT/DELETE endpoints. Validation runs over 'arkhamDeckPlayList'
+rather than the bare list, matching 'postApiV1ArkhamDecksR', because replacing
+the base list can leave an existing overlay pointing at cards the deck no longer
+contains.
+-}
+putApiV1ArkhamDeckR :: ArkhamDeckId -> Handler (Entity ArkhamDeck)
+putApiV1ArkhamDeckR deckId = do
+  userId <- getRequestUserId
+  UpdateDeckPost {..} <- requireCheckJsonBody
+  -- A replacement list may name custom cards only this user has, so the library
+  -- has to be resolvable before the list is checked or stored.
+  registerUserCustomCards userId
+  mDeck <- runDB $ selectOne do
+    decks <- from $ table @ArkhamDeck
+    where_ $ decks.id ==. val deckId
+    where_ $ decks.userId ==. val userId
+    pure decks
+  Entity _ existing <- maybe notFound pure mDeck
+  let
+    updated =
+      existing
+        { arkhamDeckName = fromMaybe (arkhamDeckName existing) updateDeckName
+        -- Required on the wire, so the client's value is authoritative: null
+        -- detaches the deck, which is what stops a later sync from re-pulling
+        -- over edits made in the embedded builder.
+        , arkhamDeckUrl = updateDeckUrl
+        , arkhamDeckList = fromMaybe (arkhamDeckList existing) updateDeckList
+        }
+    -- Only recompute the denormalized investigator when the list actually
+    -- changed; a rename must not rewrite it from a list we were not sent.
+    updated' = case updateDeckList of
+      Just list -> updated {arkhamDeckInvestigatorName = tshow $ investigator_name list}
+      Nothing -> updated
+  case toDeckErrors (arkhamDeckPlayList updated') of
+    [] -> runDB do
+      replace deckId updated'
+      pure $ Entity deckId updated'
+    err -> sendStatusJSON status400 err
 
 deleteApiV1ArkhamDeckR :: ArkhamDeckId -> Handler ()
 deleteApiV1ArkhamDeckR deckId = do

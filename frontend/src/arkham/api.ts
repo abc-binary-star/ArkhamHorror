@@ -1,5 +1,5 @@
 import api from '@/api';
-import { Game, GameDetailsEntry, gameDecoder, gameDetailsEntryDecoder } from '@/arkham/types/Game';
+import { Game, GameDetailsEntry, UndoMode, gameDecoder, gameDetailsEntryDecoder } from '@/arkham/types/Game';
 import { ArkhamDbDecklist, Deck, deckDecoder } from '@/arkham/types/Deck';
 import { CardDef, cardDefDecoder } from '@/arkham/types/CardDef';
 import { CustomCard, customCardDecoder } from '@/arkham/customCards';
@@ -183,6 +183,26 @@ export const newDeck = async (
   return deckDecoder.decodePromise(data)
 }
 
+/* Partial update: name and list are optional and keep what is stored when
+ * omitted. A rename therefore does not have to resend the list, which matters
+ * because the Deck.list we hold is a projection missing the id and
+ * investigator_name an ArkhamDbDecklist requires. The url is the exception --
+ * the backend requires the key, because null is how a deck gets detached from
+ * its external source and an omitted field cannot say that. A 400 carries a
+ * DeckError list (unimplemented cards), which the caller should surface, not
+ * swallow. */
+export const updateDeck = async (
+  id: string,
+  changes: { deckUrl: string | null; deckName?: string; deckList?: ArkhamDbDecklist },
+): Promise<Deck> => {
+  const { data } = await api.put(`arkham/decks/${id}`, {
+    deckName: changes.deckName,
+    deckUrl: changes.deckUrl === '' ? null : changes.deckUrl,
+    deckList: changes.deckList,
+  })
+  return deckDecoder.decodePromise(data)
+}
+
 /* Validation reads nothing and writes nothing, so a request that produced no
  * response at all is safe to send again. Worth doing because a browser that
  * loses a request mid-flight will not retry a POST on its own -- Firefox on
@@ -310,7 +330,10 @@ export const newGame = async (
   ultimatumsAndBoons?: string[],
   // Achievement tracking (only meaningful for campaigns with an achievement
   // catalog); backend defaults to true when omitted.
-  achievementsEnabled = true
+  achievementsEnabled = true,
+  // History retention, fixed at creation: the backend prunes steps as they are
+  // persisted, so a mode cannot be loosened later and still mean anything.
+  undoMode: UndoMode = 'full'
 ): Promise<Game> => {
   const { data } = await api.post('arkham/games', {
     deckIds,
@@ -325,7 +348,8 @@ export const newGame = async (
     strictAsIfAt,
     asIfRuling: strictAsIfAt == null ? undefined : strictAsIfAt ? 'chapter2' : 'chapter1',
     ultimatumsAndBoons,
-    achievementsEnabled
+    achievementsEnabled,
+    undoMode
   })
   return gameDecoder.decodePromise(data)
 }

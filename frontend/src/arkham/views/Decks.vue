@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import * as Arkham from '@/arkham/types/Deck'
 import Prompt from '@/components/Prompt.vue'
+import LoadState from '@/components/LoadState.vue'
 import { fetchDecks, deleteDeck, syncDeck } from '@/arkham/api'
 import NewDeck from '@/arkham/components/NewDeck.vue';
 import Deck from '@/arkham/components/DeckRow.vue';
@@ -13,6 +14,7 @@ import type { InvestigatorClass } from '@/arkham/helpers'
 import { storeToRefs } from 'pinia'
 import { useSettings } from '@/stores/settings'
 import { loadLibrary } from '@/arkham/customCardLibrary'
+import { onDeckBuilderSave } from '@/arkham/deckBuilderBridge'
 
 const { t } = useI18n()
 
@@ -40,16 +42,42 @@ async function addDeck(d: Arkham.Deck) {
 
 async function deleteDeckEvent() {
   const { value } = deleteId
-  if (value) {
-    deleteDeck(value).then(() => {
-      allDecks.value = allDecks.value.filter((deck) => deck.id !== value)
-      deleteId.value = null
-    })
+  if (!value) return
+
+  try {
+    await deleteDeck(value)
+    allDecks.value = allDecks.value.filter((deck) => deck.id !== value)
+  } catch {
+    // Without this the deck stays in the list, the prompt stays open, and the
+    // user has no idea the delete did not happen.
+    toast.error(t('pleaseTryAgainLater'))
+  } finally {
+    deleteId.value = null
   }
 }
 
-fetchDecks().then(async (response) => {
-  allDecks.value = response
+const loaded = ref(false)
+const loadError = ref(false)
+
+const loadDecks = () => {
+  loadError.value = false
+  fetchDecks()
+    .then((response) => { allDecks.value = response })
+    .catch(() => { loadError.value = true })
+    .finally(() => { loaded.value = true })
+}
+
+loadDecks()
+
+// A deck saved in the /build/ tab is written to the database by the builder
+// itself; reload so it shows up here without a manual refresh.
+let unsubscribeDeckBuilder: (() => void) | null = null
+onMounted(() => {
+  unsubscribeDeckBuilder = onDeckBuilderSave(() => loadDecks())
+})
+onUnmounted(() => {
+  unsubscribeDeckBuilder?.()
+  unsubscribeDeckBuilder = null
 })
 
 const decks = computed(() => {
@@ -83,7 +111,7 @@ async function sync(deck: Arkham.Deck) {
 </script>
 
 <template>
-  <div class="page-container">
+  <div class="page-container workbench-shell">
     <div id="decks">
       <header class="decks-header">
         <h2>{{ $t('decks') }}</h2>
@@ -101,8 +129,11 @@ async function sync(deck: Arkham.Deck) {
         class="toolbar"
       />
 
-      <div v-if="decks.length === 0" class="empty-state">
-        <p>{{ $t('noDecksMatchFilters') }}</p>
+      <LoadState v-if="loadError" error @retry="loadDecks" />
+      <LoadState v-else-if="!loaded" />
+      <div v-else-if="decks.length === 0" class="empty-state">
+        <img class="empty-state-card" src="/assets/veiled-harbour/24-空档案纸牌.png" alt="" aria-hidden="true" />
+        <p>{{ $t(allDecks.length === 0 ? 'noDecksYet' : 'noDecksMatchFilters') }}</p>
       </div>
       <div v-else class="deck-grid">
         <Deck
@@ -126,31 +157,43 @@ async function sync(deck: Arkham.Deck) {
 
 <style scoped>
 #decks {
-  width: 70vw;
-  max-width: 98vw;
-  min-width: 60vw;
+  width: min(1180px, calc(100% - 48px));
+  max-width: none;
+  min-width: 0;
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 20px 20px 10px;
+  padding: 28px 0 72px;
+  background:
+    linear-gradient(rgba(233, 225, 210, 0.78), rgba(233, 225, 210, 0.78)),
+    url('/assets/veiled-harbour/09-牌组工作台纸面.png') center / cover no-repeat;
+  border: 1px solid color-mix(in srgb, var(--brass) 30%, transparent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
   @media (max-width: 768px) {
     width: 100%;
     min-width: unset;
-    padding: 20px 12px 10px;
+    padding: 18px 14px 56px;
     box-sizing: border-box;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
   }
 }
 
 .decks-header {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--box-border);
 
   h2 {
     flex: 1;
     color: var(--title);
     font-size: 2em;
-    text-transform: uppercase;
-    font-family: teutonic, sans-serif;
+    font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
+    font-weight: 600;
+    letter-spacing: 0.02em;
     margin: 0;
   }
 
@@ -161,9 +204,10 @@ async function sync(deck: Arkham.Deck) {
 }
 
 .new-deck-panel {
-  background: #111;
-  border: 1px solid #2a2a2a;
-  border-radius: 8px;
+  background: var(--surface-panel) url('/assets/veiled-harbour/03-档案纸纹理.svg') repeat;
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
   padding: 20px;
   margin-bottom: 20px;
 }
@@ -173,10 +217,23 @@ async function sync(deck: Arkham.Deck) {
 }
 
 .empty-state {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   padding: 40px;
   text-align: center;
-  color: var(--button);
+  color: var(--text-dim);
   font-size: 0.9rem;
+}
+
+.empty-state-card {
+  width: min(180px, 48vw);
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: 1px solid color-mix(in srgb, var(--brass) 54%, transparent);
+  border-radius: 6px;
+  box-shadow: var(--shadow-3);
 }
 
 .deck-grid {

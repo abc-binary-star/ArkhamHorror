@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { watch, shallowRef, ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router'
-import { fetchDeck, deleteDeck, fetchCards, syncDeck, setDeckOverlay, removeDeckOverlay } from '@/arkham/api';
+import { fetchDeck, deleteDeck, fetchCards, syncDeck, setDeckOverlay, removeDeckOverlay, updateDeck, fetchDeckList, validateDeck } from '@/arkham/api';
 import { storeToRefs } from 'pinia'
 import { useSettings } from '@/stores/settings'
 import {
@@ -17,9 +17,10 @@ import { customCardDef, isCustomCardCode, stripCardCodePrefix } from '@/arkham/c
 import { loadLibrary } from '@/arkham/customCardLibrary'
 import { cardImg, localizeArkhamDBBaseUrl } from '@/arkham/helpers';
 import * as Arkham from '@/arkham/types/CardDef';
-import type {Deck} from '@/arkham/types/Deck';
+import type {Deck, ArkhamDbDecklist} from '@/arkham/types/Deck';
 import * as DeckHelpers from '@/arkham/types/Deck';
 import Prompt from '@/components/Prompt.vue'
+import LoadState from '@/components/LoadState.vue'
 import CardListView from '@/arkham/components/CardListView.vue'
 import CardImageView from '@/arkham/components/CardImageView.vue'
 import { useToast } from "vue-toastification";
@@ -185,6 +186,80 @@ async function saveOverlay() {
     savingOverlay.value = false
   }
 }
+
+/* Editing the deck itself, as opposed to the overlay: rename it, or repoint it
+ * at a different ArkhamDB / arkham.build list and pull that list in. Per-card
+ * add/remove already lives in the overlay editor, so this stays small. */
+const editing = ref(false)
+const editName = ref('')
+const editUrl = ref('')
+const editList = shallowRef<ArkhamDbDecklist | null>(null)
+const savingEdit = ref(false)
+const fetchingList = ref(false)
+
+function startEdit() {
+  if (editing.value) {
+    editing.value = false
+    return
+  }
+  editName.value = deck.value?.name ?? ''
+  editUrl.value = deck.value?.url ?? ''
+  editList.value = null
+  editing.value = true
+}
+
+async function fetchEditList() {
+  const url = editUrl.value.trim()
+  if (!url) {
+    toast.error(t('deck.editUrlRequired'))
+    return
+  }
+  fetchingList.value = true
+  try {
+    const list = await fetchDeckList(url)
+    await validateDeck(list)
+    editList.value = list
+    toast.success(t('deck.editListLoaded'))
+  } catch (e) {
+    console.error(e)
+    editList.value = null
+    toast.error(t('deck.editListFailed'))
+  } finally {
+    fetchingList.value = false
+  }
+}
+
+async function saveEdit() {
+  const d = deck.value
+  if (!d) return
+  const name = editName.value.trim()
+  if (!name) {
+    toast.error(t('deck.editNameRequired'))
+    return
+  }
+  const url = editUrl.value.trim()
+  savingEdit.value = true
+  try {
+    await updateDeck(d.id, {
+      deckName: name,
+      // Always stated: null is how the backend detaches a deck from its source,
+      // and an omitted field cannot express that.
+      deckUrl: url,
+      // Sending the list only after an explicit fetch keeps a rename from
+      // silently repointing the deck at a url whose cards were never loaded.
+      // A url change on its own is still coherent: sync then pulls from it.
+      ...(editList.value ? { deckList: editList.value } : {}),
+    })
+    deck.value = await fetchDeck(d.id)
+    editing.value = false
+    toast.success(t('deck.editSaved'))
+  } catch (e) {
+    console.error(e)
+    toast.error(t('deck.editSaveFailed'))
+  } finally {
+    savingEdit.value = false
+  }
+}
 const store = useDbCardStore()
 
 onMounted(() => {
@@ -207,18 +282,28 @@ const enum View {
 // Custom cards resolve out of your library, which the deck may name.
 if (customCardsEnabled.value) loadLibrary()
 
-fetchCards(true).then((response) => {
-  allCards.value = response.sort((a, b) => {
-    if (a.art < b.art) return -1
-    if (a.art > b.art) return 1
-    return 0
-  })
+const loadError = ref(false)
 
-  fetchDeck(props.deckId).then((deckData) => {
-    deck.value = deckData
-    ready.value = true
-  })
-})
+const loadDeck = () => {
+  loadError.value = false
+  ready.value = false
+
+  fetchCards(true)
+    .then((response) => {
+      allCards.value = response.sort((a, b) => {
+        if (a.art < b.art) return -1
+        if (a.art > b.art) return 1
+        return 0
+      })
+
+      return fetchDeck(props.deckId)
+    })
+    .then((deckData) => { deck.value = deckData })
+    .catch(() => { loadError.value = true })
+    .finally(() => { ready.value = true })
+}
+
+loadDeck()
 
 const view = ref(View.List)
 
@@ -462,7 +547,9 @@ watch(deckRef, (el) => {
 <template>
   <div class="container">
     <div class="results">
-      <header class="deck" v-show="deck" ref="deckRef" :class="deckClass">
+      <LoadState v-if="loadError" error @retry="loadDeck" />
+      <LoadState v-else-if="!ready" />
+      <header class="deck" v-show="deck && !loadError" ref="deckRef" :class="deckClass">
         <template v-if="deck">
           <img v-if="deckInvestigator" class="portrait--decklist" :src="cardImg(deckInvestigator)" />
           <div class="deck--details">
@@ -504,6 +591,13 @@ watch(deckRef, (el) => {
                 title="Edit overlay"
                 @click.prevent="startOverlay"
               ><font-awesome-icon icon="layer-group" /></a>
+              <a
+                class="action-btn"
+                :class="{ 'action-btn--on': editing }"
+                href="#"
+                :title="$t('deck.editDeck')"
+                @click.prevent="startEdit"
+              ><font-awesome-icon icon="pen" /></a>
               <a class="action-btn action-btn--delete" href="#" :title="$t('deck.deleteDeck')" @click.prevent="deleting = true"><font-awesome-icon icon="trash" /></a>
             </div>
           </div>
@@ -522,10 +616,33 @@ watch(deckRef, (el) => {
               <button type="button" @click="overlayEditing = false">Cancel</button>
             </div>
           </div>
+          <div v-if="editing" class="deck-edit-bar">
+            <p class="overlay-help">{{ $t('deck.editHelp') }}</p>
+            <label class="deck-edit-field">
+              <span>{{ $t('name') }}</span>
+              <input v-model="editName" type="text" class="deck-edit-input" :placeholder="$t('deck.editNamePlaceholder')" />
+            </label>
+            <label class="deck-edit-field">
+              <span>{{ $t('deck.editUrlLabel') }}</span>
+              <input v-model="editUrl" type="url" class="deck-edit-input" placeholder="https://arkham.build/decklist/view/…" />
+            </label>
+            <div class="overlay-actions">
+              <button type="button" :disabled="fetchingList" @click="fetchEditList">
+                {{ fetchingList ? $t('deck.editFetching') : $t('deck.editFetchList') }}
+              </button>
+              <button type="button" :disabled="savingEdit || fetchingList" @click="saveEdit">
+                {{ savingEdit ? $t('deck.editSaving') : $t('deck.editSave') }}
+              </button>
+              <button type="button" :disabled="savingEdit" @click="editing = false">{{ $t('deck.editCancel') }}</button>
+            </div>
+            <p v-if="editList" class="deck-edit-loaded">
+              {{ $t('deck.editListReady', { name: editList.name, count: Object.values(editList.slots).reduce((a, b) => a + b, 0) }) }}
+            </p>
+          </div>
         </template>
       </header>
 
-      <div class="deck-sections">
+      <div v-if="ready && !loadError" class="deck-sections">
         <section v-if="hunchDeckCards.length > 0" class="deck-section deck-section--hunch">
           <h2 class="deck-section-title">Hunch Deck <span>{{ hunchDeckCards.length }}</span></h2>
           <CardImageView v-if="view == View.Image" :cards="hunchDeckCards" />
@@ -611,8 +728,8 @@ watch(deckRef, (el) => {
   flex-direction: column;
   min-height: 0;
   margin-bottom: 18px;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(48, 58, 61, 0.035);
+  border: 1px solid var(--box-border);
   border-radius: 12px;
   overflow: hidden;
 
@@ -631,26 +748,26 @@ watch(deckRef, (el) => {
   gap: 8px;
   margin: 0;
   padding: 10px 14px;
-  color: #e8dfc9;
-  background: rgba(0, 0, 0, 0.28);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  background: var(--surface-raised, #f4efe4);
+  border-bottom: 1px solid var(--edge-faint);
   font-size: 0.82rem;
-  font-weight: 900;
+  font-weight: var(--font-black);
   letter-spacing: 0.08em;
   text-transform: uppercase;
 
   span {
     padding: 1px 7px;
-    color: #1d170f;
-    background: #c8a96e;
+    color: var(--ink);
+    background: var(--brass);
     border-radius: 999px;
     font-size: 0.68rem;
     letter-spacing: 0;
   }
 }
 
-.deck-section--hunch .deck-section-title { color: #b8d7ff; }
-.deck-section--side .deck-section-title { color: #d2c6ff; }
+.deck-section--hunch .deck-section-title { color: var(--willpower-light); }
+.deck-section--side .deck-section-title { color: var(--intellect-light); }
 
 /* ── Deck header ─────────────────────────────────────────── */
 
@@ -661,10 +778,10 @@ watch(deckRef, (el) => {
   column-gap: 16px;
   row-gap: 0;
   padding: var(--deck-pad) 0 0; /* no horizontal padding — children handle their own spacing */
-  color: #f0f0f0;
+  color: var(--text);
   background: var(--box-background);
   border-left: 4px solid transparent;
-  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--shadow-3);
   position: sticky;
   position: -webkit-sticky;
   top: -1px;
@@ -751,15 +868,15 @@ watch(deckRef, (el) => {
   /* The toolbar is its own band; let the card above it breathe first. */
   margin-top: 12px;
   padding: 8px var(--deck-pad);
-  background: rgba(0, 0, 0, 0.2);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(48, 58, 61, 0.06);
+  border-top: 1px solid var(--box-border);
 }
 
 .deck--view-options {
   display: flex;
   gap: 2px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(48, 58, 61, 0.06);
+  border: 1px solid var(--box-border);
   border-radius: 6px;
   padding: 2px;
   width: fit-content;
@@ -769,12 +886,12 @@ watch(deckRef, (el) => {
     border: none;
     border-radius: 4px;
     padding: 5px 9px;
-    color: #777;
+    color: var(--text-dim);
     cursor: pointer;
     transition: background 0.12s, color 0.12s;
 
-    &:hover { color: #ccc; }
-    &.pressed { background: rgba(255,255,255,0.12); color: #eee; }
+    &:hover { color: var(--text); }
+    &.pressed { background: var(--spooky-green); color: var(--button-1-text); }
   }
 }
 
@@ -789,8 +906,8 @@ watch(deckRef, (el) => {
  * speaks in (the badge, the lit toolbar button), so it reads as one feature
  * without borrowing a board-state colour. */
 .overlay-bar {
-  background: color-mix(in srgb, var(--spooky-green-dark) 45%, #12161c);
-  border-top: 1px solid color-mix(in srgb, var(--spooky-green) 35%, transparent);
+  background: color-mix(in srgb, var(--spooky-green) 10%, var(--surface-panel));
+  border-top: 1px solid color-mix(in srgb, var(--spooky-green) 35%, var(--box-border));
   flex-basis: 100%;
   padding: 0.7rem var(--deck-pad);
   width: 100%;
@@ -805,7 +922,7 @@ watch(deckRef, (el) => {
 /* The bar sits on its own dark ground, where inherited body text all but
  * disappears -- it needs to be read, so it gets full brightness. */
 .overlay-help {
-  color: #e6ece4;
+  color: var(--text);
   font-size: 0.92rem;
   margin: 0 0 0.7rem;
 }
@@ -817,7 +934,7 @@ watch(deckRef, (el) => {
   gap: 0.6rem;
 
   label {
-    color: #e6ece4;
+    color: var(--text);
     display: flex;
     flex-direction: column;
     font-size: 0.82rem;
@@ -825,10 +942,10 @@ watch(deckRef, (el) => {
   }
 
   select {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid color-mix(in srgb, var(--spooky-green) 30%, transparent);
+    background: var(--surface-raised, #f4efe4);
+    border: 1px solid color-mix(in srgb, var(--spooky-green) 30%, var(--box-border));
     border-radius: 4px;
-    color: #e6ece4;
+    color: var(--text);
     font-size: 0.9rem;
     padding: 0.35rem;
   }
@@ -840,18 +957,59 @@ watch(deckRef, (el) => {
   margin-left: auto;
 
   button {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--surface-raised, #f4efe4);
     border: 1px solid color-mix(in srgb, var(--spooky-green) 35%, transparent);
     border-radius: 4px;
-    color: #e6ece4;
+    color: var(--text);
     cursor: pointer;
     font-size: 0.9rem;
     padding: 0.4rem 0.8rem;
 
     &:hover:not(:disabled) {
-      background: color-mix(in srgb, var(--spooky-green) 22%, transparent);
+      background: color-mix(in srgb, var(--spooky-green) 12%, var(--surface-panel));
     }
   }
+}
+
+/* Editing the deck's own name and source list. Deliberately not the overlay's
+ * green -- per the note on .overlay-bar that colour marks the overlay feature,
+ * and this edits the deck underneath it. */
+.deck-edit-bar {
+  background: var(--surface-panel);
+  border-top: 1px solid var(--box-border);
+  flex-basis: 100%;
+  padding: 0.7rem var(--deck-pad);
+  width: 100%;
+}
+
+.deck-edit-field {
+  align-items: baseline;
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+
+  span {
+    color: var(--text-dim);
+    flex: 0 0 6.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+.deck-edit-input {
+  background: var(--input-background, transparent);
+  border: 1px solid var(--box-border);
+  border-radius: 4px;
+  color: var(--text);
+  flex: 1 1 auto;
+  font: inherit;
+  min-width: 0;
+  padding: 0.35rem 0.5rem;
+}
+
+.deck-edit-loaded {
+  color: var(--text-dim);
+  font-size: 0.88rem;
+  margin: 0.6rem 0 0;
 }
 
 .deck-actions {
@@ -870,7 +1028,7 @@ watch(deckRef, (el) => {
 .overlay-badge {
   align-items: center;
   align-self: flex-start;
-  background: rgba(120, 200, 160, 0.12);
+  background: color-mix(in srgb, var(--spooky-green) 10%, var(--surface-panel));
   border: 1px solid var(--spooky-green);
   border-radius: 999px;
   color: var(--spooky-green);
@@ -905,12 +1063,12 @@ watch(deckRef, (el) => {
 }
 
 .action-btn {
-  color: #8a93a8;
+  color: var(--text-dim);
   font-size: 0.9em;
   text-decoration: none;
   transition: color 0.15s;
 
-  &:hover { color: #fff; }
+  &:hover { color: var(--text); }
   &.action-btn--delete:hover { color: #ff6666; }
 }
 </style>

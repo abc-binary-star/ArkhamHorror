@@ -15,6 +15,7 @@ import Arkham.Epic.Types (SharedEventState)
 import Arkham.Card.CardCode
 import Arkham.Game
 import Arkham.Game.Diff
+import Arkham.Game.Settings (Settings (settingsUndoMode), UndoMode (..))
 import Arkham.Id
 import Control.Lens (view)
 import Control.Monad (foldM)
@@ -71,6 +72,20 @@ getMaybeIntField field (Object obj) =
     _ -> Nothing
 getMaybeIntField _ _ = Nothing
 
+{- | The game's 'UndoMode', read straight out of the raw JSON so a guard does not
+cost a full 'Game' deserialization (the same reason 'getScenarioSteps' exists).
+Falls back to 'FullUndo' — the behaviour before the field existed — so saves
+written by an older backend keep working.
+-}
+getUndoMode :: Json.Value -> UndoMode
+getUndoMode (Object obj) =
+  fromMaybe FullUndo do
+    settingsValue <- KM.lookup "gameSettings" obj
+    case fromJSON @Settings settingsValue of
+      Success settings -> Just settings.settingsUndoMode
+      Error _ -> Nothing
+getUndoMode _ = FullUndo
+
 {- | Single-step undo. Optimized to avoid the expensive Game<->Value round-trip:
 fetches game state as raw JSON (ArkhamGameRaw), applies the patch at the Value
 level, then deserializes to Game exactly once for the return value.
@@ -108,6 +123,15 @@ stepBack isDebug userId gameId = do
     -- local inverse). 0 = no floor (every non-epic game).
     undoFloor <- lift $ getGameUndoFloor gameId
     Entity stepId step <- maybeToExceptM (jsonError "Missing step") $ getBy (UniqueStep gameId n)
+    -- Expert keeps no history at all; Hardcore keeps history but walls off any
+    -- step whose outcome was random, so a revealed token cannot be rerolled by
+    -- rewinding and choosing differently.
+    case getUndoMode rawGame.currentData of
+      ExpertUndo -> throwError $ jsonError "Undo is disabled for this game"
+      HardcoreUndo
+        | choiceHasRandomOutcome step.choice ->
+            throwError $ jsonError "The latest step contains a random outcome and cannot be undone"
+      _ -> pure ()
     -- never delete the initial step as it can not be redone
     -- NOTE: actually we never want to step back if the patchOperations are empty, the first condition is therefor redundant
     when (step.step <= 0) $ throwError $ jsonErrorContents step "Can't undo the first step"
@@ -336,6 +360,17 @@ stepBackToScenarioStep
 stepBackToScenarioStep userId gameId rawGame targetStep = runExceptT do
   let currentSteps = getScenarioSteps rawGame.currentData
       n = currentSteps - targetStep
+      undoMode = getUndoMode rawGame.currentData
+  when (undoMode == ExpertUndo) $ throwError $ jsonError "Undo is disabled for this game"
+  -- A multi-step rewind would cross whatever random outcomes happened in
+  -- between, which is exactly what Hardcore forbids; the single-step endpoint
+  -- is the one that checks the stored flag.
+  when (undoMode == HardcoreUndo)
+    $ throwError
+    $ jsonError "Hardcore mode only allows a single-step undo"
+  when (undoMode == LightUndo && n > 30)
+    $ throwError
+    $ jsonError "Light mode only keeps the latest 30 steps"
   when (n <= 0) $ throwError "Nothing to undo"
   Entity pid arkhamPlayer <- lift $ getBy404 (UniquePlayer userId gameId)
   -- Epic Multiplayer: never let a multi-step undo cross the act-advance floor
@@ -354,6 +389,16 @@ stepBackToScenarioStep userId gameId rawGame targetStep = runExceptT do
     where_ $ steps.step !=. val 0
     orderBy [desc steps.step]
     pure steps
+
+  -- Undo modes prune history as each step is persisted, so part of the requested
+  -- range may simply be gone. Folding the surviving steps would apply a partial
+  -- patch and leave a state matching neither the old nor the new step, so refuse
+  -- rather than corrupt the save. Step 0 is never deletable and is excluded by
+  -- the query, hence the max 1.
+  let expectedSteps = reverse [max 1 (toStep + 1) .. arkhamGameRawStep rawGame]
+  when (map ((.step) . entityVal) steps /= expectedSteps)
+    $ throwError
+    $ jsonError "The requested undo point is no longer available"
 
   lift do
     -- The step-deletion trigger only permits deleting steps greater than the

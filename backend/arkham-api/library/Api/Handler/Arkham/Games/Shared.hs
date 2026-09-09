@@ -14,7 +14,8 @@ import Api.Arkham.Helpers
 import Api.Arkham.Types.MultiplayerVariant
 import Arkham.Achievement.Types (Achievement, achievementChecklist, achievementName)
 import Arkham.Asset.Types (Asset, assetController, assetOwner, assetPlacement)
-import Arkham.Campaign.Types (CampaignAttrs)
+import Arkham.Campaign.Types (CampaignAttrs, campaignStep)
+import Arkham.CampaignStep (CampaignStep)
 import Arkham.Campaigns.TheDreamEaters.Meta qualified as TheDreamEaters
 import Arkham.Card.CardCode (CardCode (..), HasCardCode (toCardCode))
 import Arkham.ClassSymbol
@@ -51,7 +52,9 @@ import Arkham.Epic.Types (
 import Arkham.Event.Types (eventController)
 import Arkham.Game
 import Arkham.Game.Diff
+import Arkham.Game.Settings (UndoMode (..), retainedStepFloor, settingsUndoMode)
 import Arkham.Game.State
+import Arkham.Game.Utils (modeCampaign)
 import Arkham.GameEnv
 import Arkham.Id
 import Arkham.Investigator (lookupInvestigator)
@@ -368,6 +371,36 @@ data EpicOrganizerGateBlocked = EpicOrganizerGateBlocked
   deriving stock Show
   deriving anyclass Exception
 
+{- | Whether a log message records an outcome nobody could have predicted: a
+chaos token drawn or revealed, or an encounter card / enemy drawn. Hardcore undo
+reads this to refuse rewinding such a step, so a revealed token cannot be
+rerolled by undoing and trying again.
+-}
+isRandomOutcomeMessage :: Message -> Bool
+isRandomOutcomeMessage msg = case msg of
+  DrewCards {} -> True
+  InvestigatorDrewEncounterCard {} -> True
+  InvestigatorDrewEncounterCardFrom {} -> True
+  InvestigatorDrawEnemy {} -> True
+  DrawChaosToken {} -> True
+  RevealChaosToken {} -> True
+  SilentRevealChaosToken {} -> True
+  RequestedChaosTokens _ _ (_ : _) -> True
+  _ -> case messageType msg of
+    Just DrawChaosTokenMessage -> True
+    Just RevealChaosTokenMessage -> True
+    Just DrawEncounterCardMessage -> True
+    Just DrawEnemyMessage -> True
+    _ -> False
+
+{- | The campaign step in play, compared before and after an action to notice
+that it crossed a scenario boundary. A standalone game has no campaign and so
+never checkpoints, which is the intended reading of 'StandardUndo': undo freely
+within the scenario you are in.
+-}
+campaignStepFingerprint :: Game -> Maybe CampaignStep
+campaignStepFingerprint game = campaignStep . toAttrs <$> modeCampaign (gameMode game)
+
 updateGame :: Answer -> ArkhamGameId -> Maybe Room -> Handler ()
 updateGame response gameId mRoom = do
   let broadcast :: Broadcast
@@ -445,17 +478,20 @@ updateGame response gameId mRoom = do
         achievementsByRef <- newIORef []
         achievementProgressRef <- newIORef []
         achievementProgressByRef <- newIORef []
+        randomOutcomeRef <- newIORef False
         let
-          collectAchievements = \case
-            EarnAchievement a -> modifyIORef' achievementsRef (a :)
-            EarnAchievementBy iid a -> modifyIORef' achievementsByRef ((iid, a) :)
-            AchievementProgress a items -> modifyIORef' achievementProgressRef ((a, items) :)
-            AchievementProgressBy iid a items ->
-              modifyIORef' achievementProgressByRef ((iid, a, items) :)
-            _ -> pure ()
+          collectStepMetadata msg = do
+            when (isRandomOutcomeMessage msg) $ writeIORef randomOutcomeRef True
+            case msg of
+              EarnAchievement a -> modifyIORef' achievementsRef (a :)
+              EarnAchievementBy iid a -> modifyIORef' achievementsByRef ((iid, a) :)
+              AchievementProgress a items -> modifyIORef' achievementProgressRef ((a, items) :)
+              AchievementProgressBy iid a items ->
+                modifyIORef' achievementProgressByRef ((iid, a, items) :)
+              _ -> pure ()
         mResult <- liftIO $ timeout runMessagesTimeoutMicros do
           runGameApp (GameApp gameRef queueRef genRef (handleMessageLog logRef broadcast) mEpicEnv) do
-            runMessages (gameIdToText gameId) (Just collectAchievements)
+            runMessages (gameIdToText gameId) (Just collectStepMetadata)
         case mResult of
           Just () -> pure ()
           Nothing -> liftIO $ throwIO $ RunMessagesTimeout gameId runMessagesTimeoutMicros
@@ -473,6 +509,7 @@ updateGame response gameId mRoom = do
         updatedQueue <- readIORef $ queueToRef queueRef
         -- handleMessageLog conses for O(1) inserts; reverse here to restore order.
         updatedLog <- reverse <$> readIORef logRef
+        hasRandomOutcome <- readIORef randomOutcomeRef
 
         now <- liftIO getCurrentTime
         -- A one-player game is created WithFriends, but its player adding a second
@@ -484,27 +521,62 @@ updateGame response gameId mRoom = do
             pure $ if seats > 1 then Solo else arkhamGameMultiplayerVariant
           _ -> pure arkhamGameMultiplayerVariant
         deleteWhere [ArkhamStepArkhamGameId P.==. gameId, ArkhamStepStep P.>. arkhamGameStep]
-        let g' =
-              ArkhamGame
-                arkhamGameName
-                ge
-                (arkhamGameStep + 1)
-                variant'
-                arkhamGameCreatedAt
-                now
+        let
+          newStep = arkhamGameStep + 1
+          -- Record dot, not `gameSettings ge`: the `gameJson@Game {..}` binding
+          -- above already shadowed that selector with a plain Settings value.
+          undoMode = settingsUndoMode ge.gameSettings
+          -- Standard undo treats crossing into the next campaign step as a
+          -- checkpoint: the patch is dropped and everything below is pruned, so
+          -- the scenario just finished cannot be replayed.
+          isCheckpoint =
+            undoMode == StandardUndo
+              && campaignStepFingerprint arkhamGameCurrentData
+              /= campaignStepFingerprint ge
+          storedPatch = if isCheckpoint then mempty else diffDown
+          storedRandomOutcome = not isCheckpoint && hasRandomOutcome
+          g' =
+            ArkhamGame
+              arkhamGameName
+              ge
+              newStep
+              variant'
+              arkhamGameCreatedAt
+              now
         replace gameId g'
         insertMany_ $ map (newLogEntry gameId arkhamGameStep now) updatedLog
         void
           $ upsertBy
-            (UniqueStep gameId (arkhamGameStep + 1))
+            (UniqueStep gameId newStep)
             ( ArkhamStep
                 gameId
-                (Choice diffDown updatedQueue)
-                (arkhamGameStep + 1)
+                (Choice storedPatch updatedQueue storedRandomOutcome)
+                newStep
                 (ActionDiff $ view actionDiffL ge)
             )
-            [ ArkhamStepChoice =. Choice diffDown updatedQueue
+            [ ArkhamStepChoice =. Choice storedPatch updatedQueue storedRandomOutcome
             , ArkhamStepActionDiff =. ActionDiff (view actionDiffL ge)
+            ]
+        -- Enforce the undo mode by discarding history it does not keep, in the
+        -- same transaction as the step it is measured against. Doing it here
+        -- rather than refusing the undo request later is what makes Expert and
+        -- Hardcore unrecoverable, which is the point of those modes.
+        --
+        -- Two schema constraints bound this, neither visible from the code:
+        --
+        -- * @enforce_step_order_per_game@ (BEFORE INSERT) raises unless
+        --   @step - 1@ already exists, so every branch of 'retainedStepFloor'
+        --   must keep @newStep@ itself or the next action wedges the game.
+        -- * @prevent_invalid_step_deletion@ (migrations/deploy/add_step_constraint.sql)
+        --   forbids deleting any step at or below the game's current step, which
+        --   is exactly what pruning does. setup.sql does not contain it and
+        --   migrate.sh's BASELINE_THROUGH already covers that migration, so a
+        --   database initialised from setup.sql has no such trigger. On one that
+        --   does, every pruned action would abort its transaction.
+        for_ (retainedStepFloor undoMode isCheckpoint hasRandomOutcome newStep) \floorStep ->
+          deleteWhere
+            [ ArkhamStepArkhamGameId P.==. gameId
+            , ArkhamStepStep P.<. floorStep
             ]
 
         -- Epic Multiplayer: drain any shared-counter deltas emitted this action
@@ -924,7 +996,7 @@ runMessagesInGroupCore p msgs gid = do
         insert_
           $ ArkhamStep
             gid
-            (Choice mempty (producedQueue <> currentQueue))
+            (Choice mempty (producedQueue <> currentQueue) False)
             (arkhamGameStep + 1)
             (ActionDiff $ view actionDiffL updatedGame)
         pure (Just game')

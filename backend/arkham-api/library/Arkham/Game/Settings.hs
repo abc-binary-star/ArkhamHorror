@@ -23,6 +23,68 @@ instance FromJSON AsIfRuling where
     "Chapter2AsIfRuling" -> pure Chapter2AsIfRuling
     other -> fail $ "unknown AsIfRuling: " <> unpack other
 
+{- | How much history a game keeps, enforced by pruning @arkham_steps@ when each
+step is persisted (see @retainedStepFloor@) and by the guards in
+@Api.Handler.Arkham.Undo@:
+
+* @StandardUndo@ — unlimited undo inside a scenario; crossing into the next
+  scenario is a checkpoint that drops everything before it.
+* @FullUndo@ — keep every step. The default, and the pre-existing behaviour.
+* @LightUndo@ — keep the latest 30 steps.
+* @HardcoreUndo@ — keep one step, and keep nothing at all past a step whose
+  resolution involved a random outcome, so a revealed chaos token cannot be
+  rerolled by rewinding.
+* @ExpertUndo@ — keep nothing; undo and the debug controls are off.
+-}
+data UndoMode
+  = StandardUndo
+  | FullUndo
+  | LightUndo
+  | HardcoreUndo
+  | ExpertUndo
+  deriving stock (Eq, Ord, Show, Generic, Data)
+
+instance ToJSON UndoMode where
+  toJSON = \case
+    StandardUndo -> String "standard"
+    FullUndo -> String "full"
+    LightUndo -> String "light"
+    HardcoreUndo -> String "hardcore"
+    ExpertUndo -> String "expert"
+
+instance FromJSON UndoMode where
+  parseJSON = withText "UndoMode" \case
+    "standard" -> pure StandardUndo
+    "full" -> pure FullUndo
+    "light" -> pure LightUndo
+    "hardcore" -> pure HardcoreUndo
+    "expert" -> pure ExpertUndo
+    "StandardUndo" -> pure StandardUndo
+    "FullUndo" -> pure FullUndo
+    "LightUndo" -> pure LightUndo
+    "HardcoreUndo" -> pure HardcoreUndo
+    "ExpertUndo" -> pure ExpertUndo
+    other -> fail $ "unknown UndoMode: " <> unpack other
+
+{- | Steps below the returned floor are deleted as soon as the new step is
+persisted. This is what actually enforces 'UndoMode'; guarding the undo endpoint
+alone would leave the discarded history on disk. 'Nothing' keeps everything.
+
+Every branch that returns a floor returns one at or below @newStep@, so the new
+step itself always survives -- the @enforce_step_order_per_game@ trigger raises
+unless @step - 1@ exists, and dropping @newStep@ would wedge the next action.
+-}
+retainedStepFloor :: UndoMode -> Bool -> Bool -> Int -> Maybe Int
+retainedStepFloor mode isCheckpoint hasRandomOutcome newStep = case mode of
+  StandardUndo | isCheckpoint -> Just newStep
+  StandardUndo -> Nothing
+  FullUndo -> Nothing
+  LightUndo -> Just $ max 0 (newStep - 30)
+  HardcoreUndo
+    | hasRandomOutcome -> Just newStep
+    | otherwise -> Just $ max 0 (newStep - 1)
+  ExpertUndo -> Just newStep
+
 data Settings = Settings
   { settingsAbilitiesCannotReactToThemselves :: Bool -- Grotesque Statue FAQ (September 2023)
   , settingsAsIfRuling :: AsIfRuling
@@ -43,6 +105,10 @@ data Settings = Settings
   , settingsAchievementsEnabled :: Bool
   -- ^ Above-the-table achievement tracking for this game. Defaults on;
   -- only shown at creation for campaigns with an achievement list.
+  , settingsUndoMode :: UndoMode
+  -- ^ Chosen at game creation and never mutated afterwards: pruning already
+  -- discarded the steps a stricter mode would have refused to keep, so
+  -- loosening the mode mid-game could not bring them back.
   }
   deriving stock (Eq, Show, Generic, Data)
 
@@ -82,6 +148,7 @@ defaultSettings =
     , settingsRolledUltimatumOrBoon = Nothing
     , settingsScreamedAllies = mempty
     , settingsAchievementsEnabled = True
+    , settingsUndoMode = FullUndo
     }
 
 instance ToJSON Settings where
@@ -94,6 +161,7 @@ instance ToJSON Settings where
     , "settingsRolledUltimatumOrBoon" .= settingsRolledUltimatumOrBoon settings
     , "settingsScreamedAllies" .= settingsScreamedAllies settings
     , "settingsAchievementsEnabled" .= settingsAchievementsEnabled settings
+    , "settingsUndoMode" .= settingsUndoMode settings
     ]
 
 instance FromJSON Settings where
@@ -108,6 +176,7 @@ instance FromJSON Settings where
     rolledUltimatumOrBoon <- o .:? "settingsRolledUltimatumOrBoon" .!= Nothing
     screamedAllies <- o .:? "settingsScreamedAllies" .!= mempty
     achievementsEnabled <- o .:? "settingsAchievementsEnabled" .!= True
+    undoMode <- o .:? "settingsUndoMode" .!= FullUndo
     pure
       Settings
         { settingsAbilitiesCannotReactToThemselves = abilitiesCannotReactToThemselves
@@ -117,4 +186,5 @@ instance FromJSON Settings where
         , settingsRolledUltimatumOrBoon = rolledUltimatumOrBoon
         , settingsScreamedAllies = screamedAllies
         , settingsAchievementsEnabled = achievementsEnabled
+        , settingsUndoMode = undoMode
         }

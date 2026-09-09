@@ -6,6 +6,7 @@ import { chaosTokenImage, compareTokenFaces, type TokenFace } from '@/arkham/typ
 import type { Difficulty } from '@/arkham/types/Difficulty'
 import type { Scenario, Campaign } from '@/arkham/data'
 import type { GameMode, MultiplayerVariant, CampaignType } from '@/arkham/types/NewGame'
+import type { UndoMode } from '@/arkham/types/Game'
 import { ACHIEVEMENT_CAMPAIGN_IDS } from '@/arkham/achievements'
 import { useSettings } from '@/stores/settings'
 
@@ -228,6 +229,13 @@ const rulesExpanded = ref(false)
 // Only rendered when the effective campaign (Return To swaps the id) has an
 // achievement catalog; unsupported campaigns always create with tracking on.
 const achievementsEnabled = defineModel<boolean>('achievementsEnabled', { required: true })
+
+// --- Undo mode ------------------------------------------------------------------
+// Chosen here rather than in the in-game settings panel because it is fixed at
+// creation: the backend prunes steps as they are persisted, so loosening it
+// later could not bring the discarded history back.
+const undoMode = defineModel<UndoMode>('undoMode', { required: true })
+const undoModes: UndoMode[] = ['full', 'standard', 'light', 'hardcore', 'expert']
 
 const effectiveCampaignId = computed<string | null>(() => {
   if (props.gameMode !== 'Campaign') return null
@@ -592,6 +600,18 @@ function setOptEnabled(o: RecommendedToggle, enabled: boolean) {
         </div>
       </div>
 
+      <div class="card">
+        <div class="card-title">{{ $t('create.undoMode.title') }}</div>
+        <div class="segmented segmented-5">
+          <template v-for="mode in undoModes" :key="mode">
+            <input type="radio" v-model="undoMode" :value="mode" :id="`undoMode-${mode}`" />
+            <label :for="`undoMode-${mode}`">{{ $t(`create.undoMode.${mode}`) }}</label>
+          </template>
+        </div>
+        <div class="achievements-desc">{{ $t(`create.undoMode.hint.${undoMode}`) }}</div>
+        <div class="achievements-desc">{{ $t('create.undoMode.immutable') }}</div>
+      </div>
+
       <div v-if="supportsAchievements" class="card">
         <div class="card-title">{{ $t('achievements.settingsToggleTitle') }}</div>
         <div class="segmented segmented-2">
@@ -880,6 +900,7 @@ input[type='radio'] {
 .segmented-2 { grid-template-columns: repeat(2, 1fr); }
 .segmented-3 { grid-template-columns: repeat(3, 1fr); }
 .segmented-4 { grid-template-columns: repeat(4, 1fr); }
+.segmented-5 { grid-template-columns: repeat(5, 1fr); }
 
 .segmented label {
   display: flex;
@@ -893,6 +914,14 @@ input[type='radio'] {
   cursor: pointer;
   background: rgba(255, 255, 255, 0.06);
   border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Five across is tighter than the others, and labels like "Standard" overflow
+   at the default uppercase tracking. After .segmented label on purpose: equal
+   specificity, so the later rule is the one that applies. */
+.segmented-5 label {
+  padding: 10px 4px;
+  letter-spacing: 0.02em;
 }
 
 .segmented label:last-of-type {

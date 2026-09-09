@@ -8622,6 +8622,7 @@ test-suite spec
       Arkham.Game.DiffSpec
       Arkham.Game.PendingGameOptionsSpec
       Arkham.Game.ResetGameSpec
+      Arkham.Game.SettingsSpec
       Arkham.GameSpec
       Arkham.Helpers.EnemySpec
       Arkham.Helpers.InvestigatorSpec

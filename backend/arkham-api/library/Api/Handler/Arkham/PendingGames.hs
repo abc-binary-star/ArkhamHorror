@@ -102,7 +102,7 @@ putApiV1ArkhamPendingGameR gameId = do
                 insert_
                   $ ArkhamStep
                     gameId
-                    (Choice mempty updatedQueue)
+                    (Choice mempty updatedQueue False)
                     (arkhamGameStep + 1)
                     (ActionDiff $ view actionDiffL updatedGame)
 
@@ -184,7 +184,7 @@ putApiV1ArkhamPendingGameR gameId = do
             insert_
               $ ArkhamStep
                 gameId
-                (Choice mempty updatedQueue)
+                (Choice mempty updatedQueue False)
                 (arkhamGameStep + 1)
                 (ActionDiff $ view actionDiffL updatedGame)
 

@@ -31,6 +31,11 @@ type GameState = { tag: 'IsPending', contents: string[] } | { tag: 'IsActive' } 
 
 type AsIfRuling = 'chapter1' | 'chapter2'
 
+// How much history the game keeps. Mirrors the backend's UndoMode; enforced by
+// pruning steps as they are persisted, so it is chosen at creation and cannot
+// be loosened later — the discarded history is gone.
+export type UndoMode = 'standard' | 'full' | 'light' | 'hardcore' | 'expert'
+
 type GameSettings = {
   settingsAbilitiesCannotReactToThemselves: boolean
   settingsAsIfRuling: AsIfRuling
@@ -44,6 +49,7 @@ type GameSettings = {
   settingsScreamedAllies: string[]
   // Whether official campaign achievements are tracked for this game.
   settingsAchievementsEnabled: boolean
+  settingsUndoMode: UndoMode
 }
 
 const gameSettingsDecoder = JsonDecoder.object<GameSettings>({
@@ -58,6 +64,13 @@ const gameSettingsDecoder = JsonDecoder.object<GameSettings>({
   settingsRolledUltimatumOrBoon: withDefault<string | null>(null, JsonDecoder.string()),
   settingsScreamedAllies: withDefault<string[]>([], JsonDecoder.array(JsonDecoder.string(), 'string[]')),
   settingsAchievementsEnabled: withDefault(true, JsonDecoder.boolean()),
+  settingsUndoMode: withDefault<UndoMode>('full', JsonDecoder.oneOf<UndoMode>([
+    JsonDecoder.literal('standard'),
+    JsonDecoder.literal('full'),
+    JsonDecoder.literal('light'),
+    JsonDecoder.literal('hardcore'),
+    JsonDecoder.literal('expert'),
+  ], 'UndoMode')),
 }, 'GameSettings')
 
 export const gameStateDecoder = JsonDecoder.oneOf<GameState>(
@@ -410,6 +423,7 @@ export const gameDecoder: JsonDecoder.Decoder<Game> = JsonDecoder.object(
     settingsRolledUltimatumOrBoon: null,
     settingsScreamedAllies: [],
     settingsAchievementsEnabled: true,
+    settingsUndoMode: 'full',
   },
   undoActionStep: undoActionStep ?? null,
   undoTurnStep: undoTurnStep ?? null,

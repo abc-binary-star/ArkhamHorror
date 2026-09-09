@@ -25,9 +25,30 @@ import Orphans ()
 data Choice = Choice
   { choicePatchDown :: Patch
   , choiceMessages :: [Message]
+  , choiceHasRandomOutcome :: Bool
+  -- ^ Whether resolving this step produced a random outcome (chaos token,
+  -- encounter/enemy draw). Set when the step is persisted and read back by
+  -- Hardcore undo, which refuses to rewind past randomness.
   }
   deriving stock (Show, Generic)
-  deriving anyclass (ToJSON, FromJSON)
+
+-- Hand-written rather than derived: steps persisted before
+-- 'choiceHasRandomOutcome' existed have no such key, and a derived FromJSON
+-- would reject them.
+instance ToJSON Choice where
+  toJSON Choice {..} =
+    object
+      [ "choicePatchDown" .= choicePatchDown
+      , "choiceMessages" .= choiceMessages
+      , "choiceHasRandomOutcome" .= choiceHasRandomOutcome
+      ]
+
+instance FromJSON Choice where
+  parseJSON = withObject "Choice" \o ->
+    Choice
+      <$> o .: "choicePatchDown"
+      <*> o .: "choiceMessages"
+      <*> o .:? "choiceHasRandomOutcome" .!= False
 
 instance PersistFieldSql Choice where
   sqlType _ = SqlString
