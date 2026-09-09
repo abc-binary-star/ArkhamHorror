@@ -32,6 +32,8 @@ import {
   ExclamationTriangleIcon,
   FlagIcon,
   RectangleStackIcon,
+  SpeakerWaveIcon,
+  SpeakerXMarkIcon,
 } from '@heroicons/vue/20/solid'
 import { LottieAnimation } from 'lottie-web-vue'
 import * as JsonDecoder from 'ts.data.json'
@@ -94,9 +96,12 @@ import EventActAdvanceBarrier from '@/arkham/components/EventActAdvanceBarrier.v
 import StandaloneScenario from '@/arkham/components/StandaloneScenario.vue'
 import StoryQuestion from '@/arkham/components/StoryQuestion.vue'
 import AchievementToast from '@/arkham/components/AchievementToast.vue'
+import NarrationMenu from '@/arkham/components/NarrationMenu.vue'
+import { clearCurrentNarration, stopNarration } from '@/arkham/narration'
 import Draggable from '@/components/Draggable.vue'
 import Menu from '@/components/Menu.vue'
 import Prompt from '@/components/Prompt.vue'
+import LoadState from '@/components/LoadState.vue'
 
 interface GameCard {
   title: string
@@ -225,11 +230,8 @@ const { hasTimeLimit, barrierPending, timerStartedAt, timeUp } = useEventTimer()
 // Whether an epic bar (organizer or player) is mounted above the board.
 const hasEventBar = computed(() => !!organizerEventId.value || !!playerEventId.value)
 
-// Reserve the epic bar's height in the board layout. `.game-main` is sized off a
-// hardcoded `calc(100vh - 80px)`; the bar adds height ABOVE it, so without this
-// the board's bottom (player area) is pushed past the viewport and clipped.
-// Measured (not a fixed constant) so it stays correct if the bar wraps/changes,
-// and it defaults to 0 for ordinary, non-event games — no layout shift for them.
+// Measure the optional event bar so the flex layout can reserve its space without
+// pushing the board's player area below the viewport.
 const epicBarRef = ref<HTMLElement | null>(null)
 const epicBarHeight = ref(0)
 useResizeObserver(epicBarRef, () => {
@@ -398,6 +400,8 @@ const processing = ref(false)
 // keeps a plain "continue" click from flickering an animation on every press.
 const showProcessing = ref(false)
 let processingTimer: ReturnType<typeof setTimeout> | null = null
+const endTurnKeyArmed = ref(false)
+let endTurnKeyArmTimer: ReturnType<typeof setTimeout> | null = null
 watch(processing, (busy) => {
   if (processingTimer) {
     clearTimeout(processingTimer)
@@ -428,6 +432,18 @@ function handleSettingChange(event: Event) {
   if (detail?.key === 'arkhamSoundsDisabled') {
     soundsDisabled.value = detail.value === 'true'
   }
+}
+
+// One-click mute from the game bar; reuses the settings' persistence + sync
+// event so the Settings dialog radio stays consistent.
+function toggleSounds() {
+  soundsDisabled.value = !soundsDisabled.value
+  localStorage.setItem('arkhamSoundsDisabled', soundsDisabled.value ? 'true' : 'false')
+  window.dispatchEvent(
+    new CustomEvent('arkham-setting-change', {
+      detail: { key: 'arkhamSoundsDisabled', value: String(soundsDisabled.value) },
+    }),
+  )
 }
 
 function updateGameLog(nextLog: readonly string[]) {
@@ -652,6 +668,40 @@ function activePlayerBelongsToCurrentPlayer(g: Arkham.Game, currentPlayerId: str
   )
 }
 
+// "Your turn" tab-title flash: a player idling in another tab/window gets no
+// audio or toast, so blink the title until they come back. Toast covers the
+// visible case; the sound cue already exists below.
+let turnTitleBase = ''
+let turnTitleFlashInterval: ReturnType<typeof setInterval> | null = null
+
+function stopTurnTitleFlash() {
+  if (turnTitleFlashInterval) {
+    clearInterval(turnTitleFlashInterval)
+    turnTitleFlashInterval = null
+  }
+  if (turnTitleBase) {
+    document.title = turnTitleBase
+    turnTitleBase = ''
+  }
+}
+
+function flashTurnTitle() {
+  if (!document.hidden) return
+  stopTurnTitleFlash()
+  turnTitleBase = document.title
+  let on = true
+  const apply = () => {
+    document.title = (on ? '▶ ' : '') + turnTitleBase
+    on = !on
+  }
+  apply()
+  turnTitleFlashInterval = setInterval(apply, 1200)
+}
+
+function onVisibilityChange() {
+  if (!document.hidden) stopTurnTitleFlash()
+}
+
 watch(activePlayerId, (newActivePlayerId, oldActivePlayerId) => {
   if (!newActivePlayerId || !oldActivePlayerId || newActivePlayerId === oldActivePlayerId) return
   if (props.spectate || solo.value) return
@@ -659,6 +709,8 @@ watch(activePlayerId, (newActivePlayerId, oldActivePlayerId) => {
   if (!activePlayerBelongsToCurrentPlayer(game.value, playerId.value)) return
 
   playAudioFile('turnIndicator.ogg')
+  toast.info(t('game.yourTurn'))
+  flashTurnTitle()
 })
 
 type SkipTriggerEntry = { playerId: string; choiceIdx: number; investigatorId: string }
@@ -735,6 +787,29 @@ const websocketUrl = computed(() => {
   return buildWebsocketUrl(`/api/v1/arkham/games/${props.gameId}${spectatePrefix}`, userStore.token)
 })
 
+const loadError = ref(false)
+
+const loadGame = async () => {
+  loadError.value = false
+  try {
+    const { game: newGame, playerId: newPlayerId, multiplayerMode, eventId } =
+      await fetchGame(props.gameId, props.spectate)
+
+    preloadImages(newGame)
+    ;(window as Window & { g?: Arkham.Game }).g = newGame
+    game.value = newGame
+    solo.value = multiplayerMode === 'Solo'
+    // Engage the Epic event this game belongs to even when the URL lacks
+    // ?event (e.g. entered via the join / take-a-seat path).
+    gamePayloadEventId.value = eventId
+    updateGameLog(newGame.log)
+    playerId.value = newPlayerId
+    ready.value = true
+  } catch {
+    loadError.value = true
+  }
+}
+
 watch(
   // Also react to `spectate`: the same Game.vue instance is reused when an
   // organizer toggles between the Spectate (organizer) and Game (play-my-seat)
@@ -745,20 +820,7 @@ watch(
     const [newId] = newVals
     if (!newId) return
     if (oldVals && newId === oldVals[0] && newVals[1] === oldVals[1]) return
-    await fetchGame(props.gameId, props.spectate).then(
-      async ({ game: newGame, playerId: newPlayerId, multiplayerMode, eventId }) => {
-        preloadImages(newGame)
-        ;(window as Window & { g?: Arkham.Game }).g = newGame
-        game.value = newGame
-        solo.value = multiplayerMode === 'Solo'
-        // Engage the Epic event this game belongs to even when the URL lacks
-        // ?event (e.g. entered via the join / take-a-seat path).
-        gamePayloadEventId.value = eventId
-        updateGameLog(newGame.log)
-        playerId.value = newPlayerId
-        ready.value = true
-      },
-    )
+    await loadGame()
   },
   { immediate: true },
 )
@@ -1512,7 +1574,28 @@ const handleKeyPress = (event: KeyboardEvent) => {
       if (c.tag !== Message.MessageType.END_TURN_BUTTON) return false
       return game.value?.investigators[c.investigatorId]?.playerId === playerId.value
     })
-    if (endTurn !== -1) choose(endTurn)
+    if (endTurn !== -1) {
+      // Mirror the End Turn button's two-step confirm: E alone must not throw
+      // away unused actions on a stray keypress.
+      const choice = choices.value[endTurn]
+      const investigator =
+        choice.tag === Message.MessageType.END_TURN_BUTTON
+          ? game.value?.investigators[choice.investigatorId]
+          : undefined
+      if (investigator && investigator.remainingActions > 0 && !endTurnKeyArmed.value) {
+        endTurnKeyArmed.value = true
+        if (endTurnKeyArmTimer !== null) clearTimeout(endTurnKeyArmTimer)
+        endTurnKeyArmTimer = setTimeout(() => { endTurnKeyArmed.value = false }, 3000)
+        toast.info(t('game.confirmEndTurnKeyboard', { n: investigator.remainingActions }))
+        return
+      }
+      endTurnKeyArmed.value = false
+      if (endTurnKeyArmTimer !== null) {
+        clearTimeout(endTurnKeyArmTimer)
+        endTurnKeyArmTimer = null
+      }
+      choose(endTurn)
+    }
     return
   }
 
@@ -1914,12 +1997,17 @@ onUnmounted(() => {
   focusLightObserver = null
   if (focusLightAnimationFrame !== null) cancelAnimationFrame(focusLightAnimationFrame)
   window.removeEventListener('arkham-setting-change', handleSettingChange)
+  document.removeEventListener('visibilitychange', onVisibilityChange)
+  stopTurnTitleFlash()
+  if (endTurnKeyArmTimer !== null) clearTimeout(endTurnKeyArmTimer)
   if (chooseDecksPoll !== null) clearTimeout(chooseDecksPoll)
   if (processingTimer !== null) clearTimeout(processingTimer)
   delete (window as any).sendDebug
   delete (window as any).undo
   delete (window as any).debugChoose
   emitter.off('playabilityResult', onPlayabilityResult)
+  stopNarration()
+  clearCurrentNarration()
   close()
 })
 </script>
@@ -1933,8 +2021,11 @@ onUnmounted(() => {
       </section>
     </div>
   </div>
-  <div id="game" v-else-if="ready && game && playerId" :style="{ '--epic-bar-height': epicBarHeight + 'px' }">
+  <LoadState v-else-if="loadError" error @retry="loadGame" />
+  <LoadState v-else-if="!ready" />
+  <div class="tabletop-shell" v-else-if="ready && game && playerId" :style="{ '--epic-bar-height': epicBarHeight + 'px' }">
     <dialog v-if="error" class="error-dialog">
+      <img class="status-seal status-seal--danger" src="/assets/veiled-harbour/20-危险等待印章.png" alt="" aria-hidden="true" />
       <h2>{{ $t('error') }}</h2>
       <p class="error-message">{{ error }}</p>
       <p>{{ $t('errorContent') }}</p>
@@ -2101,9 +2192,25 @@ onUnmounted(() => {
     </Draggable>
     <div v-if="socketError" class="socketWarning">
       <!-- frontend/src/locales/en/gameBoard/base.json -->
-      <p>{{ $t('outOfSyncHint') }}</p>
+      <div class="socket-warning-card">
+        <img class="status-seal" src="/assets/veiled-harbour/20-危险等待印章.png" alt="" aria-hidden="true" />
+        <p>{{ $t('outOfSyncHint') }}</p>
+      </div>
     </div>
     <div class="game-bar">
+      <div class="game-bar-item">
+        <div>
+          <button
+            @click="toggleSounds"
+            v-tooltip="$t('gameBar.sounds')"
+            :aria-pressed="!soundsDisabled"
+          >
+            <SpeakerWaveIcon v-if="!soundsDisabled" aria-hidden="true" />
+            <SpeakerXMarkIcon v-else aria-hidden="true" />
+            <span class="sounds-label">{{ $t('gameBar.sounds') }}</span>
+          </button>
+        </div>
+      </div>
       <div class="game-bar-item">
         <div>
           <button @click="showLog = !showLog">
@@ -2244,6 +2351,7 @@ onUnmounted(() => {
         <button v-if="isActualScenarioView" @click="toggleSidebar">
           <ArrowsRightLeftIcon aria-hidden="true" /> {{ $t('gameBar.toggleSidebar') }}
         </button>
+        <NarrationMenu />
       </div>
     </div>
     <div v-if="hasEventBar" ref="epicBarRef" class="epic-bar-slot">
@@ -2337,6 +2445,15 @@ onUnmounted(() => {
             </div>
           </div>
         </div>
+        <!-- Click-anywhere-to-continue behind the reveal overlay: the OK button
+             was the only dismissal target, and a round has dozens of reveals.
+             Sits below the reveal's z-index and outside its v-if chain. -->
+        <div
+          v-if="gameCard || tarotCards.length > 0"
+          class="revelation-backdrop"
+          aria-hidden="true"
+          @click="continueUI"
+        ></div>
         <HistoryPanel
           v-if="showHistory && game && playerId"
           :game="game"
@@ -2476,9 +2593,9 @@ onUnmounted(() => {
   gap: 8px;
   padding: 8px 16px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  background: var(--surface-panel, #e8e1d2);
+  border: 1px solid var(--box-border);
+  color: var(--text);
   font-family: teutonic, sans-serif;
   font-size: 0.95em;
   letter-spacing: 0.06em;
@@ -2493,9 +2610,9 @@ onUnmounted(() => {
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: #f0f0f0;
+    background: var(--surface-raised, #f4efe4);
+    border-color: var(--edge);
+    color: var(--spooky-green);
 
     .back-icon {
       transform: translateX(-3px);
@@ -2676,14 +2793,30 @@ onUnmounted(() => {
   }
 }
 
-#game {
+.tabletop-shell {
   width: 100vw;
   display: flex;
   flex-direction: column;
   flex: 1;
+  min-width: 0;
+  min-height: 0;
   overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(20, 33, 34, 0.42), rgba(20, 33, 34, 0.06) 26%, rgba(12, 20, 21, 0.35)),
+    var(--deep-sea, #26373a) url('/assets/veiled-harbour/02-牌桌材质.png') center / cover no-repeat;
+  background-attachment: fixed;
+  border-top: 1px solid rgba(208, 180, 123, 0.35);
   &:has(.scroll-container) {
     overflow: auto;
+  }
+}
+
+@media (max-width: 800px) and (orientation: portrait) {
+  .tabletop-shell {
+    background:
+      linear-gradient(180deg, rgb(20 33 34 / 0.2), rgb(12 20 21 / 0.38)),
+      url('/assets/veiled-harbour/23-移动端牌桌竖版.png') center / cover no-repeat;
+    background-attachment: scroll;
   }
 }
 
@@ -2695,10 +2828,17 @@ onUnmounted(() => {
 }
 
 .game-main {
-  width: 100vw;
-  height: calc(100vh - 80px - var(--epic-bar-height, 0px));
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
   display: flex;
-  flex: 1;
+  flex: 1 1 auto;
+}
+
+.game-main > .game {
+  min-width: 0;
+  min-height: 0;
+  flex: 1 1 auto;
 }
 
 .socketWarning {
@@ -2717,11 +2857,40 @@ onUnmounted(() => {
   justify-self: center;
   align-self: center;
 
+}
+
+.socket-warning-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: min(560px, 88vw);
+  padding: 18px 22px;
+  background:
+    linear-gradient(180deg, rgb(232 225 210 / 0.96), rgb(218 207 187 / 0.96)),
+    url('/assets/veiled-harbour/17-调查日志纸卷.png') center / cover no-repeat;
+  border: 1px solid var(--accent-brass, #a5824b);
+  border-radius: 4px;
+  box-shadow: 0 18px 46px rgb(0 0 0 / 0.42);
+  color: var(--text, #2e3233);
+
   p {
-    padding: 10px;
-    background: #fff;
-    border-radius: 4px;
+    margin: 0;
+    padding: 0;
+    font-weight: 700;
   }
+}
+
+.status-seal {
+  width: 62px;
+  height: 62px;
+  flex: 0 0 auto;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.28);
+}
+
+.status-seal--danger {
+  margin: 4px auto 2px;
 }
 
 .sidebar {
@@ -2730,7 +2899,10 @@ onUnmounted(() => {
   max-width: 300px;
   display: flex;
   flex-direction: column;
-  background: #d0d9dc;
+  background:
+    linear-gradient(rgba(232, 225, 210, 0.86), rgba(232, 225, 210, 0.86)),
+    #d0d9dc url('/assets/veiled-harbour/27-侧栏档案抽屉.png') center / cover no-repeat;
+  border-left: 1px solid rgba(165, 130, 75, 0.5);
 
   @media (max-width: 800px) {
     position: fixed;
@@ -2745,9 +2917,20 @@ onUnmounted(() => {
     animation: sidebar-slide-in 0.18s ease-out;
   }
 
-  @media (prefers-color-scheme: dark) {
-    background: #1c1c1c;
+  @media (min-width: 801px) and (max-width: 1100px) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100dvh;
+    width: min(360px, 34vw);
+    max-width: none;
+    z-index: var(--z-index-200);
+    box-shadow: -2px 0 16px rgba(0, 0, 0, 0.45);
+    animation: sidebar-slide-in 0.18s ease-out;
   }
+
+  /* Keep the log readable even when the operating system is in dark mode;
+     game chrome owns its dark surface explicitly. */
 }
 
 .sidebar--empty-log {
@@ -2758,6 +2941,15 @@ onUnmounted(() => {
   display: none;
 
   @media (max-width: 800px) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: var(--z-index-199);
+    animation: sidebar-fade-in 0.18s ease-out;
+  }
+
+  @media (min-width: 801px) and (max-width: 1100px) {
     display: block;
     position: fixed;
     inset: 0;
@@ -2786,12 +2978,14 @@ onUnmounted(() => {
 }
 
 #invite {
-  background-color: #15192c;
-  color: white;
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  color: var(--text);
   width: 800px;
   margin: 0 auto;
   margin-top: 20px;
-  border-radius: 5px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
   text-align: center;
   p {
     margin: 0;
@@ -2909,10 +3103,11 @@ header {
 
   p {
     text-transform: uppercase;
-    background: rgba(0, 0, 0, 0.5);
+    background: var(--surface-raised);
+    border: var(--edge-width) solid var(--edge-dim);
     width: 100%;
     padding: 10px 20px;
-    color: white;
+    color: var(--text);
     text-align: center;
   }
 }
@@ -3089,6 +3284,16 @@ header {
   .the-silence-modal__agenda {
     width: min(280px, 72vw);
   }
+}
+
+/* Dimmed click-catcher under the reveal overlay (revelation uses
+   --z-index-1000); click anywhere dismisses the reveal. */
+.revelation-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-index-1000) - 1);
+  background: rgba(0, 0, 0, 0.25);
+  cursor: pointer;
 }
 
 .revelation {
@@ -3453,43 +3658,73 @@ header {
 
 .game-bar {
   display: flex;
+  align-items: stretch;
   margin: 0;
   padding: 0;
-  background: var(--background-mid);
-  div {
-    &.right {
-      margin-left: auto;
-    }
-    display: inline;
+  background:
+    linear-gradient(180deg, rgb(29 46 45 / 0.96), rgb(12 25 25 / 0.98)),
+    url('/assets/veiled-harbour/02-牌桌材质.png') center / cover no-repeat;
+  border-bottom: 1px solid rgba(208, 180, 123, 0.42);
+  box-shadow: 0 3px 12px rgba(8, 14, 15, 0.24);
+  color: var(--text-on-dark, #f4efe4);
+  > div {
+    display: flex;
+    align-items: stretch;
+    flex: 0 0 auto;
     transition: 0.3s;
-    height: 100%;
+    min-height: var(--control-height-icon);
+    height: auto;
     a {
-      display: inline;
+      display: flex;
+      align-items: center;
     }
-    button {
-      background: none;
+    > button,
+    > div > button {
+      background-color: transparent;
+      background-image: none;
       border: 0;
-      display: inline;
+      color: var(--text-on-dark, #f4efe4);
+      font-weight: 700;
+      min-height: var(--control-height-icon);
+      min-width: var(--control-height-icon);
       padding: 5px 10px;
       display: flex;
       gap: 5px;
-      height: 100%;
+      height: auto;
       align-items: center;
+      white-space: nowrap;
       svg {
         width: 15px;
       }
       &:hover {
-        background: rgba(0, 0, 0, 0.4);
+        background-color: rgb(255 255 255 / 0.08);
+        color: var(--text-on-dark, #f4efe4);
       }
-      height: 100%;
+      &:active {
+        background-color: rgb(0 0 0 / 0.12);
+      }
+      &:disabled {
+        background-color: rgb(0 0 0 / 0.08);
+        filter: var(--button-disabled-filter);
+      }
+      &:focus-visible {
+        outline: 2px solid var(--button-focus-ring);
+        outline-offset: -2px;
+      }
     }
+  }
+  > .right {
+    margin-left: auto;
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
   }
   justify-content: flex-start;
 }
 
 .game-bar-item.active,
 .game-bar-item:hover {
-  background: rgba(0, 0, 0, 0.21);
+  background: rgba(48, 58, 61, 0.1);
   color: var(--title);
 }
 
@@ -3513,7 +3748,7 @@ header {
   margin: 0;
   font-family: Teutonic, serif;
   font-size: 20px;
-  color: var(--text);
+  color: var(--text-on-dark, #f4efe4);
   text-transform: none;
 }
 
@@ -3588,7 +3823,7 @@ header {
     border-radius: 4px;
     background: var(--background-dark);
     border: 1px solid var(--box-border);
-    color: var(--text);
+    color: var(--text-on-dark, #f4efe4);
     line-height: 1;
   }
 
@@ -3654,17 +3889,21 @@ button:hover .shortcut {
 
 .error-dialog {
   backdrop-filter: blur(3px);
-  background-color: rgba(0, 0, 0, 0.8);
+  background:
+    linear-gradient(180deg, rgb(232 225 210 / 0.97), rgb(218 207 187 / 0.97)),
+    url('/assets/veiled-harbour/17-调查日志纸卷.png') center / cover no-repeat;
   position: absolute;
   padding: 0;
   padding-block: 10px;
-  width: 50%;
+  width: min(50%, 620px);
   display: flex;
   z-index: var(--z-index-100);
   display: flex;
   flex-direction: column;
-  border: 0;
-  border-radius: 10px;
+  border: 1px solid var(--accent-brass, #a5824b);
+  border-radius: 4px;
+  box-shadow: 0 22px 56px rgb(0 0 0 / 0.44);
+  color: var(--text, #2e3233);
   top: 50%;
 
   p {
@@ -3675,6 +3914,7 @@ button:hover .shortcut {
   h2 {
     font-family: Teutonic;
     font-size: 2em;
+    color: var(--deep-sea, #26373a);
   }
 
   button {
@@ -3690,7 +3930,7 @@ button:hover .shortcut {
       width: 15px;
     }
     &:hover {
-      background: rgba(0, 0, 0, 0.4);
+      background: rgb(165 130 75 / 0.16);
     }
     height: 100%;
   }
@@ -3809,13 +4049,13 @@ dialog {
 }
 
 .debug-playability-modal {
-  background: #1a1a2e;
+  background: var(--surface-chrome);
   border: 1px solid var(--button-highlight);
   border-radius: 8px;
   padding: 1.5rem;
   min-width: 300px;
   max-width: 700px;
-  color: #eee;
+  color: var(--text-on-dark);
 
   h3 {
     margin: 0 0 1rem;

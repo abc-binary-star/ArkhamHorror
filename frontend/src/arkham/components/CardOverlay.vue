@@ -21,6 +21,9 @@ import { type ArkhamKey, keyToId } from '@/arkham/types/Key'
 import PoolItem from '@/arkham/components/PoolItem.vue'
 import { useDbCardStore, ArkhamDBCard } from '@/stores/dbCards'
 import { useI18n } from 'vue-i18n'
+import { type NarrationSegment, setCurrentNarration } from '@/arkham/narration'
+import { cardNarrationFromCsv } from '@/arkham/narrationCsv'
+import { cardNarrationCategory } from '@/arkham/narrationCategory'
 
 /* =============================================================================
  * Constants, basic helpers, and caches
@@ -630,6 +633,76 @@ const cardCode = computed<string | null>(() => {
   const m = card.value.match(/cards\/(\d+)(_.*)?\.avif$/)
   return m ? m[1] : null
 })
+
+/* =============================================================================
+ * Read aloud
+ * ========================================================================== */
+
+// Deliberately not the `cardCode` above: that one drops the trailing side
+// letter, and narration needs it to tell a back face from a front.
+const narrationImageCode = computed<string | null>(() => {
+  const image = card.value
+  // A homebrew image path ends in /cards/<local code>, which otherwise looks
+  // like an official card code.
+  if (!image || image.includes('/homebrew/')) return null
+  const match = image.match(/\/cards\/([^/?]+)\.avif(?:[?#].*)?$/)
+  return match ? match[1].replace(/_.*$/, '') : null
+})
+
+const narrationDeclaredCode = computed<string | null>(() =>
+  normalizedCardCode(
+    hoveredElement.value?.dataset.cardCode ?? hoveredElement.value?.dataset.imageId,
+  ),
+)
+
+const narrationCardCode = computed<string | null>(
+  () => narrationDeclaredCode.value ?? narrationImageCode.value,
+)
+
+watch(
+  [narrationCardCode, narrationImageCode, hoveredElement, () => store.lang],
+  async ([code, imageCode, element]) => {
+    if (!imageCode || !element) return
+
+    try {
+      await store.initDbCards()
+    } catch {
+      // The local CSV can still supply narration if card metadata cannot load.
+    }
+    // Both awaits below can outlive the hover that started them.
+    if (narrationImageCode.value !== imageCode || hoveredElement.value !== element) return
+
+    const dbCard = code
+      ? store.getDbCard(code) ?? store.getDbCard(imageCode)
+      : store.getDbCard(imageCode)
+    const category = cardNarrationCategory(dbCard, element)
+    const csvNarration = await cardNarrationFromCsv(code, imageCode, category)
+    if (narrationImageCode.value !== imageCode || hoveredElement.value !== element) return
+    if (csvNarration) {
+      setCurrentNarration(csvNarration)
+      return
+    }
+
+    if (!dbCard) return
+    const back = imageCode === `${dbCard.code}b`
+    const segments: NarrationSegment[] = [
+      { category: 'cardName', text: back ? dbCard.back_name || dbCard.name : dbCard.name },
+      { category: 'cardSubname', text: back ? '' : (dbCard.subname ?? '') },
+      {
+        category: 'cardTraits',
+        text: back ? dbCard.back_traits || dbCard.traits || '' : dbCard.traits || '',
+      },
+      { category: 'cardText', text: back ? dbCard.back_text || '' : dbCard.text || '' },
+      { category: 'cardFlavor', text: back ? dbCard.back_flavor || '' : dbCard.flavor || '' },
+    ]
+
+    setCurrentNarration({
+      id: `card:${dbCard.code}:${back ? 'back' : 'front'}:${store.lang}:${JSON.stringify(segments)}`,
+      category,
+      segments,
+    })
+  },
+)
 
 const customizationVariant = computed<string>(() => {
   const chained = hoveredElement.value?.dataset?.chained

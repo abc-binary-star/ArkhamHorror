@@ -3,7 +3,8 @@ import * as Arkham from '@/arkham/types/Game'
 import { LogContents, LogKey, formatKey, homebrewScopeFromCampaignId, logContentsDecoder } from '@/arkham/types/Log'
 import { toCapitalizedWords, formatContent } from '@/arkham/helpers'
 import { cardArt } from '@/arkham/cardImages'
-import { computed, ref, onMounted, onUnmounted, watch, type Component } from 'vue'
+import { computed, ref, nextTick, onMounted, onUnmounted, watch, type Component } from 'vue'
+import { setCurrentNarration } from '@/arkham/narration'
 import { fetchAchievements, fetchCard, fetchGameAchievements } from '@/arkham/api'
 import type { Achievement } from '@/arkham/types/Achievement'
 import type { CardDef } from '@/arkham/types/CardDef'
@@ -802,20 +803,54 @@ const scrollToTop = () => {
   contentEl.value?.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+// --- Read aloud ---------------------------------------------------------------
+const campaignLogEl = ref<HTMLElement | null>(null)
+
+const publishCampaignLogNarration = async () => {
+  await nextTick()
+  const element = campaignLogEl.value
+  if (!element) return
+  // The tab bar lives inside the log container, so its labels end up in
+  // innerText; they are chrome rather than story and must not be read.
+  const ignored = new Set(
+    Array.from(element.querySelectorAll('nav button')).map((button) =>
+      (button.textContent ?? '').trim(),
+    ),
+  )
+  const text = element.innerText
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line && !ignored.has(line))
+    .join('。')
+  if (!text) return
+  setCurrentNarration({
+    id: `campaign-log:${props.game.id}:${activeTab.value}:${selectedTitle.value}:${text}`,
+    category: 'campaignLog',
+    segments: [{ category: 'campaignLog', text }],
+  })
+}
+
 onMounted(() => {
   contentEl.value?.addEventListener('scroll', onContentScroll, { passive: true })
+  void publishCampaignLogNarration()
 })
 
 onUnmounted(() => {
   contentEl.value?.removeEventListener('scroll', onContentScroll)
 })
+
+watch(
+  [activeTab, selectedTitle, selectedLog],
+  () => void publishCampaignLogNarration(),
+  { deep: true, flush: 'post' },
+)
 </script>
 
 <template>
   <LogIcons />
   <div class="content column" ref="contentEl">
     <div class="log-column">
-      <div class="campaign-log column">
+      <div class="campaign-log column" ref="campaignLogEl">
         <div class="campaign-log-header">
           <slot name="header-leading" />
           <h1>{{ game.name }}</h1>
@@ -1099,10 +1134,10 @@ onUnmounted(() => {
   place-items: center;
   border-radius: 10px;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.9);
-  background: #2b3140;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.45);
+  color: var(--text);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  box-shadow: var(--shadow-3);
   z-index: var(--z-index-100);
   opacity: 0;
   pointer-events: none;
@@ -1129,7 +1164,7 @@ onUnmounted(() => {
 .back-to-top:hover {
   background: var(--spooky-green);
   border-color: var(--spooky-green);
-  color: #1b1f29;
+  color: var(--button-1-text);
 }
 
 .back-to-top:active {
@@ -1147,7 +1182,7 @@ onUnmounted(() => {
   display: flex;
   gap: 4px;
   margin-bottom: 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.12);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
 }
 
 .log-tabs button {
@@ -1157,17 +1192,17 @@ onUnmounted(() => {
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
   padding: 10px 18px;
-  font-family: teutonic, sans-serif;
+  font-family: "Noto Sans", Avenir, Helvetica, Arial, sans-serif;
   font-size: 1.05em;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
+  color: var(--text-dim);
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;
 }
 
 .log-tabs button:hover {
-  color: rgba(255,255,255,0.85);
+  color: var(--text);
 }
 
 .log-tabs button.active {
@@ -1207,17 +1242,17 @@ onUnmounted(() => {
   gap: 16px;
   margin: 0 0 20px;
   padding: 0 0 14px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
 }
 
 h1 {
-  font-family: teutonic, sans-serif;
+  font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
   font-size: 2.2em;
   margin: 0;
   padding: 0;
   color: var(--title);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 /* ── Empty state ─────────────────────────────────────────── */
@@ -1225,12 +1260,12 @@ h1 {
 .empty-state {
   padding: 32px;
   text-align: center;
-  color: rgba(255,255,255,0.3);
+  color: var(--text-dim);
   font-size: 0.9rem;
   font-style: italic;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: 8px;
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
 }
 
 /* ── Log categories ──────────────────────────────────────── */
@@ -1272,9 +1307,9 @@ h1 {
   align-items: center;
   gap: 8px;
   padding: 8px 14px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 
@@ -1283,22 +1318,22 @@ h1 {
   label {
     flex: 1;
     cursor: pointer;
-    font-family: teutonic, sans-serif;
+    font-family: "Noto Sans", Avenir, Helvetica, Arial, sans-serif;
     font-size: 1em;
     font-weight: normal;
     letter-spacing: 0.06em;
-    color: rgba(255,255,255,0.45);
+    color: var(--text-dim);
   }
 
   &.checked {
-    background: rgba(255,255,255,0.10);
-    border-color: rgba(255,255,255,0.18);
-    label { color: #f0f0f0; }
+    background: color-mix(in srgb, var(--spooky-green) 10%, var(--surface-raised));
+    border-color: var(--spooky-green);
+    label { color: var(--text); }
   }
 
   &:hover:not(.checked) {
-    background: rgba(255,255,255,0.07);
-    border-color: rgba(255,255,255,0.12);
+    background: var(--surface-panel);
+    border-color: var(--spooky-green);
   }
 }
 
@@ -1306,27 +1341,27 @@ h1 {
 
 .supplies-container {
   background: var(--box-background);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 8px;
+  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: var(--radius-lg);
   padding: 14px 16px;
 
   h2 {
-    font-family: teutonic, sans-serif;
+    font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
     font-size: 1.1em;
     font-weight: normal;
-    color: rgba(255,255,255,0.75);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    color: var(--text);
+    font-weight: 600;
+    letter-spacing: 0.02em;
     margin: 0 0 12px;
     padding-bottom: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.07);
+    border-bottom: var(--edge-width) solid var(--edge-dim);
   }
 
   h3 {
-    font-family: teutonic, sans-serif;
+    font-family: "Noto Sans", Avenir, Helvetica, Arial, sans-serif;
     font-size: 0.95em;
     font-weight: normal;
-    color: rgba(255,255,255,0.6);
+    color: var(--text-dim);
     letter-spacing: 0.04em;
     margin: 0 0 6px;
   }

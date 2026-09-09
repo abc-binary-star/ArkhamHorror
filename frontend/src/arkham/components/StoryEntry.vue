@@ -10,6 +10,8 @@ import Token from '@/arkham/components/Token.vue';
 import { useI18n } from 'vue-i18n';
 import FormattedEntry from '@/arkham/components/FormattedEntry.vue';
 import CardImage from '@/arkham/components/CardImage.vue';
+import { setCurrentNarration } from '@/arkham/narration';
+import { flavorTextNarration } from '@/arkham/narrationText';
 
 export interface Props {
   game: Game
@@ -30,7 +32,7 @@ const choose = (idx: number) => {
   if (answerPending.value) return
   emit('choose', idx)
 }
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const maybeFormat = function(body: string) {
   return body.startsWith("$") ? t(tformat(body.split(' ')[0])) : body
@@ -111,6 +113,12 @@ const confirmDrownedCityTask = () => {
 watch(() => props.question, () => {
   selectedTaskChoice.value = null
 })
+
+// Publishing does not speak on its own: narration.ts only reads aloud when the
+// item id changes and autoRead is on, so this is safe to run `immediate`.
+watch([() => props.question.flavorText, locale], ([flavorText]) => {
+  setCurrentNarration(flavorTextNarration(flavorText, t))
+}, { immediate: true })
 
 const readCards = computed(() => props.question.readCards ?? [])
 
