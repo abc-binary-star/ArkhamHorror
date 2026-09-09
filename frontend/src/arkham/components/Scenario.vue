@@ -1407,6 +1407,12 @@ const agendaGroupedTreacheries = computed(() =>
   Object.entries(groupBy(nextToTreacheries.value, (t) => props.game.treacheries[t].cardCode)),
 )
 
+// Cards attached to the scenario reference card (Primordial Evils) sit beside
+// it, since the reference card itself is just an image.
+const scenarioReferenceTreacheries = computed<string[]>(() => Object.values(props.game.treacheries).
+  filter((t) => t.placement.tag === "NextToScenarioReference").
+  map((t) => t.id))
+
 const keys = computed(() => props.scenario.setAsideKeys)
 const spentKeys = computed(() => props.scenario.keys)
 // TODO: not showing cosmos should be more specific, as there could be a cosmos location in the future?
@@ -2405,6 +2411,17 @@ async function addChaosToken(face: any) {
                 <PoolItem v-if="resources && resources > 0" type="resource" :amount="resources" />
                 <PoolItem v-if="damage && damage > 0" type="damage" :amount="damage" />
               </div>
+            </div>
+            <div v-if="scenarioReferenceTreacheries.length > 0" class="scenario-reference-attachments">
+              <TreacheryView
+                v-for="treacheryId in scenarioReferenceTreacheries"
+                :key="treacheryId"
+                :treachery="game.treacheries[treacheryId]"
+                :game="game"
+                :playerId="playerId"
+                @choose="choose"
+                :overlay-delay="310"
+              />
             </div>
             <div v-if="heededDanielsWarning" class="spoken-hastur-recorder">
               <button
@@ -3577,6 +3594,15 @@ async function addChaosToken(face: any) {
 .scenario-guide-main {
   position: relative;
   width: fit-content;
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.scenario-reference-attachments {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .scenario-badges {
