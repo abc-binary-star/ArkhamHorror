@@ -832,6 +832,39 @@ generate_nginx_conf() {
     local pkg_root="$SCRIPT_DIR/.."
     local dns_resolvers
     dns_resolvers="$(detect_resolvers)"
+
+    # Embedded deck builder (arkham.build). Optional: emitted only when the
+    # bundle was staged and copied into game/, so a package built without it is
+    # byte-identical to before. The game uses hash-history routing, so the
+    # top-level route redirects below cannot collide with our own pages.
+    local build_locations=''
+    if [ -f "$SCRIPT_DIR/build/index.html" ]; then
+        build_locations='    location ~* ^/build/assets/.*\.(js|css)$ {
+      root "'"$SCRIPT_DIR"'";
+      try_files $uri =404;
+      add_header Cache-Control "public, max-age=31536000, immutable" always;
+    }
+    location = /build {
+      return 302 /build/;
+    }
+    location ~ ^/(deck|card|browse|search|settings|rules|share|decklists|collection-stats|install-fan-made-content)(/.*)?$ {
+      return 302 /build$request_uri;
+    }
+    location /build/ {
+      root "'"$SCRIPT_DIR"'";
+      add_header Cache-Control "no-store" always;
+      try_files $uri $uri/ /build/index.html;
+    }
+    # Pre-baked static cache of the arkham.build card database, so the builder
+    # works with no internet. Files are extensionless, hence default_type.
+    location /build-api/ {
+      root "'"$SCRIPT_DIR"'";
+      default_type application/json;
+      try_files $uri =404;
+    }
+'
+    fi
+
     cat > "$conf" << NGINX_EOF
 worker_processes auto;
 pid "$NGINX_PID";
@@ -854,7 +887,7 @@ http {
       root "$frontend_root";
       try_files \$uri \$uri/ /index.html;
     }
-    # Card image routing:
+$build_locations    # Card image routing:
     # 1. user cards/
     # 2. user cards_en/
     # 3. built-in frontend/dist/img/arkham/{lang}/cards/
@@ -2047,6 +2080,24 @@ main() {
     # Copy frontend
     substep "Copy: ${FRONTEND_SRC}/ → ${PKG_DIR}/game/frontend/dist/"
     cp -r "${FRONTEND_SRC}/"* "${PKG_DIR}/game/frontend/dist/"
+
+    # Copy the optional embedded deck builder (arkham.build). start.sh only
+    # emits the /build/ nginx locations when game/build/index.html is present.
+    local builder_src="${DEPS_DIR}/arkham-build"
+    if [ -f "${builder_src}/build/index.html" ]; then
+        substep "Copy: ${builder_src}/build/ → ${PKG_DIR}/game/build/"
+        ensure_dir "${PKG_DIR}/game/build"
+        cp -r "${builder_src}/build/." "${PKG_DIR}/game/build/"
+        if [ -d "${builder_src}/build-api" ]; then
+            substep "Copy: ${builder_src}/build-api/ → ${PKG_DIR}/game/build-api/"
+            ensure_dir "${PKG_DIR}/game/build-api"
+            cp -r "${builder_src}/build-api/." "${PKG_DIR}/game/build-api/"
+        else
+            warn "deck builder staged without its card cache; it will need internet access"
+        fi
+    else
+        info "deck builder not staged at ${builder_src}; skipping"
+    fi
 
     # Copy PostgreSQL
     substep "Copy PostgreSQL binaries ..."

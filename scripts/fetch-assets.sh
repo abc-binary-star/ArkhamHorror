@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 #
 # Downloads image assets using S3 for listing and CloudFront for delivery.
-# Listing via S3 (no credentials required — public bucket).
+# Listing needs no credentials — the bucket is public. The aws CLI is used when
+# installed, otherwise the S3 REST API is queried with curl directly.
 # Download via CloudFront for faster edge delivery.
 #
 # Differential sync: skips files that already exist with the correct size.
@@ -17,6 +18,8 @@
 #
 # Environment variables:
 #   FETCH_S3_BUCKET   S3 bucket name for listing (default: arkham-horror-assets)
+#   FETCH_S3_ENDPOINT S3 REST endpoint for listing when aws CLI is absent
+#                     (default: https://$FETCH_S3_BUCKET.s3.amazonaws.com)
 #   FETCH_CDN_BASE    CloudFront base URL (default: https://assets.arkhamhorror.app)
 #   FETCH_PARALLEL    Concurrent downloads (default: 8)
 #   FETCH_RETRIES     Retries per file on failure (default: 3)
@@ -24,6 +27,7 @@
 set -euo pipefail
 
 S3_BUCKET="${FETCH_S3_BUCKET:-arkham-horror-assets}"
+S3_ENDPOINT="${FETCH_S3_ENDPOINT:-https://${S3_BUCKET}.s3.amazonaws.com}"
 CDN_BASE="${FETCH_CDN_BASE:-https://assets.arkhamhorror.app}"
 PARALLEL="${FETCH_PARALLEL:-8}"
 
@@ -144,14 +148,56 @@ _fetch_one() {
 export -f _fetch_one
 export PUBLIC_DIR CDN_BASE
 
+# The bucket is public, so listing needs no credentials. The aws CLI is used
+# when present; otherwise the S3 REST API is paginated with curl, so the script
+# has no dependency beyond curl. Both emit tab-separated `Size\tKey` lines.
+_list_objects_rest() {
+  local prefix="$1" token='' body truncated
+
+  while :; do
+    local -a args=(--data-urlencode "list-type=2" --data-urlencode "prefix=$prefix")
+    [ -n "$token" ] && args+=(--data-urlencode "continuation-token=$token")
+
+    body=$(curl -fsSL -G "$S3_ENDPOINT" "${args[@]}") || return 1
+
+    printf '%s' "$body" | awk 'BEGIN { RS="</Contents>" }
+      {
+        k = ""; s = ""
+        if (match($0, /<Key>[^<]*<\/Key>/))    k = substr($0, RSTART + 5, RLENGTH - 11)
+        if (match($0, /<Size>[0-9]*<\/Size>/)) s = substr($0, RSTART + 6, RLENGTH - 13)
+        if (k != "" && s != "") printf "%s\t%s\n", s, k
+      }'
+
+    # Only the opening tag is matched: BSD sed (macOS) has no `\?` quantifier.
+    truncated=$(printf '%s' "$body" \
+      | grep -o '<IsTruncated>[^<]*' | sed 's|<IsTruncated>||')
+    [ "$truncated" = "true" ] || return 0
+
+    token=$(printf '%s' "$body" \
+      | grep -o '<NextContinuationToken>[^<]*' \
+      | sed 's|<NextContinuationToken>||')
+    [ -n "$token" ] || return 0
+  done
+}
+
 _list_objects() {
-  aws s3api list-objects-v2 \
-    --bucket "$S3_BUCKET" \
-    --prefix "$1" \
-    --no-sign-request \
-    --output text \
-    --query 'Contents[].[Size,Key]' \
-    | grep -v '^None$' || true
+  local prefix="$1" listing
+
+  if command -v aws >/dev/null 2>&1; then
+    listing=$(aws s3api list-objects-v2 \
+      --bucket "$S3_BUCKET" \
+      --prefix "$prefix" \
+      --no-sign-request \
+      --output text \
+      --query 'Contents[].[Size,Key]' \
+      | grep -v '^None$' || true)
+  else
+    listing=$(_list_objects_rest "$prefix" || true)
+  fi
+
+  # .DS_Store is bucket cruft that would be bundled into dist, and a key ending
+  # in `/` is a zero-byte directory placeholder that would be written as a file.
+  printf '%s\n' "$listing" | grep -v '\.DS_Store$' | grep -v '/$' || true
 }
 
 _sync_prefix() {
@@ -288,7 +334,6 @@ _sync_prefix() {
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 
-command -v aws  >/dev/null 2>&1 || die "aws CLI not found. Install from https://aws.amazon.com/cli/ or use 'make fetch-images-docker'."
 command -v curl >/dev/null 2>&1 || die "curl not found."
 
 [ $# -ge 1 ] || usage
@@ -306,14 +351,18 @@ _other_langs_pattern() {
 
 ALL_LANG_PATTERN="img/arkham/($(IFS='|'; printf '%s' "${ALL_LANGS[*]}")/)"
 
-printf '\n%s=== %s ===%s\n\n' "$_BOLD" \
-  "$(case "$1" in
-    cards)             echo 'Fetching English card images' ;;
-    en)                echo 'Fetching all English/static images' ;;
-    en+*)              echo "Fetching English/static + ${1#en+} translations" ;;
-    fr|es|ita|ko|zh)   echo "Fetching $1 translated images only" ;;
-    all)               echo 'Fetching all images' ;;
-  esac)" "$_RESET"
+# Not $(case ...): bash 3.2 (macOS /bin/bash) mis-parses case patterns that
+# contain `)` inside a command substitution and dies before downloading.
+_banner=''
+case "$1" in
+  cards)             _banner='Fetching English card images' ;;
+  en)                _banner='Fetching all English/static images' ;;
+  en+*)              _banner="Fetching English/static + ${1#en+} translations" ;;
+  fr|es|ita|ko|zh)   _banner="Fetching $1 translated images only" ;;
+  all)               _banner='Fetching all images' ;;
+esac
+
+printf '\n%s=== %s ===%s\n\n' "$_BOLD" "$_banner" "$_RESET"
 
 case "$1" in
   cards)
