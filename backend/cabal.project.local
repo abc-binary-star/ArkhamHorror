@@ -1,3 +1,0 @@
-ignore-project: False
-semaphore: true
-jobs: $ncpus

@@ -30,3 +30,6 @@ errors.err
 *.eventlog
 *.eventlog.html
 *.hp
+
+# Machine-local cabal override
+cabal.project.local
