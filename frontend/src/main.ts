@@ -2,20 +2,22 @@ import './styles/index.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import FloatingVue from 'floating-vue'
-import Toast from "vue-toastification";
+import Toast, { createToastInterface, globalEventBus } from "vue-toastification";
 import { createVfm } from 'vue-final-modal'
 import App from './App.vue'
 import router from './router'
+import api from '@/api'
+import { useUserStore } from '@/stores/user'
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faExpeditedssl } from "@fortawesome/free-brands-svg-icons";
-import { faGear, faLayerGroup, faBan, faCircleExclamation, faGhost, faLocationDot, faSearch, faList, faImage, faAngleDown, faUndo, faTrash, faEye, faCopy, faExternalLink, faRefresh, faBook, faChevronRight, faBars, faTimes, faShieldHeart, faWrench, faPaperclip, faArrowLeft, faArrowUp, faStore, faTriangleExclamation, faShuffle, faTrophy, faDownload, faCheckDouble, faFlask } from '@fortawesome/free-solid-svg-icons'
+import { faGear, faLayerGroup, faBan, faCircleExclamation, faGhost, faLocationDot, faSearch, faList, faImage, faAngleDown, faUndo, faTrash, faEye, faCopy, faExternalLink, faRefresh, faBook, faChevronRight, faBars, faTimes, faShieldHeart, faWrench, faPaperclip, faArrowLeft, faArrowUp, faStore, faTriangleExclamation, faShuffle, faTrophy, faDownload, faCheckDouble, faFlask, faPen } from '@fortawesome/free-solid-svg-icons'
 import * as VueI18n from 'vue-i18n'
 import { loadLocaleMessages, normalizeLocale } from '@/locales/messages'
 import { preferredLanguage } from '@/locales/language'
 import mitt from 'mitt';
 
-library.add(faBan, faLocationDot, faCircleExclamation, faGhost, faSearch, faList, faImage, faAngleDown, faExpeditedssl, faUndo, faTrash, faEye, faCopy, faExternalLink, faRefresh, faBook, faChevronRight, faBars, faTimes, faShieldHeart, faWrench, faPaperclip, faArrowLeft, faArrowUp, faStore, faTriangleExclamation, faShuffle, faTrophy, faGear, faLayerGroup, faDownload, faCheckDouble, faFlask)
+library.add(faBan, faLocationDot, faCircleExclamation, faGhost, faSearch, faList, faImage, faAngleDown, faExpeditedssl, faUndo, faTrash, faEye, faCopy, faExternalLink, faRefresh, faBook, faChevronRight, faBars, faTimes, faShieldHeart, faWrench, faPaperclip, faArrowLeft, faArrowUp, faStore, faTriangleExclamation, faShuffle, faTrophy, faGear, faLayerGroup, faDownload, faCheckDouble, faFlask, faPen)
 
 async function bootstrap() {
   const language = localStorage.getItem('language')
@@ -66,6 +68,37 @@ async function bootstrap() {
   app.config.globalProperties.emitter = emitter
 
   app.mount('#app')
+
+  // A 401 from anywhere means the stored token is dead. Left alone, `whoami`
+  // fails, the user store logs out silently, and someone mid-game is dropped on
+  // a logged-out page with no explanation. Registered only once the router has
+  // settled its first navigation: the beforeEach guard itself calls whoami, and
+  // pushing a redirect from inside that would fight the navigation in flight.
+  void router.isReady().then(() => {
+    const toast = createToastInterface(globalEventBus)
+    let bouncing = false
+
+    api.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        const hadSession = localStorage.getItem('arkham-token') !== null
+        if (hadSession && error?.response?.status === 401) {
+          useUserStore(pinia).logout()
+
+          const current = router.currentRoute.value
+          if (!bouncing && current.path !== '/sign-in') {
+            bouncing = true
+            toast.error(i18n.global.t('loadState.sessionExpired'))
+            void router
+              .push({ path: '/sign-in', query: { nextUrl: current.fullPath } })
+              .finally(() => { bouncing = false })
+          }
+        }
+
+        return Promise.reject(error)
+      },
+    )
+  })
 }
 
 void bootstrap()

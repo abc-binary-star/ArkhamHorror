@@ -77,32 +77,48 @@ export const useDbCardStore = defineStore("dbCards", {
     },
 
     async fetchDbCards(lang: string) {
-      const data = await fetch(`/cards/cards_${lang}.json`.replace(/^\//, '')).then(async (cardResponse) => {
-        return await cardResponse.json()
-      })
+      const response = await fetch(`/cards/cards_${lang}.json`.replace(/^\//, ''))
+      // Without this a 404 hands back the SPA's index.html and .json() throws an
+      // opaque SyntaxError from deep inside the store.
+      if (!response.ok) {
+        throw new Error(`card database for "${lang}" returned ${response.status}`)
+      }
+      const data = await response.json() as ArkhamDBCard[]
 
-      if (this.lang !== lang) return
+      // The user may have asked for a different language while this was in flight.
+      if (this.loadingLang !== lang) return
 
       this.dbCards = data
       const index = new Map<string, ArkhamDBCard>()
-      for (const card of data as ArkhamDBCard[]) {
+      for (const card of data) {
         index.set(card.code, card)
         index.set(`${card.code}b`, card)
       }
       this.dbCardsIndex = index
+      // Committed only once its cards are actually in place. Setting it earlier
+      // would make the guard below treat stale wrong-language cards as correct
+      // and never retry.
+      this.lang = lang
     },
 
-    async initDbCards() {
+    /** Resolves true when the cards on screen match the stored language. */
+    async initDbCards(): Promise<boolean> {
       const language = localStorage.getItem('language') || 'en'
 
-      if (this.lang === language && this.dbCards.length > 0) return
-      if (this.loadingLang === language) return
+      if (this.lang === language && this.dbCards.length > 0) return true
+      if (this.loadingLang === language) return false
 
-      this.lang = language
       this.loadingLang = language
 
       try {
         await this.fetchDbCards(language)
+        return this.lang === language
+      } catch (err) {
+        // Swallowed on purpose: most callers fire this as `void initDbCards()`,
+        // and an unhandled rejection there would surface nowhere. Leaving
+        // this.lang alone is what lets the next call retry.
+        console.error(`[dbCards] could not load the ${language} card database`, err)
+        return false
       } finally {
         if (this.loadingLang === language) this.loadingLang = null
       }
