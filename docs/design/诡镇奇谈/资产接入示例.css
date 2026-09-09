@@ -1,0 +1,161 @@
+/* 将此片段复制到 frontend/src/styles/veiled-harbour.css 后，按实际资源路径调整 url。 */
+:root {
+  --vh-fog-page: #bdb8ad;
+  --vh-paper: #e9e1d2;
+  --vh-deep-sea: #26373a;
+  --vh-brass: #a5824b;
+  --vh-harbour-teal: #28615d;
+}
+
+.vh-archive-paper {
+  background-color: var(--vh-paper);
+  background-image: url('/assets/veiled-harbour/03-档案纸纹理.svg');
+  background-repeat: repeat;
+}
+
+.vh-tabletop {
+  background: var(--vh-deep-sea) url('/assets/veiled-harbour/02-牌桌材质.png') center / cover no-repeat;
+}
+
+.vh-hero {
+  min-height: clamp(300px, 36vw, 440px);
+  background: linear-gradient(90deg, rgb(35 42 42 / 0.18), transparent 64%),
+    url('/assets/veiled-harbour/01-诡镇奇谈主视觉.png') center / cover no-repeat;
+}
+
+.vh-chapter-cover {
+  aspect-ratio: 4 / 5;
+  background: url('/assets/veiled-harbour/07-章节封面-潮汐之门.png') center / cover no-repeat;
+}
+
+.vh-investigator-portrait {
+  aspect-ratio: 3 / 4;
+  background: url('/assets/veiled-harbour/08-调查员档案-海图师.png') center / cover no-repeat;
+}
+
+.vh-deck-workbench {
+  background: var(--vh-paper) url('/assets/veiled-harbour/09-牌组工作台纸面.png') center / cover no-repeat;
+}
+
+.vh-action-paper {
+  background: var(--vh-deep-sea) url('/assets/veiled-harbour/10-行动纸面背景.png') center / cover no-repeat;
+}
+
+.vh-chaos-seal {
+  width: 64px;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: url('/assets/veiled-harbour/11-混沌袋仪式纹章.png') center / contain no-repeat;
+}
+
+.vh-nautical-overlay {
+  background-image: linear-gradient(rgb(38 55 58 / 0.18), rgb(38 55 58 / 0.18)),
+    url('/assets/veiled-harbour/12-深海航图叠层.png');
+  background-position: center;
+  background-size: cover;
+}
+
+.vh-brass-corner {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  pointer-events: none;
+  background: url('/assets/veiled-harbour/04-黄铜角饰.svg') top left / contain no-repeat;
+}
+
+.vh-card-slot {
+  background: var(--vh-paper) url('/assets/veiled-harbour/13-卡槽纸面.png') center / cover no-repeat;
+}
+
+.vh-dialog-paper {
+  background: var(--vh-paper) url('/assets/veiled-harbour/14-选择弹窗纸面.png') center / cover no-repeat;
+}
+
+.vh-mobile-hero {
+  background: url('/assets/veiled-harbour/15-移动端诡镇奇谈竖版.png') center / cover no-repeat;
+}
+
+.vh-card-back {
+  aspect-ratio: 1;
+  background: url('/assets/veiled-harbour/16-卡牌背面纹章.png') center / cover no-repeat;
+}
+
+.vh-log-scroll {
+  background: var(--vh-paper) url('/assets/veiled-harbour/17-调查日志纸卷.png') center / cover no-repeat;
+}
+
+.vh-investigator-status {
+  aspect-ratio: 3 / 4;
+  background: var(--vh-paper) url('/assets/veiled-harbour/18-调查员状态卡.png') center / cover no-repeat;
+}
+
+.vh-action-bar {
+  min-height: 72px;
+  background: var(--vh-deep-sea) url('/assets/veiled-harbour/19-行动条底板.png') center / cover no-repeat;
+}
+
+.vh-danger-wait-seal {
+  width: 52px;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: url('/assets/veiled-harbour/20-危险等待印章.png') center / contain no-repeat;
+}
+
+.vh-dialog-inner {
+  background: var(--vh-paper) url('/assets/veiled-harbour/21-故事抉择内框.png') center / cover no-repeat;
+}
+
+.vh-card-interaction-rail {
+  min-height: 54px;
+  background: url('/assets/veiled-harbour/22-卡牌交互状态带.png') center / 100% 100% no-repeat;
+  mix-blend-mode: multiply;
+}
+
+.vh-mobile-tabletop {
+  min-height: 100dvh;
+  background: var(--vh-deep-sea) url('/assets/veiled-harbour/23-移动端牌桌竖版.png') center / cover no-repeat;
+}
+
+.vh-empty-archive {
+  aspect-ratio: 4 / 5;
+  background: url('/assets/veiled-harbour/24-空档案纸牌.png') center / cover no-repeat;
+}
+
+.vh-action-button-plate {
+  min-height: 38px;
+  background: url('/assets/veiled-harbour/25-行动按钮铭牌.png') left center / 400% 100% no-repeat;
+}
+
+.vh-action-button-plate--hover {
+  background-position: 33.333% center;
+}
+
+.vh-action-button-plate--active {
+  background-position: 66.666% center;
+}
+
+.vh-action-button-plate--disabled {
+  background-position: right center;
+}
+
+.vh-action-tray {
+  min-height: 72px;
+  background: var(--vh-deep-sea) url('/assets/veiled-harbour/26-牌桌行动托盘.png') center / 100% 100% no-repeat;
+}
+
+.vh-archive-drawer {
+  background: var(--vh-paper) url('/assets/veiled-harbour/27-侧栏档案抽屉.png') center / cover no-repeat;
+}
+
+.vh-resource-seal {
+  width: 32px;
+  aspect-ratio: 1;
+  background: url('/assets/veiled-harbour/28-调查员资源徽章组.png') left top / 300% 200% no-repeat;
+}
+
+.vh-resource-seal--sanity { background-position: 50% top; }
+.vh-resource-seal--clue { background-position: right top; }
+.vh-resource-seal--resource { background-position: left bottom; }
+.vh-resource-seal--doom { background-position: 50% bottom; }
+.vh-resource-seal--time { background-position: right bottom; }
+}
