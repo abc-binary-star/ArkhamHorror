@@ -1,0 +1,158 @@
+{
+  "name": "黑暗物质",
+  "xp": {
+    "heirToCarcosa": "卡尔克萨之裔"
+  },
+  "intro": {
+    "title": "在……中 太空, 没有 1 可以 Hear 你 Scream",
+    "body": "<p class='basic'>“他 mentioned establishment 的 Dynasty 在……中 Carcosa, lakes which connected 哈斯塔, Aldebaran, 和 mystery 的 Hyades. 他 spoke 的 Cassilda 和 Camilla, 和 sounded cloudy depths 的 Demhe 和 湖泊 的 哈利.”</p><p class='basic right'>– Robert W. Chambers, “ Repairer 的 Reputations”</p><p>它 是 2147, 和 你有 仅 woken up 从 cryo-sleep 在……中 一 seemingly abandoned 太空 飞船 – 和 从 there 在……上 你是 thrown 至 一 deep 太空 adventure across solar system 至 prevent extinction 的 human race. Based 在……上 Call 的 Cthulhu supplements Ripples 从 Carcosa 由 Oscar Rios 和 结束 Time 由 Dr. Michael C. LaBossiere,<i>黑暗物质</i>是 一 8 冒险 fan-made campaign 为<i>Arkham 恐惧: 卡牌 Game</i>为 1–4 players, designed 由 Axolotl. 它 requires<i>道路 至 Carcosa</i>deluxe expansion; 为 best 经验, 它 是 highly recommended 该 你有 completed<i>道路 至 Carcosa</i>在……之前 playing.</p>"
+  },
+  "specialRules": {
+    "0": {
+      "title": "扫描",
+      "body": "@:darkMatter.additionalRulesAndClarifications.scan"
+    },
+    "1": {
+      "title": "记忆",
+      "body": "@:darkMatter.additionalRulesAndClarifications.memories"
+    },
+    "2": {
+      "title": "Alert",
+      "body": "@:darkMatter.additionalRulesAndClarifications.alert"
+    }
+  },
+  "additionalRulesAndClarifications": {
+    "title": "Additional Rules & Clarifications",
+    "scan": "<h3>扫描</h3><p class='basic'>一些 encounter 卡牌 在……中 此 campaign 将 有 图标 标示 在……上 bottom 的 卡牌 当 他们 是 face down. 这些 encounter 卡牌 将 be used 至 form “扫描 牌组”, 一 out 的 进行 牌组 的 卡牌 该 将 be constructed 在……期间 设置 的 一些 scenarios.</p><p class='basic'>在……中 此 campaign, abilities identified 由<b>扫描</b>action designator allow 调查员 至 explore 你的 environment. Such abilities 是 generally used 至 找到 剧情 支援, 剧情 卡牌 或 地点 在……中 扫描 牌组 至 help progress within 每个 冒险, 和 是 usually, 但是 不 always, initiated 使用 “activate” action.</p><p class='basic'><b>扫描</b>abilities instruct 你 至 搜索 为 top 卡牌 的 扫描 牌组 matching 一 certain 图标. 在……中 such cases, 查看 在 图标 在……上 bottom 的 top 卡牌 在……中 扫描 牌组.<b>如果 top 卡牌 的 扫描 牌组 有 一 图标 matching 图标 你是 扫描 为, 抽取 该 卡牌.</b>此 是 considered 一 “successful” 扫描. 如果 没有 卡牌 是 drawn, 扫描 是 considered 至 be “unsuccessful”.</p><p class='basic'>如果 topmost 卡牌 does 不 有 一 matching 图标, 放置 它 face down 下一 至 扫描 牌组, 和 查看 为 一 matching 图标 在……上 下一 卡牌 的 扫描 牌组. Repeat 此 process 直到 一 卡牌 的 标示 type 是 drawn. 在……之后 此 action 有 ended, 洗入 每个 卡牌 下一 至 扫描 牌组 back 至 扫描 牌组.</p><p class='basic'><b>扫描</b>abilities 将 usually, 但是 不 always, refer 至 图标 的 一 地点. 图标 的 一 地点 是 connection 符号 该 是 located 在……中 top left corner 的 卡牌.</p><p class='basic'>如果 such 一 situation arises 该 你 会 need 至 弃掉 一 卡牌 与 扫描 back 或 洗入 它 至 任意 其他 牌组, 洗入 它 back 至 扫描 牌组 instead.</p>",
+    "memories": "<h3>记忆</h3><p class='basic'>一些 冒险 卡牌, 剧情 resolutions 和 interludes 可以 refer 至 你的 “记忆”. 每个 调查员 有 一 section 在……中 战役日志 至 mark 他们的 individual “记忆”.<b>这些 “记忆” 是 tied 至 specific 调查员, 和 是 不 shared among 全部 的 调查员.</b></p><p class='basic'>你可以 be instructed 至 加入 tally marks 或 cross out tally marks 至 specific 调查员’s “记忆”. 此 是 done 由 marking 一 line 在……中 该 调查员’s “记忆” section 在……中 战役日志, 或 crossing out 1 的 above lines, respectively. number 的 “记忆” 每个 调查员 有 是 equal 至 number 的 tally marks 在……中 他们的 respective sections 该 有 不 been crossed out.</p>",
+    "alert": "<h3>Alert</h3><p class='basic'>每个 time 一 调查员 fails 一 skill test 当……时 attempting 至 evade 一 敌人 与 alert keyword, 在……之后 applying 全部 结果 为 该 skill test, 该 敌人 performs 一 attack against evading 调查员. 一 敌人 does 不 exhaust 在……之后 performing 一 alert attack. 此 attack occurs whether 敌人 是 engaged 与 evading 调查员 或 不.</p>"
+  },
+  "prologue": {
+    "title": "Prologue",
+    "body": "<p>你 turn 在……上 folded program 在……中 你的 手牌, reading 它 为 what seems like hundredth time. “Miskatonic Playhouse presents: King 在……中 Yellow,” 它 reads. “一 special 1-night engagement 在 Arkham’s 非常 own Ward Theatre. 一 irresistible drama 在……中 2 acts. Production staged 和 directed 由 Nigel Engram.” cast 是 一 small ensemble, 与 1 unattributed credit 在 结束: “ 陌生者.”</p><p>至 有 such 一 highly anticipated 进行 come 至 Arkham 全部 way 从 Paris 是 一 noteworthy event, even 如果 它 是 仅 为 1 night. 为 weeks leading up 至 show, 它 是 talk 的 小镇. 它 seemed 因此 unassuming… 和 yet, 你有 evidence something sinister 是 在 work. 它 started 与 disappearance 的 1 的 stagehands 在 theatre—一 boy 的 仅 seventeen who missed rehearsal 1 night 和 是 never seen again. 然后, 更少 than 2 weeks 在……之前 performance, there 是 musician whose corpse 是 found 与 一 gun 在……中 它的 mouth. Perhaps most chilling 是 crazed man coppers had picked up 在……中 Independence Square who had been ranting 和 raving about “King’s 返回.” 他 是 brought 至 Arkham Asylum, 和 你 是 surprised 至 discover 该 他 是 不 alone 在……中 他的 delusions.</p><p>Finding 这些 events suspicious, 你 和 你的 companions 有 delved deeper 至 matter. Although 没有 connection 可以 be proven, 这些 weren’t 仅 strange events surrounding up-和-coming 进行. Instances 的 suicide 和 madness 有 followed 在……中 它的 wake, 和 你是 determined 至 discover why.</p><p>lights 在……中 auditorium dim, 和 一 spotlight shines 在……上 stage. What unfolds 是 不 quite what 你 expected. Slow-paced 和 monotonous, 第一 场景 的<i>King 在……中 Yellow</i>是 一 tedious bore. setting 和 characters 是 compelling, 但是 meandering 和 nonsensical 剧情 does little 至 entertain 或 inform. 你 开始 至 wonder whether dreadful events surrounding<i>King 在……中 Yellow</i>aren’t connected, 在……之后 全部. Perhaps 它 是 仅 你的 overactive imagination; how 可以 such 一 trivial 和 unassuming show cause such pandemonium? 你是 surprised 当 第一 场景 closes 不使用 任意 rising action 或 revelation. lights rise 为 intermission, 和 你 consider leaving early, stifling 一 yawn. 在……之前 你是 able 至 decide, however, 你 找到 yourself drifting… drifting… 至 sleep.</p><p class='basic right'>前往 至<b>冒险 I: 褴褛之王号</b>.</p>"
+  },
+  "label": {
+    "alienAid": {
+      "readyAndMoveMiGoScientist": "Ready 米·戈科学家 和 移动 它 至 任意 地点"
+    },
+    "arrivalOfTheKing": {
+      "memoriesToCrossOut": "Cross out 任意 amount 的 tally marks 下一 至 你的 “记忆”"
+    },
+    "biologyLab": {
+      "healDamage": "Heal 1 伤害 从 每个 调查员 在 你的 地点",
+      "healHorror": "Heal 1 恐惧 从 每个 调查员 在 你的 地点"
+    },
+    "contamination": {
+      "discardAlly": "弃掉 attached Ally",
+      "placeDoom": "放置 1 毁灭标记 在……上 attached Ally"
+    },
+    "delights": {
+      "doNotRemoveAToken": "Do 不 移除 一 标记",
+      "removeSkull": "移除 一 Skull 标记 从 混乱袋",
+      "removeCultist": "移除 一 邪教徒 标记 从 混乱袋",
+      "removeTablet": "移除 一 石板 标记 从 混乱袋",
+      "removeElderThing": "移除 一 Elder Thing 标记 从 混乱袋",
+      "removeElderSign": "移除 一 Elder Sign 标记 从 混乱袋"
+    },
+    "desync": {
+      "traumaAndExile": "Suffer 1 精神创伤 和 加入 1 tally mark 下一 至 你的 “记忆”, 然后 exile 此 卡牌",
+      "returnToDeck": "如果 你的 牌组 有 5 或 更多 卡牌 在……中 它, 洗入 此 卡牌 back 至 你的 牌组. Otherwise, 弃掉 它"
+    },
+    "evaSuit": {
+      "doNotPutIntoPlay": "Do 不 放置 EVA Suit 至 进行"
+    },
+    "fromTheDark": {
+      "takeDamage": "获得 {count} 伤害",
+      "drawAMimic": "搜索 遭遇牌堆 和 弃牌堆 为 一 Mimic 敌人 和 抽取 它"
+    },
+    "innocentMishap": {
+      "damageNearestBrain": "造成 1 伤害 至 nearest Brain 剧情 支援",
+      "damageMiGoScientist": "造成 2 伤害 至 米·戈科学家",
+      "take2DirectDamage": "获得 2 direct 伤害"
+    },
+    "jv7Hyades": {
+      "trefoil": "扫描 为 clover 图标",
+      "t": "扫描 为 T 图标"
+    },
+    "medicalFoam": {
+      "doNotPutIntoPlay": "Do 不 放置 Medical Foam 至 进行"
+    },
+    "micrometeoroid": {
+      "discardEachEvent": "弃掉 每个 event 在……中 你的 手牌"
+    },
+    "mindMachineInterface": {
+      "doNotPutIntoPlay": "Do 不 放置 Mind-Machine Interface 至 进行"
+    },
+    "paleBlueDot": {
+      "takeHorror": "获得 1 恐惧",
+      "placeDoom": "加入 1 毁灭标记 至 当前 密谋 和 弃掉 此 卡牌"
+    },
+    "paradoxicalThreat": {
+      "placeFacedown": "放置 top 3 卡牌 的 遭遇牌堆 至 你的 threat area, face-down",
+      "doomAndDraw": "加入 1 毁灭标记 至 当前 密谋 和 抽取 3 face-down 卡牌 从 你的 threat area"
+    },
+    "radiationTablets": {
+      "doNotPutIntoPlay": "Do 不 放置 Radiation 石板 至 进行"
+    },
+    "sceneShifting": {
+      "placeDoom": "放置 1 毁灭标记 在……上 当前 密谋",
+      "moveEnemies": "移动 每个 敌人 1 地点 toward 你. 每个 敌人 在 你的 地点 immediately attacks 你"
+    },
+    "solarEclipse": {
+      "take1Horror": "获得 1 恐惧",
+      "locationGets2Shroud": "你的 地点 gets +2 shroud 为 此 investigation"
+    },
+    "surprise": {
+      "moveBoogeyman": "移动 小丑 至 你的 当前 地点",
+      "boogeymanAttacks": "小丑 immediately attacks 你"
+    },
+    "virtualAccessKey": {
+      "addToDeck": "加入 虚拟访问密钥 至 你的 牌组",
+      "doNotAddToDeck": "Do 不 加入 它 至 你的 牌组"
+    },
+    "whatTypeOfShipIsThis": {
+      "placeDoom": "放置 1 毁灭标记 在……上 当前 密谋 和 加入 此 至 胜利展示区",
+      "removeFromGame": "移除 此 卡牌 从 game"
+    },
+    "withoutATrace": {
+      "assumeCommandOfTheShip": "Assume command 的 飞船",
+      "scavengeTheShipForParts": "Scavenge 飞船 为 parts"
+    }
+  },
+  "key": {
+    "youWereTransportedToTheVirtualDreamlandsByMaja": "你 是 transported 至 Virtual Dreamlands 由 玛雅.",
+    "youEnteredTheVirtualDreamlandsByYourOwnMeans": "你 entered Virtual Dreamlands 由 你的 own means.",
+    "hasBeenInfectedByTheCybervirus": "有 been infected 由 cybervirus.",
+    "youAreTrappedInAVirtualNightmare": "你是 trapped 在……中 一 virtual 梦魇.",
+    "youPartiallyRestoredTheSanityOfK2PS187": "你 partially restored sanity 的 K2-PS187.",
+    "youFullyRestoredTheSanityOfK2PS187": "你 fully restored sanity 的 K2-PS187.",
+    "youHaveWatchedThePerformanceOfHeirToCarcosa": "你有 watched performance 的 卡尔克萨之裔.",
+    "theElbrusStationHasBeenLostInTheQuantumRealm": "Elbrus Station 有 been lost 在……中 quantum realm.",
+    "theElbrusStationHasBeenFullyStabilized": "Elbrus Station 有 been fully stabilized.",
+    "youHaveWitnessedThePrimordialChaos": "你有 witnessed primordial chaos.",
+    "youHaveRescuedTheRemainingCrewOfTheNostalgiaII": "你有 rescued 剩余 crew 的 往昔号 II.",
+    "theNostalgiaIIHasBeenSaved": "往昔号 II 有 been saved.",
+    "youCouldntSaveTheCrewOfTheNostalgiaII": "你 couldn’t save crew 的 往昔号 II.",
+    "allInvestigatorsHaveBeenCorruptedByTheEarth": "全部 调查员 有 been corrupted 由 地球.",
+    "youAreNotInGoodStandingWithTheMiGo": "你是 不 在……中 good standing 与 米·戈.",
+    "youAreAlliedWithTheMiGo": "你是 allied 与 米·戈.",
+    "youHaveUncoveredTheCultistsInhumanMethods": "你有 uncovered 邪教徒’s inhuman methods.",
+    "youHaveWitnessedTheUnconsciousPandemonium": "你有 witnessed unconscious pandemonium.",
+    "youHaveWitnessedTheManifestedMadness": "你有 witnessed manifested madness.",
+    "theInvestigatorsAreTrappedWithinCarcosa": "调查员 是 trapped within Carcosa.",
+    "theInvestigatorsKnowOfTheAbjurationOfTheThrone": "调查员 know 的 Abjuration 的 Throne.",
+    "theSunWentSupernovaAndWipedOutMostOfTheSolarSystem": "太阳 went supernova 和 wiped out most 的 solar system.",
+    "miGoSafelyReturnedToTheirHomeWorld": "米·戈 safely returned 至 他们的 home world.",
+    "hopeWasShieldedFromTheBlast": "Hope 是 shielded 从 blast.",
+    "theUCCEscapedToAnotherGalaxy": "UCC escaped 至 另一 galaxy.",
+    "livedTheRemainderOfTheirDaysWithHope": "Lived remainder 的 他们的 days, 与 Hope.",
+    "livedTheRemainderOfTheirDaysOnParadise": "Lived remainder 的 他们的 days, 在……上 Paradise.",
+    "youHaveReturnedToThePalacesOfDimCarcosa": "你有 returned 至 palaces 的 Dim Carcosa.",
+    "wasCaughtInTheSupernovasBlast": "是 caught 在……中 supernova’s blast.",
+    "theInvestigatorsEscapedHastursGrasp": "调查员 有 finally escaped 哈斯塔’s grasp 和 prevented him 从 escaping 他的 prison.",
+    "theRealmOfCarcosaOvertookOurUniverse": "realm 的 Carcosa overtook 我们的 universe, 和 塔希尔达 rules 在……上 black stars.",
+    "hasturAndTassildaAreImprisonedInCarcosaOnceMore": "哈斯塔 和 塔希尔达 是 imprisoned 在……中 Carcosa once 更多, 和 universe vanquished inevitable… 为 now.",
+    "impendingDoom": "Impending 毁灭标记",
+    "memories": "记忆"
+  }
+}

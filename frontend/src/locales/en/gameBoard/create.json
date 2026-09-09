@@ -35,6 +35,23 @@
 
     "includeTarotReadings": "Include Tarot Readings",
 
+    "undoMode": {
+        "title": "Undo Mode",
+        "standard": "Standard",
+        "full": "Full",
+        "light": "Light",
+        "hardcore": "Hardcore",
+        "expert": "Expert",
+        "hint": {
+            "standard": "Unlimited undo within a scenario; advancing to the next scenario discards all earlier history.",
+            "full": "Keeps every step, so you can rewind anywhere. This is the default, and the previous behaviour.",
+            "light": "Keeps only the latest 30 steps; older history is discarded.",
+            "hardcore": "Keeps a single step, and nothing at all past a step whose resolution involved a random outcome (a revealed chaos token, an encounter card or enemy draw).",
+            "expert": "Keeps no history; undo is turned off entirely."
+        },
+        "immutable": "Cannot be changed after the game starts: discarded history does not come back."
+    },
+
     "playMode": "Play Mode",
     "singleGroupMode": "Single Group Mode",
     "epicMultiplayerMode": "Epic Multiplayer Mode",

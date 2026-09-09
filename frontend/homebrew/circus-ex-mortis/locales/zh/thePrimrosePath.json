@@ -1,0 +1,32 @@
+{
+  "thePrimrosePath": {
+    "intro": {
+      "title": "冒险 II: 报春花之路",
+      "body": "<p>Stories 有 long been told 和 retold 在……中 Arkham about strange 和 mystical things lurking 在……中 它. Witches, demons, humanoid beasts, list goes 在……上. 任意 1 的 那些 会 be reason 至 不 venture 至 树林 在 night, 但是 since 你're already chancing things 与 circus 和 它的 monsters, there's 不 much left 至 hold 你 back.</p><p>full 月亮 lends 一 eerie brightness 至 树林. 相同 atmosphere 的 illusory magic 该 你 saw 在……上 circus grounds lingers between trees. 没有 doubt circus 有 taken precautions 至 veil themselves 从 prying outsiders, 和 你 wonder how 他们 和 月亮 align. 直到 然后, 你 必须 decide how 你 将 前往 至 此 mystical 森林.</p>",
+      "label": {
+        "useMoonlight": "<p>\"We'll 使用 moonlight 至 我们的 advantage.\" 如果 there 是 一 {'{'}tablet{'}'} 标记 在……中 混乱袋, 移除 它 和 加入 一 {'{'}cultist{'}'} 标记 至 混乱袋 为 remainder 的 campaign.</p>",
+        "shadows": "<p>\"We'll stick shadows 作为 much 作为 possible.\" 如果 there 是 一 {'{'}cultist{'}'} 标记 在……中 混乱袋, 移除 它 和 加入 一 {'{'}tablet{'}'} 标记 至 混乱袋 为 remainder 的 campaign.</p>"
+      }
+    },
+    "bloodMoon": {
+      "label": {
+        "physicalTrauma": "Suffer 1 肉体创伤",
+        "mentalTrauma": "Suffer 1 精神创伤"
+      }
+    },
+    "resolutions": {
+      "resolution1": {
+        "title": "结局 1",
+        "body": "<p><b>结局 1:</b>Battered 和 dazed, 你 stumble through ensorcelled 树林, instinctive motivation 为 survival alone pushing 你 forward. Minutes pass &ndash; 或 是 他们 hours? &ndash; 直到 一 much softer crunch rouses 你的 senses. 1 的 circus carnies wanders 由 你, seemingly 在……上 patrol. carnie 必须 be 在……上 他的 way back 至 camp, 和 如果 他 可以 bypass illusory defenses, 然后 perhaps 你 可以 作为 well. 你 follow man 在 一 distance, 和 gradually, 你 tail him 至 outskirts 的 circus encampment.</p><ul><li>在……中 你的 战役日志, 记录 该<i>调查员 是 lost 在……中 Arkham 树林</i>.</li><li>跳过 至<b>结局 3</b>.</li></ul>"
+      },
+      "resolution2": {
+        "title": "结局 2",
+        "body": "<p><b>结局 2:</b>Despite fearsome challenges 在……中 森林, 你 找到 camp 至 be surprisingly placid. performers sleep 在……中 tents 或 在……中 hammocks out 在……中 open, 与 仅 一 small night guard 在……上 duty patrolling. 为 全部 magic 和 monstrosity 在 他们的 command, circus 是 still crewed 由 mortal humans 与 common needs.</p><p>一些 creatures 该 你 faced 在……中 树林 did 不 even 查看 作为 disguised 作为 circus animals. 他们 是 almost formless amalgamations 的 mouths, tentacles, hooves 和 horns, scattered 在……上 一 fleshy trunk like patches 在……上 一 old coat. 你 shudder 至 imagine what worse things 可以 be 在 circus' beck 和 call.</p><ul><li>在……中 你的 战役日志, 记录 该<i>调查员 bypassed illusions</i>.</li><li>前往 至<b>结局 3</b>.</li></ul>"
+      },
+      "resolution3": {
+        "title": "结局 3",
+        "body": "<p><b>结局 3:</b>与 cautious steps, 你 traverse outskirts 的 circus encampment, looking 为 任意 sign 的 kidnapped citizens. 你 reach 一 towering oak 在 far side, ancient, twisted, 和 全部 但是 barren. 一 ornate painted trailer stands against 它, larger than 任意 的 其他 nearby carts 由 far.</p><p>towering figure 的 ringmaster emerges 和 descends short steps. \"Get 你的 sleep,\" 他 utters, \" perimeter guard 将 let 我们 know 当 他们 arrive.\" 与 ringmaster out 在……中 树林, 你有 一 rare chance 至 delve 至 heart 的 matter. Steeling 你的 nerve, 你 creep up steps 至 他的 trailer.</p><ul><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><i>经验</i>: {xp}</li></ul></li><li>前往 至<b>幕间故事: 未来与过去</b>.</li></ul>"
+      }
+    }
+  }
+}

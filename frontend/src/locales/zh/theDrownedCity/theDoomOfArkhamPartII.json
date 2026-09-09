@@ -1,0 +1,118 @@
+{
+  "intro": {
+    "mustDecide": "调查员必须选择(一项)：",
+    "alliesIntoPlay": "查找<i>探险</i>和<i>诡镇末日</i>遭遇组，以及每位调查员的牌库，和所有场上和场外区域，找出下列剧情支援：约翰·雷蒙德·勒格拉斯、露比·斯坦德希、安迪·范·诺特维克。将这些支援全部放置入场，位于任意调查员的控制之下。这些支援在本场冒险期间都不占据盟友槽位。",
+    "alliesSetAside": "查找<i>探险</i>和<i>诡镇末日</i>遭遇组，以及每位调查员的牌库，和所有场上和场外区域，找出下列剧情支援：约翰·雷蒙德·勒格拉斯、露比·斯坦德希、安迪·范·诺特维克。将这些卡牌放在一边，位于场外。",
+    "addToken": "在混乱袋中加入1个{elderThing}标记，持续到这个剧本结束。",
+    "label": {
+      "lastStand": "<i>“我们必须殊死一搏，用足够的火力赶走他。”</i>",
+      "anotherWay": "<i>“一定还有别的办法。”</i>"
+    },
+    "theDoomOfArkham3Continued": "<p>“我翻译的字符似乎在说，克苏鲁和他的，呃，子嗣，都和拉莱耶本身绑定—”他摊开了阿卡姆的地图，“如果我们把_神器_像这样摆在城市周围，我就能念诵仪式，将他驱除。不过，我需要你们所有人在我准备的时候，吸引他的注意力到自己身上。”安迪拿出一件你从兰道尔那里取回的神器，在手里翻了过来，它闪着反常的光芒。</p>",
+    "theDoomOfArkham3Ruby": "<p>“我到阿卡姆警局去。”勒格拉斯探员说道，“我在那里有些人脉。应该可以派些警员到街上去帮助幸存者。”露比在安迪讲述计划的时候一言不发，现在抱着双臂说道：“所以你要我们去惹毛那个正在摧毁城市的家伙，好让你有机会背几句话，把几个遗物藏起来。”她吸了口烟，“这能有什么问题？”</p>",
+    "title": "诡镇末日·第II部分",
+    "proceedToSetup": "进入<b>设置</b>",
+    "theDoomOfArkham1": "<p>_The Doom 的 Arkham 1_: 你和其他人无助地望着克苏鲁摧毁了河岸城的剩余部分。在他身后，黑水淹没了街道和废墟。“兰道尔是幕后黑手。我不知道他是怎么做到的，也不知道为什么，但我认为他就是想让我们唤醒这个东西！”露比说道。破裂的瓦斯线路着了，饥饿的烈火吞没了残骸，照映出正在入侵城市的克苏鲁眷族大军。“要这一切都是真的，我们可得阻止它。”安迪说道。他们看着你，等你下命令。</p>",
+    "theDoomOfArkham2": "<p>_The Doom 的 Arkham 2_: “我喜欢你的想法。”勒格拉斯探员说着装弹上膛，传来的喀嗒声让人听了舒心。你们一起计划了如何抵御这次远古威胁。露比建议你们占据屋顶，而勒格拉斯给自己在阿卡姆警局的几个人脉打了电话。要是你们齐心协力，或许还能把克苏鲁的怒火引开阿卡姆。“这是我听过最坏的主意，但我不觉得还有别的方法。”露比说道。你看到她的眼睛里闪过——是恐惧吗？你别无选择，只能挺身一战。</p>",
+    "lastStand": "“我们 need 至 受到 a 最后 stand 和 drive 他 场外 与 sheer firepower.” 前往_诡镇末日 2_.",
+    "anotherWay": "“那里 必须 是 另一 道路.” 跳至_诡镇末日 3_. (你 可以 仅 选择 这 选项 如果 那里 是 5 或 更多 神器 checked/listed 和 不 crossed 离场 在……下 “取得的神器” 在 你的 冒险日志.)",
+    "theDoomOfArkham3": "<p>_诡镇末日 3_: Andy beckons 你 所有 进入 a deserted diner as  waters 继续 至 rise. “这 isn’t my field 的 expertise,” 他 说, laying a stack 的 loose papers 在 a table. “But I’ve 是 translating  字符 从 R’lyeh, 和 I think 我们 might 是 able 至 stop 这 与, uhm…well, a ritual.” Ruby waves Inspector Legrasse’s objections 一边 as Andy outlines a “ritual 的 returning” 他 discovered 在  ancient courts 的 R’lyeh. By using pieces 的  ancient 城市 的 R’lyeh, 你 可以 是 able 至 封印  古神 away.</p>",
+    "recordStoodTogether": "In 你的 冒险日志, 记录 _the 调查员 stood together_.",
+    "recordAlliesHaveAPlan": "In 你的 冒险日志, 记录 _你的 allies 有 a 计划_."
+  },
+  "setup": {
+    "placeLocations": "将每个地点按照地点摆放示意图所示放置入场。",
+    "setAsideLocations": "将所有剩余地点放在一边，位于场外。",
+    "cthulhuAtRivertown": "将单面的克苏鲁<i>（远古恶魔）</i>敌人放置在河岸城。",
+    "startAtRivertown": "每位调查员从河岸城开始游戏。",
+    "placeBoard": "找出盒中双面的克苏鲁版图，放在场景和密谋牌库上方，克苏鲁面朝上。",
+    "artifacts": "收齐“取得的神器”下每个没有划掉的取得的神器。将其放置入场，位于调查员控制之下，尽可能平均分配。",
+    "floodedNeighborhoods": "将淹没标记加入供应堆，并提升“淹没的街区”下列出的每个地点的淹没等级。",
+    "starSpawnAside": "将<i>星之眷族</i>遭遇组放在一边，位于场外。",
+    "buildEncounterDeck": "混洗剩余遭遇卡来创建遭遇牌堆。",
+    "readyToBegin": "阿卡姆的命运操之你手。你现在可以开始游戏了。",
+    "cthulhuBoard": "根据示意图构建克苏鲁版图 <i>(See <b>克苏鲁版图</b>)</i>.",
+    "buildCthulhuDeck": "混洗18张克苏鲁卡牌，以构建克苏鲁牌库（见右侧的克苏鲁牌库）。将本牌库放在克苏鲁版图旁。",
+    "cthulhusRage": "在冒险参考卡牌的“克苏鲁之怒”下放置1资源（见下方的<b>克苏鲁之怒</b>）。如果只有1或2位玩家，在冒险参考卡牌上放置额外1资源。",
+    "arkhamLocations": "收齐<i>午夜假面</i>遭遇组的每张地点，以及东部屋顶、西部屋顶。在两张商业区地点和两张南区地点中各将随机一张放置入场，将这些地点的另一版本从游戏中移除。将北区、东城区、圣玛丽医院、米斯卡塔尼克大学放置入场。",
+    "rivertownRuined": "从<i>诡镇末日·第II部分</i>遭遇组中，将河岸城<i>（毁坏）</i>放置入场。将其他版本的河岸城从游戏中移除。",
+    "placeFacets": "将三张克苏鲁敌人<i>（陈腐之翼、凶狠之面、邪恶之爪）</i>各放一张在克苏鲁版图上，非_狂怒_面朝上，使其拼成一幅完整的克苏鲁插画。",
+    "checkCampaignLog": "查看你的战役日志。",
+    "midnightMasksLocations": "在收齐<i>午夜假面</i>遭遇组时，只收齐地点卡牌。不要收齐该遭遇组的其他任何卡牌。",
+    "fightBack": "使用密谋1a“诡镇末日”创建密谋牌库；使用场景1a“回击！”构建场景牌库。将其他每张场景和密谋从游戏中移除。",
+    "banishHim": "使用密谋1a“诡镇末日”创建密谋牌库；使用场景1a“驱除他！”构建场景牌库。将特殊密谋“最后的封印”放在一边，位于场外。将其他每张场景和密谋从游戏中移除。",
+    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: *诡镇末日·第II部分*, *统御主宰*, *古老迷雾*, *淹水*, *星之眷族*, *克苏鲁的使徒*, 和 *午夜假面*. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/the-doom-of-arkham-part-ii.png' /><img src='{setImgPath}/domination.png' /><img src='{setImgPath}/elder-mist.png' /><img src='{setImgPath}/flood.png' /><img src='{setImgPath}/star-spawn.png' /><img src='{setImgPath}/agents-of-cthulhu.png' /><img src='{setImgPath}/midnight-masks.png' /></section>",
+    "checkCampaignLogActAgenda": "检查 你的 冒险日志 至 build  act 和 密谋牌库:"
+  },
+  "rules": {
+    "cthulhuBoard": {
+      "title": "克苏鲁版图",
+      "body": "<p class='basic'>克苏鲁在地图上由单个敌人表示，但实际上由克苏鲁版图上的多张敌人卡牌组成。与克苏鲁<i>（远古恶魔）</i>交战的调查员，也与克苏鲁版图上的每张卡牌交战（作为单个敌人）。在与克苏鲁互动<i>（攻击、躲避等等）</i>时，选择克苏鲁版图上的一张双面敌人卡牌与之互动。</p><p class='basic'>Cthulhu 攻击 每位调查员 于 他的 地点 在……期间  敌人 阶段 using  combined 伤害 和 恐惧 values 的 每位 Cthulhu 敌人 在  Cthulhu Board. 这 攻击 是 performed 在 addition 至 任意 其他 攻击 和/或 效果 prompted 由  Cthulhu 牌组 (看见 below). 如果 a 卡牌 在  Cthulhu Board 会 攻击 via a 关键词 或 其他 效果 当fighting 或 evading, 仅 该 卡牌 攻击.</p><p class='basic'>能对一个地点多个敌人造成伤害的卡牌效果，可以对克苏鲁版图上每张敌人卡牌单独造成伤害。</p>"
+    },
+    "cthulhuDeck": {
+      "title": "克苏鲁牌库",
+      "body": "在本场冒险的设置期间，组建另一个不同牌背的牌库：克苏鲁牌库。这个单独的牌库只由“行动”卡牌组成。<b>克苏鲁牌库不是遭遇牌库，行动卡牌也不是诡计。</b>\n克苏鲁在敌军阶段期间如常移动、攻击后，会通过克苏鲁牌库的行动卡牌执行额外的行动。当敌军阶段结束时，密谋的强制效果会要求调查员抽取克苏鲁牌库顶的卡牌。在从克苏鲁牌库抽取卡牌时，从上往下依次结算其每个效果。行动卡牌结算后，将其弃到克苏鲁弃牌堆。如果克苏鲁牌库为空，立即将克苏鲁弃牌堆混洗回克苏鲁牌库。"
+    },
+    "cthulhusRage": {
+      "title": "克苏鲁之怒",
+      "body": "本场冒险中，冒险参考卡牌的“克苏鲁之怒”下方的资源数表示克苏鲁对调查员的怒意。克苏鲁之怒越高，苏醒的沉睡者就越危险、越致命。克苏鲁之怒本身没有游戏效果；但是，某些遭遇卡牌根据当前克苏鲁之怒的等级，可能会改变或变得更强。"
+    }
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1_: 之后 hours 的 struggle, 你 stand 之前 mighty Cthulhu, 谁 looks 向下 在 你 与 5 dispassionate red 眼睛. 你’ve dreamed 这 moment 之前. 他的 hulking 形态 blots 场外  群星 above, shimmering 与 an otherworldly radiance. 他的 rotten breath washes 在……上 你, stirring  water. 为 a moment,  clamor fades away as 你 meet  古神’s gaze. 你 feel 他 在 你的 mind. 那里 是 没有 anger 或 rage, 仅 cold indifference.</p><p>一声枪响，十几声枪响。你身后，附近的屋顶上，邻近的某处，一阵枪林弹雨和爆炸物打向了古神松垂腐臭的身体。勒格拉斯探员向战友吼叫，激励他们继续开火。猛烈的火力咬穿了伟大之克苏鲁盔甲一般的血肉，让他痛苦地嚎叫，油腻的黑血淹没了街道。最终，战局倒向了你们这边。在无情的进攻下，古神扭头返回_米斯卡塔尼克_河，跃入水中，后面还跟着一群怪物。</p><p>你 可以 feel  others hold 他们的 breath, waiting 为 some reprisal, 但 nothing comes. 然后, a cheer breaks  silence, followed 由 dozens 更多. Arkham 是 safe…为 now.</p><ul><li>In 你的 战役 Log, 记录 _Cthulhu 是 driven away_.</li><li>每位调查员承受3点肉体创伤和3点精神创伤，因为其与克苏鲁爆发了一场大战。</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li><li>调查员剧本胜利！但是距离克苏鲁最终的回归还有多久呢？</li><li>前往_尾声_.</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "克苏鲁刚准备挥出一击，他身上的咒印就发出耀眼的光芒，他的肢体也僵住了。安迪勇敢地从街道中现身，结结巴巴地又从喉咙里挤出两段咒文。你和露比加入他一起吟唱，仪式就要成形。古神又嚎叫了一声，俯身趴下，仿佛被看不见的绳索捆住了。诡异的绿色和金色光晕穿透云层，揭开了头顶的夜空，在绿金两色的星云中心位置，是一颗闪亮的明星。\n星光越来越强。古神的躯体在你眼前扭曲变形，仿佛镜像破碎。有那么一刻，你在阿卡姆残破的天际线上看见拉莱耶的尖塔在闪耀，既诡异，又熟悉。克苏鲁发出最后的怒吼，消失在了虚空之中。\n遥远明星的光晕黯淡了，最后在雷闪中崩裂。随之一阵可怕的寂静。\n你、露比和安迪爬上附近一栋建筑的屋顶，坐在边缘远眺毁坏的城市。河岸城和商人区许多地方已经完全淹在水下，但阿卡姆大部分地区还算完好。你们仨凝视着灾变之后的景象，风暴的云层这时飘散了，整座城市沐浴在洁白的月光中。悠长的汽笛声在_米斯卡塔尼克_河涨起的河岸上回响。安迪站了起来，朝你伸出手：\n“没时间休息了。阿卡姆的人民需要我们，更胜以往。”在剧本日志中，记录下克苏鲁被驱除。"
+    },
+    "resolution3": {
+      "title": "结局3",
+      "body": "克苏鲁刚准备挥出一击，他身上的咒印就发出耀眼的光芒，他的肢体也僵住了。安迪勇敢地从街道中现身，结结巴巴地又从喉咙里挤出两段咒文。你和露比加入他一起吟唱，仪式就要成形。古神又嚎叫了一声，俯身趴下，仿佛被看不见的绳索捆住了。诡异的绿色和金色光晕穿透云层，揭开了头顶的夜空，在绿金两色的星云中心位置，是一颗闪亮的明星。\n星光越来越强。古神的躯体在你眼前扭曲变形，仿佛镜像破碎。有那么一刻，你在阿卡姆残破的天际线上看见拉莱耶的尖塔在闪耀，既诡异，又熟悉。克苏鲁发出最后的怒吼，消失在了虚空之中。\n遥远明星的光晕黯淡了，最后在雷闪中崩裂。随之一阵可怕的寂静。\n你、露比和安迪爬上附近一栋建筑的屋顶，坐在边缘远跳毁坏的城市。阿卡姆城一片破败的景象。河岸城完全被淹没了。独立广场和市政厅只比残砖碎瓦好一点儿，其他的街区也都是一片废墟。你只能想象这其中死了多少人。你们仨沉默地凝视着灾变之后的景象，风暴的云层这时飘散了，整座城市沐浴在洁白的月光中。你看向露比，发现她泪流满面。\n“我以前从没以为自己在乎过这座城市，但我现在在这儿，哭得跟个孩子一样。”她抽泣道，“我们还能做些什么呢？”"
+    },
+    "noResolution": {
+      "body": "你挣扎着站了起来，大地却又是一阵震颤。强大的克苏鲁五只眼睛俯视着你，不带任何感情。你之前就梦到过这一幕。他庞大的身躯闪着异界的光芒，模糊了星辰。他腐臭的吐息席卷了你，也扰动了水面。你和古神的凝视交汇了眼神，那一刻，喧嚣不再。你感到他就在你的脑海。没有生气，没有愤怒，只有冰冷的淡漠。\n没有清算，没有审判，也没有毁灭。你和你的族类对他而言只是一点小小的不快。克苏鲁脸上伸出粗壮带鳞的触手，沿着河道蜿蜒而过，寻找着你，还有你和你的族类从他那里拿走的东西。你已无力抵抗。为什么还要抵抗？你的命运，你的可悲族类的命运，都已写在群星之间。阿卡姆已经迎来了末日。",
+      "title": "如果未达成任何结局"
+    },
+    "label": {
+      "removeNoWeakness": "不移除 a 随机 基础弱点"
+    },
+    "xp": {
+      "bonus": "为"
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "tablet": "-3。如果失败，将你的1线索放到所在地点。",
+      "cultist": "-3. 如果你检定失败且你所在地点已淹没，受到1点伤害。",
+      "elderThing": "-1. 再抽出一个标记。 如果 你 失败, 之后 这 检定 resolves, 抽取 牌堆顶的卡牌 的 克苏鲁牌库. (Max 1 抽取 per 轮.)",
+      "skull": "-X. X 是 克苏鲁之怒."
+    },
+    "hardExpert": {
+      "cultist": "-5. 如果你所在地点已淹没，受到1点伤害。",
+      "tablet": "-5. 如果你检定失败，将你的1个线索放到你所在地点。",
+      "elderThing": "-3。再揭示一个标记。 如果 你 失败, 之后 这 检定 resolves, 抽取 牌堆顶的卡牌 的 克苏鲁牌库. (Max 1 抽取 per 轮.)",
+      "skull": "-X. X 是 2 更多 于 克苏鲁之怒."
+    }
+  },
+  "label": {
+    "chooseAllyInvestigator": "选择一位调查员 至 获得控制权 的 这 盟友.",
+    "chooseArtifactInvestigator": "选择一位调查员 至 控制 这 _神器_.",
+    "chooseInvestigatorToTest": "选择一位调查员 至 检定",
+    "chooseEnemyForDoom": "选择一个敌人 在 克苏鲁版图 与 没有 毁灭标记 在 它",
+    "chooseSkillForTest": "选择一个技能 至 检定",
+    "chooseAlly": "选择 a set-aside _盟友_ 剧情支援卡 至 获得控制权 的.",
+    "noAlly": "Do 不 获得控制权 的 an _盟友_ 剧情支援卡.",
+    "increaseFloodLevel": "Increase  淹没程度 的 Cthulhu's 地点",
+    "dreadsightGroupChoice": "调查员 必须 decide,，作为一组",
+    "cthulhuAttacks": "Cthulhu <i>(Wicked Claw)</i> 攻击 每位调查员 于 它的 地点",
+    "chooseCthulhuEnemyToReturn": "选择 a [[Cthulhu]] 敌人 至 return 至 克苏鲁版图, [[Enraged]] 面 正面朝上",
+    "chooseLocationToFlood": "选择 a 地点 至 increase  淹没程度 的",
+    "chooseLocationToRuin": "选择  完全淹没 地点 Cthulhu moves 至",
+    "cluesToPlace": "How many 的 你的 线索 做 你 want 放置on 这 地点?"
+  },
+  "errata": {
+    "theFinalSeal": "The 第一 sentence 在  返回 的 这 密谋 应该 阅读: “如果 这 密谋 advanced 由 reaching 它的 毁灭标记 threshold, 每位调查员 是 被击败. 否则…”"
+  }
+}

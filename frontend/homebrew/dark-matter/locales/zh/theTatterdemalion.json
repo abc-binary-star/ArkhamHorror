@@ -1,0 +1,22 @@
+{
+  "theTatterdemalion": {
+    "setup": {
+      "gatherSets": "收集 全部 卡牌 从 以下 encounter sets:<i>褴褛之王号</i>,<i>Anachronism</i>, 和<i>Dark Past</i>. 这些 sets 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{imgPath}/homebrew/dark-matter/sets/the-tatterdemalion.png' /><img src='{imgPath}/homebrew/dark-matter/sets/anachronism.png' /><img src='{imgPath}/homebrew/dark-matter/sets/dark-past.png' /></section>",
+      "setAsideArtificialIntelligence": "放置 一边<i>Artificial Intelligence</i>遭遇牌组, out 的 进行. 此 放置 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{imgPath}/homebrew/dark-matter/sets/artificial-intelligence.png' /></section>",
+      "setAsideVirtualAccessKey": "放置 一边 虚拟访问密钥 剧情 支援, out 的 进行.",
+      "scanningDeck": "Create 扫描 牌组. 此 是 done 由 taking 全部 encounter 卡牌 与 图标 在 bottom 的 他们的 back side 和 shuffling 他们 together.",
+      "placeLocations": "放置 全部 剩余 地点 至 进行.",
+      "startAt": "每个 调查员 begins 进行 在 冷冻休眠舱."
+    },
+    "resolutions": {
+      "noResolution": {
+        "title": "没有 结局 是 Reached",
+        "body": "<p><b>如果 没有 结局 是 reached (每个 调查员 resigned 或 是 defeated):</b>Once again 你是 startled awake, 此 time 由 small, cold hands 的 一 young girl. “它 worked! 你’re here! Please, follow me quickly.” 你是 surprised 至 找到 yourself standing 在……中 一 field 的 grass. sky 是 black 和 seething, 太阳 unable 至 penetrate dark, rolling storm clouds… 你是 没有 longer 在……上 Tatterdemalion, 但是 你 don’t recognize 此 放置 任一. Metallic cylinders 与 red, pulsating lights stand tall 在……中 distance, looming above 一 small 小镇. Behind 你 是 一 large obsidian 大门.</p><p>你 ask little girl about 你的 whereabouts. “你是 在……中 一 simulated 梦境. 在……中 fact, 你是 在……中<i>my</i>梦境. Now follow me quickly 在……之前 怪物 eats my 朋友们.”</p><ul><li>在……中 你的 战役日志, 记录 该<i>你 是 transported 至 Virtual Dreamlands 由 玛雅</i>.</li><li>如果 一 调查员 是 defeated 或 resigned 与 Cybervirus 在……中 他们的 手牌, 该 调查员 必须 记录 在……中 战役日志 该 他们<i>有 been infected 由 cybervirus</i>.</li><li>如果 在 least 1 copy 的 Reminiscence 诡计 是 在……中 胜利展示区, 加入 1 {'{'}elderThing{'}'} 标记 至 混乱袋 为 remainder 的 campaign.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><i>经验</i>: {xp}</li></ul></li><li>前往 至<b>冒险 II: 电子梦魇</b>.</li></ul>"
+      },
+      "resolution1": {
+        "title": "结局 1",
+        "body": "<p><b>结局 1:</b>你 找到 yourself standing 在……中 一 field 的 grass. 你是 没有 longer 在……上 Tatterdemalion, 但是 你 don’t recognize 此 放置 任一. sky 是 black 和 seething, 太阳 unable 至 penetrate dark, rolling storm clouds. Metallic cylinders 与 red, pulsating lights stand tall 在……中 distance, looming above 一 small 小镇.</p><p>此 system’s pocket 梦境 reality 是 like nothing 你有 ever experienced. colors, textures, sounds, 和 scents 是 startlingly realistic. Behind 你 是 一 large obsidian 大门, 一 virtual gateway 至 represent 你的 arrival.</p><p>你是 surprised 至 see 一 little girl walking towards 你. “你 got here 仅 在……中 time! Please, follow me quickly 在……之前 怪物 eats my 朋友们.”</p><ul><li>在……中 你的 战役日志, 记录 该<i>你 entered Virtual Dreamlands 由 你的 own means</i>.</li><li>如果 一 调查员 是 defeated, resigned, 或 ended 他们的 game 与 Cybervirus 在……中 他们的 手牌, 该 调查员 必须 记录 在……中 战役日志 该 他们<i>有 been infected 由 cybervirus</i>.</li><li>如果 在 least 1 copy 的 Reminiscence 诡计 是 在……中 胜利展示区, 加入 1 {'{'}elderThing{'}'} 标记 至 混乱袋 为 remainder 的 campaign.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><i>经验</i>: {xp}</li></ul></li><li>前往 至<b>冒险 II: 电子梦魇</b>.</li></ul>"
+      }
+    }
+  }
+}

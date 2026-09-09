@@ -1,0 +1,94 @@
+{
+  "label": {
+    "usurpTheNight": {
+      "refuse": "拒绝",
+      "proceed": "进入<b>结局2</b>",
+      "flipBack": "翻面 卡牌 敌人 面",
+      "acceptMercy": "相关角色 克扎拉' 和"
+    },
+    "defeatingXzharah": {
+      "proceed": "进入_结局2_",
+      "flipBack": "翻面 \"a\" 面"
+    },
+    "theBlackWind": {
+      "discard": "弃掉 The Black Wind 和 抽取遭遇牌库顶的卡牌 至 replace 它. 你 get -1 至 所有 技能 为remainder 的 这 轮.",
+      "addStrength": "在无尽深渊上增加1点力量，并将黑风加入胜利牌区。"
+    },
+    "lookAtExplorationDeck": "查看探索牌库顶的卡牌",
+    "lookAtEncounterDeck": "查看遭遇牌库顶的卡牌",
+    "nassor": {
+      "addStrength": "加入 1 strength 至 无尽深渊",
+      "extraDamage": "相关角色 +{count} 伤害 和 +{count} 恐惧 为 攻击"
+    },
+    "fateOfTheDreamers": {
+      "removeStrength": "移除 2 strength 从 无尽深渊.",
+      "addStrength": "加入 2 strength 至 无尽深渊."
+    },
+    "prisonersOfConquest": {
+      "freeTheCreatures": "检定 {agility} (4) 至 free  生物s.",
+      "slayTheCreatures": "检定 {combat} (4) 至 slay  生物s."
+    },
+    "ruinsOfSarkomand": {
+      "speakToTheDenizens": "检定{intellect}（3）以与居住在这些遗迹中的近似人形生物交谈。",
+      "blockTheTrapdoor": "检定 {combat} (3) ."
+    },
+    "effigyOfNodens": {
+      "entreatForAid": "检定{willpower}（2）以请求这座雕像所描绘实体的援助。",
+      "overthrowTheStatue": "检定 {combat} (2) ."
+    },
+    "theHourOfJudgment": {
+      "spareNeith": "放过奈斯，听听她要说什么。选择此项后，你相信自己能进一步了解奈斯所说的Xzharah。",
+      "destroyNeith": "摧毁 奈特 一次 和 为 全部. 由 选项, 你 在……下 诅咒 的 将 ."
+    }
+  },
+  "rules": {
+    "storyCards": {
+      "title": "剧情卡",
+      "body": "剧情卡是在本冒险出现的一种新的卡牌类型。此类卡牌只出现在另一冒险卡的背面，作为另一种叙述的形式出现。在你收到指示要结算一张剧情卡时，阅读该卡上的剧情文本然后结算其游戏文本(如果有的话)。\n<i>(注意：当一个在场的地点或敌人翻至剧情卡一面时，该地点或敌人在剧情卡结算时依然视为在场。)</i>"
+    },
+    "strengthOfTheAbyss": {
+      "title": "深渊之力",
+      "body": "在本场冒险中，冒险辅助卡上的资源数量表示当前深渊之力的强度。当你受到指示，要增强或减弱深渊之力时，相应地调整冒险辅助卡上的资源标记数目。深渊之力本身没有效果；但是，某些遭遇卡的效果根据当前的深渊之力，可能会改变或变得更强。要当心——深渊之力越是强大，你要面临的阻力也会越大。要是它变得过于强大，你就会败在深渊守卫的手上。"
+    },
+    "takenByTheAbyss": {
+      "title": "“坠入深渊”",
+      "body": "<p class='basic'>如果一个效果声明一位被击败的调查员或一个被击败的_盟友_支援<i>“坠入深渊”</i>，该角色惨遭诅咒，陷入长久的沉睡。每有一位调查员或一个_盟友_支援<i>“坠入深渊”</i> ，深渊之力增强1点。然后，如果这是一张独特卡牌，在冒险日志上记录下<i>“(卡牌名)坠入深渊。”</i>坠入深渊的调查员视为阵亡或发疯。此外，玩家不能再打出<i>坠入深渊</i>的任何独特_盟友_支援，直到该剧本结束。</p>"
+    }
+  },
+  "specialRules": [
+    {
+      "title": "@:standalone.guardiansOfTheAbyss.rules.storyCards.title",
+      "body": "@:standalone.guardiansOfTheAbyss.rules.storyCards.body"
+    },
+    {
+      "title": "@:standalone.guardiansOfTheAbyss.rules.strengthOfTheAbyss.title",
+      "body": "@:standalone.guardiansOfTheAbyss.rules.strengthOfTheAbyss.body"
+    },
+    {
+      "title": "@:standalone.guardiansOfTheAbyss.rules.takenByTheAbyss.title",
+      "body": "@:standalone.guardiansOfTheAbyss.rules.takenByTheAbyss.body"
+    }
+  ],
+  "intoTheGate": {
+    "ankh": "<p>*你的 Ankh amulet glows 与 a blinding light, causing Xzharah 至 recoil. \"So, Neith 有 废弃 us!\" Xzharah hisses.*</p>"
+  },
+  "removeStrengthFromTheAbyss": "移除 1 strength 从 无尽深渊.",
+  "theTranslatorsEvidence": {
+    "benefit": "<p>*你 bring  石板 至 Dr. El Masri, 和 她 translates 它 至  best 的 她的 能力. \"当  选择 是 made, 他 shall 是 强化 由 a thousand sacrifices 从sacred land.\" 她 blinks a few times, trying 至 process 什么 它 means. \"How many coma patients 是 那里 right now?\" 她 asks, wide-eyed.*</p>"
+  },
+  "theSupplicantsEvidence": {
+    "benefit": "<p>*你 manage 至 corner Dr. Moore as 他 tries 至 escape  城市 在 foot. \"非常 clever,\" 他 admits. \"But 你're already 场外 的 时间. Lock me up, 它 doesn't matter. The dreamers 将 是 已牺牲, 和 我们的 Chosen 将 队长 us 至 a 新 age.\" But 之后 several hours, 他 是 begging 至 是 let 场外 的  城市. \"Please,  reaper 是 coming! Neith 是 coming 为 us 所有. 我们'll 所有 是 sacrificed, don't 你 understand? 你 和 me 两者! 所有 的 us need 至 flee  城市 当我们 still 可以!\"*</p>"
+  },
+  "thePriestesssEvidence": {
+    "benefit": "<p>*Using  密钥 Nadia gave 你, 你 enter  marked residence. To 你的 surprise, 那里 是 nobody inside - 仅faint stench 的 rot 和 aged leather. The 地下室 的  residence 是 littered 与 旧 books, records kept 由  兄弟会 和 它的 many agents. 他们 将 受到 some 时间 至 peruse, 但 a 队长 是一张队长.*</p>"
+  },
+  "theSalesmansEvidence": {
+    "benefit": "<p>*Farid grins wide as 他 scoops golden idols 进入 他的 rucksack. 你 press 他 为 资讯 之前 他 gets too excited. \"查看, 他们 promised me wealth beyond my wildest 梦. Even I 有 my price, 你 知道?\" 他 throws up 他的 hands, 已撤退. \"Let me show 你 my records. I've done a lot 的 'business' 在  最后 few months. 该'll point 你 在  right direction.\"*</p>"
+  },
+  "theAssassinsEvidence": {
+    "benefit": "<p>*Despite 他的 mortal wounds,  assassin grins wickedly. \"The 白天 是 coming,\" 他 说 between a fit 的 coughs. \"你 think killing me 将 stop 它? Fools! The Beast 将 devour 你 所有!\" 他 cackles 与 他的 final breath, 然后 falls silent.*</p><p>*你quick 至 搜索 他的 belongings 之前 任意 旁人 spot  正文. Among  many strange curios 在 他的 person, 你 找出 a small leather-bound 日志 与 a cryptic inscription:*</p><p class='center'><span class='wolgast' style='line-height:1em;'>*我们的 tribute soaks 无尽深渊al blade<br>A thousand souls never 至 wake<br>与 这 我们的 Chosen shall arise<br>和  白天 是 ever nigh!*</span></p>"
+  },
+  "theProfessorsEvidence": {
+    "benefit": "<p>*你 . 和 . \"相关角色!\" . \"相关角色 有 从 a . 相关角色 .\" 和 你的 手牌. \"相关角色 . 相关角色 如果 的 , I 可以 ,\" 与 a .*</p>"
+  }
+}

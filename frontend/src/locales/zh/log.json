@@ -1,3 +1,5 @@
 {
-  "retaliate": "{name}报复"
+  "retaliate": "{name}报复",
+  "attackOfOpportunityIgnored": "忽略了 {name} 的借机攻击",
+  "attackOfOpportunityIgnoredBy": "{name} 忽略了 {source} 的借机攻击"
 }

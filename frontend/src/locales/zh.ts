@@ -4,6 +4,8 @@ import cards from '@/locales/zh/cards.json'
 import label from '@/locales/zh/label.json'
 import investigators from '@/locales/zh/investigators.json'
 import campaignLog from '@/locales/zh/campaignLog.json'
+import event from '@/locales/zh/event.json'
+import cardOption from '@/locales/zh/cardOption.json'
 import nightOfTheZealot from '@/locales/zh/nightOfTheZealot'
 import theDunwichLegacy from '@/locales/zh/theDunwichLegacy'
 import thePathToCarcosa from '@/locales/zh/thePathToCarcosa'
@@ -13,14 +15,20 @@ import theDreamEaters from '@/locales/zh/theDreamEaters'
 import theInnsmouthConspiracy from '@/locales/zh/theInnsmouthConspiracy'
 import edgeOfTheEarth from '@/locales/zh/edgeOfTheEarth'
 import theScarletKeys from '@/locales/zh/theScarletKeys'
-import theFeastOfHemlockVale from '@/locales/en/theFeastOfHemlockVale'
-import brethrenOfAsh from '@/locales/en/brethrenOfAsh'
+import theFeastOfHemlockVale from '@/locales/zh/theFeastOfHemlockVale'
+import theDrownedCity from '@/locales/zh/theDrownedCity'
+import childrenOfBlood from '@/locales/zh/childrenOfBlood'
+import brethrenOfAsh from '@/locales/zh/brethrenOfAsh'
 import standalone from '@/locales/zh/standalone'
 import gameBoard from '@/locales/zh/gameBoard/gameBoard'
 import xp from '@/locales/zh/xp.json'
+import theLabyrinthsOfLunacyLog from '@/locales/zh/theLabyrinthsOfLunacy.json'
+import { homebrewMessages } from '@/locales/homebrew'
 
 export default 
 { ...base,
+  ...event,
+  ...cardOption,
   ...campaignLog, 
   ...gameBoard, 
   cards,
@@ -39,6 +47,10 @@ export default
   edgeOfTheEarth, 
   theScarletKeys, 
   theFeastOfHemlockVale,
+  theDrownedCity,
+  childrenOfBlood,
   brethrenOfAsh, 
-  standalone
+  ...homebrewMessages('zh'),
+  standalone,
+  theLabyrinthsOfLunacy: theLabyrinthsOfLunacyLog
 }

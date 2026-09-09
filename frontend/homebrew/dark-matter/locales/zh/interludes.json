@@ -1,0 +1,65 @@
+{
+  "interludes": {
+    "1": "任务简报",
+    "2": "搜寻碎片",
+    "3": "Introspection"
+  },
+  "headings": {
+    "interludes": {
+      "2": "幕间故事",
+      "3": "幕间故事 II"
+    }
+  },
+  "missionBriefing": {
+    "title": "幕间故事 I: 任务简报",
+    "missionBriefing1": "<p>_任务简报 1:_ virtual dreamscape around 你 swirls 至 一 flurry 的 ephemeral blue code 和 dissipates 至 complete 黑暗. 你 找到 yourself back inside Tatterdemalion. 一 sharp sting hurts 你 作为 一 mechanical arm unplugs cyber-cable out 的 back 的 你的 head. K2-PS187 apologizes 为 intrusive method 它 used 至 bring 你 至 virtual dreamlands 和 是 now fully cooperative. cybernetic supercomputer 将 help 你 在……中 任意 way 它 可以, starting 与 一 summary 的 recent events 该 有 unfolded 在……上 Tatterdemalion.</p><p class='basic right'>前往 至 _任务简报 3_.</p>",
+    "missionBriefing2": "<p>_任务简报 2:_ virtual dreamscape around 你 swirls 至 一 flurry 的 ephemeral blue 和 dissipates away 作为 你 disconnect 从 virtual dreamscape 和 stumble out 的 全部 too familiar cryosleep chamber. K2-PS187 是 now fully cooperative 和 将 help 你 在……中 任意 way 它 可以. supercomputer 开始 由 briefing 你 在……上 recent events 该 有 unfolded 在……上 Tatterdemalion.</p><p class='basic right'>前往 至 _任务简报 3_.</p>",
+    "missionBriefing3": "<p>_任务简报 3:_ crew 的 Tatterdemalion 是 composed 的 worshippers 的 哈斯塔, 1 的 Ancient Ones 该 有 descended upon 地球. 邪教徒 recently undertook 一 mission 至 free 塔希尔达, daughter 的 哈斯塔, rumored 至 be imprisoned 在……上 一 asteroid codenamed Fragment. 飞船 managed 至 rendezvous 与 Fragment 和 deployed several survey teams 至 搜索 caverns upon 它. 在……之前 你的 当前 mind 是 implanted, 你 是 1 的 这些 邪教徒 explorers, destined 至 awaken 塔希尔达.</p><p>在……之后 一 few weeks 的 survey, 1 的 teams retrieved 一 slab 的 外星人 hieroglyphs, 和 ordered K2-PS187 至 开始 一 translation. 另一 team reported 至 有 found inner chambers where 塔希尔达 resided 和 destroyed imprisoning sigils. 他们 是 never heard 从 again.</p><p>你 和 你的 fellow 邪教徒 swiftly withdrew 从 asteroid 在……之前 princess 的 Carcosa 可以 awaken 和 attack Tatterdemalion. Content 该 such 是 risks 1 took worshipping gods 的 pure chaos, 你 did 不 mourn 你的 lost companions. 飞船 是 放置 至 返回 至 inner solar system. 你的 mission 有 been 一 success. 你 had finally freed 塔希尔达, daughter 的 哈斯塔, who might soon be elevated 由 她的 father 至 become 一 new Ancient 1.</p><p>当……时 most 的 邪教徒 entered cryosleep 为 journey home, K2-PS187 是 busy analysing 外星人 runes. 当 translation 是 complete, computer learned 的 一 剧情 titled “卡尔克萨之裔.” knowledge caused 它 至 go insane 和 slaughter 全部 的 waking crew out 的 terror. 飞船 是 left 在……中 turmoil, drifting 不使用 sense through 太空 — 直到 K2-PS187 brought 你 back 至 此 world 从 archives 在……中 一 final cry 为 help.</p><p>你 now understand what 你 必须 do. Although 地球 是 没有 longer home 它 used 至 be, humanity still exists, spread out throughout colonies 在……中 solar system, living 在……中 fear 和 在……中 isolation. 如果 being named 塔希尔达, 卡尔克萨之裔, 会 be exalted 由 她的 father, there 是 没有 doubt 该 她 将 decide 至 reign 在……上 humanity’s colonies 与 madness 的 Carcosa. 你 必须 atone 为 你的 past sins 和 eliminate entity 在……之前 她 可以 be elevated 至 godhood. Unfortunately, last recorded positions 的 Fragment 是 among data lost 在……期间 initial corruption. However, K2-PS187 是 able 至 retrieve 一 few leads 从 飞船’s itinerary. 你 将 need 至 traverse solar system 至 locate coordinates 的 asteroid 和 prevent 塔希尔达’s ascension.</p>",
+    "simulatedPerformance": "<p class='basic'>调查员 可以 选择 至 watch 一 simulated performance 的 translated 进行. 如果 你 do 因此, 阅读 _卡尔克萨之裔_.</p><p class='basic right'>前往 至 _ 搜寻碎片_.</p>",
+    "label": {
+      "watchThePerformance": "Watch 一 simulated performance 的 卡尔克萨之裔. 阅读 在 你的 OWN RISK.",
+      "declineToWatch": "Do 不 watch performance."
+    },
+    "checkCampaignLog": "<p class='basic'>检查 战役日志. *如果 你 是 transported 至 Virtual Dreamlands 由 玛雅*, 阅读 _任务简报 1_. Otherwise, 跳过 至 _任务简报 2_.</p>"
+  },
+  "heirToCarcosa": {
+    "title": "幕间故事 I: 任务简报",
+    "body": "<section class='note-green'><h1>卡尔克萨之裔</h1><h3 class='term' style='text-align:center;width:100%;'>阅读 在 你的 OWN RISK.</h3><p>program begins 与 royal family 的 Yhtill cowering 在……之前 King 在……中 Yellow, Avatar 的 哈斯塔. 为 下一 3 hours, 你 witness 一 horrifying creative work, full 的 betrayal, intrigue, 和 恐惧. 剧情 unfolds thus:</p><p>在……之后 claiming Yhtill 和 absorbing 它 至 Carcosa, King 在……中 Yellow took insane princess Camilla 作为 一 consort. 在……之前 她的 death, princess bore Ancient 1 3 孩子们, who became fosterlings 的 哈斯塔. 他们 是 2 boys, named Thothut 和 Tasylock, 和 一 girl named 塔希尔达. 当……时 normal-seeming 在 第一, 孩子们 developed many 的 physical characteristics 和 powers 的 他们的 father. 此 transformation 是 viewed 由 他们的 mother 作为 yet 另一 的 Carcosa’s many corruptions. 它 是 final blow 至 Camilla’s mind, causing 她的 heart 至 stop 从 despair 和 grief.</p><p>为 一些 time royal trio lived 与 他们的 sire 在……中 Carcosa, evil beings serving loyally 在 foot 的 他们的 father. 但是 soon, like 他们的 mother, uncle, 和 grandmother 在……之前 他们, princes 和 princess 的 Carcosa began 至 whisper, squabble, 和 plot. 他们 had dreams 的 power 和 succession. Eventually Thothut 和 Tasylock unwisely moved against 他们的 father. 哈斯塔 是 aware 的 plot 全部 along, 和 easily avoided 他们的 traps. 在……中 一 way too horrible 至 describe, 他 destroyed 两者 的 他的 sons.</p><p>他的 daughter 塔希尔达, who knew 的 她的 siblings’ plot 但是 refused 至 获得 part 在……中 它, 是 spared. 但是 她 had done nothing 至 warn 她的 father, choosing 至 wait 和 see 如果 他们的 plot 是 successful 在……之前 committing 至 一 course 的 action. 为 她的 silent betrayal, 塔希尔达 是 punished. 她的 father, 他 Who 应该 不 Be Named, sealed 她的 至 她的 home, which Ancient 1 tore free 的 Carcosa 和 hurled out 至 太空. 她的 father claimed 该 在……中 一 inevitable time, 她 将 be released, 和 granted 全部 该 她 desires.</p><ul><li>记录 在……中 你的 战役日志 该 *你有 watched performance 的 卡尔克萨之裔*.</li><li>每个 调查员 suffers 1 精神创伤.</li></ul></section><section class='note-green'><ul><li>如果 一 调查员 controls 卡尔克萨之裔 weakness, 他们 可以 加入 2 tally marks 下一 至 他们的 “记忆”.</li></ul></section>",
+    "label": {
+      "addTwoMemories": "加入 2 tally marks 下一 至 你的 “记忆”.",
+      "doNotAddMemories": "Do 不 加入 tally marks."
+    }
+  },
+  "theSearchForFragment": {
+    "title": "搜寻碎片",
+    "body": "<p>Aboard Tatterdemalion, 你 和 你的 companions seek coordinates 的 asteroid “Fragment” 至 prevent ascension 的 塔希尔达, daughter 的 哈斯塔. Upon analysing 剩余 data aboard 飞船, K2-PS187 和 你有 decided 在……上 3 traces 该 是 worth investigating. However, time 是 的 essence — 你可以 want 至 visit destination 你 think 将 be most valuable 第一.</p><p class='basic'>调查员 必须 选择 至 follow 1 的 以下 traces 该 有 不 already been chosen. 如果 你 不能 (你有 already completed 每个 冒险 III), 跳过 至 _幕间故事 II: Introspection_.</p>",
+    "trace1": "<div class='green trace'><p>_Trace 1:_ last destination 的 Tatterdemalion 在……之前 travelling 至 Fragment 是 一 research 实验室 在……上 一 stray asteroid named Elbrus. 此 specific facility 是 built 至 study 和 experiment 与 materials 该 exhibit quantum-like behaviour. 你 aren't sure what 邪教徒 是 hoping 至 achieve there, 但是 perhaps 这些 scientists 可以 steer 你 在……中 right direction.</p><p class='basic right'>前往 至 _冒险 IIIa: 量子迷失_.</p></div>",
+    "trace2": "<div class='green trace'><p>_Trace 2:_ Thorough analysis 的 archives 有 revealed evidence 的 hacking 至 mainframe 的 一 地球 survey vessel named 往昔号 II, 和 several references 至 一 “quarantine” 和 至 “trust 没有 1”. 如果 你 可以 establish contact 与 crew, maybe 你 可以 figure out what 邪教徒 是 looking 为.</p><p class='basic right'>前往 至 _冒险 IIIb: 地球阴影_.</p></div>",
+    "trace3": "<div class='green trace'><p>_Trace 3:_ 褴褛之王号 appears 至 有 landed 在……上 1 的 Saturn’s moons several times 在……中 past few years. 飞船’s log 记录 这些 operations 作为 “negotiations.” K2-PS187 notes 该 此 是 particularly strange, 作为 there 是 没有 known human outposts 此 far out 在……中 solar system. 你 可以 pay 一 visit 至 这些 coordinates 至 figure out what 这些 “negotiations” consist 的.</p><p class='basic right'>前往 至 _冒险 IIIc: 怪异月亮_.</p></div>",
+    "label": {
+      "lostQuantum": "Follow Trace 1. 前往 至 冒险 IIIa: 量子迷失.",
+      "inTheShadowOfEarth": "Follow Trace 2. 前往 至 冒险 IIIb: 地球阴影.",
+      "strangeMoons": "Follow Trace 3. 前往 至 冒险 IIIc: 怪异月亮."
+    }
+  },
+  "introspection": {
+    "title": "幕间故事 II: Introspection",
+    "body": "<p>strange quantum shards, golden disks obtained 从 米·戈, cryptic message 从 地球… Despite travelling throughout solar system 至 uncover 这些 individual pieces 的 puzzle, 你 still 可以’t seem 至 fit 他们 together 至 1 big picture. There 是 一 钥匙 element missing – 一 connective tissue 该 将 make sense 的 它 全部. 的 course, there 是 也 still 1 放置 你 know 为 certain contains 全部 的 你的 answers, 但是 你 fear what 你可以 找到 there. 和 该 放置 是 你的 own mind. Deep within 你的 own subconscious, 你 可以 feel 一 shimmer 的 邪教徒 你 embody – imprisoned 在……中 edges between 你的 thoughts. 你 know 为 certain 该 其他 版本 的 你 remembers how 至 找到 Fragment. Entering 1’s own virtual mind 是 particularly dangerous 作为 任意 small mistake 可以 send 你 spiraling 至 insanity. 但是 你是 ready 至 confront 你的 past once 和 为 全部. 与 help 的 K2-PS187, cryo-chamber’s 梦境 protocols 是 once again tinkered 与 至 access 你的 own personal 记忆 此 time. 你 lie back down 在……中 cryo-chamber once 更多. 与 一 flick 的 一 switch, 你 开始 至 fall back 至 unconsciousness…</p>",
+    "searchTheTatterdemalion": "<p class='basic'>调查员 可以 选择 至 获得 他们的 time 至 搜索 Tatterdemalion 为 任意 更多 important details 他们 可以 有 missed. 如果 你 do 因此, 加入 1 tally mark 至 “Impending 毁灭标记” 和 至 每个 调查员’s “记忆.”</p>",
+    "sideStory": "<p class='basic'>调查员 可以 选择 至 enter 一 simulation 的 地球’s histories 至 learn 更多 about 此 future 由 playing 一 side-剧情, crossing out “记忆” instead 的 paying 它的 经验 cost. 经验 earned 由 playing side-剧情 become “记忆” 为 调查员 instead. (返回 至 此 section 的 战役指南 在……之后 finishing side-剧情.)<i>结算 此 manually 如果 desired, adjusting “记忆” 在……中 战役日志 accordingly.</i></p>",
+    "chaosTokens": "<p class='basic'>Based 在……上 你的 difficulty level, 加入 以下 chaos 标记(s) 至 混乱袋 为 remainder 的 campaign:</p><ul class='basic'><li>Easy: –3.</li><li>Standard: –5.</li><li>Hard: –6 和 {'{'}elderThing{'}'}.</li><li>Expert: –7 和 {'{'}elderThing{'}'}.</li></ul>",
+    "checkCampaignLog": "<p class='basic'>检查 战役日志. *如果 调查员 有 uncovered 邪教徒’s inhuman methods:* 前往 至 _Introspection 1_.</p><p class='basic'>Otherwise, 跳过 至 _冒险 IV: 黄衣机器_.</p>",
+    "introspection1": "<p>记忆 的 你的 past life come flooding back 至 你 – horrible visions 的 launching missiles onto mining outposts, spreading memetic biological viruses, 和 其他 unspeakable evils upon humanity. 邪教徒 该 你 used 至 be 必须 answer 为 他们的 atrocities – 和 你是 更多 than ready 至 finally extinguish 他们的 presence within 你.</p><p class='basic'>每个 调查员 begins 以下 冒险 与 1 additional resource 和 1 additional 卡牌 在……中 他们的 starting 手牌.</p>",
+    "label": {
+      "searchTheShip": "搜索 Tatterdemalion. 加入 1 tally mark 至 “Impending 毁灭标记” 和 至 每个 调查员’s “记忆.”",
+      "doNotSearchTheShip": "Do 不 搜索 飞船."
+    }
+  },
+  "epilogue": {
+    "title": "Epilogue",
+    "epilogue1": "<p>Despite 全部 odds, humanity survived 第二 apocalypse. Beneath 光 的 new stars 和 amidst dust 的 dead, humanity enters 一 golden era 的 scientific development 和 prosperity. 当 white dwarf 该 used 至 be 太阳 extinguishes, mankind 将 有 colonized half 一 galaxy worth 的 stars. 一些 的 worlds 将 succumb 至 madness 的 Ancient Ones, 但是 most 将 survive — 和 thrive. 和 yet, 在……之后 billions 和 billions 的 years, net entropy 的 universe continues 至 increase, slowly 和 steadily. stars go dim, 1 由 1, 直到 what beings 该 descended 从 what 是 once humanity 必须 survive 由 extracting negligible amount 的 radiation released 由 仅 celestial bodies 剩余 在……中 universe – black holes. 和 still, 在……之后 一 finite 但是 uncountable time, even black holes 将 evaporate…</p>",
+    "epilogue2": "<p>Humanity 可以 有 perished along 与 它的 star, 但是 不 全部 life 在……中 universe 是 aligned 与 Ancients Ones. fungoid 米·戈 scientists escaped solar system 与 infinite trove 的 knowledge 他们 collected 从 observing humans. descendants 的 米·戈 会 live 在……上, 和 colonize many galaxies 在……中 搜索 的 更多 knowledge 至 satisfy 他们的 ravenous curiosity. 和 yet, 在……之后 billions 和 billions 的 years, net entropy 的 universe continues 至 increase, slowly 和 steadily. stars go dim, 1 由 1, 直到 what beings 该 descended 从 what 是 once 米·戈 必须 survive 由 extracting negligible amount 的 radiation released 由 仅 celestial bodies 剩余 在……中 universe – black holes. 和 still, 在……之后 一 finite 但是 uncountable time, even black holes 将 evaporate…</p>",
+    "epilogue3": "<p>和 当 全部 black holes do disappear, 和 全部 该 是 left 是 一 vacuum 的 vastly separated photons 和 electrons, life 在……中 cosmos 将 cease 至 exist. 我们的 universe succumbs 至 一 cold 和 empty death, leaving behind 一 world 的 maximum decay 和 infinite dark matter – 一 world 该 是 once known 至 一些 作为 Carcosa.</p><ul><li>在……中 你的 战役日志, 记录 该<i>realm 的 Carcosa overtook 我们的 universe, 和 塔希尔达 rules 在……上 black stars</i>.</li></ul>",
+    "epilogue4": "<p>但是 humanity 是 不 alone. 他们 有 encountered countless 外星人 species throughout universe 和 shared 他们的 knowledge 和 advancements towards finding 一 way 至 reverse entropy. final piece 的 puzzle 是 information 该 had been collected 由 米·戈 scientists 的 尤格斯 – data within 6 human brains 该 once populated 一 kindergarten class 在……上 地球, 在……之前 Ancient Ones 第一 awakened. 和 thus, 与 essential help 的 米·戈, Royal Family 的 Carcosa 是 imprisoned 在……中 他们的 mad realm 的 Carcosa once 更多, 和 yellow stars rise again 在……中 rebirth 的 一 brighter universe.</p><ul><li>在……中 你的 战役日志, 记录 该<i>哈斯塔 和 塔希尔达 是 imprisoned 在……中 Carcosa once 更多, 和 universe vanquished inevitable… 为 now</i>.</li></ul>"
+  }
+}

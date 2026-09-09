@@ -1,0 +1,167 @@
+{
+  "specialRules": [
+    {
+      "title": "场景2中的铁道与相邻规则",
+      "body": "<p class='basic'>每位 Rail 地点 有 1 或 更多 rail icons 印刷 在 它. 这些 rail icons represent  track  Mine Cart moves 沿着.</p><ul><li>当地点上的轨道图示面向相邻地点的轨道图示时，这些轨道图示视为<b>对齐</b>。</li><li>之间有对齐轨道图示的相邻地点视为互相连接，并形成一条铁道。没有对齐轨道图示的相邻地点不视为互相连接。</li></ul>"
+    },
+    {
+      "title": "滑动与交换地点",
+      "body": "<p class='basic'>调查员可以透过滑动与交换地点来对齐轨道，构建通往铁道出口的新路线。</p><p class='basic'>要滑动地点，先选择一张与空格相邻的地点，然后将该地点(以及该地点上所有的卡牌)移动到该空格。</p><p class='basic'>要交换2个地点，同时将这2个地点(以及各自地点上所有的卡牌)，放到彼此原先占据的格子。</p><ul><li><b>有剧情支援的地点无法被滑动或交换。</b></li></ul>"
+    },
+    {
+      "body": "<p class='basic'>每位调查员的迷你卡牌都覆盖放在矿车上。</p><ul><li>在矿车内的调查员，同时视为在矿车所在的地点上。调查员无法脱离矿车进行移动。当矿车移动时，每位调查员也跟著移动。</li><li>矿车剧情支援的右侧有一个轨道图示，表示其朝向的方向。矿车上的轨道图示，必须永远朝向其所在地点上的其中一个轨道图示。</li><li>当移动矿车时，只能沿著连接地点上的铁道路线移动。</li><li>当矿车进入一个地点时，调查员可以选择将其朝左或朝右旋转90度，让矿车朝向该地点上的其中一个轨道图示。</li><li>矿车只能往其轨道图示朝向的方向移动。如果它移动进入的地点没有形成一条完整路线<i>(也就是没有对齐)</i>，矿车将会脱轨。</li></ul>",
+      "title": "The 矿车"
+    }
+  ],
+  "intro": {
+    "title": "冒险：铭刻于石",
+    "body": "<p>你们知道前往北角矿坑的路要穿越珍珠山脉中央的一道狭窄的山沟，但除此之外没有其他线索。你们只好在谷地中四处询问更多关于矿坑的消息，但搜集到的讯息似乎相互矛盾。据传这座矿坑已经关闭，但最近又传出有人在其中失踪；有些消息说里面的地衣跟苔癣具有营养价值，但也有人说它们含有剧毒？最奇怪的是关于那座矿坑关闭的原因，没有人知道，或只是不愿提起。</p><p>你们朝著矿坑方向前进，最后来到一个巨口般的山洞前。你们沿著老旧的铁道进入洞口，周围四散著废弃的装备，亮黄色的菌菇生长其上，将其完全覆盖。这些菌菇看起来不适合食用，同时散发出腐臭的气息。终于狭窄的隧道引领你们来到一座宽广的洞穴，四处长满了发光的蘑菇以及高耸的水晶结构体。地面发出微微的震动，随之一阵哭声从矿洞深处回荡而来，你们安抚住自己的不安，向更深处前进。至少，对于那些在生锈工具上不自然生长的蕈菇，马尔克斯博士一定会想要一些样本。</p><p class='basic right'>前往_设置_.</p>"
+  },
+  "setup": {
+    "scrap": "在每个地点各放置1资源，作为残片。<i>(提示：在场景1期间收集的残片，在场景2中会对调查员有帮助。)</i>",
+    "startAt": "每位调查员从最左边的地点开始游戏。",
+    "remainingResidents": "将<i>住民</i>遭遇组中的其他卡牌从游戏中移除。",
+    "scenarioReference": "将场景1冒险参考卡牌放置入场。",
+    "setOutOfPlay": "将2张晶化寄生虫敌人以及<i>铭刻于石</i>遭遇组中所有其他卡牌放在一旁，置于场外。",
+    "otherLocations": "收齐<i>铭刻于石</i>遭遇组中的所有地点，将控制站地点放置入场。将剩余的15张_轨道沿线_地点放在一旁，置于场外。",
+    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: *銘刻於石*, *岩间恐怖*, *折射*, *寒冷刺骨*, 和 *Ghouls*. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/written-in-rock.png' /><img src='{setImgPath}/horrors-in-the-rock.png' /><img src='{setImgPath}/refractions.png' /><img src='{setImgPath}/chilling-cold.png' /><img src='{setImgPath}/ghouls.png' /></section><section class='encounter-sets'><img src='{setImgPath}/written-in-rock.png' /><img src='{setImgPath}/horrors-in-the-rock.png' /><img src='{setImgPath}/refractions.png' /><img src='{setImgPath}/chilling-cold.png' /><img src='{setImgPath}/ghouls.png' /></section>",
+    "currentDaySet": "In addition, 检查  冒险日志 为当前 白天 和 gather 它的 corresponding 遭遇组 为 *第一天*, *第二天*, 或 *最后一天*. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/the-first-day.png' /><img src='{setImgPath}/the-second-day.png' /><img src='{setImgPath}/the-final-day.png' /></section><section class='encounter-sets'><img src='{setImgPath}/the-first-day.png' /><img src='{setImgPath}/the-second-day.png' /><img src='{setImgPath}/the-final-day.png' /></section>",
+    "currentDayMarker": "检查 你的 冒险日志 为当前 白天 和 时间. 放置Time Marker 卡牌 入场 在 它的 corresponding (_白天 {'{'}day{'}'}_) 或 (_夜晚 {'{'}night{'}'}_) 面.",
+    "caves": "Gather  6 _洞穴_ 地点 和 randomly 移除 2 的 他们 从 游戏. 放置rest as shown 在  参考摆放位置 diagram 在 页 11 (看见 _地点 Adjacency_ 在 页 3).",
+    "residents": "如果 它 是 (_白天 {'{'}day{'}'}_), gather 每位 剧情支援卡 从*居民* 遭遇组. 这 组 indicated 由 下列icon:<section class='encounter-sets'><img src='{setImgPath}/residents.png' /></section>",
+    "riverHawthorne": "如果 它 是 _白天 1_, 将芮福．霍桑放到栏位3的地点。",
+    "simeonAtwood": "如果 它 是 _白天 1_ 或 _白天 2_, 将西缅．阿特伍德放在一旁，置于场外。",
+    "leahAtwood": "如果 它 是 _白天 3_, 将莉亚．阿特伍德放在一旁，置于场外。",
+    "subterraneanBeast": "如果 它 是 (_白天 {'{'}day{'}'}_), 将地底恐兽从游戏中移除。"
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1_: Simeon steps 场外 的  mine cart looking dazed. “What a ride!” 他 shouts, troublingly unfazed. “没有 matter 什么, 你definitely going 在  Miner’s 秘密 Order 的 Mischief ’s 大厅 的 Fame! 你’re 在 good company 与 George Washington Carver 和 my mom.” 他 nearly trips as  rail line slopes upward, 朝向  brilliant sky. 你 帮助 他 至 他的 feet 和 队长 他 outside, 进入  clear fresh 空气.</p><ul><li>更新剧本日志。<ul><li>在西缅．阿特伍德的笔记中，记录下<i>西缅活下来了</i>。</li><li>提升西缅．阿特伍德2格友好度。每位调查员取得2\n点奖励经验值。</li></ul></li><li>跳至_结局 6_.</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2_: Leah grips  面 的  cart as 你 disembark. 她 bites 她的 lip as 她 holds 返回 tears, unseeing. As 你 队长 她的 返回 up  tunnel,  sound 的 soft weeping echoes 离场  stone walls. As 你 emerge outside 进入  clean, fresh 空气, 你 work up  courage 至 ask Leah 什么 她 saw.</p><p>“他走了，西缅走了。”她回答到。</p><ul><li>更新剧本日志。<ul><li>在莉亚．阿特伍德的笔记中，记录下<i>莉亚在矿坑中见到某种东西</i>。</li><li>提升莉亚．阿特伍德的友好度。每位调查员取得2\n点奖励经验值。</li></ul></li><li>跳至_结局 6_.</li></ul>"
+    },
+    "resolution3": {
+      "title": "结局3",
+      "body": "你们发誓自己在下车时，听到了西缅．阿特伍德的声音从空荡的隧道中传来。你们无法对它充耳不闻，只好沿著隧道返回，希望能找到那个年轻人。最后你们来到一座长满水晶的闪耀峡谷边，峡谷中有个人形的黑影正俯身在一具小动物的尸体前。你们大喊著，但那个人影却迅速地躲入黑暗中。你们喊著西缅的名字直到声音沙哑，但却无济于事。最终你们转身走向洞穴的出口，嘴里带著难以忍受的苦涩。"
+    },
+    "resolution4": {
+      "title": "结局4",
+      "body": "你们发誓自己在下车时，听到了莉亚．阿特伍德的声音从空荡的隧道中传来。你们无法对它充耳不闻，只好沿著隧道返回，希望能找到这位谷地的厨师。最后你们来到一座长满水晶的闪耀峡谷边，峡谷中有个人形的黑影正俯身在莉亚的尸体前。你们大喊著，但那个人影却迅速地躲入黑暗中。你们看了莉亚毫无生机的遗体最后一眼，然后转身走向洞穴的出口，嘴里带著难以忍受的苦涩。"
+    },
+    "resolution5": {
+      "title": "结局5",
+      "body": "你们翻身下车时听见一声熟悉的敲击声，随之而来的是一阵腐臭味。更多咆啸与吼叫声从曲折的洞窟中传来，促使你们加速朝出口跑去。最后你们终于重新呼吸到了清新的夜间空气，你们停下脚步，转身凝望著漆黑的洞窟，天知道这座岛地下还有多少恐怖的存在藏身于岩石中。"
+    },
+    "resolution6": {
+      "title": "结局6",
+      "body": "<p>_结局 6_: “Miskatonic Survey, June 1926. Members Marquez, Musgrave, et alii. 我们 是 lucky 至 escape 从 北 Point Mine 与 我们的 lives. Extreme instability 和 seismic tremors. Findings include asymmetrical crystal formations, rodents 的 unusual 大小, 和 an unusually aggressive insect population.”</p><ul><li>如果  Prismatic Shard 剧情 支援 是 在……下  控制 的 an 调查员 当  冒险 ended, 选择 an 调查员 加入它 至 他们的 牌组. 它 会 不 数量 朝向 他们的 牌组 大小.</li><li>更新剧本日志。<ul><li>如果 “你 helped 河流,” increase 河流 Hawthorne’s Relationship Level. 每位调查员 获得 1 奖励 经验.</li><li>如果 an 调查员 controls 河流 Hawthorne 和  above 是 不 true: Decrease 河流 Hawthorne’s Relationship Level.</li></ul></li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的胜利X数值之和。<b>每位调查员现在可以花费剧本日志中，“未花费的经验值”下所记录的经验值。</b></li><li>在剧本日志中“已调查区域”的区域，将<i>北角矿坑</i>打勾。</li><li>检查 你的 战役 Log.<ul><li>如果 它 是 白天 1, 回合 至 _Prelude: The 第一 Evening_ (*页 31*).</li><li>如果 它 是 夜晚 1, 回合 至 _Prelude: 黎明 的  Second 白天_ (*页 39*).</li><li>如果 它 是 白天 2, 回合 至 _Prelude: The Second Evening_ (*页 43*).</li><li>如果 它 是 夜晚 2, 回合 至 _Prelude: 黎明 的  Final 白天_ (*页 51*).</li><li>如果 它 是 白天 3, 回合 至 _Prelude: The Final Evening_ (*页 55*).</li></ul></li></ul>"
+    },
+    "xp": {
+      "bonus": {
+        "simeon": "奖励经验值",
+        "leah": "奖励经验值",
+        "river": "你 河流"
+      }
+    },
+    "noResolution": {
+      "title": "如果未达成任何结局",
+      "body": "失去意识前，你们最后见到的景象是矿车冲进一座闪闪发光的峡谷中。醒来后，你们发现自己身处一个满是发光蕈类、充满水晶体的洞窟，头还在隐隐作痛。你们看见乱石中有向上的路，但要走回铁轨隧道可能要花费好几个小时。你们叹了口气，开始涉水横越地底的溪流。",
+      "skipToResolution6": "如果 它 是 _夜晚 1_ 或 _夜晚 2_, 划掉 西缅．阿特伍德’s 名称 和 跳至_结局6_.",
+      "skipToResolution3": "如果 它 是 _白天 1_ 或 _白天 2_, 跳至_结局3_.",
+      "skipToResolution4": "如果 它 是 _白天 3_, 跳至_结局4_."
+    },
+    "standalone": {
+      "title": "独立冒险 Mode",
+      "body": "<p>_独立冒险 Mode 仅._ The rails give 场外 beneath 你. 那里 是 没有 exit 从 这 mine, 和  rock closes 在.</p><p>那里 是 {doom} 毁灭标记 在  密谋 当  最后 的 你 fell.</p>"
+    }
+  },
+  "theCaveIn": "冒险幕间故事：坍方",
+  "slidingAndSwappingLocations": {
+    "title": "滑动与交换地点",
+    "body": "<h3>滑动与交换地点</h3><p class='basic'>调查员可以透过滑动与交换地点来对齐轨道，构建通往铁道出口的新路线。</p><p class='basic'>要滑动地点，先选择一张与空格相邻的地点，然后将该地点(以及该地点上所有的卡牌)移动到该空格。</p><p class='basic'>要交换2个地点，同时将这2个地点(以及各自地点上所有的卡牌)，放到彼此原先占据的格子。</p><ul><li><b>有剧情支援的地点无法被滑动或交换。</b></li></ul>"
+  },
+  "codex": {
+    "leahAtwood": {
+      "body": "<h3>@:theFeastOfHemlockVale.writtenInRock.codex.leahAtwood.title </h3><p><b>如果没有任何调查员控制莉亚．阿特伍德：</b></p><p>你们发现莉亚正盯著一池浓稠、发光的液体看。看见你们走来，她伸手擦掉眼角的泪水，并拒绝你们带她离开。“我只想待在这里。”她说。你们向她解释洞口已经坍方，还有危险正在逐渐迫近。“那些都不重要了。”她麻木的回答。在你们的说服下，她的态度最后还是软化了。就在你们领著她走向矿车时，你们转身看见发光的池边有个浑圆的人型倒影，那个身影迅速的消失在岩石后。</p><p class='basic right'>选择一位调查员控制莉亚．阿特伍德。任意一位调查员可以再次触发此圣典。</p><hr><p>_Otherwise:_</p><p>莉亚打破沉默，抓住故障的控制杆：“不是左边！是右边！”矿车在轨道上剧烈摇晃，然后自行恢复平衡。你们与这位谷地的厨师对望一眼，都松了一口气，矿车摇摆著继续前进。</p><p class='basic right'>将2资源放到冒险参考卡牌上，作为转辙器。</p>",
+      "title": "{'{'}codex{'}'} 圣典2：莉亚．阿特伍德"
+    },
+    "simeonAtwood": {
+      "body": "<h3>@:theFeastOfHemlockVale.writtenInRock.codex.simeonAtwood.title </h3><p><b>如果没有任何调查员控制西缅．阿特伍德：</b></p><p>就在矿车剧烈摇晃著通过破烂的桥梁时，你们注意到前方有个身影悬吊在悬崖边缘。完全出于本能，你们上半身翻过矿车边缘，在呼啸而过时抓住了那个人影的手，将他拉进车里。你们认出他是谷地的捣蛋鬼：西缅．阿特伍德。他脸色惨白的拍了拍自己身上的尘土，然后说：“我在找我的宝藏，都是我的宝 — ”他喘著气，放弃继续说下去。“谢谢你们救了我，如果没有你们，不知道我会怎样。”</p><p class='basic right'>选择一位调查员控制西缅．阿特伍德。任意一位调查员可以再次触发此圣典。</p><hr><p>_Otherwise:_</p><p>“不，不是这样用的。”西缅拉动矿车的控制杆。“你们这样是怎么活下来的？居然还找得到我。”他拉下隧道旁的一根转辙器，得意洋洋的对你们笑：“这样用才对。”</p><p class='basic right'>将2资源放到冒险参考卡牌上，作为转辙器。</p>",
+      "title": "{'{'}codex{'}'} 西缅．阿特伍德"
+    },
+    "riverHawthorne": {
+      "body": "<h3>@:theFeastOfHemlockVale.writtenInRock.codex.riverHawthorne.title </h3><p>“在这见到你们真稀奇啊。”芮福起身迎接你们，手里拿著一个装满发光蘑菇与血红色苔癣的手编篮子。“我的味蕾可是很挑剔的，我跟你说，法国名厨欧仁妮．布拉济耶说我是她餐桌上最识货的贵客呢。”芮福华丽的显摆手中的篮子，指向昏暗的隧道说：“这些都是美味的珍馐，为了爱，我们有时候必须做出一点牺牲。”你们表示愿意帮忙采摘，毕竟马尔克斯博士一定会想要一些这种奇怪植物的样本。</p><p class='basic right'>控制芮福．霍桑。如果冒险结束时，调查员们控制了芮福。霍桑，并控制了至少2[per_investigator]个线索，请记住“你们帮助了芮福”。</p>",
+      "title": "{'{'}codex{'}'} 圣典5：芮福．霍桑"
+    },
+    "drRosaMarquez": {
+      "body": "<h3>@:theFeastOfHemlockVale.writtenInRock.codex.drRosaMarquez.title </h3><p>_If it is Act 1:_</p><p>“不知道西缅去哪里了，莉亚昨晚非常担心。”马尔克斯博士有些分神，手中拿著蓝白色的水晶样本。“这些水晶似乎不是自然形成的，我不是地质学家，不过这些结构看起来……被扭曲了，完全不符合基础的几何结构。”</p><p class='basic right'>将1资源放到冒险参考卡牌上，作为残片。任意一位调查员可以在不同场景再次触发此圣典。</p><hr><p>_If it is Act 2:_</p><p>“我年纪太大了，受不了这种刺激！”马尔克斯博士大喊著，紧紧抓著自己的帽子。矿车飞速行驶，一道道腐坏的横梁从你们头顶飞掠而过。你们在黑暗中飞梭，教授用她的手杖击中了一个转辙器。矿坑深处，有某种生物在蠢蠢欲动。</p><p class='basic right'>交换2个相邻地点。</p>",
+      "title": "{'{'}codex{'}'} 圣典Θ：萝莎．马尔克斯博士"
+    }
+  },
+  "theCaveIn4": "<p>_The 洞穴-In 4_: 与entrance collapsed,  仅 道路 场外 的  mine 是 穿过. 你 push  mine cart forward 与 每位 ounce 的 你的 strength 和 jump 在, hoping  rusted tracks hold up.</p><ul><li>Gather 所有 15 set-aside _Rail_ 地点.<ul><li>将铁道出口与7张所示的铁道坑洞，依照参考摆放位置图例进行放置。</li><li>洗切 剩余_Rail_ 地点 和 放置 1 在 每位 space marked 与 a “?” 在 地点 Placement diagram.</li></ul></li><li>将1资源放到冒险参考卡牌上，作为转辙器。</li><li>放置set-一边 Mine Cart 支援 于  Control Station 和 选择 哪个 direction 它 是 facing (*看见* _Sliding 和 Swapping 地点_ *和* _The Mine Cart_ *在 页 11*).<ul><li>将每位调查员的迷你卡牌放在矿车上。</li><li>如果西缅．阿特伍德或莉亚．阿特伍德被放在一旁，将他们放到栏位2最上方的地点。</li><li>将放在一旁的棱彩晶体支援，放到栏位4最下方的地点。</li></ul></li><li>如果 它 是 (_夜晚 {'{'}night{'}'}_), 放置set-一边 Subterranean Beast 敌人 于  Control Station, exhausted.</li><li>将遭遇弃牌堆与放在一旁的<i>铭刻于石</i>遭遇组剩余的卡牌洗入遭遇牌库。</li><li>继续进行游戏。</li></ul>",
+  "theMineCart": {
+    "body": "<h3>The Mine Cart</h3><p class='basic'>每位调查员的迷你卡牌都覆盖放在矿车上。</p><ul><li>在矿车内的调查员，同时视为在矿车所在的地点上。调查员无法脱离矿车进行移动。当矿车移动时，每位调查员也跟著移动。</li><li>矿车剧情支援的右侧有一个轨道图示，表示其朝向的方向。矿车上的轨道图示，必须永远朝向其所在地点上的其中一个轨道图示。</li><li>当移动矿车时，只能沿著连接地点上的铁道路线移动。</li><li>当矿车进入一个地点时，调查员可以选择将其朝左或朝右旋转90度，让矿车朝向该地点上的其中一个轨道图示。</li><li>矿车只能往其轨道图示朝向的方向移动。如果它移动进入的地点没有形成一条完整路线<i>(也就是没有对齐)</i>，矿车将会脱轨。</li></ul>",
+    "title": "The 矿车"
+  },
+  "theCaveIn1": "巨石滚落，你们转身看向崩塌的隧道，没办法回头了。没有其他线索可循，你们只能继续沿著铁道，深入黑暗之中。过了一会儿后，你们看见轨道上有一辆旧矿车，旁边有座明亮的棚子。",
+  "theCaveIn2": "<p>_The 洞穴-In 2_: 这座顶棚原本似乎是控制室，但后来被改成了休憩的地方。墙上甚至天花板上满是手绘的地图跟表格，看起来是出自于年轻人之手。如果有人最近待过这里，那他们八成跟你们一起被困在这了。</p><p class='basic right'>跳至_The 洞穴-In 4_.</p>",
+  "theCaveIn3": "<p>_The 洞穴-In 3_: 尖利的颤音回荡在洞穴中，随之而来的是令人战栗的敲击声。在隧道的另一端，一支多脚、长著漆黑巨口的生物正朝你们前进。牠发出一声凄厉的尖啸并冲向你们，你们感觉自己的心脏几乎停止了。</p><p class='basic right'>前往_The 洞穴-In 4_.</p>",
+  "act1": {
+    "tokens": {
+      "easyStandard": {
+        "skull": "-X. X 是 你的 地点's column 数量.",
+        "cultist": "-1. 放置 1 资源 在 这 卡牌, as a scrap.",
+        "elderThing": "-3. 如果 你 失败, 受到1点伤害.",
+        "tablet": "-2. 如果 你 失败, 移除 1 从 卡牌."
+      },
+      "hardExpert": {
+        "skull": "-X. X 是 两次 你的 地点's column 数量.",
+        "cultist": "-3. 如果 你 成功, 放置 1 资源 在 这 卡牌, as a scrap.",
+        "elderThing": "-5. 受到1点伤害.",
+        "tablet": "-4. 移除 1 从 卡牌."
+      }
+    }
+  },
+  "act2": {
+    "tokens": {
+      "easyStandard": {
+        "skull": "-X. X 是 你的 地点's column 数量.",
+        "cultist": "-2. 放置 1 资源 在 这 卡牌, as a switch.",
+        "tablet": "-3. 如果 你 失败, 移动  矿车 一次.",
+        "elderThing": "-4. 如果 你 失败, 移除 1 从 卡牌."
+      },
+      "hardExpert": {
+        "skull": "-X. X 是 两次 你的 地点's column 数量.",
+        "cultist": "-3. 如果 你 成功, 放置 1 资源 在 这 卡牌, as a switch.",
+        "tablet": "-4. 移动  矿车 一次.",
+        "elderThing": "-5. 移除 1 从 卡牌."
+      }
+    }
+  },
+  "label": {
+    "mineCart": {
+      "facing": "选择 哪个 direction  矿车 是 facing",
+      "faceNorth": "相关角色 北",
+      "faceSouth": "相关角色 南",
+      "faceEast": "相关角色 东",
+      "faceWest": "相关角色 西",
+      "cancelMove": "相关角色 移动",
+      "moveAgain": "移动 额外"
+    },
+    "wildRide": {
+      "damage": "Deal 1 直接 伤害 和 1 直接 恐惧 至 每位调查员, _盟友_ 支援, 和 _居民_ 卡牌 他们 控制",
+      "moveAgain": "移动 2 额外"
+    }
+  },
+  "tooltips": {
+    "theUndergroundMaze": {
+      "slide": "{'{'}action{'}'} 花费 1 {'{'}perPlayer{'}'} 资源: Slide a 已揭示 地点 进入 an empty adjacent space. (Group limit 一次 per 轮.)",
+      "prismaticShard": "{'{'}action{'}'} 如果  棱彩晶体 剧情支援卡 是 在你的地点: 获得控制权 的 它."
+    }
+  },
+  "proceedToTheCaveIn2": "如果 它 是 (_白天 {'{'}day{'}'}_), 前往_坍方 2_.",
+  "skipToTheCaveIn3": "否则, 跳至_坍方 3_."
+}

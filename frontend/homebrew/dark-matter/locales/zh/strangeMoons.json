@@ -1,0 +1,71 @@
+{
+  "strangeMoons": {
+    "intro": {
+      "title": "冒险 IIIc: 怪异月亮",
+      "body": "<p>“Humanity’s 第一 contact 与 extraterrestrials 是 在……中 early 21st century, 当 一 lunar expedition stumbled upon 一 vast underground network 的 外星人 structures underneath sea 的 regolith. Greys, 作为 humanity 有 come 至 know 他们, 是 在……下 guise 的 一 curious species 该 came 至 我们的 solar system 至 observe 和 probe young civilization. true purpose 的 他们的 lunar activities 有 remained concealed 为 many years…”</p><p class='basic right'>— 玛雅, Information Archives</p><p>你 查看 out view ports 和 可以 see 仅 dense, orange clouds 为 most 的 descent. 仅 在……之后 landing shuttle dipped 至 troposphere 该 clouds 是 thin enough 为 你 至 peer 在 ground below — miles 和 miles 的 windswept dunes 的 methane snow, broken 由 knife-like volcanic ridges 的 icy stone, open craters belching “lava flows” 的 liquid water, ammonia, 和 methane 该 freeze 至 fantastic shapes 作为 他们 pour down slopes. 你 可以 never 有 dreamed 的 anything like beauty 和 外星人 landscape 的 Titan.</p><p>craft lands smoothly onto 一 flat slab 的 ice. 在……之后 K2-PS187 confirms 该 此 是 coordinates 的 unusual “business trips” 该 邪教徒 是 conducting, 你 suit up, open hatch 和 step out 至 harsh terrain. 一 large tunnel nestled between orange cliffs greets 你. 一 green glow pulsates 从 within, illuminating 一 strange figure, guarding entrance…</p>"
+    },
+    "setup": {
+      "gatherSets": "收集 全部 卡牌 从 以下 encounter sets:<i>怪异月亮</i>和<i>Deep 太空</i>. 这些 sets 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{imgPath}/homebrew/dark-matter/sets/strange-moons.png' /><img src='{imgPath}/homebrew/dark-matter/sets/deep-space.png' /></section>",
+      "setAsideInterstellarPredators": "放置 一边<i>Interstellar Predators</i>遭遇牌组, out 的 进行. 此 放置 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{imgPath}/homebrew/dark-matter/sets/interstellar-predators.png' /></section>",
+      "setAsideBrains": "放置 一边 每个 *Brain* 剧情 支援, out 的 进行.",
+      "setAsideFeasterFromAfar": "放置 一边 Feaster 从 Afar 敌人 (与 一 扫描 back).",
+      "createScanningDeck": "Create 扫描 牌组. 此 是 done 由 taking 全部 其他 encounter 卡牌 与 图标 在 bottom 的 他们的 back side 和 shuffling 他们 together.",
+      "placeLocations": "放置 全部 剩余 地点 至 进行.",
+      "startAt": "每个 调查员 begins 进行 在 Entrance Tunnel.",
+      "spawnTheGreys": "Spawn Greys 敌人 在 Entrance Tunnel."
+    },
+    "tokens": {
+      "easyStandard": {
+        "skull": "-2. 如果 你 fail, 造成 1 伤害 至 一 *Brain* 剧情 支援.",
+        "cultist": "-2. 如果 你 revealed 另一 chaos 标记 在……期间 此 test, 获得 1 恐惧.",
+        "tablet": "揭示 2 additional 标记 为 此 test.",
+        "elderThing": "-3. 如果 此 是 一 attack 或 evasion attempt against 一 *Byakhee* 敌人, 揭示 一 additional 标记 为 此 test."
+      },
+      "hardExpert": {
+        "skull": "-3. 如果 你 fail, 造成 1 伤害 至 nearest *Brain* 剧情 支援.",
+        "cultist": "-3. 如果 你 revealed 另一 chaos 标记 在……期间 此 test, 获得 1 恐惧.",
+        "tablet": "揭示 2 additional 标记 为 此 test.",
+        "elderThing": "-4. 如果 此 是 一 attack 或 evasion attempt against 一 *Byakhee* 敌人, 揭示 一 additional 标记 为 此 test."
+      }
+    },
+    "specialRules": {
+      "0": {
+        "title": "Seal",
+        "body": "<p class='basic'>一些 卡牌 可以 有 ability 至 seal 1 或 更多 chaos 标记 作为 part 的 他们的 effect. 此 是 done 作为 follows: 搜索 混乱袋 为 specified 标记, 移除 它 从 混乱袋, 和 放置 它 在……上 卡牌. 如果 specified 标记 是 不 在……中 混乱袋, effect fails.</p><p class='basic'>当 一 chaos 标记 是 “released,” 它 是 returned 至 混乱袋 和 是 没有 longer considered sealed.<b>如果 一 卡牌 与 1 或 更多 chaos 标记 sealed 在……上 它 leaves 进行 为 任意 reason, 任意 chaos 标记 sealed 在……上 它 是 immediately released.</b></p>"
+      },
+      "1": {
+        "title": "Patrol",
+        "body": "<p class='basic'>一些 敌人 有 patrol keyword. 在……期间 敌人 phase (在……中 framework step 3.2), 每个 ready, unengaged 敌人 与 patrol keyword moves 至 一 connecting 地点 along shortest 道路 toward designated 地点 (作为 described 在……中 parentheses 下一 至 word patrol).</p><ul><li>如果 there 是 multiple 地点 该 qualify 作为 designated 地点, lead 调查员 可以 选择 which 地点 敌人 moves toward.</li><li>如果 一 敌人 与 patrol 会 be compelled 至 移动 至 一 地点 which 是 blocked 由 一 卡牌 ability, 敌人 does 不 移动.</li></ul>"
+      },
+      "2": {
+        "title": "Brain 扫描",
+        "body": "<p class='basic'>在……中 此 冒险,<b>扫描</b>abilities 将 instruct 你 至 搜索 扫描 牌组 为 一 卡牌 与 2 matching 图标. 一 卡牌 该 contains 仅 1 的 2 图标 是 invalid, 和 不能 be chosen 为 扫描. 卡牌 在……中 扫描 牌组 必须 contain 两者 的 标示 图标, 在……中 任意 order.</p>"
+      },
+      "3": {
+        "title": "Combined Skill Tests",
+        "body": "<p class='basic'>一些 skill tests 在……中 此 冒险 将 require 调查员 至 test multiple skills 在 once. 至 perform such 一 skill test, simply 加入 两者 标示 skills 和 揭示 和 结算 一 chaos 标记, compare modified skill value 至 difficulty 的 test. Such 一 test 是 considered 至 be 一 test 的 两者 skill types. 卡牌 与 任一 skill 图标 可以 be committed 至 test, 和 两者 图标 是 considered matching skill 图标.<i>(Skill 图标 仅 contribute once 为 skill tests 该 involve additions 的 相同 skill.)</i></p>"
+      },
+      "4": {
+        "title": "Replacing 地点",
+        "body": "<p class='basic'>Throughout 此 冒险, 你可以 be instructed 至 放置 new 地点 在……上 top 的 existing ones. 当 一 地点 是 placed 在……上 top 的 一 地点 该 是 already 在……中 进行, 它 takes 它的 放置. 全部 标记, attachments, 调查员, 敌人, 和 其他 卡牌 在 former 地点 是 considered 至 now be 在 new 地点 (他们 有 不 “moved”— 地点 simply changed). 如果 一 地点 leaves 进行 和 there 是 另一 地点 underneath 它, 该 地点 takes 它的 放置. 全部 标记, attachments, 调查员, 敌人, 和 其他 卡牌 在 地点 leaving 进行 是 considered 至 now be 在 former 地点.</p>"
+      }
+    },
+    "resolutions": {
+      "xp": {
+        "resolution1": "Further understanding 的 agents 的 King 在……中 Yellow"
+      },
+      "noResolution": {
+        "title": "没有 结局 是 Reached",
+        "body": "<p><b>如果 没有 结局 是 reached:</b></p><ul><li>如果 在 least 1 调查员 resigned, 前往 至<b>结局 2</b>.</li><li>如果 每个 调查员 是 defeated, 前往 至<b>结局 1</b>.</li></ul>"
+      },
+      "resolution1": {
+        "title": "结局 1",
+        "body": "<p><b>结局 1:</b>Flapping 和 screeching, 你 had 没有 chance against extraterrestrial swarm 该 descended onto Titan shortly 在……之后 你有 arrived. Fortunately — 它 seems 作为 though 你 是 不 他们的 target. 外星人 facility 有 been ransacked 和 任意 线索 你 可以 有 gleaned 有 been destroyed. 在 非常 least, 他们 left 你 alone. 当 coast 是 finally clear 的 flying monstrosities, 你 搜索 through ruins 至 找到 several golden disks 的 various radii. Aboard Tatterdemalion, 你 fiddle 与 这些 disks 和 try 至 combine 他们 在……中 various orientations — 但是 他们 don’t appear 至 有 任意 使用 其他 than value 的 material itself. There 是 still much 你 don’t know, 和 与 结算, 你 prepare 为 下一 expedition.</p><ul><li>记录 在……中 你的 战役日志 该<i>你是 不 在……中 good standing 与 米·戈</i>.</li><li>如果 there 是 3 剧情 卡牌 在……中 胜利展示区, 记录 在……中 你的 战役日志 该<i>你有 uncovered 邪教徒’s inhuman methods</i>. 然后, 加入 1 {'{'}elderThing{'}'} 标记 至 混乱袋 为 remainder 的 campaign 为 catching eye 的 King 在……中 Yellow.</li><li>加入 1 tally mark 在……下 “Impending 毁灭标记” 在……中 你的 战役日志, 和 1 additional tally mark 为 每个 Brain 剧情 支援 在……中 进行.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区. 每个 调查员 earns 2 additional 经验 作为 他们 获得 further understanding 的 agents 的 King 在……中 Yellow.<ul><li><b>经验</b>: {xp}</li></ul></li><li>返回 至<b>搜寻碎片</b>.</li></ul>"
+      },
+      "resolution2": {
+        "title": "结局 2",
+        "body": "<p><b>结局 2:</b>在……上 board Tatterdemalion, 你 try 至 decipher meaning 的 various glimpses 你’ve seen within 外星人 facility, 但是 nothing strikes 你 作为 particularly significant. 一 thorough 搜索 的 cargo hold reveals 一 stack 的 golden disks 该 是 exchanged 在……期间 transaction. 你 fiddle 与 他们 和 try 至 combine 他们 在……中 various orientations — 但是 他们 don’t appear 至 有 任意 使用 其他 than value 的 material itself. There 是 still much 你 don’t know, 和 与 结算, 你 prepare 为 下一 expedition.</p><ul><li>如果 there 是 3 剧情 卡牌 在……中 胜利展示区, 记录 在……中 你的 战役日志 该<i>你有 uncovered 邪教徒’s inhuman methods</i>. 然后, 加入 1 {'{'}elderThing{'}'} 标记 至 混乱袋 为 remainder 的 campaign 为 catching eye 的 King 在……中 Yellow.</li><li>如果 一 copy 的 米·戈科学家 是 在……中 胜利展示区, 记录 在……中 你的 战役日志 该<i>你是 不 在……中 good standing 与 米·戈</i>. Otherwise, 记录 该<i>你是 allied 与 米·戈</i>.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><b>经验</b>: {xp}</li></ul></li><li>加入 1 tally mark 在……下 “Impending 毁灭标记” 在……中 你的 战役日志.</li><li>返回 至<b>搜寻碎片</b>.</li></ul>"
+      }
+    }
+  }
+}

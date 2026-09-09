@@ -1,0 +1,119 @@
+{
+  "intro": {
+    "toeTheLine": {
+      "choose": "你必须决定<i>(选择一项)</i>：",
+      "oldJob": "在剧本日志中，“安分守己”下擦去1进展。下一场冒险期间，你在第一个密谋期间得到每项技能值+1。",
+      "highRoad": "在剧本日志中，“安分守己”下记录2进展并承受1点精神创伤。下一场冒险期间，你在第一个密谋期间得到每项技能值-1。",
+      "title": "任务: 安分守己",
+      "instructions": "_阅读 仅 如果 你 有  “安分守己” 任务:_",
+      "body": "探险 makes camp 之前 descending 进入  vault below. 在……上 a bland 但 filling meal, 1 的 你的 fellow 探险 members reveals 他们 有 a history 与 你的 former employer. “Wait, 你’re  1 everyone talks 关于?” 他们 snort. “Trust me, 从things I’ve heard, 你 don’t want 你的 旧 job 返回. 你的 旧 boss still jokes 关于 你. Even 如果 Tillinghast 可以 get 你  job, nobody 返回 那里 respects 你. 你’re looking 于 a 生命 的 grunt work, pal.”",
+      "reflection": "你 finish 你的 meal 在 silence as 你 ponder 他们的 words. 你的 旧 colleagues might 不 respect 你, 但 与 Tillinghast’s 人脉s, 你 可以 使 他们 fear 你. A few bribes, well-timed threats—even a call 从mob—might 放置 他们 在 他们的 放置. 它’s 不 exactly above-board, 但 如果 你 游戏  卡牌 right, 你 可以 oust 你的 former employer. 你 有  rest 的 探险 至 计划 你的 移动 一次 你 get 返回Arkham."
+    },
+    "label": {
+      "toeTheLine": {
+        "oldJob": "<i>不惜任何代价也要拿回过去的工作。</i>",
+        "highRoad": "<i>坚持高风亮节，放下过去执念。</i>"
+      }
+    },
+    "checkCampaignLog": "查看你的战役日志。",
+    "proceedToSetup": "进入<b>设置</b>",
+    "title": "大秘库",
+    "grandVault1": "_The Grand Vault 1_: 你还没看到大块头机械，就远远听到了它回响的轰鸣。你走出幽闭的隧道，发现自己站在峭壁上，俯瞰着一大片广阔的洞窟，大到你看不见另一头。相互连接的穴室像迷宫一样排布，里面传来异星构造体嘴嗡的声音。在一片喧闹之中，你还能听到下面远处传来了流水声。",
+    "grandVault2": "_The Grand Vault 2_: 你还没看到大块头机械，就远远听到了它回响的轰鸣。你下到螺旋阶梯的底端，发现自己站在峭壁上，俯瞰着一大片广阔的洞窟，大到你看不见另一头。相互连接的穴室像迷宫一样排布，里面传来异星构造体嗡嗡的声音。在一片喧闹之中，你还能听到下面远处传来了流水声。",
+    "grandVault3": "这里就是拉莱耶搏动的心脏。巨大的水渠将城市上方的洪水引入，灌满又排干秘库，仿佛是心胜的心室。这貌似是某种能源，也像是城市能不断升起的原因。跟探险队讨论过后，你决定暂缓前进，先探索这个庞大的建筑群。要是真有机会能找到那些难寻的神器，那也就是这儿了。",
+    "headedWest": "如果 探险 前往 西, 前往_大秘库 1_.",
+    "headedEast": "如果 探险 前往 东, 跳至_大秘库 2_.",
+    "resolveToeTheLine": "如果 任意 调查员 有  安分守己 任务, 他们 结算 他们的 respective 剧情 在  下一 页."
+  },
+  "setup": {
+    "title": "设置",
+    "placeFixedLocations": "按照地点摆放示意图，将宏伟台阶、移动平台、封印穴室、秘库核心地点放置入场。",
+    "removeOtherworldlyMechanisms": "随机将一张异界装置从游戏中移除（异界装置是某些秘库穴室地点的已揭示面）。",
+    "placeVaultChambers": "将剩余每张秘库穴室地点混洗，按照地点摆放示意图放置入场。",
+    "beginAtTheGreatStair": "每位调查员从宏伟台阶开始游戏。",
+    "starSpawn": "混洗<i>星之眷族</i>遭遇组的每个敌人，将随机2个从游戏中移除。将剩下的放在一边，位于场外。",
+    "addFloodTokens": "将淹没标记加入供应堆。",
+    "floodBottomRow": "提升底下一行三张秘库穴室的淹没等级。",
+    "buildEncounterDeck": "混洗剩余遭遇卡来创建遭遇牌堆。",
+    "readyToBegin": "現在你已經準備好開始遊戲了。",
+    "checkCampaignLog": "查看你的战役日志。",
+    "powerWasDiverted": "在左下方的秘库穴室上放置1资源。该地点“已激活”。",
+    "otherwise": "在左下方、右下方和右上方的秘库穴室地点上各放置1资源。这些地点即“已激活”。",
+    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: _大秘库_, _异星装置_, _淹水_, _穷途异魔_, _R’lyeh_, 和 _星之眷族_. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/the-grand-vault.png' /><img src='{setImgPath}/alien-machinery.png' /><img src='{setImgPath}/flood.png' /><img src='{setImgPath}/the-inescapable.png' /><img src='{setImgPath}/rlyeh.png' /><img src='{setImgPath}/star-spawn.png' /></section>",
+    "setCardsAside": "将下列卡牌放在一旁，置于场外：池底之物敌人、拟鳄龟杂生 每位 copy 的  double-sided Ancient Vault 诡计, 每位 copy 的  Vault Attendant 敌人,  潮汐碑匾 剧情支援卡, 和 _穷途异魔_ 遭遇组.",
+    "chooseExpeditionAsset": "按玩家顺序，每位玩家可以从<i>探险</i>遭遇组选择1张_道具_支援，使其位于自己控制之下开始游戏。该遭遇组的图标为：<img src='{setImgPath}/tdc_expedition.png' />"
+  },
+  "theVaultCore": {
+    "title": "冒险幕间故事：秘库核心",
+    "choose": "你必须决定<i>(选择一项)</i>：",
+    "label": {
+      "pushTheButton": "<i>按下按钮。</i>",
+      "leaveItAlone": "<i>按兵不动。</i>"
+    },
+    "body": "秘库的核心是一个复杂的控制站。周围的穴室都已激活，控制站亮起了恶心的绿色能量。古老夸张的字符描绘出了城市扭曲变形的模拟图。仔细的观察之后，你推测这个站点在为城市的每个部分供能；有一片熟悉的区域尤为明显，吸引了你的注意；高耸的尖塔基座上有一对巨门。有趣的是，它们的设计和你登陆时见到的黑曜石大门颇为相似。",
+    "node": "小小的红色节点在底下闪烁，仿佛在恳求你按下去。",
+    "pushTheButton": "<i>按下按钮。</i> In 你的 冒险日志, 记录 _the inner sanctum 是 unsealed_. 继续 playing.",
+    "leaveItAlone": "<i>按兵不动。</i> 每位调查员获得1点奖励经验值。 继续 playing.",
+    "xp": {
+      "leaveItAlone": "为"
+    }
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1_: The expedition members pass  evening sharing 剧情 和 cracking jokes. Even 在 spite 的  城市’s dour atmosphere, spirits seem 至 是 high. 你 share 你的 findings 与 Ruby 和 她的 companions 当Andy attempts 至 使 stew. 她 describes 他们的 difficult route 至  vault, 和 advises 你 受到  道路 up 穿过  ancient court above, 改为 的  route 她 took 穿过  silent factories.</p><p>“再说，我确信工厂在我们后面就全塌了，”露比说道，“要是你取道宫廷，我建议你避开那些所谓的‘朝圣者’。整座城里都是这帮货色。我看到一大帮子摇摇晃晃地朝顶上的大神庙去了。他们告诉我，他们是从某种地下巢穴里逃出来的，其中有人感染了相当严重的热病，所以我建议你离他们远点。”</p><ul><li>更新剧本日志。<ul><li>在拉莱耶地图的部分划掉“大秘库”。</li><li>如果  Tidal 石板 是 在……下  控制 的 an 调查员 当  冒险 ended, 检查  框 旁边“Tidal 石板” 在……下 “神器 Earned.”</li></ul></li><li>如果 任意 调查员 有  Good Money 任务, 有 他们 结算 他们的 respective 剧情 在 这 页.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>前往_Court 的  Ancients_.</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "探险队在玩笑和轶事中度过了这一夜。即便城里的气氛不佳，大家的精神却很高涨。露比跟有兴致的探险队员一起打起了扑克，你则跟安迪分享了自己的发现。他也讲了自己穿越沉没西墙道路，以及怎么通过城市远古地基的故事。\n“一场岩石滑坡把我们困在了某个远古的地窖里，里面有某种可怕生物的干尸—那样的东西我从没见过。除此之外，就没什么稀奇的了。”安迪说着递给你一碗味道寡淡的炖菜，“啊，不过，几天前，我们遇到过一个病得快死的人，都那样了还不肯跟我们走，只说自己是‘朝圣者’，来这里是为了崇拜古城里的神灵，叫克苏鲁的什么东西。”\n“克苏鲁”这个名字在你耳畔响起。你在梦里一次次地听过这个名字。餐后休息的时候，你发现自己不经意间，竟还在念这个名字，直到你陷入沉眠。"
+    },
+    "goodMoney": {
+      "choose": "你必须决定<i>(选择一项)</i>：",
+      "playItSafe": "在剧本日志中，“价值千金”下擦去1进展。下一场冒险期间，你有额外3资源开始游戏。",
+      "playBothSides": "<i>尽可能左右逢源。</i>",
+      "body": "你 lie awake 在  dark 为 several hours, mulling 在……上 你的 最后 conversation 在 Arkham. Carl Sanford, 头部 的 <center><i>银暮秘社</i></center>, told 你 他 有 a deal 为 你. A better deal 于 anything Tillinghast 会 ever give 你. 所有 你 需要do 是 present 你的 findings 至 他 改为 的 Randall. 如果 你 skim a few extra relics 在  面, maybe swipe some notes 和 photos 的  ancient 城市, 他 promised double 什么 Tillinghast 会 pay, maybe even 更多.",
+      "title": "任务: 价值千金",
+      "instructions": "_阅读 仅 如果 你 有  “价值千金” 任务:_",
+      "reflection": "你2 . 相关角色 是 . 相关角色 , 你 相关角色 是 你 a 选择. 如果 你 你的 卡牌 , 你 从 相关角色 和 蒂林哈斯特 和 与 . 相关角色 你 , 你’ ."
+    },
+    "label": {
+      "goodMoney": {
+        "playItSafe": "<i>小心驶得万年船。</i>",
+        "playBothSides": "<i>尽可能左右逢源。</i>"
+      }
+    },
+    "noResolution": {
+      "body": "<p>_如果 没有 结局 是 到达 (每位调查员 resigned 在……期间 act 1 或 是 被击败)_: 你rescued 从churning water battered 和 bruised, 但 thankfully still alive. 之后 returning 至  towering precipice 哪里 你 began, 你pleasantly surprised 至 找出 Ruby 和 Andy chatting 在……上 a meal 的 dry rations. Rather 于 cut  reunion short, 你 结算 至 使 camp. Together, 你 pass  evening cracking jokes 和 sharing 剧情. 之前 parting ways, Ruby 和 Andy share 他们的 findings 和 compile a crude 地图 的  ancient 城市.</p><ul><li>更新剧本日志。<ul><li>在拉莱耶地图的部分划掉“大秘库”。</li><li>如果  Tidal 石板 是 在……下  控制 的 an 调查员 当  冒险 ended, 检查  框 旁边“Tidal 石板” 在……下 “神器 Earned.”</li></ul></li><li>如果 任意 调查员 有  Good Money 任务, 有 他们 结算 他们的 respective 剧情 在 这 页.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>检查 你的 战役 Log.<ul><li>如果  expedition 前往 西, 前往_Court 的  Ancients_.</li><li>如果  expedition 前往 东, 前往_The Apiary_.</li></ul></li></ul>",
+      "title": "如果未达成任何结局"
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "tablet": "-2 (如果你所在地点部分淹没，改为-3；如果你所在地点完全淹没，改为-4)。",
+      "cultist": "-3. 如果 你 失败, 你 必须 任一 deactivate 你的 地点 或 受到1点伤害 或 1 恐惧.",
+      "skull": "-X. X 是 half 数量为activated 地点 (rounded 向下).",
+      "elderThing": "-4. 如果 你 失败, 搜索  遭遇 弃牌堆 为 a copy 的  Still Behind 你 诡计 和 加入 它 加入胜利牌区。"
+    },
+    "hardExpert": {
+      "cultist": "-4. 之后 这 检定 resolves, 你 必须 任一 deactivate 你的 地点 或 受到1点伤害和1点恐惧.",
+      "skull": "-X. X 是 数量为activated 地点.",
+      "tablet": "-3 (-4 改为 如果 你的 地点 是 部分淹没; -5 改为 如果 你的 地点 是 完全淹没).",
+      "elderThing": "-5. 如果 你 失败, 搜索  遭遇 弃牌堆 为 a copy 的  Still Behind 你 诡计 和 抽取 它."
+    }
+  },
+  "label": {
+    "deadlyMechanisms": {
+      "deactivate": "Deactivate  nearest activated Vault 地点.",
+      "move": "移动 至 an adjacent 地点 (淹水 如果 able).",
+      "drawAttendant": "抽取 1 的 相关角色 相关角色 敌人."
+    },
+    "chooseExpeditionAssetQuestion": "选择 an earned 神器 支援, 或 an 物品 支援 从 探险 遭遇组, 至 begin 在场 在……下 你的 控制.",
+    "noExpeditionAsset": "Do 不 受到 an 神器 或 探险 支援.",
+    "deactivateYourLocation": "Deactivate 你的 地点."
+  },
+  "tooltips": {
+    "theGreatStair": {
+      "resign": "你 至 黑暗, ."
+    }
+  }
+}

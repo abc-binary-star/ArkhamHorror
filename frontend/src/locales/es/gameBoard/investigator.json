@@ -1,6 +1,8 @@
 {
     "discards": "Descartes",
     "endTurn": "Finalizar Turno",
+    "confirmEndTurn": "Confirmar fin de turno ({n} acciones restantes)",
+    "confirmEndTurnShort": "¿Terminar? ({n})",
     "skipTriggers": "Saltar Desencadenantes",
     "skipAllTriggers": "Saltar Desencadenantes de Todos los Investigadores",
     "devouredCards": "Devoradas ({count})",

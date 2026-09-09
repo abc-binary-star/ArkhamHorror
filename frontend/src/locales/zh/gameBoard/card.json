@@ -1,3 +1,5 @@
 {
-    "vengeance":"复仇 {value}"
+  "vengeance": "复仇 {value}",
+  "resolvedSide": "结算面",
+  "front": "前方"
 }

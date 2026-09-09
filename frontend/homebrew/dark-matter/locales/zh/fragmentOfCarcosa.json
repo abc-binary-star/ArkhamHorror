@@ -1,0 +1,62 @@
+{
+  "fragmentOfCarcosa": {
+    "intro": {
+      "title": "冒险 V: 卡尔克萨碎片",
+      "body": "<p>There 是 没有 time 至 waste. 作为 如果 它 是 muscle-记忆, 你 adorn makeshift shrine 由 installing 1 的 quantum shards 在……中 center. Several 的 golden discs obtained 从 米·戈 必须 be placed 在……中 front — aligned 至 form 一 syzygy. 与 components 在……中 order, 你 pronounce unspeakable message 从 地球:</p><p class='center'>“Let red dawn surmise<br>What 我们 shall do,<br>当 此 blue starlight dies<br>和 全部 是 through.”</p><p>golden discs 开始 trembling, building momentum 直到 他们 全部 turn upright 和 开始 至 roll around shrine 在……中 1 direction. quantum 神器’s hue shifts 至 一 yellow glare 在……之前 glowing 一 intense 和 dense red. discs spin around 和 around surface 在 不同, 但是 consistent speeds, 直到 他们 finally slow down 至 一 crawl 和 fall 在……上 simultaneously. 然后, 作为 suddenly 作为 它 began, red shard erupts 在……中 一 fog 的 nebulous gas, blinding 你 在……中 它的 flurry.</p><p>当 你的 eyesight returns, 全部 该 保持 是 golden discs resting 在 various 地点 across floor. 你 instinctively recognize 此 作为 一 schematic 的 solar system. Upon closer examination, 一 single remnant 的 purple shard 保持 between what 你 believe 是 Jupiter 和 Saturn’s orbits. K2-PS187 confirms 该 depiction 是 accurate 至 当前 star-time — 和 begins plotting 一 course towards asteroid.</p><p>在……上 way there, 你 think 的 不同 worlds 你有 visited 和 many adventures 你有 experienced, 两者 在……中 此 world 和 在……中 你的 own. Throughout 每个 interaction, 每个 quest, 是 underlying sense 的 hope 和 optimism 为 future. 此 future does 不 deserve 至 become 另一 pawn 至 mad king, 和 你 intend 至 stop 该 从 happening.</p><p>当 你 arrive, asteroid does 不 resemble what 你 had expected. egg-shaped asteroid 是 about 4 km 在 它的 widest, 和 looks awfully… normal. yellow color 是 closer 至 一 murky brown than gold. 它 是 littered 与 craters 和 cavities, battered 由 harshness 的 太空. 不使用 delay, 你 suit 在……上 和 descend onto surface 的 Fragment, ready 至 face Royal Princess 的 Carcosa…</p>"
+    },
+    "setup": {
+      "gatherSets": "收集 全部 卡牌 从 以下 encounter sets:<i>卡尔克萨碎片</i>和<i>Inhabitants 的 Carcosa</i><i>(从 道路 至 Carcosa)</i>. 这些 sets 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{imgPath}/homebrew/dark-matter/sets/fragment-of-carcosa.png' /><img src='{setImgPath}/inhabitants-of-carcosa.png' /></section>",
+      "placeLocations": "放置 Surface 的 Fragment 和 Abandoned Lander 地点 至 进行.",
+      "startAt": "每个 调查员 begins 进行 在 Surface 的 Fragment.",
+      "setAsideLocations": "放置 一边 6 double-sided 地点, out 的 进行.",
+      "setAsideStoryCards": "放置 一边 4 1-sided 剧情 卡牌 (Delights, Arrival 的 King, 为 你 Alone 和 Lost Expedition), out 的 进行.",
+      "setAsideCards": "放置 一边 Bottle 的 Whispers 剧情 支援, Cave Dweller 敌人, Beast 的 Aldebaran 敌人, 和 每个 copy 的 Spawn 的 哈利 一边, out 的 进行."
+    },
+    "tokens": {
+      "easyStandard": {
+        "skull": "-2. 如果 你 fail 当……时 你是 在 一 *Cave* 地点, 获得 1 伤害.",
+        "cultist": "-2. 如果 你 fail 当……时 你是 在 一 *Carcosa* 地点, 获得 1 恐惧.",
+        "tablet": "-1. 你 必须 任一 (选择 1): 揭示 另一 标记, 或 cross out 1 tally mark 下一 至 你的 “记忆”.",
+        "elderThing": "-2. 如果 你是 在 一 *Carcosa* 地点: 加入 1 毁灭标记 至 当前 密谋, 或 automatically fail 此 skill test."
+      },
+      "hardExpert": {
+        "skull": "-3. 如果 你是 在 一 *Cave* 地点, 获得 1 伤害.",
+        "cultist": "-3. 如果 你是 在 一 *Carcosa* 地点, 获得 1 恐惧.",
+        "tablet": "-2. 你 必须 任一 (选择 1): 揭示 另一 标记, 或 cross out 1 tally mark 下一 至 你的 “记忆”.",
+        "elderThing": "-3. 如果 你是 在 一 *Carcosa* 地点: 加入 1 毁灭标记 至 当前 密谋, 或 automatically fail 此 skill test."
+      }
+    },
+    "specialRules": {
+      "0": {
+        "title": "Flipping 地点 在……中 Fragment",
+        "body": "<p class='basic'>在……中 此 冒险, 你可以 be instructed 至 flip 一 地点 至 它的 其他 side. 当 此 occurs, simply flip 地点, keeping 全部 标记, attachments, 调查员, 敌人, 和 其他 卡牌 在……上 该 相同 地点 (which 将 有 一 不同 name). 然后, 加入 线索 在……上 该 地点 up 至 它的 线索 value.</p><p class='basic'>地点 与 “不能 be flipped.” 将 simply ignore instructions 至 flip 它, 和 将 不 prevent abilities 从 triggering.</p>"
+      }
+    },
+    "label": {
+      "tablet": {
+        "revealAnotherToken": "揭示 另一 标记",
+        "crossOffMemory": "Cross out 1 tally mark 下一 至 你的 “记忆”"
+      }
+    },
+    "resolutions": {
+      "noResolution": {
+        "title": "没有 结局 是 Reached",
+        "body": "如果 每个 调查员 是 defeated:",
+        "proceedToResolution1": "如果 它 是 场景 1 或 场景 2, 前往 至<b>结局 1</b>.",
+        "proceedToResolution2": "如果 它 是 场景 3, 前往 至<b>结局 2</b>."
+      },
+      "resolution1": {
+        "title": "结局 1",
+        "body": "<p><b>结局 1:</b>当 你 finally awaken, 在……中 distance, 外星人 spires 的 一 warped 城市 rise 至 clouds. Behind 你, dark surface 的 一 湖泊 reflects glare 的 2 suns. 你 call out 至 K2-PS187 为 help, 但是 there 是 没有 response 此 time. 此 isn’t 另一 simulation; 你是 imprisoned 在……中 realm 的 Carcosa, 与 没有 way out 至 save solar system.</p><ul><li>记录 在……中 你的 战役日志 该<i>调查员 是 trapped within Carcosa</i>.</li><li>每个 调查员 是 driven<b>insane</b>.</li><li>调查员 失去 campaign.</li></ul>"
+      },
+      "resolution2": {
+        "title": "结局 2",
+        "body": "<p><b>结局 2:</b>你 wake up 在……中 一 cold sweat back 在……中 cryo-chamber. 当……时 你是 confused 和 disoriented, K2-PS187 explains 该 你有 been 在……中 一 coma 为 在……上 2 months 在……之后 你 decided 至 enter 你的 own mind. 你的 经验 在……上 该 asteroid, true nature 的 哈斯塔—它 是 too real 至 be imagined; 它 必须 有 been forged 从 fragments 的 邪教徒’s 记忆. Regardless 的 circumstances, 你 now know 的 impending 毁灭标记 的 solar system, 和 understand what 你 必须 do: save 作为 many 作为 你 可以 在……之前 inevitable.</p><ul><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><i>经验</i>: {xp}</li></ul></li><li>加入 2 tally marks 在……下 “Impending 毁灭标记” 在……中 你的 战役日志.</li><li>前往 至<b>冒险 VI: 星陨</b>.</li></ul>"
+      },
+      "resolution3": {
+        "title": "结局 3",
+        "body": "<p><b>结局 3:</b>当 你 finally regroup back 在……上 Tatterdemalion, 全部 你 可以 think 的 是 全部 time 你 可以 有 saved 如果 仅 你 remembered real threat 你 face. 太阳 仅 有 一 few years left 至 shine, 和 most 的 humanity 是 oblivious 至 它的 imminent demise. 在……中 face 的 此 impending 毁灭标记, 你 know what 你 必须 do: save 作为 many 作为 你 可以 在……之前 inevitable.</p><ul><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><i>经验</i>: {xp}</li></ul></li><li>前往 至<b>冒险 VI: 星陨</b>.</li></ul>"
+      }
+    }
+  }
+}

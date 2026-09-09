@@ -1,0 +1,113 @@
+{
+  "intro": {
+    "plumbTheDepths": {
+      "title": "任务：追本溯源",
+      "choose": "你必须决定<i>(选择一项)</i>：",
+      "body": "你不禁赞叹起这座古代建筑的古朴宏大。这是古代的宫殿吗?还是图书馆?抑或宗教场所?墙上精妙的壁画混合了象形文字和异星文字，描绘了一场星际之间的迁徙。字符闪着幽幽绿光，记录着不为人知的历史、人类毫无了解的古代秘密。",
+      "lookAway": "在剧本日志中，“追本溯源”下擦去1进展。每位调查员带有1个线索开始下一场冒险<i>（从供应堆拿取）</i>。",
+      "seekTheTruth": "在剧本日志中，“追本溯源”下记录2进展并承受1点精神创伤。每位调查员少1张起始手牌开始下一场冒险。",
+      "instructions": "_阅读 仅 如果 你 有  “追本溯源” 任务:_",
+      "memories": "1 image—a nightmarescape 的 oceanic horrors 和 sunken cities—catches 你的 attention. 你 press  eye 的 a particularly disturbing 生物 和 feel a rush 的 ancient 记忆. Thoughts 和 feelings 的 an alien 是, images 的  stygian depths 的 some distant planet, overwhelm 你的 consciousness. The 记忆 give 道路 至 clearer, 更多 defined facts, dates, a history recorded 由 a prehistoric civilization.",
+      "reflection": "你 开始 , 你的 是一张. 相关角色 是 更多 你 … 你?"
+    },
+    "label": {
+      "plumbTheDepths": {
+        "lookAway": "<i>看向别处。</i>",
+        "seekTheTruth": "<i>探求真相。</i>"
+      }
+    },
+    "courtOfTheAncients2Ruby": "“小心点，我们并非第一批来客。”露比说道。珠宝大盗弯腰看向新鲜血泊里俯躺的尸体，尸体身上的彩色补丁长袍吸引了你的注意。深沉的隆隆吼声震撼了整个厅室。露比的表情严肃了起来：",
+    "courtOfTheAncients2Conclusion": "“要是我们想找到什么有价值的东西，最好赶快行动。”",
+    "checkCampaignLog": "查看你的战役日志。",
+    "proceedToSetup": "进入<b>设置</b>",
+    "title": "远古宫廷",
+    "courtOfTheAncients1": "_Court 的  Ancients 1_: 你沿着黑黢黢的隧道远离城市的心脏，时间也随你一起流逝。最终不断的扰动和机械的轰鸣都消散了，取而代之的是不祥的静默。安迪刚刚建议你，在无尽楼梯的终点转过去找另一条路。你头顶就有一扇雕刻精致的门。你按下中央的面板，门外是一座巨大的建筑，悬在空中，看着像是某种远古大教堂的内殿。最中央是一架高耸的升降机，周围螺旋环绕着楼层。墙上数不尽的异星符文都闪着绿光。你好奇宏伟的档案库里会不会有什么珍贵的东西。",
+    "courtOfTheAncients2": "_Court 的  Ancients 2_: 你踏上了巍峨的内殿之顶。扭曲的楼梯和狭窄步道围绕着肆意伸展的建筑，露出下面的更多楼层。你周围的墙上都覆盖着发光的异星文字：千百计的符号盖住了所有表面。你好奇宏伟的档案库里会不会有什么珍贵的东西。",
+    "headedWest": "如果 探险 前往 西, 前往_远古宫廷 1_.",
+    "headedEast": "如果 探险 前往 东, 跳至_远古宫廷 2_.",
+    "resolvePlumbTheDepths": "如果 任意 调查员 有  追本溯源 任务, 他们 结算 他们的 respective 剧情 至  right."
+  },
+  "setup": {
+    "title": "设置",
+    "placeFixedLocations": "按照地点摆放示意图所示，将扭曲窄道、西前厅、东前厅、古代祭坛放置入场。",
+    "placeCrumblingArchives": "混洗每张崩塌档案馆，将其中随机一张从游戏中移除。将剩余的每张崩塌档案馆按照地点摆放示意图所示放置入场。",
+    "westStarSpawn": "查找<i>星之眷族</i>遭遇组，找出星之眷族观测者敌人，将其放在一边，位于场外。将<i>星之眷族</i>遭遇组中随机两张其他卡牌从游戏中移除。",
+    "westBeginAtEastAntechamber": "每位调查员从东前厅开始游戏。",
+    "eastBuildActAgendaDeck": "使用密谋1a“淹没的档案馆”和密谋2a“动荡的地基”创建密谋牌库；使用场景1a“巨人的阶梯”和场景2a“逃离高塔（版本二）”构建场景牌库。将其他每张场景和密谋从游戏中移除。",
+    "eastAddFloodTokens": "将淹没标记加入供应堆。",
+    "eastFloodLevelsOneAndTwo": "提升1层和2层的每个地点的淹没等级。",
+    "eastFullyFloodLevelOne": "提升1层的每个地点的淹没等级，以使其完全淹没。",
+    "eastStarSpawn": "查找<i>星之眷族</i>遭遇组，找出星之眷族观测者敌人，将其放在一边，位于场外。将<i>星之眷族</i>遭遇组的剩余卡牌从游戏中移除。",
+    "setCardsAside": "将伊库勒刻特碎片剧情支援和巨型霸王敌人放在一边，位于场外。",
+    "buildEncounterDeck": "混洗剩余遭遇卡来创建遭遇牌堆。",
+    "readyToBegin": "現在你已經準備好開始遊戲了。",
+    "westGreatLift": "将大升降机地点放置入场，位于1层，<i>（关闭）</i>面朝上。（见下方的<b>大升降机和滑动地点</b>）。",
+    "westBuildActAgendaDeck": "使用密谋1a“毁坏的档案馆”和密谋2a“动荡的地基”创建密谋牌库；使用场景1a“巨人的阶梯”和场景2a“逃离高塔（版本一）”构建场景牌库。将其他每张场景和密谋从游戏中移除。",
+    "eastGreatLift": "将大升降机地点放置入场，位于4层，<i>（关闭）</i>面朝上。（见下方的<b>大升降机和滑动地点</b>）。",
+    "checkCampaignLogInescapable": "查看你的战役日志。",
+    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: _远古宫廷_, _统御主宰_, _梦_, _古老迷雾_, _穷途异魔_, _R’lyeh_, 和 _星之眷族_. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/court-of-the-ancients.png' /><img src='{setImgPath}/domination.png' /><img src='{setImgPath}/dreams.png' /><img src='{setImgPath}/elder-mist.png' /><img src='{setImgPath}/the-inescapable.png' /><img src='{setImgPath}/rlyeh.png' /><img src='{setImgPath}/star-spawn.png' /></section>",
+    "checkCampaignLogWest": "查看你的战役日志。 如果 _探险 前往 西_:",
+    "westGatherStowaways": "找出所有卡牌：  _偷渡虫_ 遭遇组. 这些遭遇牌如下面图标所示：</p><section class='encounter-sets'><img src='{setImgPath}/cult-of-umordhoth.png' /></section></div><section class='encounter-sets'><img src='{setImgPath}/stowaways.png' /></section>",
+    "checkCampaignLogEast": "查看你的战役日志。 如果 _探险 前往 东_:",
+    "eastGatherPilgrims": "找出所有卡牌：  _朝圣者_ 遭遇组. 这些遭遇牌如下面图标所示：</p><section class='encounter-sets'><img src='{setImgPath}/cult-of-umordhoth.png' /></section></div><section class='encounter-sets'><img src='{setImgPath}/pilgrims.png' /></section>",
+    "chooseExpeditionAsset": "按玩家顺序，每位玩家可以从<i>探险</i>遭遇组选择1张_道具_支援，使其位于自己控制之下开始游戏。该遭遇组的图标为：<img src='{setImgPath}/tdc_expedition.png' />",
+    "eastBeginAtTwistingCatwalks": "每位调查员 begins 游戏 于 扭曲窄道.",
+    "creatureWasDefeated": "如果 _the 生物 是 被击败_, 移除 _穷途异魔_ 遭遇组 从 游戏.",
+    "otherwise": "否则, 组 穷途异魔 敌人 一边, 场外卡牌."
+  },
+  "rules": {
+    "greatLift": {
+      "title": "大升降机和滑动地点",
+      "body": "<p class='basic'>本场冒险期间，调查员需要通过大升降机探索塔楼的不同楼层。</p><ul><li>除了通过大升降机及地点各自的连接图标，以及特定的卡牌效果之外，地点彼此之间都不连接。</li><li>大升降机只与其左边和右边的地点相互连接，反之亦然。</li><li>在受到指示要将大升降机向上或向下滑动时，就将大升降机从当前的楼层向上或向下移动一个楼层。<ul><li>大升降机不能移动到第4层之上，也不能移动到第1层之下。</li></ul></li><li>在大升降机移动时，该地点的每张卡牌和每个标记也随之一起移动。</li></ul>"
+    }
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1_: Steeling 你自己 为 另一 climb, 你 放置 1 手牌 above  其他, moving 从 handhold 至 handhold as  tower threatens 至 collapse 在……下 你. Eventually 你 pull 你自己 至  lip 的  shattered dome 和 场外 至 safety. Andy clambers 场外 的  ancient court, followed 由  rest 的  expedition. 你 所有 查看 向下 于  dazzling skyline 的 R’lyeh, 哪个 seems 至 shift 和 sway strangely 在  strong sea winds.</p><ul><li>更新剧本日志。<ul><li>在拉莱耶地图上划掉“远古宫廷”。</li><li>如果  Shard 的 Y’ch’lecht 是 在……下  控制 的 an 调查员 当  冒险 ended, 检查  框 旁边“Shard 的 Y’ch’lecht” 在……下 “神器 Earned.”</li></ul></li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>前往_Obsidian Canyons_.</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2_: 之后 prodding 和 twisting 于 每位 ridge 的  dais, 它 finally slides open. Below, a spiral stairway descending 进入 deep 黑暗 below. 另一 chunk 的 rock shatters 在  floor 的  ancient building. “我们 需要get 场外 的 这里!” Ruby shouts. Wasting 没有 时间, 你 descend  stairs, leaving  crumbling tower 和 它的 ancient 秘密 在……后.</p><ul><li>更新剧本日志。<ul><li>在拉莱耶地图上划掉“远古宫廷”。</li><li>如果  Shard 的 Y’ch’lecht 是 在……下  控制 的 an 调查员 当  冒险 ended, 检查  框 旁边“Shard 的 Y’ch’lecht” 在……下 “神器 Earned.”</li></ul></li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>前往_The Grand Vault_.</li></ul>"
+    },
+    "noResolution": {
+      "body": "<p>_如果 没有 结局 是 到达 (每位调查员 resigned 或 是 被击败)_: The rest 的  expedition tell 你 他们 发现 你 standing 于  edge 的  towering climb as 如果 sleepwalking. 你 rub 你的 眼睛. 你 有 没有 记忆 的  alien court. 和, given 该 它 有 almost entirely collapsed, 你 never 将.</p><ul><li>更新剧本日志。<ul><li>在拉莱耶地图上划掉“远古宫廷”。</li><li>如果  Shard 的 Y’ch’lecht 是 在……下  控制 的 an 调查员 当  冒险 ended, 检查  框 旁边“Shard 的 Y’ch’lecht” 在……下 “神器 Earned.”</li></ul></li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>检查 你的 战役 Log.<ul><li>如果  expedition 前往 西, 前往_Obsidian Canyons_.</li><li>如果  expedition 前往 东, 前往_The Grand Vault_.</li></ul></li></ul>",
+      "title": "如果未达成任何结局"
+    },
+    "xp": {
+      "bonus": "为 plumbing 远古宫廷"
+    }
+  },
+  "cosmicOmen": {
+    "label": {
+      "takeHorrorAndDiscard": "受到1点直接恐惧 和 随机弃掉1张卡牌 从 你的 手牌",
+      "shuffleGlyphIntoEncounterDeck": "洗入 1 字符 卡牌 在场 至 遭遇牌库"
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "tablet": "-2. 如果 你的 地点 是 淹水, 再抽出一个标记。",
+      "elderThing": "-4. 如果 这 标记 是 已揭示 在……期间 an 攻击 或 evasion 尝试, 受到1点伤害 或 1 恐惧.",
+      "skull": "-X. X 是 数量为字符 卡牌 在 胜利牌区。",
+      "cultist": "-2 (-4 改为 如果 那里 是一张Stowaway 敌人 在你的地点)."
+    },
+    "hardExpert": {
+      "tablet": "-3. 如果 你的 地点 是 淹水, 再抽出一个标记。",
+      "elderThing": "-5. 如果 这 标记 是 已揭示 在……期间 an 攻击 或 evasion 尝试, 受到1点伤害和1点恐惧.",
+      "skull": "-X. X 是 1 更多 于 数量为字符 卡牌 在 胜利牌区。",
+      "cultist": "-3 (-5 改为 如果 那里 是一张Stowaway 敌人 在你的地点)."
+    }
+  },
+  "label": {
+    "chooseExpeditionAssetQuestion": "选择 an earned 神器 支援, 或 an 物品 支援 从 探险 遭遇组, 至 begin 在场 在……下 你的 控制.",
+    "noExpeditionAsset": "Do 不 受到 an 神器 或 探险 支援.",
+    "additionalActions": "额外行动s 至 花费",
+    "greatLift": {
+      "slideUp": "Slide 大升降机 up",
+      "slideDown": "Slide 大升降机 向下",
+      "slideUpAdditional": "花费 1 线索 每调查员 至 slide 大升降机 up",
+      "slideDownAdditional": "花费 1 线索 每调查员 至 slide 大升降机 向下",
+      "doNotSlide": "Do 不 slide 大升降机"
+    }
+  }
+}

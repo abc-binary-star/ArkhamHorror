@@ -1,15 +1,45 @@
 {
   "serviceUnavailable": "服务不可用",
   "pleaseTryAgainLater": "请稍后再试。",
+  "gameLog": {
+    "played": "打出了",
+    "draws": "抽取了",
+    "chaosToken": "混乱标记",
+    "chaosTokens": "混乱标记",
+    "remember": "记住“{value}”",
+    "forgot": "忘记“{value}”",
+    "record": "记录“{value}”"
+  },
+  "loadState": {
+    "loading": "加载中…",
+    "failed": "这个页面没能加载出来。",
+    "retry": "重试",
+    "backHome": "返回大厅",
+    "cardDataFailed": "新语言的卡牌数据没能加载出来，卡名会暂时停留在原来的语言。",
+    "sessionExpired": "登录已过期——重新登录后会回到你刚才的页面。"
+  },
   "nav": {
     "home": "首页",
     "about": "关于",
+    "achievements": "成就",
     "admin": "管理员",
     "cards": "卡牌",
     "myDecks": "我的牌组",
-    "support": "Patreon赞助"
+    "support": "Patreon 赞助",
+    "cardBuilder": "卡牌编辑器",
+    "deckBuilder": "卡组构筑"
   },
   "activeGames": "进行中的游戏",
+  "checkCampaignLog": "查看你的战役日志。",
+  "elusive": {
+    "flee": "隐匿：为此敌人选择一个相连地点以供其逃离。"
+  },
+  "hunter": {
+    "move": "猎手：为此敌人选择一个其将前往的地点。"
+  },
+  "patrol": {
+    "move": "巡逻：为此敌人选择一个其将前往的地点。"
+  },
   "continue": "继续",
   "debugGame": "调试游戏",
   "doDeleteGame": "你确定要删除这场游戏吗？",
@@ -43,10 +73,10 @@
     "loseResources": "失去1资源 | 失去{count}资源"
   },
   "name": "{name}",
-  "shuffleRemainder": "将剩余的遭遇牌混洗，形成遭遇牌库。",
-  "readyToBegin": "你现在可以开始游戏了。",
+  "shuffleRemainder": "混洗剩余遭遇卡牌来创建遭遇牌堆。",
+  "readyToBegin": "現在你已經準備好開始遊戲了。",
   "Yes": "是",
-  "No": "否",
+  "No": "不",
   "On": "开",
   "Off": "关",
   "Back": "返回",
@@ -58,7 +88,11 @@
   "Explore": "探索",
   "Fight": "攻击",
   "Engage": "交战",
-  "Forced": "強制",
+  "Forced": "强制",
+  "Use": "使用",
+  "Reaction": "反应",
+  "discard": "弃掉 {name}",
+  "waitingForPlayer": "等待 {name}…",
   "Delayed": "延时效果",
   "Objective": "目标",
   "Haunted": "闹鬼",
@@ -70,7 +104,7 @@
   "addToken": "向混乱袋中加入一个 {'{'}{token}{'}'} 混乱标记，并持续直到剧本结束",
   "token": {
     "Aether": "以太",
-    "AlarmLevel": "警觉等级",
+    "AlarmLevel": "警报等级",
     "Ammo": "弹药",
     "Antiquity": "古物",
     "Bounty": "赏金",
@@ -92,10 +126,11 @@
     "Horror": "恐惧",
     "Inspiration": "灵感",
     "Key": "钥匙",
-    "Lead": "队长",
+    "Kindling": "引火物",
+    "Lead": "線索",
     "Leyline": "地脉",
     "Lock": "锁",
-    "LostSoul": "迷失灵魂",
+    "LostSoul": "失魂落魄",
     "Offering": "祭品",
     "Overgrowth": "疯长",
     "Pillar": "支柱",
@@ -129,6 +164,9 @@
     "cards": "卡牌",
     "charge": "充能",
     "clues": "线索",
+    "damage": "伤害",
+    "curseTokens": "{'{'}curse{'}'} 标记",
+    "evidence": "证据",
     "horror": "恐惧",
     "mental": "精神",
     "physical": "肉体",
@@ -143,12 +181,14 @@
     "ally": "盟友",
     "arcane": "法术",
     "body": "身体",
+    "head": "头部",
     "hand": "手部",
     "tarot": "塔罗"
   },
   "destiny": {
     "theWitchingHour": "巫异时刻",
     "atDeathsDoorStep": "死亡门前",
+    "atDeath'sDoorstep": "死亡门前",
     "theSecretName": "隐秘之名",
     "theWagesOfSin": "恶罪报应",
     "forTheGreaterGood": "崇高利益",
@@ -193,7 +233,7 @@
   },
   "upgradeDecks": "升级牌组",
   "addSideScenario": "添加支线剧本",
-  "lead": "调查员队长",
+  "lead": "線索",
   "or2": "{0} 或 {1}",
   "or3": "{0}、{1} 或 {2}",
   "slashOr": "{0}/{1}",
@@ -204,7 +244,7 @@
   "skip": "跳过",
   "handSize": "手牌上限",
   "yes": "是",
-  "no": "否",
+  "no": "不",
   "succeededBy": "成功，超过难度 {amount} 点",
   "failedBy": "失败，低于难度 {amount} 点",
   "chooseLeadInvestigator": "选择调查员队长",
@@ -212,24 +252,63 @@
   "fromDeck": "从牌库中",
   "fromHand": "从手牌中",
   "fromDiscard": "从弃牌堆中",
+  "fromEncounterDeck": "从遭遇牌库中",
+  "fromEncounterDiscard": "从遭遇弃牌堆中",
+  "fromInvestigatorDeck": "从 {name} 的牌组中",
+  "fromInvestigatorHand": "从 {name} 的手牌中",
+  "fromInvestigatorDiscard": "从 {name} 的弃牌堆中",
+  "searchThisDeck": "搜索此牌组（之后将其洗牌）",
   "ok": "确定",
   "back": "返回",
   "join": "加入",
   "joinGame": "加入游戏",
   "decks": "牌组",
-  "newDeck": "新牌组",
+  "needsSlots": "需要卡牌槽位",
   "deckSyncedSuccessfully": "牌组同步成功",
   "areYouSureDeleteDeck": "你确定要删除这个牌组吗？",
   "noDecksMatchFilters": "没有符合过滤条件的牌组。",
+  "noDecksYet": "还没有牌组——先建一个吧。",
   "deck": {
-    "viewOnArkhamDb": "分享卡组",
+    "viewOnArkhamDb": "在 ArkhamDB 查看",
     "syncDeck": "同步牌组",
-    "deleteDeck": "删除牌组"
+    "deleteDeck": "删除牌组",
+    "editDeck": "编辑牌组",
+    "editHelp": "改牌组名，或把它重新指向另一个 ArkhamDB / arkham.build 链接并把那份卡表拉进来。逐张加卡、减卡请用叠层（Overlay）编辑器。",
+    "editNamePlaceholder": "牌组名",
+    "editUrlLabel": "来源链接",
+    "editFetchList": "从链接拉取卡表",
+    "editFetching": "拉取中…",
+    "editSave": "保存",
+    "editSaving": "保存中…",
+    "editCancel": "取消",
+    "editListReady": "已载入「{name}」，共 {count} 张（保存后生效）",
+    "editUrlRequired": "先填一个来源链接",
+    "editNameRequired": "牌组名不能为空",
+    "editListLoaded": "卡表已载入，点保存生效",
+    "editListFailed": "拉取卡表失败——链接是否有效、卡组是否已公开？",
+    "editSaved": "牌组已更新",
+    "editSaveFailed": "保存失败"
   },
   "deckList": {
     "newDeck": "新牌组",
     "saveToDeckList": "保存到牌组列表",
     "saveToDeckListDescription": "保留此牌组以供未来的战役使用"
+  },
+  "cardPool": {
+    "remaining": "还需添加 1 张 | 还需添加 {count} 张",
+    "complete": "已完成",
+    "joeDiamond": {
+      "title": "直觉牌组",
+      "candidates": "你的_洞察_事件"
+    },
+    "underworldMarket2": {
+      "title": "市场牌组",
+      "candidates": "你的_非法_卡牌"
+    },
+    "stickToThePlan3": {
+      "title": "按计划行事",
+      "candidates": "你的_策略_和_补给_事件"
+    }
   },
   "lobby": {
     "scenario": "冒险",
@@ -240,13 +319,21 @@
     "copy": "复制",
     "copied": "✓ 已复制",
     "claim": "认领",
+    "takeASeat": "选择一个席位",
     "claimed": "已认领",
     "waiting": "等待中",
     "joined": "已加入",
     "couldNotClaimSeat": "无法认领此位置。可能已被占用。",
     "waitingForMorePlayers": "还需等待 {remaining} 名玩家 | 还需等待 {remaining} 名玩家"
   },
+  "waitingOn": {
+    "label": "等待此调查员",
+    "short": "等待"
+  },
   "game": {
+    "yourTurn": "轮到你了",
+    "loadOlderLogEntries": "载入更早的记录（还有 {n} 条）",
+    "confirmEndTurnKeyboard": "还有 {n} 个未使用行动——再按一次 E 确认结束回合",
     "areYouSureUndoScenario": "你确定要撤销并回到冒险开始时吗？",
     "playabilityChecks": "可玩性检查",
     "unableToDownloadExport": "无法下载导出文件",
@@ -272,8 +359,22 @@
     "listView": "列表视图",
     "imageView": "图像视图",
     "includeEncounter": "包含遭遇卡",
+    "cardPool": "卡牌池",
+    "playerCards": "玩家卡牌",
+    "campaignCards": "战役卡牌",
+    "bothCards": "两者",
     "chapter1": "第一章",
     "chapter2": "第二章"
+  },
+  "cardDetails": {
+    "close": "关闭",
+    "back": "返回",
+    "code": "卡牌编号",
+    "notImplemented": "尚未实装",
+    "previous": "上一张卡牌",
+    "next": "下一张卡牌",
+    "openInArkhamDB": "ArkhamDB",
+    "openInArkhamBuild": "arkham.build"
   },
   "cardsList": {
     "name": "名称",
@@ -290,10 +391,12 @@
     "begin": "开始"
   },
   "campaignSettings": {
-    "title": "剧本设置"
+    "title": "战役设置"
   },
   "sideStory": {
-    "selectSideScenario": "选择要添加的支线剧情 "
+    "selectSideScenario": "选择要添加的支线剧情",
+    "requiresInvestigator": "需要 {name}",
+    "xpAsymmetric": "（{signatureXp} 获得 {name} 点经验，其他每位调查员获得 {otherXp} 点经验）"
   },
   "partners": {
     "expeditionTeam": "探险队",
@@ -304,16 +407,27 @@
   "partnerStatus": {
     "safe": "安全",
     "resolute": "坚决",
-    "eliminated": "被击败"
+    "eliminated": "已退场"
   },
   "campaignLog": {
     "chaosBag": "混乱袋",
+    "viewHistory": "查看历史记录",
+    "hideHistory": "隐藏历史记录",
     "remembered": "备忘录",
-    "campaignNotes": "剧本笔记"
+    "specialRules": "特殊规则",
+    "campaignRules": "战役规则",
+    "backToTop": "返回顶部",
+    "noRules": "当前剧本或战役没有特殊规则。",
+    "tabs": {
+      "log": "战役日志",
+      "investigators": "调查员",
+      "rules": "规则"
+    },
+    "campaignNotes": "冒险笔记"
   },
   "campaignLogView": {
     "noEntriesYet": "暂无记录。",
-    "recordedSets": "已记录的循环",
+    "recordedSets": "已记录的条目组",
     "recordedCounts": "已记录的计数"
   },
   "investigatorRow": {
@@ -367,7 +481,9 @@
     "grouped": "分组"
   },
   "player": {
-    "viewDeck": "查看牌组"
+    "viewDeck": "查看牌组",
+    "silenceCard": "静默——隐藏时跳过此卡牌的快速触发和反应",
+    "unsilenceCard": "解除静默——再次提供此卡牌的触发能力"
   },
   "enemy": {
     "debug": "调试"
@@ -396,7 +512,29 @@
   "chooseDeck": {
     "search": "搜索…",
     "useThisDeck": "使用此牌组",
+    "alreadyPlayedThisCampaign": "此调查员已经参加过本战役",
     "randomBasicWeaknessPoolTooltip": "调整随机分配此牌组基础弱点时使用的产品范围。"
+  },
+  "campaign": {
+    "roster": {
+      "leave": "离开",
+      "leaveTooltip": "离开战役。你的经验和创伤会保留，以便你在剧本之间重新加入。",
+      "confirmLeave": "确认离开",
+      "rejoin": "重新加入",
+      "add": "添加调查员",
+      "addSolo": "控制第二名调查员",
+      "addSoloHint": "你将同时控制两名调查员——游戏会切换为独自控制模式，每名调查员都有一个标签页。",
+      "inviteHint": "或者将此链接分享给其他玩家：",
+      "failed": "无法更新调查员名单"
+    }
+  },
+  "deckRestrictions": {
+    "scarletKeys": {
+      "redGlovedMan": {
+        "description": "牌组中不能包含红手套人。",
+        "error": "《血色钥匙》战役不能包含红手套人。"
+      }
+    }
   },
   "deckToolbar": {
     "searchDecks": "搜索牌组…",
@@ -407,7 +545,9 @@
     "save": "保存",
     "saveAndUse": "保存并使用",
     "useWithoutSaving": "不保存，直接使用",
-    "unimplementedError": "无法创建牌组，以下卡牌尚未实装："
+    "unimplementedError": "无法创建牌组，以下卡牌尚未实装：",
+    "investigatorUnimplemented": "「{name}」还没有实装，请换一个牌组。",
+    "requestFailed": "无法连接服务器验证此牌组。请检查网络连接后重试。"
   },
   "claimSeat": {
     "unableToLoad": "无法加载游戏详细信息。",
@@ -417,32 +557,49 @@
   "home": {
     "dismiss": "忽略",
     "noActiveGames": "没有进行中的游戏。",
-    "loadGame": "加载游戏"
+    "loadGame": "加载游戏",
+    "archiveKicker": "诡镇奇谈 · 档案馆",
+    "archiveIndex": "案件编号 04—17 / 限制阅览",
+    "heroTitle": "诡镇奇谈",
+    "heroSubtitle": "潮水正把某种东西带回来。",
+    "heroCaption": "打开案件，召集调查员，在雾合拢之前沿着灯火留下的方向前进。",
+    "caseKicker": "正在调查",
+    "emptyTitle": "尚未建立案件",
+    "sideLabel": "档案员批注",
+    "sideTitle": "让提灯一直亮着。",
+    "sideBody": "每场战役都会留下痕迹。等港口足够安静时，再回到牌桌听一听它的声音。",
+    "records": "份档案"
   },
   "about": {
     "supportTitle": "支持",
     "supportBody": "运行此服务的基础设施费用相当昂贵。该项目依赖于社区的贡献来支付这些费用。如果你能在财务上支持这个项目，请访问我们的 Patreon。",
     "supportNote": "请注意，没有功能被锁定在付费墙后。此项目对所有人免费，并将在其持续运行期间保持免费。",
     "copyrightTitle": "版权声明",
-    "copyrightBody": "此应用中提供的关于 <a href=\"https://www.fantasyflightgames.com/en/products/arkham-horror-the-card-game/\">Arkham Horror: The Card Game™（诡镇奇谈：卡牌版）</a> 的文本和图形信息，版权归 Fantasy Flight Games 2024 所有。此应用是一个粉丝项目，不是由 Fantasy Flight Games 制作、认可、支持或与其有任何附属关系。",
-    "copyrightArtwork": "所有艺术作品和插图的知识产权归其各自的创作者所有。所有 Arkham Horror: The Card Game™ 图像和图形均由 Fantasy Flight Games 享有版权。",
+    "copyrightBody": "此应用中提供的关于 <a href=\"https://www.fantasyflightgames.com/en/products/arkham-horror-the-card-game/\">Arkham 恐惧: The 卡牌 Game™（诡镇奇谈：卡牌版）</a> 的文本和图形信息，版权归 Fantasy Flight Games 2024 所有。此应用是一个粉丝项目，不是由 Fantasy Flight Games 制作、认可、支持或与其有任何附属关系。",
+    "copyrightArtwork": "所有艺术作品和插图的知识产权归其各自的创作者所有。所有 Arkham 恐惧: The 卡牌 Game™ 图像和图形均由 Fantasy Flight Games 享有版权。",
     "projectTitle": "项目详情",
-    "projectBody": "此应用程序由 <a href=\"https://github.com/halogenandtoast\">halogenandtoast</a> 及贡献者创建，旨在支持 Arkham Horror: The Card Game 社区。此项目的源代码可在 <a href=\"https://github.com/halogenandtoast/ArkhamHorror\">Github</a> 获取。欢迎通过 Github 提议或 Mythos Busters discord 服务器上的专用频道提供反馈和错误报告。"
+    "projectBody": "此应用程序由 <a href=\"https://github.com/halogenandtoast\">halogenandtoast</a> 及贡献者创建，旨在支持 Arkham 恐惧: The 卡牌 Game 社区。此项目的源代码可在 <a href=\"https://github.com/halogenandtoast/ArkhamHorror\">Github</a> 获取。欢迎通过 Github 提议或 Mythos Busters discord 服务器上的专用频道提供反馈和错误报告。"
   },
   "settingsForm": {
     "languageHelp": "这将更改卡牌和应用的语言。如果所选语言中没有可用的卡牌或文本，将默认显示英语。（译者：中文相关bug，请在QQ群里反馈）",
     "enrollInBeta": "加入测试版",
     "betaWarning": "测试版功能可能存在严重错误，游戏可能无法恢复，请仅在愿意提供反馈的情况下启用此功能。",
+    "epicMultiplayer": "史诗多人模式（开发中）",
+    "epicMultiplayerWarning": "史诗多人模式仍在开发中，尚不能正常使用。请仅为测试启用。",
     "dangerZone": "危险区域",
     "dangerZoneDescription": "永久删除你的帐户和所有相关数据，包括游戏和牌组。",
     "cannotBeUndone": "此操作无法撤销。",
     "deleteAccount": "删除帐户",
     "deleteConfirm": "你确定吗？你的所有游戏、牌组和帐户数据都将被永久删除，且无法恢复。",
-    "confirmPermanentDelete": "是，永久删除我的帐户"
+    "confirmPermanentDelete": "是，永久删除我的帐户",
+    "customCards": "自定义卡牌",
+    "customCardsWarning": "实验性功能。此功能可能停止工作、破坏进行中的游戏，或随时被移除。自定义卡牌的正确性取决于其定义，编辑器也能表达出引擎可以运行但印刷卡牌不会出现的效果。",
+    "customCardsHelp": "在菜单中添加卡牌编辑器，你可以创建自己的卡牌，并从调试菜单将其加入游戏。你还可以通过牌组上的 {icon} 按钮，或为游戏选择牌组时牌组旁的按钮，为牌组添加覆盖配置：替换自定义调查员（其签名卡会随之替换），并添加或移除卡牌。在牌组页面应用的覆盖配置会一直作用于该牌组，直到你移除它；选择游戏时应用的覆盖配置只作用于该游戏，不会改变牌组或其他副本。",
+    "openCardBuilder": "打开卡牌编辑器"
   },
   "campaignLogTooltip": {
     "rememberedTitle": "备忘录",
-    "campaignNotesTitle": "剧本笔记"
+    "campaignNotesTitle": "冒险笔记"
   },
   "worldMap": {
     "toggleFullscreen": "切换全屏"
@@ -459,7 +616,7 @@
     "status": "状态"
   },
   "calendar": {
-    "timePassed": "流逝的时间"
+    "timePassed": "经过的时间"
   },
   "keysStatus": {
     "keys": "钥匙",
@@ -498,10 +655,11 @@
     "asset": {
       "title": "调试支援",
       "takeControl": "获得控制权",
-      "ready": "准备就绪",
-      "exhaust": "消耗",
+      "ready": "重整",
+      "exhaust": "横置",
       "defeat": "击败",
       "discard": "弃掉",
+      "flip": "翻面",
       "showSlots": "显示槽位"
     },
     "concealedCard": {
@@ -512,7 +670,7 @@
       "increaseDamageDealt": "增加造成的伤害",
       "addHunter": "添加猎手",
       "increaseHealth": "增加生命值",
-      "exhaust": "消耗",
+      "exhaust": "横置",
       "ready": "重整",
       "defeat": "击败",
       "evade": "躲避",
@@ -521,10 +679,21 @@
     "location": {
       "title": "调试地点",
       "addPassageway": "添加通道",
+      "floodLevel": "淹没程度",
+      "floodLevels": {
+        "Unflooded": "未淹没",
+        "PartiallyFlooded": "部分淹没",
+        "FullyFlooded": "完全淹没"
+      },
       "reveal": "揭示",
       "removeClues": "移除线索",
       "placeClue": "放置线索",
       "reset": "重置"
+    },
+    "story": {
+      "title": "调试剧情",
+      "inspectBag": "检查混乱袋",
+      "empty": "没有可显示的混乱袋内容。"
     },
     "common": {
       "place": "放置",
@@ -534,5 +703,120 @@
       "modifiers": "修正",
       "close": "关闭"
     }
+  },
+  "customizations": {
+    "Enchanted": "附魔",
+    "ProtectiveRunes": "防护符文",
+    "Durable": "坚固",
+    "Hallowed": "神圣",
+    "Lightweight": "轻量",
+    "Hexdrinker": "噬魔",
+    "ArmorOfThorns": "荆棘护甲",
+    "Heirloom": "传家宝",
+    "InscriptionOfGlory": "荣耀铭文",
+    "InscriptionOfTheElders": "古老者铭文",
+    "InscriptionOfTheHunt": "狩猎铭文",
+    "InscriptionOfFury": "狂怒铭文",
+    "AncientPower": "远古力量",
+    "Saga": "萨迦",
+    "Scriptweaver": "织文者",
+    "NotchedSight": "缺口瞄具",
+    "ExtendedStock": "加长枪托",
+    "Counterbalance": "配重",
+    "LeatherGrip": "皮革握把",
+    "ExtendedMagazine": "扩容弹匣",
+    "QuicksilverBullets": "水银子弹",
+    "MendingDistillate": "修复蒸馏剂",
+    "CalmingDistillate": "镇静蒸馏剂",
+    "EnlighteningDistillate": "启迪蒸馏剂",
+    "QuickeningDistillate": "加速蒸馏剂",
+    "Refined": "精炼",
+    "Empowered": "强化",
+    "Perfected": "完美",
+    "PessimisticOutlook": "悲观展望",
+    "TrialAndError": "反复试错",
+    "IndepedentVariable": "自变量",
+    "FieldResearch": "实地研究",
+    "PeerReview": "同行评审",
+    "ResearchGrant": "研究经费",
+    "IrrefutableProof": "无可辩驳的证据",
+    "AlternativeHypothesis": "替代假说",
+    "LivingQuill": "活体羽笔",
+    "SpectralBinding": "幽灵束缚",
+    "MysticVane": "秘法风向标",
+    "EndlessInkwell": "无尽墨水瓶",
+    "EnergySap": "能量汲取",
+    "InterwovenInk": "交织墨迹",
+    "SupernaturalRecord": "超自然记录",
+    "SearchWarrant": "搜查令",
+    "FabricatedEvidence": "伪造证据",
+    "Blackmail": "敲诈",
+    "Extort": "勒索",
+    "Surveil": "监视",
+    "Expose": "揭露",
+    "Helpful": "乐于助人",
+    "Versatile": "多才多艺",
+    "Bolstering": "增援",
+    "Clever": "聪慧",
+    "Prompt": "迅速",
+    "Experienced": "老练",
+    "Swift": "敏捷",
+    "ReflexResponse": "反射应对",
+    "SituationalAwareness": "情势感知",
+    "KillerInstinct": "杀手本能",
+    "GutReaction": "本能反应",
+    "MuscleMemory": "肌肉记忆",
+    "SharpenedTalent": "磨砺天赋",
+    "ImpulseControl": "冲动控制",
+    "ForceOfHabit": "习惯使然",
+    "ShiftingInk": "变幻墨迹",
+    "SubtleDepiction": "细腻描绘",
+    "ImbuedInk": "灌注墨迹",
+    "EldritchInk": "远古墨迹",
+    "EldritchInk2": "远古墨迹",
+    "MacabreDepiction": "阴森描绘",
+    "Vibrancy": "活力",
+    "ArmoredCarapace": "装甲甲壳",
+    "ClawsThatCatch": "捕捉之爪",
+    "JawsThatSnatch": "攫取之颚",
+    "EyesOfFlame": "烈焰之眼",
+    "WingsOfNight": "暗夜之翼",
+    "Dominance": "支配",
+    "DreamingCall": "梦之召唤",
+    "DæmonicInfluence": "恶魔影响",
+    "Betray": "背叛",
+    "Mercy": "仁慈",
+    "Confess": "忏悔",
+    "Distract": "分心",
+    "GreaterControl": "更强控制",
+    "Bonded": "绑定",
+    "Tonguetwister": "绕口令",
+    "ThriceSpoken": "三重诉说",
+    "Detachable": "可拆卸",
+    "PryBar": "撬棍",
+    "SharpenedKnife": "磨利的刀",
+    "SignalMirror": "信号镜",
+    "MagnifyingLens": "放大镜",
+    "LuckyCharm": "幸运护符",
+    "SpringLoaded": "弹簧加载",
+    "ImprovedTimer": "改良计时器",
+    "Tripwire": "绊线",
+    "Simple": "简单",
+    "Poisonous": "有毒",
+    "RemoteConfiguration": "远程配置",
+    "Net": "网",
+    "ExplosiveDevice": "爆炸装置",
+    "Specialist": "专家",
+    "Specialist2": "专家",
+    "Nemesis": "宿敌",
+    "MythosHardened": "神话淬炼",
+    "AlwaysPrepared": "时刻准备",
+    "Railshooter": "轨道射手",
+    "Telescanner": "远距扫描器",
+    "Translocator": "转位器",
+    "Realitycollapser": "现实坍缩器",
+    "Matterweaver": "物质编织者",
+    "AethericLink": "以太链接",
+    "EmpoweredConfiguration": "强化配置"
   }
 }

@@ -1,6 +1,23 @@
 {
   "serviceUnavailable": "Service Unavailable",
   "pleaseTryAgainLater": "Please try again later.",
+  "gameLog": {
+    "played": "played",
+    "draws": "draws",
+    "chaosToken": "chaos token",
+    "chaosTokens": "chaos tokens",
+    "remember": "Remember \"{value}\"",
+    "forgot": "Forgot \"{value}\"",
+    "record": "Record \"{value}\""
+  },
+  "loadState": {
+    "loading": "Loading…",
+    "failed": "Couldn't load this page.",
+    "retry": "Try again",
+    "backHome": "Back to lobby",
+    "cardDataFailed": "Card names couldn't be loaded in the new language, so they stay in the previous one.",
+    "sessionExpired": "Your session expired — sign in again to pick up where you left off."
+  },
   "nav": {
     "home": "Home",
     "about": "About",
@@ -9,7 +26,8 @@
     "cards": "Cards",
     "myDecks": "Decks",
     "support": "Patreon",
-    "cardBuilder": "Card Builder"
+    "cardBuilder": "Card Builder",
+    "deckBuilder": "Deck Builder"
   },
   "activeGames": "Active Games",
   "checkCampaignLog": "Check your Campaign Log.",
@@ -266,15 +284,33 @@
     "saveAndUse": "Save & Use",
     "useWithoutSaving": "Use Without Saving",
     "unimplementedError": "Could not create deck, the following cards are unimplemented:",
+    "investigatorUnimplemented": "{name} isn't supported yet — please use a different deck.",
     "requestFailed": "Could not reach the server to validate this deck. Check your connection and try again."
   },
   "deckSyncedSuccessfully": "Deck synced successfully",
   "areYouSureDeleteDeck": "Are you sure you want to delete this deck?",
   "noDecksMatchFilters": "No decks match your filters.",
+  "noDecksYet": "No decks yet — create one to get started.",
   "deck": {
     "viewOnArkhamDb": "View on ArkhamDB",
     "syncDeck": "Sync deck",
-    "deleteDeck": "Delete deck"
+    "deleteDeck": "Delete deck",
+    "editDeck": "Edit deck",
+    "editHelp": "Rename the deck, or repoint it at another ArkhamDB / arkham.build link and pull that list in. Use the overlay editor to add or remove individual cards.",
+    "editNamePlaceholder": "Deck name",
+    "editUrlLabel": "Source link",
+    "editFetchList": "Fetch list from link",
+    "editFetching": "Fetching…",
+    "editSave": "Save",
+    "editSaving": "Saving…",
+    "editCancel": "Cancel",
+    "editListReady": "Loaded “{name}”, {count} cards (applied on save)",
+    "editUrlRequired": "Enter a source link first",
+    "editNameRequired": "The deck name cannot be empty",
+    "editListLoaded": "List loaded — save to apply it",
+    "editListFailed": "Could not fetch that list — is the link valid and the deck public?",
+    "editSaved": "Deck updated",
+    "editSaveFailed": "Could not save the deck"
   },
   "deckList": {
     "newDeck": "New Deck",
@@ -298,9 +334,13 @@
     "waitingForMorePlayers": "Waiting for {remaining} more player | Waiting for {remaining} more players"
   },
   "waitingOn": {
-    "label": "Waiting on this investigator"
+    "label": "Waiting on this investigator",
+    "short": "Waiting"
   },
   "game": {
+    "yourTurn": "Your turn",
+    "loadOlderLogEntries": "Load older entries ({n} more)",
+    "confirmEndTurnKeyboard": "You still have {n} unused actions — press E again to confirm end turn",
     "areYouSureUndoScenario": "Are you sure you wish to undo to the beginning of the scenario?",
     "playabilityChecks": "Playability Checks",
     "unableToDownloadExport": "Unable to download export",
@@ -516,7 +556,18 @@
   "home": {
     "dismiss": "Dismiss",
     "noActiveGames": "No active games.",
-    "loadGame": "Load Game"
+    "loadGame": "Load Game",
+    "archiveKicker": "Arkham Horror Archive",
+    "archiveIndex": "Case file 04—17 / Restricted collection",
+    "heroTitle": "Arkham Horror",
+    "heroSubtitle": "The tide is carrying something back.",
+    "heroCaption": "Open the case file, gather your investigators, and follow the lanterns before the fog closes in.",
+    "caseKicker": "Open investigations",
+    "emptyTitle": "No case has been opened",
+    "sideLabel": "Archivist's note",
+    "sideTitle": "Keep the lantern lit.",
+    "sideBody": "Every campaign leaves a trace. Return to the table when the harbour is quiet enough to hear it.",
+    "records": "records"
   },
   "about": {
     "supportTitle": "Support",

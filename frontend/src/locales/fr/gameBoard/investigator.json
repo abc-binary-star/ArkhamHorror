@@ -1,6 +1,9 @@
 {
     "discards": "Défausse",
     "endTurn": "Fin du tour",
+    "endTurnShort": "Fin",
+    "confirmEndTurn": "Confirmer la fin du tour ({n} actions restantes)",
+    "confirmEndTurnShort": "Fin ? ({n})",
     "skipTriggers": "Ignorer déclencheurs",
     "skipAllTriggers": "Ignorer les déclencheurs de tous les investigateurs",
     "devouredCards": "Dévoré ({count})",

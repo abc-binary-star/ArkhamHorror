@@ -2,6 +2,8 @@
     "discards": "Discards",
     "endTurn": "End turn",
     "endTurnShort": "End",
+    "confirmEndTurn": "Confirm end turn ({n} actions left)",
+    "confirmEndTurnShort": "End? ({n} left)",
     "skipTriggers": "Skip Triggers",
     "skipAllTriggers": "Skip Triggers for All Investigators",
     "devouredCards": "Devoured ({count})",

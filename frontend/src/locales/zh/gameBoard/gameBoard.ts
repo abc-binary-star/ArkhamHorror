@@ -8,5 +8,7 @@ import card from '@/locales/zh/gameBoard/card.json'
 import upgrade from '@/locales/zh/gameBoard/upgrade.json'
 import create from '@/locales/zh/gameBoard/create.json'
 import ultimatumsAndBoons from '@/locales/zh/gameBoard/ultimatumsAndBoons.json'
+import historyPanel from '@/locales/zh/gameBoard/history_panel.json'
+import achievements from '@/locales/zh/gameBoard/achievements.json'
 
-export default {...base, phase, skillTest, gameBar, investigator, scenario, card, upgrade, create, ultimatumsAndBoons}
+export default {...base, phase, skillTest, gameBar, historyPanel, investigator, scenario, card, upgrade, create, ultimatumsAndBoons, achievements}

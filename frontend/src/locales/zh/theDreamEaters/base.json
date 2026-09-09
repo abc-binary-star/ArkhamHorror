@@ -1,59 +1,339 @@
 {
-    "key": {
-        "theDreamersStrayedFromThePath" : "入梦者偏离了道路",
-        "theInvestigatorsWereSavedByRandolphCarder" : "调查员被伦道夫·卡特救下",
-        "theCatsCollectedTheirTributeFromTheZoogs" : "猫群收到了祖格鼠的贡品",
-        "theInvestigatorsParleyedWithTheZoogs" : "调查员和祖格鼠谈判",
-        "drMaheswaranJoinedTheInvestigation" : "马斯沃伦医生与你一同调查",
-        "drMaheswaranStayedWithHerPatients" : "马斯沃伦医生留在病人身边",
-        "stepsOfTheBridge" : "桥梁进度",
-        "drMaheswaransFateIsUnknown" : "马斯沃伦医生生死未卜",
-        "randolphEscapedTheHospitalOnHisOwn" : "伦道夫自己逃出了医院",
-        "randolphEscapedTheHospitalWithTheInvestigators" : "伦道夫和调查员一起逃出了医院",
-        "drMaheswaranIsAlive" : "马斯沃伦医生生还",
-        "drMaheswaranIsMissing" : "马斯沃伦医生失踪",
-        "theBlackCatDeliveredNewsOfYourPlight" : "黑猫带去你们陷入困境的消息",
-        "theBlackCatSharedKnowledgeOfTheDreamlands" : "黑猫告知了幻梦境的事情",
-        "theBlackCatWarnedTheOthers" : "黑猫提醒其他调查员",
-        "okayFineHaveItYourWayThen" : "那好吧，随你便",
-        "theDreamersGrowWeaker" : "入梦者渐渐衰弱",
-        "youAreOnYourOwn" : "你独自前行",
-        "theBlackCatHasAHunch" : "黑猫察觉到了什么",
-        "theBlackCatIsAtYourSide" : "黑猫在你身边",
-        "youAskedForIt" : "这是你自找的",
-        "theInvestigatorsForcedTheirWayIntoTheTemple" : "调查员强行进入神庙",
-        "evidenceOfKadath" : "卡达斯的证据",
-        "hasBrokenTheLawOfUlthar" : "已打破乌撒的法则",
-        "wasCaptured" : "被俘",
-        "virgilWasCaptured" : "维吉尔被俘",
-        "randolphEludedCapture" : "伦道夫未遭俘虏",
-        "randolphWasCaptured" : "伦道夫被俘",
-        "randolphSurvivedTheDescent" : "伦道夫安全下降到地下世界",
-        "randolphDidNotSurviveTheDescent" : "伦道夫在下降到地下世界的途中遇难",
-        "theInvestigatorsPossessTheSilverKey" : "调查员持有银钥匙",
-        "theBlackCatRequestedAidFromTheOthers" : "黑猫向其他调查员寻求帮助",
-        "theBlackCatSharedKnowledgeOfTheUnderworld" : "黑猫告知了地下世界的事情",
-        "theBlackCatIsSearchingForTheTruth" : "黑猫调查真相",
-        "theDreamersKnowOfAnotherPath" : "入梦者知道了另一条路",
-        "theInvestigatorsWereCarriedToTheColdWastes" : "调查员被带到冰封荒土",
-        "theInvestigatorsTraveledToTheColdWastes" : "调查员前往冰封荒土",
-        "randolphCarterDidNotSurviveTheVoyage" : "伦道夫在这趟航程中遇难",
-        "randolphSurvivedTheVoyage" : "伦道夫安全地经历了航程",
-        "theInvestigatorsFoundAWayOutOfTheUnderworld" : "调查员找到了离开地下世界的路",
-        "theBlackCatSpokeOfNyarlathotep" : "黑猫提到了奈亚拉托提普",
-        "theBlackCatSpokeOfAtlachNacha" : "黑猫提到了阿特拉克·纳克亚",
-        "theBlackCatKnowsTheTruth" : "黑猫得知真相",
-        "nyarlathotepsInvasionHasBegun" : "奈亚拉托提普开始入侵",
-        "theDreamersEscapedFromNyarlathotepsGrasp" : "调查员逃离了奈亚拉托提普的魔掌",
-        "theDreamersBanishedNyarlathotep" : "调查员驱逐了奈亚拉托提普",
-        "theDreamersAwoke" : "入梦者醒来",
-        "theDreamersStayedInTheDreamlandsForever" : "入梦者永远留在了幻梦境",
-        "theDreamersTraveledBeneathTheMonastery" : "入梦者进入隐修院底下",
-        "theInvestigatorsAreTrappedInAtlachNachasRealm" : "调查员被困在阿特拉克·纳克亚的领域",
-        "theBridgeWasCompleted" : "桥梁已经建成",
-        "theBridgeWasDestroyed" : "桥梁已被摧毁",
-        "theInvestigatorsReturnedToReality" : "调查员回到现实世界",
-        "theInvestigatorsNeverEscaped" : "调查员永远无法逃离",
-        "theInvestigatorsAreStillInTheDreamlands" : "调查员仍在幻梦境"
+  "key": {
+    "theDreamersStrayedFromThePath": "入梦者偏离了道路",
+    "theInvestigatorsWereSavedByRandolphCarder": "调查员被伦道夫·卡特救下",
+    "theCatsCollectedTheirTributeFromTheZoogs": "猫群收到了祖格鼠的贡品",
+    "theInvestigatorsParleyedWithTheZoogs": "调查员和祖格鼠谈判",
+    "drMaheswaranJoinedTheInvestigation": "马斯沃伦医生与你一同调查",
+    "drMaheswaranStayedWithHerPatients": "马斯沃伦医生留在病人身边",
+    "stepsOfTheBridge": "桥梁进度",
+    "drMaheswaransFateIsUnknown": "马斯沃伦医生生死未卜",
+    "randolphEscapedTheHospitalOnHisOwn": "伦道夫自己逃出了医院",
+    "randolphEscapedTheHospitalWithTheInvestigators": "伦道夫和调查员一起逃出了医院",
+    "drMaheswaranIsAlive": "马斯沃伦医生生还",
+    "drMaheswaranIsMissing": "马斯沃伦医生失踪",
+    "theBlackCatDeliveredNewsOfYourPlight": "黑猫带去你们陷入困境的消息",
+    "theBlackCatSharedKnowledgeOfTheDreamlands": "黑猫告知了幻梦境的事情",
+    "theBlackCatWarnedTheOthers": "黑猫提醒其他调查员",
+    "okayFineHaveItYourWayThen": "那好吧，随你便",
+    "theDreamersGrowWeaker": "入梦者渐渐衰弱",
+    "youAreOnYourOwn": "你独自前行",
+    "theBlackCatHasAHunch": "黑猫察觉到了什么",
+    "theBlackCatIsAtYourSide": "黑猫在你身边",
+    "youAskedForIt": "这是你自找的",
+    "theInvestigatorsForcedTheirWayIntoTheTemple": "调查员强行进入神庙",
+    "evidenceOfKadath": "卡达斯的证据",
+    "hasBrokenTheLawOfUlthar": "已打破乌撒的法则",
+    "wasCaptured": "被俘",
+    "virgilWasCaptured": "维吉尔被俘",
+    "randolphEludedCapture": "伦道夫未遭俘虏",
+    "randolphWasCaptured": "伦道夫被俘",
+    "randolphSurvivedTheDescent": "伦道夫安全下降到地下世界",
+    "randolphDidNotSurviveTheDescent": "伦道夫在下降到地下世界的途中遇难",
+    "theInvestigatorsPossessTheSilverKey": "调查员持有银钥匙",
+    "theBlackCatRequestedAidFromTheOthers": "黑猫向其他调查员寻求帮助",
+    "theBlackCatSharedKnowledgeOfTheUnderworld": "黑猫告知了地下世界的事情",
+    "theBlackCatIsSearchingForTheTruth": "黑猫调查真相",
+    "theDreamersKnowOfAnotherPath": "入梦者知道了另一条路",
+    "theInvestigatorsWereCarriedToTheColdWastes": "调查员被带到冰封荒土",
+    "theInvestigatorsTraveledToTheColdWastes": "调查员前往冰封荒土",
+    "randolphCarterDidNotSurviveTheVoyage": "伦道夫在这趟航程中遇难",
+    "randolphSurvivedTheVoyage": "伦道夫安全地经历了航程",
+    "theInvestigatorsFoundAWayOutOfTheUnderworld": "调查员找到了离开地下世界的路",
+    "theBlackCatSpokeOfNyarlathotep": "黑猫提到了奈亚拉托提普",
+    "theBlackCatSpokeOfAtlachNacha": "黑猫提到了阿特拉克·纳克亚",
+    "theBlackCatKnowsTheTruth": "黑猫得知真相",
+    "nyarlathotepsInvasionHasBegun": "奈亚拉托提普开始入侵",
+    "theDreamersEscapedFromNyarlathotepsGrasp": "调查员逃离了奈亚拉托提普的魔掌",
+    "theDreamersBanishedNyarlathotep": "调查员驱逐了奈亚拉托提普",
+    "theDreamersAwoke": "入梦者醒来",
+    "theDreamersStayedInTheDreamlandsForever": "入梦者永远留在了幻梦境",
+    "theDreamersTraveledBeneathTheMonastery": "入梦者进入隐修院底下",
+    "theInvestigatorsAreTrappedInAtlachNachasRealm": "调查员被困在阿特拉克·纳克亚的领域",
+    "theBridgeWasCompleted": "桥梁已经建成",
+    "theBridgeWasDestroyed": "桥梁已被摧毁",
+    "theInvestigatorsReturnedToReality": "调查员回到现实世界",
+    "theInvestigatorsNeverEscaped": "调查员永远无法逃离",
+    "theInvestigatorsAreStillInTheDreamlands": "调查员仍在幻梦境"
+  },
+  "flavorText": {
+    "prologueOpening": {
+      "title": "现实不仅仅是清醒的世界",
+      "body": "<blockquote>“在浅眠中他走下了七十级台阶，来到火焰洞穴，向长著胡子的牧师纳什特和卡曼塔道出自己的计划。两位牧师摇著他们戴著双重冠的脑袋，发誓说这将是他灵魂的末日。”</blockquote><p class='basic right'>—H. P. Lovecraft, *The 梦-Quest 的 Unknown Kadath*</p>"
+    },
+    "prologue": {
+      "title": "引导故事",
+      "body": "<i>1925年2月13日，星期五</i>\n马萨诸塞州的阿卡姆镇发生了一些怪事。\n通常来说，这座阴郁的新英格兰小镇上的居民并不会对其大惊小怪。阿卡姆的确一直以怪事——有人称之为超自然现象——著称。然而，这次的情况实际上前所未见。\n一切要从最新一期《传奇故事》说起。一位名叫维吉尔·格雷的作家写下了自己梦中经历的一次旅行——他声称这不是自己编造的小说。他描写了一条长长的螺旋楼梯、一柱灼热难当、似是活物的火焰、一棵来自月球的树、一只会说话的古怪猫……还有其他难以置信的景象。但最初吸引你注意力的并不是这篇非同寻常的故事。维吉尔的故事刊登后不久，《传奇故事》陆续收到并刊登了一封封信件，寄信人阅读维吉尔的故事后声称经历过一模一样的梦境。不久，阿卡姆报社报道了这则故事，以及专家们也得知了这一奇怪现象的新闻。\n有人说服作者维吉尔·格雷到当地的精神病院接受治疗，许多和他一样精神错乱的人也被送进了精神病院。学界普遍认为维吉尔的梦境真实到他本人分不清现实与虚幻，而他的作品将他的幻觉传播给他人，使读者也变得歇斯底里。你仍然无法接受这一结论。毕竟，人类对于做梦这个行为仍不甚了解。对于睡眠中的大脑状态，医学专家的各种理论之间存在较大分歧。近来，包括西格蒙德·弗洛伊德在内的许多专家认为，梦是一个人潜意识里的欲望、恐惧或执念的表现。预言家们则一直以来都相信，通过筛选和解释梦境，就能得知入梦者的过去和未来。但是，如果这些理论都是真的，那么怎会有那么多人——来自各行各业的人——都梦到同一段经历？假如当代对睡眠的所有理解都是错的呢？假如我们的意识在睡梦中真的能到达一个地方——存在于清醒世界以外的梦之国度呢？\n你和你的同伴们聚集起来，彻查这一怪事的真相。如果说这座镇上有人能进入梦中世界，那么，或许你们也能。你已经梦到了维吉尔所经历的梦境，完全一致。如果一切顺利，你们中的一半人将出发前往“幻梦境”并返回。其余的人将留在清醒世界，研究同伴的睡眠模式以确保一切正常……"
+    },
+    "campaignStructure": {
+      "title": "引导故事",
+      "body": "<p class='basic'>这 cycle consists 的 2 separate 4-部分 campaigns—A 和 B.</p><p class='basic'>战役 A 是 called *The 梦-Quest* 和 consists 的 scenarios 1–A, 2–A, 3–A, 和 4–A. 这 战役 tells  剧情 的 那些 调查员 谁 journey 进入  world 的 梦.</p><p class='basic'>战役 B 是 called *The Web 的 梦* 和 consists 的 scenarios 1–B, 2–B, 3–B, 和 4–B. 这 战役 tells  剧情 的 那些 调查员 谁 stay 在……后 在  waking world.</p><p class='basic'>The scenarios 在 这 cycle 可以 是 进行 在 1 的 3 ways: as 1 的  above 4-部分 campaigns (任一 A 或 B), 或 as an interconnected 8-部分 战役 (两者 A 和 B) 在 哪个 a single group 的 1–4 players 受到 控制 的 2 separate groups 的 调查员 和 alternates between 他们.</p><ul><li>如果你正在游玩4场冒险组成的《梦寻秘境》剧本：<ul><li>前往_战役 A 设置_. 之后 每位 冒险, 前往the 下一 numbered A 冒险, as instructed 由  冒险’s 结局. Do 不 游戏  4 B scenarios. 这 战役 是一张self-contained 经验.</li></ul></li><li>如果你正在游玩由4场冒险组成的《睡梦之网》剧本：<ul><li>前往_战役 B 设置_. 之后 每位 冒险, 前往the 下一 numbered B 冒险, as instructed 由  冒险’s 结局. Do 不 游戏  4 A scenarios. 这 战役 是一张self-contained 经验.</li></ul></li><li>如果 你playing The 梦-Eaters as an 8-部分 战役:<ul><li>每位 player 应该 build a 不同 调查员 牌组 每位战役, choosing 1 的 他们的 调查员 至 是 部分 的 战役 A 和 1 至 是 部分 的 战役 B. (*为 added chaos,  players 可以 也 选择 randomly.*)</li><li>注意，每个剧本都有其独立的混乱袋，在该剧本的“剧本设置”的指示所述。但是，没有必要同时设置两个混乱袋。在剧本日志中的“混乱袋”栏位记录当前混乱袋的内容，以便你轻松地切换不同剧本的混乱袋。</li><li>从 那里, 你 可以 前往任一 _冒险 1–A: Beyond  Gates 的 Sleep_, 或 _冒险 1–B: Waking 梦魇_ (你的 选择). 之后 每位 冒险, follow  结局’s instructions 至 determine 当 至 alternate between  2 groups. Decisions made 由 1 group 可以 sometimes affect  其他 group.</li></ul></li></ul>"
+    },
+    "theBlackCat": {
+      "title": "幕间故事I：黑猫",
+      "body": "<ul><li>如果 你playing 两者 梦寻秘境 和 睡梦之网 as an interconnected 剧本, 或 如果 你playing The 梦-Quest (剧本A) 由 itself: 前往_黑猫 1_.</li><li>如果 你playing 睡梦之网 (剧本B) 由 itself: 跳至_黑猫 3_.</li></ul>"
+    },
+    "theBlackCat1": {
+      "title": "幕间故事I：黑猫",
+      "body": "<p>_The Black 猫 1:_ As 你 travel 场外 的  Enchanted 树林, 你 pass 穿过 rolling green meadows 在……下 a bright-blue, cloudless sky. 你 speak 与blond-haired man—谁 introduces himself as Randolph Carter— 为 several hours 沿着 你的 journey 南. 你 pass 穿过 a 小镇 Randolph calls Nir 和 在……上 a stone bridge spanning a wide 河流. Since  man seems friendly 和 knowledgeable 关于 两者 你的 world 和 这 1, 你 explain 至 他 你的 situation: 该 你 有 followed  writings 的 a man named Virgil Gray 至 reach 这 strange land, 在 order 至 看见 为 你自己  真相 的 他的 剧情. “那里 是一张放置 在 Ulthar 哪里 你 可以 yet meet 这 man 为 你自己,” Randolph responds. “当 我们 reach Ulthar, I 将 show 你.”</p><p>乌撒之城和你想象中的不太一样。这座小城的边界是一条鹅卵石路，这条路隔开了古朴的农舍与连绵起伏的草地。在这座小城中，狭窄的鹅卵石街道上几乎全是各种各样、形形色色的猫，你一走近它们就散开了。倾斜的街道上方拱悬著几层尖屋顶的楼房；整个小城似乎全是杂乱无章的住宅群，并且在这儿经营的都是些老式行业。你来到城中心的广场时，伦道夫停下脚步，露出充满朝气的微笑向你致意：“欢迎来到乌撒。”他宣告道，“就像我之前提到的，在这儿你会比较安全。你在这儿只需要遵守一条至高法律：在乌撒之城，任何人都不能杀害猫。”想到街道上全是猫，你大声发问这座小城是不是被猫统治的。“不完全是。”伦道夫思考著你说的话，答道，“虽然我想人们可能会把这里称为幻梦境的猫界中心。下次再跟你说那条法律是怎么来的。先过来——我感觉，你说的那个‘维吉尔’老哥就在艾纳酒馆。”</p><p>伦道夫带你穿过广场，这周围的建筑物都装饰有猫咪元素，包括雕像、标志，甚至连彩窗上也是。最后你来到一幢有著“艾纳酒馆”招牌的建筑前。里面是中世纪风格的小酒馆，摆满了长长的木桌。你注意到这里有几名客人，还有数量是他们三倍的猫咪。木质吧台旁边，一名客人正在用小条的肉干喂猫。他相貌英俊，像是三十出头，留著黑色短发，有著刚毅的下颌和高高的颧骨。你马上认出了他就是那位作者，维吉尔·格雷。在你内心深处，你好奇这次相遇究竟是巧合还是命运的安排，是好事还是坏事。</p><p>不论如何，你和伦道夫一同走近他并作自我介绍。维吉尔脸上带著喜悦的笑容，与你二人握手：“很高兴见到你们，入梦者同道！”作者说著，话语声中带著一丝孩子气的激动，“见到更多相信我的朋友真是太好了。我已经厌倦了报纸上关于我所谓‘疾病’的报道。”</p><p>你点头表示赞同，告诉维吉尔你来这里是为了从这次探索中找到一些证据，将它们带回现实世界。“你以为我没试过这么做吗？”他挫败地回道，“可悲的是，一个睡著的人是没法把这个世界的任何东西带回清醒世界的。你眼前的这一切都是想象出来的。想法、概念、幻象。难道你能把脑子里的想法握在手里吗？”</p><p>伦道夫插嘴道：“幻梦境里有一个地方，或许有你想要的证据。我在我的梦里见过那个地方。我到过那里三次，每一次都只待了一瞬，马上就被升起的太阳唤醒了……但不论我怎么努力，我都找不到去那儿的路。我已经花了好多个夜晚来寻找。”</p><p>“噢？”维吉尔好奇地问道，“那又是什么地方？”</p><p>“那是一座奇妙的城市，”他双眼发亮，描述道，“那里金碧辉煌，令人心驰神往，不同于我以往见过的每个地方。它位于不为人知的卡达斯山脉的顶峰之上，从未有人踏足。那里坐落著一座属于诸神的缟玛瑙城堡，它隐藏在重重云雾之中，万千星辰为它加冕。”</p><p>维吉尔沉醉在伦道夫的讲述中，一边漫不经心地抚摸著桌上靠近自己的猫咪。那是一只苗条的猫咪，一身黑毛油光水滑，黑如宇宙虚空。“那么我们必须找到那个地方！就算那里没有我们要找的证据，这听起来就像一场此生不再有的冒险。这足够我写上一百页，甚至更多！”</p><p>你对维吉尔与伦道夫说，你得回到清醒世界把你的经历告诉同伴们，才能加入这场冒险。就在这时，响起了另一道神秘而安静的声音：“噢，你无法醒来。那只眼睛正盯著你。”</p><p>你和其他二人转头到处看，寻找著声音的来源。是酒馆老板吗？还是别的客人？维吉尔的黑猫舒展身子，坐了起来，它那敏锐的黄色眼睛就像是窗外的阳光。“我等你们寻找卡达斯等了很久。”它说道。</p><p>“你会说话？”维吉尔惊讶地说道，吓得跳了起来，差点从高脚凳摔了下去。</p><p>“你这呆子，我是猫，当然会说话，”黑猫一边无聊地舔著爪子，一边答道，“你都见过上千只乌撒的猫了，怎么现在才吃惊？”</p><p>“但……我以为……”维吉尔用手掌擦了擦自己的额头。</p><p>“别管他了。”黑猫直接对你说，“我向你保证，你找到了卡达斯之后才能回到清醒世界。那是你唯一的出路。在这期间，我会回到清醒世界，并将你要寻找卡达斯的事情告诉你的同伴。”它跳下桌面，信心满满地朝大门走去。“但我想他们的任务会更艰巨……”</p><ul><li>如果你正在游玩由8场相互关联的冒险组成的《梦寻秘境》和《睡梦之网》剧本。</li><li>否则,  enigmatic 猫 vanishes 场外  门 在你get  chance 至 respond. 前往_冒险 2–A: The 搜索 为 Kadath_.</li></ul>"
+    },
+    "theBlackCat2": {
+      "title": "幕间故事I：黑猫",
+      "body": "<p>“需要我对你们在清醒世界的朋友说些什么？”</p><ul><li>调查员队长必须作出决定(选择以下一项):<ul><li>Tell 你的 companions 的 你的 quest, 你的 plight, 和 你的 险厄. The 黑色 猫 将 return 至 你 一次 这 message 是 delivered. 这 可以 放置 an undue burden 在 你的 companions. In  战役 Log 为 The 梦-Quest (战役 A), 记录 * 黑色 猫 delivered news 的 你的 plight*.</li><li>Tell 你的 companions 关于 你的 新 friends 和 关于  Dreamlands. In  战役 Log 为 The 梦-Quest (战役 A), 记录 * 黑色 猫 shared 知识 的  Dreamlands*.</li><li>Tell 你的 companions 该 他们 是 在 danger, 和 该 你safe. The 黑色 猫 将 stay 与 他们 一次 这 message 是 delivered. 这 might 使 你的 quest a little 更多 difficult. In  战役 Log 为 The 梦-Quest (战役 A), 记录 * 黑色 猫 warned  others*.</li><li>你 don’t trust 这 creature 1 bit. 你 threaten  黑色 猫, warning 它 不 至 approach 你的 friends 在……下 任意 circumstance. The 黑色 猫 yawns 和 vanishes 场外  门. In  战役 Log 为 The 梦-Quest (战役 A), 记录 *okay, fine, 有 它 你的 道路 然后*.</li></ul></li><li>前往_The Black 猫 3_.</li></ul>"
+    },
+    "theBlackCat3": {
+      "title": "幕间故事I：黑猫",
+      "body": "<p>_The Black 猫 3:_ “...你 必须 是 他们的 friends,”  enigmatic voice 说 从 above. To 你的 surprise,  quiet voice belongs 不 至 a person, 但 至 a 黑色 猫 该 lounges lazily across a tree branch hanging 在道路 outside  hospital. “Oh, pick 你的 jaws up 离场  ground 和 listen.” The 猫 rises 和 leaps 到 牌堆顶 的 a nearby fence, walking 沿着 它 与kind 的 grace 仅 cats possess.</p><p>“它来自地球的幻梦境。”伦道夫说明道，他的声音里带著几分欢悦，像是重遇了多年不见的故交，“我好久没和你们说上话了！”</p><p>那只猫敏锐的黄色眼睛盯著伦道夫片刻，随后将目光转回你身上。“……是啊。不过，我是给你那几位睡梦中的朋友们带口信的。”</p><p class='basic'>检查冒险日志。阅读以下与你处境一致的每个部分。</p>"
+    },
+    "youAreOnYourOwn": {
+      "title": "幕间故事I：黑猫",
+      "body": "<p class='basic'>如果你正在独立游玩《睡梦之网》剧本(剧本B)，并且没有《梦寻秘境》的冒险日志：</p><p>“遇上麻烦的不只是你的朋友。”黑猫解释道，“这里酝酿著一个巨大的阴谋，而你的朋友们……唔，我只能说他们现在把全部精力都用在应对自己的难题上了。只有你能打破巨网。忘记同伴，亲自上场吧。除此之外，别无他法。在你完成你的任务之前，我会尽力保护你的朋友们。你听明白了吗？”</p><p class='basic'>In 你的 战役 Log, 记录 *你on 你的 own*.</p>"
+    },
+    "theBlackCatSharedKnowledgeOfTheDreamlands": {
+      "title": "幕间故事I：黑猫",
+      "body": "<p class='basic'>黑猫告知了幻梦境的事情。</p><p>黑猫告诉你关于幻梦境的一切，以及你的朋友们即将展开的探索。“你的朋友们在幻梦境里一处安全的地方，跟他们一起的还有另外两个人。其中包括我的宠物维吉尔。我看穿你脸上的表情了，没错，就是那个维吉尔。还有一个入梦者，名叫……啊，慢著。”猫怀疑地盯著伦道夫，然后打了个哈欠，“哈。没什么，别在意。我得确认一些事情。”说完之后，那只猫突然消失了。</p><p class='basic'>In 两者 战役 Logs, 记录 * 黑色 猫 有 a hunch*.</p>"
+    },
+    "theBlackCatDeliveredNewsOfYourPlight": {
+      "title": "幕间故事I：黑猫",
+      "body": "<p class='basic'>黑猫带去你们陷入困境的消息。</p><p>“所以，你的朋友他们遇上了大麻烦。他们必须完成这次探索，否则就无法醒来，而他们要做的事情绝不轻松。混沌之眼正盯著他们。确实你也有很多事要做，但你可能是他们唯一的希望了。”黑猫跳下篱笆，转身欲离开，“那么，恕我告退，我得赶在你朋友们把自己害死之前回去呢。”</p><p class='basic'>因为《梦寻秘境》(剧本A)的冒险日志中，已记录黑猫在你身边，将其划去。从两个剧本的混乱袋各移除1个[elder_thing]标记。</p>"
+    },
+    "theBlackCatWarnedTheOthers": {
+      "title": "幕间故事I：黑猫",
+      "body": "<p class='basic'>黑猫提醒其他调查员。</p><p>“你的朋友让我告诉你，他们没事。其实他们还让我提醒你，真正陷入危险的是你。如果我是你，我会相信他们说的话。这里酝酿著一个巨大的阴谋，只有你能阻止它。你最好继续前进，这样对大家都好。别担心，我会在这待一会儿的。总得有人保你不死。”</p><p class='basic'>因为《睡梦之网》(剧本B)的冒险日志中，已记录黑猫在你身边，将其划去。从两个剧本的混乱袋各移除1个[石板]标记。</p>"
+    },
+    "okayFineHaveItYourWayThen": {
+      "title": "幕间故事I：黑猫",
+      "body": "<p class='basic'>_*如果 okay, fine, 有 它 你的 道路 然后:*_</p><p>“算了，没什么，不用在意。我相信你们自己搞得定。”黑猫突然就走了，什么都没再说。</p><p class='basic'>In 两者 战役 Logs, 记录 *你 asked 为 它*.</p>"
+    },
+    "theOneironauts1": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p>_The Oneironauts 1:_ Following 冒险 2–B,  调查员 有 finally 到达  结束 的  mysterious stairway…</p><p>黑猫在阶梯底下等待著你的到来，它的眼神冷漠而坚定，看著你一步步地往下走。你正想问一只猫是怎么到这里来的，它打断了你。“不必问了。你不会明白的。”它在冰冷的石质地面上蜷作一团，懒洋洋地躺在这个荒凉的地方。</p><p class='basic'>检查  战役 Log 为 The Web 的 梦 (战役 B). 阅读  section below 该 applies 至 你的 situation, 然后 前往下列文本. 如果 neither section applies, 跳至 他们.</p>"
+    },
+    "wheresBlondie": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p class='basic'>如果<i>伦道夫在下降到地下世界的途中遇难</i>，并且<i>黑猫察觉到了什么</i>：</p><p>“那个金发小子在哪？”黑猫四处张望著问道。悲痛的你一言不发。“啊。我明白了。”猫看著自己的爪子说道。它似乎并不关心你同伴的安全。“嗯，看来问题自己解决了。”它神秘兮兮地自言自语。</p><p class='basic'>在两份冒险日志中，划去<i>黑猫察觉到了什么</i>。</p>"
+    },
+    "youAskedForIt": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p class='basic'>_*如果 你 asked 为 它:*_</p><p>“好吧，因为你显然并不需要我的帮助，我会离开的。但我只想确认下你是不是还活著。看呐！你还活著，至今为止。那再见啦。”你还没来得及应它的话，它就走开了，漆黑的毛色融入了地下世界的黑暗之中。</p><p class='basic'>跳过本幕间故事的余下部分。</p><p class='basic right'>前往任一 _冒险 3–A: Dark 面 的  月亮_ 或 _冒险 3–B: Point 的 没有 Return_.</p>"
+    },
+    "youDidNotAskForIt": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p>你已经受够了这只猫说话神神秘秘，半真半假，答非所问。你朝它抱怨：你也是一知半解，那你还怎么帮我们？黑猫坐起身，眯起眼睛：“我当时不知道我是否信得过你。老实说，现在我也不清楚。早在很久很久以前，我就能看到这些事件的幻象。我知道可能会发生的一些事，但不是全部。你或许能拯救我们所有人……但也可能是预示我们末日到来的蠢货。”黑猫的理由像是信手拈来，但确实解释了它为什么每次都知道在哪能找到你。你试图说服它相信你，但你仍然无法取得它的信任。“我来告诉你吧。在漆黑之海的水面以下，有著两界之间的通道。你必须到那儿去，阻止这个世界和你的世界相融。如果你能安然无恙地到达那儿，我会把一切都告诉你。但是，我得先到别的地方去。你的同伴们也需要我。”</p><ul><li>你还没来得及应它的话，它就走开了，漆黑的毛发融入了地下世界的黑暗之中。</li><li>黑猫提出它可以再一次向你的同伴传递信息。调查员队长必须决定(选择以下一项)：<ul><li>Tell 你的 companions 该 你in trouble. The 黑色 猫 将 return 至 你 与 援助 一次 这 message 是 delivered. 这 可以 放置 an undue burden 在 你的 companions. In  战役 Log 为 The Web 的 梦 (战役 B), 记录 * 黑色 猫 requested 援助 从others*.</li><li>Tell 你的 companions 关于  Underworld. The 黑色 猫 将 然后 go elsewhere. In  战役 Log 为 The Web 的 梦 (战役 B), 记录 * 黑色 猫 shared 知识 的  Underworld*.</li><li>Tell 你的 companions 该 你safe. The 黑色 猫 将 stay 与 他们 一次 这 message 是 delivered. 这 might 使 你的 quest a little 更多 difficult. In  战役 Log 为 The Web 的 梦 (战役 B), 记录 * 黑色 猫 warned  others*.</li></ul></li></ul><p class='basic right'>前往_The Oneironauts 2_.</p>"
+    },
+    "theOneironauts2": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p>_The Oneironauts 2:_ Following 冒险 2–A,  dreamers sail 为 parts unknown…</p><p>你突然听到猫尖锐的嚎叫声，睁开了眼睛。本来你已经睡著了……但准确来说，不是睡著。尽管——或者说正是因为——你在做梦，你无法在这个世界真正地睡著。当你回过神来，你注意到那声嚎叫的来源：维吉尔的猫，像虚空之地一般黑，它正坐在几英尺外，等著你注意到它。“终于看过来了。”它说，“你也是时候从自己脑袋里醒来，注意一下外界了。听著，我有很重要的事要对你说。”</p><p class='basic'>检查  战役 Log 为 The 梦-Quest (战役 A). 阅读 每位 section below 该 applies 至 你的 situation. 然后, 前往下列文本.</p>"
+    },
+    "atLeastOneNotCaptured": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p class='basic'>_*如果 于 至少 1 的  调查员 是 不 captured:*_</p><p>“等等，我的人类在哪？”黑猫伸长了脖颈环顾你的甲板，问道，“我不是让他跟你在一起吗？”\n你把维吉尔被海盗抓走的事情告诉了它，但它听完只是毫不在意地舔舔自己的爪子。“噢，好吧，没关系。我跟你想的一样。”</p>"
+    },
+    "allCaptured": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p class='basic'>如果所有调查员皆已被俘：</p><p>你示意黑猫安静，但它无视了你：“别紧张。现在那群海盗都在甲板上呢。”你咬牙切齿地问它为什么对你们被俘一事毫不在乎，要求它放了你。“不。如果没记错的话，会有别人来干这事。”它神秘兮兮地说道。</p>"
+    },
+    "searchingForTheTruth": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p class='basic'>如果<i>黑猫察觉到了什么</i>，并且<i>伦道夫未遭俘虏</i>：</p><p>黑猫看到伦道夫在你的船上掌舵，怀疑地盯著他。你开口问它有什么不对劲的。“一般来说，我喜欢鱼的味道，但这条鱼太腥了。有点不对劲。不可能有两个他。但我的记忆也变得模糊……”你之前只是有点听不懂它说的话，但这回你是彻底摸不著头脑了。两个伦道夫？“嗯。”黑猫肯定地答道，“这边有一个，清醒世界还有另一个。这很不对劲啊。”黑猫轻描淡写地说道，“我想有人正试图干预。我得查清这事。”说完，黑猫就跳出了你的视野。</p><p class='basic'>跳过本幕间故事的余下部分。在两份冒险日志中，记录<i>黑猫调查真相</i>。</p>"
+    },
+    "nowWhereWasI": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p>“我刚刚说到哪了？噢，对。我和你的朋友们谈了一阵。他们现在也在幻梦境。他们还托我给你带话。”</p><p class='basic'>检查冒险日志。阅读以下与你处境一致的每个部分。</p><p class='basic right'>一次  relevant entry 有 是 阅读, 选择 和 前往任一 _冒险 3–A: Dark 面 的  月亮_ 或 _冒险 3–B: Point 的 没有 Return_.</p>"
+    },
+    "theBlackCatRequestedAidFromTheOthers": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p class='basic'>_*如果  黑色 猫 requested 援助 从others:*_</p><p>“你的朋友们遇上了点麻烦。他们踏上了一场有去无回的旅行，到一个十分可怕的地方去，但我不知道没了我他们还能不能到达那里。我知道你现在的任务也很艰巨，但如果我不跟在他们身边，就算你到了卡达斯也没有任何意义。祝你好运。别把命给丢了。”说完，黑猫就跳出了你的视野。</p><p class='basic'>检查 两者 战役 Logs.</p><ul><li>因为两份冒险日志均未记录<i>黑猫在你身边</i>，在《睡梦之网》(剧本B)的冒险日志中，记录<i>黑猫在你身边 </i>。在两个剧本的混乱袋各加入1个[石板]标记。</li><li>*如果  战役 Log 为 The 梦-Quest (战役 A) 有  黑色 猫 是 于 你的 面 recorded*, cross 它 离场 和 记录 它 在  战役 Log 为 The Web 的 梦 (战役 B) 改为. Replace 1 {elderThing} 标记 在 每位 战役’s 混乱袋 与 1 {tablet} 标记.</li><li>因为《睡梦之网》(剧本B)的冒险日志中已记录<i>黑猫在你身边</i>，无事发生。</li></ul>"
+    },
+    "warnedTheOthersStory": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p class='basic'>黑猫提醒其他调查员。</p><p>“你的朋友们做得就像预期的一样好，真的。但他们很担心你，也很难怪他们会这样，毕竟他们可能短时间内无法来帮你。他们想让我代替他们，帮你走出困境，所以我会在这里再待一段时间。我会保护你周全。如果你遭逢不测，唔……”它停顿了很久，“……还是别说这些了。”</p><p class='basic'>检查 两者 战役 Logs.</p><ul><li>因为两份冒险日志均未记录<i>黑猫在你身边</i>，在《梦寻秘境》(剧本A)的冒险日志中，记录<i>黑猫在你身边 </i>。在两个剧本的混乱袋各加入1个[elder_thing]标记。</li><li>*如果  战役 Log 为 The Web 的 梦 (战役 B) 有  黑色 猫 是 于 你的 面 recorded*, cross 它 离场 和 记录 它 在  战役 Log 为 The 梦-Quest (战役 A) 改为. Replace 1 {tablet} 标记 在 每位 战役’s 混乱袋 与 1 {elderThing} 标记.</li><li>因为《梦寻秘境》(剧本A)的冒险日志中已记录<i>黑猫在你身边</i>，无事发生。</li></ul>"
+    },
+    "sharedTheKnowledgeStory": {
+      "title": "幕间故事II：梦境行者",
+      "body": "<p class='basic'>黑猫告知了地下世界的事情。</p><p>黑猫告诉你关于你的同伴们进入的幻梦境的一切：“你们一直在探索的幻梦境，就覆盖在地下世界之上，就像一件美丽的丝绸裙子覆盖著腐烂的皮肤。你不用到那里去，这是好事，因为那里尤其不欢迎来客。我想起来，实际上，你或许曾经路过通向地下世界的入口——就在魔幻森林。除此之外，还有几个入口：一个在冷原隐修院下方，另一个在萨尔科曼德的废墟……”</p><p class='basic'>In  战役 Log 为 The 梦-Quest (战役 A), 记录 * dreamers 知道 的 另一 道路*.</p><p class='basic'>检查 两者 战役 Logs.</p><ul><li>因为《梦寻秘境》(剧本A)的冒险日志中，已记录黑猫在你身边，将其划去。从两个剧本的混乱袋各移除1个{elderThing}标记。</li><li>因为《睡梦之网》(剧本B)的冒险日志中，已记录黑猫在你身边，将其划去。从两个剧本的混乱袋各移除1个{tablet}标记。</li><li>因为两份冒险日志均未记录<i>黑猫在你身边</i>，无事发生。</li></ul>"
+    },
+    "theGreatOnes1": {
+      "title": "幕间故事III：梦境诸神",
+      "body": "<p>_The Great Ones 1:_ Following 冒险 3–A,  dreamers 是 在 他们的 道路 至  Cold Wastes wherein lies unknown Kadath…</p><p>一颗毛茸茸的脑袋打断了你的白日梦。你低头看去，看到一只黑猫正盯著你。“嘿。我发现你有了一些进展。”你不知道这算不算是“进展”。尽管你终于踏上了前往冰封荒土的道路，但你仍未知道卡达斯的确切位置，也不清楚到达之后会发生些什么。</p><p class='basic'>检查  战役 Log 为 The 梦-Quest (战役 A). 阅读  section below 该 applies 至 你的 situation, 然后 前往下列文本. 如果 没有 section applies, 跳至 他们.</p>"
+    },
+    "theGreatOnes1GrowWeaker": {
+      "title": "幕间故事III：梦境诸神",
+      "body": "<p class='basic'>入梦者渐渐衰弱。</p><p>“哇。”黑猫突然开口，“我说，你看起来不妙啊。”它用好奇但冷漠的目光盯著你。你问它这是什么意思。“你没发现吗？你看起来很虚弱。你吃饱了吗？算了，这无所谓。反正你还能走路，不是吗？这就够了。”</p><p class='basic'>Depending 在 你的 难度, 加入 a 标记 至  混乱袋 为 The 梦-Quest (战役 A),如下： Easy (–3), Standard (–4), Hard (–5), Expert (–7).</p>"
+    },
+    "theGreatOnes1Searching": {
+      "title": "幕间故事III：梦境诸神",
+      "body": "<p class='basic'>如果<i>伦道夫在这趟航程中遇难</i>，且<i>黑猫调查真相</i>：</p><p>“那个‘谁’呢？”黑猫问道，同时寻找著伦道夫。你试著说明发生了些什么，但你几乎哽咽说不出话。“别说了。我知道了。”黑猫思考著眼前的情况，似乎并不关心伦道夫的凄惨命运。“好吧，我想，我不会说出本来要说的话了。”它像是在打谜语。</p><p class='basic'>在两份冒险日志中，划掉<i>黑猫调查真相</i>。</p>"
+    },
+    "theGreatOnes1YouAskedForIt": {
+      "title": "幕间故事III：梦境诸神",
+      "body": "<p class='basic'>_*如果 你 asked 为 它:*_</p><p>“别在意。我就是来看看你死了没。”你开始告诉黑猫你遇到的困难，它的脑袋歪向一边，作出一副猫咪好奇的样子。“哈。听起来挺有趣的。我问你这些了吗？我记得没有。噢对，我再说明白点：我只关心你能不能完成你的任务。我不关心你怎么样。”黑猫瞪著一双怒目，几乎没有眨眼，“那么，祝你好运。你会需要运气的。”它跳进了阴影中，消失不见。</p><p class='basic'>跳过本幕间故事的余下部分。</p><p class='basic right'>前往任一 _冒险 4–A: Where  Gods Dwell_ 或 _冒险 4–B: Weaver 的  Cosmos_.</p>"
+    },
+    "theGreatOnes1Part2": {
+      "title": "幕间故事III：梦境诸神",
+      "body": "<p>你问黑猫它是否知道卡达斯里有些什么。“算是知道吧。”它回答说，“我之前就预见了你会到达卡达斯。实际上，我预见过很多次。但……每次得到的结果并不相同。或者，只是我的看法不同。不管怎样，我觉得你所走的路是正确的。毕竟，这是唯一的路了。我知道你到那之后会看到些什么，但我担心如果我告诉了你，你的看法也会发生改变。别担心。你做得很好。去卡达斯吧。找到梦境诸神所在的地方。等你到那之后，一切都会水到渠成。只要你没把事情搞砸。你将要面对的家伙——我不想提起它的名字——不止会危及幻梦境。它会危及存在本身。如果你不介意，我要去别的地方了。”</p><ul><li>你还没来得及问它同题，它就跳进了虚空之中。</li><li>黑猫提出可以向你的同伴传递信息。调查员队长必须决定(选择以下一项)：<ul><li>Tell 你的 companions 关于  threats 该 你 face. The 黑色 猫 将 return 至 你 与 援助 一次 这 message 是 delivered. 这 可以 放置 an undue burden 在 你的 companions. In  战役 Log 为 The 梦-Quest (战役 A), 记录 * 黑色 猫 spoke 的 Nyarlathotep*.</li><li>Tell 你的 companions 该 你 将 是 okay. The 黑色 猫 将 stay 与 他们 一次 这 message 是 delivered. 这 might 使 你的 quest a little 更多 difficult. In  战役 Log 为 The 梦-Quest (战役 A), 记录 * 黑色 猫 spoke 的 Atlach-Nacha*.</li></ul></li></ul><p class='basic right'>前往_The Great Ones 2_.</p>"
+    },
+    "theGreatOnes2": {
+      "title": "幕间故事III：梦境诸神",
+      "body": "<p>_The Great Ones 2:_ Following 冒险 3–B,  调查员 有 到达 a cosmic penumbra between worlds…</p><p>一声低沉的猫叫声吸引你望向附近的一张网。你走近时，你发现黑猫被粘在一张黏糊糊的蛛网上，它极力挣扎，却无法挣脱。即使有著锋利的爪子，它似乎也遇上了麻烦。你俯下身，把猫抱了出来，它跳出了你的怀抱，落到下面的一个岩石平台上，那是黑猫与虚空之间唯一存在的东西。它低声咆哮片刻，然后挺直身躯。“我说过要你帮忙了吗？”它骂道，“好吧，你还是来到了漆黑之海底下。看看你周围吧。看到这些网了吗？”即使你不去看，你也无法无视周围的蜘蛛网，它们围成一条通往虚空的险路。“这是你的世界与幻梦境之间的桥梁。如果这条桥梁搭成，两个世界就会融合。明白了吗？如果你不想让整个世界变成那所医院——你昏睡的朋友们所在的医院——你就必须不惜一切代价来阻止此事。没有任何事比这重要。<b>没有</b>。”</p><p class='basic'>检查  战役 Log 为 The 梦-Quest (战役 A). 阅读 每位 section below 该 applies 至 你的 situation, 然后 前往下列文本. 如果 没有 section applies, 跳至 他们.</p>"
+    },
+    "theGreatOnes2TheSilverKey": {
+      "title": "幕间故事III：梦境诸神",
+      "body": "<p class='basic'>_*如果  调查员 possess  Silver 密钥:*_</p><p>“嘿，那把钥匙还在你这儿吗？”黑猫问道。你在行囊里翻找一通，把你从无名小屋里找到的钥匙拿给黑猫看。“给我。”它提出要求，并且在你还没来得及抗议之前就跳了起来，把钥匙从你手中叼走，“别这样看著我。你的朋友们比你更需要这个。”</p><p class='basic'>在《睡梦之网》(剧本B)的冒险日志中，划去<i>调查员持有银钥匙</i>，改为在《梦寻秘境》(剧本A)的冒险日志中记录<i>调查员持有银钥匙</i>。</p><p class='basic'>如果“银钥匙”在调查员的牌组中，将其移除。任意一位进行《梦寻秘境》(剧本A)的调查员可以选择将该“银钥匙”加入其牌组。这张卡牌不计入该调查员的牌组卡牌张数。</p>"
+    },
+    "theGreatOnes2Searching": {
+      "title": "幕间故事III：梦境诸神",
+      "body": "<p class='basic'>_*如果  黑色 猫 是 searching 为真相:*_</p><p>黑猫一看到伦道夫就立刻安静了下来。它不安地围绕著这个人类男子转了一圈又一圈。至于伦道夫，他看起来对于猫的出现感到异常紧张，甚至在它靠近时退后了脚步。“有什么事吗？我没有伤害过你的同胞。”他坦率地说道，“我做了什么冒犯你的事情吗？”</p><p>“你光是存在就冒犯了我。”黑猫咆哮著回应。它慢慢回到你身边，警惕地盯著伦道夫。“我知道这是怎么回事了。一切都说通了。我知道是谁在干扰我，影响我预见了。别相信那家伙。”它警告道，并且来回踱步，盯著身后的那个金发男子，“我得作好准备。等时机到来，我会回来的。”</p><p class='basic'>跳过本幕间故事的余下部分。在两份冒险日志中，记录<i>黑猫得知真相</i>。</p>"
+    },
+    "theGreatOnes2Part2": {
+      "title": "幕间故事III：梦境诸神",
+      "body": "<p>“噢，趁我还没忘记，我得告诉你：你的朋友们快要到达他们的目的地了。如果一切都像我预见的那样，他们会自己脱身的。与此同时，他们想让我告诉你……”</p><p class='basic'>检查冒险日志。阅读以下与你处境一致的每个部分。</p><p class='basic right'>一次  relevant entry 有 是 阅读, 选择 和 前往任一 _冒险 4–A: Where  Gods Dwell_ 或 _冒险 4–B: Weaver 的  Cosmos_.</p>"
+    },
+    "theGreatOnes2Nyarlathotep": {
+      "title": "幕间故事III：梦境诸神",
+      "body": "<p class='basic'>_*如果  黑色 猫 spoke 的 Nyarlathotep:*_</p><p>“……那家伙有著数以千计，甚至可能是无穷的假面。有的人称它为<b>奈亚拉托提普</b>。它擅长操控和欺骗他人，诡计多端。你的朋友们一开始被困在幻梦境，或许就是它的杰作。你要问为什么，我也不知道。如果你希望你的朋友们活命，或许该让我去帮帮他们。你自己待在这儿会没事的，对吧？”黑猫不等你回答，便话也不说地跳进了下方的虚空，消失了踪影。</p><p class='basic'>检查 两者 战役 Logs.</p><ul><li>*如果 neither 战役 Log 有  黑色 猫 是 于 你的 面 recorded*, 在  战役 Log 为 The 梦-Quest (战役 A), 记录 * 黑色 猫 是 于 你的 面*. 加入 1 {elderThing} 标记 至  chaos bags 为 两者 campaigns.</li><li>*如果  战役 Log 为 The Web 的 梦 (战役 B) 有  黑色 猫 是 于 你的 面 recorded*, cross 它 离场 和 记录 它 在  战役 Log 为 The 梦-Quest (战役 A) 改为. Replace 1 {tablet} 标记 在 每位 战役’s 混乱袋 与 1 {elderThing} 标记.</li><li>*如果  战役 Log 为 The 梦-Quest (战役 A) 有  黑色 猫 是 于 你的 面 recorded*, 没有 change 是 made.</li></ul>"
+    },
+    "theGreatOnes2AtlachNacha": {
+      "title": "幕间故事III：梦境诸神",
+      "body": "<p class='basic'>_*如果  黑色 猫 spoke 的 Atlach-Nacha:*_</p><p>“……还记得我刚刚提的那道桥梁吗？编织那张网的生物是你前所未见的。我曾经在幻梦境的黑暗角落里听到过它的名讳：<b>阿特拉克·纳克亚</b>。它是这里爬行的所有蜘蛛的主人，也是它们的祖先。或许不止这里，而是世上所有的。要想阻止它的阴谋，你会需要我帮忙的。”</p><p class='basic'>检查 两者 战役 Logs.</p><ul><li>*如果 neither 战役 Log 有  黑色 猫 是 于 你的 面 recorded*, 在  战役 Log 为 The Web 的 梦 (战役 B), 记录 * 黑色 猫 是 于 你的 面*. 加入 1 {tablet} 标记 至  chaos bags 为 两者 campaigns.</li><li>*如果  战役 Log 为 The 梦-Quest (战役 A) 有  黑色 猫 是 于 你的 面 recorded*, cross 它 离场 和 记录 它 在  战役 Log 为 The Web 的 梦 (战役 B) 改为. Replace 1 {elderThing} 标记 在 每位 战役’s 混乱袋 与 1 {tablet} 标记.</li><li>*如果  战役 Log 为 The Web 的 梦 (战役 B) 有  黑色 猫 是 于 你的 面 recorded*, 没有 change 是 made.</li></ul>"
+    },
+    "epilogueMatrix": {
+      "title": "尾声故事",
+      "body": "<p class='basic'>检查  战役 Log 为 两者 campaigns. Use  matrix below 至 找出  尾声 该 applies 至 你的 situation, 然后 前往该 尾声.</p><div class='epilogue-table-wrap'><table class='epilogue-matrix' data-selected='{count}'><thead><tr><th></th><th>桥梁已经建成。</th><th>调查员回到现实世界。</th><th>调查员永远无法逃离。</th><th>调查员仍在幻梦境。</th></tr></thead><tbody><tr><th>奈亚拉托提普开始入侵。</th><td data-epilogue='1'>尾声1</td><td data-epilogue='2'>尾声2</td><td data-epilogue='3'>尾声3</td><td data-epilogue='4'>尾声4</td></tr><tr><th>入梦者醒来。</th><td data-epilogue='5'>尾声5</td><td data-epilogue='6'>尾声6</td><td data-epilogue='7'>尾声7</td><td data-epilogue='8'>尾声8</td></tr><tr><th>入梦者永远留在了幻梦境。</th><td data-epilogue='9'>尾声9</td><td data-epilogue='10'>尾声10</td><td data-epilogue='11'>尾声11</td><td data-epilogue='12'>尾声12</td></tr><tr><th>入梦者进入隐修院底下。</th><td data-epilogue='13'>尾声13</td><td data-epilogue='14'>尾声14</td><td data-epilogue='15'>尾声15</td><td data-epilogue='16'>尾声16</td></tr></tbody></table></div>"
+    },
+    "epilogue1": {
+      "title": "尾声故事",
+      "body": "黑猫观察著这场浩劫。“你的世界就是个战场。事实上，一直都是这般。超乎你理解范围的多股势力争斗已久，比你们人类(或者说，甚至比我们猫族)认识的时间都更为久远。它们为了争夺幻梦境，展开了漫长的斗争，但除了幻梦境还有许多现实世界，决出的唯一胜者能够真正掌管所有世界。我早就知道，这样的情况总有可能发生，我们有可能失败。但在最后，至少我能说我尽力了。说真的，这都是你的错，不怪我。”"
+    },
+    "epilogue2": {
+      "title": "尾声故事",
+      "body": "“这么说，你成功回到了你的世界。希望你旅途愉快。对的，你之前的同伴已经醒来了。但他们已经不是从前的他们了，对吧？那是当然的。他们或许不记得自己的梦，但并不意味著那些梦没有发生。你看不到他们眼睛里闪烁的光芒吗？你没发现他们趁你不在时，对某个存在低声耳语？对，就那个。你知道我说的是谁。别担心，至少你最后还有一些时间。别忘了，我提醒过你的。”"
+    },
+    "epilogue3": {
+      "title": "尾声故事",
+      "body": "“什么？我会感到愧疚吗？当然不会。确实，如果没有我的干预，他们或许还过著原来的生活，对外界的真相一无所知。包括维吉尔。但我不后悔。我必须这样做。我试过挽救他们。他们的死不是我造成的。”黑猫移开了视线，“至少他们不会看到即将降临的混沌了。”"
+    },
+    "epilogue4": {
+      "title": "尾声故事",
+      "body": "“你怎么还在这里？哦，我知道了。你找不到返回清醒世界的道路。好吧，或许这是最好的结果。你知道的，你之前的同伴们醒来了，但他们带著某人回到了清醒世界。你真的要问那个人是谁吗？你知道我说的是谁。相信我：留在这个世界里吧。忘掉从前的种种。待在这更好，我跟你保证。”"
+    },
+    "epilogue5": {
+      "title": "尾声故事",
+      "body": "“噢，你醒来了。有点意思，我没想过你能回来。或许你不该回来的。有件事你必须要知道。你的同伴……好吧，长话短说，事情并没有照计划发展。你的世界已经不属于你们。抱歉给你带来这个坏消息。不管怎样，我可不想被吃掉，我这就走了。不管你要做些什么，别离开这间房。”"
+    },
+    "epilogue6": {
+      "title": "尾声故事",
+      "body": "“真是令人欣喜的重聚。是的，你回到了清醒世界。现在你可以回归到你所谓的‘生活’，毫无意义的到处闲逛了。把你的梦境抛在脑后吧，就像下一顿要吃的剩菜一样。还是说，你终于意识到你的世界也是幻想的产物了？拿起你在这场梦中取得的东西，用它来塑造你的命运吧。至于我？我自然要回我的家去。不用操心。我肯定我们还会再见面的。”"
+    },
+    "epilogue7": {
+      "title": "尾声故事",
+      "body": "黑猫远远地盯著进行调查的你。“抱歉，你永远都不会知道你的朋友们发生了什么。反正你也不会再记得我，不是吗？我真心希望，你很快就能好好休息。毕竟，你的世界得救了。要是浪费了这辛苦争取来的时光，可就太可惜了，对吧？享受你的人生吧。忘了你的同伴们。已经没有任何事能做了。\n……你听不见我说的话，对吗？”"
+    },
+    "epilogue8": {
+      "title": "尾声故事",
+      "body": "“你真的再也不回去了吗？你太自私了。你的同伴在现实世界醒来，而你还在这里，流连于幻梦境的奇景。但是，我想我没办法责怪你。换了是我，可能我也会这么做。我本来可以告诉他们你在哪，但他们不会再记得我，所以你只能靠自己了。至于我？我自然要回我的家去。不用操心。我肯定我们还会再见面的。”"
+    },
+    "epilogue9": {
+      "title": "尾声故事",
+      "body": "“你以为你能一直待在自己的梦里，不用面对这里发生的一切所带来的后果吗？多么愚蠢的想法。记住，你只是在作梦。你的身体并不在这里；你同时存在于两个世界。你还不明白吗？噢对，或许这样对你更好。待在这里，忘掉从前的种种。你会更喜欢这样的，我保证。”"
+    },
+    "epilogue10": {
+      "title": "尾声故事",
+      "body": "“你真的再也不醒来了吗？你太自私了。你的同伴已经回到了现实世界，他们以为自己拯救了你，但你却躺在医院病房里永远沉睡，对吗？但是，我想我没办法责怪你。换了是我，可能我也会这么做。别担心，我不会告诉他们你在哪。要是我说了，他们会不停地找你。至于我？我自然要回我的家去。不用操心。我肯定我们还会再见面的。”"
+    },
+    "epilogue11": {
+      "title": "尾声故事",
+      "body": "“不管你再怎么找，你也找不到他们。他们远在地面以下。实际上，他们甚至可能已经不在那里了。谁知道呢。不论如何，忘掉他们吧。现在两个世界都平平安安。值得庆贺！过好你的生活吧，不要怀抱愧疚。至于我？我自然要回我的家去。不用操心。我肯定我们还会再见面的。”"
+    },
+    "epilogue12": {
+      "title": "尾声故事",
+      "body": "“啊，这么说你们找到彼此了？尽管幻梦境如此辽阔，我想你们也总有可能相遇。你们要回到原来的世界去吗？不，我想你们不会回去。为什么回去呢？你们想要的一切，都在这个地方。我无法责怪你们。你们可以结伴从西境之柱到东境之柱，游览梦境世界的每一个奇迹。只是记住，这一切都不是真实的。对吗？”"
+    },
+    "epilogue13": {
+      "title": "尾声故事",
+      "body": "“想法不错，但已经太晚了。蛛群已经蔓延到了宇宙的每一个角落。这个世界，你的世界，地下的世界……我曾试图拯救，但我的力量并不足够。老实说，我希望你从没见到这一幕。现在的你，再也无法获得安宁。”"
+    },
+    "epilogue14": {
+      "title": "尾声故事",
+      "body": "“你在这里做什么？不，你的同伴已经逃回你们的世界去了。这是个不错的想法，但你只能靠自己了。没错，有很多途径能离开地下世界，但它们并不好找。这里有古革巨人、噩妖、食尸鬼，还有……算了，你会知道的。老实说，你为什么要下来呢？我希望你有一天能成功离开这里。至于我？我自然要回我的家去。不用操心。我肯定我们还会再见面的。”"
+    },
+    "epilogue15": {
+      "title": "尾声故事",
+      "body": "黑猫摒住气息，紧张地看著你们逃离。“哇。老实说，我从没预见这一幕。他们曾为了你冒生命危险，现在你也为他们赴汤蹈火。真有趣。或许你们人类还有希望。”过了一会，它开始感到无聊，“好吧，我看够了。我得到别的地方去。我知道你们没了我也不会有事的。你们能替我保护好两个世界吗？”"
+    },
+    "epilogue16": {
+      "title": "尾声故事",
+      "body": "“哦，真是一场悲剧。你们错过了彼此！噢对，你现在只能自食其力了。没错，有很多途径能离开地下世界，但它们并不好找。这里有古革巨人、噩妖、食尸鬼，还有……算了，你会知道的。老实说，你为什么要下来呢？我希望你有一天能成功离开这里。至于我？我自然要回我的家去。不用操心。我肯定我们还会再见面的。”"
+    },
+    "brokeTheLawOfUlthar": {
+      "title": "尾声故事",
+      "body": "<p class='basic'>_*如果 (你的 调查员 名称) 有 broken  law 的 Ulthar 和 你不 killed 或 driven insane:*_</p><p>一天晚上，你被周围的低吼声惊醒。黑暗中有无数双犀利的猫眼盯著你。其中一只猫跳到你的胸口上，它的爪子狠狠地扎进了你的皮肤里。“你以为我们不会来找你吗？”它的眼睛发出光芒。它露出牙齿，猫群也朝你靠近。</p><p class='basic right'>你好大的胆子！你<b>阵亡</b>了。</p>"
     }
+  },
+  "specialRules": [
+    {
+      "title": "@:theDreamEaters.additionalRulesAndClarifications.alert.title",
+      "body": "@:theDreamEaters.additionalRulesAndClarifications.alert.body"
+    },
+    {
+      "title": "@:theDreamEaters.additionalRulesAndClarifications.storyCards.title",
+      "body": "@:theDreamEaters.additionalRulesAndClarifications.storyCards.body"
+    },
+    {
+      "title": "@:theDreamEaters.additionalRulesAndClarifications.swarming.title",
+      "body": "@:theDreamEaters.additionalRulesAndClarifications.swarming.body"
+    },
+    {
+      "title": "@:theDreamEaters.additionalRulesAndClarifications.hidden.title",
+      "body": "@:theDreamEaters.additionalRulesAndClarifications.hidden.body"
+    }
+  ],
+  "label": {
+    "theBlackCat2NewsOfYourPlight": "<i>告诉同伴你将展开的探索，和你陷入的危险与困境。</i>",
+    "theBlackCat2KnowledgeOfDreamlands": "<i>告诉同伴你认识了些新朋友，并告诉他们幻梦境的事情。</i>",
+    "theBlackCat2WarnTheOthers": "<i>告诉同伴他们正面临危险，而你们一切安好。</i>",
+    "theBlackCat2DontTrust": "<i>你压根就不相信这个生物。</i>",
+    "blackCatWandersOff": "你还没来得及应它的话，它就走开了，漆黑的毛发融入了地下世界的黑暗之中。",
+    "blackCatBoundsOff": "你还没来得及问它同题，它就跳进了虚空之中。",
+    "whereTheGodsDwell": "神居之所",
+    "theDreamQuest": "梦寻秘境",
+    "theWebOfDreams": "睡梦之网",
+    "beyondTheGatesOfSleep": "梦境门外",
+    "wakingNightmare": "清醒噩梦",
+    "darkSideOfTheMoon": "月之暗面",
+    "pointOfNoReturn": "无归之地",
+    "weaverOfTheCosmos": "编织宇宙",
+    "theSearchForKadath": "寻觅卡达斯",
+    "aThousandShapesOfHorror": "万千骇形",
+    "youDidNotAskForItRequestAid": "<i>告诉你的同伴你陷入了困境。</i> 黑猫传达消息后会回到你身边来帮你。这可能会给你的同伴增加更重的负担。",
+    "youDidNotAskForItKnowledgeOfUnderworld": "<i>告诉你的同伴关于地下世界的事情。</i> 然后黑猫会到别的地方去。",
+    "youDidNotAskForItWarnTheOthers": "<i>告诉你的同伴你一切安好。</i> 黑猫传达消息后会待在他们身边。这可能会让你的探索变得更困难一些。",
+    "theGreatOnes1SpokeOfNyarlathotep": "<i>告诉你的同伴你面临的威胁。</i> 黑猫传达消息后会回到你身边来帮你。这可能会给你的同伴增加更重的负担。",
+    "theGreatOnes1SpokeOfAtlachNacha": "<i>告诉你的同伴你能搞定这一切。</i> 黑猫传达消息后会待在他们身边。这可能会让你的探索变得更困难一些。"
+  },
+  "additionalRulesAndClarifications": {
+    "alert": {
+      "body": "每当调查员在试图躲避一名带有警戒关键词的敌人时技能检定失败，在结算该技能检定带来的所有后果之后，该敌人对进行躲避的调查员执行一次攻击。敌人执行警戒攻击后不被消耗。不论该敌人是否与进行躲避的调查员交战，此类攻击均会发生。",
+      "title": "警戒"
+    },
+    "storyCards": {
+      "title": "剧情卡",
+      "body": "<div class='story-card-rule'><div><p class='basic'>剧情卡牌通常只出现在一张冒险卡的背面，用于补充剧情叙述。在你收到指示要结算一张剧情卡时，阅读该卡上的剧情文本然后结算其游戏文本。</p></div><img src='{setImgPath}/../cards/06057.avif' alt='卡曼-塔审判剧情卡' /></div>"
+    },
+    "swarming": {
+      "title": "蜂拥X",
+      "body": "<p class='basic'>“蜂拥X”关键词表示一群敌人集体行动，带有“蜂拥X”关键词的敌人入场后，将你的牌堆顶上的X张卡牌放到该敌人下面，作为蜂拥卡牌，但不要查看卡牌内容。蜂拥卡牌上面的敌人称为“头领敌人”。某些冒险卡的效果可能会指示玩家将蜂拥卡牌添加到一个敌人处，这一流程与蜂拥关键词敌人入场的流程一样。</p><ul><li>如果未指定由哪一位调查员来添加蜂拥卡牌，那么由调查员队长来进行添加。</li><li>头领下面的每张蜂拥卡牌视为一个该敌人。每张蜂拥卡牌视为拥有与头领卡牌相同的数值和文字。<i>(例如，如果一个调查员与头领敌人交战，且该头领敌人下面有2张蜂拥卡牌，那么该调查员一共与3个敌人交战。)</i></li><li>敌军阶段期间敌人攻击时，每张蜂拥卡牌单独进行攻击。在本步骤期间，头领敌人及其全部蜂拥卡牌一旦攻击完毕，消耗所有这些卡牌。</li><li>每张蜂拥卡牌可被单独攻击或分配伤害，但下面仍有蜂拥卡牌的头领敌人不能被击败。一张蜂拥卡牌被击败时，超出的所有伤害都可以对同一个头领下面的另一张蜂拥卡牌造成；或者，如果该头领下没有任何的蜂拥卡牌，则对该头领造成。<i>(例如，罗兰·班克斯使用.45自动手枪来攻击一个带有2张蜂拥卡牌的三重蝗。这次攻击造成2点伤害。第一点伤害击败2张蜂拥卡牌中的1张，所以超出的伤害点数可以对另一张蜂拥卡牌造成，将其也击败。)</i></li><li>每当蜂拥卡牌离场，将该卡放到其所有者的牌堆底下。你如果不确定该蜂拥卡牌的所有者，可以查看该卡的内容以确定其所有者。</li><li>头领敌人及其全部蜂拥卡牌作为一个整体进行移动，交战和被消耗。<i>(例如，如果一个头领敌人或其任意蜂拥卡牌被躲避，这些全部卡牌都被消耗并且解除交战。)</i>\n带有蜂拥X关键词的敌人上出现“胜利X”时，这行文字只对这张头领卡牌生效。蜂拥卡牌不能进入胜利牌区，并且永远不会价值胜利点数。</li></ul>"
+    },
+    "hidden": {
+      "title": "隐私",
+      "body": "<p class='basic'>带有“隐私”关键词的遭遇卡或弱点卡具有显现能力，这个能力会指示你秘密地将该卡牌加入自己手牌中。结算此能效果时不翻开这张卡，也不向其他调查员展示卡牌上的文字。</p><ul><li>当你手牌中有隐私卡时，视作它在你的威胁区域内。卡牌上的持续能力生效，并且卡牌上的能力只能被你触发。</li><li>当你手牌中有隐私敌人，它不视为与你交战或在你的威胁区域内，它不进行攻击，除非有特殊说明。但是，该卡牌上的持续能力生效，并且卡牌上的能力只能被你触发。</li><li>隐私卡计入你的手牌上限，但除非按照隐私卡上的文字描述执行，否则你不能以任何形式从你手牌中弃掉它。弃掉隐私卡时，将其放入对应的弃牌堆。</li></ul>"
+    },
+    "title": "额外规则与说明"
+  },
+  "question": {
+    "whichScenarioToStart": "你想从哪个冒险开始？",
+    "chooseDeckForPartA": "选择 A 部分牌组",
+    "chooseDeckForPartB": "选择 B 部分牌组",
+    "proceedToWhichScenario": "前往哪个冒险"
   }
+}

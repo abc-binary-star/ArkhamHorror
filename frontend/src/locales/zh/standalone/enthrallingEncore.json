@@ -1,0 +1,62 @@
+{
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<div class='resolution'><p>_结局 1_: 与violinist 被击败, 你 可以 仅 hope 该  最后 specter 的 该 unholy production 是 finally 放置 至 rest. 每位 白天 下列the events 于  Ward Theatre, 你的 nerves 是 coiled tight, always expecting 至 hear  melody. The days pass,  melody never returns, 和 它 会 seem 你allowed 至 continue 你的 生命 as 如果  events surrounding <i>The King 在 Yellow</i> 有 never truly happened. But 他们 做了, didn't 他们?</p><ul><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。<ul><li>_经验_: {xp}</li></ul></li><li>每位调查员可以 任一 upgrade 他们的 signature 卡牌 至 它的 advanced 版本, 或 downgrade  advanced 版本 的 他们的 weakness 至 它的 original 版本 (如果 able).<ul><li>每位调查员 unable 至 upgrade 他们的 advanced signature 卡牌 或 downgrade 他们的 advanced weakness 获得 2 奖励 经验, 改为.</li></ul></li></ul></div>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<div class='resolution'><p>_结局 2_: Unable 至 withstand  soloist 任意 longer, 你 drop 至 你的 knees, letting  overwhelming power 的  melody wash 在……上 你 像 an unstoppable 淹水. The notes fill 你的 ears, drowning 场外 每位 其他 thought. 你的 vision fades,  reality 的  Ward Theatre growing dark, warping 和 stretching 于 odd angles.</p><p>你 squeeze 你的 眼睛 shut, trying 至 focus 在 什么 你 可以 feel, 至 保留 你自己 grounded. 你的 hands 是 pressed 进入 coarse sand, 和 每位 few seconds 你 feel cold water lapping 于 你的 fingertips. 之后 什么 feels 像 minutes 你 open 你的 眼睛 再次 至 看见  tall spires 的 该 ancient 城市, reaching up 至 a sky lit 与 黑色 群星. The violin 是 now joined 由 an unseen orchestra, reaching a deafening crescendo. 你 try 至 rise 从 你的 knees, 但 你的 shaking 蛛腿 give 场外, 和 你 fall 到 你的 返回…</p><p>…和 land 在  dusty wooden boards 的 a stage. The sound 的 你的 collapse echoes 离场 的  cavernous walls 的  Ward Theatre. 你 stare up 于  dark ceiling above as 你 lie 在  proscenium. The soloist 是 gone. The monsters 是 gone. The Theatre 是 dark 和 seemingly abandoned, save 为 你.</p><p>你 rise slowly, 然后 回合 和 flee, 不 wanting 至 查看 为 任意 signs 的 你的 经验. 你convinced 该 这 放置 是 cursed, 该  production 是 cursed, 和 该 这 诅咒 将 haunt 你 为rest 的 你的 days.</p><p>As 你 push 穿过  front doors 的  theatre 和 返回 场外 进入  街道, 你 hear  haunting melody 在 你的 头部 一次 更多…</p><ul><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。<ul><li>_经验_: {xp}</li></ul></li><li>艾格尼丝·贝克必须将黑暗回忆升级到其进阶版，或者将进阶版的希波利尔传家宝还原成其原始版。<ul><li>每位调查员 unable 至 upgrade 他们的 advanced signature 卡牌 或 downgrade 他们的 advanced weakness suffers 1 精神 创伤, 改为.</li></ul></li></ul></div>"
+    },
+    "noResolution": {
+      "body": "<p>如果 没有 结局 是 到达 because 每位调查员 是 被击败: 跳至<b>结局2</b>.</p>",
+      "title": "如果未达成任何结局"
+    },
+    "label": {
+      "doNotSwap": "不交换",
+      "downgradeWeakness": "Downgrade 你的 advanced 弱点 至 它的 原版 版本",
+      "upgradeWeakness": "Upgrade 你的 弱点 至 它的 advanced 版本",
+      "downgradeSignature": "Downgrade 你的 advanced signature 卡牌 至 它的 原版 版本",
+      "swapSignature": "相关角色 或 卡牌",
+      "upgradeSignature": "相关角色 你的 卡牌"
+    },
+    "xp": {
+      "unableToSwap": "相关角色 或 卡牌"
+    }
+  },
+  "label": {
+    "cultist": {
+      "takeDamage": "受到1点伤害",
+      "spendClue": "花费 1 线索"
+    },
+    "chooseInvestigator": "选择一位调查员 至 抽取 1 的  已揭示 Props 卡牌",
+    "chooseProp": "选择 a 相关角色 卡牌 抽取. 相关角色 剩余 卡牌 将 和 底 的 相关角色 牌组"
+  },
+  "setup": {
+    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: *Enthralling Encore*, *谢幕*, *Decay 和 Filth*, *妄想*, *如影随形*, *Ghouls*, *恐惧打击*, 和 *老鼠*. 每位 的 这些 组 except 为 *Enthralling Encore* 可以 是 发现 在  基础游戏 和 卡尔克萨之路剧本扩展. The 原版 冒险 reference 卡牌, acts, 和 agendas 从*Curtain Call* 遭遇组 是 removed 从 游戏.<section class='encounter-sets'><img src='{setImgPath}/curtain-call.png' /><img src='{setImgPath}/decay-and-filth.png' /><img src='{setImgPath}/delusions.png' /><img src='{setImgPath}/hauntings.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/rats.png' /></section>",
+    "removeCards": "移除 The Man 在 苍白面具 和 Royal Emissary 从 游戏.",
+    "propsDeck": "Build  Props 牌组. 这 是 done 由 searching 你的 收藏 为 3 level 0 non-盟友 支援 从 每位 class ({'{'}guardian{'}'}, {'{'}seeker{'}'}, {'{'}rogue{'}'}, {'{'}mystic{'}'}, 和 {'{'}survivor{'}'}), 为 a 总计 的 15 卡牌 (没有 duplicates, 如果 possible). 洗切 这些 卡牌 together 至 形态  Props 牌组. 放置 这 牌组 near  冒险 reference 卡牌. (The suggested list 从规则 insert 是 used: 肉体 Training, 第一 援助, Machete, 旧 Book 的 Lore, Hyperawareness, Medical Texts, Burglary, Pickpocketing, Hard Knocks, Holy Rosary, Scrying, Arcane Studies, Baseball Bat, Rabbit's Foot, 和 Dig Deep.)",
+    "setAside": "Set 每位 copy 的 Lobby Doorway 和 每位 copy 的 Backstage Doorway 一边, 场外卡牌.",
+    "placeLocations": "放置Theatre, Lobby, Balcony, 和 Backstage 地点 入场.",
+    "startAt": "每位调查员 begins 游戏 于 Theatre.",
+    "sinisterSoloist": "放置 相关角色 相关角色 敌人 至 相关角色."
+  },
+  "tokens": {
+    "easyStandard": {
+      "cultist": "-2. 如果 你 失败, 你 必须 任一 花费 1 线索 或 受到1点伤害.",
+      "elderThing": "-2. 如果 Sinister Soloist 是 在你的地点, 再抽出一个标记。",
+      "skull": "-X. X 是 数量 的 .",
+      "tablet": "-3 (-5 改为 如果 是 3 或 更多 卡牌 你)."
+    },
+    "hardExpert": {
+      "cultist": "-3. 如果 你 失败, 你 必须 花费 1 线索 和 受到1点伤害.",
+      "elderThing": "-3. 如果 Sinister Soloist 是 在你的地点, 你 自动 失败 改为.",
+      "skull": "-X. X 是 1 更多 于 数量 的 .",
+      "tablet": "-4 (-6 改为 如果 是 3 或 更多 卡牌 你)."
+    }
+  },
+  "intro": {
+    "title": "相关角色 相关角色",
+    "body": "<p>相关角色 有 的 生命. 你' 不 有 <i>相关角色 相关角色 相关角色</i> 相关角色 相关角色 相关角色. 相关角色 然后, 你' 放置 的 你的 , , 和 , . 相关角色 然后 你 . 你 你的 , 的 , 由 a . 有 你 a 的 相关角色 你 : 相关角色 相关角色. 相关角色 相关角色 是 和 , 为 你 可以 ……</p>"
+  }
+}

@@ -1,6 +1,7 @@
 {
-    "closeLog": "Fermer le journal",
-    "viewLog": "Journal",
+    "closeLog": "Fermer le journal de campagne",
+    "viewLog": "Journal de campagne",
+    "sounds": "Sons",
 
     "view": "Affichage",
     "shortcuts": "Raccourcis",

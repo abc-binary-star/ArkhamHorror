@@ -1,0 +1,92 @@
+{
+  "intro": {
+    "title": "冒险II：新视野",
+    "body": "你和警探瑞若兹一起前往滨水区的新视野工厂。“唔，眼下我看咱们有两个选择。”瑞若兹说，“我们可以现在就进去，开始搜查。我有搜查令，这样行动就更官方了，但里面还有人上班，他们可能会把事情搞复杂。或者……”他做了个撬锁的手势，“我们等到天黑后再动手。”",
+    "addCultist": "将1个{'{'}cultist{'}'}标记加入混乱袋，持续到这个剧本结束.",
+    "searchDuringTheDay": "在白天搜查 (Hint: Prepare 至 talk 你的 道路 在). 前往_冒险设置(版本一)_.",
+    "searchAfterDark": "等天黑后再搜查 (Hint: Prepare 至 战力 你的 道路 在). 跳至_冒险设置(版本二)_.",
+    "chooseAsGroup": "相关角色 调查员 必须 选择, a :"
+  },
+  "label": {
+    "searchDuringTheDay": "在白天搜查",
+    "searchAfterDark": "等天黑后再搜查",
+    "doNotSpendExperience": "Do 不 花费经验值",
+    "spendExperienceToRemoveBlood": "<p>全组花费总计2点{'{'}perPlayer{'}'}经验，以从混乱袋移除1个{'{'}blood{'}'}标记<p>"
+  },
+  "version1": {
+    "setup": {
+      "title": "冒险设置(版本一)",
+      "gatherLocations": "收齐<b>新视野</b>遭遇组的所有地点。",
+      "agendaDeck": "使用密谋1a“白日喧嚣”和密谋2a“掘入更深（版本一）”构建密谋牌库。将其他每张密谋从游戏中移除。",
+      "factoryWorkers": "在每个工厂车间地点生成1个工厂工人敌人。",
+      "setAside": "将下列卡牌放在一边，位于场外：贾维尔·里维拉敌人、每张枯疫工人敌人、每张幽暗回声诡计、<b>惨遭感染</b>和<b>飞天恐怖</b>遭遇组、伪造许可和血色歌谣剧情支援。",
+      "removeNightWatchman": "将夜班看守敌人从游戏中移除。",
+      "day": "将每张_白日_地点放置入场。将每张_黑夜_地点从游戏中移除。每位调查员自选一个工厂车间地点开始游戏。",
+      "shallowTunnels": "如果进行的是简单或普通难度，将岩穴入口<i>（浅层通道）</i>、下行通道、全部3张侧边洞室<i>（浅层通道）</i>放在一边，位于场外。将剩余的所有地点从游戏中移除。",
+      "darkestDepths": "如果进行的是困难或专家难度，将岩穴入口<i>（至暗深渊）</i>、下行通道、全部3张侧边洞室<i>（至暗深渊）</i>放在一边，位于场外。将剩余的所有地点从游戏中移除。",
+      "lethargicBeast": "如果正在进行简单难度，将孜卜拉牟特<i>（困倦巨兽）</i>放在一边，位于场外。将其他每张孜卜拉牟特从游戏中移除。",
+      "sourceOfTheBlight": "如果正在进行普通难度，将孜卜拉牟特<i>（枯疫源头）</i>放在一边，位于场外。将其他每张孜卜拉牟特从游戏中移除。",
+      "progenitorOfMonsters": "如果正在进行困难或专家难度，将孜卜拉牟特<i>（怪物始祖）</i>放在一边，位于场外。将其他每张孜卜拉牟特从游戏中移除。",
+      "gatherSets": "将下列遭遇组中的所有遭遇卡找出:<section class='encounter-sets grid'><div><img src='{setImgPath}/new-horizons.png' /><span>新 Horizons</span></div><div><img src='{setImgPath}/afflicted.png' /><span>Afflicted</span></div><div><img src='{setImgPath}/blood-blight.png' /><span>Blood Blight</span></div><div><img src='{setImgPath}/bloodthirst.png' /><span>Bloodthirst</span></div><div><img src='{setImgPath}/hunted.png' /><span>Hunted</span></div><div><img src='{setImgPath}/infected.png' /><span>Infected</span></div><div><img src='{setImgPath}/sanguine-secrets.png' /><span>Sanguine 秘密</span></div><div><img src='{setImgPath}/vermin.png' /><span>Vermin</span></div><div><img src='{setImgPath}/flying-terrors.png' /><span>飞天恐怖{'{'}asterisk{'}'}</span></div></section><div class='center'>{'{'}asterisk{'}'}这 遭遇组 是 发现 在  Arkham 恐惧: The 卡牌 Game 基础游戏.</div>",
+      "zburamoarte": "相关角色 每名 的 祖布拉莫阿尔特 敌人."
+    }
+  },
+  "version2": {
+    "setup": {
+      "title": "冒险设置(版本二)",
+      "gatherLocations": "收齐<b>新视野</b>遭遇组的所有地点。",
+      "agendaDeck": "使用密谋1a“黑夜寂静”和密谋2a“掘入更深（版本二）”构建密谋牌库。将其他每张密谋从游戏中移除。",
+      "setAside": "将下列卡牌放在一边，位于场外：夜班看守敌人、每张枯疫工人敌人、每张幽暗回声诡计、<b>惨遭感染</b>和<b>飞天恐怖</b>遭遇组、伪造许可和血色歌谣剧情支援。",
+      "removeJavierRivera": "将贾维尔·里维拉敌人和每张工厂工人敌人从游戏中移除。",
+      "gatherSets": "找出下列遭遇组中的所有卡牌：<section class='encounter-sets grid'><div><img src='{setImgPath}/new-horizons.png' /><span>新 Horizons</span></div><div><img src='{setImgPath}/afflicted.png' /><span>Afflicted</span></div><div>《血之子嗣》</div><div><img src='{setImgPath}/infected.png' /><span>Infected</span></div><div><img src='{setImgPath}/preyed-upon.png' /><span>Preyed Upon</span></div><div><img src='{setImgPath}/sanguine-secrets.png' /><span>Sanguine 秘密</span></div><div><img src='{setImgPath}/stalked.png' /><span>Stalked</span></div><div><img src='{setImgPath}/flying-terrors.png' /><span>Flying Terrors{'{'}asterisk{'}'}</span></div><div><img src='{setImgPath}/reeking-decay.png' /><span>Reeking Decay{'{'}asterisk{'}'}</span></div></section><div class='center'>{'{'}asterisk{'}'}这 遭遇 组 是 发现 在  Arkham 恐惧: The 卡牌 Game core 组.</div>",
+      "night": "将每张_黑夜_地点放置入场。将每张_白日_地点从游戏中移除。每位调查员自选一个工厂车间地点开始游戏。",
+      "shallowTunnels": "如果进行的是简单或普通难度，将岩穴入口<i>（浅层通道）</i>、下行通道、全部3张侧边洞室<i>（浅层通道）</i>放在一边，位于场外。将剩余的所有地点从游戏中移除。",
+      "darkestDepths": "如果进行的是困难或专家难度，将岩穴入口<i>（至暗深渊）</i>、下行通道、全部3张侧边洞室<i>（至暗深渊）</i>放在一边，位于场外。将剩余的所有地点从游戏中移除。",
+      "lethargicBeast": "如果正在进行简单难度，将孜卜拉牟特<i>（困倦巨兽）</i>放在一边，位于场外。将其他每张孜卜拉牟特从游戏中移除。",
+      "sourceOfTheBlight": "如果正在进行普通难度，将孜卜拉牟特<i>（枯疫源头）</i>放在一边，位于场外。将其他每张孜卜拉牟特从游戏中移除。",
+      "progenitorOfMonsters": "如果正在进行困难或专家难度，将孜卜拉牟特<i>（怪物始祖）</i>放在一边，位于场外。将其他每张孜卜拉牟特从游戏中移除。",
+      "zburamoarte": "相关角色 每名 的 祖布拉莫阿尔特 敌人."
+    }
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1_: At long 最后 你 emerge 从meat packing facility, feeling 没有 better 于  cattle flanks 该 hung 从 hooks within. 你 hope 该 什么 你able 至 accomplish 将 prove 至 是 useful enough, even 如果 你 didn’t get 至  底端 的 什么  cult 是 doing 在  warehouse. At  非常 至少, 你 有 a 名称 至 go 离场 的—Howard Wilkes,  owner 的 新 Horizons, 和  leader 的  cult 该 是 dwelling 在 它的 depths.</p><ul><li>In 你的 战役 log, 记录 * 调查员 做了 不 complete 他们的 搜索*.</li><li>In 你的 战役 log, 记录 * 调查员 left Zburamoarte alive*.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。<ul><li>_经验_: {xp}</li></ul></li><li>调查员可以选择花费 2 {'{'}perPlayer{'}'} 总计 经验,，作为一组, 移除1 {'{'}blood{'}'} 标记 从混乱袋.</li><li>跳至_结局 5_.</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2_: 你 有 gotten 至  底端 的  cult’s activities 在  warehouse, 和 当你 chose 至 leave whatever monsters lurked 在  depths 的  tunnels alive, 你 可以 仅 hope 该 你的 efforts 将 prove enough 放置所有 的 这 至 rest. At  非常 至少, 你 有 a 名称 至 go 离场 的—Howard Wilkes,  owner 的 新 Horizons, 和  leader 的  cult 该 是 dwelling 在 它的 depths.</p><ul><li>In 你的 战役 log, 记录 * 调查员 completed 他们的 搜索*.</li><li>In 你的 战役 log, 记录 * 调查员 left Zburamoarte alive*.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。<ul><li>_经验_: {xp}</li></ul></li><li>调查员可以选择花费 2 {'{'}perPlayer{'}'} 总计 经验,，作为一组, 移除1 {'{'}blood{'}'} 标记 从混乱袋.</li><li>跳至_结局 5_.</li></ul>"
+    },
+    "resolution3": {
+      "title": "结局3",
+      "body": "<p>_结局 3_: 在一场grueling 战力 against  truly massive foe, 你 finally 放置abomination 向下. 这 beast, 这 Zburamoarte, 是source 的  infected 鲜血 used 在  cult’s rituals, spreading  鲜血 blight throughout 所有 的 Arkham via  tainted meat. 与source 的  鲜血 blight 被击败, 你 hope 该 没有 others 可以 fall 至  相同 fate as Julia Stern 和 others within  新 Horizons factory. The case isn’t 在……上, however, as 你 learned 该 a man named Howard Wilkes,  owner 的 新 Horizons, 是 也 leading 的  cult 的 Zburamoarte. 它’s 时间 至 使 他 answer 为 他的 crimes.</p><ul><li>In 你的 战役 log, 记录 * 调查员 completed 他们的 搜索*.</li><li>In 你的 战役 log, 记录 * 调查员 被击败 Zburamoarte*.</li><li>移除 1 {'{'}blood{'}'} 标记 从混乱袋.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。<ul><li>_经验_: {xp}</li></ul></li><li>跳至_结局 5_.</li></ul>"
+    },
+    "resolution4": {
+      "title": "结局4",
+      "body": "<p>_结局 4_: 你quickly overwhelmed 由  cult, dragging 你 向下 进入  caves 当repeating  名称 “Zburamoarte, Zburamoarte, Zburamoarte…” Mercifully, 你 黑色 场外 在……期间  course 的  cult’s rituals, 和 当 你 come 至 再次, 你alone 在  floor 的  factory,  第一 light 的 morning peeking 穿过  windows. 你 pick 你自己 up, stretch 你的 aching joints, 和 使 a swift exit.</p><ul><li>In 你的 战役 log, 记录 * 调查员 是 left 至  cult’s mercy*.</li><li>在剧本之后的部分，在混乱袋中加入2个{'{'}blood{'}'}标记。</li><li>每位没有鲜血枯疫弱点的调查员，拥有一张放在一边的鲜血枯疫弱点。</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。<ul><li>_经验_: {xp}</li></ul></li><li>前往_结局 5_.</li></ul>"
+    },
+    "resolution5": {
+      "title": "结局5",
+      "body": "<p>_Resolution 5_: 你和警探瑞若兹碰头，准备查查这个霍华德·威尔克斯，让他为工厂里发生的一切付出代价。</p><ul><li>如果 “_the 调查员 发现 a sheet 的 arcane 符号_,” 任意 调查员可以 become  bearer 的  set-aside Sanguine Song 剧情 支援.</li><li>选择一位调查员拥有放在一边的伪造许可剧情支援。</li><li>每位在冒险结束时身上封印了2个{'{'}blood{'}'}标记的调查员拥有一张放在一边的鲜血枯疫弱点（如果该调查员尚未拥有）。</li><li>释放所有封印的{'{'}blood{'}'}标记，将其返回混乱袋。</li><li>前往_幕间故事: Friends 在 Low 放置_.</li></ul>"
+    },
+    "noResolution": {
+      "body": "<p>_如果 没有 结局 是 到达 (每位调查员 是 被击败)_: “Things got pretty rough 在 那里.”</p><p>你醒来听到了警探瑞若兹的声音。你在晨光中眨眨眼睛，坐了起来，僵硬的关节还是阵痛。瑞若兹把手搭在你的肩膀上。“别太拼命。”他说，“而且我一直盯着工厂后面，留心有没有人——或是东西——要跟着我们出去。”</p><ul><li>在剧本之后的部分，在混乱袋中加入1个{'{'}blood{'}'}标记。</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。<ul><li>_经验_: {xp}</li></ul></li><li>跳至_结局 5_.</li></ul>",
+      "title": "如果未达成任何结局"
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "skull": "-X。X为当前场景编号。",
+      "elderThing": "-4. 如果 你 失败 和 那里 是一张{'{'}blood{'}'} 标记 sealed 在 你的 调查员, 受到1点伤害 和 release 1 {'{'}blood{'}'} 标记 sealed 在 你.",
+      "cultist": "-1. 如果 是一张{'{'}blood{'}'} 标记 你的 调查员, 揭示 额外 标记. 相关角色 技能检定 , 1 {'{'}blood{'}'} 标记 你.",
+      "tablet": "-3 (-5 改为 如果 是一张{'{'}blood{'}'} 标记 你的 调查员. 相关角色 检定 , 1 {'{'}blood{'}'} 标记 你)."
+    },
+    "hardExpert": {
+      "skull": "-X。X为当前场景编号+1。",
+      "elderThing": "-4. 之后 这 检定 resolves, 如果 那里 是一张{'{'}blood{'}'} 标记 sealed 在 你的 调查员, 受到1点伤害 和 release 1 {'{'}blood{'}'} 标记 sealed 在 你.",
+      "cultist": "-2. 如果 是一张{'{'}blood{'}'} 标记 你的 调查员, 揭示 额外 标记.",
+      "tablet": "-3. 如果 是一张{'{'}blood{'}'} 标记 你的 调查员, 你 自动 失败 改为."
+    }
+  },
+  "spendExperience": "花费 2 {'{'}perPlayer{'}'} 总计 经验值,，作为一组, 移除1 {'{'}blood{'}'} 标记 从混乱袋"
+}

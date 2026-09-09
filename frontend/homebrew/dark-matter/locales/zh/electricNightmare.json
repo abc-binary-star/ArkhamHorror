@@ -1,0 +1,62 @@
+{
+  "electricNightmare": {
+    "setup": {
+      "gatherSets": "收集 全部 卡牌 从 以下 encounter sets:<i>电子梦魇</i>,<i>Endtimes</i>, 和<i>Dark Past</i>. 这些 sets 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{imgPath}/homebrew/dark-matter/sets/electric-nightmare.png' /><img src='{imgPath}/homebrew/dark-matter/sets/endtimes.png' /><img src='{imgPath}/homebrew/dark-matter/sets/dark-past.png' /></section>",
+      "setAsideBoogeyman": "放置 一边<i>小丑</i>遭遇牌组, out 的 进行. 此 放置 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{imgPath}/homebrew/dark-matter/sets/the-boogeyman.png' /></section>",
+      "randomizeAct": "随机 选择 1 版本 的 场景 1 (Public 学校 187) 至 放置 至 进行. 移除 其他 2 versions 从 game.",
+      "setAsideLocations": "放置 每个 copy 的 Undefined 房间 地点 一边, out 的 进行, 作为 well 作为 Entrance 大厅 (一 Shimmer 在……中 Wall).",
+      "placeSchoolGrounds": "放置 学校 Grounds 地点 至 进行.",
+      "startAt": "每个 调查员 begins 进行 在 学校 Grounds.",
+      "attachMaja": "附着 玛雅 剧情 支援 至 学校 Grounds.",
+      "setAsideStoryAssets": "放置 以下 剧情 支援 一边, out 的 进行: Alma, David, Tilde, William, 和 每个 copy 的 K2-PS187.",
+      "checkCampaignLog": "检查 你的 战役日志. 如果 一 调查员 *有 been infected 由 cybervirus*, 该 调查员 必须 搜索 collection 为 Cybervirus 和 开始 冒险 与 它 在……中 他们的 手牌."
+    },
+    "specialRules": {
+      "0": {
+        "title": "地点 在……中 Virtual Dreamlands",
+        "body": "<p class='basic'>在……期间 此 冒险, 地点 将 be arranged 在……中 schematics, depicted 由 他们的 图标. 地点 是 adjacent orthogonally (left, right, above, 和 below), 和 是 不 adjacent diagonally.</p>"
+      },
+      "1": {
+        "title": "Switching 地点",
+        "body": "<p class='basic'>Throughout 此 冒险, 你可以 be instructed 至 switch 2 地点 与 每个 其他. 当 一 地点 是 switched 与 另一 地点, 他们 获得 每个 other’s 放置 在……中 arrangement. 全部 标记, attachments, 调查员, 敌人, 和 其他 卡牌 在 每个 地点 保持 在……上 相同 地点 (他们 有 “moved” 与 地点 — 仅 arrangement 和 connections 有 changed).</p><p class='basic'><i>为 example, 如果 Wendy Adams 是 currently 在……中 学校 Grounds 和 是 instructed 至 switch 她的 地点 与 Entrance 大厅, which 是 directly above 学校 Grounds, positions 的 2 地点 将 be switched. 在……之后 switching 这些 2 地点 与 每个 其他, Wendy Adams 保持 在……中 学校 Grounds, now above Entrance 大厅.</i></p>"
+      },
+      "2": {
+        "title": "Swarming",
+        "body": "<p class='basic'>一 敌人 与 swarm 卡牌 underneath 是 actually 一 pack 的 敌人 operating 在……中 unison. 敌人 该 swarm 卡牌 是 underneath 是 called “host 敌人”. 在……中 此 冒险, encounter 卡牌 可以 become swarm 卡牌. 当 那些 swarm 卡牌 是 defeated, 他们 是 discarded 至 encounter 弃牌堆.</p><ul><li>每个 swarm 卡牌 underneath host 敌人 acts 作为 一 separate instance 的 该 敌人 为 most purposes. 每个 swarm 卡牌 有 相同 values 和 text 作为 它的 host 卡牌.</li><li>每个 swarm 卡牌 attacks separately 当 敌人 attack 在……期间 敌人 phase. Once host 敌人 和 全部 的 它的 swarm 卡牌 有 attacked 在……期间 此 step, exhaust 全部 的 他们.</li><li>每个 swarm 卡牌 可以 be attacked 或 dealt 伤害 separately, 但是 host 敌人 不能 be defeated 当……时 它 still 有 swarm 卡牌 underneath 它. 当 一 swarm 卡牌 是 defeated, 任意 excess 伤害 可以 be dealt 至 另一 swarm 卡牌 underneath 相同 host 敌人 或 至 host 敌人 itself.</li><li>host 敌人 和 全部 的 它的 swarm 卡牌 移动, engage, 和 exhaust 作为 一 single entity.<i>(为 example, 如果 一 host 敌人 或 任意 的 它的 swarm 卡牌 是 evaded, 全部 的 他们 exhaust 和 become disengaged.)</i></li></ul>"
+      }
+    },
+    "intro": {
+      "title": "冒险 II: 电子梦魇",
+      "body": "<p>你 struggle 至 follow pace 的 little girl 作为 她 skips 和 hops towards small 小镇. “My name 是 玛雅. My directive 是 至 store 和 manage information archives 在……上 飞船.” 她 hastily explains 该 一 few 的 她的 classmates 和 她的 是 kidnapped 从 他们的 学校 由 “bad people” 在……上 January 16th, 2045. 他们的 brains 是 surgically removed 和 preserved 在……中 一 special experimental machine 该 eventually became powerful supercomputer operating Tatterdemalion, K2-PS187.</p><p>作为 你 walk through 小镇, 它 becomes clear 该 something horrible 有 happened here. Everything appears 至 be 在……中 disarray, 作为 如果 一 riot 有 recently passed through. Freshly-painted yellow graffiti depicting strange symbols 和 hieroglyphs 可以 be seen. Everywhere 是 splatters 的 血, spent shell casings, 和 pale face masks. There 是 没有 bodies, 但是 你 可以 hear sound 的 distant screams, gunshots, 和 sirens coming 从 beyond streets. Nearby 是 一 overturned police car 和 一 black box truck lying 在……上 它的 side. Huge claw marks 有 torn 至 metal 的 truck 和 它的 rear doors hang open. 作为 你 walk past, 一 radio 从 within crackles 和 sputters, 然后 blares, “Hello, Unit 12? Unit 12, 是 该 你? Please respond.” 玛雅 clarifies 该 此 virtual environment 该 represents K2-PS187’s dreams takes form 的 day 他们 got captured, day entire world ended. What 可以 possibly 有 happened 在……上 地球 在……中 distant future? 或 rather, distant past?</p><p>你 finally arrive outside 的 一 large brick building. 玛雅 halts 和 gestures towards 它. “此 是 where my 朋友们 是 hiding. bad people made 我们 translate 一 scary 剧情 和 make 一 movie 为 他们. 我们 didn’t want 至 阅读 它, 但是 他们 made 我们. 一 few days later, Annie, universal translator, 她 – 她 –” 玛雅 struggles 至 utter words. There 是 一 desperate fear 在……中 她的 eyes. “你 won’t believe me, 但是 I swear, 它 是 Boogeyman! I saw Boogeyman eat 她的! I ran away 和 searched archives 至 see 如果 anything, anyone 可以 help. 在……之后 一 long time, I finally found someone 和 called out 至 他们. That’s 当 你 woke up! Now 该 你’re inside 我们的 system, 你 可以 save 我们!”</p><p>在……之前 你 是 一 道路 leading 至 一 pair 的 double doors, above which 是 words “Public 学校 187.” Underneath, someone 有 written “HASTUR RISES!” 在……中 yellow spray paint. 一 inhuman howl echoes through halls inside 学校, followed 由 孩子们 screaming 在……中 terror.</p><p class='basic'>检查 战役日志. 每个 调查员 与 3 或 fewer “记忆” 必须 阅读<b>Desynchronization</b>.</p>"
+    },
+    "tooltips": {
+      "cafeteria": {
+        "investigate": "_{'{'}action{'}'} Investigate_. 此 test gets +2 difficulty. 如果 你 succeed, discover 一 additional 线索 从 一 adjacent 地点."
+      }
+    },
+    "resolutions": {
+      "noResolution": {
+        "title": "没有 结局 是 Reached",
+        "body": "如果 没有 结局 是 reached (每个 调查员 resigned 或 是 defeated):",
+        "proceedToResolution1": "如果 there 是 没有 Reintegrated 剧情 卡牌 在……中 胜利展示区: 前往 至<b>结局 1</b>.",
+        "proceedToResolution2": "如果 there 是 在 least 1 Reintegrated 剧情 卡牌 当 冒险 ended: 前往 至<b>结局 2</b>."
+      },
+      "resolution1": {
+        "title": "结局 1",
+        "body": "<p><b>结局 1:</b>一 roar 的 applause startles 你 awake. crowd 的 theatre rises 至 他们的 feet, cheering endlessly. Several patrons 在……中 front row 是 throwing roses 至 actors 在……上 stage, who 是 bowing 与 wide smiles across 他们的 faces. 一 searing headache crawls through 你的 temples. How did 你 get back here? 是 你 在……中 theatre 全部 along? What about spaceship? virtual reality? 是 它 全部 仅 一 terrible 梦境? 在……之前 你 可以 get up 和 exit auditorium, lights flicker off. 一 spotlight shines onto stage, illuminating 一 single actor, dressed up 作为 一 小丑. Something 必须 有 gone wrong inside simulation. 你是 没有 longer inside 的 K2-PS187’s 梦魇, 但是 你的 own. 不使用 outside interference, 你的 body 将 likely be drifting 在……中 endless 太空 forever, 作为 你的 mind slowly decays 在……中 此 rotten reproduction 的 reality. 陌生者 begins laughing. 一 horrible, ear-piercing laugh.</p><ul><li>在……中 你的 战役日志, 记录 该<i>你是 trapped 在……中 一 virtual 梦魇</i>.</li><li>每个 调查员 是 driven<b>insane</b>.</li><li>调查员 失去 campaign.</li></ul>"
+      },
+      "resolution2": {
+        "title": "结局 2",
+        "body": "<p><b>结局 2:</b>你 wake up inside 的 一 virtual 教室, surrounded 由 孩子们 你 rescued. 孩子们 themselves, who 在 第一 appeared dirty 和 disheveled, now appear clean 和 neat 在……中 学校 uniforms. 他们 contained insanity 的 剩余 孩子们 由 creating 一 new pocket reality, disconnected 从 system mainframe. survivors mourn loss 的 他们的 朋友们, 但是 是 glad 该 there 是 没有 更多 Boogeyman 至 scare 他们 和 该 there 是 没有 更多 bad people 至 tell 他们 what 至 do. virtual dreamscape 是 没有 longer 一 nightmarish hell 它 used 至 be.</p><ul><li>在……中 你的 战役日志, 记录 该<i>你 partially restored sanity 的 K2-PS187</i>.</li><li>检查 number 的 Reintegrated 剧情 卡牌 在……中 胜利展示区. 如果 there 是 exactly 1, 一 调查员 可以 加入 K2-PS187 (25% Functionality) permanent 剧情 支援 至 他们的 牌组; 如果 there 是 exactly 2, K2-PS187 (50% Functionality) 剧情 支援; 如果 there 是 exactly 3, K2-PS187 (75% Functionality) 剧情 支援.</li><li>如果 在 least 1 copy 的 Reminiscence 诡计 是 在……中 胜利展示区, 加入 1 {'{'}elderThing{'}'} 标记 至 混乱袋 为 remainder 的 campaign.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><i>经验</i>: {xp}</li></ul></li><li>前往 至<b>幕间故事 I: 任务简报</b>.</li></ul>"
+      },
+      "resolution3": {
+        "title": "结局 3",
+        "body": "<p><b>结局 3:</b>Outside, 太阳 comes out 和 它 appears 至 be 一 beautiful spring day. Inside, halls 是 clean 和 orderly, 与 brightly painted pictures 在……上 walls. 孩子们 themselves, who 在 第一 appeared dirty 和 disheveled, now appear clean 和 neat 在……中 学校 uniforms. 他们 是 overjoyed 该 Boogeyman 和 全部 bad people 是 finally gone. 他们 understand 该 他们 可以 never 返回 home 和 该 他们的 families 是 long dead. 但是 该 does 不 diminish 他们的 happiness 该 there 是 没有 更多 Boogeyman 至 scare 他们 和 该 他们 有 一 real teacher 至 获得 care 的 他们 again. virtual dreamscape 是 now filled 与 happy, loving 孩子们.</p><ul><li>在……中 你的 战役日志, 记录 该<i>你 fully restored sanity 的 K2-PS187</i>.</li><li>一 调查员 可以 选择 至 加入 K2-PS187 (100% Functionality) permanent 剧情 支援 至 他们的 牌组.</li><li>如果 在 least 1 copy 的 Reminiscence 诡计 是 在……中 胜利展示区, 加入 1 {'{'}elderThing{'}'} 标记 至 混乱袋 为 remainder 的 campaign.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><i>经验</i>: {xp}</li></ul></li><li>前往 至<b>幕间故事 I: 任务简报</b>.</li></ul>"
+      }
+    },
+    "desynchronization": {
+      "title": "Desynchronization",
+      "body": "<p>一 overturned schoolbus gathers dust 在……上 学校 grounds. 作为 你 examine vandalized windows, 你 notice 一 glimpse 的 你的 own reflection. However, 你 没有 longer recognize person looking back 在 你. frame, distinct facial features, 他们 全部 seem 因此 familiar 至 你, yet 你 know 此 是 不 你的 body. 你 stare 至 glass 在……中 disbelief. face 的 你的 reflection morphs 至 一 blank, pale mask 与 没有 mouth, nose 或 eyes. virtual reality 没有 longer recognizes 你的 residual self image anymore – mental projection 的 你的 digital self 有 decayed 至 nothingness.</p><ul><li>你 必须 加入 Desync weakness 至 你的 牌组. 此 卡牌 does 不 count towards 你的 牌组 limit.</li></ul>"
+    }
+  }
+}

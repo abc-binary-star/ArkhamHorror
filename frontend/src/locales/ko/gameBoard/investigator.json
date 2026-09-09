@@ -1,6 +1,8 @@
 {
     "discards": "버리기",
     "endTurn": "차례 마치기",
+    "confirmEndTurn": "차례 종료 확인 (남은 행동 {n}개)",
+    "confirmEndTurnShort": "종료? ({n})",
     "skipTriggers": "격발 건너뛰기",
     "skipAllTriggers": "모든 조사자의 격발 건너뛰기",
     "devouredCards": "{count}장 집어삼켜짐",

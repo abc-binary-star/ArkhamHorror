@@ -1,0 +1,152 @@
+{
+  "intro": {
+    "title": "外神之战",
+    "body": "<p>在第一次世界大战后的十多年里，另一种战争降临地球——长期隐匿在社会阴影里的多个阵营之间发生冲突。</p><p>从阿卡姆的多起谋杀案开始——短短数天里就发现了许多分成两半的尸体。警方起初认为凶手是个连环杀手，直到发现了第六个受害者的尸体——已经是一堆支离破碎的肉块和内脏，就像是咀嚼过又吐出来的一顿饭。如此可怕的谋杀案不可能是人类干的。</p><p>当北美其他城市也开始发生类似的凶杀案，你试图揭开真相。一个连环杀手不可能同时出现在阿卡姆、普罗维登斯、蒙特利尔和纽约。这一定是团伙作案。但你还有别的发现：众多受害者之间存在一些共同点，可以据此把他们分成3个不同的群体。</p><p>In Providence, many victims 是 older 和 well-educated. In Montréal, 那些 killed lived 在  树林 outside  城市, 或 有 professions dealing 与 nature 或 biology 在 some capacity. In 新 York, bodies turned up deep 在  sewers 和 underground subway tunnels, 他们的 identities shrouded 在 mystery.</p><p>你 有 spent  past few weeks trying 至 unearth  真相 在……后 这些 murders 和  various factions carrying 他们 场外. In 这 时间,  conflict 有 grown exponentially. Massacres. Bombings. Sightings 的 strange ceremonies 在  streets. Entities blotting 场外  群星 在  夜晚 sky. Swarms 的 locust-like insects devouring people whole. Mutated lizard creatures prowling  sewers. 和 worse yet, 当Arkham seems 至 是conflict's epicenter, 这些 incidents 是 spreading 所有 across  world.</p><p>这不是一场普通的战争，也不是政府当局能够对付得了的。只有你在怀疑这背后的真相。不论如何，你必须找出这些阵营争斗的原因，赶在整个世界被疯狂吞噬之前停止这场冲突。</p><p class='basic right'>前往_设置_.</p>"
+  },
+  "setup": {
+    "agendaDecks": "在设置密谋牌堆时，将全部3个密谋牌堆按照顺序(从上到下依次为绿色、蓝色、红色)放置入场。",
+    "placeLocations": "将次元枢纽地点放在一边，将剩余的10个地点放置入场。",
+    "beginAtArkham": "每位调查员从阿卡姆开始游戏。",
+    "shuffleRemainder": "混洗剩余的19张遭遇卡，以形成遭遇牌堆。",
+    "gatherFactionSets": "从其他3个遭遇组(<i>乐园之子</i>、<i>同化虫群</i>、<i>星辰消逝</i>)找出其全部的9张卡牌。将这些遭遇组放在一边，位于场外。<i>(注意：外神之战遭遇组中有1张缥纱存在、1张三重蝗和1张乐园引领者，而其余卡牌则包括在这3个遭遇组中。)</i><section class='encounter-sets'><img src='{setImgPath}/children-of-paradise.png' /><img src='{setImgPath}/assimilating-swarm.png' /><img src='{setImgPath}/death-of-the-stars.png' /></section>",
+    "spawnCultists": "从<i>外神之战</i>遭遇组找出1张虫群信徒、1张虚无主义占星师、1张乐园狂信徒。生成以上所有敌人(按照每张卡牌上的“<b>生成 - </b>”指示）。",
+    "setAsideAssets": "将以下5张剧情支援放在一边，位于场外：外域披风、口袋次元门、恐怖终结、阿卡特之剑、附魔头骨。",
+    "gatherSets": "找出所有卡牌：  *外神之战* 遭遇组. 这 组 是 indicated 由 这 icon:<section class='encounter-sets'><img src='{setImgPath}/war-of-the-outer-gods.png' /></section>",
+    "epicMultiplayer": "如果 你playing 在 *多组史诗模式*,  event 组织者 calculates 和 宣告s  global 毁灭标记 thresholds 每位密谋."
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_Resolution 1_: 在你的严密把控之下，枢纽中的诸多门扉现已被紧紧封印。枢纽被封印之后，几个争夺所有权的教团应会重新转入地下——他们可能在等待枢纽重新开启，再利用枢纽来达成自己残酷的阴谋。在那之前，地球还是安全的……相对来说。</p><ul><li>任意一位调查员可以选择将“外域披风”剧情支援加入其牌组。该卡牌不计入该调查员牌组的卡牌张数。</li><li>任意一位调查员可以选择将“口袋次元门”剧情支援加入其牌组。该卡牌不计入该调查员牌组的卡牌张数。</li><li>每位调查员 获得 经验 等于 至  *Victory X* 数值 的 每位 卡牌 在 胜利牌区. 每位调查员 获得 2 奖励 经验 as 他们 有 prevented 所有 的  Outer Gods 从 completing 他们的 schemes.</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2_: The swarm 的 Ezel 是 too countless 至 击败 穿过 normal means. But 那里 是一张trick! Otherworldly though 他们 可以 是,  insects 是 insects nonetheless, 和 many hives 有 among 他们 a queen. Using 所有 的 你的 ingenuity, 你 devise a 计划 至 crush  queen 和 thereby scatter  swarm.</p><p>令人惊喜的是，你的计划奏效了。虫群一旦失去了虫后，就会失去目标，一种绝望和恐慌的感觉取代了它们的饥饿感。稍不多时，这不计其数的虫子便再次落入了来时的坑洞。或许会出现另一个虫后来统领它们，但早在它出现之前，你就已封上这被诅咒的坑洞。目前，地球安全无虞。</p><ul><li>任意 1 调查员可以 选择 加入the Cloak 的  Outer Realms 剧情 支援 至 他们的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>任意 1 调查员可以 选择 加入the Enchanted 骷髅 剧情 支援 至 他们的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+    },
+    "resolution3": {
+      "title": "结局3",
+      "body": "西勒诺斯不具有形状，甚至完全不是由物质构成的，但这并不意味著没有弱点。你运用这些教团的仪式来反制其身，想出了一种即便是虚空也无法吞噬的炽热法术。你施放仪式时，那团迷雾痛苦地退去，只发出了从真空中抽吸空气的尖锐嘶嘶声。\n你害怕地观察著上空，希望那团迷雾别在仪式结束的时候卷土重来。几分钟过去了。又过去了几个小时。夜空再次布满了熟悉的星辰。或许那团迷雾再也不会出现了。如果它的观察者们记录属实，那么它很可能会在未来——或许是数百年、数干年以后——再次现身。你可能今天成功拯救了地球，但是对那团迷雾真身的理解仍然困扰著你。"
+    },
+    "resolution4": {
+      "title": "结局4",
+      "body": "<p>_结局 4_: Green 鲜血 和 sticky pus erupts 从beast's carapace as 它 collapses, groaning 与 such force 该 它 rumbles 穿过  大地. Thanks 至 你的 haste, 你 有 felled  beast 之前 它 可以 grow too powerful 至 stop. Even 在 它的 infancy, 它 是一张tremendous foe.</p><p>你目睹它的身体分解成一滩土色的脓水，感到一阵恶心。这家伙本来会是某种“乐园”。卵的孵化以及卵中之物被摧毁之后，你希望阿卡特教团会就此解散，但是你仍然害怕自己的插手会招来报应。</p><ul><li>任意 1 调查员可以 选择 加入the Cloak 的  Outer Realms 剧情 支援 至 他们的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>任意 1 调查员可以 选择 加入the Blade 的 Ark'于 剧情 支援 至 他们的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+    },
+    "resolution5": {
+      "title": "结局5",
+      "body": "虫群一点一点地分解了地球上的所有物质，将每一颗微粒都变成了与自己相似的个体。你的意识依然存在，永远被困在这可怕的、嗡嗡作响的虫群里面。但一切都好。你现在和虫后在一起。一种诡异的饥饿感折磨著你。你只想进行同化。虫群必须发展壮大！"
+    },
+    "resolution6": {
+      "title": "结局6",
+      "body": "地球只是第一个被西勒诺斯吞噬的星球——它是空天的化身，万事万物贪婪的终结。当这个星球的核心温度降至冰点，所有生命立即被扼杀殆尽。从地球联结点所形成的开口开始，那团迷雾延伸到了太阳系的每个角落，沿途吞噬了一切热量。如今无人再能阻止它了。"
+    },
+    "resolution7": {
+      "title": "结局7",
+      "body": "这头野兽的横冲直撞无法阻挡，只有你知道如何才能击败它。它穿过大陆和海洋，沿路的城市接连崩塌。军队均被消灭。政府纷纷倒台。阿卡特教团孕育出来的怪物仍未停止他们贪婪的征战，直到地球上除了辽阔的废土与人类文明摇摇欲坠的废墟之外，再没有东西可供他们支配。他们甘愿为之牺性的“乐园”已经到来。"
+    },
+    "noResolution": {
+      "title": "如果未达成任何结局",
+      "body": "<p>*如果 未达成任何结局 (所有调查员都被击败)*:</p><ul><li>如果 你playing 在 *单组模式*, 或 如果 所有 groups 是 被击败 在 *多组史诗模式*, 找出  faction 该 是 在  队长 和 前往 accordingly.<ul><li>如果  红色阵营领先, 跳至_结局5_.</li><li>如果  蓝色阵营领先, 跳至_结局6_.</li><li>如果  绿色阵营领先, 跳至_结局7_.</li></ul></li><li>如果 你playing 在 *多组史诗模式*, 你 share 在  结局 该 剩余players reach.</li></ul>"
+    },
+    "label": {
+      "greenFactionInTheLead": "The 绿色阵营领先",
+      "blueFactionInTheLead": "The 蓝色阵营领先",
+      "redFactionInTheLead": "The 红色阵营领先"
+    },
+    "xp": {
+      "bonus": "全部 的 相关角色 相关角色 从"
+    }
+  },
+  "rules": {
+    "factions": {
+      "title": "阵营",
+      "body": "<p class='basic'>这 冒险 introduces 3 warring factions, 每位 与 他们的 own 组 的 敌人, treacheries, 和 agendas. 这些 factions 可以 是 differentiated 由 color—blue, green, 或 red.</p><ul><li>The _Cult 的 Silenus_ 是_blue_ faction. Blue 卡牌 可以 也 是 identified 由 他们的 star 和 constellation patterns.<div class='card-examples'><div class='top'><div class='ex'><img src='{setImgPath}/../cards/86025.avif' /><img class='arrow' src='{setImgPath}/../extra/war-of-the-outer-gods/arrows/arrow-blue.svg' style='--at:12%' /></div><div class='ex'><img src='{setImgPath}/../cards/86026.avif' /><img class='arrow left' src='{setImgPath}/../extra/war-of-the-outer-gods/arrows/arrow-blue.svg' style='--at:29%' /></div></div><div class='ex'><img class='agenda' src='{setImgPath}/../cards/86003.avif' /><img class='arrow left' src='{setImgPath}/../extra/war-of-the-outer-gods/arrows/arrow-blue.svg' style='--at:13%;--right:-33px;' /></div></div></li><li><b>玛格-阿卡特教团</b>是<b>绿色</b>阵营。绿色卡牌也可以通过鳞片和触手纹样来辨识。</li><li><b>艾泽尔-赞-雷兹尔教团</b>是<b>红色</b>阵营。红色卡牌也可以通过蜂窝纹样和虫翼来辨识。</li><li>Unless 否则 noted, 每位 faction’s 卡牌 operate 像 normal 卡牌 的 他们的 type (敌人, treacheries, 或 agendas).</li><li>如果 调查员 是 instructed 至 perform a sequence “在 faction order,” 第一 结算 该 sequence 为green faction. 然后 结算 该 sequence 为blue faction. Finally, 结算 该 sequence 为red faction. (*Note: 这 是 也  order 的 agendas 从 顶端 至 底端 as depicted 在……期间 设置.*)</li></ul>"
+    },
+    "factionAgendas": {
+      "title": "阵营密谋",
+      "body": "<p class='basic'>在冒险设置期间，为每个阵营(绿色、蓝色和红色)分别组建一个密谋牌堆，一共是3个不同的密谋牌堆。这些密谋牌堆表示每个阵营的目标进展。</p><ul><li>在神话阶段的“在当前密谋卡上放置1个毁灭标记”步骤，按照阵营顺序在每个密谋上放置1个毁灭标记。</li><li>在“检查毁灭标记目标值”步骤期间，按照阵营顺序依次检查每张密谋卡的毁灭标记目标值(在多组史诗模式中，则按照活动组织者宣布的顺序)。</li><li>场上有3张密谋时，玩家卡上的毁灭标记不计入任何一张密谋的毁灭标记目标值。</li><li>如果有卡牌效果指示调查员在“当前密谋”上放置毁灭标记，那么玩家可以选择要将其放到哪一张密谋卡上。</li><li>在一张密谋卡推进时，其他每张密谋卡上的所有毁灭标记留在原位。按照正常规则，从场上其他每张卡牌(玩家卡、敌人、地点)上移除所有毁灭标记。</li></ul>"
+    },
+    "inTheLead": {
+      "title": "“领先”",
+      "body": "每个阵营都想抢在敌对阵营之前推进自己的密谋牌堆。“领先”阵营指的是密谋牌堆推进最快的阵营。如果2个或3个阵营的推进进度相同，这些阵营中密谋卡上毁灭标记最多的一方领先。如果比较毁灭标记数量仍为平手，那么场上有最多敌人的阵营领先。"
+    },
+    "warring": {
+      "title": "交兵",
+      "body": "<p class='basic'>“交兵”是一个关键词能力，会使交兵阵营在敌军阶段朝著另一个交兵阵营移动并攻击。</p><p class='basic'>敌军阶段的“猎手敌人移动”步骤期间，每个准备且未交战的交兵敌人朝著最近的其他阵营的交兵敌人移动一次。如果场上同时有交兵敌人和猎手敌人，其移动先后顺序由调查员决定。</p><ul><li>交兵敌人按照阵营顺序进行移动。</li><li>所在地点已有其他阵营敌人的交兵敌人不移动。</li><li>如果有多个敌人能够作为交兵敌人一次移动的目标，且这些敌人与该交兵敌人的距离相等，那么由调查员队长来选择该交兵敌人朝哪个敌人移动。</li><li>如果没有敌人能够作为该次移动的目标，那么该交兵敌人不移动。</li><li>如果交兵敌人将要被迫移动到一个地点，而该次移动被卡牌效果阻止，那么该交兵敌人不移动。</li></ul><p class='basic'>在……期间  “结算 敌人 攻击” step 的  敌人 阶段, 每位 unengaged 敌人 与warring 关键词 攻击 a warring 敌人 于 它的 地点 的 a 不同 faction.</p><ul><li>交兵敌人按照阵营顺序进行攻击。</li><li>如果有多个敌人能够作为该次攻击的目标，那么该交兵敌人攻击剩余生命值最低的(其他阵营的)敌人。如果其中有多个敌人剩余生命值同为最低，那么由调查员队长来选择该次攻击的目标。</li><li>以此方式进行的攻击，造成的伤害等于攻击方敌人的伤害值和恐惧值相加之和。</li><li><b>如果一个敌人攻击并击败了另一个敌人(蜂拥卡海除外)，在攻击方敌人所属阵营的密谋卡上放置1个毁灭标记。</b></li></ul><div class='warring-example'><p class='we-title'>交兵示例：</p><p class='we-cap'>*A Disciple 的  Swarm 是 在 Streets 的 新 York 城市, a Hune-Stitched Herald 是 在 Arkham, 和 a Zealot 的 Paradise 是 在 Streets 的 Montréal. 每位 的 他们 有  warring 关键词, 和 每位 是 ready 和 unengaged.*</p><div class='we-panel we-setup'><div class='we-spot'><img class='loc' src='{setImgPath}/../cards/86021.avif' /><img class='enemy' src='{setImgPath}/../cards/86029.avif' /></div><div class='we-spot'><img class='loc' src='{setImgPath}/../cards/86014.avif' /><img class='enemy' src='{setImgPath}/../cards/86037.avif' /></div><div class='we-spot'><img class='loc' src='{setImgPath}/../cards/86018.avif' /><img class='enemy' src='{setImgPath}/../cards/86027.avif' /></div></div><p class='we-cap'><i>敌军阶段的“猎手敌人移动”步骤期间，每个准备且未交战的交兵敌人朝著最近的其他阵营的交兵敌人移动一次。在本例中，绿色敌人移动到阿卡姆。胡吝纫合兆使因为所在地点已有一个敌人，所以不移动。最后，虫群信徒也移动到阿卡姆。</i></p><div class='we-panel we-move'><div class='we-spot'><img class='loc' src='{setImgPath}/../cards/86021.avif' /><img class='enemy red-faction faded' src='{setImgPath}/../cards/86029.avif' /></div><div class='we-spot gathered'><img class='loc' src='{setImgPath}/../cards/86014.avif' /><img class='enemy blue-faction' src='{setImgPath}/../cards/86037.avif' /><img class='enemy red-faction' src='{setImgPath}/../cards/86029.avif' /><img class='enemy green-faction' src='{setImgPath}/../cards/86027.avif' /></div><div class='we-spot'><img class='loc' src='{setImgPath}/../cards/86018.avif' /><img class='enemy green-faction faded' src='{setImgPath}/../cards/86027.avif' /></div><img class='we-arrow we-mv-left' src='{setImgPath}/../extra/war-of-the-outer-gods/arrows/warring-move-arrow.svg' /><img class='we-arrow we-mv-right' src='{setImgPath}/../extra/war-of-the-outer-gods/arrows/warring-move-arrow-right.svg' /></div><p class='we-cap'><i>敌军阶段的“结算敌军攻击”步骤期间，上述每个敌人攻击其他阵营的交兵敌人。先是乐园狂信徒攻击虫群信徒(因为虫群信徒的剩余生命值低于胡吝纫合兆使)，造成1点伤害。然后，胡吝纫合兆使也攻击虫群信徒，造成3点伤害。这使得虫群信徒还没机会攻击就被击败，并且导致在蓝色密谋卡上放置1个毁灭标记。</i></p><div class='we-panel we-attack'><div class='enemy'><img src='{setImgPath}/../cards/86029.avif' /><img class='dmg d1' src='{setImgPath}/../tokens/damage-token.png' /><img class='dmg d2' src='{setImgPath}/../tokens/damage-token.png' /><img class='dmg d3' src='{setImgPath}/../tokens/damage-token.png' /><img class='dmg d4' src='{setImgPath}/../tokens/damage-token.png' /></div><div class='enemy'><img src='{setImgPath}/../cards/86037.avif' /></div><div class='enemy'><img src='{setImgPath}/../cards/86027.avif' /></div><img class='we-arrow we-atk-top' src='{setImgPath}/../extra/war-of-the-outer-gods/arrows/warring-attack-arrow-top.svg' /><img class='we-arrow we-atk-bot' src='{setImgPath}/../extra/war-of-the-outer-gods/arrows/warring-attack-arrow-bottom.svg' /></div></div>"
+    },
+    "wards": {
+      "title": "界护",
+      "body": "“界护”能使调查员减少放在密谋卡上的毁灭标记数量。当有效果指示放置界护标记时，放置资源标记以作表示。将要把毁灭标记放到密谋上时，该密谋上每有1个界护标记，防止放置1个毁灭标记，然后从该密谋上移除被防止放置的毁灭标记数目的界护标记。"
+    },
+    "placeAroundThisLocation": {
+      "title": "“放在本地点周围”",
+      "body": "如果有指示调查员将1个或多个线索放到一个地点“周围”，这些线索应该放到该地点卡的边界外，并且紧挨边界，但不要放到地点卡上面。一个地点“周围”的线索不视为在该地点“上”，并且无法以任何方式发现这些线索。<div class='place-around'><img src='{setImgPath}/../cards/86024b.avif' /><div class='clues left'><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /></div><div class='clues right'><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /></div><div class='clues top'><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /></div><div class='clues bottom'><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /><img src='{setImgPath}/../tokens/clue.png' /></div></div>"
+    },
+    "swarmingX": {
+      "title": "蜂拥X",
+      "body": "The swarming X 关键词 represents a pack 的 敌人 operating 在 unison. 之后 an 敌人 与swarming X 关键词 enters 游戏, 放置顶端 X 卡牌 的 你的 牌组 背面朝上 underneath  敌人 as swarm 卡牌, 不使用 looking 于 他们. The 敌人 那些 swarm 卡牌 是 underneath 是 called  \"host 敌人.\" Some 冒险 卡牌 效果 可以 也 instruct a player 加入swarm 卡牌 至 an 敌人. 这 是 done using  相同 process.<ul><li>如果未指定由哪一位调查员来添加蜂拥卡牌，那么由调查员队长来进行添加。</li><li>每位 swarm 卡牌 underneath  host 敌人 acts as a separate instance 的 该 敌人. 每位 swarm 卡牌 有  相同 values 和 文本 as 它的 host 卡牌. *(为 example, 如果 an 调查员 是 engaged 与 a host 敌人 与 2 swarm 卡牌 underneath 它, 该 调查员 是 engaged 与 3 敌人 在 总计.)*</li><li>敌军阶段期间敌人攻击时，每张蜂拥卡牌单独进行攻击。在本步骤期间，头领敌人及其全部蜂拥卡牌一旦攻击完毕，消耗所有这些卡牌。</li><li>每位 swarm 卡牌 可以 是 attacked 或 dealt 伤害 separately, 但  host 敌人 不能 是 被击败 当它 still 有 swarm 卡牌 underneath 它. 当 a swarm 卡牌 是 被击败, 任意 excess 伤害 可以 是 dealt 至 另一 swarm 卡牌 underneath  相同 host 敌人, 或 如果 所有 的 它的 swarm 卡牌 是 gone, 至  host 敌人 itself. *(为 example, Roland Banks uses a .45 自动 至 攻击 a Trylogog 与 2 swarm 卡牌. The 攻击 deals 2 伤害. The 第一 point 的 伤害 defeats 1 的  2 swarm 卡牌, so  excess point 的 伤害 可以 是 dealt 至 另一 swarm 卡牌, defeating 它 as well.)*</li><li>每当蜂拥卡牌离场，将该卡放到其所有者的牌堆底下。你如果不确定该蜂拥卡牌的所有者，可以查看该卡的内容以确定其所有者。</li><li>头领敌人及其全部蜂拥卡牌作为一个整体进行移动，交战和被消耗。<i>(例如，如果一个头领敌人或其任意蜂拥卡牌被躲避，这些全部卡牌都被消耗并且解除交战。)</i>\n带有蜂拥X关键词的敌人上出现“胜利X”时，这行文字只对这张头领卡牌生效。蜂拥卡牌不能进入胜利牌区，并且永远不会价值胜利点数。</li><li>当 Victory X appears 在 an 敌人 与Swarming X 关键词, 这 文本 是 仅 active 为host 卡牌. Swarm 卡牌 不能 enter 胜利牌区 和 是 never worth victory points.</li></ul>"
+    }
+  },
+  "specialRules": [
+    {
+      "title": "@:standalone.warOfTheOuterGods.rules.factions.title",
+      "body": "@:standalone.warOfTheOuterGods.rules.factions.body"
+    },
+    {
+      "title": "@:standalone.warOfTheOuterGods.rules.factionAgendas.title",
+      "body": "@:standalone.warOfTheOuterGods.rules.factionAgendas.body"
+    },
+    {
+      "title": "@:standalone.warOfTheOuterGods.rules.inTheLead.title",
+      "body": "@:standalone.warOfTheOuterGods.rules.inTheLead.body"
+    },
+    {
+      "title": "@:standalone.warOfTheOuterGods.rules.warring.title",
+      "body": "@:standalone.warOfTheOuterGods.rules.warring.body"
+    },
+    {
+      "title": "@:standalone.warOfTheOuterGods.rules.wards.title",
+      "body": "@:standalone.warOfTheOuterGods.rules.wards.body"
+    },
+    {
+      "title": "@:standalone.warOfTheOuterGods.rules.placeAroundThisLocation.title",
+      "body": "@:standalone.warOfTheOuterGods.rules.placeAroundThisLocation.body"
+    },
+    {
+      "title": "@:standalone.warOfTheOuterGods.rules.swarmingX.title",
+      "body": "@:standalone.warOfTheOuterGods.rules.swarmingX.body"
+    }
+  ],
+  "label": {
+    "take2Horror": "受到2点恐惧",
+    "take2Damage": "受到2点伤害",
+    "skipTest": "不进行检定",
+    "placeDoomOnTheBlueAgenda": "放置1个毁灭标记 在  blue 密谋",
+    "youAndYourAssetsTakeDamage": "你 和 每位 支援 你 控制 受到1点直接伤害",
+    "placeClueOnYourLocation": "放置 1 的 你的 线索 在 你的 地点",
+    "placeCluesOnYourLocation": "放置 2 的 你的 线索 在 你的 地点",
+    "removeTopOfDeckFromGame": "移除 牌堆顶 6 卡牌 的 你的 牌组 从 游戏. 洗切 每位 弱点 removed 这 道路 进入 你的 牌组",
+    "placeEnemyOnTopOfEncounterDeck": "放置 a 非精英 敌人 在你的地点 在 顶端 的  遭遇牌库",
+    "take3Horror": "受到 3 恐惧",
+    "removeHandFromGame": "移除 每名 卡牌 你的 手牌 从",
+    "removeCluesFromAroundHubDimension": "移除 2 线索 从 相关角色 相关角色",
+    "huneStitchedHeraldAttacksYou": "相关角色 相关角色 你",
+    "removeItemFromGame": "选择 物品 支援 你 和 移除 从",
+    "removeCardsInHandFromGame": "选择 3 卡牌 你的 手牌 和 移除 从",
+    "spendClues": "花费 3 线索",
+    "lookAtTopOfEncounterDeck": "查看 顶 5 卡牌 的 遭遇牌库. 弃掉 2 的 和 返回 顶, 任意"
+  },
+  "tokens": {
+    "easyStandard": {
+      "cultist": "-3. 如果 你 失败, 放置 1 资源 在  nearest _Mutated_ 敌人, as a 突变.",
+      "skull": "-1 为 每名 线索 你有.",
+      "tablet": "-3. 如果 你 失败, 抽取 顶 _相关角色_ 卡牌 遭遇弃牌堆.",
+      "elderThing": "-4. 如果 你 失败, 放置 1 卡牌 检定 背面朝上 _相关角色_ 敌人, a 卡牌."
+    },
+    "hardExpert": {
+      "cultist": "-4. 放置 1 资源 在 每位 _Mutated_ 敌人, as a 突变.",
+      "skull": "-2 为 每名 线索 你有.",
+      "tablet": "-4. 抽取 顶 _相关角色_ 卡牌 遭遇弃牌堆.",
+      "elderThing": "-5. 放置 每名 卡牌 检定 背面朝上 _相关角色_ 敌人, a 卡牌."
+    }
+  }
+}

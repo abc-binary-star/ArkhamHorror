@@ -1,0 +1,61 @@
+{
+  "theMachineInYellow": {
+    "theManInThePallidMask": {
+      "label": {
+        "gainClueAndHeal": "获得 1 线索 从 标记 bank 和 heal up 至 2 伤害 和 2 恐惧",
+        "addMemory": "加入 1 tally mark 下一 至 你的 “记忆”"
+      }
+    },
+    "intro": {
+      "title": "冒险 IV: 黄衣机器",
+      "body": "<p>你 awaken 与 一 开始, 作为 though shaken 由 一 unseen force. There 是 仅 一 few 其他 patrons 在……中 audience, 和 没有 performers 在……上 stage. lights 是 dimmed, 和 stage curtains 是 tattered 和 ripped. 一 foul 但是 unrecognizable smell permeates air. 你是 back 在……中 Ward theatre — where 它 全部 began. 是 此 一 神器 的 你的 记忆? 或 有 你 been dreaming 此 entire time? Shaking off 你的 drowsiness, 你 call out 至 air 为 K2-PS187. 至 你的 relief, 和 slight disappointment, digitalized voices respond 在……中 confirmation 该 procedure behaved 作为 planned. 你有 arrived inside 的 你的 own mind…</p>"
+    },
+    "setup": {
+      "gatherSets": "收集 全部 卡牌 从 以下 encounter sets:<i>Curtain Call</i>,<i>黄衣机器</i>,<i>Dark Past</i>,<i>Delusions</i>和<i>Rats</i>.<i>(Curtain Call 和 Delusions 是 从 道路 至 Carcosa.)</i>这些 sets 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{setImgPath}/curtain-call.png' /><img src='{imgPath}/homebrew/dark-matter/sets/the-machine-in-yellow.png' /><img src='{imgPath}/homebrew/dark-matter/sets/dark-past.png' /><img src='{setImgPath}/delusions.png' /><img src='{setImgPath}/rats.png' /></section>当 gathering<i>Curtain Call</i>遭遇牌组, 仅 收集 地点.",
+      "maddeningDelusions": "调查员 可以 选择 至 使用<i>Maddening Delusions</i>遭遇牌组 (从 返回 至 道路 至 Carcosa) instead 的<i>Delusions</i>遭遇牌组. 如果 你 do 因此, 每个 调查员 可以 加入 1 tally mark 下一 至 他们的 “记忆”. 此 放置 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{setImgPath}/maddening-delusions.png' /></section>",
+      "placeLocations": "放置 Theatre, Lobby, Balcony, 和 Backstage 地点 至 进行.",
+      "startAt": "每个 调查员 begins 进行 在 Theatre.",
+      "setAsideDoorways": "放置 一边 每个 copy 的 Backstage Doorway 和 Lobby Doorway 地点, out 的 进行.",
+      "setAsideYourOtherSelf": "放置 一边 每个 copy 的 你的 其他 Self 敌人, out 的 进行."
+    },
+    "maddeningDelusions": {
+      "label": {
+        "useMaddeningDelusions": "使用<i>Maddening Delusions</i>遭遇牌组",
+        "useDelusions": "使用<i>Delusions</i>遭遇牌组",
+        "addMemory": "加入 1 tally mark 下一 至 你的 “记忆”",
+        "doNotAddMemory": "Do 不 加入 一 tally mark"
+      }
+    },
+    "tokens": {
+      "easyStandard": {
+        "skull": "-X. X 是 half 的 你的 “记忆” (rounded down).",
+        "cultist": "-X. X 是 number 的 hidden 卡牌 在……中 你的 手牌.",
+        "tablet": "揭示 另一 标记. Double 该 标记's modifier.",
+        "elderThing": "-4. 你可以 选择 至 cross out 一 tally mark 下一 至 你的 调查员's “记忆” 至 automatically succeed."
+      },
+      "hardExpert": {
+        "skull": "-X. X 是 你的 “记忆”.",
+        "cultist": "-X. X 是 number 的 hidden 卡牌 在……中 你的 手牌.",
+        "tablet": "揭示 另一 标记. Double 该 标记's modifier.",
+        "elderThing": "-6. 你可以 选择 至 cross out 一 tally mark 下一 至 你的 调查员's “记忆” 至 automatically succeed."
+      }
+    },
+    "resolutions": {
+      "xp": {
+        "resolution1": "Reliving 他们的 past 记忆"
+      },
+      "noResolution": {
+        "title": "没有 结局 是 Reached",
+        "body": "<p><b>如果 没有 结局 是 reached (每个 调查员 resigned 或 是 defeated):</b>前往 至<b>结局 1</b>.</p>"
+      },
+      "resolution1": {
+        "title": "结局 1",
+        "body": "<p><b>结局 1:</b>你 had 一 梦境. 一 vivid, lucid 和 全部-too real 梦境. 你 escaped Ward theatre 至 rainy streets 的 Arkham. 你 会 visit 在……之后-party 的 dreadful<i>King 在……中 Yellow</i>, 和 embark along 一 grand 和 mind-bending adventure across Arkham which eventually leads 至 France 和 至 Carcosa itself. 当 你 finally wake up 在……中 cold sweat back 在……中 cryo-chamber, 你 almost forgot new reality 你 had found yourself 在……中. Although ordeal 有 been difficult 和 took much longer than 你 anticipated, 你有 finally unlocked 该 part 的 你的 记忆 该 有 been kept concealed 由 你的 其他 self— ritual 至 locate 卡尔克萨碎片.</p><ul><li>如果 在 least 1 copy 的 Reminiscence 诡计 是 在……中 胜利展示区, 加入 1 {'{'}elderThing{'}'} 标记 至 混乱袋 为 remainder 的 campaign.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区. 每个 调查员 earns 2 additional 经验 为 reliving 他们的 past 记忆.<ul><li><i>经验</i>: {xp}</li></ul></li><li>加入 2 tally marks 在……下 “Impending 毁灭标记” 在……中 你的 战役日志.</li><li>前往 至<b>冒险 V: 卡尔克萨碎片</b>.</li></ul>"
+      },
+      "resolution2": {
+        "title": "结局 2",
+        "body": "<p><b>结局 2:</b>与 infectious tumor 该 是 邪教徒’s consciousness finally ejected 从 你的 mind, 你有 unlocked 该 part 的 你的 记忆 该 有 been kept concealed 由 你的 其他 self— ritual 至 locate 卡尔克萨碎片. 不使用 further ado, 你 quickly disconnect yourself 从 virtual dreamlands 和 返回 至 form 在……中 Tatterdemalion, ready 至 confront 塔希尔达 在 long last.</p><ul><li>如果 在 least 1 copy 的 Reminiscence 诡计 是 在……中 胜利展示区, 加入 1 {'{'}elderThing{'}'} 标记 至 混乱袋 为 remainder 的 campaign.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><i>经验</i>: {xp}</li></ul></li><li>前往 至<b>冒险 V: 卡尔克萨碎片</b>.</li></ul>"
+      }
+    }
+  }
+}

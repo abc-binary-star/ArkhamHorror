@@ -1,0 +1,116 @@
+{
+  "allPointsWest": {
+    "intro": {
+      "backOnTrack": {
+        "title": "Back 在……上 Track",
+        "body": "<p><i>你的 decision 至 pursue rougarou 放置 你 一 little far afield, 但是 你 返回 至 New Orleans Union Station 在……之后 一 long 和 harrowing night 至 找到 Dykstras' train waiting 为 你.</i></p>"
+      },
+      "whatAHorribleNight": {
+        "title": "What 一 Horrible Night",
+        "body": "<p><i>Even 当 你有 urges 控制, there seem 至 be outward signs 的 curse affecting 你, given looks 从 Ralph 和 Carrie. “I've got 一 razor 和 shaving cream 在……中 caboose 如果 你 need 它,” Ralph states, though 你're 不 sure how seriously.</i></p><p class='basic'><i>卢格鲁的诅咒</i>gains “<b>[reaction]</b>在……之后 你 release 一 {'{'}moon{'}'} 标记: 弃掉<i>卢格鲁的诅咒</i>.”</p>"
+      },
+      "goodJuju": {
+        "title": "Good Juju",
+        "body": "<p><i>Lady Esprit accompanies 你 至 station 和 wastes little time 在……中 setting up shop 在……中 caboose. Carrie watches 她的 与 folded arms. “是 你 一 witch?” young lady asks. Lady Esprit laughs 与 surprising spirit 和 continues 不使用 looking. “Even better than 该, 孩子.”</i></p><p class='basic'><i>Lady Esprit</i>gains “<b>[reaction]</b>在……之后 你 release 一 {'{'}moon{'}'} 标记: Discover 一 线索. (Limit once per round.)”</p>"
+      },
+      "rightOnSchedule": {
+        "title": "Right 在……上 Schedule",
+        "body": "<p><i>与 time 的 essence, 你 tell Dykstras 该 你'll meet 他们 在 Northside station 和 rapidly pack, 也 calling 在……中 一 couple small favors 至 get 一些 extra clothes 为 Thea 至 使用 在……期间 journey. 她 keeps 一 close hold 在……上 tome 作为 你 depart 你的 宅邸. “California. That'll give me time 至 阅读 through 此 book, 在 least. Hopefully there's something 在……中 there 该 tells 我们 what Blake 是 trying 至 do, 或 what my visions mean.”</i></p>"
+      }
+    },
+    "interludes": {
+      "notInThisTown": {
+        "title": "不 在……中 此 小镇",
+        "body": "<p><i>你的 arrival 在……中 Chicago 是 timely, 和 你有 opportunity 至 interfere 与 circus greatly 在……之前 你 两者 移动 onward. Chicago police 是 constantly 在……上 edge 与 gang activity common 至 城市, 和 与 一 little creative reporting 至 avoid sounding like 一 looney, 你 might convince 他们 至 go 在……之后 Blake, though 如果 它 goes badly, police might waylay 你 instead.</i></p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+        "label": {
+          "raid": "“We'll try 至 convince cops 至 raid circus.”",
+          "smaller": "“We'll meddle 在……上 我们的 own terms, however smaller.”"
+        }
+      },
+      "wrongTerritory": {
+        "title": "Wrong Territory",
+        "body": "<p><i>你的 delays 在……中 getting 至 Chicago 有 limited 你的 options 在……中 hampering circus 在……之前 你 两者 必须 移动 在……上. various crime families 的 城市 compete 与 每个 其他 bitterly, 和 如果 你 可以 somehow convince 1 的 dons 该 circus 是 一 front 为 bootlegging 在……上 他们的 territory, 它 可以 放置 Blake back quite 一 bit, though 如果 它 goes badly, gangs 是 likely 至 cause 你 plenty 的 trouble instead.</i></p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+        "label": {
+          "rileUp": "“We'll see 如果 我们 可以 rile up Chicago gangs.”",
+          "smaller": "“We'll meddle 在……上 我们的 own terms, however smaller.”"
+        }
+      },
+      "stompingGround": {
+        "title": "Stomping Ground",
+        "body": "<p><i>你的 timely arrival 在……中 Memphis gives 你 一 chance 至 seek out former members 的 新月马戏团 — 或 rather 4 Leaf Circus, 作为 它 used 至 be. 你是 able 至 locate Mr. Konkin, 一 former strongman who quit 在……之后 witnessing 一些 的 horrors 在……中 making. 他 是 reluctant 至 speak 直到 你 prove yourself capable 的 standing against Blake 和 他的 monstrous circus, though 你 将 likely be 放置 back 由 time spent 如果 你 不能.</i></p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+        "label": {
+          "proof": "“你 want proof? Well 你're gonna get 它.”",
+          "backOnTrack": "“Getting back 在……上 track right away 是 更多 important.”"
+        }
+      },
+      "foolsErrand": {
+        "title": "Fool's Errand",
+        "body": "<p><i>与 little time 至 spare 在……之前 你 移动 在……上, 你 decide 至 获得 一 riskier approach 至 找到 answers. Locals direct 你 至 一 ancient 森林 outside 的 Memphis 该 是 once home 至 grisly things 该 sound familiar 至 你 now. It's possible 该 something yet 保持 该 可以 give 你 insight 至 stopping Blake, 但是 it's 一 matter 的 一 needle 在……中 一 haystack. 你'll need 至 be persistent — 和 lucky — 至 找到 anything 不使用 misspending days here.</i></p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+        "label": {
+          "braveDanger": "“任意 advantage 是 worth braving 一 little danger.”",
+          "backOnTrack": "“Getting back 在……上 track right away 是 更多 important.”"
+        }
+      },
+      "natureOfTheBeast": {
+        "title": "Nature 的 Beast",
+        "body": "<p><i>Upon 你的 arrival 在……中 St. Louis, 你 inquire about circus 和 找到 该 there 有 been 一 “accident” involving 他们. Several laborers took initiative 至 help unload circus trains 和 是 injured 由 animals. 当……时 official word 是 quick 至 attribute attack 至 temperamental creatures, it's possible 该 workers 是 attacked 至 prevent 他们 从 seeing anything. 如果 你 可以 help 与 他们的 medical treatment, 然后 你可以 get laborers well enough 至 warn everyone about circus. It's always easier 至 trust locals.</i></p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+        "label": {
+          "patchThemUp": "“Here, 我们 可以 help patch 他们 up.”",
+          "noTime": "“我们 don't 有 time 或 resources 至 help.”"
+        }
+      },
+      "skeletonsInTheCloset": {
+        "title": "Skeletons 在……中 Closet",
+        "body": "<p><i>你 arrive 在……中 St. Louis 与 仅 一 few hours 至 spare. 你 need 至 找到 something 至 hamper circus activities quickly, something 该 authorities 可以't overlook. 它 occurs 至 你 该 monsters need tremendous amounts 的 food 在……上 journey, 和 如果 你 可以 dig up 一些 evidence 的 extra meat 在……中 他们的 diet, 然后 你可以 save 一些 其他 lives tonight.</i></p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+        "label": {
+          "whereToLook": "“你 仅 有 至 know where 至 查看.”",
+          "noTime": "“我们 don't 有 time 或 resources 至 help.”"
+        }
+      },
+      "behindTheCurtain": {
+        "title": "Behind Curtain",
+        "body": "<p><i>Out 在……中 一 城市 作为 remote 作为 Denver, 你 discover 该 circus 是 being 一 little 更少 careful 与 它的 illusory disguises. 与 time 你've gained, 你 可以 afford 至 watch 为 一 opportunity 至 undo 他们的 spells 和 揭示 他们的 horrid deception 至 public. trick 是 making deception plain 为 全部 至 see.</i></p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+        "label": {
+          "showTheCity": "“Time 至 show 城市 what 他们 really 是.”",
+          "cantStay": "“我们 可以't afford 至 stay here 一 moment longer.”"
+        }
+      },
+      "humaneTreatment": {
+        "title": "Humane Treatment",
+        "body": "<p><i>当……时 你 arrived 在……中 Denver far later than 你 wished 至, there 是 still 一 advantage 至 be exploited. Student groups 从 several 的 城市's universities intend 至 boycott circus 在……上 grounds 的 animal cruelty. 当……时 他们 don't truly grasp evil truth 的 此 particular circus, 一些 creativity 在……上 你的 part 可以 assist 他们 在……中 dissuading 其他 从 going 至 see circus.</i></p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+        "label": {
+          "paintCan": "“Give me 该 paint 可以 和 pasteboard.”",
+          "cantStay": "“我们 可以't afford 至 stay here 一 moment longer.”"
+        }
+      }
+    },
+    "reinforcedCar": {
+      "label": {
+        "reduceDamage": "Reduce 伤害 dealt 由 该 attack 由 1",
+        "reduceHorror": "Reduce 恐惧 dealt 由 该 attack 由 1"
+      }
+    },
+    "resolutions": {
+      "resolution1": {
+        "title": "结局 1",
+        "body": "<p><b>结局 1:</b><i>与 你 和 每个 的 你的 companions out 的 commission, Ralph 和 Carrie make 一 emergency stop 和 throw 他们的 everything 至 defending 当……时 你 recuperate. 由 time 你've driven off attackers 和 recovered 从 你的 wounds, 你是 days behind schedule. 全部 你 可以 do 是 get back 在……上 rails 和 hope it's 不 too late.</i></p><ul><li>为 每个 场景 剩余 在……中 场景 牌组, 放置 2 resources 在……上 冒险 reference 卡牌.</li><li>跳过 至<b>结局 5</b>.</li></ul>"
+      },
+      "resolution2": {
+        "title": "结局 2",
+        "body": "<p><b>结局 2:</b><i>performers riding circus train finally manage 至 jam wheels 的 你的 own train. Ralph 和 Carrie shout 在 你 至 brace 为 一 crash 作为 locked wheels buck train upward 和 send 你 careening off 至 side 的 tracks. 你 drag yourself 从 wreckage, ready 至 defend yourself, 但是 circus train 有 moved 在……上 already. 更多 than 一 day goes 由 在……之前 你 可以 get word 至 local railways 至 bring 一 crane, putting 你 woefully behind schedule 在……中 getting 至 Los Angeles.</i></p><ul><li>放置 2 resources 在……上 冒险 reference 卡牌.</li><li>跳过 至<b>结局 5</b>.</li></ul>"
+      },
+      "resolution3": {
+        "title": "结局 3",
+        "body": "<p><b>结局 3:</b><i>你 breathe 一 sigh 的 relief 作为 circus train fades 从 view behind 你. Ralph checks 他的 watch 作为 他 finishes attending 至 machinery. “Nice work back there. I think we'll get 至 Los Angeles 仅 behind schedule, 但是 不 由 much.” 一 little behind 是 更多 than acceptable, given obstacles 和 perils 你 had 至 endure across country. 你 返回 至 caboose 至 rest, watching landscape 从 back railing, bathed 在……中 orange glow 的 setting 太阳.</i></p><ul><li>跳过 至<b>结局 5</b>.</li></ul>"
+      },
+      "resolution4": {
+        "title": "结局 4",
+        "body": "<p><b>结局 4:</b><i>你 breathe 一 sigh 的 relief 作为 circus train fades 从 view behind 你. Ralph slows train 与 several careful looks 在 engine gauges. “该 last fight nearly damaged engine. Best 不 至 push 它, unless 你 want 至 walk rest 的 way.” Frustrating, 但是 sensible. 你 返回 至 caboose 至 rest, watching landscape 从 back railing, bathed 在……中 orange glow 的 setting 太阳.</i></p><ul><li>放置 1 resource 在……上 冒险 reference 卡牌.</li><li>前往 至<b>结局 5</b>.</li></ul>"
+      },
+      "resolution5": {
+        "title": "结局 5",
+        "body": "<p><b>结局 5:</b><i>It's early morning 当 Carrie rouses 你 从 sleep. ever-present thrum 的 train wheels 有 stopped, 和 hissing steam 的 cooling engine 是 全部 但是 finished. “We're 在……中 yard outside La Grande station,” Carrie says gently, helping 至 grab 你的 belongings. 你 clamber down back steps 至 找到 Ralph waiting 为 你. “Well... I guess 此 是 结束 的 line. 至 be honest, I'm 不 sure 如果 我们 可以 go 任意 further 与 你 如果 我们 wanted. 在……之后 该 journey... I'm already going 至 有 nightmares.” 他 looks 至 他的 daughter, 和 Carrie rubs 1 的 她的 arms, nodding 与 一 rueful expression. “但是 你've got 该 strength 至 see 它 through. We're counting 在……上 你. 不 仅 为 我们的 family, 但是 为 everybody's families. We'll see 你 back 在……中 Arkham, God willing.” Carrie gives 你 和 Thea tense embraces 在……中 farewell, 当……时 Ralph 仅 offers 一 handshake, 两者 covering 他们的 fear 作为 much 作为 他们 可以. 你 book 至 一 modest hotel 和 collapse, still weary despite having slept through night. 你 wonder how much Blake 有 prepared 在……上 last week 和 一 half, 和 仅 how much 一 difference 你的 actions 在……上 journey 有 made.</i></p><ul><li>在……中 你的 战役日志, 记录 该<i>ringmaster had X days 至 prepare</i>, where X 是 number 的 resources 在……上 冒险 reference 卡牌.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><i>经验</i>: {xp}</li></ul></li><li>前往 至<b>幕间故事: Written 在……中 Stone</b>.</li></ul>"
+      }
+    }
+  }
+}

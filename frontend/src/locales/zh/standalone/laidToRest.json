@@ -1,0 +1,108 @@
+{
+  "specialRules": [
+    {
+      "title": "@:standalone.laidToRest.theSpectralEncounterDeck.title",
+      "body": "@:standalone.laidToRest.theSpectralEncounterDeck.body"
+    },
+    {
+      "body": "闹鬼是出现在某些地点卡牌上的一种新能力。每当调查员在调查一个地点时技能检定失败，在结算该技能检定带来的所有后果后，该调查员必须结算该地点上的所有“<b>闹鬼</b> –”能力。\n卡牌效果指向的“闹鬼”地点即为带有至少一个“<b>闹鬼</b> –”能力的地点(包括但不限于打印有“<b>闹鬼</b> –”字样的地点)。",
+      "title": "闹鬼"
+    },
+    {
+      "title": "@:standalone.laidToRest.theBeyondAndTheSpiritDeck.title",
+      "body": "@:standalone.laidToRest.theBeyondAndTheSpiritDeck.body"
+    },
+    {
+      "title": "巡逻",
+      "body": "<p class='basic'>有些敌人带有巡逻关键词。在敌军阶段(流程的步骤3.2)，每名处于准备状态、未交战且带有巡逻关键词的敌人，沿著连接地点，依据最短的路径向指定地点(标注于巡逻关键词后)移动。</p><ul><li>如果有多个符合描述的地点，由队长选择敌人的移动方向。</li><li>如果 an 敌人 与 patrol 会 是 compelled 至 移动 至 a 地点 该 是 blocked 由 a 卡牌 能力,  敌人 会 不 移动.</li></ul>"
+    }
+  ],
+  "theSpectralEncounterDeck": {
+    "title": "幽灵遭遇牌堆",
+    "body": "<p class='basic'>在本场冒险的设置阶段，构筑2个遭遇牌堆：1个“基础”遭遇牌堆，1个“幽灵”遭遇牌堆。一般来说，调查员将要与遭遇牌堆互动时，该调查员应该使用基础遭遇牌堆。</p><p class='basic'>However, 在……期间 这 冒险, 地点 可以 翻面 在……上 至 他们的 _光谱_ 面. 当an 调查员 是 于 a 地点 与_光谱_ 特质, 该 调查员 应该 use  光谱 遭遇牌库 改为 的  standard 遭遇牌库 为 所有 purposes, unless 否则 noted. 这 includes drawing 卡牌 从遭遇牌库, as well as searching, looking 于, revealing, 或 否则 interacting 与遭遇牌库 (或 遭遇 弃牌堆) 在 任意 道路. 这 也 includes 能力 该 trigger 当  遭遇牌库 runs 场外 的 卡牌. 如果 an 效果 specifically refers 至  standard 遭遇牌库 或 光谱 遭遇牌库, 它 interacts 与specified 牌组 regardless 的  调查员’s 地点.</p><p class='basic'>下列每个2 遭遇 decks 有 它的 own 弃牌堆. Whenever an 遭遇 卡牌 与_光谱_ 特质 会 是 弃掉的, 它 是 placed 在  弃牌堆 为光谱 遭遇牌库. 所有 其他 遭遇 卡牌 是 弃掉的 至  弃牌堆 为standard 遭遇牌库.</p>"
+  },
+  "theBeyondAndTheSpiritDeck": {
+    "title": "彼端和灵魂牌组",
+    "body": "吉姆·卡尔弗可以从灵魂牌组将_盟友_支援叠加到双面的彼端调查员专属支援，作为灵魂。灵魂牌组是一个独立的牌组；在游戏开始时，面朝下混洗放在彼端的旁边。其免疫所有玩家卡牌效果，除了彼端上的强制效果。\n<b>叠加到彼端的灵魂在场上，但只保留他们的名字和文字框。</b>灵魂不占用任何槽位、没有生命值或神智值。在一个独特的灵魂入场时，弃掉其他所有同名支援。如果叠加的灵魂将要被丢弃，改为将其放置到灵魂牌堆的<b>底部</b>。"
+  },
+  "setup": {
+    "removeCards": "将<i>恶罪报应</i>遭遇组中原本的冒险辅助卡、场景、密谋和幽灵迷网剧情支援从游戏中移除。在游戏设置时，使用下载的<i>安魂镇息</i>遭遇组中提供的新冒险辅助卡牌、场景和密谋。",
+    "startAt": "每位调查员从绞刑者河开始游戏。",
+    "heretics": "将2个随机的异端者敌人从游戏中随机移除。将每张剩余的异端者敌人混洗到灵魂牌组，敌人面朝上。",
+    "jeanDevereux": "将双面的尚·德弗罗敌人生成在绞刑者河，<i>(寻求了结)</i>面朝上。",
+    "ravenousSpirits": "在以下地点下面各放一张面朝下的饥饿的灵魂敌人：绞刑架、异端者的墓地、教堂阁楼和教堂地下室。",
+    "encounterDecks": "本场冒险会用到2个独立的遭遇牌堆。",
+    "nonSpectral": "将所有地点以非_幽灵_面放置入场。<i>注意：在这场冒险期间，将地点翻面不会“揭示”新的地点。</i>",
+    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: *安息长眠*, *恶罪报应*, *Anette’s Coven*, *罪恶之城*, *在劫难逃*, *冥界*, *被困的灵魂*, 和 *巫法*. 每位 的 这些 组 except 为 Laid 至 Rest 可以 是 发现 在 万象无终剧本扩展. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/laid-to-rest.png'/><img src='{setImgPath}/the-wages-of-sin.png'/><img src='{setImgPath}/anettes-coven.png'/><img src='{setImgPath}/city-of-sins.png'/><img src='{setImgPath}/inexorable-fate.png'/><img src='{setImgPath}/realm-of-death.png'/><img src='{setImgPath}/trapped-spirits.png'/><img src='{setImgPath}/witchcraft.png'/></section>",
+    "spectralDeck": "Separate 每位 的 剩余卡牌 与_幽灵_ 特质 和 洗切 他们 together 至 build 幽灵遭遇牌堆.",
+    "spiritDeck": "无论使用哪个版本的Jim Culver 是 是 进行 在 这 冒险, 构筑灵魂牌组 using  构建牌组 requirements 在  平行调查员 版本 的 Jim Culver's 调查员 卡牌. 放置 异世界 signature 支援 沿着 与spirit 牌组 入场 在 Jim Culver's 游戏 区域.",
+    "placeLocations": "从两张绞刑架地点、两张异端者的墓地地点和两张教堂地下室地点之中各随机选择一张，并与教堂阁楼(176a)一起放置入场。将其他版本的绞刑架、异端者的墓地、教堂地下室和教堂阁楼(175a)移出游戏。然后，将闹鬼农田、废弃教堂和绞刑者河放置入场。",
+    "clues": "在每个没有线索的地点上放置线索，值到每个地点上有至少1{'{'}perPlayer{'}'}个线索。",
+    "standardDeck": "洗切 每位 的 剩余卡牌 不使用  _幽灵_ 特质 together 至 build  普通 遭遇牌库."
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1_: Phantasmagoric shapes 形态 和 recede 在  mist around 你. As 你 受到 Jean's hands,  medium falls 进入 a dead faint. In  dark, 你 glimpse 你的 father's face: 他的 laugh lines, 他的 kind 眼睛, 他的 smile. 你的 father 是 与 你 于 最后.</p><p>尚突然清醒的喘息声打断了这时刻。还没等你反应过来，你父亲的脸一眨眼就消失了，留下孤单的你。尽管你的胃像是打了个结，但你知道你的父亲曾在这里，虽然时间短暂，但他看到了你，你感到松了一口气。当你帮助尚站起来时，听到父亲的声音在你耳边低声鼓励，盖过耳边的嘈杂的鬼魂鼓噪。你希望他的声音永远不要停止。</p><ul><li>吉姆·卡尔弗获得等同于胜利牌区中所有敌人的胜利点数总值的经验值{jimXp}。</li><li>每位 其他 调查员 获得 {xp} 经验, 等于 至  combined Victory X 数值 的 每位 地点 在 胜利牌区.</li><li>吉姆·卡尔弗可以将吉姆的小号升级到其进阶版，或者将进阶版的最后的狂想曲还原成其原始版。</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_Resolution 2_: 当你们跌跌撞撞地离开绞刑者山丘时，尚垂头丧气地咒骂。“对不起，我的朋友，”他说道。“死人会说话，但他们不一定会聆听。”尖刻的呼唤从非人般的嘴唇发出，席卷了整个空间，印证了灵媒的话。</p><ul><li>吉姆·卡尔弗获得等同于胜利牌区中所有敌人的胜利点数总值的经验值{jimXp}。</li><li>每位 其他 调查员 获得 {xp} 经验, 等于 至  combined Victory X 数值 的 每位 地点 在 胜利牌区.</li><li>吉姆·卡尔弗必须将最后的狂想曲升级到其进阶版，或者将进阶版的吉姆的小号还原成其原始版。</li></ul>"
+    },
+    "noResolution": {
+      "title": "如果未达成任何结局",
+      "body": "<p class='basic'>_如果 未达成任何结局 (所有调查员都撤退或被击败)_: 前往_结局2_.</p>"
+    }
+  },
+  "intro": {
+    "body": "<p>死者并不安息。无论你去到哪里，你都听到它们说话、低语、哭泣、尖叫。有时对著彼此，有时则是独自。它们喃喃不休地谈论它们所爱的人、它们的工作，或者它们死前藏在楼板底下的钱。常常与食物或饮料有关，死者总是饥饿的。有时，当它们意识到你能听见它们的声音时，它们就会紧紧地围在你身边，在你耳边低语最后的愿望等等。你试著尽力提供帮助，但通常它们希望你帮助的对象也已经死了。你做了很多空洞的承诺，至少能让它们安静下来。</p><p>好景不常，从你父亲死在法兰西区的猎枪小屋里的那一天起，死者就开始说话了。你回到家时，在客厅里看到你父亲站在自己的尸体上；你还来不及说话，他就消失了。从那时起，每当你吹奏父亲的小号时，你都会听到不和谐的声音。一些是人的声音，也有一些其他的声音；非人般的嘴唇发出刺耳的哀嚎、喉音的哭喊、还有一群微微发光的幽灵脸孔从阴影中窥探。</p><p>帮助你了解这一切的是尚。当你在波旁街转角处表演时，他停下来听并注意到你长长地看了躺在你脚下的鬼魂一眼。他也看得到。尚介绍自己是灵媒，并要你去他位于布罗德莫的商店与他见面。他告诉你所有关于死者以及坟墓彼端的事情，还有如果你与他们相处太久，会付出什么代价。</p><p>让你来到阿卡姆的原因也是死者。你靠著演奏父亲的小号勉强维持生计。当你演奏时，死者的声音变得更大声。有时它们甚至会欣赏你的音乐。昨晚，你在四叶草俱乐部外面街头表演时遇到尚，就像你们第一次见面一样。但你发现有些不对劲：他脸色憔悴，样子看起来像是好几天没睡觉。尚告诉你，你的父亲想见你，为此你需要去一个现世与彼端之间界线很薄弱的地方。你告诉他你知道这样的地方：绞刑者山丘上充斥著鬼魂。如果你帮它们一些忙，也许它们也会给你一些回报。</p><p class='basic right'>前往<b>设置</b>.</p>",
+    "title": "挑战剧情: 安息长眠"
+  },
+  "label": {
+    "doNotSwap": "不交换",
+    "downgradeFinalRhapsody": "将进阶版的最后的狂想曲还原成其原始版。",
+    "downgradeJimsTrumpet": "将进阶版的吉姆的小号还原成其原始版。",
+    "upgradeJimsTrumpet": "相关角色 相关角色 相关角色",
+    "upgradeFinalRhapsody": "相关角色 相关角色 相关角色"
+  },
+  "buildSpiritDeck": {
+    "instructions": "选择{count}张不同的<strong>盟友</strong>支援（任意职阶，等级0–2），构筑吉姆·卡尔弗的灵魂牌组。",
+    "allClasses": "全部",
+    "selectedHeading": "灵魂牌组",
+    "title": "Build  灵魂牌组",
+    "counter": "{selected} / {count}",
+    "confirm": "Confirm 灵魂牌组",
+    "search": "搜索 盟友 …",
+    "noResults": "没有 盟友 你的 ."
+  },
+  "heading": "挑战剧情",
+  "tooltips": {
+    "jeanDevereuxSeekingClosure": {
+      "parley": "抽取 a 背面朝上 卡牌 beneath Jean Devereux's 地点 和 选择 a 异端 attached 至 The Beyond: <b>谈判</b> Jim Culver draws  chosen 异端, flips 它, 和 resolves 它的 文本."
+    },
+    "jeanDevereuxPossessed": {
+      "parley": "<b>谈判</b> 检定 {'{'}willpower{'}'} (3). 这 检定 gets +1 难度 每位copy 的 Unfinished Business 在 胜利牌区. 如果 你 成功, 恢复 所有 伤害 从 Jean Devereux 和 翻面 他 (他 是 没有 longer engaged)."
+    },
+    "gatheringMists": {
+      "parley": "花费 2{'{'}perPlayer{'}'} 线索,，作为一组: <b>谈判</b> 你 banish a spirit. 弃掉 牌堆顶的卡牌 的  Spirit 牌组. (Hint: 抽取 Heretics 场外 的  Beyond 和 summon 他们 与 Jean's 帮助!)"
+    },
+    "laidToRest": {
+      "moveEnemy": "任一 耗竭 Jim's Trumpet, 或 花费 1{'{'}perPlayer{'}'} 线索,，作为一组: 选择一个敌人 至 移动 一次 朝向 Jim Culver's 地点.",
+      "flipLocation": "花费 1{'{'}perPlayer{'}'} 线索,，作为一组: 翻面 你的 地点. (Group limit 一次 per 轮 per 地点.)"
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "elderThing": "-2. 如果 那里 是一张_幽灵_ 敌人 在你的地点, 再抽出一个标记。",
+      "skull": "-X. X 是 1 更多 于 数量为copies 的 Unfinished Business 在 胜利牌区。",
+      "cultist": "-X. X 是 数量为卡牌 attached 至 异世界.",
+      "tablet": "-X. X 是 数量为_幽灵_ 地点 在场."
+    },
+    "hardExpert": {
+      "skull": "-X. X 是 2 更多 于 数量为copies 的 Unfinished Business 在 胜利牌区。",
+      "cultist": "-X. X 是 两次 数量为卡牌 attached 至 异世界.",
+      "tablet": "-X. X 是 两次 数量为_幽灵_ 地点 在场.",
+      "elderThing": "-3. 如果 那里 是一张_幽灵_ 敌人 在你的地点, 你 自动 失败."
+    }
+  }
+}

@@ -224,8 +224,8 @@
       "playRevealed": "打出1张自己揭示的手牌"
     },
     "crisisOfFaith": {
-      "replaceBlessWithCurse": "将{'{'}bless{'}'}标记替换为{'{'}curse{'}'}标记",
-      "swap": "将{'{'}bless{'}'}标记替换为{'{'}curse{'}'}标记"
+      "replaceBlessWithCurse": "将祝福标记替换为诅咒标记",
+      "swap": "将祝福标记替换为诅咒标记"
     },
     "customGrip": {
       "doNotPlayFirearm": "不打出一张_枪械_支援"
@@ -985,7 +985,7 @@
     },
     "sharpshooter3": {
       "doBoth": "选择两项",
-      "attackUsesAlt": "这次攻击不使用{'{'}combat{'}'}，改为使用{'{'}agility{'}'}。你的{'{'}combat{'}'}修正值改为修正你的{'{'}agility{'}'}",
+      "attackUsesAlt": "这次攻击不使用{'{'}战斗{'}'}，改为使用{'{'}敏捷{'}'}。你的{'{'}战斗{'}'}修正值改为修正你的{'{'}敏捷{'}'}",
       "useEnemyEvadeForAttack": "对于本次攻击期间被攻击敌人，不使用其攻击值，改为使用其躲避值"
     },
     "shrineOfTheMoirai3": {
@@ -1050,7 +1050,8 @@
       "fail": "本次技能检定自动失败，治愈1点伤害和1点恐惧"
     },
     "stickToThePlan3": {
-      "chooseNoMoreEvents": "结束找出事件"
+      "chooseNoMoreEvents": "结束找出事件",
+      "chooseCards": "从你的牌组中放置最多 3 张_策略_或_补给_事件牌到一边"
     },
     "stormRuler": {
       "exhaust": "横置风暴御主，对你所在地点的一个敌人造成额外{count}点伤害"
@@ -1205,7 +1206,8 @@
     },
     "underworldMarket2": {
       "placeTheRestOnTheBottomInAnyOrder": "将其余卡牌以任意顺序放回市场牌库底",
-      "spend1ResourceToDraw1OfThem": "花费1资源以抽取其中1张"
+      "spend1ResourceToDraw1OfThem": "花费1资源以抽取其中1张",
+      "chooseMarketDeck": "从你的牌组中放置 10 张_非法_卡牌到一边，组成市场牌组。"
     },
     "unrelenting1": {
       "doneSealingTokens": "结束封印标记"
@@ -1244,9 +1246,105 @@
     },
     "zeal": {
       "putIntoPlayFromDiscard": "从你的弃牌堆放置入场"
+    },
+    "abyssalTome2": {
+      "placeDoom": "在深渊之书上放置 1 个毁灭标记",
+      "doNotPlaceDoom": "不在深渊之书上放置毁灭标记"
+    },
+    "ajax": {
+      "moveTwice": "移动两次",
+      "moveToField": "移动到任意原野地点"
+    },
+    "alienWhispers": {
+      "damageAsset": "对你控制的一张支援造成 1 点伤害",
+      "horrorAsset": "对你控制的一张支援造成 1 点恐惧"
+    },
+    "callOfMadness": {
+      "shuffleTekelili": "将梦魇牌组顶的 3 张卡牌洗入你的牌组"
+    },
+    "corrosiveSlime": {
+      "devourResource": "8L-08 型实验体吞噬你的 1 个资源",
+      "devourRandomCardFromHand": "8L-08 型实验体随机吞噬你手牌中的 1 张卡牌"
+    },
+    "doppelganger1": {
+      "moveToLocationOfDoppelganger": "移动到二重身所在地点",
+      "evadeEnemy": "躲避敌人"
+    },
+    "doubleDown2": {
+      "spendResources": "在孤注一掷上花费资源"
+    },
+    "empiricalHypothesis": {
+      "failBy2": "你检定失败且低于难度至少 2 点。",
+      "succeedBy3": "你检定成功且超过难度至少 3 点。",
+      "runOutOfCards": "你的手牌耗尽。",
+      "dealtDamageOrHorror": "你受到伤害或恐惧。",
+      "discardTreacheryOrEnemy": "你从场上弃掉一张背叛或敌人卡牌。",
+      "enterLocationWithShroud3": "你进入一个隐藏值至少为 3 的地点。"
+    },
+    "enervation": {
+      "discardHighestCost": "选择你手牌中印刷费用最高的卡牌并弃掉"
+    },
+    "georgeBarnaby": {
+      "donePlacingCards": "结束将卡牌放置在乔治·巴纳比下方"
+    },
+    "icebreakerLanding": {
+      "removeFrost": "从混乱袋中移除 1 个 {'{'}frost{'}'} 标记",
+      "recordSmallRadio": "在战役日志的“已找回的补给”部分记录小型无线电"
+    },
+    "ltWilsonStewart": {
+      "healDamage": "治愈威尔逊·斯图尔特中尉的 1 点伤害",
+      "healHorror": "治愈威尔逊·斯图尔特中尉的 1 点恐惧",
+      "plus1SkillValue": "你的下一次技能检定获得 +1 技能值",
+      "drawCard": "抽 1 张卡牌",
+      "gainResource": "获得 1 个资源"
+    },
+    "manifestationsOfEvil": {
+      "addFrost": "向混乱袋中加入 1 个 {'{'}frost{'}'} 标记",
+      "shuffleTekelili": "按玩家顺序，每位调查员将梦魇牌组顶的 2 张卡牌洗入自己的牌组"
+    },
+    "miasmaticTorment": {
+      "damage": "所附支援受到 1 点伤害",
+      "horror": "所附支援受到 1 点恐惧"
+    },
+    "parlorHemlockHouse": {
+      "testForAdditionalDamage": "检定 {'{'}intellect{'}'} (4)，否则受到 1 点额外伤害"
+    },
+    "songOfTheMagahBird": {
+      "resistTheCall": "抵抗召唤",
+      "driveAwayTheBirds": "驱散鸟群"
+    },
+    "stringOfCurses": {
+      "evadeAndPlaceDoom": "自动躲避该敌人并在其上放置 1 个毁灭标记。本轮剩余时间内它不能受到伤害。在你所在地点发现 1 个线索。",
+      "defeatForResources": "如果该敌人上有至少 1 个毁灭标记，击败它。每有 1 个原本在其上的毁灭标记，获得 1 个资源。"
+    },
+    "throughTheCracks": {
+      "disengage": "解除与每个和你交战的敌人的交战状态。",
+      "move": "移动到一个已揭示的相连地点。",
+      "disengageAndMove": "解除与每个和你交战的敌人的交战状态，并移动到一个已揭示的相连地点。"
+    },
+    "throughTheCracks2": {
+      "disengage": "解除与每个和你交战的敌人的交战状态。",
+      "move": "移动到一个已揭示的相连地点。",
+      "disengageAndMove": "解除与每个和你交战的敌人的交战状态，并移动到一个已揭示的相连地点。"
+    }
+  },
+  "title": {
+    "joeDiamond": {
+      "chooseHunchCards": "直觉牌组",
+      "chooseHunch": "直觉牌组"
+    },
+    "stickToThePlan3": {
+      "chooseCards": "按计划行事"
+    },
+    "underworldMarket2": {
+      "chooseMarketDeck": "市场牌组"
     }
   },
   "tooltips": {
+    "obsidianClaw": {
+      "move": "{'{'}fast{'}'} 在你的回合内，横置此卡牌并选择一个至多相隔 2 个连接的地点：移动到所选地点。",
+      "flip": "{'{'}fast{'}'} 翻转此卡牌。（每轮最多一次。）"
+    },
     "agencyBackup5": {
       "fastExhaustAgency": "{'{'}fast{'}'}横置特工支援并对其造成1点伤害：对你所在地点的一个敌人造成1点伤害",
       "fastExhaustAgency2": "{'{'}fast{'}'}横置特工支援并对其造成1点恐惧：发现你所在地点的1个线索"
@@ -1325,12 +1423,12 @@
       "alternativeHypothesis": "你可以结算其强制效果，选择一个你本轮未选择的标准。然后，将其重整"
     },
     "endurance": {
-      "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
-      "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}"
+      "fastSpend1Resource": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}敏捷{'}'}",
+      "fastSpend1Resource2": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}战斗{'}'}"
     },
     "endurance3": {
-      "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
-      "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}"
+      "fastSpend1Resource": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}敏捷{'}'}",
+      "fastSpend1Resource2": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}战斗{'}'}"
     },
     "hardKnocks": {
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
@@ -1352,10 +1450,10 @@
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+2{'{'}willpower{'}'}"
     },
     "holySpear5": {
-      "fightWithReleaseBless": "{'{'}action{'}'}: _攻击_。你本次攻击得到+2{'{'}combat{'}'}并造成+1伤害。在你发动本能力时，你可以释放一个封印在圣矛上的{'{'}bless{'}'}标记",
+      "fightWithReleaseBless": "{'{'}action{'}'}: _攻击_。你本次攻击得到+2{'{'}willpower{'}'}并造成+1伤害。在你发动本能力时，你可以释放一个封印在圣矛上的{'{'}bless{'}'}标记",
       "fightWithSealBless": "{'{'}action{'}'}查找混乱袋，找出2个{'{'}bless{'}'}标记并将其封印在圣矛上：_攻击_。你本次攻击得到+4{'{'}combat{'}'}并造成+2伤害",
       "actionSearchThe": "{'{'}action{'}'}查找混乱袋，找出2个{'{'}bless{'}'}标记并将其封印在圣矛上：_攻击_。你本次攻击得到+4{'{'}combat{'}'}并造成+2伤害",
-      "actionYouGet2": "{'{'}action{'}'}: _攻击_. You get +2 {'{'}combat{'}'}并造成+1伤害。在你发动本能力时，你可以释放一个封印在圣矛上的{'{'}bless{'}'}标记"
+      "actionYouGet2": "{'{'}action{'}'}: _攻击_. 你 get +2 {'{'}willpower{'}'}并造成+1伤害。在你发动本能力时，你可以释放一个封印在圣矛上的{'{'}bless{'}'}标记"
     },
     "hyperawareness": {
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
@@ -1380,12 +1478,12 @@
       "fastSpend2Resources2": "{'{'}fast{'}'}花费2资源：你本次技能检定得到+1{'{'}intellect{'}'}，直到本阶段结束"
     },
     "levelheaded": {
-      "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
-      "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
+      "fastSpend1Resource": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}敏捷{'}'}",
+      "fastSpend1Resource2": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}意志{'}'}"
     },
     "levelheaded3": {
-      "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
-      "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
+      "fastSpend1Resource": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}敏捷{'}'}",
+      "fastSpend1Resource2": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}意志{'}'}"
     },
     "livreDeibon": {
       "fastExhaustLivre": "{'{'}fast{'}'}横置伊波恩之书：将你牌库顶的卡牌投入到你所在地点一位调查员执行的符合条件的技能检定中",

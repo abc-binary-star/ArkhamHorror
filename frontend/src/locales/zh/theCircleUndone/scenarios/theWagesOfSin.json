@@ -1,5 +1,11 @@
 {
-  "heading": "冒险 IV",
+  "heading": "冒险IV",
+  "specialRules": [
+    {
+      "title": "@:theCircleUndone.theWagesOfSin.theSpectralEncounterDeck.title",
+      "body": "@:theCircleUndone.theWagesOfSin.theSpectralEncounterDeck.body"
+    }
+  ],
   "tokens": {
     "easyStandard": {
       "skull": "-X。其中X等于胜利牌区内的未了之事的数量+1。",
@@ -15,63 +21,63 @@
     }
   },
   "messages": {
-    "understandTheTragicLyrics": "\"You understand the tragic lyrics behind the witch's song\""
+    "understandTheTragicLyrics": "“你理解女巫歌声背后的悲惨歌词”"
   },
   "tooltips": {
     "hangmansBrook": {
-      "resign": "\"Who's bright idea was this, anyway?\""
+      "resign": "“这到底是谁出的馊主意？”"
     },
     "hangmansBrookSpectral": {
       "resign": "@:theCircleUndone.theWagesOfSin.tooltips.hangmansBrook.resign",
-      "haunted": "Take 1 damage. Until the end of the round, the above resign ability cannot be triggered."
+      "haunted": "受到1点伤害。直到本轮结束，以上撤退能力无法触发。"
     },
     "returnToHangmansBrookSpectral": {
       "resign": "@:theCircleUndone.theWagesOfSin.tooltips.hangmansBrook.resign",
-      "haunted": "Place 1 clue from the supply on Hangman's Brook."
+      "haunted": "从供应区在绞刑架溪放置1个线索。"
     },
     "hauntedFieldsSpectral": {
-      "haunted": "Move the nearest Spectral enemy once toward Haunted Fields."
+      "haunted": "将最近的光谱敌人朝闹鬼田野移动1次。"
     },
     "abandonedChapelSpectral": {
-      "haunted": "Until the end of the round, you get -1 to each skill."
+      "haunted": "直到本轮结束，你的每项技能-1。"
     },
     "theGallowsSpectral_169": {
-      "haunted": "Discard the top 3 cards of the standard encounter deck. If a Witch enemy is discarded by this effect, draw it."
+      "haunted": "弃掉标准遭遇牌库顶端3张卡。如果因此弃掉女巫敌人，抽取它。"
     },
     "theGallowsSpectral_170": {
-      "haunted": "Discard the top 3 cards of the standard encounter deck. If a Geist enemy is discarded by this effect, draw it."
+      "haunted": "弃掉光谱遭遇牌库顶端3张卡。如果因此弃掉幽灵敌人，抽取它。"
     },
     "hereticsGravesSpectral_171": {
-      "haunted": "Reduce your base {'{'}willpower{'}'} to 1 until the end of your next turn."
+      "haunted": "直到你的下个回合结束，将你的基础{'{'}willpower{'}'}设为1。"
     },
     "hereticsGraves_172": {
-      "haunted": "Heal 1 damage from each Heretic and each Witch enemy in play."
+      "haunted": "从场上的每个异端和女巫敌人上恢复1点伤害。"
     },
     "chapelCryptSpectral_173": {
-      "haunted": "Spawn the top card of your deck facedown, engaged with you. Treat that card as a Reanimated Dead enemy with 1 fight, 1 health, 1 evade, 1 damage, and the Monster trait."
+      "haunted": "将你的牌组顶牌背面朝上生成并与你交战。将其视为重生亡者敌人，战斗、生命、躲避和伤害均为1，且具有怪物特质。"
     },
     "chapelCryptSpectral_174": {
-      "haunted": "Find the topmost Hex treachery in the standard encounter discard pile and put it into play in your threat area."
+      "haunted": "找到标准遭遇弃牌堆中最上方的巫术诡计，将其放置在你的威胁区。"
     },
     "chapelCryptSpectral_175": {
-      "haunted": "Discard a random card from beneath Chapel Attic."
+      "haunted": "从教堂阁楼下方随机弃掉1张卡。"
     },
     "chapelAtticSpectral_176": {
-      "haunted": " Discard a random card from your hand (2 cards instead of you have 5 or more cards in hand)."
+      "haunted": "从你的手牌随机弃掉1张卡（如果手牌有5张或更多，则弃掉2张）。"
     }
   },
   "label": {
     "ominousPortents": {
-      "spectral": "Draw the top card of the spectral encounter deck. That card gains peril, and its effects cannot be canceled.",
-      "test": "Test {'{'}willpower{'}'} (3). If you fail take 2 horror."
+      "spectral": "抽取光谱遭遇牌库顶牌。该卡获得险厄，且其效果不能被取消。",
+      "test": "检定{'{'}willpower{'}'}（3）。如果失败，受到2点恐惧。"
     },
     "baneOfTheLiving": {
-      "unfinishedBusiness": "Choose an Unfinished Business card in play, flip it to its Heretic side, and place damage on it equal to half its health.",
-      "geist": "Discard cards from the top of the spectral encounter deck until a Geist enemy is discarded. Spawn that enemy engaged with you."
+      "unfinishedBusiness": "选择一张场上的未竟之事卡，将其翻到异端面，并在其上放置等同于其生命值一半的伤害。",
+      "geist": "从光谱遭遇牌库顶端弃牌，直到弃掉幽灵敌人。将该敌人生成并与你交战。"
     },
     "witchweed": {
-      "surge": "Give Witchweed surge to place it in the standard encounter discard pile.",
-      "otherwise": "Place it in the spectral encounter discard pile."
+      "surge": "使巫草获得涌入，将其置于标准遭遇弃牌堆。",
+      "otherwise": "将其置于光谱遭遇弃牌堆。"
     }
   },
   "intro": {
@@ -84,14 +90,14 @@
     "placeLocations": "随机从以下每种地点的两个版本中各选择一个：绞刑架、异端者的墓地、教堂阁楼、教堂地下室，并将选出的4个地点放置入场。将所选地点的其他版本从游戏中移除。然后，将闹鬼农田、废弃教堂、绞刑者河放置入场。",
     "spectral": "这些地点两面均为已揭示面。一面带有_幽灵_属性，另一面则不带有。在将这些地点放置入场时，使用不带有_幽灵_属性的已揭示面。",
     "startAt": "每位调查员从绞刑者河开始游戏。",
-    "setAside": "将4张幽灵迷网支援放在一边，位于场外。",
-    "heretics": "混洗6张异端者敌人，将其中随机4张放在一边。将另外2张从游戏中移除。这些卡牌是双面的，其背面为剧情卡。为了获得最佳的游戏体验，请勿查看其另一面的剧情卡牌。",
-    "encounterDecks": "本场冒险会用到2个独立的遭遇牌库。",
+    "setAside": "将4张“幽灵迷网”放在一边，位于场外。",
+    "heretics": "混洗6张异端者敌人，将其中随机4张放在一边。将其他2张移出游戏。这些卡牌是双面的，其背面为剧情卡。为了获得最佳的游戏体验，请勿查看背面内容。",
+    "encounterDecks": "本场冒险会用到2个独立的遭遇牌堆。",
     "spectralDeck": "将剩余所有带有_幽灵_属性的卡牌混洗在一起，建立幽灵遭遇牌库(*参考下方的“幽灵遭遇牌堆”*)。",
     "standardDeck": "将剩余所有不带蛋_幽灵_属性的卡牌混洗在一起，建立基础遭遇牌库。"
   },
   "theSpectralEncounterDeck": {
-    "title": "幽灵遭遇牌库",
+    "title": "幽灵遭遇牌堆",
     "body": "<p class='basic'>在本场冒险的设置期间，会构筑2个遭遇牌库：一个“基础”遭遇牌库和一个“幽灵”遭遇牌库。一般来说，每当有调查员将要与遭遇牌库互动，该调查员应该使用基础遭遇牌库。</p><p class='basic'>然而，在本场冒险期间的特定时间点，地点卡可能翻面至其_幽灵_面。调查员位于带有_幽灵_属性的地点时，该调查员在任何情况下都不使用基础遭遇牌库，改为使用幽灵遭遇牌库，除非有其他说明。包括从遭遇牌库抽取卡牌、查找、查看、揭示，和其他任何形式与遭遇牌库（或遭遇弃牌堆）的互动，都使用对应的遭遇牌库。在遭遇牌库耗尽卡牌时触发的能力也正常触发。如果有效果特别指明是基础遭遇牌库或幽灵遭遇牌库，则该效果与指名的牌库互动，不论调查员位于什么地点。</p><p class='basic'>上述两个遭遇牌库分别拥有各自的弃牌堆。每当带有_幽灵_属性的卡牌将被弃掉，将其放在幽灵遭遇牌库的弃牌堆。其他所有遭遇卡被弃掉时放入基础遭遇牌库的弃牌堆。</p><p class='basic'>_注意：_在本场冒险期间，将一个地点翻面至另一面并不是“揭示”新地点。</p>"
   },
   "resolutions": {
@@ -100,16 +106,16 @@
       "body": "<p class='basic'>_如果未达成任何结局且至少一位调查员撤退_：转至_结局 1_.</p><p class='basic'>_如果未达成任何结局（每位调查员被击败）_：转至_结局 2_.</p>"
     },
     "resolution1": {
-      "title": "结局 1",
-      "body": "<p>_结局 1_: 逐渐减弱的阳光透过了薄雾，那团怪雾最终消散不见。同时，绞刑者山丘恢复了原样。再没有恶鬼来纠缠你，召唤鬼魂的女巫也再次退回了黑暗。你希望自己己所做的能够保护阿卡姆其余的人，不再向恐惧屈服。</p><ul><li>在剧本日志中，记录下*有X名异端者被释放到阿卡姆*。其中X为场上的异端者敌人数量。(如果当前场景为场景1，不记录上述语句，改为记录下*有4名异端者被释放到阿卡姆*。)<ul><li>如果X不超过3，在“遗留记忆”下方记录*一缕鬼灵迷雾*。</li></ul></li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的胜利X数值之和。</li></ul>"
+      "title": "结局1",
+      "body": "<p>_结局 1_: 逐渐减弱的阳光透过了薄雾，那团怪雾最终消散不见。同时，绞刑者山丘恢复了原样。再没有恶鬼来纠缠你，召唤鬼魂的女巫也再次退回了黑暗。你希望自己己所做的能够保护阿卡姆其余的人，不再向恐惧屈服。</p><ul><li>在剧本日志中，记录下*有X名异端者被释放到阿卡姆*。其中X为场上的异端者敌人数量。(如果当前场景为场景1，不记录上述语句，改为记录下*有4名异端者被释放到阿卡姆*。)<ul><li>如果X不超过3，在“遗留记忆”下方记录*一缕鬼灵迷雾*。</li></ul></li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
     },
     "resolution2": {
-      "title": "结局 2",
-      "body": "<p>_结局 2_: 你听天由命，双膝跪倒。迷雾开始分离。看守人现身，连时间都变得缓慢。他的灵体在地面滑行，按时钟滴答敲响的速度，缓缓地接近你。你闭上了双眼，不想看到将要取走自己性命的凶手。双拳紧握，全身绷紧。</p><p>片刻过后。</p><p>你再次睁开眼睛时，怪物和鬼灵迷雾一同消失了。</p><p>……你得救了吗？</p><ul><li>在剧本日志中，记录下*调查员从看守人之拥下存活*。</li><li>在剧本日志中，记录下*有X名异端者被释放到阿卡姆*。其中X为场上的异端者敌人数量。(如果当前场景为场景1，不记录上述语句，改为记录下*有4名异端者被释放到阿卡姆*。)<ul><li>如果X不超过3，在“遗留记忆”下方记录*一缕鬼灵迷雾*。</li></ul></li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的胜利X数值之和。</li></ul>"
+      "title": "结局2",
+      "body": "<p>_结局 2_: 你听天由命，双膝跪倒。迷雾开始分离。看守人现身，连时间都变得缓慢。他的灵体在地面滑行，按时钟滴答敲响的速度，缓缓地接近你。你闭上了双眼，不想看到将要取走自己性命的凶手。双拳紧握，全身绷紧。</p><p>片刻过后。</p><p>你再次睁开眼睛时，怪物和鬼灵迷雾一同消失了。</p><p>……你得救了吗？</p><ul><li>在剧本日志中，记录下*调查员从看守人之拥下存活*。</li><li>在剧本日志中，记录下*有X名异端者被释放到阿卡姆*。其中X为场上的异端者敌人数量。(如果当前场景为场景1，不记录上述语句，改为记录下*有4名异端者被释放到阿卡姆*。)<ul><li>如果X不超过3，在“遗留记忆”下方记录*一缕鬼灵迷雾*。</li></ul></li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
     },
     "resolution3": {
-      "title": "结局 3",
-      "body": "<p>_结局 3_: As you depart Hangman’s Hill, the unnatural mist lingers behind—a reminder that you chose information and power over the safety of the city. The last thing you see as you cross the brook is the blood streaking down the bark of the trees flanking the bridge. The sight is repulsive, and yet…perhaps there is information to be gathered here, as well. Hoping you’ve done the right thing, you study the strange carvings for a moment before continuing to your next destination.</p><ul><li>In your Campaign Log, record *1 heretic was unleashed unto Arkham*.</li><li>In your Campaign Log, under “Mementos Discovered,” record *Bloody Tree Carvings*.</li><li>In your Campaign Log, record *Erynn joined the investigators*. Any one investigator may choose to add the Erynn MacAoidh story asset to their deck. This card does not count toward that investigator’s deck size.</li><li>Each investigator earns experience equal to the Victory X value of each card in the victory display.</li></ul>"
+      "title": "结局3",
+      "body": "<p>_Resolution 3_: 你离开绞刑者山丘时，那团怪雾仍在身后不见消散——这提醒著你，相比于城市的安全，你选择了情报和力量。穿过小溪时，你注意到桥边的树皮上，有血液正向下流淌。这一幕令人作呕，但……也许这里也有值得收集的情报。你研究了一会那怪异的雕刻，心中希望自己所做的是正确的，然后站起身，向下一个目的地出发。</p><ul><li>In 你的 战役 Log, 记录 *1 异端 是 unleashed unto Arkham*.</li><li>在你的冒险日志“遗留记忆”下方记录下<i>吉尔曼的日记</i>和<i>凯夏的公式</i>。</li><li>In 你的 战役 Log, 记录 *Erynn joined  调查员*. 任意 1 调查员可以 选择 加入the Erynn MacAoidh 剧情 支援 至 他们的 牌组. 这 卡牌 会 不 数量 朝向 该 调查员’s 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
     }
   }
 }

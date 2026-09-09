@@ -1,0 +1,136 @@
+{
+  "name": "死亡马戏团",
+  "intro": "<h1>在……中 Shadow 的 New 月亮</h1><p>新月马戏团 有 come 至 Arkham 为 1 night 仅 &mdash; 和 missing person cases 和 mysterious deaths 有 followed 它 up coast.<i>死亡马戏团</i>是 一 8-part fan-made campaign 为<i>Arkham 恐惧: 卡牌 Game</i>, designed 由 Tyler Gotch.</p>",
+  "specialRules": {
+    "0": {
+      "title": "月亮标记",
+      "body": "@:circusExMortis.additionalRules.moonTokens"
+    }
+  },
+  "additionalRules": {
+    "title": "Additional Rules: 月亮标记",
+    "moonTokens": "<p class='basic'>此 campaign introduces 一 new kind 的 chaos 标记: 月亮 ({'{'}moon{'}'}) 标记. 在……期间<i>死亡马戏团</i>campaign, 月亮 plays 一 significant role, 和 月亮 标记 represents 两者 strength 和 severity 的 它的 strange influence.</p><ul><li>{'{'}moon{'}'} 标记 revealed 在……期间 一 skill test 有 以下 effect: “0. Seal 此 标记 在……上 你的 调查员 卡牌 和 揭示 另一 标记.”</li><li>{'{'}moon{'}'} 标记 sealed 在……上 你的 调查员 卡牌 有 没有 effect 在……上 他们的 own, 但是 一些 卡牌 effects 可以 reference whether 或 不 there 是 一 {'{'}moon{'}'} 标记 sealed 在……上 你的 调查员 卡牌, 或 number 的 {'{'}moon{'}'} 标记 sealed 在……上 你的 调查员 卡牌.</li><li>在 结束 的 round, 为 每个 {'{'}moon{'}'} 标记 sealed 在……上 你的 调查员 卡牌, 你 必须 (选择 1):<ul><li>该 标记 stays sealed 在……上 你的 调查员 卡牌.</li><li>获得 1 伤害 或 1 恐惧. 然后, release 该 标记.</li></ul></li><li>一 {'{'}moon{'}'} 标记 revealed outside 的 一 skill test 有 没有 effect 在……上 它的 own unless otherwise specified 由 一 卡牌 effect.</li></ul>"
+  },
+  "prologue": {
+    "title": "Prologue",
+    "body": "<p class='center'><b>****** COMING SOON – NEW 月亮 CIRCUS! ******</b></p><p class='center'><b>Come 和 see greatest show 在……中 world!</b></p><p class='center'><b>Death-defying acrobatics! Feats 的 supreme strength 和 skill!</b></p><p class='center'><b>一 menagerie 的 most incredible creatures alive!</b></p><p class='center'><b>Coming 至 你的 小镇 此 Sunday! 1 night 仅!</b></p><p class='center'><b>** DON'T MISS 此 ONCE-IN-A-LIFETIME CHANCE! **</b></p><p><i>Sunday, August 26th, 1923. Arkham, Massachusetts.</i></p><p>新月马戏团 had been talk 的 小镇 为 better part 的 week. Traveling circuses tended 至 visit bigger cities 为 potential profit alone, 和 few people 在……中 Arkham 可以 找到 time 或 money 至 visit Boston, New York, 或 Philadelphia 在……上 一 whim. 当……时 circus typically didn't 抽取 attention 的 high society, even French Hill elite began 至 joke about seeing circus 为 一 lark. 你 confess, 你 had 一些 interest 在……中 circus 作为 well, 但是 不 为 popular reasons.</p>",
+    "minnie": "<p>Minnie Klein 的 Arkham Advertiser 是 第一 1 至 bring coincidences 至 你的 attention. 你 found Minnie waiting 为 你 在 Velma's Diner 与 她的 notepad 在……中 手牌 和 一 hungry 查看 在……中 她的 eyes – 和 它 wasn't 为 lunch specials. “获得 一 查看 在 此,” 她 says, 使用 她的 pencil like 一 teacher's pointer, “ 新月马戏团 used 至 work usual circuit 在……中 south, hitting 全部 big cities like Atlanta 和 Jacksonville, 和 never going further north than Memphis. 然后 一 month ago, circus suddenly took off up coast, 和 started working 一 bunch 的 podunk towns 在……上 way north. Arkham's biggest 1 they've hit since Savannah.”</p><p>你 concede 该 there's probably something odd behind circus's decision 但是 你 fail 至 see what about 它 有 excited Minnie. 她 quickly elaborates. “Missing person cases<b>和</b>mysterious deaths 在……中 每个 小镇 新月马戏团 有 visited 在 time circus 是 在……中 小镇. 和 here's kicker.” Minnie smiles proudly 作为 她 taps 在 bottom 的 她的 pad. “ people who went 至 see circus? Nobody 可以 remember anything concrete about 它. 2 people who live 3 states away gave 他们的 local papers exact 相同 quote about 他们的 经验. How's 该 为 fishy?”</p><p>Fishy enough 至 warrant 你的 investigation 在 非常 least. 和 因此 与 tickets 在……中 手牌 和 preparations made 为 任意 possible contingency, 你 放置 out 为 circus. evening 是 still bright owing 至 time 的 year, 但是 full 月亮 是 already rising.</p>",
+    "addMoonTokens": "加入 3 {'{'}moon{'}'} 标记 至 混乱袋 为 remainder 的 campaign."
+  },
+  "campaignReading": {
+    "title": "Tarot 牌组",
+    "body": "<p class='basic'>如果 调查员 选择 至 使用 Tarot 牌组 从 返回 至 Circle Undone expansion, there 是 一些 thematic connection 至 死亡马戏团 campaign. 调查员 可以 选择 至 perform 一 8-卡牌 Campaign Reading 与 这些 specific 8 卡牌, 在……中 此 order: Magician, Hermit, Strength, Chariot, Devil, Temperance, 太阳, 月亮</p>",
+    "label": {
+      "performCampaignReading": "Perform Campaign Reading",
+      "performIndividualReadings": "Perform 一 tarot reading 在……之前 每个 冒险 instead"
+    }
+  },
+  "destiny": {
+    "oneNightOnly": "仅此一夜",
+    "thePrimrosePath": "报春花之路",
+    "harm'sWay": "危险之路",
+    "allPointsWest": "向西而行",
+    "piperAtTheGatesOfDawn": "黎明之笛",
+    "bacchanalia": "酒神狂欢",
+    "redSunrise": "Red Sunrise",
+    "thousandToOne": "Thousand 至 1"
+  },
+  "moonToken": {
+    "label": {
+      "endOfRoundQuestion": "一 {'{'}moon{'}'} 标记 是 sealed 在……上 你的 调查员 卡牌. 你 必须 选择 1:",
+      "keepSealed": "该 标记 stays sealed 在……上 你的 调查员 卡牌",
+      "takeDamageAndRelease": "获得 1 伤害. 然后, release 该 标记",
+      "takeHorrorAndRelease": "获得 1 恐惧. 然后, release 该 标记"
+    }
+  },
+  "key": {
+    "theRingmasterDoesNotSuspectYou": "ringmaster does 不 suspect 你.",
+    "theRingmasterHasHisEyeOnYou": "ringmaster 有 他的 eye 在……上 你.",
+    "theInvestigatorsWereLostInTheArkhamWoods": "调查员 是 lost 在……中 Arkham 树林.",
+    "theInvestigatorsBypassedTheIllusions": "调查员 bypassed illusions.",
+    "groupsOfCitizensWereSavedFromTheCircus": "Groups 的 citizens saved 从 circus",
+    "theRingmasterHadDaysToPrepare": "Days ringmaster had 至 prepare",
+    "theInvestigatorsCouldNotEscapeTheCircus": "调查员 可以 不 escape circus.",
+    "theInvestigatorsClashedWithBlake": "调查员 clashed 与 Blake.",
+    "theInvestigatorsUnmaskedBlake": "调查员 unmasked Blake.",
+    "theInvestigatorsStruckDownBlake": "调查员 struck down Blake.",
+    "theInvestigatorsMustFollowTheCult": "调查员 必须 follow cult.",
+    "theInvestigatorsDiscoveredTheRitualsLocation": "调查员 discovered ritual's 地点.",
+    "theInvestigatorsDidNotArriveInTime": "调查员 did 不 arrive 在……中 time.",
+    "theCultRallies": "cult rallies.",
+    "theInvestigatorsWereDevouredByTheThousandYoung": "调查员 是 devoured 由 thousand young.",
+    "theInvestigatorsEndedTheRitual": "调查员 ended ritual.",
+    "shubNiggurathReignsOverAnEclipsedWorld": "Shub-Niggurath reigns 在……上 一 eclipsed world.",
+    "shubNiggurathVanishedWithTheEclipse": "Shub-Niggurath vanished 与 eclipse.",
+    "theProphecyWasFulfilled": "prophecy 是 fulfilled.",
+    "theProphecyWasUnfulfilled": "prophecy 是 unfulfilled.",
+    "destinies": "Destinies",
+    "theNewMoonCircusWasNeverSeenAgain": "新月马戏团 是 never seen again.",
+    "theNewMoonCircusMaySomedayReturn": "新月马戏团 可以 someday 返回."
+  },
+  "label": {
+    "sealMoonToken": "搜索 混乱袋 为 一 {'{'}moon{'}'} 标记 和 seal 它 在……上 你的 调查员 卡牌",
+    "brokenCouplings": {
+      "placeBetween": "放置 between {locationA} 和 {locationB}"
+    },
+    "circusEncampment": {
+      "doneReleasingMoonTokens": "Done releasing 月亮 标记"
+    }
+  },
+  "theBigTopThirdRing": {
+    "label": {
+      "takeMove": "Immediately 获得 一 移动 action",
+      "takeEvade": "Immediately 获得 一 evade action"
+    }
+  },
+  "endlessSpawn": {
+    "label": {
+      "autoSucceed": "搜索 混乱袋 为 一 {'{'}moon{'}'} 标记 和 seal 它 在……上 你的 调查员 卡牌 至 automatically succeed"
+    }
+  },
+  "lostAllControl": {
+    "label": {
+      "directDamage": "造成 1 direct 伤害 至 该 卡牌",
+      "directHorror": "造成 1 direct 恐惧 至 该 卡牌"
+    }
+  },
+  "primordialEvils": {
+    "label": {
+      "reduceTokens": "附着 Primordial Evils 至 冒险 reference 卡牌. Reduce modifier 的 每个 {'{'}skull{'}'}, {'{'}cultist{'}'}, {'{'}tablet{'}'}, {'{'}elderThing{'}'}, 和 {'{'}moon{'}'} 标记 由 1",
+      "placeDoom": "放置 1 毁灭标记 在……上 当前 密谋. 此 effect 可以 cause 当前 密谋 至 advance"
+    }
+  },
+  "amaltheaWeaverOracleOfMystery": {
+    "label": {
+      "drawTopCard": "抽取 top 卡牌 的 他们的 牌组",
+      "drawBottomCard": "抽取 bottom 卡牌 的 他们的 牌组"
+    }
+  },
+  "invocationOfDiana": {
+    "label": {
+      "releaseTokens": "Release up 至 2 {'{'}moon{'}'} 标记 sealed 在……上 卡牌 他们 控制"
+    }
+  },
+  "hiddenInPlainSight": {
+    "label": {
+      "spendCluesToAutoSucceed": "Spend 线索 作为 一 group 至 automatically succeed",
+      "doNotSpendClues": "Do 不 spend {'{'}count{'}'} 线索"
+    }
+  },
+  "underLockAndKey": {
+    "label": {
+      "spendCluesToAutoSucceed": "Spend 线索 作为 一 group 至 automatically succeed",
+      "doNotSpendClues": "Do 不 spend {'{'}count{'}'} 线索"
+    }
+  },
+  "clappedInIrons": {
+    "label": {
+      "chooseDamage": "How much 伤害 将 group 获得 至 reduce 线索 cost?"
+    }
+  },
+  "hypnoticState": {
+    "label": {
+      "chooseHorror": "How much 恐惧 将 group 获得 至 reduce 线索 cost?"
+    }
+  }
+}

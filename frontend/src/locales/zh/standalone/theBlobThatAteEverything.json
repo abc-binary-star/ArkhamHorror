@@ -1,0 +1,184 @@
+{
+  "intro": {
+    "title": "吞噬万物",
+    "body": "<p class='basic'>Incident Report: 8L-08.<br>Thursday, 07/05/1928.<br>Blackwater, MA.</p><p class='basic'><i>上午3时12分——黑水镇外发生陨石撞击事件。警方接到来电，并派出探员前往调查。当地农夫朗·格雷厄姆接受询问时，声称那是一块绿色的陨石，足有数英尺宽。陨石坑的直径为100码(91.44米)，在其外围区域探测到辐射。建议立即隔离，并且交由研究团队进一步观察。局势已得到控制。</i></p><p>局势并没有得到控制。</p><p>该 是report  G-men took 当 他们 第一 arrived. 为下一 few days,  小镇 的 Blackwater 是 在 lockdown. The impact 是 所有 该 是 talked 关于 在  papers, 但 不 much 是 known 一边 从enormous crater 和  效果 它 有 在  countryside. Nobody 是 allowed 至 leave  小镇, 和 仅 那些 approved 由  shadowy government agency 是 allowed 至 enter. 那些 unfortunate few included high-ranking government agents, 和 a team 的 researchers 从nearby Miskatonic University, 谁 是 summoned 至 调查  meteor itself. 为rest 的  小镇’s inhabitants, 它 是一张strange occurrence, nothing 更多… 该 是, 直到  meteor hatched.</p><p>I saw 它 与 my own 眼睛. 当  anomaly emerged,  第一 thing 它 做了 是 devour  team 的 researchers 谁 有 是 sent 至 collect 和 study samples 从meteor. The 下一 thing 它 做了 是 devour 他们的 lab equipment. 然后 Ron Graham’s tractor. 然后 他的 宅邸, 在 它的 entirety. 它 continued 至 grow 和 spread, devouring everything 在 它的 道路. I barely escaped 与 my 生命.</p><p>军队赶到时，他们还以为能用枪子儿和炮弹把这玩意给干掉。他们一波又一波地发起攻势，但不论他们用了什么武器，都会成为那头怪物的食粮。然后它自己分裂成数百个碎片，转瞬间湮没了整支军队。战争打得激烈，此时我和返回小镇的其他人一同望向上空，看见无数光芒与形状在变换。天上有什么东西等待著，等待著时机到来。</p><p>小镇仍被隔离，我们被困在镇上了。那头怪物越长越大，要不了多久，整座黑水镇都会被它吞噬。到那个时候，谁还能阻止它肆虐呢？</p>"
+  },
+  "setup": {
+    "subject": "将“个体代号8L-08”敌人放置入场，放在密谋牌堆旁边。该卡牌不在任何地点上。",
+    "shuffleQuarantine": "混洗所有“隔离区”地点，将其中1张地点卡牌移出游戏。",
+    "placeCrater": "将“陨石坑”放置入场。",
+    "remaining": "将剩余“隔离区”放置入场。",
+    "startAt": "每位调查员从“临时指挥部”开始游戏。",
+    "placeLocations": "根据后文的指导来设置地点。",
+    "innerRing": "拿取“研究营地”、“临时指挥部”，以及2张随机的“隔离区”地点。将这些地点卡牌混洗，并逐张放置，使每张卡牌与“陨石坑”连接。",
+    "outerRing": "拿取“真菌坟林”和3张随机的“隔离区”地点。将这些地点卡牌混洗，并逐张放置，使每张卡牌分别与“陨石坑”外圈4个地点之中的1个地点连接，并距离“陨石坑”最远。",
+    "countermeasures": "在冒险参考卡上放置1资源，作为1对策。",
+    "gatherSets": "找出所有卡牌： *吞噬万物* 遭遇组. 这 组 是 indicated 由 这 icon:<section class='encounter-sets'><img src='{setImgPath}/the-blob-that-ate-everything.png' /></section>",
+    "gatherElseSets": "Gather  *重返吞噬万物* 和 *米戈入侵2* 遭遇组. Set 所有卡牌 从 *米戈入侵 II* 一边, 场外卡牌. 洗切  4 新 Quarantine Zone 地点 together 与原版 地点s 和 移除 5 于 随机.",
+    "setAside": "从<i>吞噬万物</i>遭遇组查找以下遭遇卡牌，并将其放在一边，位于场外：脆弱心脏、1张紧噬软泥、1张方体软泥、2张软泥幽灵。",
+    "epicMultiplayer": "如果 你playing 在 *多组史诗模式*, gather 所有卡牌 从多组史诗模式 遭遇组, indicated 由 这 icon. (移除 所有 卡牌 从单组团队模式 遭遇 组 从 游戏.)<section class='encounter-sets'><img src='{setImgPath}/epic-multiplayer.png' /></section>",
+    "singleGroup": "如果 你playing 在 *单组模式*, gather 所有卡牌 从单组团队模式 遭遇组, indicated 由 这 icon. (移除 所有 卡牌 从多组史诗模式 遭遇 组 从 游戏.)<section class='encounter-sets'><img src='{setImgPath}/single-group.png' /></section>",
+    "setAsideMiGo": "Set 所有卡牌 从米戈入侵 遭遇组 一边, 场外卡牌. 这 组 是 indicated 由 这 icon:<section class='encounter-sets'><img src='{setImgPath}/migo.png' /></section>"
+  },
+  "specialRules": [
+    {
+      "title": "团块X",
+      "body": "<p class='basic'>本场冒险的许多敌人均为这头怪物的碎块，它们被分散到各处，有著自己的意识。击败此类敌人，就能对怪物本体造成伤害。当一个带有<b>团块X</b>的敌人被击败时，对“个体代号8L-08”造成X点伤害。</p><ul><li>带有<b>团块X</b>的敌人被击败时不放入胜利牌区，除非该敌人同时带有<b>胜利X</b>。</li></ul>"
+    },
+    {
+      "title": "吞噬",
+      "body": "<p class='basic'>在本场冒险期间，“个体代号8L-08”能够“吞噬”万物。</p><ul><li>如果一张卡牌被吞噬，将其放在“个体代号8L-08”下方。“个体代号8L-08”下方的卡牌视为离场，在游戏结束时，被吞噬的所有卡牌返回其所有者的牌堆。如果一位调查员被吞噬，他即阵亡。</li><li>如果一个标记被吞噬，将其放到标记池。</li><li>在选择被吞噬的地点时，如果吞噬一个地点会导致另一个地点失去所有有效连接，那么该地点不能被吞噬。</li><li>“个体代号8L-08”也可以吞噬某些现实或意识具象。如果发生此类情况，届时你就将知道后果。</li></ul>"
+    },
+    {
+      "title": "对策",
+      "body": "“对策”表示补给、研究，或军用装备，能够提高调查员的生存能力。可以通过特定卡牌的能力来花费“对策”从而触发强力效果。然而，获得新“对策”的机会十分罕见，要谨慎决定使用的方式！"
+    },
+    {
+      "title": "剧情卡",
+      "body": "<p class='basic'>剧情卡是在本冒险出现的一种新的卡牌类型。此类卡牌只出现在另一冒险卡的背面，作为另一种叙述的形式出现。在你收到指示要结算一张剧情卡时，阅读该卡上的剧情文本然后结算其游戏文本(如果有的话)。</p>"
+    },
+    {
+      "title": "现实溶蚀",
+      "body": "<style>.reality-acid-table{width:100%;border-collapse:collapse;font-size:.82em;line-height:1.25;background:#BEC5B1;color:#1f1a12}.reality-acid-table th{background:#A2B695;color:#1f1a12;text-transform:uppercase;letter-spacing:.04em;border:1px solid #7f9273;padding:4px 6px;font-weight:bold}.reality-acid-table td{border:1px solid #8f9b86;padding:4px 6px;vertical-align:top;font-weight:normal}.reality-acid-table tbody tr:nth-child(odd){background:#BEC5B1}.reality-acid-table tbody tr:nth-child(even){background:#CDD0C3}.reality-acid-table .token{width:13%;text-align:center;color:#1f1a12;white-space:nowrap}.reality-acid-table .aspect{width:74%}</style><p class='basic'>Subject 8L-08 opens 它的 maw, 和 devours… If  combination 的 chaos tokens revealed 是 不 listed, 或 如果  listed aspect 不能 是 devoured, 揭示 two new chaos tokens 和 consult  chart 再次. Chaos tokens 是 在 任意 order.</p><table class='reality-acid-table'><thead><tr><th colspan='2'><b>混乱标记</b></th><th><center><b>被吞噬的现实具象</b></center></th></tr></thead><tbody><tr><td class='token'>{autoFail}</td><td class='token'>{skull}/{cultist}</td><td class='aspect'>…The non-_Elite_ 敌人 nearest 至 你.</td></tr><tr><td class='token'>{autoFail}</td><td class='token'>{tablet}/{elderThing}</td><td class='aspect'>…A treachery 于 你的 地点.</td></tr><tr><td class='token'>{autoFail}</td><td class='token'>–1 至 –8</td><td class='aspect'>……你调查员卡牌上的1点恐惧和1点伤害。</td></tr><tr><td class='token'>{autoFail}</td><td class='token'>+0/+1</td><td class='aspect'>…Your greatest flaw. Search 你的 deck 为 任意 1 weakness 卡牌. It 是 devoured.</td></tr><tr><td class='token'>{autoFail}</td><td class='token'>{elderSign}</td><td class='aspect'>…The {autoFail} token 只是 revealed.</td></tr><tr><td class='token'>+1</td><td class='token'>{skull}/{cultist}</td><td class='aspect'>…Your caution. Resolve Reality Acid three 更多 times, ignoring 这 result.</td></tr><tr><td class='token'>+1</td><td class='token'>{tablet}/{elderThing}</td><td class='aspect'>…Your ignorance. Discover 1 clue 于 你的 地点.</td></tr><tr><td class='token'>+1</td><td class='token'>–1 至 –8</td><td class='aspect'>…Friendships. Until  结束 的  轮, 调查员 不能 commit 卡牌 至 每位 others’ 技能 tests.</td></tr><tr><td class='token'>+1</td><td class='token'>0</td><td class='aspect'>…Your player reference 卡牌.</td></tr><tr><td class='token'>0</td><td class='token'>0</td><td class='aspect'>…1 per-investigator clues 从 你的 地点.</td></tr><tr><td class='token'>0</td><td class='token'>{skull}</td><td class='aspect'>…Your voice. Until  结束 的  轮, 你 不能 speak 或 使 noise.</td></tr><tr><td class='token'>0</td><td class='token'>{cultist}</td><td class='aspect'>…Your group’s food 和 drinks. It 不能 是 consumed until 你的 group 有 dealt 于 至少 3 damage 至 Subject 8L-08.</td></tr><tr><td class='token'>0</td><td class='token'>{tablet}</td><td class='aspect'>…The concept 的 language. Until  结束 的  investigation 阶段, 你 可以 仅 speak 在 gibberish.</td></tr><tr><td class='token'>0</td><td class='token'>{elderThing}</td><td class='aspect'>…Light. Until  结束 的  轮, 调查员 必须 游戏 与 全部 nearby light sources turned 离场 或 covered (except 为 flashlights).</td></tr><tr><td class='token'>0</td><td class='token'>–1/–2</td><td class='aspect'>…Itself, 和 然后 regurgitates itself. Deal 1 damage 至 Subject 8L-08.</td></tr><tr><td class='token'>0</td><td class='token'>–3</td><td class='aspect'>…All damage 从 每位 _Manifold_ 敌人.</td></tr><tr><td class='token'>0</td><td class='token'>–4 至 –8</td><td class='aspect'>…All 的  supplies, ammo, charges, 和 secrets among 支援 你 控制.</td></tr><tr><td class='token'>–1</td><td class='token'>{skull}</td><td class='aspect'>…Your hope. Until  结束 的  下一 mythos 阶段, 组 你的 base 意志 至 0.</td></tr><tr><td class='token'>–1</td><td class='token'>{cultist}</td><td class='aspect'>…Your curiosity. Until  结束 的  下一 mythos 阶段, 组 你的 base 智力 至 0.</td></tr><tr><td class='token'>–1</td><td class='token'>{tablet}</td><td class='aspect'>…Your precision. Until  结束 的  下一 mythos 阶段, 组 你的 base 战斗 至 0.</td></tr><tr><td class='token'>–1</td><td class='token'>{elderThing}</td><td class='aspect'>…Your attention. Until  结束 的  下一 mythos 阶段, 组 你的 base 敏捷 至 0.</td></tr><tr><td class='token'>–1</td><td class='token'>–1</td><td class='aspect'>…Your versatility. Until  结束 的  轮, 你 不能 游戏 或 use 卡牌 那 做 不 match 你的 调查员’s class.</td></tr><tr><td class='token'>–1</td><td class='token'>–2</td><td class='aspect'>…Your cell phone.</td></tr><tr><td class='token'>–1</td><td class='token'>–3</td><td class='aspect'>…The chaos bag. Remove 全部 tokens 从 它 和 放置 他们 在 a 不同 container.</td></tr><tr><td class='token'>–1</td><td class='token'>–4 至 –8</td><td class='aspect'>…Level 1–5 卡牌 的 你的 choice 与 于 至少 5 total levels 从 among 你的 deck, 弃掉 pile, hand, 和 游戏 area.</td></tr><tr><td class='token'>–2</td><td class='token'>{skull}/{cultist}</td><td class='aspect'>…The top 3 卡牌 的 你的 deck.</td></tr><tr><td class='token'>–2</td><td class='token'>{tablet}/{elderThing}</td><td class='aspect'>…The top 3 卡牌 的 你的 弃掉 pile.</td></tr><tr><td class='token'>–2</td><td class='token'>–2</td><td class='aspect'>…The deckbox 你 store 你的 deck 在.</td></tr><tr><td class='token'>–2</td><td class='token'>–3</td><td class='aspect'>…Your 调查员’s 卡牌 sleeve.</td></tr><tr><td class='token'>–2</td><td class='token'>–4 至 –8</td><td class='aspect'>…Your party’s teamwork. Each 调查员 loses 1 行动.</td></tr><tr><td class='token'>–3</td><td class='token'>{skull}/{cultist}/{tablet}/{elderThing}</td><td class='aspect'>…A _Talent_, _Connection_, 或 _Condition_ 支援 你 控制.</td></tr><tr><td class='token'>–3</td><td class='token'>–4 至 –8</td><td class='aspect'>…Your sense 的 时间. Until 你 advance  agenda, 调查员 不能 use time-keeping devices, ask 关于  时间, 或 trigger abilities 在 任意 卡牌 与 “时间,” “watch,” 或 “chrono” 在 它的 title.</td></tr><tr><td class='token'>–4 至 –8</td><td class='token'>{skull}/{cultist}</td><td class='aspect'>…Your 调查员 mini 卡牌. (Use something else 至 mark 你的 地点.)</td></tr><tr><td class='token'>–4 至 –8</td><td class='token'>{tablet}/{elderThing}</td><td class='aspect'>…Your house. Search  collection 为 Your House (Core #124); 它 是 devoured.</td></tr><tr><td class='token'>–4 至 –8</td><td class='token'>–4 至 –8</td><td class='aspect'>…Your soul. Record 在 你的 Campaign Log 那 你 有 没有 soul.</td></tr><tr><td class='token'>{skull}</td><td class='token'>{skull}</td><td class='aspect'>…The highest-cost _Ally_ 支援 你 控制.</td></tr><tr><td class='token'>{skull}</td><td class='token'>{cultist}</td><td class='aspect'>…All event 卡牌 在 你的 hand.</td></tr><tr><td class='token'>{skull}</td><td class='token'>{tablet}</td><td class='aspect'>…All 的 你的 resources.</td></tr><tr><td class='token'>{skull}</td><td class='token'>{elderThing}</td><td class='aspect'>…All 技能 卡牌 在 你的 hand.</td></tr><tr><td class='token'>{cultist}</td><td class='token'>{cultist}</td><td class='aspect'>…All 卡牌 那 有 是 exiled.</td></tr><tr><td class='token'>{cultist}</td><td class='token'>{tablet}</td><td class='aspect'>…Your identity. Until  结束 的  轮, treat 你的 调查员’s text box as 如果 它 是 blank (including _Traits_).</td></tr><tr><td class='token'>{cultist}</td><td class='token'>{elderThing}</td><td class='aspect'>…The concept 的 speed. Until  结束 的  轮, 调查员 不能 获得 或 take 额外 行动.</td></tr><tr><td class='token'>{tablet}</td><td class='token'>{tablet}</td><td class='aspect'>…Your sense 的 urgency. Until  结束 的  轮, 你 不能 move.</td></tr><tr><td class='token'>{tablet}</td><td class='token'>{elderThing}</td><td class='aspect'>…Your potential. Until  结束 的  轮, 你的 skills 不能 是 increased.</td></tr><tr><td class='token'>{elderThing}</td><td class='token'>{elderThing}</td><td class='aspect'>…Your patience. Place 1 毁灭标记 在 当前agenda.</td></tr><tr><td class='token'>{elderSign}</td><td class='token'>{skull}/{cultist}</td><td class='aspect'>…All _Spell_ 和 _Ritual_ 支援 你 控制.</td></tr><tr><td class='token'>{elderSign}</td><td class='token'>{tablet}/{elderThing}</td><td class='aspect'>…All _Item_ 支援 你 控制.</td></tr><tr><td class='token'>{elderSign}</td><td class='token'>+1</td><td class='aspect'>…The concept 的 a “弃掉 pile.” Until  结束 的  下一 mythos 阶段, 每位 卡牌 那 会 是 placed 在 任意 调查员’s 弃掉 pile 是 instead devoured.</td></tr><tr><td class='token'>{elderSign}</td><td class='token'>0</td><td class='aspect'>…One 的 你的 hands. For  remainder 的 游戏, 你 有 1 fewer hand slot.</td></tr><tr><td class='token'>{elderSign}</td><td class='token'>–1</td><td class='aspect'>…The concept 的 success. The 下一 时间 an 调查员 会 succeed 于 a 检定 由 2 或 更多, 那 调查员 instead automatically fails.</td></tr><tr><td class='token'>{elderSign}</td><td class='token'>–2/–3</td><td class='aspect'>……1对策。</td></tr><tr><td class='token'>{elderSign}</td><td class='token'>–4 至 –8</td><td class='aspect'>…The concept 的 easiness. Until  结束 的 游戏, flip  冒险 reference 卡牌 至 它的 Hard/Expert side.</td></tr></tbody></table>"
+    }
+  ],
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "黑水镇已被吞噬一空。封锁线也已破坏。无法控制那头怪物，它先是延伸到了村庄，吞噬沿路的一切事物。旋即整个马萨诸塞州都被它吞入腹中。然后是整个新英格兰。它从地下挖开通路，连海洋都无法阻止它前进。无一大陆幸免。地球上的每个生物都会被吞噬，然后，地球也将迎来同样的命运。\n……但这还没有结束。\n即使这个星球完全化为虚无，也无法阻止那头怪物的生长。它会不断扩张和吞噬，直到一切的一切只剩下冰冷的虚空和吞噬万物的团块。"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2_:</p><p class='basic'><i>事件报告：8L-08(接上页)</i><br><i>1928年7月11日，星期三</i><br><i>马萨诸塞州黑水镇</i></p><p class='basic'>0742 hours – Contact made 与 <span class='censor'>hostile alien</span> subject.Subject <span class='censor'>arrived via</span> meteor; researchers 是 unsure whether meteor served as an avenue 为 <span class='censor'>space travel</span> 或 as some kind 的 <span class='censor'>weaponized egg</span>. Initiated immediate emergency response procedures. At roughly 0500 hours, subject 是 eliminated 由 third party. As per operational protocol, samples 有 是 collected 和 sent 至 <span class='censor'>Roswell</span> 为 further study. Agents 是 currently scrubbing remainder 的 subject’s presence 从 quarantine zone. Strongly recommend immediate expunging 的 上一 conflicting incident report.</p><p class='basic'>Citizens 的 Blackwater 有 是 informed <span class='basic'>该</span> quarantine <span class='censor'>是 due 至</span> contagion 的 airborne virus. <span class='censor'>Induced</span> several infections <span class='censor'>至 这 结束</span>; medical teams en route 至 confirm.</p><p class='basic'>Agents 是 attempting 至 meet 与 unlicensed combatants 为 debriefing. Due 至 sensitive nature 的 incident, recommend release followed 由 close observation. 剧情 必须 是 kept <span class='censor'>need-to-know</span>. <span class='censor'>Nobody else 可以 知道 什么 really happened 这里</span>.</p><p class='basic'>摧毁 这 incident report immediately. 额外 instructions 至 follow.</p><ul><li>In 你的 战役 Log, 记录 该 * anomaly 是 contained*.</li><li>每位of 下列assets 该 是 在场 (Universal Solvent, Pet Oozeling, Mi-Go Weapon, 和 Lt. Wilson Stewart), 任意 1 调查员可以 选择 加入该 支援 至 他的 或 她的 牌组. 它 会 不 数量 朝向 该 调查员’s 牌组 大小.</li><li>每位调查员 获得 经验 等于 至  Victory X 数值 的 每位 卡牌 在 胜利牌区. 每位调查员 获得 3 奖励 经验 as 他 或 她 有 saved  fabric 的 existence.</li></ul>"
+    }
+  },
+  "realityAcid": {
+    "title": "现实溶蚀",
+    "outcomes": {
+      "heal": "……你调查员卡牌上的1点恐惧和1点伤害。",
+      "countermeasure": "……1对策。",
+      "nearestEnemy": "……离你最近的非_精英_敌人。",
+      "treachery": "……你所在地点的一张诡计卡。",
+      "greatestFlaw": "……你最大的缺点。查找你牌堆的任意1张弱点卡，其被吞噬。",
+      "caution": "……你的谨慎。再结算3次“现实溶蚀”，无视本次结果。",
+      "ignorance": "……你的无知。发现你所在地点的1个线索。",
+      "friendships": "……友谊。调查员们不能对他人的技能检定投入卡牌，直到本轮结束。",
+      "playerReferenceCard": "……你的玩家参考卡。",
+      "voice": "……你的声音。你不能说话也不能制造噪音，直到本轮结束。",
+      "foodAndDrinks": "……你所在团队的食物和饮用水，你所在团队不能消耗食物和饮用水，直到你所在团队对“个体代号8L-08”造成了至少3点伤害。",
+      "language": "……语言的概念。在调查员阶段结束之前，你只能胡言乱语。",
+      "light": "……光。每位调查员在关闭或遮盖所有附近光源的情况下进行游戏(手电筒除外)，直到本轮结束。",
+      "regurgitate": "……它自身，然后它反刍自身。对“个体代号8L-08”造成1点伤害。",
+      "manifold": "……所有_复体_敌人的伤害。",
+      "uses": "……你控制的支援卡上的所有补给、子弹、充能和秘密。",
+      "versatility": "……你的多种才艺。你不能打出或使用不符合你调查员职阶的卡牌，直到本轮结束。",
+      "cellPhone": "……你的手机。",
+      "chaosBag": "……混乱袋。从混乱袋中移除所有标记，将其放到另一个容器。",
+      "levelCards": "……你牌堆，弃牌堆，手牌和游戏区域等级为1-5的卡牌，由你选择总等级至少为5的若干张卡牌。",
+      "top3Discard": "……你弃牌堆顶的3张卡牌。",
+      "deckbox": "……你存放牌库用的牌盒。",
+      "cardSleeve": "……你调查员的牌套。",
+      "teamwork": "……你所在团队的协作能力。每位调查员失去1个行动。",
+      "senseOfTime": "……你的时间观念。调查员不能使用计时设备，不能询问时间，也不能触发标题带有“时间”、“表”或“时”字样的任何卡牌的能力，直到推进密谋。",
+      "miniCard": "……你的迷你卡(用其他东西标记所在地点)。",
+      "yourHouse": "……你的房子。搜索收藏，找出“你的房子”(基础＃124)；其被吞噬。",
+      "noSoul": "……你的灵魂。在冒险日志中，记录<i>你失去了灵魂</i>。",
+      "ally": "……你控制的费用最高的_盟友_支援卡。",
+      "events": "……你手牌中的所有事件卡牌。",
+      "resources": "……你所有的资源。",
+      "skills": "……你手牌中的所有技能卡牌。",
+      "exiledCards": "……被放逐的所有卡牌。",
+      "identity": "……你的身份。将你调查员文本框视作空白(包括_属性_)，直到本轮结束。",
+      "speed": "……速度概念。调查员不能获得或执行额外的行动，直到本轮结束。",
+      "cannotMove": "……你的紧迫感。你不能移动，直到本轮结束。",
+      "potential": "……你的潜能。你不能提高技能值直到本轮结束。",
+      "doom": "……你的耐心。在当前的密谋上放置1个毁灭标记。",
+      "item": "……你控制的所有_道具_支援卡。",
+      "discardPile": "……“弃牌堆”的概念。任何卡牌将要被放到任意调查员的弃牌堆时，改为该卡牌被吞噬，直到下一个神话阶段结束。",
+      "handSlot": "……你的一只手。你的手部槽位-1，直到本局游戏结束。",
+      "success": "……胜利的概念。下一次调查员将要检定成功并超过难度至少2点，该调查员改为自动失败。",
+      "easiness": "……舒适感。将冒险辅助卡翻到“困难/专家”面，直到本局游戏结束。",
+      "willpower": "……你的希望。直到下一个神话阶段结束，将你的基础意志设为0。",
+      "intellect": "……你的好奇心。直到下一个神话阶段结束，将你的基础智慧设为0。",
+      "combat": "……你的精准。直到下一个神话阶段结束，将你的基础战力设为0。",
+      "agility": "……你的专注。直到下一个神话阶段结束，将你的基础敏捷设为0。",
+      "spellRitual": "……你控制的所有_法术_和_仪式_支援卡。",
+      "elderSignToken": "…The {'{'}elderSign{'}'} 标记 只是 已揭示.",
+      "locationClues": "…1 每位玩家 线索 从 你的 地点.",
+      "talentAsset": "…A _Talent_, _人脉_, 或 _状态_ 支援 你 控制.",
+      "top3Deck": "…相关角色 顶 3 卡牌 的 你的 牌组."
+    },
+    "devours": "<smallcaps>“个体代号8L-08”张开了它的巨口，开始吞噬……</smallcaps>",
+    "consultAgain": "<i>(如果翻开的混乱标记与以下列举的任何组合都不同，或者如果列出的具象无法被吞噬，抽出两个新的混乱标记并再次查看下表。)</i>"
+  },
+  "label": {
+    "temporaryHQ": {
+      "healDamage": "治愈3点伤害",
+      "drawCards": "抽取3張卡牌。",
+      "gainResources": "获得 5 资源",
+      "healHorror": "恢复 3 恐惧"
+    },
+    "doneDevouring": "相关角色 卡牌",
+    "replicatingAberration": {
+      "spendCountermeasure": "花费 1",
+      "allowSpawn": "相关角色 相关角色 相关角色"
+    }
+  },
+  "tooltips": {
+    "temporaryHQ": {
+      "action": "{'{'}action{'}'} 花费 1 countermeasure: 选择一项 – 治愈3点伤害, 恢复 3 恐惧, 获得 5 资源, 或 抽取3張卡牌。"
+    },
+    "theCrater": {
+      "deal": "{'{'}action{'}'} 花费 1 countermeasure: Deal 3 伤害 至 Subject 8L-08 或 a 复体 敌人 在任意地点."
+    },
+    "researchSite": {
+      "placeClues": "{'{'}action{'}'} 花费 1 countermeasure: 放置 2 线索 在 研究 Site _(从标记 pool)_.",
+      "gainCountermeasure": "{'{'}action{'}'} 花费 2 线索: 获得 1 ."
+    },
+    "fungusMound": {
+      "test": "{'{'}action{'}'} 花费 1 countermeasure: 选择 a Mi-Go 敌人 在任意地点 和 检定 {'{'}intellect{'}'} (0). 每位point 你 成功 由, deal 1 伤害 至  chosen 敌人 (至 a maximum 的 5)."
+    },
+    "sewer": {
+      "move": "{'{'}action{'}'} 检定 {'{'}intellect{'}'} (1). 如果 你 成功, 移动 至 a 地点 up 至 X 人脉s away 从 Sewer, 哪里 X 是amount 你 succeeded 由."
+    },
+    "bridge": {
+      "defeat": "{'{'}fast{'}'} 选择 an exhausted 复体 敌人 于 Bridge 和 检定 {'{'}intellect{'}'} (X), 哪里 X 是 该 敌人's 躲避 数值. 如果 你 成功, 击败  chosen 敌人. (Max 1 成功 per 游戏.)"
+    },
+    "waterTower": {
+      "damage": "{'{'}action{'}'} 如果 那里 是 没有 线索 在 Water Tower: 检定 {'{'}intellect{'}'} (3). 如果 你 成功, deal 3 伤害 至 每位 Ooze 敌人 于 Water Tower 和 于 每位 connecting 地点. (Max 1 成功 per 游戏.)"
+    },
+    "church": {
+      "evade": "{'{'}action{'}'} 如果 那里 是 没有 线索 在 Church: 选择 an Ooze 敌人 于 Church, 或 a connecting 地点. 移动  chosen 敌人 1 地点 away 从 Church 和 自动 躲避 它. (Group limit 一次 per 游戏.)"
+    },
+    "theMilitarysPlan": {
+      "action": "{'{'}action{'}'}: 检定 {'{'}intellect{'}'} 或 {'{'}agility{'}'} (3). 如果 你 成功, 移除  恐惧 标记 在 这 地点."
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "elderThing": "-5. 选择 up 至 5 卡牌 从 你的 手牌. Subject 8L-08 devours 每位 的 那些 卡牌. 你 得到技能值+1 为 这 检定 每位卡牌 devoured 在 这 道路.",
+      "cultist": "-2. 如果 这 标记 是 已揭示 在……期间 an 攻击 against an 敌人, 该 敌人 gains 反击 为 这 攻击.",
+      "tablet": "-3. 之后 这 技能检定 ends, Subject 8L-08 devours 每位 卡牌 该 是 committed 至  检定.",
+      "skull": "-1 为 5 卡牌 相关角色 808 有 ."
+    },
+    "hardExpert": {
+      "elderThing": "-7. 选择 up 至 7 卡牌 从 你的 手牌. Subject 8L-08 devours 每位 的 那些 卡牌. 你 得到技能值+1 为 这 检定 每位卡牌 devoured 在 这 道路.",
+      "cultist": "-3. 如果 这 标记 是 已揭示 在……期间 an 攻击 against an 敌人, 它 gains 反击 为 这 检定.",
+      "tablet": "-4. 之后 这 技能检定 ends, Subject 8L-08 devours 每位 卡牌 该 是 committed 至  检定.",
+      "skull": "-1 为 3 卡牌 相关角色 808 有 ."
+    }
+  },
+  "remembered": {
+    "theFormulaWasNotCompleted": "The formula 是 不 已完成d",
+    "theChemistWasSaved": "相关角色 是",
+    "theSampleWasRecovered": "相关角色 是",
+    "theSampleWasLost": "相关角色 是",
+    "theMiGoWereDrivenOff": "相关角色 相关角色 是",
+    "theSecretOfTheOozeWasStolen": "相关角色 秘密 的 是",
+    "theExplosivesWereDefused": "相关角色 是",
+    "theExplosivesWereDetonated": "相关角色 是"
+  },
+  "xp": {
+    "bonus": "相关角色 的 ."
+  }
+}

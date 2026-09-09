@@ -1,66 +1,108 @@
 {
-    "newGame": "新游戏",
-
-    "numberOfPlayers" : "玩家人数",
-    "withFriends": "与好友一起",
-    "multihandedSolo": "独自控制",
-    "switchingPerspectives": "切换界面",
-    "switchingPerspectivesDescription": "独自控制时，你有时需要从特定调查员的界面进行操作。使用玩家标签页中的 <strong>图标</strong> （文本框左上角所示）即可切换到该调查员的界面。",
-
-    "campaign": "剧本模式",
-    "standalone": "单场冒险模式（使用剧本关卡）",
-    "sideStory": "支线剧情",
-
-    "alphaWarning": "此剧本目前正在开发中。它可能尚未完成，您不应该针对它提交bug报告。",
-    "betaWarning": "本内容已准备就绪供测试使用，但请做好游戏频繁崩溃的心理准备。",
-    "betaWarningScenario": "此剧本已准备就绪供测试使用，但请做好游戏频繁崩溃的心理准备。",
-
-    "normal": "正常",
-    "returnTo": "重返系列",
-    
-    "fullCampaign": "完整剧本",
-    "partialCampaign": "部分剧本",
-    "multiplayerVariant": "多人游戏模式",
-    "campaignType": "战役类型",
-    "pickScenario": "选择章节",
-
-    "difficulty": "难度选择",
-    "Easy": "简单",
-    "Standard": "普通",
-    "Hard": "困难",
-    "Expert": "专家",
-
-    "includeTarotReadings": "使用塔罗牌解牌",
-
-    "gameName": "游戏名称",
-    "create": "创建",
-    "back": "返回",
-
-    "chooseYourDeck": "选择你的牌组",
-    "tabooList": "禁卡表: {tabooList}",
-    "useExistingDeck": "使用已有牌组",
-    "loadNewDeck": "加载新牌组",
-    "selectADeck": "-- 选择一个牌组 --",
-    "deckUrlPlaceholder": "在这里填写ArkhamDB或arkham.build牌组url链接",
-    "choose": "选择",
-
-    "variant": "战役变体",
-    "fullCampaignOption": {
-      "theDreamEaters": "食梦者<br><small>八部分组成的战役</small>",
-      "theDreamQuest": "探索梦境<br><small>四部分组成的战役</small>",
-      "theWebOfDreams": "梦之网<br><small>四部分组成的战役</small>"
+  "newGame": "新游戏",
+  "numberOfPlayers": "玩家人数",
+  "withFriends": "与好友一起",
+  "multihandedSolo": "独自控制",
+  "switchingPerspectives": "切换界面",
+  "switchingPerspectivesDescription": "独自控制时，你有时需要从特定调查员的界面进行操作。使用玩家标签页中的 <strong>图标</strong> （文本框左上角所示）即可切换到该调查员的界面。",
+  "campaign": "剧本模式",
+  "standalone": "单场冒险模式（使用剧本关卡）",
+  "sideStory": "支线剧情",
+  "requiresInvestigator": "需要 {name}",
+  "alphaWarning": "此剧本目前正在开发中。它可能尚未完成，您不应该针对它提交bug报告。",
+  "betaWarning": "本内容已准备就绪供测试使用，但请做好游戏频繁崩溃的心理准备。",
+  "betaWarningScenario": "此剧本已准备就绪供测试使用，但请做好游戏频繁崩溃的心理准备。",
+  "normal": "正常",
+  "returnTo": "重返系列",
+  "fullCampaign": "完整剧本",
+  "bothScenarios": "两个剧本（战役）",
+  "scenarios": "剧本",
+  "partialCampaign": "部分剧本",
+  "multiplayerVariant": "多人游戏模式",
+  "campaignType": "战役类型",
+  "pickScenario": "选择章节",
+  "difficulty": "难度选择",
+  "Easy": "简单",
+  "Standard": "普通",
+  "Hard": "困难",
+  "Expert": "专家",
+  "includeTarotReadings": "使用塔罗牌解牌",
+  "undoMode": {
+    "title": "撤销模式",
+    "standard": "标准",
+    "full": "完整",
+    "light": "轻量",
+    "hardcore": "硬核",
+    "expert": "专家",
+    "hint": {
+      "standard": "同一剧本内可无限撤销；推进到下一剧本时，之前的历史会被全部丢弃。",
+      "full": "保留全部历史，可以回溯到任意一步。这是默认档位，也是以前的行为。",
+      "light": "只保留最近 30 步，更早的历史会被丢弃。",
+      "hardcore": "只保留一步；一旦某步涉及随机结果（翻开混乱标记、抽遭遇卡或敌人），就不能再撤销过去。",
+      "expert": "不保留任何历史，撤销功能完全关闭。"
     },
-
-    "recommendedOptions": "推荐选项",
-
-    "recommendedOption": {
-      "PlayersDoNotControlStoryAssetClues": {
-        "title": "玩家无法控制剧情线索",
-        "description": "自《毒堇谷盛宴》起，玩家现在可以控制其所控制的支援卡上的线索。该规则在当前战役中会产生一些奇怪的交互，因此建议开启此选项，使“剧情支援卡”排除在该规则之外。"
-      },
-      "UseSwarmPlaceholders": {
-        "title": "为蜂拥使用占位卡",
-        "description": "不再使用队长调查员牌组中的卡牌作为蜂拥卡，而是生成不属于任何调查员牌组的专用占位卡。"
-      }
+    "immutable": "开局后无法更改：已丢弃的历史不会再回来。"
+  },
+  "playMode": "游戏模式",
+  "singleGroupMode": "单组模式",
+  "epicMultiplayerMode": "多组史诗模式",
+  "singleScenarioMode": "单剧本",
+  "miniCampaignMode": "迷你战役",
+  "miniCampaignDescription": "<p>按你选择的顺序，连续进行三场游戏——每个组各进行一场。与普通战役不同：</p><ul><li>使用单场冒险的牌组构筑规则，无需从 0 点经验开始。</li><li>玩家可以在剧本之间更换调查员和/或牌组。</li><li>剧本之间不会获得或花费经验。</li><li>没有战役日志；调查员不会获得创伤，阵亡或陷入疯狂的调查员仍可用于其他剧本。</li></ul>",
+  "numberOfGroups": "组数",
+  "groupName": "组名",
+  "groupPlayers": "玩家",
+  "imposeTimeLimit": "设置时间限制",
+  "timeLimitMinutes": "时间限制（分钟）",
+  "gameName": "游戏名称",
+  "create": "创建",
+  "back": "返回",
+  "chooseYourDeck": "选择你的牌组",
+  "tabooList": "禁卡表: {tabooList}",
+  "useExistingDeck": "使用已有牌组",
+  "loadNewDeck": "加载新牌组",
+  "selectADeck": "-- 选择一个牌组 --",
+  "deckUrlPlaceholder": "在这里填写ArkhamDB或arkham.build牌组url链接",
+  "choose": "选择",
+  "variant": "战役变体",
+  "fullCampaignOption": {
+    "theDreamEaters": "食梦者<br><small>八部分组成的战役</small>",
+    "theDreamQuest": "梦寻秘境<br><small>四部分组成的战役</small>",
+    "theWebOfDreams": "睡梦之网<br><small>四部分组成的战役</small>"
+  },
+  "advancedRulesConfiguration": "高级规则配置",
+  "rulesPresets": "预设",
+  "presetCustom": "自定义",
+  "preset": {
+    "chapter1": {
+      "name": "第一章",
+      "description": "适用于第一章战役的推荐设置。"
+    },
+    "chapter2": {
+      "name": "第二章",
+      "description": "适用于第二章战役的推荐设置。"
     }
+  },
+  "chapter1Heading": "第一章",
+  "chapter2Heading": "第二章",
+  "homebrewHeading": "自制内容",
+  "designedBy": "设计者：{name}",
+  "sideStoriesHeading": "支线剧情",
+  "challengeScenariosHeading": "挑战剧本",
+  "asIfAtBehavior": "“视为在此”行为",
+  "asIfAtChapter1": "第一章规则",
+  "asIfAtChapter1Description": "“视为在此地点”对整张卡牌或整个能力持续生效，包括其他卡牌的窗口触发能力。",
+  "asIfAtChapter2": "第二章规则",
+  "asIfAtChapter2Description": "“视为在此地点”只在指定能力或行动结算期间生效。其他卡牌能力和窗口触发能力按照实际游戏状态结算。",
+  "recommendedOptions": "推荐选项",
+  "recommendedOption": {
+    "PlayersDoNotControlStoryAssetClues": {
+      "title": "玩家无法控制剧情线索",
+      "description": "自《毒堇谷盛宴》起，玩家现在可以控制其所控制的支援卡上的线索。该规则在当前战役中会产生一些奇怪的交互，因此建议开启此选项，使“剧情支援卡”排除在该规则之外。"
+    },
+    "UseSwarmPlaceholders": {
+      "title": "为蜂拥使用占位卡",
+      "description": "不再使用队长调查员牌组中的卡牌作为蜂拥卡，而是生成不属于任何调查员牌组的专用占位卡。"
+    }
+  }
 }

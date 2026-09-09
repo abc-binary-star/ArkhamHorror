@@ -1,0 +1,88 @@
+{
+  "intro": {
+    "noPlaceLikeHome": {
+      "title": "任务：吾家可归",
+      "choose": "你必须决定<i>(选择一项)</i>：",
+      "question": "这已经是第无数次“最后一件活”了。蒂林哈斯特当真言而有信吗?",
+      "body": "你望着异星而来的天体仪器，一阵头晕目眩。这一幕让你想到了一切开始的晚上，蒂林哈斯特把你从街头捞走的那个晚上。那夜星光明亮，而你也忘不了群星的排列，就和你面前的一模一样。远离了阿卡姆的不断奔波和蝇营狗苟，你终于能停下来思考一番。蒂林哈斯特的话术客气，但腔调却是生硬、冰冷、无情。回想起来，你好像只在有用的时候才吸引到这个生意人的注意。他的举止并无善意；他救你的时候，只是想着用债务再给自己招一个狗腿子罢了。",
+      "trustHim": "<i>“蒂林哈斯特先生待我不薄。我相信他。”</i>",
+      "onMyOwn": "在剧本日志中，“吾家可归”下记录2进展并承受1点精神创伤。每位调查员少2张起始手牌开始下一场冒险。",
+      "instructions": "_阅读 仅 如果 你 有  吾家可归 任务:_"
+    },
+    "label": {
+      "noPlaceLikeHome": {
+        "trustHim": "<i>“蒂林哈斯特先生待我不薄。我相信他。”</i>",
+        "onMyOwn": "<i>“我就靠自己。别人都不能信任。</i>”",
+        "healPhysicalTrauma": "治愈1点肉体创伤",
+        "healMentalTrauma": "治愈1点精神创伤",
+        "healTraumaQuestion": "恢复 1 精神 或 1 肉体创伤 从 你的 调查员."
+      }
+    },
+    "drownedQuarter2Conclusion": "你还没来得及阻止，他就开始操作古代装置了。也许有办法能在不淹死的前提下拿走球体……",
+    "drownedQuarter3Conclusion": "你还没来得及阻止，她就开始操作古代装置了。也许有办法能在不淹死的前提下拿走球体……",
+    "checkCampaignLog": "查看你的战役日志。",
+    "proceedToSetup": "进入<b>设置</b>",
+    "title": "溺亡城区",
+    "drownedQuarter1": "_The Drowned Quarter 1_: 你走进海底穹顶的时候，居然听到了噼啪的电流声。海底的圆广场上全是被淹没的沟渠和崩塌的废墟。你费尽心力，目光还是不断飘向异星屏障上方的海洋。一团水母浮过阴暗的深海，如梦如幻。要是能量场莫名消失，那整个探险队肯定都会被卷入涡流。",
+    "drownedQuarter3": "_The Drowned Quarter 3_: 你跟着探险队经过深水坑和沉没的废墟，这里就是光源，可能也是能量场的来源。你看到里面有个圆形的太阳系仪：这个复杂的机械由旋转的球体和嗡嗡的齿轮构成，正不断发射着电流，核心位置则固定着一个炽热发光的球体。露比倒抽一口凉气：“这是某种泵，我敢打赌金属球是其中重要的一部分。要是拿走它，整个海洋可能都会倒在我们头上。”她俏皮地笑了，“所以你最好准备快跑。”",
+    "resolveNoPlaceLikeHome": "如果调查员有“吾家可归”任务：",
+    "headedWest": "如果 探险 前往 西, 前往_溺亡城区 2_.",
+    "headedEast": "如果 探险 前往 东, 跳至_溺亡城区 3_.",
+    "drownedQuarter2": "“我想这里就是源头。”安迪指着广场中央的圆形结构说道，那里的电流掠过上面闪亮的泡泡。可能就是这个光源发射出了保护海底废墟的能量场。你看到里面有个圆形的太阳系仪：这个复杂的机械由旋转的球体和嗡嗡的齿轮构成，正不断发射着电流，核心位置则固定着一个炽热发光的球体。安迪紧张地动来动去：“它在为整个装置供能。我不知道要是拿出来会怎么样…但它看上去会是蒂林哈斯特先生想要的东西。”\n你还没来得及阻止，他就开始操作古代装置了。也许有办法能在不淹死的前提下拿走球体……"
+  },
+  "setup": {
+    "title": "设置",
+    "placeBarrierCore": "将屏障核心放置入场，<i>（未激活）</i>面朝上。",
+    "gatherSeaFloorLocations": "收齐每个海床地点，将随机一张珊瑚礁和随机一张溺亡卫城从游戏中移除。",
+    "placeSeaFloorLocations": "混洗剩余的8张海床地点，按照右侧的地点摆放示意图，放置入场，呈3x3的方阵，屏障核心位于中间。",
+    "beginAtBarrierCore": "每位调查员从屏障核心开始游戏。",
+    "buildEncounterDeck": "混洗剩余遭遇卡来创建遭遇牌堆。",
+    "readyToBegin": "現在你已經準備好開始遊戲了。",
+    "addFloodTokens": "将淹没标记加入供应堆并检查你的剧本日志：",
+    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: _溺亡城区_, _异星装置_, _宇宙遗产_, _深潜者_, _古老迷雾_, _淹水_, _R’lyeh_, 和 _海底生物_. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/the-drowned-quarter.png' /><img src='{setImgPath}/alien-machinery.png' /><img src='{setImgPath}/cosmic-legacy.png' /><img src='{setImgPath}/tdc_deep-ones.png' /><img src='{setImgPath}/elder-mist.png' /><img src='{setImgPath}/flood.png' /><img src='{setImgPath}/rlyeh.png' /><img src='{setImgPath}/undersea-creatures.png' /></section>",
+    "chooseExpeditionAsset": "按玩家顺序，每位玩家可以从<i>探险</i>遭遇组选择1张_道具_支援，使其位于自己控制之下开始游戏。该遭遇组的图标为：<img src='{setImgPath}/tdc_expedition.png' />",
+    "locationPlacement": "参考摆放位置 为 “溺亡城区”",
+    "setCardsAside": "将屏障节点剧情支援、双面的海底寄生虫{'{'}runeX{'}'}和黑曜石遗物{'{'}runeY{'}'}卡牌放在一边，位于场外。",
+    "headedEast": "升起的古城撼动了远古的穹顶。提升1[per_investigator]个海床地点的淹没等级。"
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "奇异的节点在你手中搏动，射出柔和的光泡泡，推开了坠落的碎骸。就在穹顶也像泡泡一样碎裂的时候，你来到了入口。海水狂潮夺回了异星建筑，探险队看着，又是敬畏，又是害怕。你掌心传来细微的刺痛。你低头看去，发现节点已经埋入你的掌心，在皮肤下面长出蜘蛛状的黑色毛发。你拿开节点，毛发就收缩起来，一点儿也不疼。蒂林哈斯特肯定乐于见到这一发现。"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "重新激活的核心在几分钟之内就把淹没的穹顶内的积水抽取干净。你和探险队一起勘察沉没遗迹的四周，惊叹着远古的恢弘。你走在干爽的海底，海鱼在发光的泡泡上掠过，这幅景象真是如梦似幻。几小时后，探险队就继续前进了。"
+    },
+    "resolution3": {
+      "title": "结局3",
+      "body": "<p>_结局 3_: The energy field protecting  tunnel 返回the 城市 continues 至 hold strong. The jagged foundations 的 R’lyeh continue 至 break 离场 在 pieces as  城市 rises. 它 是 时间 至 移动 在.</p><ul><li>在剧本日志中，拉莱耶地图的部分划掉“溺亡城区”。</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li></ul>"
+    },
+    "noResolution": {
+      "body": "<p>_If 没有 resolution 是 到达 (每位 调查员 resigned 或 是 被击败)_: 你在穹顶入口的一侧，透过薄纱一般的屏障看到了海底。海洋在几秒之内就夺回了这座异星的穹顶。你们没被卷走真是个小小的奇迹。</p><ul><li>你的失败让你远离了目标。如可能，每位调查员必须擦去其任务的1进展。</li><li>跳至_结局 3_.</li></ul>",
+      "title": "如果未达成任何结局"
+    },
+    "xp": {
+      "bonus": "为 studying 溺亡城区 于 length"
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "tablet": "-4. 如果你检定失败，在你所在地点放置你的1个线索。",
+      "cultist": "-2. 如果 你 失败 和 你的 地点 是 完全淹没, 受到1点伤害.",
+      "skull": "-X. X 是 half 数量为已揭示 地点 (rounded 向下).",
+      "elderThing": "-3 (-5 改为 如果 你的 地点 是 不 淹水)."
+    },
+    "hardExpert": {
+      "cultist": "-3. 如果你所在地点已淹没，受到1点伤害。",
+      "skull": "-X. X 是 数量为已揭示 地点.",
+      "tablet": "-4. 每位point 你 失败 由, 放置 1 的 你的 线索 在 你的 地点.",
+      "elderThing": "-4 (-6 改为 如果 你的 地点 是 不 淹水)."
+    }
+  },
+  "label": {
+    "chooseFloodedSeaFloor": "Increase  淹没程度 的 1 海床 地点 每调查员.",
+    "chooseExpeditionAssetQuestion": "选择 an earned 神器 支援, 或 an 物品 支援 从 探险 遭遇组, 至 begin 在场 在……下 你的 控制.",
+    "noExpeditionAsset": "Do 不 受到 an 神器 或 探险 支援."
+  }
+}

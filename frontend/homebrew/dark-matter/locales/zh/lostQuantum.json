@@ -1,0 +1,59 @@
+{
+  "lostQuantum": {
+    "resolutions": {
+      "noResolution": {
+        "title": "没有 结局 是 Reached",
+        "body": "<p class='basic'>_如果 没有 结局 是 reached (每个 调查员 resigned 或 是 defeated), 和 一 调查员 resigned 与 欧文·西蒙斯 剧情 支援 在……下 他们的 控制:_ 前往 至 _结局 3_.</p><p class='basic'>_如果 没有 结局 是 reached (每个 调查员 resigned 或 是 defeated), 和 调查员 did 不 resign 与 欧文·西蒙斯 剧情 支援 在……下 他们的 控制:_ 前往 至 _结局 1_.</p>"
+      },
+      "resolution1": {
+        "title": "结局 1",
+        "body": "<p>_结局 1:_ 当 你 finally came back 至 你的 senses, 你 和 你的 companions 是 inside Tatterdemalion, 和 Elbrus appears 至 有 disappeared—possibly lost 在……中 太空 和 time within quantum realm. 你 don’t remember much 的 what happened. Despite initial evidence pointing 至 contrary—proof 是 eventually found 该 ordeal 有 been real—shards 的 quantum-behaving crystals 是 discovered 在……中 cargo bay, 该 你 presumably 有 brought back 从 Elbrus. Still unsure 的 why 邪教徒 有 come, 你 prepare 为 下一 destination, which 可以 finally give 一 few answers rather than pose 更多 questions.</p><ul><li>在……中 你的 战役日志, 记录 该 * Elbrus Station 有 been lost 在……中 quantum realm*.</li><li>如果 它 是 不 already written, 记录 在……中 你的 战役日志 该 *你有 witnessed primordial chaos*.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li>_经验_: {xp}</li></ul></li><li>加入 4 tally marks 在……下 “Impending 毁灭标记” 在……中 你的 战役日志.</li><li>返回 至 _ 搜寻碎片_.</li></ul>"
+      },
+      "resolution2": {
+        "title": "结局 2",
+        "body": "<p>_结局 2:_ physicist 是 更多 than grateful 为 你的 help. “全部 此 vital research—thank god 你 came 在……中 time. 如果 你 ever need 至 get something done 在……中 Colonial territories, I’ll make sure 至 放置 在……中 my good word.” 与 一 nod 和 一 awkward handshake, 你 depart facility 和 返回 至 Tatterdemalion. 邪教徒 有 stolen quantum shards 从 Elbrus, 但是 为 what purpose, 你是 still unsure.</p><p>你 查看 至 ephemeral glow 的 crystal shard Erwin 有 gifted 你, wondering about bizarre circumstances 你有 found yourself 在……中. However, there’s 没有 time 至 waste 在……上 self-reflection—K2-PS187 awaits 你的 下一 heading.</p><ul><li>在……中 你的 战役日志, 记录 该 * Elbrus Station 有 been fully stabilized*.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li>_经验_: {xp}</li></ul></li><li>加入 1 {'{'}elderThing{'}'} 标记 至 混乱袋 为 remainder 的 campaign 为 catching eye 的 King 在……中 Yellow.</li><li>加入 1 tally mark 在……下 “Impending 毁灭标记” 在……中 你的 战役日志.</li><li>返回 至 _ 搜寻碎片_.</li></ul>"
+      },
+      "resolution3": {
+        "title": "结局 3",
+        "body": "<p>_结局 3:_ 一 few moments 在……之后 你 返回 至 Tatterdemalion, Elbrus implodes 在……中 一 cacophony 的 ephemeral haze 和 pops out 的 existence. physicist sighs 在……中 relief. “Thank god 你 came 在……中 time. It’s 一 shame about 全部 该 research 该 是 lost, 但是 在 least everyone 是 safe. Now please explain 至 me why 我们 是 now 在……中 非常 飞船 I remember came 至 pillage 我们的 facility.” 你 brief Erwin 在……上 你的 quest 和 discuss what purposes 邪教徒 可以 有 had 与 quantum shards. physicist proposes several ideas 的 quantum weaponry 或 tools—但是 none 的 which makes 任意 sense. Regardless, 他 是 willing 至 join 你 在……上 你的 quest—out 的 good 将 或 curiosity, 你是 unsure. Still unsure 的 why 邪教徒 有 come, 你 prepare 为 下一 destination, which 可以 finally give 一 few answers rather than pose 更多 questions.</p><ul><li>在……中 你的 战役日志, 记录 该 * Elbrus Station 有 been lost 在……中 quantum realm*.</li><li>一 调查员 可以 加入 欧文·西蒙斯 *(Quantum Physicist)* 剧情 支援 至 他们的 牌组. 此 卡牌 does 不 count toward 该 调查员’s 牌组 limit.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li>_经验_: {xp}</li></ul></li><li>加入 2 tally marks 在……下 “Impending 毁灭标记” 在……中 你的 战役日志.</li><li>返回 至 _ 搜寻碎片_.</li></ul>"
+      }
+    },
+    "intro": {
+      "title": "冒险 IIIa: 量子迷失",
+      "body": "<p>“当 world ended, various scientific 和 mining communities 的 不同 nationalities 该 lie 在……中 asteroid belt between planets Mars 和 Jupiter had formed 一 pact—一 promise 至 ensure survival 的 mankind. [...] United Colonial Coalition 是 composed 的 twenty colonies, varying widely 在……中 size, population, 和 purpose. 一些 colonies exist solely 为 mining, 当……时 其他 focus 在……上 scientific research 或 是 engineering centers; 这些 usually 有 fewer than 200 individuals living within 他们. 其他 asteroids serve 作为 population centers, containing vast hydroponic farms, universities, 和 recreational areas. 这些 可以 be home 至 更多 than 一 thousand colonists...”</p><p class='basic right'>— 玛雅, Information Archives</p><p>当 你 arrive 在 asteroid, 你是 absorbed 由 fuchsia glow 的 Elbrus. Quantum materials 有 仅 recently been discovered, 但是 可以 hold 钥匙 properties 该 可以 be used 至 engineer devices 该 会 有 been impossible 与 classical materials. Unfortunately, quantum fields generated 由 这些 materials disrupt traditional radio communication, making 它 impossible 为 你 至 hail scientists 在……上 Elbrus. 不使用 further ado, 你 和 你的 companions board 1 的 landing crafts 和 drift towards asteroid...</p><p>purple aurora spreads 在……上 view port like distant milk, filling 房间 与 一 electric tinge. 你的 final approach vector takes 你 directly 在……上 1 的 larger craters 在……上 asteroid. computer calculates trajectories, 和 commences final descent onto rocky surface. 它 是 仅 然后 该 short-range radios crackle 至 一 man’s terrified voice. “Abort landing procedure now! Abort! 在……之前—” 但是 它 是 too late. warning lights 开始 flashing 在……上 和 off 作为 craft spins out 的 控制. 你 grab onto anything 你 可以, 但是 vessel increasingly spins 和 spins 直到 你的 arms flail 和 黑暗 prevails...</p>"
+    },
+    "setup": {
+      "gatherSets": "收集 全部 卡牌 从 以下 encounter sets:<i>量子迷失</i>和<i>Deep 太空</i>. 这些 sets 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{imgPath}/homebrew/dark-matter/sets/lost-quantum.png' /><img src='{imgPath}/homebrew/dark-matter/sets/deep-space.png' /></section>",
+      "setAsideErwinSimmons": "放置 一边 两者 copies 的 欧文·西蒙斯 剧情 支援, out 的 进行.",
+      "setAsideFeasterFromAfar": "放置 一边 Feaster 从 Afar 敌人 (与 一 扫描 back).",
+      "createScanningDeck": "Create 扫描 牌组. 此 是 done 由 taking 全部 其他 encounter 卡牌 与 图标 在 bottom 的 他们的 back side 和 shuffling 他们 together.",
+      "placeLandingCraft": "搜索 扫描 牌组 为 Landing Craft 地点 和 放置 它 至 进行.",
+      "startAt": "每个 调查员 begins 进行 在 Landing Craft.",
+      "randomizeAgenda": "随机 洗入 3 versions 的 密谋 1 together 至 form 密谋 牌组."
+    },
+    "tokens": {
+      "easyStandard": {
+        "skull": "-X. X 是 number 的 face-down encounter 卡牌 在……中 你的 threat area.",
+        "cultist": "-X. X 是 half number 的 地点 在……中 进行 (rounded down).",
+        "tablet": "-1. 揭示 另一 标记. 如果 你 fail, 放置 top 卡牌 的 遭遇牌堆 至 你的 threat area, face-down.",
+        "elderThing": "-3. 随机 抽取 一 face-down encounter 卡牌 在……中 你的 threat area."
+      },
+      "hardExpert": {
+        "skull": "-X. X 是 number 的 face-down encounter 卡牌 在……中 你的 threat area.",
+        "cultist": "-X. X 是 number 的 地点 在……中 进行.",
+        "tablet": "-2. 揭示 另一 标记. 如果 你 fail, 放置 top 卡牌 的 遭遇牌堆 至 你的 threat area, face-down.",
+        "elderThing": "-4. 随机 抽取 一 face-down encounter 卡牌 在……中 你的 threat area."
+      }
+    },
+    "specialRules": {
+      "0": {
+        "title": "Face-Down Encounter 卡牌",
+        "body": "<p class='basic'>在……中 此 冒险, 你可以 be instructed 至 放置 encounter 卡牌 face-down 至 你的 threat area. 这些 卡牌 是 considered out-的-进行, 但是 可以 be referenced 由 其他 冒险 卡牌.</p><p class='basic'>当 你 会 抽取 卡牌 从 遭遇牌堆, 如果 两者 遭遇牌堆 和 弃掉 piles 是 empty, 抽取 一 卡牌 从 face-down encounter 卡牌 在……中 你的 threat area instead. 如果 there 是 none 在……中 你的 threat area, 你是 defeated.</p>"
+      },
+      "1": {
+        "title": "线索 & 地点 在……中 Quantum Realm",
+        "body": "<p class='basic'>在……中 此 冒险, 地点 可以 leave 进行 和 re-enter 进行 在 一 later time. 当 一 地点 leaves 进行, 弃掉 全部 attached 卡牌 和 线索 在……上 它. 当 一 地点 enters 进行, regardless 的 如果 它 有 been 在……中 进行 在 一 上一 time, treat 它 作为 如果 你有 仅 revealed 它 为 第一 time. 作为 such, 一 number 的 线索 equal 至 该 地点’s 线索 value 是 placed 在……上 该 地点 每个 time 它 是 revealed (从 标记 pool).</p>"
+      }
+    }
+  }
+}

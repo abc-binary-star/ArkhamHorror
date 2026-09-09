@@ -1,0 +1,143 @@
+{
+  "theFutureAndThePast": {
+    "title": "幕间故事: 未来与过去",
+    "intro": "<p>大门 至 ringmaster's trailer thankfully opens 和 closes 与 barely 任意 sound. 它的 interior 是 lavishly furnished, 每个 piece 的 furniture 和 decor made 从 material 的 finest quality. 1 shelf 是 stocked 与 books 的 occult, 非常 writing 在……上 他们的 spines already sparking 一 feeling 的 dread 在……中 你. 你的 browsing 有 仅 begun 当 一 quiet sound snaps 你的 attention 至 一 dark curtain separating trailer 至 halves. Cautiously, 你 ready yourself 为 trouble 和 throw back curtain.</p><p>第二 half 是 没有 更少 richly decorated, 但是 hardly worthy 的 你的 attention. 一 dark-skinned woman 在……中 garb 的 一 fortune teller sits bound 至 一 chair 和 gagged, softly stirring 在……中 一 exhausted state. 她的 eyes drift up 至 你, weary 在 第一, 但是 widen 在……中 shock 在……中 一 instant. woman leans forward, 她的 breathing accelerating 作为 你 reach back 至 untie knotted cloth. “It's 你!” 她 gasps quietly, 她的 voice dry 但是 still smooth 与 一 southern drawl, “从 my visions! It's... it's really happening!”</p>",
+    "farSeeing": {
+      "title": "Far-Seeing",
+      "body": "<p><i>如果 1 或 更多 Clairvoyant 调查员 是 chosen 为 此 campaign, 那些 调查员 阅读 Far-Seeing.</i></p><p>你're 没有 陌生者 至 glimpses 的 future, 但是 你're 更多 accustomed 至 seeing rather than being seen. Knowing 该 你 进行 一些 part 在……中 此 woman's visions lends 一 new perspective 至 你的 own.</p><p class='basic'>你 earn 1 bonus 经验, which 可以 仅 be used 至 purchase<i>Augury</i>卡牌.</p>"
+    },
+    "xp": {
+      "farSeeing": "Far-Seeing"
+    },
+    "thea": "<p>Thea shudders 作为 她 thinks back. “他 forced me 至 tell him 的 my visions. 不 physically, 但是 my mind... 他 used 他的 magic 至 squeeze 它 like 一 orange, make me talk about things I didn't even know 该 I knew... 它 took 全部 my strength 仅 至 hold back details 的 who 可以 stop him... 仅 该 你 是 here, 在……中 Arkham, 但是 该 是 my 仅 hope... 和 y'全部 是 一 wonderful sight 为 sore eyes.”</p><p>It's 一 lot 至 获得 在……中 在 once. Whether 或 不 你 believe Thea's 剧情, Blake still brought circus north 至 Arkham pursuing 那些 who saw against him. He'll be 在……之后 你的 血, especially 与 你的 actions trying 至 stop 他的 slaughter 在 非常 least. 你 ask Thea 如果 她 knows 仅 what Blake wants 至 stop 你的 involvement 在……中, 和 她 gives 一 dazed nod. “I don't fully know, 但是 let me show 你 something. I'm sure I 可以 help 你 figure 它 out.”</p>",
+    "addAmaltheaWeaver": "1 调查员 必须 加入 Amalthea Weaver (Circus Fortune Teller) 至 他们的 牌组. 此 卡牌 does 不 count toward 该 调查员's 牌组 size.",
+    "theTome": "<p>Recovering 她的 strength 由 degrees, Thea directs 你 back 至 第一 half 的 trailer, 至 shelf 的 occult books. “该 1, 与 光 brown leather,” 她 indicates. 你 pull weathered tome 从 它的 放置 和 inspect cover. Eldritch symbols adorn cover, 但是 nothing distinguishes 它 从 其他 works near 它. 你 unlatch clasp 和 inspect aged parchment inside.</p>",
+    "linguaFranca": {
+      "title": "Lingua Franca",
+      "body": "<p><i>如果 1 或 更多 Miskatonic, Scholar 或 Believer 调查员 是 chosen 为 此 campaign, 那些 调查员 阅读 Lingua Franca.</i></p><p>Despite 它的 age, penmanship 是 clear 和 words recognizable. 你有 一 familiarity 与 Latin, due 至 你的 own upbringing, 和 可以 understand 它 easily. 如果 此 tome 是 important, 你的 task 是 仅 一 little simpler now.</p><p class='basic'>你 开始 下一 冒险 与 1 additional 卡牌 在……中 你的 opening 手牌.</p>"
+    },
+    "apuleius": "<p>Thea stands beside 你 作为 你 study 第一 page 的 old tome. “因此 此 是 它. Blake 会 often 有 此 book 在……中 手牌 当 他 questioned me.” 她的 finger traces 一 word 在 top 的 page. “Apuleius,” 她 mutters. 你 ask Thea how much 她 可以 阅读 的 tome. “Most 的 它. 1 的 magicians 在 old circus taught me 至 阅读 和 write Latin. 他们 said 该 knowing 它 会 加入 一些 flair 至 my fortune telling. Seems 因此 long ago now...” 你 close book 和 加入 它 至 你的 belongings. There 将 be time 至 study 它的 secrets later, 但是 你有 至 get out 的 Blake's hands.</p>",
+    "addDeCultusBestiae": "1 调查员 必须 加入 De Cultus Bestiae (Forgotten Work 的 Apuleius) 至 他们的 牌组. 此 卡牌 does 不 count toward 该 调查员's 牌组 size.",
+    "eclipse": "<p>你 wonder aloud what ancient text 和 Thea's visions 有 在……中 common, 和 Thea wrings 她的 hands together. “There's 1 其他 thing 从 my visions I 可以 see there's... 一 eclipse. 一 full 1.”</p>",
+    "likeClockwork": {
+      "title": "Like Clockwork",
+      "body": "<p><i>如果 Norman Withers 是 chosen 为 此 campaign, 该 调查员 reads Like Clockwork.</i></p><p>astronomical community 有 long held predictive models 为 motions 的 太阳 和 月亮. Though stars 是 更多 你的 specialty, topic 有 jogged 一些 academic 记忆 该 你 had shelved 直到 now.</p><p class='basic'>你的 deckbuilding options 获得 “Up 至 2 additional Seeker 卡牌 (&loz;) level 1-2.”</p>"
+    },
+    "escape": "<p>一 total eclipse. celestial event 是 certainly mystic 在……中 itself, 但是 它的 exact importance 至 Sylvester Blake 和 他的 circus isn't clear. answers 必须 be somewhere 在……中 leatherbound tome, 但是 你 可以't devote time 至 study 它 here now. 你 ask Thea 至 think 在……上 她的 visions once 你're safely away 从 encampment 与 作为 many captive civilians 作为 你 可以 找到. 她 agrees 和 readies herself 为 一 cautious bid 为 freedom. It's now 该 你 wish full 月亮 会 vanish 为 一 当……时 至 help cover escape.</p>",
+    "addMoonToken": "加入 一 {'{'}moon{'}'} 标记 至 混乱袋 为 remainder 的 campaign."
+  },
+  "writtenInStone": {
+    "title": "幕间故事: Written 在……中 Stone",
+    "intro": "<p>一 knock sounds 在 大门 至 你的 房间, erasing 任意 weariness 从 你的 mind. 你 open 它 cautiously, 但是 找到 Thea – 她的 own 房间 directly across 大厅 从 yours – 与 tome held 至 她的 chest. 你 usher 她的 inside quickly 和 lock 大门. “I didn't really 有 一 chance 在……期间 journey, 但是 I 有 至 talk 与 y'全部 about what I learned 从 此 book.”</p><p>“ book – De Cultus Bestiae – 是 written 由 Apuleius, who lived 在……中 Roman Empire. 他 是 一 scholar 和 poet, 和 他 dabbled 在……中 several cults. Normally 该 会 be cults 在……中 old sense, like specific parts 的 Roman pantheon, 但是 此 account 是 specifically about cult 的... Shub-Niggurath.”</p><p>tome details cult 的 Shub-Niggurath – disguised 作为 一 cult 的 Bacchus – 和 how Apuleius infiltrated 它, learned 他们的 secrets, 和 aided local Roman governor 在……中 dissolving cult 在……中 该 region. Most 的 horrors 是 known 至 你 through 你的 recent trials, 但是 Thea goes 在……上 至 explain several 钥匙 revelations.</p><p>“他 claims 该 Shub-Niggurath 可以 be summoned 由 一 ritual 在……中 一 森林 在……期间 任意 new 月亮, 但是 仅 temporarily. cult back 在……中 该 time 是 devising 一 ritual 至 permanently summon 他们的 god 由 locking 月亮 在……中 放置 在……期间 一 eclipse, 但是 他们的 works 是 burned 当 cult 是 scattered. high priest laid out 一 prophecy 在……之前 他的 execution, which Apuleius recorded 在……中 tome.”</p><p>Thea shows 你 一 passage which 她 translates 作为 她 reads. “由 cunning 的 Lord 的 树林, consort 的 Mother Goddess, words 将 once 更多 be known, 她的 mighty young fattened, 和 stars 的 black sky be aligned. Red 将 be dawn 和 red 森林 当 neither 月亮 nor 太阳 shine down again. Iä! Shub-Niggurath! Goat 与 一 Thousand Young!”</p>",
+    "prophecy": "<p>Thea swallows dryly 作为 她 completes passage. “I know how 他 felt now. 该 prophecy 是 immediately followed up 由 一 short protective prayer 至 Diana, Roman goddess 的 wild animals, hunt, 和 月亮.” 她 again shows 你 book, 此 time saying Latin phrase aloud.</p>",
+    "addInvocationOfDiana": "每个 调查员 可以 加入 一 copy 的 Invocation 的 Diana 至 他们的 牌组. 这些 卡牌 do 不 count toward 那些 调查员' 牌组 size.",
+    "destinyIntro": "<p>你 ask Thea 如果 that's 全部 there 是 至 prophecy, 因为 该 doesn't explain why Blake 是 worried about 你的 involvement. “It's actually 2 prophecies together rather than 1,” Thea explains, turning 至 一 later page 在……中 book. “Apuleius consulted high priestess 的 Diana 以下 execution, 和 她 gave 她的 own prophecy 的 hope – 的 那些 who 会 rise 至 stop 它.”</p><p class='basic'>每个 调查员 必须 选择 1 的 以下 options. 然后, 在……中 战役日志 在……下 “Destinies,” 记录 该 调查员's name 和 chosen word. 每个 调查员 必须 选择 一 不同 option. 如果 一 调查员 是 killed 或 driven insane, 他们的 destiny 是 transferred 至 调查员 chosen 至 replace 他们.</p>",
+    "role": "<p>Thea reads out translated descriptions 的 这些 foreseen figures 和 你 必须 admit, 你 do fit model. Granted 你're 不 sure 如果 一 priestess 从 nearly 2 millennia ago 可以 see 你 specifically, 但是 it's 作为 likely 作为 全部 其他 improbable things 该 happened 在……中 past 2 weeks. Thea's expression grows 一 little uncertain 作为 她 looks between 你 和 text. “Y'全部 是 there, plain 至 see, 但是... I 仅 wish I knew what there 是 still 在……中 store 为 me. 如果 此 whole thing 是 true, 然后 my visions 是 仅 至 get y'全部 involved 在……中 它, 和 now... well, 是 该 为 它?”</p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+    "determination": "<p><b>Determination:</b>你 argue 该 prophecy 是 peeping through keyhole 的 time. 仅 因为 她 wasn't 在……中 small visible part doesn't mean 她 isn't there 和 making 一 huge difference. “获得 为 example, where did prophecy talk about 他们 和 他们的 instrumental part 在……中 getting 你 here?” Thea exhales 和 looks visibly relieved. “Y'全部 是 right. I've got 至 获得 matters 至 my own hands 和 believe 该 what I'm doing makes 一 difference. Y'全部 是 doing 该 在……之前 你 even knew about 任意 prophecies.”</p><p class='basic'>调查员 与 Amalthea Weaver 在……中 他们的 牌组 swaps 她的 与 Amalthea Weaver (Aspirant 的 Courage).</p>",
+    "guidance": "<p><b>Guidance:</b>你 argue 该 perhaps 她的 visions 是 一 extension 的 相同 prophecy. ancient priestess 可以 仅 see 和 understand 因此 much, 因此 perhaps it's up 至 Thea 至 complete rest. 她的 ability 和 knowledge 有 allowed 你 至 understand 此 ages old prophecy 在……中 第一 放置, 在……之后 全部. Thea looks down 在 book 在……中 她的 hands, nodding quietly. “Y'全部 是 right. I've got 至 stop thinking about my visions 在……中 such 一 narrow window. There's got 至 be 更多 至 他们, 如果 仅 I focus 在……上 understanding 他们.”</p><p class='basic'>调查员 与 Amalthea Weaver 在……中 他们的 牌组 swaps 她的 与 Amalthea Weaver (Aspirant 的 Wisdom).</p>",
+    "furtherReading": {
+      "title": "Further Reading",
+      "body": "<p>Thea turns back 至 page 与 profane declaration 和 furls 她的 brow 在……中 contemplation. “I 仅 wish 我们 knew what Blake 是 planning. 他 seems 至 有 everything 他 needs 为 此 prophecy, 和 他 仅 needed 至 come 至 California 为 此 eclipse, 因此 why go out 的 他的 way 至 hunt 你 down? He's 仅 因此 certain 的 这些 prophecies 和 他的 visions, 但是 why?”</p>"
+    },
+    "noChoice": {
+      "title": "没有 Choice",
+      "body": "<p><i>如果 1 或 更多 Chosen 调查员 是 chosen 为 此 campaign, 阅读 没有 Choice.</i></p><p>你 可以't 开始 至 understand 一 mind 作为 twisted 和 evil 作为 Blake's, 但是 作为 someone who accepted 你的 放置 在……中 events long ago, 你有 一 little insight 至 他的 fixation.</p><p class='basic'>你可以 heal 1 physical 或 精神创伤.</p>"
+    },
+    "motive": "<p class='basic'>调查员 必须 decide (选择 1):</p>",
+    "fanaticism": "<p><b>Fanaticism:</b>你 suggest 该 since Blake serves Shub-Niggurath, 此 ritual 是 millennia 在……中 making. 他 会 rather die than allow cult 至 fail 一 第二 time, 和 作为 such 他 会 follow tome 的 Apuleius 至 letter 在……中 他的 task.</p><p class='basic'>调查员 与 De Cultus Bestiae 在……中 他们的 牌组 swaps 它 与 De Cultus Bestiae (Interpretation 的 Conviction).</p>",
+    "nemesis": "<p><b>Nemesis:</b>你 suggest 该 为 一 man 作为 confident 和 prepared 作为 Blake 是, 你的 presence 在……中 prophecy represents 更多 than simple prose. 你的 theft 的 Apuleius' tome 也 likely 有 一 personal aspect 至 他的 situation, 和 helps drive 他的 existing vendetta against 你.</p><p class='basic'>调查员 与 De Cultus Bestiae 在……中 他们的 牌组 swaps 它 与 De Cultus Bestiae (Interpretation 的 Obsession).</p>",
+    "bookmark": "<p><b>Bookmark:</b>There's 没有 结束 至 theories 你 可以 imagine about prophecies 和 Blake. What 你've supposed 是 仅 作为 likely 至 be true 作为 不, 在……之后 全部. 你 和 Thea agree 至 shelve 这些 thoughts 作为 你 apply 你的 brains 至 更多 immediate problems.</p>",
+    "addSkullToken": "加入 一 {'{'}skull{'}'} 标记 至 混乱袋 为 remainder 的 campaign.",
+    "label": {
+      "addInvocationOfDianaQuestion": "你可以 加入 一 copy 的 Invocation 的 Diana 至 你的 牌组. 它 does 不 count toward 你的 牌组 size.",
+      "addInvocationOfDiana": "加入 Invocation 的 Diana 至 你的 牌组",
+      "doNotAddInvocationOfDiana": "Do 不 加入 Invocation 的 Diana",
+      "determination": "\"Prophecy 可以 仅 happen 如果 people like 你 获得 action.\"",
+      "guidance": "\"Perhaps 你有 一 similar role 至 Priestess 的 Diana.\"",
+      "healTraumaQuestion": "没有 Choice: 你可以 heal 1 physical 或 精神创伤.",
+      "healPhysicalTrauma": "Heal 1 肉体创伤",
+      "healMentalTrauma": "Heal 1 精神创伤",
+      "doNotHealTrauma": "Do 不 heal 创伤",
+      "fanaticism": "\"Maybe he's 因此 dedicated 该 literally nothing else matters.\"",
+      "nemesis": "\"Maybe 我们 仅 represent failure 至 him personally.\"",
+      "destinyQuestion": "选择 1 的 以下 destinies:",
+      "heart": "\" 1 who 将 strike heart.\"",
+      "pipes": "\" 1 who 将 silence pipes.\"",
+      "torch": "\" 1 who 将 raise torch.\"",
+      "rock": "\" 1 who 将 split rock.\"",
+      "sigil": "\" 1 who 将 scribe sigil.\"",
+      "stain": "\" 1 who 将 cleanse stain.\"",
+      "prayer": "\" 1 who 将 recite prayer.\"",
+      "burden": "\" 1 who 将 bear burden.\""
+    }
+  },
+  "goodOmens": {
+    "title": "幕间故事: Good Omens",
+    "destinyReminder": "<p>每个 卡牌 在……中 此 幕间故事 可以 be found 在……中<i>Destiny 和 Prophecy</i>遭遇牌组, 标示 由 此 图标:</p>",
+    "intro": "<p>第一 rays 的 sunlight 开始 至 warm 城市 作为 你 开始 你的 journey northward. Thea 是 focused intently 在……上 final page 的 Apuleius' account, mouthing Latin words 和 lingering 在……上 每个 1. 在……之后 一 long pause, 她 finally turns toward 你...</p>",
+    "moreToDo": "<p><b>更多 至 Do:</b>“I've been trying 至 控制 my visions 更多 directly. It's been working, 但是 there's 仅... too many 的 他们. I 失去 details 如果 I try 至 获得 它 全部 在……中. How 会 y'全部 decide which visions 是 most important ones?”</p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+    "priorWarning": "<p><b>Prior Warning:</b>Thea nods, folding book 与 一 serene smile. “I'll do exactly 该. Even though I'm 1 supposed 至 be guiding 你, 你've given me plenty 的 guidance. 但是 it's my turn 为 sure now. We'll be ready 为 anything 他们 可以 cook up.”</p><p class='basic'>调查员 与 Amalthea Weaver 在……中 他们的 牌组 swaps 她的 与 Amalthea Weaver (Oracle 的 Purity).</p>",
+    "sawItComing": "<p><b>Saw 它 Coming:</b>Thea nods, shutting book 与 一 brave smile. “I'll do exactly 该. Even though I'm 1 supposed 至 be guiding 你, 你've given me plenty 的 guidance. 但是 it's my turn 为 sure now. 他们 won't be able 至 twitch 不使用 我们 knowing 它.”</p><p class='basic'>调查员 与 Amalthea Weaver 在……中 他们的 牌组 swaps 她的 与 Amalthea Weaver (Oracle 的 结算).</p>",
+    "moreToSee": "<p><b>更多 至 See:</b>“I've been trying 至 open myself up 至 my visions 更多, let 他们 进行 out fully 和 揭示 things I didn't see 在……之前. I 仅... don't know how 至 interpret 他们. What 会 y'全部 do 与 visions 和 prophecies?”</p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+    "writtenInInk": "<p><b>Written 在……中 Ink:</b>Thea casts 她的 eyes back toward tome. “I'll do exactly 该. Even though I'm 1 supposed 至 be guiding 你, 你've given me plenty 的 guidance. 但是 it's my turn 为 sure now. We'll make sure 此 prophecy goes exactly 至 plan.”</p><p class='basic'>调查员 与 Amalthea Weaver 在……中 他们的 牌组 swaps 她的 与 Amalthea Weaver (Oracle 的 Enlightenment).</p>",
+    "writtenInSmoke": "<p><b>Written 在……中 Smoke:</b>Thea casts 她的 eyes back toward tome. “I'll do exactly 该. Even though I'm 1 supposed 至 be guiding 你, 你've given me plenty 的 guidance. 但是 it's my turn 为 sure now. We'll make sure 该 destiny 是 在……中 我们的 hands.”</p><p class='basic'>调查员 与 Amalthea Weaver 在……中 他们的 牌组 swaps 她的 与 Amalthea Weaver (Oracle 的 Mystery).</p>",
+    "theLastWord": {
+      "title": "Last Word",
+      "body": "<p>你的 own thoughts stray 至 old tome, 和 你 wonder aloud 仅 what cult knows 该 你 don't. 在……之后 全部, tome 是 在……中 Blake's possession 为 who knows how many years.</p>"
+    },
+    "theInfinite": "<p><b>Infinite:</b>如果 你're right 在……中 Blake's devotion being 他的 driving motivation, 然后 他的 followers 将 放置 他们的 effort 至 ritual foremost, 和 rely 在……上 foul spell 至 carry 他们 至 victory.</p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+    "powersAbove": "<p><b>Powers Above:</b>tome 有 guided 你 此 far, 在……中 一 sense, 和 你 see 没有 reason 至 deviate 从 该 now. incantations 的 book 将 be needed now 更多 than ever.</p><p class='basic'>调查员 与 De Cultus Bestiae 在……中 他们的 牌组 swaps 它 与 De Cultus Bestiae (Prophecy 的 Beyond).</p>",
+    "powersBelow": "<p><b>Powers Below:</b>tome 有 guided 你 此 far, 在……中 一 sense, 但是 不 不使用 你的 own talents carrying 它 along. Cautious 使用 的 book 将 be wisest course 的 action 此 morning.</p><p class='basic'>调查员 与 De Cultus Bestiae 在……中 他们的 牌组 swaps 它 与 De Cultus Bestiae (Prophecy 的 Eternal).</p>",
+    "theEndless": "<p><b>Endless:</b>如果 你're right 在……中 Blake's vengeance being 他的 driving motivation, 然后 他的 followers 将 rely 在……上 physical agents 的 他们的 god, goatspawn 和 malignant dark young 为 victory.</p><p class='basic'>调查员 必须 decide (选择 1):</p>",
+    "againstTheFlood": "<p><b>Against Flood:</b>Shub-Niggurath 是 named 在……中 tome 作为 black goat 的 一 thousand young, 和 你 必须 expect 至 face 和 defeat countless 敌人 在……之前 day 是 out.</p><p class='basic'>调查员 与 De Cultus Bestiae 在……中 他们的 牌组 swaps 它 与 De Cultus Bestiae (Prophecy 的 Horde).</p>",
+    "againstTheStorm": "<p><b>Against Storm:</b>你有 seen many times sheer size 和 power 的 greatest 的 Shub-Niggurath's 孩子们, 和 你 将 有 至 do everything 在……中 你的 power 至 oppose 他们 today.</p><p class='basic'>调查员 与 De Cultus Bestiae 在……中 他们的 牌组 swaps 它 与 De Cultus Bestiae (Prophecy 的 Behemoth).</p>",
+    "breakOfDawn": "<p><b>Break 的 Dawn:</b>你 和 Thea share quiet, 如果 tired, conversation 作为 你 前往 north out 的 Los Angeles 在……中 growing daylight. clear sky does little 至 assuage 你的 worries 的 coming fight.</p>",
+    "addSkullToken": "加入 一 {'{'}skull{'}'} 标记 至 混乱袋 为 remainder 的 campaign.",
+    "label": {
+      "priorWarning": "\"Focus 在……上 使用 visions 至 keep 我们 protected.\"",
+      "sawItComing": "\"Focus 在……上 使用 visions 至 fight 这些 monsters.\"",
+      "writtenInInk": "\"Try 至 square visions 与 written prophecy.\"",
+      "writtenInSmoke": "\"获得 visions 作为 他们 是, beyond prophecy.\"",
+      "powersAbove": "\"我们 必须 rely 在……上 forces beyond humanity 为 guidance.\"",
+      "powersBelow": "\"我们 必须 rely 在……上 我们的 own strengths 在……中 此 fight.\"",
+      "againstTheFlood": "\"我们 必须 prepare 至 face thousands.\"",
+      "againstTheStorm": "\"我们 必须 prepare 至 face giants.\""
+    }
+  },
+  "epilogue": {
+    "title": "Epilogue",
+    "intro": "<p><i>阅读 以下 仅 如果 调查员 won campaign.</i></p><p>与 possibility 的 Liber Pater Society waiting 为 你 back 在……中 Los Angeles 与 plans 的 vengeance, 你 instead depart redwood 森林 northward toward San Francisco. 你的 harrowing 经验 有 left 你 wary 的 forests 在……中 general, 和 你 welcome train ride back across open country.</p>",
+    "underWraps": {
+      "title": "在……下 Wraps",
+      "body": "<p><i>如果 一 调查员 有 Monstrous Transformation 在……中 他们的 牌组, 该 调查员 reads 在……下 Wraps.</i></p><p>savage urges 有 been largely subdued since battle 在……下 eclipse, 但是 你 know 该 此 是 something 你 将 有 至 contend 与 constantly, perhaps 为 rest 的 你的 life. 直到 你 discover 一 cure 为 curse 的 Rougarou, there 将 有 至 be 血, 1 way 或 另一.</p>"
+    },
+    "divergingPaths": {
+      "title": "Diverging Paths",
+      "body": "<p><i>如果 一 调查员 有 Lady Esprit 在……中 他们的 牌组, 该 调查员 reads Diverging Paths.</i></p><p>Lady Esprit 有 kept 一 更多 aloof mood than usual since ordeal 在……中 redwood 森林. 由 time 你的 journey reaches St. Louis once again, bokor 保持 在……上 platform 作为 你 board train 至 Chicago. “Papa Legba stands 在 crossroads 和 points way where I'm needed most. 但是 don't 你 worry none. 如果 你 need me, 然后 roads 将 lead me 至 你 once again.”</p>"
+    },
+    "thea": "<p>Thea 有 remained 一 constant – 如果 quiet – companion 为 journey back 至 Arkham. Since Blake's acquisition 的 4 Leaf Circus, Thea's life had been funneled toward eclipse ritual. Everything had built 至 该 moment, 和 now 她 是 adrift. Even Thea's visions don't suggest 任意 distinct events 至 come. 她的 future 是 一 open book, 因此 至 speak, though 她 still keeps 一 close 手牌 在……上 De Cultus Bestiae.</p>",
+    "kernelOfTruth": {
+      "title": "Kernel 的 Truth",
+      "body": "<p><i>如果 prophecy 是 fulfilled:</i></p><p>Thea rubs 一 手牌 smoothly 在……上 weathered cover 的 tome. “It's strange 至 think 的 全部 那些 ancient folks putting such trust 在……中 我们. Neither priestess nor Apuleius really knew what cult 是 doing 或 how 它 可以 be stopped, 但是 他们 仅... hoped. I suppose I do know 该 hope, 在 least.”</p><p class='basic'>每个 调查员 earns 2 bonus 经验 为 realizing 他们的 part 在……中 events beyond true understanding.</p>"
+    },
+    "xp": {
+      "kernelOfTruth": "Kernel 的 Truth"
+    },
+    "grainOfSalt": {
+      "title": "Grain 的 Salt",
+      "body": "<p><i>如果 prophecy 是 unfulfilled:</i></p><p>Thea holds tome 与 两者 hands, contemplating 它 like 一 headstone. “I don't know what priestess really did 和 didn't see, 但是 I think 它 served 它的 purpose. Even 如果 全部 那些 flowery words did 是 getting 你 至 该 森林, 然后 它 doesn't really matter what 是 truth 和 what 是 仅 hope. I 可以't blame priestess 为 wanting 一 future beyond cult's ambitions.”</p>"
+    },
+    "lookingAhead": {
+      "title": "Looking Ahead",
+      "body": "<p>当……时 两者 的 你 close 此 somewhat literal chapter 的 你的 lives, question 的 future still 保持. 你 ask Thea what 她 intends 至 do 如果 她 accompanies 你 全部 way 至 Arkham. “I'm still trying 至 figure 该 part out. I don't think I 可以 仅 go back 至 circus life 在……之后 everything that's happened. 如果 I still get visions 该 是 even half 作为 important 作为 ones 与 你 和 Blake, they'll be 更多 than circus admission price. Though I suppose I've still got 至 eat 在……中 meantime.”</p><p>你 suggest introducing Thea 至 一些 的 你的 allies 在……中 Arkham, such 作为 Dr. Henry Armitage. 与 她的 proficiency 在……中 Latin – 和 更多 经验 在……中 occult matters than anyone 可以 reasonably hope – Thea 会 be 一 boon 至 Miskatonic 图书馆. fortune teller's eyes drift 至 train window, gazing 在……上 rushing landscape 与 一 wistful expression. “Never know 直到 I try, right?”</p><p>你的 返回 至 Arkham 是 met 与 非常 little fanfare 在 全部. circus 是 全部 但是 forgotten – 在……中 many cases – 作为 citizens seek 任意 normalcy 他们 可以 找到 在……中 此 小镇. Ralph 和 Carrie Dykstra catch sight 的 你 在 Northside platform 和 eagerly reunite 与 offers 的 congratulations. Minnie Klein 是 soon 至 follow, eager 至 harvest fruit 的 journalistic seeds 她 planted. 她 knows full well 该 她的 editor Doyle Jeffries won't print 一 word 的 此, 但是 她的 own curiosity 是 satisfied 如果 nothing else. 2 brief meetings 是 更多 meaningful than anyone around 你 可以 guess, 但是 不使用 你的 experiences, hardly enough 至 抽取 一 glance.</p><p>Thea departs 为 Southside 与 plenty 的 thankful goodbyes, seeking 一 temporary 房间 在 Ma's boarding 宅邸 直到 她 可以 settle 在……上 一 new situation, 和 leaving 你 alone 为 第一 time 在……中 nearly 一 month.</p>"
+    },
+    "restAssured": {
+      "title": "Rest Assured",
+      "body": "<p>你 walk familiar roads 至 你的 home 在……中 Rivertown, enjoying brief respite 在……中 cool September air. Arkham 是 gloomy even 在……中 best 的 weather, making 它 perfect climate 为 many subtle 和 insidious evils 该 lurk throughout. 你're almost glad 的 evils 该 instead present themselves colorfully 作为 一 poisonous reptile. Had 一 plot like 此 developed 在……中 total secrecy, there 会 有 been little hope 的 uncovering truth. It's 一 reminder 至 be vigilant, 和 至 never 获得 events 在 face value. There's 一 sucker born 每个 minute, circus saying goes.</p><p class='basic'>在……中 你的 战役日志, 记录 该<i>新月马戏团 是 never seen again</i>.</p>"
+    },
+    "encore": {
+      "title": "Encore",
+      "body": "<p>你 walk familiar roads 至 你的 home 在……中 Rivertown, enjoying brief respite 在……中 cool September air. 它 gives 你 time 至 think 在……上 past events, particularly 那些 surrounding Sylvester Blake himself. Despite 你的 victory 在……中 森林, Blake disappeared 不使用 一 trace, 和 你're certain 你 haven't seen last 的 him. ringmaster 是 作为 vindictive 作为 他 是 cunning, 和 你 had better watch 你的 back 作为 long 作为 there's 任意 chance 的 他的 reappearance. 它 可以 或 可以 不 be 在……中 guise 的 新月马戏团, 但是 evil wears many faces.</p><p class='basic'>在……中 你的 战役日志, 记录 该<i>新月马戏团 可以 someday 返回</i>. 调查员 与 Amalthea Weaver 在……中 他们的 牌组 必须 加入 一 copy 的 Tower &bull; XVI 至 他们的 牌组. 调查员 与 De Cultus Bestiae 在……中 他们的 牌组 必须 加入 一 copy 的 Devil &bull; XV 至 他们的 牌组.</p>"
+    }
+  }
+}

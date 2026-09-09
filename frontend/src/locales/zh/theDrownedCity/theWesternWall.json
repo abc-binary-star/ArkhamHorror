@@ -1,0 +1,134 @@
+{
+  "intro": {
+    "doNoHarm": {
+      "title": "任务：医者仁心",
+      "body": "就在你准备穿越城墙的时候，你发现黑沙上躺着个人。是个破衣烂衫的男子。你不管他是怎么来的，先凑近搭了搭脉搏。他还活着，只是受了重伤。他的脖子、手臂和胸膛上都有圆形的咬伤，里面流出黄色的脓水。你尽力帮他包扎了伤口，用嗅盐唤醒了他。他挣扎张开眼睛，吐出一个嘶哑的词：“主母。”你望向其他人，这个男的显然需要帮助。",
+      "choose": "你必须决定<i>(选择一项)</i>：",
+      "bringAlong": "<i>“带上他吧，他还有救。”</i>",
+      "leaveBehind": "下一场冒险在你揭示起始地点时，不在该地点上放置线索。在剧本日志中，记录下<i>探险队扔下了朝圣者。</i>",
+      "instructions": "_阅读 仅 如果 你 有  “医者仁心” 任务:_"
+    },
+    "label": {
+      "doNoHarm": {
+        "bringAlong": "<i>“带上他吧，他还有救。”</i>",
+        "leaveBehind": "<i>“扔下他吧。”</i>"
+      }
+    },
+    "checkCampaignLog": "查看你的战役日志。",
+    "title": "西墙",
+    "westernWall1": "_The Western 墙 1_: 你们越往西去，就越清楚地发现，你们沿着的这片沙赠，就是古代环形城墙的顶端。城墙直直往下，在海床上形成一个圆形广场。稍加计划，你就可以沿着废墟间一处处储藏有空气的空洞，安全地抵达海床。要是足够小心，你就能活着下去。",
+    "westernWall2": "_The Western 墙 2_: 拉莱耶升起，古城本就不牢的地基晃动不止。碎石层和曝露的过道构成一条通往海面的险峻通道。要想安全浮出海面，你得在古代城墙的陡峭表面上攀爬，沿着一处处储藏有空气的空洞行进。你知道减压症的危险，所以不能直接浮出。要是足够小心，你就能活着回到海面。",
+    "headedWest": "如果 探险 前往 西, 前往_西墙 1_.",
+    "headedEast": "如果 探险 前往 东, 跳至_西墙 2_.",
+    "resolveDoNoHarm": "如果 an 调查员 有  医者仁心 任务, 他们 结算 他们的 respective 剧情 至  right.",
+    "proceedToWesternSetup": "前往_设置（版本一）——向西探险_.",
+    "proceedToEasternSetup": "前往_设置（版本二）——向东探险_."
+  },
+  "setup": {
+    "west": {
+      "title": "设置（版本一）——向西探险",
+      "buildActDeck": "使用场景1a“深入深渊”创建场景牌库。将其余场景从游戏中移除。",
+      "placeBottomWalkways": "将剩余的两张_步道_地点和放在一边的黑曜石基层混洗，以使你无法分辨。将它们放置入场，位于深度5的位置，未揭示面朝上。",
+      "setLocationsAside": "将黑曜石基层、溺亡小屋、沉没梯道、破碎遗迹{'{'}runeV{'}'}和海底秘库{'{'}runeZ{'}'}入放在一边，位于场外。",
+      "placeUpperWalkways": "将剩余的五张_步道_地点和放在一边的溺亡小屋、沉没梯道、破碎遗迹{'{'}runeV{'}'}混洗，将其中六张放置入场，位于西墙下方，深度2-4的位置，未揭示面朝上。"
+    },
+    "east": {
+      "buildActDeck": "使用场景1a“浮出城墙”创建场景牌库。将其余场景从游戏中移除。",
+      "title": "设置 (v.II) — Western 探险",
+      "setLocationsAside": "将西墙、溺亡小屋、沉没梯道、破碎遗迹{'{'}runeV{'}'}和海底秘库{'{'}runeZ{'}'}放在一边，位于场外。",
+      "placeUpperWalkways": "将剩余的五张_步道_地点和放在一边的溺亡小屋、沉没梯道、破碎遗迹{'{'}runeV{'}'}混洗，将其中六张放置入场，位于黑曜石基层上方，深度2-4的位置，未揭示面朝上。",
+      "placeBottomWalkways": "将放在一边的西墙和两张剩余的_步道_地点混洗，以使你无法分辨，以未揭示面朝上放置入场，位于深度5。"
+    },
+    "gatherLocations": "收齐<i>西墙</i>遭遇组的所有地点。",
+    "placeWesternWall": "将西墙放置入场，如图所示放在深度1。",
+    "placeObsidianFoundations": "将黑曜石基层放置入场，如图所示放在深度1。",
+    "beginAtWesternWall": "每位调查员从西墙开始游戏。",
+    "setAsideCoralStarSpawn": "查找<i>星之眷族</i>遭遇组，找出珊瑚星之眷族敌人，将其放在一边，位于场外。将<i>星之眷族</i>遭遇组的剩余卡牌从游戏中移除。",
+    "addFloodTokens": "将淹没标记加入供应堆。",
+    "floodLevelsTwoToFive": "提升深度2-5的每个地点的淹没等级。",
+    "fullyFloodLevelsFourAndFive": "提升深度4-5的淹没等级，以使其完全淹没。",
+    "buildEncounterDeck": "混洗剩余遭遇卡来创建遭遇牌堆。",
+    "readyToBegin": "現在你已經準備好開始遊戲了。",
+    "removeWalkways": "收齐其余每张_步道_地点并将其中随机两张从游戏中移除。",
+    "beginAtObsidianFoundations": "每位调查员从黑曜石基层开始游戏。",
+    "chooseExpeditionAsset": "按玩家顺序，每位玩家可以从<i>探险</i>遭遇组选择1张_道具_支援，使其位于自己控制之下开始游戏。该遭遇组的图标为：<section class='encounter-sets'><img src='{setImgPath}/tdc_expedition.png' /></section>",
+    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: _西墙_, _宇宙遗产_, _深潜者_, _淹水_, _R’lyeh_, _星之眷族_, _穷途异魔_, _海底生物_, 和 _克苏鲁的使徒_. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/the-western-wall.png' /><img src='{setImgPath}/cosmic-legacy.png' /><img src='{setImgPath}/tdc_deep-ones.png' /><img src='{setImgPath}/flood.png' /><img src='{setImgPath}/rlyeh.png' /><img src='{setImgPath}/star-spawn.png' /><img src='{setImgPath}/the-inescapable.png' /><img src='{setImgPath}/undersea-creatures.png' /><img src='{setImgPath}/agents-of-cthulhu.png' /></section>",
+    "setCardsAside": "将穷途异魔敌人、追猎寄生虫弱点和双面的海床壁缘{'{'}runeW{'}'}诡计放在一边，位于场外。"
+  },
+  "rules": {
+    "locationAdjacency": {
+      "title": "西墙中的地点相邻关系",
+      "body": "<p class='basic'>本场冒险期间，地点排列成5个不同深度的模式。</p><ul><li>每个地点的位置都有各自的深度，从1至5，从西墙开始为深度1，一路往下，最底下的地点为深度5。</li><li>任何涉及地点深度的卡牌效果，指的就是地点在第几行，如右侧的地点摆放示意图所示。</li><li><b>本场冒险期间，每个地点都与其上一行及下一行的每个地点相互连接。同一行的地点彼此之间不连接。</b></li></ul>"
+    }
+  },
+  "specialRules": [
+    {
+      "title": "@:theDrownedCity.theWesternWall.rules.locationAdjacency.title",
+      "body": "@:theDrownedCity.theWesternWall.rules.locationAdjacency.body"
+    }
+  ],
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1_: The ocean floor 是一张dreamlike phantasmagoria 的 sinister flora 和 nightmarish creatures. A mutated lanternfish 该 可以 仅 是 described as antediluvian swims placidly 穿过 a 森林 的 deep water seagrass. 另一 deep sea creature 与 glowing 眼睛 和 a jagged maw swims straight 于 你, 但 turns away 于  最后 moment 从shimmering field 该 keeps  water 于 bay.</p><ul><li>In 你的 战役 Log, cross 场外 “The Western 墙” 在  R’lyeh 地图.</li><li>如果 an 调查员 有  Do 没有 Harm 任务, 他们 结算 他们的 respective 剧情 在 这 页.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>跳至_结局 3_.</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2_: A tremor shakes  ancient 城市, knocking 你 向下. Ruby curses as 你 steady 你自己 在 a fallen pillar. The 城市 的 R’lyeh continues 至 rise. Eventually,  tremors subside. Ruby stands 旁边你 和 looks 场外 于  perfect circle 的  黑色 water bay. “Damn,” 她 说. “I made a bet 与 Andy 我们’d get 返回 第一. But 该 softie wouldn’t dare collect 如果 I pretend I broke my leg, don’t 你 think?” 你 sigh 和 队长  道路 返回the Cassandra, leaving Ruby 至 bandage 她的 right calf. 它 将 是 good 至 return.</p><ul><li>In 你的 战役 Log, cross 场外 “The Western 墙” 在  R’lyeh 地图.</li><li>如果 an 调查员 有  *Do 没有 Harm* 任务, 他们 结算 他们的 respective 剧情 在 这 页.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>前往_Sepulchre 的  Sleeper_.</li></ul>"
+    },
+    "doNoHarmResolution": {
+      "title": "任务：医者仁心",
+      "task2Trauma": "你抛下了落难之人。承受1点精神创伤。",
+      "task2Progress": "在剧本日志中，“医者仁心”下擦去1进展。",
+      "checkCampaignLog": "查看你的战役日志。",
+      "task1HuntingParasite": "找出放在一边的追猎寄生虫弱点并永久加入你的牌库。这张卡牌不计入你的牌库卡牌张数。",
+      "task1Progress": "你尽了最大努力救助受害者。在剧本日志中，“医者仁心”下记录2进展",
+      "task1": "男子的状况迅速恶化。就在你的危险之旅即将告终的时候，他咳出了腐臭的黄色痰液。你走出了险境，他却尖叫一声，弯下腰去，抓着自己的胸口和脸。他脖子和肩膀周围的皮肤冒出了小孔，随即像腐化的水果一样裂开，像寄生虫一样的虫子蠕动着喷涌而出。每只虫子的嘴里都长满了尖尖的小牙，滴着受害者尸体上同样流出来的恶心的黄色液体。男子残余的部分缓缓站了起来，像个邪恶的木偶，朝你伸出一只血淋淋的手，手上钻出一只虫子，一弹一弹地哆嗦着，像是在品尝空气的味道。",
+      "task2": "即便你已经走出了城墙，那个被抛下的男人还留在你心里挥之不去。他恳切的眼神、气喘吁吁的咳嗽，将永远萦绕在你梦境。你是不是本可以救他?或者至少让他走得有些尊严?",
+      "instructions": "_阅读 仅 如果 你 有  “医者仁心” 任务:_",
+      "helpedThePilgrim": "如果 探险 helped  pilgrim, 前往任务 1.",
+      "otherwise": "否则, 跳至 _任务 2_."
+    },
+    "resolution3": {
+      "title": "结局3",
+      "body": "<p>_结局 3_: An ancient dome shimmers enticingly 在  sea floor. As 你 marvel 于  strange sights, a chunk 的 obsidian loosens 和 falls 从 up above 到  seafloor dome. Rather 于 shatter,  dome ripples, pliant, as  rock falls 穿过 与 a thunderous crash. Something 在  center projects a 路障 该 repels water, 但 allows solid things 至 pass 穿过.</p><p>无论光穹里有什么奇怪的技术，蒂林哈斯特肯定都很感兴趣。不过，你也找到了进入拉莱耶的道路：墙基处有一扇圆门，有着和穹顶一样的能量场，在唤你进入城市。</p><ul><li>调查员必须决定<i>(选择一项)</i>：<ul><li>发掘海底穹顶的秘密，进入<b>溺亡城区</b>.</li><li>继续深入拉莱耶地底，进入<b>养育场</b>。</li></ul></li></ul>"
+    },
+    "noResolution": {
+      "body": "<p>_如果 没有 结局 是 到达 (每位调查员 是 被击败)_: 与rest 的  expedition’s 帮助, 你 limp 至 你的 destination, taking refuge 在 intermittent pockets 的 空气 在  crumbling ruins. Nightmarish shapes flit 至 和 fro 在  dark ocean beyond  墙. The creatures 该 live 在 和 around R’lyeh’s foundation 是 warped 和 strange; 你 有 a feeling 你 将 是 seeing 他们 再次 soon, 在 你的 own nightmares.</p><ul><li>In 你的 战役 Log, cross 场外 “The Western 墙” 在  R’lyeh 地图.</li><li>如果 an 调查员 有  Do 没有 Harm 任务, 他们 结算 他们的 respective 剧情 在 这 页.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>检查 你的 战役 Log.<ul><li>如果  expedition 前往 西, 跳至_结局 3_.</li><li>如果  expedition 前往 东, 前往_Sepulchre 的  Sleeper_.</li></ul></li></ul>",
+      "title": "如果未达成任何结局"
+    },
+    "xp": {
+      "bonus": "as 探险 presses 在"
+    },
+    "label": {
+      "resolution3": {
+        "drownedQuarter": "前往_溺亡城区_.",
+        "apiary": "前往_养育场_."
+      }
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "cultist": "-3. 如果 你 失败 和 你的 地点 是 完全淹没, 受到1点伤害.",
+      "tablet": "-3. 如果 你 失败, 增加你所在地点被淹没的等级.",
+      "skull": "-X. X 是 你的 地点's level.",
+      "elderThing": "-3 (-5 改为 如果 你的 地点 是 完全淹没)."
+    },
+    "hardExpert": {
+      "cultist": "-5. 如果 你的 地点 是 完全淹没, 受到1点伤害.",
+      "tablet": "-5. 增加你所在地点被淹没的等级, 如果 able.",
+      "skull": "-X. X 是 2 更多 于 你的 地点's level.",
+      "elderThing": "-5 (如果 你的 地点 是 完全淹没, 你 自动 失败 改为)."
+    }
+  },
+  "label": {
+    "chooseExpeditionAssetQuestion": "选择 an 物品 支援 从 探险 遭遇组 至 begin 在场 在……下 你的 控制.",
+    "noExpeditionAsset": "Do 不 受到 an 探险 支援."
+  },
+  "sunkenStairway": {
+    "label": {
+      "above": "放置 相关角色 相关角色 相关角色 相关角色.",
+      "below": "放置 相关角色 相关角色 相关角色 相关角色."
+    }
+  }
+}

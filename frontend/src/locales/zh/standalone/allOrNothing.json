@@ -1,0 +1,78 @@
+{
+  "intro": {
+    "body": "你愿意尽一切努力做正确的事。你母亲的巨额医疗费用可不会自行解决，因此你想出了一个计划：赌博。还能享受在卡牌赌上一切风险，梭哈时肾上腺素激增的刺激感。最近，感觉好像生活给了你满手坏牌，但你总能扭转满手坏牌获得胜利。当幸运女神站在你这边时，谁还需要技巧？\n你选择了二十一点。不知道为什么，你想要的牌往往会在最好的时机出现，每当庄家的点数又爆了，你都快几乎掩饰不了自己的兴高采烈。你似乎每晚都手感绝佳，桌上的筹码越来越高，堆积如山。顺风顺水的手感在偿还债务方面大有帮助，但这好运也常常让庄家和其他玩家怒气冲冲。你知道你该停手的时机。\n多年以来，你已赢钱赢出了声望，有些人甚至称你“作弊”。因此，你不得不保持低调，并时时转换地方赌博。有个地方：四叶草俱乐部，是你最享受的场所。每天晚上，大量的资金都在这个非法俱乐部汇聚，但这地方是欧巴尼恩帮控制的。他们恐吓、无情、作恶多端。没有人会想引起他们的注意，尤其是有像你这种声望的人。\n四叶草俱乐部有一个底线，无论如何都得维持这个底线。厚颜无耻的欧巴尼恩帮不喜欢被占便宜，他们会尽一切必要手段阻止这种事发生。在这里，庄家总是赢。\n今晚，这件事肯定会改变。您拉起衣领，走进月下美人。这间餐厅看似空荡荡的，但建筑的后面传来微弱的音乐的轰鸣声。很明显所有“客人”都在哪里。你只想赶紧喝上一杯，开始大赢四方……",
+    "title": "挑战剧情: 孤注一掷"
+  },
+  "setup": {
+    "scenarioReference": "将<i>百赌百胜</i>遭遇组中原本的冒险辅助卡牌移出游戏。使用下载的<i>孤注一掷</i>遭遇组中提供的新冒险辅助卡牌。",
+    "removeFromGame": "将彼得·克劳佛支援卡和佛朗西斯·摩尔根博士故事支援卡从游戏中移除。这些卡牌不会在挑战冒险中使用。",
+    "setAside": "将下列卡牌放在一边，位于场外：所有的走廊后门地点、所有的俱乐部保安敌人、西沃恩·莱利敌人。",
+    "placePitBoss": "将俱乐部赌场管理员敌人放置入场，放在俱乐部大厅。",
+    "returnToSetupCard": "将“重返”设置卡牌从游戏中移除。",
+    "returnToVersions": "将原始版本的俱乐部大厅从游戏中移除，改为使用新版本的俱乐部大厅。",
+    "cloverClubStage": "将俱乐部舞台放在一边，位于场外。",
+    "returnToTreacheries": "将新的诡计卡加入其余的遭遇卡。",
+    "cheated": "记住“倒霉蛋”奥图尔“作弊”了。",
+    "startAt": "每位调查员从月下美人开始游戏。",
+    "gatherSets": "找出下列遭遇组中的所有卡牌： *所有 或 Nothing*, *The 宅邸 Always Wins*, *Bad Luck*, *Naomi’s Crew*, *The Midnight Masks*, 和 *老鼠*. 每位 的 这些 组 except 为 所有 或 Nothing 可以 是 发现 在  Core Set 和 The Dunwich Legacy Deluxe Expansion. 这些 遭遇组图标如下:<section class='encounter-sets'><img src='{setImgPath}/all-or-nothing.png' align='right' /><img src='{setImgPath}/the-house-always-wins.png' align='right' /><img src='{setImgPath}/bad-luck.png' align='right' /><img src='{setImgPath}/naomis-crew.png' align='right' /><img src='{setImgPath}/midnight-masks.png' align='right' /><img src='{setImgPath}/rats.png' align='right' /></section>找出<i>午夜假面</i>遭遇组时，只找出其中5张诡计卡(2张错误指示和3张追猎鬼影)。注意不要拿出该遭遇组中的地点、场景、密谋或冒险辅助卡。",
+    "placeLocations": "将以下剩余地点放置入场：黑暗走廊、俱乐部大厅、俱乐部酒吧、俱乐部卡牌室、月下美人。",
+    "newActAgenda": "移除  原版 冒险 reference 卡牌, act 牌组, 和 密谋牌库 从 *百赌百胜* 遭遇组 从 游戏. Use  新 冒险参考卡, 和 build  act 和 密谋 decks using 仅新 act 和 密谋 卡牌 provided 在  *孤注一掷* 遭遇 组.",
+    "returnTo": "<section style='display: flex; flex-direction: row; gap: 1em;'>你 可以 optionally decide 至 gather  卡牌 included 在  *重返百赌百胜* 遭遇组, as well, 如果 你的 收藏 includes 他们. 这 组 是 indicated 由  icon 至  right. 如果你这么做，依照以下的额外步骤进行：<section class='encounter-sets' style='flex-shrink: 0'><img src='{setImgPath}/return-to-the-house-always-wins.png' align='right' /></section></section>"
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "victory": "每位调查员获得等同于胜利牌区中胜利点数总值的经验。",
+      "resourcesChoice": "如果场景2a上的资源总数为(选择一项)……",
+      "skidsMaySwap": "“倒霉蛋”奥图尔可以将在逃中升级到其进阶版，或将进阶版的医院债务还原成其原始版。",
+      "body": "心脏狂跳，兴奋感流窜全身，你分不清是什么让你更加激动：从欧巴尼恩帮手中赢钱或从他们手中逃脱。今晚你证明了你自己：“倒霉蛋”奥图尔百赌百胜……",
+      "resources40": "40个{'{'}perPlayer{'}'}或更多资源时，‘倒霉蛋’奥图尔获得1点奖励经验，且下一场冒险开始时带有额外4个资源。",
+      "resources50": "50个{'{'}perPlayer{'}'}或更多资源时，‘倒霉蛋’奥图尔获得2点奖励经验，且下一场冒险开始时带有额外5个资源。",
+      "resources60": "60个{'{'}perPlayer{'}'}或更多资源时，‘倒霉蛋’奥图尔获得3点奖励经验，且下一场冒险开始时带有额外6个资源。",
+      "resources10": "10 {'{'}perPlayer{'}'} 或 更多, “倒霉蛋”奥图尔下一场冒险开始时带有额外1个资源。",
+      "resources20": "20 {'{'}perPlayer{'}'} 或 更多, “倒霉蛋”奥图尔下一场冒险开始时带有额外2个资源。",
+      "resources30": "30 {'{'}perPlayer{'}'} 或 更多, “倒霉蛋”奥图尔下一场冒险开始时带有额外3个资源。",
+      "experience": "_经验值_: {xp}"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2:_ 你've 未能go unnoticed. Within minutes, 你surrounded 由  O'Bannion's heartless enforcers 和 dragged 进入 a dark 房间. The brutes clench 他们的 fists 和 roll up 他们的 sleeves. 你 close 你的 眼睛 和 brace 为hard lesson 他们're 关于 至 teach 你: Lady Luck 是 没有 use 于  Clover Club.</p><p>你的下场是被丢在俱乐部后巷入口外的垃圾堆中。往好处想，情况可能会更糟，你只是被揍得满身瘀伤。你从赌场轮换名单中剔除了四叶草俱乐部。如果赌注是赔上性命，那就最好别赌。你亲身体会到，在四叶草俱乐部，只有庄家才能百赌百胜……</p><ul><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。<ul><li>_经验_: {xp}</li></ul></li><li>“倒霉蛋”奥图尔必须将医院债务升级到其进阶版，或将进阶版的在逃中还原成其原始版。</li></ul>"
+    },
+    "label": {
+      "skidsMaySwap": "“倒霉蛋”奥图尔可以将在逃中升级到其进阶版，或将进阶版的医院债务还原成其原始版。",
+      "skidsMustSwap": "“倒霉蛋”奥图尔必须将医院债务升级到其进阶版，或将进阶版的在逃中还原成其原始版。",
+      "doNotSwap": "不交换 任意 卡牌",
+      "downgradeHospitalDebts": "Downgrade  advanced 版本 的 Hospital Debts 至 它的 原版 版本",
+      "downgradeOnTheLam": "Downgrade  advanced 版本 的 On  Lam 至 它的 原版 版本",
+      "upgradeOnTheLam": "相关角色 相关角色",
+      "upgradeHospitalDebts": "相关角色 相关角色 相关角色"
+    },
+    "noResolution": {
+      "title": "如果未达成任何结局",
+      "body": "<p>_如果未达成任何结局（每位调查员被击败）_: 前往_结局2_.</p>"
+    },
+    "xp": {
+      "gamblersTake": "资源 在 Act 2a"
+    }
+  },
+  "label": {
+    "returnTo": {
+      "include": "Include  _重返百赌百胜_ 遭遇组",
+      "exclude": "Do 不 include  _重返百赌百胜_ 遭遇组"
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "cultist": "-2 (-4 改为 如果 你 有 10 或 更多 资源).",
+      "tablet": "-2. 如果 你 失败, 失去 3 资源.",
+      "skull": "-1 为 每名 线索 你有.",
+      "elderThing": "-3. 如果 你 失败, \"相关角色\" 相关角色 1 恐惧."
+    },
+    "hardExpert": {
+      "cultist": "-4 (-8 改为 如果 你 有 10 或 更多 资源).",
+      "tablet": "-3. 失去 3 资源.",
+      "skull": "-2 为 每名 线索 你有.",
+      "elderThing": "-5. 如果 你 失败, \"相关角色\" 相关角色 1 恐惧."
+    }
+  }
+}

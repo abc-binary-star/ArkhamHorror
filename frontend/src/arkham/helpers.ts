@@ -24,7 +24,12 @@ const imgHelper: Map<string, ImageHelper> = new Map<string, ImageHelper>([
   ['fr', { root: 'fr', digests: new Set(), data: new Map(), loaded: ref(false) }],
   ['es', { root: 'es', digests: new Set(), data: new Map(), loaded: ref(false) }],
   ['ko', { root: 'ko', digests: new Set(), data: new Map(), loaded: ref(false) }],
-  ['zh', { root: 'zh', digests: new Set(), data: new Map(), loaded: ref(false) }]
+  ['zh', { root: 'zh', digests: new Set(), data: new Map(), loaded: ref(false) }],
+  // The UI uses `zh` for the Chinese message tree, while card data and the
+  // language selector use `zh-cn` for Simplified Chinese. Both currently share
+  // the same localized image set; keep the alias explicit so card images do not
+  // silently fall back to English when Simplified Chinese is selected.
+  ['zh-cn', { root: 'zh', digests: new Set(), data: new Map(), loaded: ref(false) }]
 ])
 
 const digestLoaders: Record<string, () => Promise<{ default: string[] }>> = {
@@ -33,6 +38,7 @@ const digestLoaders: Record<string, () => Promise<{ default: string[] }>> = {
   es: () => import('@/digests/es.json'),
   ko: () => import('@/digests/ko.json'),
   zh: () => import('@/digests/zh.json'),
+  'zh-cn': () => import('@/digests/zh.json'),
 }
 
 export async function checkImageExists(language: string = localStorage.getItem('language') || 'en') {

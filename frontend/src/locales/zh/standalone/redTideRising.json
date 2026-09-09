@@ -1,0 +1,77 @@
+{
+  "setup": {
+    "actAgendaDeck": "将<i>艾莲娜·哈珀失踪案</i>遭遇组中原本的密谋与场景移出游戏。仅用<i>赤潮升涌</i>遭遇组中提供的新场景与密谋卡牌构建场景和密谋牌堆。",
+    "placeLocations": "将下列地点放置入场：印斯茅斯广场、马什精炼厂、印斯茅斯港口、鱼街旧桥、国立第一杂货舖、吉尔曼旅社、小利透书店。",
+    "removeStoryAssets": "将托马斯·道森和艾莲娜·哈珀故事支援移出游戏。",
+    "shuffleRemainder": "混洗剩余遭遇卡牌来创建遭遇牌堆。",
+    "midnightMasks": "找出<i>午夜假面</i>遭遇组时，只找出其中5张诡计卡(2张错误指示和3张追猎鬼影)。不要拿取该遭遇组的其他任何卡牌。",
+    "scenarioReference": "将<i>艾莲娜·哈珀失踪案</i>遭遇组中原本的冒险辅助卡牌移出游戏。使用下载的<i>赤潮升涌</i>遭遇组中提供的新冒险辅助卡牌。",
+    "setAsideMonsters": "将下列每个_怪物_敌人放在一边，位于场外：长翼者、2张狩猎中的夜魇敌人。",
+    "drawLead": "抽取迹象牌堆顶的一张卡牌，结算其显现能力。",
+    "mysteriousPhoto": "温蒂·亚当斯可以决定其入场时，哪一面朝上。",
+    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: *赤潮升起*, *艾莲娜·哈珀失踪案*, *达贡的使徒*, *印斯茅斯之雾*, *当地人*, *寒冷刺骨*, *上锁的门*, *夜魇*, 和 *午夜假面*.<section class='encounter-sets'><img src='{setImgPath}/red-tide-rising.png' /><img src='{setImgPath}/disappearance-of-elina-harper.png' /><img src='{setImgPath}/agents-of-dagon.png' /><img src='{setImgPath}/fog-over-innsmouth.png' /><img src='{setImgPath}/locals.png' /><img src='{setImgPath}/chilling-cold.png' /><img src='{setImgPath}/locked-doors.png' /><img src='{setImgPath}/nightgaunts.png' /><img src='{setImgPath}/midnight-masks.png' /></section>",
+    "leadsDeck": "Prepare  Leads 牌组: 找出  6 unique 敌人 与_Suspect_ 特质 和  6 single-sided 地点 与_Hideout_ 特质, 和 洗切 这些 12 卡牌 together 至 形态  Leads 牌组. 放置 它 near  冒险 reference 卡牌.",
+    "setAsideAngryMob": "将莉亚．阿特伍德放在一旁，置于场外。",
+    "adjustments": "Depending 在 数量为调查员 (treat 数量为调查员s as 1 higher 如果 playing 困难, 和 2 higher 如果 playing Expert): 2 调查员, begin 与 1 毁灭标记 在 密谋1; 3 调查员, begin 与 2 毁灭标记 在 密谋 1; 4 调查员, 洗切 1 随机 set-aside _怪物_ 敌人 进入  Leads 牌组."
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1:_ 你 didn't 找出 Dad, 但 你able 至 找出  下一 best thing:  man 在  brown derby. 你 approach casually, hoping 他'll ignore 你 像 everyone else tends 至 做, so 你 可以 confront 他. 你 follow 他 进入 a dark alley 和 immediately realize 他's leading 你 somewhere hidden away 从 prying 眼睛. \"Didn't think 你'd follow me,\" 他 说 一次 你're alone.</p><p>问题从你身上倾泻而出。他认识你爸爸吗？他在哪里？照片是为什么？什么是赤潮？但他只是将一根手指放在嘴边。“嘘，孩子。你会害死我的。”他叹了口气，摘下帽子，将颤抖的手指抚过油腻的头发。“听著，我只能告诉你……你爸爸，他结交了一些坏人，一些很可怕的人。他想抽身，但唯一的出路……”他做了个厌恶的表情，摇摇头。“你得明白，他无法回家。你会有危险，他也会。但是……他还是想让你知道他爱你。所以……”</p><p>你擦去一滴快要从脸颊上滴落的眼泪。这个男人看起来很害怕。如果他不是超一流的演员，那他说的就是实话。你问他最后一个问题——和爸爸在一起的坏人是谁？——但你的问题一说出口，他立刻摇了摇头，转身离开。“我已经说太多了！”这是他逃走前留下的最后一句话。</p><ul><li>Ignore  Victory X 数值 的 每位 _Suspect_ 和 _Hideout_ 卡牌 在 胜利牌区. 改为, Wendy Adams 获得 1 经验 每位卡牌 在 胜利牌区 beyond  3rd, 和 每位 其他 调查员 获得 1 经验 每位卡牌 在 胜利牌区 beyond  5th.</li><li>温蒂·亚当斯必须将被抛弃的孤单升级到其进阶版，或者将进阶版的温蒂的护身符还原成其原始版。</li><li>温蒂·亚当斯可以将温蒂的护身符升级到其进阶版，或者将进阶版的被抛弃的孤单还原成其原始版。</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>你等待追捕你的人绕过转角，然后悄悄地溜回巴士站，搭上下一班前往阿卡姆的巴士。你生气到把爸爸照片的两侧都揉烂了。一滴泪珠从你的脸颊滑落。你还是没能找到有用的线索。那天早上戴著圆顶硬帽、穿著羊毛大衣的男人究竟是谁？你让自己卷入了什么了？但是，再看一眼照片，一个希望仍然萦绕在你的脑海中：爸爸还活著，他一定还活著。</p><ul><li>Ignore  Victory X 数值 的 每位 _Suspect_ 和 _Hideout_ 卡牌 在 胜利牌区. 改为, Wendy Adams 获得 1 经验 每位卡牌 在 胜利牌区 beyond  3rd, 和 每位 其他 调查员 获得 1 经验 每位卡牌 在 胜利牌区 beyond  5th.</li><li>温蒂·亚当斯必须将被抛弃的孤单升级到其进阶版，或者将进阶版的温蒂的护身符还原成其原始版。</li></ul>"
+    },
+    "noResolution": {
+      "title": "如果未达成任何结局",
+      "body": "<p class='basic'>_如果未达成任何结局且至少一位调查员撤退_：转至_结局 1_.</p><p class='basic'>_如果未达成任何结局（每位调查员被击败）_：转至_结局 2_.</p>"
+    },
+    "label": {
+      "upgradeAbandonedAndAlone": "Upgrade 孤立无援 至 它的 advanced 版本",
+      "downgradeAbandonedAndAlone": "将进阶版的孤立无援还原成其原始版。",
+      "doNotSwap": "不交换 任意 卡牌",
+      "downgradeWendysAmulet": "将进阶版的温蒂的护符还原成其原始版。",
+      "upgradeWendysAmulet": "相关角色 相关角色 相关角色"
+    },
+    "xp": {
+      "wendy": "胜利牌区 (1 经验值 每位卡牌 beyond  3rd)",
+      "other": "胜利牌区 (1 经验值 每位卡牌 beyond  5th)"
+    }
+  },
+  "intro": {
+    "body": "<p>大家都不会在乎那些被遗弃的人。这是你离开孤儿院后，流落街头时学到的第一件事。你必须自谋生计，尽力而为才能勉强度日。到目前为止，凭藉著你的机智和妈妈被他们带走之前留给你的护身符，你成功地活了下来。偶尔，有人会展现一点同情心，往你的杯子里扔一两枚硬币。某个愉快的早晨，一位离开维尔玛餐馆的善良女士把她剩下的香肠和鸡蛋给了你。但大多数情况下，你只能靠自己。其他流浪街头的小鬼可能和你处境相同，但你犹豫是否要把他们中的任何人当作是朋友，也许詹姆斯可以，但也很勉强。不——饥饿、孤单、无聊和猜疑是你最好，也是唯一的朋友。尽管如此，这还是比待在孤儿院更好。</p><p>然后命运性的一天到来了。一开始就像其他平凡的日子，你和詹姆斯一路穿过河岸城，沿路“收集”任何你可能可以卖给奥利弗·托马斯的东西。剩下的肯定会被马尔文的帮派——一群流浪儿联合起来欺负其他流浪儿——搜括走。但在你的战利品中，有一个小饰品让你眼前一亮：一张照片。那不是一张普通的照片，是你爸爸的照片。</p><p>你绝不会弄错，心中确信无疑。照片里，你爸爸站在一栋你不认得的建筑物前面。他身后的标志看起来是不同的语言，所以可能是在很远很远的某个地方。你没有办法知道这张照片是多久拍摄的。照片有好几个地方都磨损、污渍和缺口了。你把它翻过来，上面熟悉而潦草的字迹写著：“赤潮很快就会升起。保持安全，我的女儿。”</p><p>你哀求詹姆斯告诉你这张照片是从哪里来的，他宣称在你遇到马尔文的帮派前的某个时候，一个穿著长羊毛外套和深棕色圆顶硬帽的男人把它丢进了你的杯子里。你立即行动，四处打听，寻找那个戴著圆顶硬帽的人。你唯一的线索是他在东城区附近跳上了一辆巴士。那辆破旧、无标记的巴士是开往港口城镇印斯茅斯的。你尽你所能地搜刮硬币，然后坐上唯一的巴士路线，前往古老、失落的海港。如果爸爸还在那里，你一定要找到他，一定要！<p><p class='basic right'>前往_设置_.</p>",
+    "title": "挑战剧情: 赤潮升起"
+  },
+  "specialRules": [
+    {
+      "body": "<p class='basic'>In 这 冒险, Wendy 是 searching 印斯茅斯 为 任意 sign 的 她的 father. The Leads 牌组 contains 下列每个6 _Suspect_ 敌人 和  6 _Hideout_ 地点. As _Suspect_ 和 _Hideout_ 卡牌 leave 游戏, Wendy 必须 抽取 新 leads 从Leads 牌组. The 目标 是 至 empty  Leads 牌组 之前 密谋2b 是 到达. The fewer 卡牌 该 remain 在  Leads 牌组,  better.</p>",
+      "title": "相关角色 为 相关角色"
+    },
+    {
+      "body": "<p class='basic'>_Suspect_ 和 _Hideout_ 卡牌 不能 是 added 加入胜利牌区 except 由 using  double-sided Mysterious Photo 剧情支援卡 在……下 Wendy's 控制. 它的 front 面 lets Wendy 谈判 与 _Suspect_ 敌人 和 加入 clueless _Suspects_ 于 她的 地点 加入胜利牌区 由 spending 线索，作为一组. 它的 返回 面 会  相同 为 _Hideout_ 地点 via 调查阶段. 每位 卡牌 added 加入胜利牌区 这 道路 improves  经验值 gained 于  结束 的  冒险.</p>",
+      "title": "相关角色 相关角色"
+    }
+  ],
+  "tokens": {
+    "easyStandard": {
+      "skull": "-X. X 是 half 数量为_Suspect_ 和 _Hideout_ 卡牌 在 胜利牌区 (rounded up).",
+      "cultist": "-2. (-4 改为 如果 你parleying 与 a _Suspect_ 敌人 或 investigating a _Hideout_ 地点).",
+      "tablet": "-3. 如果 你 成功, 查看 顶 卡牌 的 相关角色 牌组. 你可以 选择 洗入 相关角色 牌组.",
+      "elderThing": "-1. 如果 你 失败, 洗入 顶 卡牌 的 遭遇牌库 至 相关角色 牌组."
+    },
+    "hardExpert": {
+      "skull": "-X. X 是 数量为_Suspect_ 和 _Hideout_ 卡牌 在 胜利牌区。",
+      "cultist": "-3. (-5 改为 如果 你parleying 与 a _Suspect_ 敌人 或 investigating a _Hideout_ 地点).",
+      "tablet": "-4. 如果 你 成功, 查看 顶 卡牌 的 相关角色 牌组. 你可以 选择 洗入 相关角色 牌组.",
+      "elderThing": "-2. 如果 你 失败, 洗入 顶 卡牌 的 遭遇牌库 至 相关角色 牌组."
+    }
+  },
+  "label": {
+    "mysteriousPhotoSuspects": "相关角色 相关角色 与 _相关角色_ 面 正面朝上",
+    "mysteriousPhotoHideouts": "相关角色 相关角色 与 _相关角色_ 面 正面朝上",
+    "flipMysteriousPhoto": "翻面 相关角色 相关角色 在……上",
+    "shuffleLeadsDeck": "洗入 相关角色 牌组",
+    "doNotShuffleLeadsDeck": "不 洗入 相关角色 牌组"
+  }
+}

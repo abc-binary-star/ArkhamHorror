@@ -16,5 +16,39 @@
   "remembered": {
     "foundAnAncientBindingStone": "找到一块古代的约束之石",
     "foundAStrangeDoll": "找到一个奇怪的玩偶"
+  },
+  "setup": {
+    "setAsideEncounterSets": "将<i>狼人诅咒</i>遭遇组放在一边，位于场外。",
+    "setAside": "将下列卡牌放在一边，位于场外：“埃斯普利女士”、“捕熊陷阱”、“渔网”。",
+    "placeLocations": "将所有地点根据属性(_新奥尔良_、_河畔_、_荒地_、_不洁_)分作四堆。随机选择其中一堆，并将该堆地点移出游戏。随机选择其中另一堆，并将该堆地点放置入场。将其余2堆地点的所有地点卡牌放在一边，位于场外。每位调查员从场上一个_河口_地点开始游戏。",
+    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: *狼人诅咒* 和 *河口*. 这些 遭遇组图标如下, respectively: <section class='encounter-sets'><img src='{setImgPath}/curse-of-the-rougarou.png' /><img src='{setImgPath}/the-bayou.png' /></section>"
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_Resolution 1_: 然而，你成功在天亮之前回到了安全的地方，一直休息到下午。直到你第二天去找埃斯普利女士，你才意识到昨晚的受害者是谁。怀著沉重的心情和挥之不去的恐惧，你没有联系当局，而是自己埋葬了她的尸体——越少人踏入河口深处越好。</p><ul><li>在冒险日志中，记录下<i>你未点燃火盆</i>。</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_Resolution 2_: 当黑色的污血从那只生物的伤口渗出，它发出一声可怜的哀嚎。它的身体倒在淤泥的时候，它变回了原来的型态——这是个年轻的黑人，表情因痛苦而扭曲。你将他的尸体带回到埃斯普利女士那儿去，她运用自己神奇的魔力，从这片土地上清除诅咒的污痕。“如果你需要我的帮助，就来找我。”这位神秘女子对你说道。</p><ul><li>In 你的 战役 Log, 记录 该 * Rougarou 是 destroyed*, 和  诅咒 是 lifted. 移除  诅咒 的  Rougarou weakness 从 它的 bearer's 牌组. 任意 1 调查员可以 选择 加入Lady Esprit 至 他们的 牌组. 这 卡牌 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+    },
+    "resolution3": {
+      "title": "结局3",
+      "body": "<p>_结局 3_: Somehow, 你 有 managed 至 quell  rage 和 bloodlust 的  诅咒 within  creature, 和 在 moments  形态 的 a young, dark-skinned man stands 之前 你, panting 和 sweating. 他 seems 至 仅 只是 now understand everything 他's done, 和 agrees 至 flee 至 a secluded corner 的  大地 哪里 他 可以 harm 没有 1. However,  诅咒 lives 在. 他 sees 它 在 你的 眼睛 和 grips 你的 手臂 tightly. \"Don't let 它 受到 控制,\" 他 warns. \"I 是 weak, 但 你-I 可以 tell 你strong. Control  诅咒 as I 可以 不.\"</p><ul><li>在冒险日志中，记录下“<i>狼人逃离且你身负诅咒</i>”。“狼人诅咒”的弱点承受者必须将“兽性变化”加入自己的牌组。这张卡牌不计入该调查员的牌组张数。</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+    },
+    "noResolution": {
+      "title": "如果未达成任何结局",
+      "body": "<div class='resolution'><p class='basic'>_如果所有调查员都撤退或被击败_: 前往 _结局 1_。"
+    }
+  },
+  "huntingTheRougarou": {
+    "label": {
+      "resolution3": "结局3",
+      "flipBack": "翻回其中一面"
+    }
+  },
+  "intro": {
+    "body": "<p>在维尔玛小餐馆，你和你阿卡姆报社的联络人明妮·克莱因见面，她从桌子对面递给你一篇文章手稿。要不是因为主编道尔·杰弗里斯的嘲弄，它早就该登报了。“我记得他的原话是：‘我是不会把某个巫毒教疯子的胡话印出来当作新闻的。’”她解释道。从她脸上狡诘的微笑，你知道她嗅到了新闻的气味。</p><p>头条骇人听闻。在九天里发生了三起杀人事件，这无疑会震惊全城。但你并不觉得这件事会吓坏整个新奥尔良，你怀疑甚至有些人都不知道这些杀人事件。然而，一个人名勾起了你的兴趣。报纸上称“埃斯普利女士”是巫毒教女祭司，她声称有一道邪恶诅咒已在河口扎根。</p><p>“她说的有点道里，不是吗？至少看起来是这样。”明妮说道。你并不敢肯定。如果埃斯普利女士所言非虚，你敢断言，所谓“狼人诅咒”不会只取三人性命。但诅咒是什么？狼人？这种事怎么可能是真的？只有一种办法能够找出真相。你披上外衣，前往北区火车站……</p>",
+    "title": "Terror Grips 紐奧良!"
   }
 }

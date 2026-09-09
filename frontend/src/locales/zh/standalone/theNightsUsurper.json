@@ -1,0 +1,76 @@
+{
+  "intro": {
+    "title": "夜之乱臣",
+    "body": "<p>温洛克摩挲著自己的胡子，思索著你的话。身为本次勘察代赫舒尔的领队，你能不能加入探险队完全取决于他。“瞧，你这些证据我都看了。我知道开罗发生了什么。我也相信你说的。可是……”他恼火地叹了一声，“我只是不知道要怎么说服探险队的其它人。古代神庙是一回事，但要说通往另一个维度的入口？这个称为伊扎法拉的家伙？这些都不可能是真的，对吧？”</p><p>但你的研究和经验得出的答案并不是这样。威胁是确实存在的。这个神秘组织——恶兽兄弟会——在全埃及活动，要是不阻止他们，他们新发现的“天选”就会带来毁灭，危害整个地球。</p><p>你 insist 1 最后 时间 至 是 allowed access 至  expedition's 资源. \"Alright, alright,\" Winlock relents. \"I don't 知道 什么 它 是 你're looking 为 场外 那里 在  desert, 但 I hope 你 找出 它.\" 你 shake 你的 头部 在 reply. 你'd rather come up empty-handed.</p>"
+  },
+  "setup": {
+    "placeLocations": "将探险营地放置入场。每位调查员从探险营地开始游戏。",
+    "explorationDeck": "创建探索牌堆。拿取7张剩余的单面地点，将这些地点与遭遇卡一同混洗形成探索牌堆，所混洗的遭遇卡为以下每种1张：深渊领域、黑风、金字塔下的恐怖、蝗虫成群。",
+    "setAside": "将下列卡牌放在一边，位于场外：深渊镰形剑、召来的夜魇、单面惊悚入口地点、双面伊扎法拉敌人、5张双面_异界_地点、2张骇人的夏塔克鸟。伊扎法拉和_异界_地点卡的背面为剧情卡。为了获得最佳的游戏体验，请勿查看背面的剧情卡<i>(详见“剧情卡”)</i>。",
+    "brotherhood": "找出6张双面_兄弟会_敌人卡。这些敌人卡的另一面均为剧情卡<i>(详见“剧情卡”)</i>。其中一些敌人会放在冒险辅助卡底下，具体见下。将其余敌人移出游戏。",
+    "brotherhoodCampaign": "将冒险日志上 <i>“逃走的兄弟会成员”</i>下列出的敌人放在冒险辅助卡底下。",
+    "strengthOfTheAbyss": "深渊之力：",
+    "strengthCampaign": "放置的资源标记数量等于冒险日志上所记的<i>“深渊中的沉梦者”</i>旁括号内所列的数字。",
+    "gatherSets": "Gather 下列遭遇组: *夜之乱臣*, *埃及之沙*, *恶兽兄弟会*, 和 *深渊赠礼*. 这些 遭遇组图标如下, respectively: <section class='encounter-sets'><img src='{setImgPath}/nights-usurper.png' /><img src='{setImgPath}/sands-of-egypt.png' /><img src='{setImgPath}/brotherhood-of-the-beast.png' /><img src='{setImgPath}/abyssal-gifts.png' /></section>",
+    "brotherhoodStandalone": "如果 你playing 在 独立冒险 mode, 洗切 这些 6 敌人 together 和 放置 3 的 他们 beneath  冒险 reference 卡牌 不使用 looking 于 他们.",
+    "strengthStandalone": "如果 你playing 在 独立冒险 Mode, 放置 1 资源 为 每位调查员 在 游戏."
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "“这就是个拱门。你干嘛这么激动，老大？”温洛克叉著手。这东西浑身上下都透著一股不对劲。他确信这地方就是那群阿卡姆来的人要找的地方——绘有精妙图文的拱门——很明显不通往任何地方——但是，温洛克确定在另一端一定有著什么。“这不是埃及的东西。”他眯起眼凝视著拱门，“这看起来甚至都不是……不是人类的东西。”\n“你相信那些傻瓜？看啊老大，<b>这什么都不是！</b>”其中一个队员笑道。\n“嗯？”温洛克瞪大了眼睛厉声说道，“是吗？”"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2_: The essence fades 从 Xzharah's 正文. Swirling clouds 的 mist surround 他 和 force 他 至 他的 knees. Creatures 的  abyss appear wordlessly 于 你的 面, surrounding Xzharah 与 a quiet, expressionless hate. Xzharah's sword betrays 他 和 falls 从 他的 grip,  blade fracturing as 它 clatters 至  ground. \"…The prophecy 必须 是 fulfilled…\" 它 是最后 的 他的 vile whispers. 他的 肉体 形态 vanishes 进入  realm's ethereal mist, 和 所有 是 silent 在  Great Abyss.</p><ul><li>在冒险日志中，记录下<i>深渊得到拯救</i>。在冒险日志中，划掉所有的<i>“(卡牌名)坠入深渊”</i>。</li><li>任意 1 调查员可以 选择 加入Summoned Nightgaunt 至 他的 或 她的 牌组. 这 卡牌 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+    },
+    "resolution3": {
+      "title": "结局3",
+      "body": "<p>_Resolution 3_: 你跪在伊扎法拉面前，他将冰冷的手放在你肩上。“你已经证明了自己的忠诚。”他宣布道。深渊中的生物环绕著你，低头向新主人致意。再也没有谁敢反抗他了。“你的族裔中很少有人能具备足够的智慧或意志能看到未来。看到我们的预言实现。但你很有价值，打开了自己的眼界。比我过去信任的蠢货都更有价值。”他让你站起身，将自己那把染血弯剑的剑柄交到了你的手里，“现在起身吧，恶兽之仆。你在我们之中赢得了一席之地。”</p><ul><li>In 你的 战役 Log, 记录 该 *你 joined forces 与 Xzharah*.</li><li>任意 1 调查员可以 选择 加入the Khopesh 的  Abyss 至 他的 或 她的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+    },
+    "noResolution": {
+      "title": "如果未达成任何结局",
+      "body": "<div class='resolution'><p class='basic'>_如果所有调查员都撤退或被击败_: 前往 _结局 1_。"
+    }
+  },
+  "specialRules": [
+    {
+      "title": "@:standalone.guardiansOfTheAbyss.rules.storyCards.title",
+      "body": "@:standalone.guardiansOfTheAbyss.rules.storyCards.body"
+    },
+    {
+      "title": "@:standalone.guardiansOfTheAbyss.rules.strengthOfTheAbyss.title",
+      "body": "@:standalone.guardiansOfTheAbyss.rules.strengthOfTheAbyss.body"
+    },
+    {
+      "title": "@:standalone.guardiansOfTheAbyss.rules.takenByTheAbyss.title",
+      "body": "@:standalone.guardiansOfTheAbyss.rules.takenByTheAbyss.body"
+    },
+    {
+      "title": "探索",
+      "body": "<p class='basic'><i>深渊守卫</i>中的某些能力带有<b>探索</b>行动标识。此类能力通常会通过“启动”行动发动，用于找出新的地点并将这一地点放置入场。</p><p class='basic'><b>探索</b>能力会指示你抽取“探索牌堆”顶上的1张卡牌。探索牌堆是一个独立的牌堆，在某些冒险的设置阶段构成该牌堆，包含多张单面地点卡和诡计卡。</p><ul><li>每个<b>探索</b>能力会声明你正在寻找并要抽出的一类地点。<b>抽出一个该类地点后，将其放置入场，然后你移动到该地点。</b>这视为一次“成功”的探索。</li><li>如果抽出了其他任何地点，将其放在探索牌堆旁边，然后抽取探索牌堆的下一张卡牌。重复此流程，直到抽出指定类型的地点，或抽出诡计卡。在此行动结束后，将探索牌堆旁的所有地点混洗并放回探索牌堆。</li><li>如果抽出了诡计卡，如常结算。如果该卡牌被弃掉，如常将它放到遭遇弃牌堆。探索牌堆没有弃牌堆。这视为一次“失败”的探索。</li><li>单面地点从探索牌堆放置入场时，在该地点上放置线索，数量等于其线索值。</li></ul>"
+    }
+  ],
+  "tokens": {
+    "easyStandard": {
+      "cultist": "深渊之力：",
+      "skull": "-X. X 是深渊之力.",
+      "elderThing": "-4. 如果 你 成功 和  深渊之力 是 4 或 更多, 移除 1 strength 从 无尽深渊.",
+      "tablet": "-1. 为 这 技能检定, ignore 所有 bonuses 至 你的 技能值."
+    },
+    "hardExpert": {
+      "cultist": "深渊之力：",
+      "skull": "-X. X 是 1 更多 于  深渊之力.",
+      "elderThing": "-5. 如果 你 成功 和  深渊之力 是 4 或 更多, 移除 1 strength 从 无尽深渊.",
+      "tablet": "-3. 为 这 技能检定, ignore 所有 bonuses 至 你的 技能值."
+    }
+  },
+  "remembered": {
+    "freedTheNightgaunts": "Freed  夜魇",
+    "executedTheNightgaunts": "Executed  夜魇",
+    "warnedTheDenizensOfSarkomand": "相关角色 的 相关角色",
+    "cutOffAllEscape": "相关角色 全部",
+    "pledForHelp": "相关角色 为 帮助",
+    "affrontedTheRulerOfThisRealm": "相关角色 的"
+  }
+}

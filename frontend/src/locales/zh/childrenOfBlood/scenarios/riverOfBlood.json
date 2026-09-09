@@ -1,0 +1,67 @@
+{
+  "intro": {
+    "title": "冒险I：鲜血之河",
+    "body": "“尽你所能阻止她，阻止那东西。”你准备出发去寻找朱利亚的时候，克里斯托弗对你说，“放手去吧。”\n你一晚上都在滨水区疯狂搜索，但始终无法定位到确切的线索。你一夜未眠，只能希望白天的运气能好些。"
+  },
+  "setup": {
+    "startAt": "每位调查员从水岸街开始游戏。",
+    "waterfrontCivilians": "在主干道生成1个滨水平民敌人。",
+    "gatherSets": "找出下列遭遇组中的所有卡牌：<section class='encounter-sets grid'><div><img src='{setImgPath}/river-of-blood.png' /><span>河流 的 Blood</span></div><div><img src='{setImgPath}/blood-blight.png' /><span>Blood Blight</span></div><div><img src='{setImgPath}/blood-moon.png' /><span>Blood 月亮</span></div><div>《血之子嗣》</div><div><img src='{setImgPath}/hunted.png' /><span>Hunted</span></div><div><img src='{setImgPath}/infected.png' /><span>Infected</span></div><div><img src='{setImgPath}/misinformation.png' /><span>Misinformation</span></div><div><img src='{setImgPath}/preyed-upon.png' /><span>Preyed Upon</span></div><div><img src='{setImgPath}/vermin.png' /><span>Vermin</span></div><div><img src='{setImgPath}/dead-ends.png' /><span>Dead Ends{'{'}asterisk{'}'}</span></div><div><img src='{setImgPath}/flying-terrors.png' /><span>Flying Terrors{'{'}asterisk{'}'}</span></div></section><div class='center'>{'{'}asterisk{'}'}这 遭遇 组 是 发现 在  Arkham 恐惧: The 卡牌 Game core 组.</div><br><div class='center'>如果 你playing 在 Hard 或 Expert 难度, DO 不 gather  _Preyed Upon_ 和 _Vermin_ 遭遇 组. 改为, gather 所有 卡牌 从 下列encounter 组:</div><section class='encounter-sets grid'><div><img src='{setImgPath}/agents-of-zburamoarte.png' /><span>Agents 的 Zburamoarte</span></div><div><img src='{setImgPath}/mongrels.png' /><span>Mongrels</span></div></section>",
+    "lairs": "将遭遇牌库顶2张卡牌和放在一边的朱利亚·斯特恩敌人一同混洗。将这些卡牌在每张_巢穴_地点底下随机各放置1张。",
+    "onTheRun": "如果正在进行简单难度，将朱利亚·斯特恩<i>（一路奔逃）</i>放在一边，位于场外。将其他每张朱利亚·斯特恩从游戏中移除。",
+    "stalkingTheStreets": "如果正在进行普通难度，将朱利亚·斯特恩<i>（街巷潜行）</i>放在一边，位于场外。将其他每张朱利亚·斯特恩从游戏中移除。",
+    "preyingUponArkham": "如果正在进行困难或专家难度，将朱利亚·斯特恩<i>（捕食阿卡姆）</i>放在一边，位于场外。将其他每张朱利亚·斯特恩从游戏中移除。",
+    "setOutOfPlay": "将下列卡牌放在一旁，置于场外：池底之物敌人、拟鳄龟杂生 每位 剩余 Waterfront 平民 敌人, 每位 夜晚 Feeder 敌人 (或 每位 Spawn 的 Zburamoarte 敌人 如果 playing 在 Hard 或 专家), 每位 卡牌 在  _Infected_ 遭遇组,  侦探 Reynolds 剧情支援卡, 和  Fang 的 Zburamoarte 剧情 支援.",
+    "gatherAdditionalSets": "相关角色, 如果 是 3 或 4 调查员, 全部 卡牌 从 :<section class='encounter-sets grid'><div><img src='{setImgPath}/afflicted.png' /><span>相关角色</span></div></section>",
+    "placeLocations": "放置 每名 地点 至 , :",
+    "dawn": "如果 你是 简单 或 标准 难度, 放置 每名 _黎明_ 地点 至 . 移除 每名 _黄昏_ 地点 从 .",
+    "dusk": "如果 你是 困难 或 专家 难度, 放置 每名 _黄昏_ 地点 至 . 移除 每名 _黎明_ 地点 从 .",
+    "additionalWaterfrontCivilians": "如果 是 3 或 4 调查员 , 1 相关角色 相关角色 敌人 相关角色 街.",
+    "juliaStern": "相关角色 每名 的 朱莉娅·斯特恩 敌人."
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1_: 在一场grueling conflict, 你 finally subdue 你的 quarry. Rather 于 受到 她的 生命, 你 knock Julia unconscious 和 prepare 至 regroup 与 Detective Reynolds, holding 场外 hope 该 那里 可以 是 some 道路 至 save 她的. 当 你 return 至 collect 她的, however, 你 discover 该 她 有 disappeared 进入  shadows 一次 更多. 你 hope 你 made  right 选择. 为 now, however,  仅 道路 forward 为 你to reconnect 与 Detective Reynolds 和 get 至  底端 的 什么 caused 所有 的 这 bloodshed 在  第一 放置.</p><ul><li>In 你的 战役 log, 记录 该 * 调查员 spared Julia Stern*.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。<ul><li>_经验_: {xp}</li></ul></li><li>调查员可以选择花费 2 {'{'}perPlayer{'}'} 总计 经验,，作为一组, 移除1 {'{'}blood{'}'} 标记 从混乱袋.</li><li>跳至_结局 4_.</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2_: At long 最后, 你的 hunt comes 至 an 结束. Ending Julia’s 生命, 和  lives 的 她的 victims, 是一张regrettable course 的 行动, 但 它 需要是 done 至 使  Waterfront District safe 再次. 之后 3 bloody nights 在  banks 的  Miskatonic 河流, 你’re hoping 该 你 可以 reconnect 与 Detective Reynolds 和 get 至  底端 的 什么 caused 所有 的 这 在  第一 放置.</p><ul><li>In 你的 战役 log, 记录 该 * 调查员 killed Julia Stern*.</li><li>在剧本之后的部分，从混乱袋中移除1个{'{'}blood{'}'}标记。</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。<ul><li>_经验_: {xp}</li></ul></li><li>跳至_结局 4_.</li></ul>"
+    },
+    "resolution3": {
+      "title": "结局3",
+      "body": "<p>_结局 3_: The hunt 穿过  夜晚 是 long 和 arduous, 但 Julia proves too crafty 和 too swift 为 你的 efforts. By  morning 的  third 白天 的 你的 搜索, 你 worry 该 你’ll 需要wait 直到 她 strikes 再次. 为 now, however,  仅 道路 forward 为 你to reconnect 与 Detective Reynolds 和 get 至  底端 的 什么 caused 所有 的 这 bloodshed 在  第一 放置.</p><ul><li>In 你的 战役 log, 记录 该 * 调查员 未能stop Julia Stern*.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>每位调查员取得2点奖励经验值，因为其做了应对将来的准备。<ul><li>_经验_: {xp}</li></ul></li><li>前往_结局 4_.</li></ul>"
+    },
+    "resolution4": {
+      "title": "结局4",
+      "body": "<p>_Resolution 4_: 你回到警探瑞若兹的办公室，阐释自己的发现。他告诉你他的线索也指向了新视野肉类加工厂，那里有一群可疑分子出没，他们穿着长袍，而不是工人更常见的围裙和工作服。“那也是朱利亚上班的地方。”瑞若兹说，“看来值得一探。”</p><ul><li>警探瑞若兹加入调查！选择一位调查员拥有放在一边的警探瑞若兹剧情支援。</li><li>选择一位调查员拥有放在一边的孜卜拉牟特之牙剧情支援。</li><li>每位在冒险结束时身上封印了3个{'{'}blood{'}'}标记的调查员拥有一张放在一边的鲜血枯疫弱点（如果该调查员尚未拥有）。</li><li>释放所有封印的{'{'}blood{'}'}标记，将其返回混乱袋。</li><li>前往_冒险 II: 新 Horizons_.</li></ul>"
+    },
+    "noResolution": {
+      "body": "<p>_If 没有 resolution 是 到达 (每位 调查员 是 被击败)_: 你不久就清楚了，在夜幕下潜行的怪物不止朱利亚·斯特恩一个。他们永无休止的狩猎实令你精疲力竭。你记得的最后一件事，就是怪物们俯身在你面前……不幸中的万幸是，你随即失去了意识。\n黎明灼烈的黄光将你唤醒。你平复了一下心情，然后与警探瑞若兹再次碰面。</p><ul><li>In 你的 战役 log, 记录 该 * 调查员 未能stop Julia Stern*.</li><li>在剧本之后的部分，在混乱袋中加入1个{'{'}blood{'}'}标记。</li><li>每位调查员拥有一张放在一边的鲜血枯疫弱点。</li><li>每位调查员 获得 经验 等于 至  _victory X_ 数值 的 每位 卡牌 在 胜利牌区. 每位调查员 也 获得 3 奖励 经验 as 他们 learn 从 他们的 mistakes.<ul><li>_经验_: {xp}</li></ul></li><li>跳至_结局 4_.</li></ul>",
+      "title": "如果未达成任何结局"
+    },
+    "xp": {
+      "noResolution": "从",
+      "resolution3": "是 为 是"
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "skull": "-X。X为当前密谋卡编号。",
+      "elderThing": "-3. 如果 你 失败 和 那里 是 1 或 更多 {'{'}blood{'}'} (*鲜血*) 标记 sealed 在 你的 调查员, 之后 这 检定 resolves, release 1 的 那些 标记 和 受到1点伤害.",
+      "tablet": "-2. 如果 你 失败 和 是一张_巢穴_ 地点, 受到 1 恐惧."
+    },
+    "hardExpert": {
+      "skull": "-X. X为当前密谋编号+1。",
+      "elderThing": "-4. 如果 那里 是 1 或 更多 {'{'}blood{'}'} (*鲜血*) 标记 sealed 在 你的 调查员, 之后 这 检定 resolves, release 1 的 那些 标记 和 受到1点直接伤害.",
+      "tablet": "-3. 如果 你是 a _巢穴_ 地点, 受到 1 恐惧."
+    }
+  },
+  "label": {
+    "doNotSpendExperience": "Do 不 花费经验值",
+    "spendExperienceToRemoveBlood": "<p>全组花费总计2点{'{'}perPlayer{'}'}经验，以从混乱袋移除1个{'{'}blood{'}'}标记<p>",
+    "r1": "\"相关角色 为 .\" (→ _1_)",
+    "r2": "\" 放置 结束 .\" (→ _2_)"
+  },
+  "spendExperience": "花费 2 {'{'}perPlayer{'}'} 总计 经验值,，作为一组, 移除1 {'{'}blood{'}'} 标记 从混乱袋"
+}

@@ -1,16 +1,176 @@
 {
   "tokens": {
     "easyStandard": {
-      "skull": "-X. X is the current agenda number.",
-      "cultist": "-X. X is the number of _Guest_ assets at your location (to a maximum of 5).",
-      "tablet": "-2. (-4 instead if you are at a _Private_ location).",
-      "elderThing": "-3. If you fail or if The Bloodless Man is at your location, take 1 horror."
+      "skull": "-X。X为当前密谋卡编号。",
+      "cultist": "-X。X为你所在地点的_宾客_支援数量（最多 5 个）。",
+      "tablet": "-2。（如果你在_私人_地点，则改为 -4。）",
+      "elderThing": "-3。如果你失败，或无血之人位于你所在地点，受到 1 点恐惧。"
     },
     "hardExpert": {
-      "skull": "-X. X is 1 plus the current agenda number.",
-      "cultist": "-X. X is the number of story assets at your location.",
-      "tablet": "-3 (-5 instead if you are at a _Private_ location).",
-      "elderThing": "-4. If you fail or if The Bloodless Man is at your location, take 1 horror."
+      "skull": "-X。X 为当前密谋卡编号加 1。",
+      "cultist": "-X。X 为你所在地点的剧情支援数量。",
+      "tablet": "-3（如果你在_私人_地点，则改为 -5）。",
+      "elderThing": "-4。如果你失败，或无血之人位于你所在地点，受到 1 点恐惧。"
+    }
+  },
+  "specialRules": [
+    {
+      "title": "@:standalone.theMidwinterGala.intro.score.title",
+      "body": "@:standalone.theMidwinterGala.intro.score.body"
+    },
+    {
+      "title": "剧情卡",
+      "body": "<p class='basic'>剧情卡 是一张卡牌类型 used 在 这 冒险. 这些 卡牌 provide 额外 narrative 和 卡牌效果文本. 能力 在 剧情卡 在场 可以 是 triggered 由 任意 调查员.</p>"
+    },
+    {
+      "title": "@:standalone.theMidwinterGala.intro.guestStoryAssets.title",
+      "body": "@:standalone.theMidwinterGala.intro.guestStoryAssets.body"
+    },
+    {
+      "title": "@:standalone.theMidwinterGala.intro.spellbound.title",
+      "body": "@:standalone.theMidwinterGala.intro.spellbound.body"
+    },
+    {
+      "body": "每当调查员在试图躲避一名带有警戒关键词的敌人时技能检定失败，在结算该技能检定带来的所有后果之后，该敌人对进行躲避的调查员执行一次攻击。敌人执行警戒攻击后不被消耗。不论该敌人是否与进行躲避的调查员交战，此类攻击均会发生。",
+      "title": "警戒"
+    },
+    {
+      "title": "巡逻",
+      "body": "<p class='basic'>有些敌人带有巡逻关键词。在敌军阶段(流程的步骤3.2)，每名处于准备状态、未交战且带有巡逻关键词的敌人，沿著连接地点，依据最短的路径向指定地点(标注于巡逻关键词后)移动。</p><ul><li>如果有多个符合描述的地点，由队长选择敌人的移动方向。</li><li>如果 an 敌人 与 patrol 会 是 compelled 至 移动 至 a 地点 该 是 blocked 由 a 卡牌 能力,  敌人 会 不 移动.</li></ul>"
+    }
+  ],
+  "label": {
+    "theFoundation": "基石",
+    "miskatonicUniversity": "米斯卡塔尼克大学",
+    "theSilverTwilightLodge": "<center><i>银暮秘社</i></center>",
+    "theSyndicate": "The 犯罪团伙",
+    "lanternClubMember": {
+      "discard": "花费 2 额外 资源 至 弃掉它 改为"
+    },
+    "localsOfKingsport": "相关角色 的 相关角色"
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局1:_ 你 查看 up 从Jewel 至 看见 你的 contact standing 在 front 的  manor, silhouetted 在  moonlight.</p>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局2:_ Agent Antonova turns 和 strides 朝向 你, 她的 left cheek spattered 与 viscous ichor.</p><p>“I 做了 不 像 这 party 于 第一, 但 它 became much 更多 interesting 一次 他们 locked  doors,” 她 grins, 然后 lays a 手牌 在 你的 shoulder.</p><p>“I 有 reported  strange 效果 的 这 ‘Jewel’ 至 my superiors. 他们 want 它 brought 至 我们的 offices 为 safekeeping, 但 I 有 several 其他 重担在肩 至 attend 至 之前 I 可以 deliver 它.”</p><p>“I suppose 那里 是 little harm 在 letting 你 hold 到 它 为 now. Know 该 I 将 是 返回 later 至 collect 它.”</p><p>之后 seeing  chaos  Jewel brought 至  Gala, 你 wonder 如果 你是 used 更多 as a ‘case study’ 于 a recipient 的 它的 power.</p><ul><li>跳至_结局7_</li></ul>"
+    },
+    "resolution3": {
+      "title": "结局3",
+      "body": "<p>_结局 3:_ 相关角色 a 相关角色 相关角色, 相关角色 从 你的 手牌 和 .</p><p>“相关角色 . 相关角色 . 相关角色! 相关角色!”</p><p>相关角色 的 , 然后 你 为 你的 .</p><p>“相关角色 , I 不 宅邸 相关角色 . . 相关角色 如果 你 由 下一 , I .”</p><ul><li>跳至 _结局 7_</li></ul>"
+    },
+    "resolution4": {
+      "title": "结局4",
+      "body": "<p>_结局4:_ \"不 too shabby,\" 说 Johnny Valone, lit cigar 在 他的 mouth. \"你 有 light hands. 可以 always use 另一 pair 为 a job 或 2.\"</p><p>他 winks as 他 blows smoke 场外  面 的 他的 mouth. \"I figured 我们 可以 pawn  thing 在  黑色 market 为 a fair price, 但 之后 seeing 什么 happened 在 那里–\" 他的 tough exterior softens. \"I wouldn’t wish 该 在 anyone. What 是 那些 things anyway? Elephants? Sick gorillas?\"</p><p>他 受到 1 最后 puff 的 他的 cigar. \"I guess I’ll never 知道. 所有 I knows 是, 那里’s 没有 道路 I’m hauling 该 rock 返回Arkham. Consider  Jewel a party favor. 和 这 是 为 savin’ my ass.\" 他 hands 场外 a wad 的 bills 至 你 和 melts 进入  shadows 与 a Cheshire grin.</p><ul><li>跳至_结局7_</li></ul>"
+    },
+    "resolution5": {
+      "title": "结局5",
+      "body": "<p>_<p>_结局 5_:_ \"I don’t care 什么 它 受到: I want 该 Jewel 和 I want 它 now!\" Carl Sanford seethes 于 他的 lackeys.</p><p>As 你 listen 至  patriarch excoriate 他的 associates, 你 think 返回the events 的  evening. Although 你 有 resolved 至 帮助  Lodge, 是world truly safer 与Jewel 在 他们的 possession?</p><p>Rather 于 return 它 至 Sanford, 你 pocket  Jewel 和 slip away 进入  evening. 你 是仅 1 谁 可以 temper 它的 power. What 你doing truly 是 崇高利益. Hopefully Sanford 将 never 找出 场外.</p><ul><li>跳至_结局7_</li></ul>"
+    },
+    "resolution6": {
+      "title": "结局6",
+      "body": "<p>_结局 6:_ \"你’ a ,\" 相关角色 相关角色 你 . \"相关角色 的 相关角色, 有 . 是 相关角色 和 的 生命. 相关角色 是 , 相关角色 相关角色…\"</p><p>相关角色 和 与 , 然后 相关角色 你的 手牌. \"相关角色 , , 与你一同 , 相关角色 .\"</p><p>你 失去 至 , 的 . 当 你 查看 , 相关角色 有 .</p><ul><li>跳至 _结局 7_</li></ul>"
+    },
+    "resolution7": {
+      "title": "结局7",
+      "body": "<p>_结局 7:_ 你的 skin prickles as 你 sit 在  返回 seat 的 你的 cab, 和 你 有  feeling 的 是 watched.</p><p>你 回合 至 查看 返回 于  manor’s facade 至 看见  nightmarish face 的  Bloodless Man staring 向下 于 你 从window.</p><p>As  manor disappears 从 view, 你 think 返回Kingsport, a 城市 shrouded 在 mystery 和 folklore. The 城市 beckons 与 它的 名称 alone, conjuring up images 的 misty sea cliffs, shadowy coves, 和 ancient, brooding mansions.</p><p>为 generations, 剧情 的 inexplicable phenomena, strange 梦, 和 haunting legends 有 plagued Kingsport. 之后 tonight’s events, 你 finally understand 为什么.</p><ul><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。<ul><li>_经验_: {xp}</li></ul></li><li>Tally 你的 score (*看见 页 24*) ({score}). 如果 你的 score 是…<ul><li class='{bonus1}'>…10-19, 每位调查员 获得 1 奖励 经验.</li><li class='{bonus2}'>…20-29, 每位调查员 获得 2 奖励 经验.</li><li class='{bonus3}'>…30-39, 每位调查员 获得 3 奖励 经验.</li><li class='{bonus4}'>…40-49, 每位调查员 获得 4 奖励 经验.</li><li class='{bonus5}'>…50 或 更多, 每位调查员 获得 5 奖励 经验.</li></ul></li></ul>"
+    },
+    "noResolution": {
+      "title": "如果未达成任何结局",
+      "body": "<p>你 , , 背面朝上 相关角色 相关角色 .</p><p>相关角色 宅邸 是 , 和 , 的 a 骷髅.</p><p>你 可以’ 你 , 你 将 相关角色 —和 —相关角色 相关角色.</p>"
+    },
+    "theSilverTwilightLodge": "如果  调查员 sided 与 _<center><i>银暮秘社</i></center> ({'{'}mystic{'}'})_, 前往_结局5_.",
+    "chooseGuest": "每位调查员可以 选择一项 single-sided _*Guest*_ 支援 在……下 任意 调查员’s 控制 加入to 他们的 牌组 (ignoring 构建牌组 restrictions). 它 会 不 数量 朝向 该 调查员’s 卡牌张数.",
+    "jewelOfSarnath": "如果 这 冒险是 a 面-剧情, 在……期间  设置 的 每位 subsequent 冒险 在 这 剧本, 你 可以 洗切  Jewel 的 Sarnath 剧情支援卡 进入  遭遇牌库.",
+    "theFoundation": "如果  调查员 sided 与 _基石 ({'{'}guardian{'}'})_, 前往_结局2_.",
+    "miskatonicUniversity": "如果  调查员 sided 与 _米斯卡塔尼克大学 ({'{'}seeker{'}'})_, 前往_结局3_.",
+    "theSyndicate": "如果  调查员 sided 与 _The 犯罪团伙 ({'{'}rogue{'}'})_, 前往_结局4_.",
+    "localsOfKingsport": "如果  调查员 sided 与_Locals 的 Kingsport ({'{'}survivor{'}'})_, 前往_结局6_.",
+    "label": {
+      "chooseGuest": "选择一项 single-sided Guest 支援 在……下 任意 调查员’s 控制 加入to 他们的 牌组"
+    },
+    "tasks": {
+      "manorsWithNoClues": "<div class='task'>_1_ point 每位已揭示 _*Manor*_ 地点 与 没有 线索.<span class='tally'>{count}</span></div>",
+      "guestAssetsControlled": "<div class='task'>_1_ point 每位_Guest_ 支援 受控制的 由  调查员.<span class='tally'>{count}</span></div>",
+      "noSpellboundInPlay": "<div class='task'>_4_ points 如果 没有 法术绑定卡牌 是 在场.<span class='tally'>{count}</span></div>",
+      "agenda1AOr2A": "<div class='task'>_5_ points 如果 密谋1a 或 密谋2a 是 在场.<span class='tally'>{count}</span></div>",
+      "bloodlessManInVictory": "<div class='task'>如果无血之人位于胜利牌区，获得_4_点。<span class='tally'>{count}</span></div>",
+      "paleLanternInVictory": "<div class='task'>如果苍白提灯位于胜利牌区，获得_3_点。<span class='tally'>{count}</span></div>",
+      "declanPearceInVictory": "<div class='task'>_3_ points 如果 Declan Pearce 是 在 胜利牌区。<span class='tally'>{count}</span></div>",
+      "rivalInVictory": "<div class='task'>_4_ points 如果 a Rival 剧情 卡牌 是 在 胜利牌区。<span class='tally'>{count}</span></div>",
+      "damageBonus": "<div class='task'><span>_3_ points 如果 没有 调查员 有 是 被击败 和 那里 是 2 {'{'}perPlayer{'}'} 或 更少 伤害 在  调查员,，作为一组.</span><span class='tally'>{count}</span></div>",
+      "horrorBonus": "<div class='task'><span>_3_ points 如果 没有 调查员 有 是 被击败 和 那里 是 2 {'{'}perPlayer{'}'} 或 更少 恐惧 在  调查员,，作为一组.</span><span class='tally'>{count}</span></div>",
+      "hardMode": "<div class='task'>_3_ points 如果 你playing 在 困难 mode.<span class='tally'>{count}</span></div>",
+      "expertMode": "<div class='task'>_6_ points 如果 你playing 在 专家 mode.<span class='tally'>{count}</span></div>",
+      "title": "任务 为 结束 的 相关角色 相关角色",
+      "body": "<p>相关角色 是一张的 任务 你的 .</p>",
+      "factionBonus": "<div class='task'>相关角色 结束 的 你的 剧情卡.<span class='tally'>{count}</span></div>",
+      "total": "<div class='right task'>_总计:_ <span class='tally'>{count}</span></div>"
+    },
+    "resigned": "<p>你 , , 背面朝上 相关角色 相关角色 .</p><p>相关角色 宅邸 是 , 和 , 的 a 骷髅.</p><p>你 可以’ 你 , 你 将 相关角色 —和 —相关角色 相关角色.</p>",
+    "xp": {
+      "bonus": {
+        "score": "相关角色"
+      }
+    }
+  },
+  "intro": {
+    "localsOfKingsport": "<p>_Locals 的 Kingsport:_ \"The 名称’s Bain. William Bain,\"  stalwart man shakes 你的 手牌 与 a firm grip. \"I’m glad 你 came 至 这 fancy little party. 真相 是 told, I’m 不 really a local; I 只是 happen 至 有 a soft spot 为 这 旧 port.\" The man deftly avoids 你的 questions 关于 他的 origins 之前 pointing 于  silent masked figure 在  corner 的  房间. \"他 是reason I invited 你 这里. 他们 call 他 ‘The Bloodless Man.’ Whatever  Lantern Club 有 planned 为 这 evening 是 certainly 他的 design.\" The captain sighs. \"没有 good 可以 come 的 该 strange Jewel. 仅 ruin. At 至少, so long as  Lantern Club 有 它.\" 之后 further discussion, 你 agree 至 帮助 Bain recover  Jewel.</p><p class='basic right'>进入<b>设置</b></p>",
+    "title": "仲冬舞会",
+    "guestChoice": "<p class='basic'>Who 是 你的 mysterious contact? 调查员 必须 选择 哪个 faction requested 他们的 assistance. (*Hint: The faction 你 选择 将 determine 你的 目标s 在 这 冒险.*)</p><p class='basic'>_The Guests:_</p><ul><li>A severe woman 在 a well-tailored suit leans against  墙 与 她的 arms crossed. 她 looks 像 她’d rather 是 在 a shootout 于 于 这 elaborate party. 如果 她 是 你的 contact, 前往_基石 ({'{'}guardian{'}'})_.</li><li>An astute professorial type strokes 他的 goatee as 他 studies  a painting. 你 recognize 他 as Caldwell Phillips,  dean 的 米斯卡塔尼克大学. 如果 他 是 你的 contact, 跳至_米斯卡塔尼克 University ({'{'}seeker{'}'})_.</li><li>A slick-looking man 与 dark hair taps ash 从 他的 cigar 进入 a hapless guest’s champagne flute. 他的 darting 眼睛 suggest 他’s casing  joint. 如果 他 是 你的 contact, 跳至_The 犯罪团伙 ({'{'}rogue{'}'})_.</li><li>你 catch  gleam 的 a signet ring 在  corner 的 你的 eye. Turning, 你 看见  prestigious leader 的 <center><i>银暮秘社</i></center>, Carl Sanford, conversing 与 a pair 的 masked guests. 如果 他 是 你的 contact, 跳至_The 银暮祕社 ({'{'}mystic{'}'})_.</li><li>A tall, stout man 与 a long 黑色 beard 和 a weatherbeaten coat looks clearly 场外 的 放置 于 这 extravagant gala. 你 recognize 他 从 The Rope 和 Anchor tavern 在 Kingsport. 如果 他 是 你的 contact, 跳至_Locals 的 Kingsport ({'{'}survivor{'}'})_.</li></ul>",
+    "theSilverTwilightLodge": "<p>_<center><i>银暮秘社</i></center>:_ Carl Sanford makes 没有 引言 as 你 approach. \"非常 good,\" 他 说 matter-of-factly, 然后 waves 他的 masked guests away. \"As I am sure 你aware, rumors 的  Jewel 的 Sarnath 是 quite prevalent amongst  occult circles 的 Arkham. Given  Jewel’s…colorful history, 它 会 使 quite  addition 至  Lodge’s 收藏.\" The patriarch stares 向下 他的 nose 于 你. \"Although I suspect 该 那里 是 far 更多 于 游戏 这里 于 meets  eye. 该 是 为什么 I 有 asked 你 这里. Acquire  Jewel 为Lodge, 和 你 shall 是 rewarded 与 知识 和 riches beyond 你的 wildest 梦.\" 你 ask 他 为什么  Lodge deserves  Jewel 更多 于 任意 其他, 和 他 smirks. \"我们 将 保留 它 safe. Far safer 于 它 会 是 在  hands 的 others. 你 不能 even begin 至 comprehend 它的 power.\"</p><p class='basic right'>跳至_设置_</p>",
+    "flavor": "<p>“它 是Yuletide, 该 men call Christmas though 他们 知道 在 他们的 hearts 它 是 older 于 Bethlehem 和 Babylon, older 于 Memphis 和 mankind. 它 是Yuletide, 和 I 有 come 于 最后 至  ancient sea 小镇 哪里 my people 有 dwelt 和 kept festival 在  elder 时间 当 festival 是 禁止; 哪里 也 他们 有 commanded 他们的 sons 至 保留 festival 一次 每位 century, 该  记忆 的 primal 秘密 might 不 是 失落.”</p><p class='right'>– H.P. Lovecraft, \"The Festival\"</p>",
+    "body": "<p>A light snow falls as 你 step 场外 的 你的 taxi 在 front 的  cracked 和 weathered facade 的  旧 Kingsport manor. Several 其他 guests—some 的  finest movers 和 shakers 从 Arkham 至 新 York—flitter past 你 至 present 他们的 invitations 至  doorman. As 你 follow 他们 在, 你 catch a scent 的 cedar 和 sweet florals, 与 an undercurrent 的 something rank.</p><p>“The Lantern Club 是 thrilled 至 有 你,” a grinning, sharp-eyed attendant 说 as 他们 手牌 你  相同 bone-white mask worn throughout  soirée. Feeling 场外 的 放置, 你 don 你的 mask 和 follow an elderly flapper 进入 a drawing 房间 与 a crackling fire. The 房间 会 是 warm 和 inviting 如果 不 为 an uncanny strangeness 在  dreamlike paintings 和 ghastly sculptures. Looking 于 他们 makes 你的 头部 swim.</p><P>“Please, please, 如果 你’ll indulge me.” A stentorian voice bellows 从 an adjoining 房间. 你 follow  voice 返回the lavish foyer. At 牌堆顶 的  stairway, a stately gentleman 与 a finely trimmed beard 和 alabaster mask raises 他的 champagne glass. “I am Declan Pearce, nomarch 的  Lantern Club. Follow me please.” The guests follow 他 穿过 a wide 组 的 double doors 进入  ballroom, 在  center 的 哪个 a gleaming gem 是 displayed 在……后 a thick pane 的 glass. The 社会名流s gather around, marveling 于  swirling, iridescent colors 该 移动 像 clouds within  hard cut angles 的  Jewel.</p><p>“My honored guests. 这 是Jewel 的 Sarnath,” Declan Pearce 说 triumphantly. “A stone unlike 任意 其他, rumored 至 有 是 cut 在 an ancient 城市 在 distant shores. Legends claim 它 可以 grant 它的 bearer’s wishes.” Scattered laughter follows Pearce’s remark, 和  chairman himself suppresses a chuckle. “Yes, yes, I 知道. Of course,  real purpose 的 这 evening 是 你. 我们 invited 仅best,  most supreme 的 新 England’s social strata, 至 appeal 至 你的 sense 的 charity. The most distinguished—或 generous—among 你 可以 是 permitted 至 hold  Jewel 由  结束 的  evening. 和 谁 knows? Perhaps 梦 是 real, 和  Jewel 的 Sarnath 可以 grant wishes. But 直到 然后, enjoy 我们的 little party.”</p><p>之后 另一 波浪 的 friendly laughter, Pearce claps 他的 hands 和 a dozen attendants bearing mouth-watering appetizers descend upon  房间. 你的 眼睛 scan  ballroom, hoping 为 some sign 的  contact 谁 led 你 这里. A chill runs 向下 你的 spine as 你 lock 眼睛 与 a tall, masked figure standing 于  返回 的  crowd. 他 slowly cocks 他的 头部 只是 a little too far 至  right. 你 wonder 如果 他 是 smiling 在……后 他的 bone-white mask.</p><p>之后 什么 feels 像 ages,  man breaks eye contact 与 你 至 继续 scanning  房间. Suppressing a shiver, 你 搜索  gaggle 的 guests. 你的 gala invitation arrived 在 an unmarked parcel, 沿着 与 a note promising generous compensation 为 你的 assistance 在 procuring  Jewel 的 Sarnath. At long 最后, 你 找出 你的 mysterious contact.",
+    "theFoundation": "<p>_基石:_ \"Ah, 你 came,\"  woman 说 在 a light Russian accent. \"I am agent Valeriya Antonova. I am 这里 在 behalf 的  authorities.\" 当 你 ask 哪个 authorities, 她 simply nods. \"Yes. The authorities.\" 她 explains 该 她 和 她的 \"authorities\" 是 investigating strange disappearances 在  区域 和 abroad, 和 他们 suspect  Lantern Club 和 Declan Pearce 是 至 是 blamed. The agent seems 至 loosen up as 她 knocks 返回 a flute 的 champagne. \"我们 也 believe 这 Jewel 可以 是source 的 some highly unusual paracausal phenomena. 是 prepared 为 anything.\"</p><p class='basic right'>跳至_设置_</p>",
+    "miskatonicUniversity": "<p>_米斯卡塔尼克大学_: 你 approach Dean Phillips 和 introduce 你自己. The painting 他 是 examining 是 eerily lifelike, depicting a 类人 生物 covered 在 fur, 与 multiple arms, 每位 与 a clawed talon. \"Quite imaginative, 这些 Lantern Club folks,\" 他 laughs. \"I 看见 你 received my missive. Thank 你 为 coming. I 必须 admit,  university 是 更多 于 a little curious 至 study 这 ancient gem. The Jewel 是 rumored 至 有 是 housed 在 a Tibetan monastery 直到 它 vanished 在  twelfth century. I simply couldn’t pass up  opportunity!\" 他 exclaims. \"Of course, 如果 那里 是 some 道路 至 examine  Jewel 更多 thoroughly…\"</p><p class='basic right'>跳至_设置_</p>",
+    "theSyndicate": "<p>_The 犯罪团伙:_ The man raises 他的 glass 在 a mock toast as 你 approach. \"Johnny Valone. Glad 你 可以 使 它 至 这 mutually beneficial business arrangement.\" The man finishes 他的 drink 和 casually hands  empty glass 至 a nearby 社会名流, 谁 looks 等于 parts confused 和 offended. Valone 是 seemingly deaf 至 他们的 protest as 他 leads 你 至 a deserted study. \"你的 reputation precedes 你. 或 rather, 它 doesn’t precede 你. Nobody’ll suspect 你的 involvement, 哪个 是 为什么 I’ve asked 为 你的 帮助 在 procuring 这 Jewel 的 Something-或-另一. 它’s a big score. I 可以 promise 你 我们’ll 使 它 worth 你的 当……时.\"</p><p class='basic right'>跳至_设置_</p>",
+    "score": {
+      "body": "In *仲冬舞会*,  调查员可以 accomplish multiple 任务 至 score points. At  结束 的 游戏, 他们 将 tally 他们的 score 至 earn 奖励经验值 和 measure 如何 successful 他们 是 在 thwarting  Lantern Club’s true intentions. 当playing 这 冒险, reference 页 24 的 这 booklet 至 看见 什么 任务 你 可以 work 朝向. 每位 时间 你 游戏, try 至 顶端 你的 上一 score!",
+      "title": "相关角色"
+    },
+    "guestStoryAssets": {
+      "title": "Guest 故事支援卡",
+      "body": "_Guest_ 支援 是一张type 的 剧情支援卡 featured 在 这 冒险. 调查员可以 谈判 与 _Guest_ 支援 至 获得控制权 的 他们. 调查员s 不能 trigger 能力 在 _Guest_ 支援 该 他们 做 不 控制."
+    },
+    "spellbound": {
+      "body": "<p class='basic'>Spellbound 是一张状态 该 可以 affect _Guest_ 支援. 当 a _Guest_ 支援 becomes spellbound (via 卡牌 或 卡牌效果文本), 调查员 失去 控制 的 该 支援, 翻面 它 背面朝上, 和 移除 所有 伤害 和 恐惧 从 它 (leaving 所有 其他 标记 在 它).</p><ul><li>当 a _Leader_ 支援 会 become spellbound, 移除 它 从 游戏 改为.</li><li>当 a spellbound 卡牌 是 flipped 正面朝上, ready 它 (leaving 所有 标记 在 它). 它 是 没有 longer spellbound.</li><li>A spellbound 卡牌 不能 是 interacted 与 unless a 游戏 效果 explicity states 否则</li></ul>",
+      "title": "相关角色"
+    }
+  },
+  "setup": {
+    "shuffleRemainder": "将剩余的33张遭遇卡牌混洗，组成遭遇牌库。",
+    "gatherSets": "找出所有卡牌： *仲冬舞会* 遭遇组. 这 组 是 indicated 由 这 icon: <section class='encounter-sets'><img src='{setImgPath}/the-midwinter-gala.png' /></section>",
+    "placeLocations": "放在一边  3 Second-Floor 房间 地点, 场外卡牌. 放置Lobby 和 Lantern Chamber 入场. 放置3 Ground-Floor 房间 地点s 入场 在 a row 至  right 的  Lobby, 于 随机",
+    "startAt": "每位调查员从营地开始游戏。",
+    "allied": "The chosen faction 从 _The Guests_ 是 你的 “allied” faction. 放在一边 该 faction’s 剧情 卡牌, 然后 放置 该 faction’s _Leader_ 卡牌, 剧情支援卡 面 正面朝上, 入场 在……下  控制 的 任意 调查员. 放置 1 的 该 faction’s 3 剩余 _Guest_ 支援 入场 正面朝上 于 每位 Ground-Floor 房间 地点 于 随机. 移除 它的 _Rival_ 卡牌 从 游戏.",
+    "rival": "放在一边 1 的  其他 4 faction 剧情卡 于 随机, 场外卡牌, 沿着 与 该 faction’s _Leader_ 卡牌 和 它的 _Rival_ 卡牌. 这 faction 是 你的 “rival” 为 游戏. 移除 你的 rival’s 3 剩余 _Guest_ 支援 从 游戏.",
+    "otherFactions": "每位of 剩余3 阵营, 移除 它的 faction 剧情 卡牌, 它的 _Leader_ 卡牌, 和 它的 _Rival_ 卡牌 从 游戏.",
+    "placeGuests": "放置顶端 3 卡牌 的  Guest 牌组 入场 正面朝上, placing 1 的 他们 于 每位 Ground-Floor 房间 地点.",
+    "theBloodlessMan": "将无血之人（*沉默潜伏者*）敌人耗竭状态放置在提灯室，并将苍白提灯剧情支援附属在其上（*催眠之光*）面朝上。",
+    "setAside": "Set 每位 的 下列卡牌 一边, 场外卡牌: 所有 _怪物_ 敌人, 两者 copies 的 Vicious Ambush,  Declan Pearce 敌人, 和  Jewel 的 Sarnath 剧情支援卡.",
+    "guestDeck": "洗入 剩余 9 _相关角色_ 背面朝上 形态 相关角色 牌组 和 放置 下一 牌组."
+  },
+  "theFabledJewel": {
+    "theSilverTwilightLodge": "<p class='basic'>_<center><i>银暮秘社</i></center> ({'{'}mystic{'}'})_, 将遭遇弃牌堆洗入遭遇牌库。 受到 牌堆顶 7 卡牌 的  遭遇牌库 和 洗切  set-aside Jewel 的 Sarnath 支援 和 Declan Pearce 敌人 进入 他们, 然后 放置 那些 9 卡牌 在  底端 的  遭遇牌库. 如果 那里 是 exactly 2 un被击败 调查员, 弃掉 牌堆顶 6 卡牌 的  遭遇牌库. 如果 那里 是 exactly 1 undefeated 调查员, 弃掉 牌堆顶 12 卡牌 的  遭遇牌库.",
+    "localsOfKingsport": "<p class='basic'>_Locals 的 Kingsport ({'{'}survivor{'}'})_, 放置set-一边 Declan Pearce 敌人 入场 于  Lantern Chamber 和 attach  set-aside Jewel 的 Sarnath 支援 至 他 (ignoring 它的 _Revelation_ 效果). 放置 1{'{'}perPlayer{'}'} 伤害 和 1 毁灭标记 在 该 支援. 揭示 牌堆顶的卡牌 的  Guest 牌组 和 将其放进场 于  Lobby.</p>",
+    "body": "<p class='basic'>_阅读 下列仅 当 directed 在……期间  冒险._</p><p>你的 contact 有 further instructions 为 如何 至 acquire  Jewel.</p><p class='basic'>放置set-一边 faction 剧情 卡牌 你 allied 与 入场 旁边the act 牌组, Allied 面 正面朝上. 如果 你 allied 与…</p>",
+    "theFoundation": "<p class='basic'>_基石 ({'{'}guardian{'}'})_, 放置set-一边 Declan Pearce 敌人 入场 于  Lantern Chamber, exhausted. Attach  set-aside Jewel 的 Sarnath 支援 至 The Bloodless Man (ignoring 它的 _Revelation_ 效果). 如果 The Bloodless Man 是 不 在场, attach  Jewel 的 Sarnath 至  Lantern Chamber.</p>",
+    "miskatonicUniversity": "<p class='basic'>_米斯卡塔尼克大学 ({'{'}seeker{'}'})_, 放置set-一边 Declan Pearce 敌人 入场 于  rightmost _*二楼*_ 地点 和 attach  set-aside Jewel 的 Sarnath 支援 至 他 (ignoring 它的 _Revelation_ 效果).",
+    "theSyndicate": "<p class='basic'>_The 犯罪团伙 ({'{'}rogue{'}'})_, 洗切 牌堆顶的卡牌 的  遭遇牌库,  set-aside Jewel 的 Sarnath 支援, 和  Declan Pearce 敌人 together, 然后 randomly 放置 1 背面朝上 beneath 每位 _*二楼*_ 地点, as “mysteries.”",
+    "title": "相关角色 相关角色 相关角色"
+  },
+  "tooltips": {
+    "thePaleLanternBeguilingAura": {
+      "flip": "翻面 在……上 a spellbound 卡牌 在你的地点.",
+      "break": "耗竭 The Pale Lantern: 检定 {'{'}combat{'}'} 或 {'{'}agility{'}'} (2). 如果 你 成功, 放置 1 伤害 在 它. 然后, 如果 那里 是 4 伤害 在 它, 你 break 它; 加入 它 加入胜利牌区 (ignoring 它的 _Forced_ 效果) 和 翻面 在……上 每位 spellbound 卡牌."
+    }
+  },
+  "message": {
+    "viciousAmbush": {
+      "couldNotMove": "敌人 {enemy} 由 相关角色 不 移动"
     }
   }
 }

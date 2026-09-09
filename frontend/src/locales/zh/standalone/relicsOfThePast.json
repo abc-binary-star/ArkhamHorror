@@ -1,0 +1,101 @@
+{
+  "specialRules": [
+    {
+      "body": "<p class='basic'>Challenge scenarios 是 特殊 print-和-游戏 scenarios 该 utilize existing products 在  Arkham 恐惧: The 卡牌 Game 收藏, 沿着 与 额外 print-和-游戏 卡牌, 至 create 新 content. 这些 scenarios 是 designed 与 certain prerequisites 在 mind, 在 order 至 craft a challenging puzzle-like 经验.</p><p class='basic'><i>往昔遗物</i> centers around  调查员 Monterey Jack, 和 therefore 有 下列prerequisite: Monterey Jack 必须 是 chosen as 1 的  调查员 当 playing 这 冒险.</p>",
+      "title": "挑战剧情"
+    },
+    {
+      "title": "探索",
+      "body": "<p class='basic'>Some 能力 在 这 冒险 是 identified 与 an <b>探索</b> 行动 designator. Such 能力 是 generally used 至 找出 新 地点 放置入场, 和 是 initiated using  \"activate\" 行动.</p><ul><li>当 resolving <b>探索</b> 能力 发现 在 这 challenge 冒险, follow 所有 的  规则 as outlined 在 页 3 的 <i>失落的时代</i> 战役 guide, 与 下列exceptions:</li><li>如果从探索牌堆抽取了敌人，如常结算。如果该卡牌被弃掉，如常将它放到遭遇弃牌堆。这视为一次“失败”的探索。</li><li>如果 a 剧情 支援 是 drawn 从exploration 牌组, 结算 它的 revelation 效果. 这 是 considered a \"successful\" exploration.</li></ul>"
+    },
+    {
+      "body": "<p class='basic'><i>往昔遗物</i> uses a list 的 supplies unique 至 这 冒险. Supplies 有 没有 inherent 效果, 但 可以 是 referenced 由 卡牌 能力. 每位调查员可以 选择 1 的  supplies listed below 至 bring 为expedition (如果 那里 是 仅 1 调查员, 他们 可以 选择 2 supplies 改为).</p><ul><li><b>Chalk:</b> 为 writing 在 stone surfaces.</li><li><b>Compass:</b> 可以 帮助 保留 你的 bearings.</li><li><b>日志:</b> To 保留 a 记录 的  events 的  expedition.</li><li><b>Satchel:</b> A safe 放置 至 store anything 你 找出 在  tomb.</li><li><b>Torches:</b> 可以照亮昏暗的区域，或点燃烛台。</li></ul><p class='basic'>如果 playing <i>往昔遗物</i> as a 面-剧情 在 部分 的 a larger 战役, supplies 从 <i>往昔遗物</i> 是 不 carried 在……上 进入 下列scenarios. Additionally, 如果 playing <i>往昔遗物</i> as 部分 的 a 面-剧情 在 <i>失落的时代</i> 战役, 任意 supplies used 在  战役 是 不 available 为 use 当playing <i>往昔遗物</i>.</p>",
+      "title": "补给"
+    }
+  ],
+  "setup": {
+    "placeEntryway": "将遗迹入口放置入场。每位调查员从遗迹入口开始游戏。",
+    "poisoned": "将不在调查员牌组中的所有中毒弱点卡放在一边。",
+    "gatherSets": "找出下列遭遇组中的所有卡牌： *Relics 的  Past*, *The Doom 的 Eztli*, *Agents 的 Yig*, *Deadly Traps*, *Forgotten Ruins*, *Poison*, *Serpents*, *Yig's Venom*, *Chilling Cold*, *Locked Doors*, 和 *Midnight Masks*. 这些 遭遇组图标如下:<section class='encounter-sets'><img src='{setImgPath}/rop.png' /><img src='{setImgPath}/the-doom-of-eztli.png' /><img src='{setImgPath}/agents-of-yig.png' /><img src='{setImgPath}/deadly-traps.png' /><img src='{setImgPath}/forgotten-ruins.png' /><img src='{setImgPath}/poison.png' /><img src='{setImgPath}/serpents.png' /><img src='{setImgPath}/yigs-venom.png' /><img src='{setImgPath}/chilling-cold.png' /><img src='{setImgPath}/locked-doors.png' /><img src='{setImgPath}/midnight-masks.png' /></section>找出<i>午夜假面</i>遭遇组时，只找出其中5张诡计卡(2张错误指示和3张追猎鬼影)。注意不要拿出该遭遇组中的地点、场景、密谋或冒险辅助卡。",
+    "removeCards": "移除  原版 冒险 reference 卡牌, acts, 和 agendas 从 *埃兹特里的覆灭* 遭遇组 从 游戏. Use  新 冒险参考卡, acts, 和 agendas provided 在  *往昔遗物* 遭遇 组. Additionally, 移除 下列卡牌 从 *The Doom 的 Eztli* 遭遇 组 从 游戏:  Relic 的 Ages 支援,  Harbinger 的 Valusia 敌人, 和  秘密 Passage, Ancient 大厅, 和 Chamber 的 Time 地点.",
+    "setAside": "将下列卡牌放在一旁，置于场外：池底之物敌人、拟鳄龟杂生  Vengeant Past 诡计,  Inner Chamber 地点,  3 Brood 的 Yig 敌人, 和 下列每个4 _*Ancient*_ 故事支援卡.",
+    "explorationDeck": "Build  exploration 牌组. 这 是 done 由 taking  5 single-sided 地点 和 shuffling 他们 together 与 下列每个following: 1 copy 下列每个Deep Dark 和 Final Mistake treacheries, 和 3 copies 的 Pit Viper. 如果 playing 在 Hard 或 专家, 也 洗切 在 1 copy 的 Locked 门 和 1 copy 的 Entombed."
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1_: 与 a lash 的 你的 whip 你 swing 在final gap, 和 a quick roll gets 你 在……下  closing stone 门 之前 它 封印 在……后 你. 你 rise 至 你的 feet, looking 场外 在jungle 之前 你, breathing  humid 空气 一次 更多. Checking 你的 gear 1 最后 时间, 你 看见 a scaly, serpentine stowaway 有 发现 它的 道路 进入 你的 bag. Grabbing 它 在……后  头部, 你 toss 它 softly 进入  grass 和 watch as 它 slithers away 与 a hiss.</p><p>你'll 需要是 satisfied 与 什么 你've learned, 和 什么 你've 发现, 在  Ruins 的 Eztli. Time 至 放置jungle 在……后 你.</p><ul><li>罗兰·班克斯获得等同于胜利牌区中所有敌人的胜利点数总值的经验。<ul><li>_经验_: {montereyXp}</li></ul></li><li>每位其他调查员获得等同于胜利牌区中所有地点的胜利点数总值的经验。<ul><li>_经验_: {xp}</li></ul></li><li>检查  supplies 的 每位调查员 谁 resigned. 如果  调查员 与日志 resigned, 每位调查员 获得 1 奖励 经验.</li><li>罗兰·班克斯必须将掩盖罪证升级到其进阶版，或者将进阶版的罗兰的.38特制手枪还原成其原始版。</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2_: 你 race 向下  ruined corridor,  hissing 的 pursuing snake monstrosities echoing 离场  stone 在……后 你. 你的 道路 leads 你 至 a deep pit, 和 你faced 与 a 选择: try 至 cross  gap, 或 回合 around 至 face 你的 pursuers. 你 reach 至 你的 belt 和 retrieve 你的 bullwhip, deciding 至 use 它 至 cross  chasm. 你 lash  whip 于 an exposed tree root near  ceiling, 和 start 你的 swing.</p><p>与 a heart-wrenching crack,  root snaps 在……下 你的 weight 和 你 plummet 进入  chasm. 你 bounce 离场 的 sharp rocks as 你 tumble 向下, eventually landing 在 a shallow stream 于  底端. 你 spit 鲜血, 和 然后 查看 up 至 看见  眼睛 的  serpent-people peering 向下 于 你 从 far above, 之前 他们 retreat 返回  道路 他们 came.</p><p>你 struggle 至 stand, 和 consider  stream 于 你的 feet. 你 stumble 沿着, 下列它的 道路, hoping 它 将 eventually 队长 你 场外.</p><ul><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。<ul><li>_经验_: {xp}</li></ul></li><li>罗兰·班克斯可以将罗兰的.38特制手枪升级到其进阶版，或者将进阶版的掩盖罪证还原成其原始版。</li></ul>"
+    },
+    "xp": {
+      "journal": "调查员 与日志 已撤退"
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "tablet": "-3。如果你检定失败，在你所在地点放置1个毁灭标记。",
+      "cultist": "-1. 如果 你已中毒, 再抽出一个标记。",
+      "skull": "-X. X 是 数量为地点 与 1 或 更多 毁灭标记 在 他们.",
+      "elderThing": "-3. 如果 你 失败,  nearest ready unengaged _Serpent_ 敌人 moves 一次 朝向 你的 地点."
+    },
+    "hardExpert": {
+      "cultist": "-2. 如果 你已中毒, 再抽出一个标记。",
+      "tablet": "-4. 放置1个毁灭标记 在 你的 地点.",
+      "skull": "-X. X 是 1 更多 于 数量为地点 与 1 或 更多 毁灭标记 在 他们.",
+      "elderThing": "-5. 之后 这 检定 resolves,  nearest ready unengaged _Serpent_ 敌人 moves 一次 朝向 你的 地点."
+    }
+  },
+  "intro": {
+    "supplies": {
+      "title": "补给",
+      "body": "<p><i>往昔遗物</i> uses a list 的 supplies unique 至 这 冒险. Supplies 有 没有 inherent 效果, 但 可以 是 referenced 由 卡牌 能力. 每位调查员可以 选择 1 的  supplies listed below 至 bring 为expedition (如果 那里 是 仅 1 调查员, 他们 可以 选择 2 supplies 改为).</p>"
+    },
+    "title": "挑战剧情: 往昔遗物",
+    "body": "<p><i>To better understand 我们的 future, 我们 必须 第一 understand 我们的 past. 它 didn't 受到 long 为reports 的 米斯卡塔尼克大学's 失败 探险 至  jungles 的 Mexico 至 reach 你的 ears. 剧情 的 step pyramids, mythical serpent-people, 和 异界ly 神器 在 放置 previously thought uninhabited 有 piqued 你的 interest. 它 didn't 受到 你 long 至 pack 你的 bags 和 使 plans 至 头部 向下 和 调查 它 你自己. The 米斯卡塔尼克 University expedition made 它 进入  ruins 但 struggled 至 使 任意 进展. 你的 heart races as 你 begin 至 consider 什么 其他 失落 treasures lie undiscovered 在  heart 的  tomb.</i></p>"
+  },
+  "label": {
+    "ancientHall": {
+      "doNotCancel": "将遭遇牌库顶的卡牌洗入探索牌库",
+      "question": "任意 调查员 于 Ancient 大厅 可以 花费 3 资源 至 cancel 这 效果"
+    },
+    "swap": {
+      "doNotSwap": "不交换",
+      "question": "罗兰·班克斯必须将掩盖罪证升级到其进阶版，或者将进阶版的罗兰的.38特制手枪还原成其原始版。",
+      "questionMust": "温蒂·亚当斯必须将被抛弃的孤单升级到其进阶版，或者将进阶版的温蒂的护身符还原成其原始版。",
+      "downgradeBuriedSecrets": "Downgrade Buried 秘密 至 它的 原版 版本",
+      "downgradeTrustyBullwhip": "Downgrade Trusty Bullwhip 至 它的 原版 版本",
+      "upgradeTrustyBullwhip": "相关角色 相关角色 相关角色",
+      "upgradeBuriedSecrets": "相关角色 相关角色 相关角色"
+    },
+    "supplies": {
+      "torches": "Torches: 可以照亮昏暗的区域，或点燃烛台。",
+      "question": "选择 a 补给 至 bring 为 探险",
+      "journal": "日志: To 保留 a 记录 的  events 的 探险.",
+      "chalk": "相关角色: 为 .",
+      "compass": "相关角色: 可以 帮助 保留 你的 .",
+      "satchel": "挎包: A 放置 你 ."
+    },
+    "placeDoomOnYourLocation": "放置1个毁灭标记 在 你的 地点",
+    "innerChamber": {
+      "doNotDrawAnother": "不抽牌 an 额外 卡牌"
+    },
+    "vengeantPast": {
+      "question": "{name}: 选择一项",
+      "dealDamage": "相关角色 1 伤害 支援'",
+      "dealHorror": "相关角色 1 恐惧 支援'",
+      "shuffleAsset": "洗入 支援 至 探索牌库"
+    },
+    "nearestEnemyAttacksYou": "相关角色 最近的 敌人 你"
+  },
+  "supplies": {
+    "torches": "Torches: 可以照亮昏暗的区域，或点燃烛台。",
+    "question": "选择 a 补给 至 bring 为 探险",
+    "journal": "日志: To 保留 a 记录 的  events 的 探险.",
+    "chalk": "相关角色: 为 .",
+    "compass": "相关角色: 可以 帮助 保留 你的 .",
+    "satchel": "挎包: A 放置 你 ."
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "starfall": {
+    "intro": {
+      "title": "冒险 VI: 星陨",
+      "body": "<p>它 是 beyond doubt. 太阳 是 experiencing 一 unprecedented acceleration 在……中 decay 的 它的 hydrogen core. K2-PS187 estimates 该 there 是 仅 一 few years left 在……之前 fusion reactions 该 fuel 我们的 star 将 run out 的 gas 和 collapse 在……上 itself, generating 一 radioactive supernova 该 将 destroy 全部 life within 一 few 光 years. Whatever 邪教徒 有 done within Fragment 有 doomed 我们的 solar system 至 一 premature 结束.</p><p>你的 仅 hope now 是 至 convince remainder 的 various colonies 的 humanity 的 此 accelerated death 和 help 他们 收集 resources 和 technology necessary 至 survive supernova 在……中 任意 way possible. K2-PS187 makes preparations 为 navigation console 作为 你 brace 为 many-months long journey ahead 的 你 travelling across solar system 至 save humanity.</p>",
+      "proceedToAnotherPath": "检查 你的 战役日志. 如果 调查员<i>know 的 Abjuration 的 Throne</i>, 前往 至<b>另一 道路</b>.",
+      "skipToSetup": "Otherwise, 跳过 至<b>设置</b>."
+    },
+    "anotherPath": {
+      "title": "另一 道路",
+      "body": "<p>Perhaps there 是 另一 way. ritual 你've glimpsed 在……中 halls 的 塔希尔达's temple 将 获得 many months 至 prepare—和 你 still do 不 know where 它 必须 be performed, 但是 如果 它 是 possible, 它 将 surely give humanity enough time 至 develop technology necessary 至 survive. Now 至 找到 ritual site 是 另一 question altogether…</p><ul><li>前往 至<b>设置</b>.</li></ul>"
+    },
+    "setup": {
+      "gatherSets": "收集 全部 卡牌 从 以下 encounter sets:<i>星陨</i>,<i>Anachronism</i>,<i>Deep 太空</i>,<i>Endtimes</i>, 和<i>Agents 的 Yog-Sothoth</i>. 这些 sets 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{imgPath}/homebrew/dark-matter/sets/starfall.png' /><img src='{imgPath}/homebrew/dark-matter/sets/anachronism.png' /><img src='{imgPath}/homebrew/dark-matter/sets/deep-space.png' /><img src='{imgPath}/homebrew/dark-matter/sets/endtimes.png' /><img src='{setImgPath}/agents-of-yog.png' /></section>",
+      "setAsideHastursGaze": "放置 一边<i>哈斯塔's Gaze</i>遭遇牌组. 此 放置 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{imgPath}/homebrew/dark-matter/sets/hasturs-gaze.png' /></section>",
+      "setAsideCards": "放置 以下 卡牌 一边, out 的 进行: 卡西尔达号 地点, 多玛格·提尔 敌人, 米·戈 Sentinel 敌人, Yithian Guard 敌人, 和 Feaster 从 Afar.",
+      "setAsideAgenda": "放置 一边 黑暗物质 密谋 和 塔希尔达's Awakening 场景, 作为 well 作为 塔希尔达 敌人, out 的 进行.",
+      "checkCampaignLog": "检查 你的 战役日志:",
+      "elbrusStation": "如果<i>Elbrus Station 有 been fully stabilized</i>, 放置 一边 Ar-没有 剧情 支援, out 的 进行. Otherwise, 放置 一边 Project Origami 剧情 支援, out 的 进行.",
+      "nostalgiaII": "如果<i>往昔号 II 有 been saved</i>, 放置 一边 Director Cixin 剧情 支援, out 的 进行. Otherwise, 放置 一边 Last Hope 剧情 支援, out 的 进行.",
+      "miGoAlliance": "如果<i>你是 allied 与 米·戈</i>, 放置 一边 米·戈 Collector 剧情 支援, out 的 进行. Otherwise, 放置 一边 Repairing Threshold 剧情 支援, out 的 进行.",
+      "createScanningDeck": "Create 扫描 牌组. 此 是 done 由 taking 全部 其他 encounter 卡牌 与 图标 在 bottom 的 他们的 back side 和 shuffling 他们 together. (Including 卡牌 above 该 有 不 been 放置 一边.)",
+      "placeLocations": "放置 以下 地点 至 进行: 褴褛之王号, Mars, Asteroid Belt 和 Pluto.",
+      "startAt": "每个 调查员 begins 进行 在 褴褛之王号.",
+      "impendingDoom": "为 每个 tally mark 在……下 “Impending 毁灭标记” 在……中 你的 战役日志, 开始 冒险 与 1 additional 毁灭标记 在……上 密谋."
+    },
+    "tokens": {
+      "easyStandard": {
+        "skull": "-X. X 是 half number 的 revealed 地点 不使用 线索 (rounded up).",
+        "cultist": "-3. 如果 你 fail 由 2 或 更多, 获得 1 伤害 和 1 恐惧.",
+        "tablet": "Increase difficulty 的 此 skill test 由 1. 揭示 另一 标记.",
+        "elderThing": "-3. 如果 你 fail, 你 必须 任一 放置 1 毁灭标记 在……上 当前 密谋, 或 获得 1 恐惧 为 每个 point 你 fail 由."
+      },
+      "hardExpert": {
+        "skull": "-X. X 是 half number 的 地点 在……中 进行 (rounded up).",
+        "cultist": "-4. 如果 你 fail 由 2 或 更多, 获得 1 伤害 和 1 恐惧.",
+        "tablet": "Increase difficulty 的 此 skill test 由 1. 揭示 另一 标记.",
+        "elderThing": "-4. 如果 你 fail, 你 必须 任一 放置 1 毁灭标记 在……上 当前 密谋, 或 获得 1 恐惧 为 每个 point 你 fail 由."
+      }
+    },
+    "resolutions": {
+      "noResolution": {
+        "title": "没有 结局 是 Reached",
+        "body": "<p><b>如果 没有 结局 是 reached (每个 调查员 resigned 或 是 defeated):</b>前往 至<b>结局 1</b>.</p>"
+      },
+      "resolution1": {
+        "title": "结局 1",
+        "body": "<p><b>结局 1:</b>一 brilliant 光 shines 在……上 solar system. cataclysmic supernova radiates through void, annihilating 全部 unprotected life 和 stripping 全部 heavenly bodies 的 他们的 precious atmosphere, leaving barren worlds 在……中 它的 wake.</p><ul><li>在……中 你的 战役日志, 记录 该<i>太阳 went supernova 和 wiped out most 的 solar system</i>.</li><li>如果 Repairing Threshold 是 在……中 胜利展示区, 在……中 你的 战役日志, 记录 该<i>米·戈 safely returned 至 他们的 home world</i>.</li><li>如果 Last Hope 是 在……中 胜利展示区, 在……中 你的 战役日志, 记录 该<i>Hope 是 shielded 从 blast</i>. 调查员 who resigned 在……中 Hope 阅读<b>Beyond Hope</b>.</li><li>如果 Project Origami 是 在……中 胜利展示区, 在……中 你的 战役日志, 记录 该<i>UCC escaped 至 另一 galaxy</i>. 调查员 who resigned 在……中 New Brooklyn 阅读<b>Far, Far Away</b>.</li><li>如果 none 的 剧情 卡牌 mentioned above 是 在……中 胜利展示区, 剩余 调查员 必须 阅读<b>终局 1</b>. Otherwise, 他们 阅读<b>终局 2</b>.</li></ul>"
+      },
+      "resolution2": {
+        "title": "结局 2",
+        "body": "<p><b>结局 2:</b>Royal Princess 的 Carcosa succumbs 至 你的 assault 和 wastes away 在……之前 你. 你有 defeated 塔希尔达, 和 在……中 doing 因此 有 prevented early collapse 的 太阳. Suddenly there 是 一 horrific smell wafting down 全部 around 你, carried 由 一 blast 的 chilly air. 在……之前 任意 的 你 可以 react, 一 dark cloud crackling 与 arcs 的 yellow 和 white energy expels 从 太阳, surrounding entire 飞船. Within 此 cloud hovers 一 horrific creature. 它 是 enormous, wrinkled, 和 hunched, 与 dozens 的 tentacles, 每个 tipped 与 一 wicked-looking fang. 此 可以 仅 be being 塔希尔达 spoke 的, 她的 sire, Last King. 在……中 一 instant, great abomination begins crushing hull 的 飞船 inwards. 在……中 你的 final moments, despite being unable 至 save yourself 从 blast, 你 feel accomplished—和 redeemed—由 what 你有 done 至 save 其他.</p><ul><li>前往 至<b>终局 3</b>.</li></ul>"
+      }
+    },
+    "beyondHope": {
+      "title": "Beyond Hope",
+      "body": "<p>在……之后 blackout finally ended, 你 和 你的 fellow companions left underground shelters 的 Hope 至 witness 一 dazzling array 的 painterly gases, 和 一 faint white sphere— residual legacy 的 太阳. Colony researchers 有 claimed 该 它 会 有 been impossible 为 electromagnetic shield 至 protect entire 行星 从 blast 不使用 unexpected 但是 embraced energy spike originating 从 nearby 外星人 ruins. 它 是 dawn 的 一 new beginning 为 mankind, age 的 White 太阳. 你 live rest 的 你的 days helping megapolis sustain itself 和 recounting fantasy stories 的 你的 life 在……上 地球. 和 yet 你 wonder, 作为 你 查看 up 至 光 的 white dwarf, how long 直到 它 too, inevitably decays 和 humanity 将 once 更多 need 至 escape extinction…</p><ul><li>在……中 你的 战役日志, 记录 该 你的 调查员<i>lived remainder 的 他们的 days, 与 Hope</i>.</li><li>调查员 win campaign!</li><li>前往 至<b>Epilogue</b>.</li></ul>"
+    },
+    "farFarAway": {
+      "title": "Far, Far Away",
+      "body": "<p>scientists 的 Sinai activated 太空-time warping device moments 在……之前 blast. colony 的 New Brooklyn 是 jaunted along folds 的 太空 time, towards 一 new galaxy, 和 一 new future. destination—一 prospective binary system 的 many exoplanets—appears 至 be safe 和 far beyond reach 的 Ancient Ones 的 old world. 你 live rest 的 你的 days helping humanity build outposts 在……下 virgin skies 的 一 new home, 一 行星 settlers 将 call Paradise. 你 recount stories 的 你的 life 在……上 地球 至 你的 descendants, stories 该 将 become fairy tales 和 eventually legends. inhabitants upon 此 new world live 和 work together 在……中 peace 和 prosperity. 它 是 dawn 的 一 new beginning 为 mankind. 和 yet 你 wonder, 作为 你 查看 up 至 光 的 你的 new stars, how long 直到 他们 too, inevitably decay 和 humanity 将 once 更多 need 至 escape extinction…</p><ul><li>在……中 你的 战役日志, 记录 该 你的 调查员<i>lived remainder 的 他们的 days, 在……上 Paradise</i>.</li><li>调查员 win campaign!</li><li>前往 至<b>Epilogue</b>.</li></ul>"
+    },
+    "theEnd1": {
+      "title": "终局 1",
+      "body": "<p>光 的 supernova engulfs skies 和 surrounds 你 和 你的 companions. Despite 全部 的 你的 efforts, 你 可以 不 redeem yourself 和 prevent demise 的 humanity. 在……中 你的 finals moments, 在……之前 shockwave strips 你 的 你的 corporeal essence, 一 figure 在……中 一 tattered yellow dress materializes 在……中 光. 你 kneel 在……之前 她的 和 grab onto 她的 手牌, 作为 塔希尔达 welcomes 你 至 dark realm 的 Carcosa.</p><ul><li>在……中 你的 战役日志, 记录 该<i>你有 returned 至 palaces 的 Dim Carcosa</i>.</li><li>每个 调查员 是<b>killed</b>.</li><li>调查员 失去 campaign.</li></ul>"
+    },
+    "theEnd2": {
+      "title": "终局 2",
+      "body": "<p>光 的 supernova engulfs skies 和 surrounds 你 和 你的 companions. Despite being unable 至 save yourself 从 blast, 你 still feel accomplished—和 redeemed—由 what 你有 done 至 save 其他. 在……中 你的 finals moments, 在……之前 shockwave strips 你 的 你的 corporeal essence, 你 shut 你的 eyes 在……中 acceptance 的 你的 terrible fate.</p><ul><li>在……中 你的 战役日志, 记录 该 你的 调查员<i>是 caught 在……中 supernova's blast</i>.</li><li>每个 调查员 是<b>killed</b>.</li><li>如果 全部 调查员 是 reading 此, 调查员 失去 campaign.</li><li>前往 至<b>Epilogue</b>.</li></ul>"
+    },
+    "theEnd3": {
+      "title": "终局 3",
+      "body": "<p>一 roar 的 applause startles 你 awake. crowd 的 theatre rises 至 他们的 feet, cheering endlessly. Several patrons 在……中 front row 是 throwing roses 至 actors 在……上 stage, who 是 bowing 与 wide smiles across 他们的 faces. 一 searing headache crawls through 你的 temples. How did 你 get back here? 是 你 在……中 theatre 全部 along? What about Tatterdemalion? K2-PS187? Fragment? … entire future? 是 它 全部 仅 一 terrible 梦境? 你 exit auditorium 在……之前 crowd rushes 至 do 相同. Dizziness 和 exhaustion harries 你的 senses. weight 的 你的 lengthy adventure 是 crushing 你的 mind. 由 time 你 finally reach lobby, 你是 clawing 你的 way across ground. ground… 地球. 你是 finally home. 一 few 的 你的 thoughts wander towards idea 该 此 might be 另一 simulation 或 一 trick 的 mind, 但是 你 don't care anymore. 你 可以 live 与 该. 在 least now, there 是 hope 为 一 brighter future.</p><ul><li>在……中 你的 战役日志, 记录 该<i>调查员 有 finally escaped 哈斯塔's grasp 和 prevented him 从 escaping 他的 prison</i>.</li><li>调查员 win campaign.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><i>经验</i>: {xp}</li></ul></li><li>每个 调查员 可以 heal up 至 2 精神创伤, 作为 他们 now 有 hope.</li><li>在……中 你的 战役日志, 记录 该<i>Hope 是 shielded 从 blast</i>,<i>UCC escaped 至 另一 galaxy</i>和<i>米·戈 safely returned 至 他们的 home world</i>.</li><li>前往 至<b>Epilogue</b>.</li></ul>"
+    }
+  }
+}

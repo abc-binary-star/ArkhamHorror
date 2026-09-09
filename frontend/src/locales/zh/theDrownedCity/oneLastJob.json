@@ -1,0 +1,46 @@
+{
+  "setup": {
+    "locations": "将以下地点从游戏中移除：圣玛丽医院、南区、墓地、你的房子，以及随机一张商业区。",
+    "startAt": "每位调查员从蒂林哈斯特密所开始游戏。",
+    "gatherSets": "找出下列遭遇组中的所有卡牌： *1 最后 Job*, *梦*, *Chilling Cold*, *Locked Doors*, *The Midnight Masks*, *老鼠*, 和 *Striking Fear*. 这些 遭遇组图标如下:<section class='encounter-sets'><img src='{setImgPath}/one-last-job.png' /><img src='{setImgPath}/dreams.png' /><img src='{setImgPath}/chilling-cold.png' /><img src='{setImgPath}/locked-doors.png' /><img src='{setImgPath}/midnight-masks.png' /><img src='{setImgPath}/rats.png' /><img src='{setImgPath}/striking-fear.png' /></section>在收齐<i>午夜假面</i>遭遇组时，只收齐地点卡牌。不要收齐该遭遇组中的场景、密谋和诡计。",
+    "placeLocations": "放置 每位 剩余 地点 入场.",
+    "actDeck": "在两张场景1a—“盘问黑帮”中随机选择一张用以构建场景牌库。将另一张从游戏中移除。将每张场景2和场景3放在一边，位于场外。",
+    "setAside": "放在一边 相关角色 相关角色, 内奥米·欧巴尼恩, 和 的 相关角色 相关角色."
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局1_: 你 return 至 蒂林哈斯特密所 与 两者  shipment 和 Ruby Standish. The jewel thief sulkily admits 你 beat 她的 little wager, 和 promises 你 a drink afterward 与 没有 mention 的  “double 或 nothing” 她 proposed. A silver bell rings as 你 step 进入  魔宠 musty curio shop. Within moments, Randall 有  框 open 在 他的 desk. Inside 它 是一张small jade-green idol wrapped 在 cloth.</p><p.“I could not be more impressed,” Tillinghast says. His eyes glitter as he appraises the green figurine. As you look at the idol, your head swims. Ruby paces the foyer of the shop nervously and addresses your employer sharply. “All right, Tillinghast. We held up our end of the bargain. Where’s our cut?” The shop door rings again as Andy returns. Randall seats himself behind his desk and peers at you and the others over steepled fingers. “My suspicions have been confirmed: the relic is genuine. Well done. What if I told you I had an offer too good to refuse?”</p>"
+    },
+    "victory": "每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。",
+    "noResolution": {
+      "body": "你一身淤伤地拖着身子回到蒂林哈斯特密所，重重地靠在了商店的门上。彩色玻璃上画着的金字塔有一枚巨眼瞪着你，让你感到一种刻意的冷漠。这东西一直让人觉得古怪，不自在。你休息了好一阵儿，才倚着门框走进了商店。你看到露比和安迪都在屋子里，围在兰道尔的桌旁，对一尊绿色小雕像赞不绝口。\n兰道尔坐在椅子里，俯身向前，交叉十指望着你们。“晚来总比不来好。我的怀疑不假：这件透物是真品。干得好。要是我说，我还有个不容拒绝的报价会怎么样呢?”",
+      "title": "如果未达成任何结局"
+    },
+    "rubyLostTheBet": "In 你的 冒险日志, 记录 *Ruby lost  bet*.",
+    "rubyWonTheBet": "In 你的 冒险日志, 记录 *Ruby won  bet*.",
+    "discoveredAnAlienLanguage": "如果  调查员 discovered an alien 语言, 你 discover 这 字符:<section class='encounter-sets'><img src='{setImgPath}/../extra/the-drowned-city/runes/a.png' /></section>In 你的 冒险日志, 记录 “Depths” 在……下 {'{'}runeA{'}'} 在  字符 记录. 这 字符 有 是 translated.",
+    "proceed": "前往_幕间故事 I: An Offer 你 可以’t Refuse_",
+    "xp": {
+      "bonus": "夜晚’"
+    }
+  },
+  "intro": {
+    "body1": "<p>你在闪烁的街灯下等候，好不容易才忍住没在料峭春寒中打一个寒战。今天是你给当地的珍宝商人兰道尔·蒂林哈斯特打工的最后一天。这个古董贩子最近一批新奥尔良运来的货丢了，就派你找回来。这老狐狸给你派了一连串危险的“差事”，还经常是违法的，这只不过是手头上的最后一件。今晚的报酬应该足够丰富，足以让你还清欠蒂林哈斯特的债了。</p><p>两者 的 你的 informants arrive 在 时间. Ruby Standish, infamous jewel thief, approaches 与 a knowing smirk. The plucky reporter Andy Van Nortwick comes soon 之后. Tillinghast seems 至 抽取  most eclectic mix 的 specialists 为 他的 “ favors.”</p><p>Between Ruby 和 Andy’s accounts, 你 piece together a rough idea 的  shipment’s 地点. “I tracked 它 从warehouse 在 Southside 至 a few 黑色 market dealers 在 Rivertown. 没有 luck, I’m afraid,” Ruby 说.</p><p>Andy 受到 离场 他的 hat 和 wipes 他的 brow. “I nearly bought 它 在 a firefight downtown. Sounds 像  Sheldons 和 O’Bannions 是 于 它 再次.”</p><p>两帮人正在打另一场争夺战—大概是为了一堆丢了的私酒吧。可能丢掉的这批货只是跟黑帮真正的目标卷到一起去了。</p>",
+    "body2": "<p>寒风乍起，你还是打了个颤。露比潇洒地笑了：“加点赌注怎么样?赌一把。第一个找到货的人全拿。我希望你已经准备好要输了。”她笑得更夸张了。</p><p>你还没来得及回应，她就已经消失在阴影之中了。</p><p class='basic right'>进入<b>设置</b></p>",
+    "title": "金盆洗手",
+    "wendy": "“要是我们得去黑帮的地盘，你可别草率行事。”安迪的声音里明显带着一种关切，“等干完这趟活，我们的钱肯定够找到你爸爸了。我保证。”"
+  },
+  "tokens": {
+    "easyStandard": {
+      "skull": "-X. X 是 数量为_罪犯_ 敌人 在场 (至 a maximum 的 4).",
+      "tablet": "-2 (-4 改为 如果 那里 是一张_罪犯_ 敌人 在你的地点).",
+      "elderThing": "-3. 如果 你 失败, 弃掉 牌堆顶 3 卡牌 的  遭遇牌库. 选择 1 _罪犯_ 敌人 弃掉的 由 这 效果 和 spawn 它 engaged 与 你."
+    },
+    "hardExpert": {
+      "skull": "-X. X 是 1 更多 于 数量为_罪犯_ 敌人 在场.",
+      "tablet": "-3 (-5 改为 如果 那里 是一张_罪犯_ 敌人 在你的地点).",
+      "elderThing": "-4. 如果 你 失败, 弃掉 牌堆顶 6 卡牌 的  遭遇牌库. 选择 1 _罪犯_ 敌人 弃掉的 由 这 效果 和 spawn 它 engaged 与 你. 它 makes an immediate 攻击."
+    }
+  }
+}

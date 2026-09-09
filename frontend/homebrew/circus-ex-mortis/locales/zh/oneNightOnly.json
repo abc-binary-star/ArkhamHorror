@@ -1,0 +1,42 @@
+{
+  "oneNightOnly": {
+    "intro": {
+      "title": "冒险 I: 仅此一夜",
+      "body": "<p>树林 south 的 Uptown loom above 你 在……中 fading 光 作为 你 approach circus grounds. Smiling barkers 获得 你的 tickets 和 usher 你 在……中 与 enthusiastic shouts 的 many waiting attractions, though 你 仅 获得 note 的 potential threats. 如果 此 circus 是 harboring dark 和 deadly things, 然后 你 可以't afford 至 let 你的 guard down 为 even 一 moment. 你 follow flow 的 crowd 至 main tent, wondering where trouble might 开始.</p><p>与 一 sudden loud fanfare, 一 long parade 的 exotic animals 和 costumed acrobats snakes around tent, 每个 settling 在……中 他们的 performance areas 至 applause 的 crowd. 一 tall man &ndash; unnaturally tall &ndash; 与 一 pointed beard 和 一 pitch-black suit saunters between 3 rings 和 gives 一 elegant bow 至 audience. 你 catch 一 unsettling glint 在……中 他的 eyes 作为 他 raises 他的 head 至 address cheering citizens.</p><p><i>\"Ladies 和 gentlemen, boys 和 girls, welcome 至 greatest spectacle 的 你的 lives! Watch 在……中 amazement 作为 I, Sylvester Blake, ringmaster 的 新月马戏团, unveil 我们的 most impossible trick!\"</i>ringmaster's voice booms out, 但是 与 一 tone 仅 作为 unnatural 作为 他的 appearance. 他 weaves 他的 hands through air 与 一 magician's deftness, 和 1 的 elephants rears up 与 一 trumpet call. Cheers 和 applause ring out 从 audience 作为 elephant repeats 它的 motion, 但是 它的 call grows distorted 和 它的 form begins 至 waver. 当 animal rises 为 一 第三 time, 它的 head begins 至 split, 和 它的 cry 是 utterly 外星人. crowd's cheering gives way 至 horrified screams, 和 pandemonium breaks.</p>",
+      "behindTheCurtain": "<p><b>Behind Curtain:</b><i>作为 你 seat yourself 在……中 bleachers, eyes instinctively stray 至 where performers 收集 在……之前 beginning 他们的 routines. few visible members 扫描 房间 furtively, practicing strange 手牌 motions.</i></p><p>你 开始 game 与 1 线索 从 标记 bank.</p>"
+    },
+    "seats": {
+      "label": {
+        "firstRing": "\"I'll 获得 一 seat 下一 至 animal acts.\" 你 开始 进行 在 Big Top (第一 Ring).",
+        "secondRing": "\"I'll 获得 一 seat 下一 至 acrobats.\" 你 开始 进行 在 Big Top (第二 Ring).",
+        "thirdRing": "\"I'll 获得 一 seat 下一 至 clowns.\" 你 开始 进行 在 Big Top (第三 Ring)."
+      }
+    },
+    "houseOfHorrors": {
+      "label": {
+        "discardHalfHand": "弃掉 half 卡牌 在……中 你的 手牌 (rounded up)",
+        "sealMoonToken": "搜索 混乱袋 为 一 {'{'}moon{'}'} 标记 和 seal 它 在……上 你的 调查员 卡牌"
+      }
+    },
+    "mesmericMagic": {
+      "label": {
+        "physicalTrauma": "Suffer 1 肉体创伤",
+        "mentalTrauma": "Suffer 1 精神创伤"
+      }
+    },
+    "resolutions": {
+      "resolution1": {
+        "title": "结局 1",
+        "body": "<p><b>结局 1:</b>rough scraping 的 ground beneath 你的 body 和 sounds 的 woodland nightlife rouse 你 slowly 但是 surely back 至 consciousness. 你 open 1 eye groggily 至 找到 1 的 circus performers dragging 你 through 树林 further south 的 Arkham. Though 它 came 在 price 的 一 welt 在……上 back 的 你的 head, 你&rsquo;re outside 该 accursed circus 和 free 从 illusory influence.</p><p>你 summon 你的 strength 和 send 一 wild strike 至 1 的 你的 captor&rsquo;s kidneys, causing him 至 drop 你 与 一 outcry 的 pain. 你 push yourself quickly upright, ready 至 fight 为 你的 freedom 如果 need be. carnie sizes 你 up, ready 为 另一 fight, 但是 looks up 在 full 月亮 above 你 两者. 与 一 grimace, 他 turns 和 runs deeper 至 树林 behind him 在 一 breakneck pace, far 更多 nimbly than 你 会 有 suspected 在 一 glance. 你 doubt 你 可以 catch up 至 him 在……中 treacherous Arkham 树林, 但是 你 在 least know 该 他 有 其他 priorities now.</p><ul><li>在……中 你的 战役日志, 记录 该<i>ringmaster does 不 suspect 你</i>.</li><li>如果 它 是 场景 1 当 game ended, 查看 在 back 的 场景 1 chosen 为 冒险 和 加入 listed 标记 至 混乱袋 为 remainder 的 campaign.</li><li>跳过 至<b>结局 3</b>.</li></ul>"
+      },
+      "resolution2": {
+        "title": "结局 2",
+        "body": "<p><b>结局 2:</b>你 tread swiftly out onto dry dirt 道路 leading up 至 circus, 与 dozens 的 frightened survivors close behind 你. Well clear 的 carnage 和 kidnapping 为 moment, 你 advise crowd 至 返回 至 Arkham 作为 fast 作为 他们 可以 和 inform police. Arkham brass aren&rsquo;t most reliable, 但是 even magic tricks 的 circus won&rsquo;t be able 至 cover 此 1 up.</p><p>作为 victims 返回 至 safety, 你的 thoughts turn back 至 circus still looming behind 你. What 是 它 全部 为? People capable 的 controlling 那些 horrid beasts 和 wielding hypnotic magic wouldn&rsquo;t organize 全部 此 仅 out 的 pure malice. Considering Minnie&rsquo;s report 的 他们的 sudden trek north 至 Arkham 作为 well, there 有 至 be 一些 deliberate purpose behind chaos tonight, 但是 what?</p><p>ringmaster &mdash; Sylvester Blake &mdash; 是 sure 至 有 answers 至 everything. 一 man 的 他的 stark 和 menacing appearance shouldn&rsquo;t be hard 至 失去 track 的, 但是 他 disappeared shortly 在……之后 chaos began. Likely 更多 的 circus illusions 在 work. Does 他 不 want 至 do 他的 own dirty work, 或 does 他 有 其他 reasons 为 staying aloof? Time 将 tell, 作为 你 intend 至 confront man yet.</p><ul><li>在……中 你的 战役日志, 记录 该<i>ringmaster 有 他的 eye 在……上 你</i>.</li><li>前往 至<b>结局 3</b>.</li></ul>"
+      },
+      "resolution3": {
+        "title": "结局 3",
+        "body": "<p><b>结局 3:</b>一 nearby scream sends 一 jolt 的 adrenaline through 你的 system once 更多, 和 你 advance 至 treeline. 一 young boy struggles 在……中 grip 的 另一 circus performer &mdash; 一 thin man 与 angular features &mdash; who 是 attempting 至 drag him possibly deeper 至 树林. 一 twig cracks 在……下 你的 foot 在……中 approach, 和 abductor snaps 他的 head up toward 你 为 barely 一 第二 在……之前 他 abandons 他的 prey 和 retreats 至 森林. boy scrabbles back against 一 tree, 和 仅 once 你 introduce yourself calmly does 他 visibly settle. 你 tell him 至 get back 至 Arkham 不使用 delay, 和 他 does, 仅 giving 一 mumbled thank 你 作为 他 runs off.</p><p>1 down, dozens 至 go. 你 turn 你的 attention back 至 moonlit trees. Most people avoid Arkham 树林 在……期间 day, 至 say nothing 的 它的 dangers 在 night, 但是 你有 little choice. circus performers 必须 有 kidnapped dozens 的 people 在……期间 bedlam. 如果 你 don&rsquo;t rescue victims tonight, 在……之前 circus 有 一 chance 至 leave, 然后 他们&rsquo;re 作为 good 作为 dead, 和 whatever foul mission circus pursues 将 be 该 much closer 至 fruition. 你 summon 你的 strength 和 courage 为 long night ahead.</p><ul><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><i>经验</i>: {xp}</li></ul></li><li>前往 至<b>冒险 II: 报春花之路</b>.</li></ul>"
+      }
+    }
+  }
+}

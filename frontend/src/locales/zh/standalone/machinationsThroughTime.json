@@ -1,0 +1,94 @@
+{
+  "setup": {
+    "startAt": "每位调查员从廷达洛斯开始游戏。",
+    "nobleLegacy": "将伟大遗产(过去)、伟大遗产(现在)和伟大遗产(未来)剧情卡牌依次放置入场，并结算每一张卡牌的<b>冒险设置</b>说明。<i>(提示：进行游戏时，先专注于完成伟大遗产(过去)，接著专注于完成伟大遗产(现在)，最后再完成伟大遗产(未来)。)</i>",
+    "machination": "从三张_骗局_剧情卡牌中随机选择一张，将其放置入场，并结算其<b>冒险设置</b>说明。将另外两张_骗局_剧情卡牌从游戏中移除。",
+    "plot": "从三张_情节_剧情卡牌中随机选择一张，将其放置入场，并结算其<b>冒险设置</b>说明。将另外两张_情节_剧情卡牌从游戏中移除。",
+    "gatherSets": "找出所有卡牌：  <i>时间骗局</i> 和 <i>单组模式</i> 遭遇 组. 这些 组 是 indicated 由 这些 icons:<section class='encounter-sets'><img src='{setImgPath}/machinations-through-time.png'><img src='{setImgPath}/single-group.png'></section>",
+    "placeLocations": "将廷达洛斯地点入场，使用带有<i>单组模式</i>遭遇组图标的一面。将剩余14张地点入场。<i>（参考第16–18页的地点摆放图，忽略廷达洛斯的摆放位置。）</i>",
+    "easy": "如果 它 是 简单, 移除1个毁灭标记 从 密谋1a.",
+    "hard": "如果 它 是 困难, 将1个毁灭标记放置在密谋1a。",
+    "expert": "如果 它 是 专家, 在密谋1a增加2个毁灭标记。",
+    "shuffleRemainder": "将剩余的33张遭遇卡牌混洗，组成遭遇牌库。 現在你已經準備好開始遊戲了。",
+    "corriganIndustries": "将真菌洞穴地点放在一旁，置于场外。",
+    "doom": "加入 1 {'{'}perPlayer{'}'} 毁灭标记 至 密谋1a. 然后, 如果 你不 playing 在 普通, 检查  难度 level:"
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>托马斯·科里根和玛丽·杰林斯基的发现对科学发展影响甚大。有了他们的帮助，你得以封印阿卡姆里所有通向廷达洛斯的次元门，艾德温·贝内特和他的骗局再也无法威胁世界。你买了一份刊登有两名科学家的报纸，突然意识到：你还有一件事没有做。你发动了机器，把报纸放在平台上。你得完成这个循环，不然这一切将会徒劳无功……</p><ul><li>每位of 下列assets 该 是 在场 (Nikola Tesla, Ezra Graves, 和 Dimensional Beam Machine), 任意 1 调查员可以 选择 加入该 支援 至 他们的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_Resolution 2_: 你使出了千方百计试图逃出野兽的魔掌，但随著它们持续的追捕，你发现自己不可能修复破碎的时间线。希望尚未破灭。尽管你抱有怀疑，但还是选择相信艾德温·贝内特会继续修复破碎的一切。他有这份能力，但他能担起这份责任吗？</p><ul><li>每位of 下列assets 该 是 在场 (Nikola Tesla, Ezra Graves, 和 Dimensional Beam Machine), 任意 1 调查员可以 选择 加入该 支援 至 他们的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+    },
+    "resolution3": {
+      "title": "结局3",
+      "body": "你的恐惧让身体僵硬，猎犬的恶臭让你感到恶心，并昏了过去。再次睁开双眼时，你发现自己在绿色月亮发出病态的黑暗光线中，你脑袋以下的部分都被埋在了恶臭的土地里，成为了廷达洛斯最新的居民。人类文明损失惨重。托马斯·科里根和玛丽·杰林斯基也被囚禁在了廷达洛斯，而他们的毕生事业也随著他们一起消失。更糟糕的是，暗中算计的艾德温·贝内特和他的惊天骗局化为波澜影响了时间，畅通无阻。你仅仅是想了想这样的疯子下一步打算计划什么，就感到厌恶无比。"
+    },
+    "resolution4": {
+      "title": "结局4",
+      "body": "<p>_Resolution 4_: 千方百计，你设法逃脱了野兽的魔掌，但随著牠们的追捕，你不可能修复破碎的时间线。人类遭受了巨大的损失。人类文明损失惨重。托马斯·科里根和玛丽·杰林斯基也被囚禁在了廷达洛斯，而他们的毕生事业也随著他们一起消失。唯一能作为慰藉的是艾德温·贝内特消失了。他的骗局不复存在，世界也会因此而更美好。但你内心深处有个想法挥之不去：他可能会卷土重来。</p><ul><li>每位of 下列assets 该 是 在场 (Nikola Tesla, Ezra Graves, 和 Dimensional Beam Machine), 任意 1 调查员可以 选择 加入该 支援 至 他们的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+    },
+    "noResolution": {
+      "body": "<p>无数猎犬冲破空间的门框和菱角限制，痴狂地逼近你。你不知所措，充满无限恐惧，凝视著即将迎来的死亡……</p><ul><li>剩下的每位调查员，不论所处哪个时代都被击败并受到1点精神创伤。</li><li>如果  Edwin Bennet 支援 是 在场 在 任意 era, 前往<b>结局2</b>.</li><li>如果  Edwin Bennet 敌人 是 在场 在 任意 era, 前往<b>结局3</b>.</li><li>否则, 前往<b>结局4</b>.</li></ul>",
+      "title": "如果未达成任何结局"
+    }
+  },
+  "intro": {
+    "body": "<p class='indented'>\"The sciences, 每位 straining 在 它的 own direction, 有 hitherto harmed us little; 但 some 白天  piecing together 的 dissociated 知识 将 open up such terrifying vistas 的 reality, 和 的 我们的 frightful position therein, 该 我们 shall 任一 go mad 从revelation 或 flee 从deadly light 进入  peace 和 safety 的 a 新 dark age.\"</p><p class='basic right'>– H.P. Lovecraft, *The Call 的 Cthulhu*</p><p>报纸头条：“当地科学家荣获诺贝尔奖！”头条下方，画著两位年长的物理学家自豪地站在一台巨型望远镜前。你瞥了一眼报纸上的日期，你哑然张著嘴。阿卡姆报社出版的时间是1956年12月5日，但这怎么可能呢？</p><p>Surprised 和 curious, 你 eagerly 阅读  entire newspaper 和 learn 的 2 remarkable scientists, Thomas Corrigan 和 Mary Zielinski, 和 他们的 journey 至 winning a Nobel Prize 在 physics. 在years, 他们的 research progressed 与 成功 之后 成功, culminating 在  discovery 的 teleportation. 他们 published 他们的 remarkable findings 在 February 23, 1955, 至 much acclaim. 和 now—或 rather, thirty years 从 now—他们 是 是 awarded 与Nobel Prize 在 Physics.</p><p>Though suspect, 你的 intuition tells 你 这 mysterious newspaper 是 real. In awe 的  future notoriety 你 go 至 Miskatonic University 至 meet 他们. However, 你're informed 他们 是 不 affiliated 与University 和, tragically, 两者 的 他们 disappeared years ago.</p><p>在世人尚未知道之时，已经发生了一场巨变。杰出科学家就这么不留痕迹地消失了。重要的科学进展退回原点。历史大发现突然变得无处可寻。人类或许已无回到正轨的可能。</p><p>Within  portals 该 riddle Arkham lies  realm 的 Tindalos, 哪里 countless suspended paths, angular 和 curved, above 和 below, wind away 在 所有 directions. Prowling 沿着 这些 paths 是 malevolent minions: ghastly satyrs 和 Hounds 的 Tindalos, among 其他 monstrosities. The beasts 是 eager 至 savage 他们的 prey, 或, perhaps worse, abduct 和 imprison 他们 在 Tindalos.</p><p>时间出现了乱流，它产生的荡漾也影响到了之后的岁月。这两名科学家如此不幸境遇，而你将要找到他们并修复破碎的时间线。切记，时间穿越可能会导致意料之外的后果，甚至会造成无可挽回的恶果。</p><p class='basic valid'>如果 你playing 在 *Single Group Mode*, 前往_设置 为 Single Group Mode_.</p><p class='basic invalid'>如果 你playing 在 *Epic Multiplayer Mode*, 前往_设置 为 Epic Multiplayer Mode_.</p>",
+    "title": "时间骗局"
+  },
+  "tokens": {
+    "easyStandard": {
+      "skull": "-X. X 是 1 plus 数量为剧情卡 在 胜利牌区。",
+      "cultist": "-1. 如果 你at 廷达洛斯, 你 自动 失败.",
+      "tablet": "-2 (-4 改为 如果 a _Scientist_ 支援 是 在你的地点).",
+      "elderThing": "-3. 如果 你 失败, deal 1 伤害 或 1 恐惧 至 an _盟友_ 支援 在你的地点."
+    },
+    "hardExpert": {
+      "skull": "-X. X 是 2 plus 数量为剧情卡 在 胜利牌区。",
+      "cultist": "-2. 如果 你at 廷达洛斯, 你 自动 失败.",
+      "tablet": "-3 (-6 改为 如果 a _Scientist_ 支援 是 在你的地点).",
+      "elderThing": "-4. 如果 你 失败, deal 1 伤害 或 1 恐惧 至 an _盟友_ 支援 在你的地点."
+    }
+  },
+  "label": {
+    "oMalleysWatchShop": {
+      "placeTime": "耗竭托马斯·科里根，在_现在_滴答俱乐部上放置1个资源，表示时间流逝。"
+    },
+    "tickTockClub": {
+      "placeTime": "耗竭托马斯·科里根，在_未来_滴答俱乐部上放置1个资源，表示时间流逝。"
+    },
+    "oldSadieSheldon": {
+      "payTheDebt": "花费 3 资源 每调查员,，作为一组, 加入旧 Sadie Sheldon 加入胜利牌区"
+    },
+    "uneasyAlliance": {
+      "test": "检定{'{'}intellect{'}'}（4）。如果成功，在埃德温·贝内特上再放置1个你的线索"
+    },
+    "vanishingHistory": {
+      "discardCards": "选择 和 弃掉 3 non-弱点 卡牌 从 你的 手牌",
+      "discardItem": "弃掉 a 剧情 _物品_ 支援 你"
+    },
+    "dimensionalBeamMachine": {
+      "investigator": "移动 an 调查员 在你的地点 至 任意 已揭示 地点",
+      "enemy": "移动 a non-_精英_ 敌人 在你的地点 至 任意 已揭示 地点"
+    },
+    "mobTroubles": {
+      "search": "搜索 遭遇牌库 或 弃掉"
+    }
+  },
+  "remembered": {
+    "thomasAndMaryAreInspiredByNikolaTesla": "Thomas 和 Mary 有 是 inspired 由 尼古拉·特斯拉",
+    "teleportationResearchHasBegun": "Teleportation 研究 有 begun",
+    "thomasAndMaryHaveMet": "相关角色 和 相关角色 有",
+    "fundingForAnObservatoryHasBegun": "相关角色 为 有",
+    "theObservatoryIsBuilt": "相关角色 是",
+    "corriganIndustriesHasBeenFounded": "相关角色 相关角色 有",
+    "thomasAndMaryHaveMadeAHistoricDiscovery": "相关角色 和 相关角色 有 a",
+    "thomasAndMaryHaveWonANobelPrize": "相关角色 和 相关角色 有 a 相关角色 相关角色",
+    "aTreeSeedHasBeenPlanted": "A 有",
+    "thomasAndMaryHaveMarried": "相关角色 和 相关角色 有",
+    "theDebtHasBeenPaid": "相关角色 有"
+  }
+}

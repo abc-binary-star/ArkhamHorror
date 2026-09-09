@@ -1,0 +1,66 @@
+{
+  "inTheShadowOfEarth": {
+    "intro": {
+      "title": "冒险 IIIb: 地球阴影",
+      "body": "<p>“在……中 middle 的 21st century, 地球 是 在……中 complete chaos. Rioting, crime, madness 和 worse had become order 的 day 为 entire world. [...] 在……中 一 last ditch 的 effort, 2 的 Arks 是 completed 和 第三 vessel 是 stripped 为 parts. 2 completed vessels 放置 out 为 Mars, 每个 carrying 3000 humans 在……中 suspended animation. 1 vessel, Liberty, suffered 一 massive power plant failure 和 crew 和 passengers 是 killed. 其他 飞船, Hope, eventually reached Mars...”</p><p class='basic right'>— 玛雅, Information Archives</p><p>行星 地球 — what used 至 be humanity’s sanctuary, 是 now abandoned 至 madness 的 Ancient Ones. There 是 非常 little information 的 what 保持 在……上 地球, 但是 如果 anyone 会 attempt 至 send out 一 transmission, survey vessels stationed around 行星 such 作为 往昔号 II 会 hear 那些 calls.</p><p>trip itself 是 uneventful, 和 你 spend 你的 days watching blue dot 的 地球 grow 和 grow 在……中 size. Around time 你 可以 finally recognize 一 few 的 continents, Tatterdemalion picks up 一 lonely 和 distant beat — echo 的 往昔号 II’s distress beacon. 你 try 至 hail crew 与 你的 radios, 但是 there 是 没有 response. 褴褛之王号 begins 它的 deceleration, 和 与 没有 time 至 waste, 你 prepare 至 board godforsaken 飞船.</p>"
+    },
+    "setup": {
+      "gatherSets": "收集 全部 卡牌 从 以下 encounter sets:<i>地球阴影</i>和<i>Deep 太空</i>. 这些 sets 是 标示 由 以下 图标:<section class='encounter-sets'><img src='{imgPath}/homebrew/dark-matter/sets/in-the-shadow-of-earth.png' /><img src='{imgPath}/homebrew/dark-matter/sets/deep-space.png' /></section>",
+      "setAsideEnemies": "放置 一边 Entity 和 Feaster 从 Afar 敌人.",
+      "createScanningDeck": "Create 扫描 牌组. 此 是 done 由 taking 全部 其他 encounter 卡牌 与 图标 在 bottom 的 他们的 back side 和 shuffling 他们 together.",
+      "createEvidenceDeck": "Create facedown “Evidence” 牌组. 此 是 done 由 taking 全部 1 sided 剧情 卡牌 和 shuffling 他们 together.",
+      "placeLocations": "放置 全部 剩余 地点 至 进行. 每个 调查员 begins 进行 在 Airlocks.",
+      "setAsideEvidence": "不使用 looking 在 它, 放置 top 卡牌 的 “Evidence” 牌组 facedown 在……下 冒险 reference 卡牌. Repeat 此 process once 为 每个 3 tally marks 在……下 “Impending 毁灭标记” 在……中 你的 战役日志.<i>(Example: 如果 你 had 5 Impending 毁灭标记, 你 会 放置 一 total 的 2 卡牌 在……下 冒险 reference 卡牌.)</i>"
+    },
+    "tokens": {
+      "easyStandard": {
+        "skull": "-X. X 是 half amount 的 伤害 在……上 你 和 支援 你 控制 (rounded down).",
+        "cultist": "-2. 如果 你 fail, 造成 1 伤害 或 1 恐惧 至 一 *Ally* 支援 你 控制.",
+        "tablet": "揭示 另一 标记. 如果 你 fail, 获得 1 伤害 和 1 恐惧.",
+        "elderThing": "0. 你 必须 任一 (选择 1): 获得 2 伤害, 或 此 test automatically fails."
+      },
+      "hardExpert": {
+        "skull": "-X. X 是 half amount 的 伤害 在……上 你 和 支援 你 控制 (rounded up).",
+        "cultist": "-3. 如果 你 fail, 造成 1 伤害 或 1 恐惧 至 一 *Ally* 支援 你 控制.",
+        "tablet": "-1. 揭示 另一 标记. 如果 你 fail, 获得 1 伤害 和 1 恐惧.",
+        "elderThing": "0. 你 必须 任一 (选择 1): 获得 3 伤害, 或 此 test automatically fails."
+      }
+    },
+    "specialRules": {
+      "0": {
+        "title": "卡牌 Removed 从 Game",
+        "body": "<p class='basic'>在……中 此 冒险, 你 必须 keep track 的 卡牌 该 是 removed 从 game. 放置 任意 卡牌 removed 从 game 在……中 一 area out 的 进行 该 是 still accessible.</p>"
+      },
+      "1": {
+        "title": "Motion 扫描",
+        "body": "<p class='basic'>在……中 此 冒险,<b>扫描</b>action designator functions slightly differently.<b>你可以 仅 扫描 当 你是 在 一 地点 与 一 图标 matching top 卡牌 的 扫描 牌组.</b>当 你 扫描, instead 的 searching 为 topmost 卡牌 的 扫描 牌组 matching 图标 你是 扫描 为, simply 抽取 top 卡牌 的 扫描 牌组. 作为 such, 你 将 有 至 移动 around 飞船 和 follow 图标 depicted 在……上 top 卡牌 的 扫描 牌组.</p>"
+      }
+    },
+    "resolutions": {
+      "noResolution": {
+        "title": "没有 结局 是 Reached",
+        "body": "<p><b>如果 没有 结局 是 reached (每个 调查员 resigned 或 是 defeated):</b></p><ul><li>如果 当前 场景 是 场景 3, 前往 至<b>结局 3</b>.</li><li>Otherwise, 前往 至<b>结局 1</b>.</li></ul>"
+      },
+      "resolution1": {
+        "title": "结局 1",
+        "body": "<p><b>结局 1:</b>你 barely made 它 out 的 madhouse alive. horrors 你’ve seen 的 what 保持 的 crew 是 almost too much 为 你 至 handle.</p><ul><li>如果 there 是 没有<b>Crew</b>剧情 支援 在……中 胜利展示区: 前往 directly 至<b>结局 5</b>.</li><li>如果 there 是<b>Crew</b>剧情 支援 在……中 胜利展示区: 查看 在 剧情 卡牌 该 是 在……下 冒险 reference 卡牌 但是 do 不 阅读 他们. 为 每个 的 剧情 卡牌, 揭示 1 random chaos 标记 从 混乱袋. 如果 它 是<i>不</i>一 {'{'}elderSign{'}'}, {'{'}bless{'}'}, ‘+1’, 或 ‘0’ 标记,<b>Crew</b>剧情 支援 corresponding 至 该 剧情 卡牌 是 一 imitation 的 Entity!<ul><li>如果 任意 的<b>Crew</b>剧情 支援 该 是 imitations 是 在……中 胜利展示区: 前往 至<b>结局 2</b>.</li><li>如果 none 的<b>Crew</b>剧情 支援 该 是 imitations 是 在……中 胜利展示区: 前往 至<b>结局 3</b>.</li></ul></li></ul>"
+      },
+      "resolution2": {
+        "title": "结局 2",
+        "body": "<p><b>结局 2:</b>一 horrible scream echoes through halls 的 Tatterdemalion. 1 的 crew members 你’ve brought aboard 是 一 imitation! 他们 revealed themselves 和 consumed 全部 crew members 你 可以 有 saved. 你 是 eventually able 至 fight 它 off 和 eject 它 through 一 airlock. However, 伤害 是 considerable 和 有 放置 back 你的 mission 由 many months.</p><ul><li>前往 至<b>结局 5</b>.</li></ul>"
+      },
+      "resolution3": {
+        "title": "结局 3",
+        "body": "<p><b>结局 3:</b>你 managed 至 save 一些 的 crew, 和 他们 mourn lost 为 several days. Thankfully, none 的 crew members 你有 brought aboard 是 一 imitation. 在……上 time, 他们 describe how madness 仅 began 一 few days 在……之后 他们 decoded 一 transmission 从 地球 — 一 cryptic poem.</p><blockquote><i>“Let red dawn surmise<br/>What 我们 shall do,<br/>当 此 blue starlight dies<br/>和 全部 是 through.”</i></blockquote><p>你 believe 此 poem 必须 be what 邪教徒 是 在……之后 — 但是 它 是 meaningless 至 你 和 doesn’t help 你 uncover coordinates 的 Fragment.</p><p>你 finally deliver 剩余 crew 至 一 service station 在……中 Martian orbit, 和 survivors thank 你 once 更多 为 saving 他们 和 bids farewell. Despite 全部, 你 必须 leave 此 behind 你 和 查看 forwards towards 另一 lead.</p><ul><li>记录 在……中 你的 战役日志 该<i>你有 rescued 剩余 crew 的 往昔号 II</i>.</li><li>加入 1 tally mark 在……下 “Impending 毁灭标记” 在……中 你的 战役日志. 然后, 加入 1 additional tally mark 为 每个 2<b>Crew</b>剧情 支援 removed 从 game, attached 至 Entity, 或 在……中 扫描 牌组.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区.<ul><li><b>经验</b>: {xp}</li></ul></li><li>返回 至<b>搜寻碎片</b>.</li></ul>"
+      },
+      "resolution4": {
+        "title": "结局 4",
+        "body": "<p><b>结局 4:</b>剩余 crew 的 往昔号 II thank 你 为 你的 help 在……中 defeating abomination. 他们 describe how madness 仅 began 一 few days 在……之后 他们 decoded 一 transmission 从 地球 — 一 cryptic poem.</p><blockquote><i>“Let red dawn surmise<br/>What 我们 shall do,<br/>当 此 blue starlight dies<br/>和 全部 是 through.”</i></blockquote><p>你 believe 此 poem 必须 be what 邪教徒 是 在……之后 — 但是 它 是 meaningless 至 你 和 doesn’t help 你 uncover coordinates 的 Fragment.</p><p>Despite 全部, 你 必须 leave 此 behind 你 和 查看 forwards towards 另一 lead.</p><ul><li>在……中 你的 战役日志, 记录 该<i>往昔号 II 有 been saved</i>.</li><li>一 调查员 可以 加入 太空 Artillery 剧情 支援 至 他们的 牌组. 此 卡牌 does 不 count towards 该 调查员’s 牌组 limit.</li><li>加入 1 {'{'}elderThing{'}'} 标记 至 混乱袋 为 remainder 的 campaign 为 catching eye 的 King 在……中 Yellow.</li><li>加入 1 tally mark 在……下 “Impending 毁灭标记” 在……中 你的 战役日志. 然后, 加入 1 additional tally mark 为 每个 2<b>Crew</b>剧情 支援 attached 至 Entity.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区 和 的 每个<b>Crew</b>剧情 支援 该 调查员 控制.<ul><li><b>经验</b>: {xp}</li></ul></li><li>返回 至<b>搜寻碎片</b>.</li></ul>"
+      },
+      "resolution5": {
+        "title": "结局 5",
+        "body": "<p><b>结局 5:</b>你 couldn’t save anyone. 1 silver lining — 在……期间 ordeal, K2-PS187 是 able 至 hack 至 mainframe 和 uncover what 邪教徒 retrieved, 一 cryptic message received 从 地球. 你 spend 一些 time attempting 至 decode message — 但是 至 没有 avail. 你 必须 leave 此 decryption, 和 traumatic experiences associated 与 它, behind 为 now 和 查看 forwards toward 另一 lead.</p><ul><li>记录 在……中 你的 战役日志 该<i>你 couldn’t save crew 的 往昔号 II</i>.</li><li>记录 在……中 你的 战役日志 该<i>全部 调查员 有 been corrupted 由 地球</i>.</li><li>加入 4 tally marks 在……下 “Impending 毁灭标记” 在……中 你的 战役日志.</li><li>每个 调查员 earns 经验 equal 至 Victory X value 的 每个 卡牌 在……中 胜利展示区. 每个 调查员 earns 2 additional 经验 作为 他们 有 seen unthinkable.<ul><li><b>经验</b>: {xp}</li></ul></li><li>返回 至<b>搜寻碎片</b>.</li></ul>"
+      }
+    }
+  }
+}

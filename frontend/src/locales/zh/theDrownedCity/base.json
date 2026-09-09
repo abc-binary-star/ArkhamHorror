@@ -1,0 +1,152 @@
+{
+  "specialRules": [
+    {
+      "title": "淹没标记",
+      "body": "@:theDrownedCity.additionalRulesAndClarifications.floodTokens"
+    },
+    {
+      "title": "神器",
+      "body": "@:theDrownedCity.additionalRulesAndClarifications.artifacts"
+    },
+    {
+      "title": "异星字符",
+      "body": "@:theDrownedCity.additionalRulesAndClarifications.alienGlyphs"
+    },
+    {
+      "body": "@:theDrownedCity.newKeywords.body",
+      "title": "新关键词"
+    }
+  ],
+  "prologue": {
+    "title": "引导故事",
+    "body": "<i>4月15日</i>\n有一阵子不对头了。天气冷得不正常，大雪、大雨和大雾让新英格兰的阴郁挥之不去。日常生活的方方面面都变得焦躁不安。街头巷尾的口角变成大打出手。关闭的大门后面传来压抑的叫嚷。米大翘课的学生为数不少。阿卡姆人都切身体会到：事情不一样了，事情不对劲了。"
+  },
+  "glyphs": {
+    "title": "异星字符",
+    "runes": {
+      "s": "装置",
+      "n": "毁灭",
+      "o": "力量",
+      "q": "手部",
+      "r": "时间",
+      "a": "深海",
+      "k": "梦境",
+      "c": "古神",
+      "z": "城市",
+      "b": "植物",
+      "d": "波浪",
+      "e": "黑暗",
+      "f": "群星",
+      "g": "生命",
+      "h": "伊奇莱赫特",
+      "i": "克苏鲁",
+      "j": "睡眠",
+      "l": "手臂",
+      "m": "大地",
+      "p": "天气",
+      "t": "空气",
+      "u": "女儿们",
+      "v": "陌生者",
+      "w": "寄生虫",
+      "x": "总和",
+      "y": "知识"
+    }
+  },
+  "artifactsEarned": {
+    "title": "取得的神器"
+  },
+  "key": {
+    "rubyWonTheBet": "露比赢得赌局。",
+    "rubyLostTheBet": "露比输掉赌局。",
+    "theInvestigatorsDiscoveredAnAlienLanguage": "调查员们发现了一种异星语言。",
+    "walkInFaith": "追随信仰",
+    "toeTheLine": "安分守己",
+    "noPlaceLikeHome": "吾家可归",
+    "goodMoney": "价值千金",
+    "doNoHarm": "医者仁心",
+    "proveYourWorth": "证明价值",
+    "dreamsOfDestruction": "毁灭之梦",
+    "plumbTheDepths": "追本溯源",
+    "theCreatureWasDefeated": "那头怪物被击败了。",
+    "barrierNode": "屏障节点",
+    "obsidianClaw": "黑曜石之爪",
+    "shardOfYchlecht": "伊库勒刻特碎片",
+    "tidalTablet": "潮汐碑匾",
+    "grislyMask": "骇人“面具”",
+    "horrorInClay": "陶中恐怖",
+    "discoveredGlyphs": "异星字符",
+    "floodedNeighborhoods": "淹没的街区",
+    "cthulhuWasDrivenAway": "克苏鲁被赶跑了。",
+    "cthulhuAnnihilatedTheCityOfArkham": "克苏鲁毁灭了阿卡姆城.",
+    "cthulhuWasBanished": "克苏鲁被驱除.",
+    "theExpeditionHeadedWest": "探险队向西进发。",
+    "theExpeditionHeadedEast": "探险队向东进发。",
+    "theExpeditionHelpedThePilgrim": "探险队救助了朝圣者。",
+    "theExpeditionLeftThePilgrim": "探险队扔下了朝圣者。",
+    "thePilgrimsWereSaved": "朝圣者得救。",
+    "thePilgrimsWereDevoured": "朝圣者被吞噬。",
+    "theInvestigatorsExterminatedTheAlienParasites": "调查员消灭了异星寄生虫。",
+    "thePowerWasDiverted": "能源已经转移。",
+    "theInnerSanctumWasUnsealed": "内部圣堂的封印已解除.",
+    "yourAlliesHaveAPlan": "你的盟友有一个计划。",
+    "theInvestigatorsStoodTogether": "调查员共赴此难。",
+    "theInvestigatorsDidNotConfrontTheNightmare": "调查员没有直面梦魇。",
+    "theInvestigatorsHaltedCthulhusAwakening": "调查员阻止了克苏鲁的苏醒。",
+    "cthulhuAnnihilatedTheExpedition": "Cthulhu annihilated 探险.",
+    "rlyehMap": "相关角色 地图",
+    "helpedWithTheRopes": "相关角色 与",
+    "wasHelpedWithTheRopes": "是 与",
+    "isStrongInTheirFaith": "是 .",
+    "madeBank": "相关角色 .",
+    "understandsTheFuture": "相关角色 .",
+    "foundTheirTrueHome": "相关角色 .",
+    "sworeAnOathToProtectOthers": "相关角色 .",
+    "foundNewWork": "相关角色 .",
+    "pulledTheirWeight": "相关角色 .",
+    "learnedTheSecretTruth": "相关角色 秘密 真相.",
+    "lostTheirFaith": "相关角色 .",
+    "arkhamWasDestroyed": "相关角色 是 ."
+  },
+  "additionalRulesAndClarifications": {
+    "floodTokens": "<h3>淹没标记</h3><p class='basic'>Throughout 这 战役, 冒险 卡牌 效果 可以 淹水 地点. 每位 地点 可以 是 于 1 的 3 不同 淹水 levels: 它 是 任一 unflooded, partially 淹水, 或 fully 淹水. A 地点’s 淹水等级 可以 是 tracked using  double‑sided 淹水 标记 included 在 这 战役 框. _A 地点’s 淹水等级 有 没有 inherent 游戏 效果_. However, some 卡牌 效果 可以 change 或 become stronger 当你at a 淹水 地点, particularly 如果 该 地点 是 fully 淹水.</p><ul><li>A 地点 与 没有 淹水 标记 是 unflooded.</li><li>如果地点变为部分淹没，在上面放置一个淹没标记，以部分淹没面朝上，作为标识。</li><li>如果地点变为完全淹没，在上面放置一个淹没标记，以完全淹没面朝上(或者如果其已为部分淹没，则将淹没标记翻面)，作为标识。<br><div style='display:flex;flex-direction:row;gap:1em;justify-content: center; align-items: center; align-self: center;'><div class='center'><img width='70' src='{setImgPath}/../tokens/partially-flooded.png' /><br><p>partially 淹水</div><div class='center'><img width='70' src='{setImgPath}/../tokens/fully-flooded.png' /><br><p>fully 淹水</p></div></div></li><li>如果地点的淹没等级“提升”，则其从未淹没变为部分淹没，或从部分淹没变为完全淹没。已经完全淹没的地点淹没等级不能提升。</li><li>如果 a 地点’s 淹水等级 是 “decreased,” 它 changes 从 fully 淹水 至 partially 淹水, 或 从 partially 淹水 至 unflooded. 如果 a 地点 becomes unflooded, 移除 它的 淹水 标记. An unflooded 地点 不能 有 它的 淹水等级 decreased.</li><li>若有卡牌效果提及，部分淹没和完全淹没的地点都视为“淹没”。</li></ul>",
+    "artifacts": "<h3>神器</h3><p class='basic'>调查员 可以 acquire certain _神器_ 剧情 支援 (也 referred 至 as simply “神器”) 穿过  course 的 *The Drowned 城市* 战役. 神器 function 像 任意 其他 支援, except 为following:</p><ul><li class='basic'>神器绝不会加入调查员的牌库。在冒险结局之后，将场上的所有神器放回游戏盒中。</li><li class='basic'>当 setting up a 冒险, 调查员可以 是 instructed 至 begin 游戏 与 an earned _神器_ 剧情 支援. 仅 神器 该 有 是 checked 离场 在  “神器 Earned” section 的  战役 Log 可以 是 chosen 在……期间 这 process.</li><li class='basic'>神器有独特的牌背，没有费用，不能离场，也不能因冒险效果被选择弃掉。</li><li class='basic'>Some 神器 contain alien 字符. 任意 文本 below 这些 字符 是 considered 至 是 blank unless 调查员 有 translated 每位 alien 字符 在  神器.</li><li class='basic'>如果有任意控制了神器的调查员被击败，不将其神器从游戏中移除，而是改为<b>由最近的幸存调查员控制该神器</b>。</li></ul>",
+    "alienGlyphs": "<h3>异星字符</h3><p class='basic'>在这个剧本中，调查员可能会受到指示，要翻译剧本日志第二页的字符。要翻译字符，就按照游戏的指示，将译文直接写在对应字符下面的空白处。</p><ul><li class='basic'>字符的含义本身没有游戏效果。</li><li class='basic'>Some 神器 contain alien 字符. 任意 文本 below 这些 字符 是 considered 至 是 blank unless 调查员 有 translated 每位 alien 字符 在  神器.</li><li class='basic'>Most scenarios 在 *The Drowned 城市* 战役 将 instruct players 至 组 字符 卡牌 一边, 场外.</li></ul>",
+    "title": "额外规则与说明"
+  },
+  "newKeywords": {
+    "body": "<h3>Alert</h3><p class='basic'>Some 敌人 在 这 战役 有  alert 关键词. 每位 时间 an 调查员 失败 a 技能 检定 当attempting 至 躲避 an 敌人 与alert 关键词, 之后 applying 所有 结果 为 该 技能 检定, 该 敌人 performs an 攻击 against  evading 调查员. An 敌人 会 不 耗竭 之后 performing an alert 攻击. 这 攻击 occurs whether  敌人 是 engaged 与evading 调查员 或 不.</p><h3>巡逻</h3><p class='basic'>此剧本中部分敌人带有巡逻关键字。在敌军阶段期间(流程步骤3.2)，每个未交战的重整敌人，若带有巡逻关键字，会沿著最短路线，向指定地点(会在巡逻旁的括号内说明)移动至一个连接地点。</p><h3>无情</h3><p class='basic'>这个剧本中部分敌人带有“无情”关键词。在敌军阶段期间（流程步骤3.3后），每个本阶段已经攻击过的敌人（即便其攻击被取消），若带有无情关键词，会重整并再次攻击与其交战的调查员。</p><h3>封印</h3><p class='basic'>As an 额外 cost 为 a 卡牌 与封印 关键词 至 enter 游戏, 它的 controller 必须 搜索  混乱袋 为specified chaos 标记 和 放置 它 在 顶端 的  卡牌, thereby sealing  标记. A sealed chaos 标记 是 不 considered 至 是 在  混乱袋, 和 therefore 不能 是 已揭示 从混乱袋 as 部分 的 a 技能 检定 或 能力.</p>",
+    "title": "新关键词"
+  },
+  "intro": {
+    "body": "<p class='indent'>“……梦魇死城拉莱耶，是由黑暗群星上渗透下来的可憎巨怪在史前难以衡量的亘古筑成。伟大的克苏鲁与其部属长眠于此，隐匿在绿色粘液的墓穴中。在无数个轮回之后，它们最终将心思远播，给敏感之人的梦境带来了恐惧，不可违逆地呼唤忠实的信徒踏上解放与归位的朝圣之旅。”</p><p class='basic right'><right>——H.P.洛夫克拉夫特，《克苏鲁的呼唤》</right></p>",
+    "title": "深海苏醒"
+  },
+  "rlyehMap": {
+    "rlyehWesternWall": "西墙",
+    "rlyehDrownedQuarter": "溺亡城区",
+    "rlyehApiary": "养育场",
+    "rlyehGrandVault": "大秘库",
+    "rlyehCourtOfTheAncients": "远古宫廷",
+    "rlyehObsidianCanyons": "黑曜石峡谷",
+    "rlyehSepulchreOfTheSleeper": "沉睡者之陵"
+  },
+  "label": {
+    "walkInFaith": {
+      "drawFromDeck": "抽取1张卡牌 从 你的 牌组 改为",
+      "drawEncounter": "照常从遭遇牌库抽取"
+    },
+    "naomiOBannion": {
+      "preventReadying": "受到1点伤害 至 prevent Naomi O’Bannion 从 readying",
+      "doNotTakeDamage": "Do 不 受到1点伤害"
+    },
+    "dreamingMigration": {
+      "moveNearestEnemy": "将最近的敌人移至你的所在地点，然后它攻击你",
+      "drawTopmostEnemy": "抽取遭遇弃牌堆顶的敌人"
+    },
+    "horrorInClay": {
+      "moveStarSpawn": "将一名_星之眷族_敌人向任意方向移动一次",
+      "blankPrintedText": "直到本轮结束，将此支援的印刷文本框视为空白"
+    },
+    "noAir": "没有找到空气，受到5点直接伤害"
+  }
+}

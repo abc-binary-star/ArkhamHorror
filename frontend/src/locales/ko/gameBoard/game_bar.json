@@ -1,6 +1,7 @@
 {
-    "closeLog": "로그 닫기",
-    "viewLog": "로그 보기",
+    "closeLog": "캠페인 로그 닫기",
+    "viewLog": "캠페인 로그 보기",
+    "sounds": "사운드",
 
     "view": "보기",
     "shortcuts": "단축키",

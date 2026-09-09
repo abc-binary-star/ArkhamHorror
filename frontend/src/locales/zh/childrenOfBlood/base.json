@@ -1,0 +1,72 @@
+{
+  "intro": {
+    "title": "无与伦比的饥渴",
+    "body": "“要说我们相信的吸血鬼或者狼人存在，其实是一种粗心又宽泛的表述。毋宁说，生命力与相关物质有一种陌生又未能归类的变动，而我们尚未准备好否认这种变动的可能。这一变动不常出现在三维空间，因其与其他空间单位的联系更为紧密，却又离我们所处空间的边界足够接近，从而间或有所呈现，但由于缺乏合适的观察位置，我们可能永远也不能理解。”\n——H.P. 洛夫克拉夫特，《畏避之屋》"
+  },
+  "prologue": {
+    "title": "引导故事",
+    "body": "<p>寒冷的秋风吹过阿卡姆的街道，鹅卵石上还残留着当天早些时候暴雨的雨水。天已放晴，头顶一片星空围绕着满月。路灯的黄光下，你正前往阿卡姆的滨水区，米斯卡塔尼克河几个月前决堤之前，这里还叫河岸城。</p><p>滨水区已然陷入可怕的恐慌之中。一连串的谋杀和失踪案，让住在这里的工人阶级晚上都不敢出门。他们白天去河边码头、火车场、新视野肉类加工厂上班，然后赶在夜幕接管城市之前奔回家里。行人时不时回头张望，匆匆穿过漆黑的小巷。有什么东西在狩猎此区的人。</p><p>你和阿卡姆警局的瑞若兹警探搭档，奋力一探究竟，但线索寥寥。</p><p>直到今晚。</p><p>一直关注此事的市民联系你前往滨水区。克里斯托弗·斯特恩邀请你到他水岸街的家中，答应给你更多信息，以此换取你在个人事务上帮他一把，这两件事最终归为一件。他痛苦地回忆起在新视野工厂上班的妻子朱利亚。她的轮班越来越长，甚至日出前就要去上班，日落后才能回家。她愈发冷淡，最后分房而居——按克里斯托弗的话说，是在躲他。</p><p>三天前，他在自家后巷发现了她。在渐圆的月光下，他发现曾经是自己妻子的生物蹲在邻居的尸体旁大快朵颐，贪婪地饮血。等他呼唤她的名字，她却遁入阴影。克里斯托弗跟了上去，但很快就跟丢了。她快得不像人类，夜色里再没有她的身影。更可怕的是，等他回到巷子里，邻居的尸体都不见了。</p><p>斯特恩先生接下来几天都疯了般地寻找妻子的踪迹。尽管他已亲眼目睹，但他似乎还在否认妻子已经变成某种怪物的可能。然而，城区夜夜传来的骇事越来越多，他意识到必须有所行动。</p><ul><li>如果 你playing 在 Hard 或 Expert 难度, 每位调查员可以 begin  战役 与 5 奖励 经验. 你 可以 upgrade 你的 decks 之前 starting  第一 冒险.</li></ul><p class='basic right'>当 你ready 至 begin, 前往_冒险 I: 河流 的 Blood_.</p>"
+  },
+  "key": {
+    "miskatonicUniversityBurned": "米斯卡塔尼克大学化为火海。",
+    "elokossWasReborn": "俄洛寇斯重生。",
+    "investigatorsDefeatedTheirMaskedPursuer": "调查员击败了戴面具的追兵",
+    "investigatorsSavedMiskatonicUniversity": "调查员拯救了米斯卡塔尼克大学",
+    "servantOfElokoss": "俄洛寇斯的使者",
+    "investigatorsDiscoveredTheCultsWhereabouts": "调查员发现了教派的藏身之处",
+    "investigatorsFailedInTheirSearch": "调查员搜查失败",
+    "investigatorsKilledTheServantOfFlame": "调查员杀死了烈焰仆从",
+    "investigatorsScouredArkhamForAnswers": "调查员搜遍了阿卡姆寻找答案",
+    "investigatorsStirredUpTrouble": "调查员捅了篓子",
+    "theServantOfFlameEscaped": "烈焰仆从逃离",
+    "investigatorsDefeatedElokossAndTheBrethrenOfAsh": "调查员击败了俄洛寇斯和灰烬同袍会",
+    "investigatorsStoppedElokosssGloriousRebirth": "调查员阻止了俄洛寇斯的辉煌重生",
+    "investigatorsFloodedTheBrethrenOfAshsSummoningRitual": "调查员淹没了灰烬同袍会的召唤仪式",
+    "investigatorsFailedToStopJuliaStern": "调查员没能阻止朱利亚·斯特恩。",
+    "investigatorsSparedJuliaStern": "调查员饶过了朱利亚·斯特恩。",
+    "investigatorsKilledJuliaStern": "调查员杀死了朱利亚·斯特恩。",
+    "investigatorsDidNotCompleteTheirSearch": "调查员没有完成搜查。",
+    "investigatorsCompletedTheirSearch": "调查员完成了搜查。",
+    "investigatorsLeftZburamoarteAlive": "调查员没能杀死孜卜拉牟特。",
+    "investigatorsDefeatedZburamoarte": "调查员击败了孜卜拉牟特。",
+    "investigatorsWereLeftToTheCultsMercy": "调查员任由教派摆布。",
+    "investigatorsStoppedTheChildrenOfBlood": "调查员阻止了鲜血之子。",
+    "investigatorsFailedToStopTheChildrenOfBlood": "调查员没能阻止鲜血之子。"
+  },
+  "friendsInLowPlaces": {
+    "title": "幕间故事：狐朋狗友",
+    "juliaWasSettled": "剧本日志中记录了<i>调查员饶过了朱利亚·斯特恩</i>或<i>调查员杀死了朱利亚·斯特恩</i>。",
+    "completedTheirSearch": "剧本日志中记录了<i>调查员完成了搜查</i>。",
+    "noBloodBlight": "没有调查员的牌库中有鲜血枯疫弱点。",
+    "label": {
+      "thankCharlie": "<i>“谢谢帮助，查理。要是你决定再次竞选，这次我肯定投票给你。”</i>",
+      "inviteCharlie": "<i>“你为什么不跟我们一起来呢，查理？让盯着你的家伙知道你不怕他们。”</i>"
+    },
+    "friendsInLowPlaces1": "<p>_Friends 在 Low 放置 1_: 你 和 Detective Reynolds meet up 于 Velma’s Diner 在  early morning 至 discuss 什么’s 下一. 与police department alerted 至  situation 于  meat packing facility,  detective 有 他的 眼睛 组 在  person responsible.</p><p>“我们从那群该死的野人口中打听到了一个名字。”瑞若兹对着热气腾腾的咖啡压低声音说，“威尔克斯，霍华德·威尔克斯。我查了一下他的资料，他挺有势力。钱不少，朋友也不少。他刚在北区给自己建了一座全新的公寓，说那是他的‘顶层公寓’。显然是某种法国设计。”瑞若兹耸耸肩，“不管怎么说，他工厂里的人不是成了邪教徒，就是成了怪物，他自己却隐居了。他已经几周没离开那儿了，也不让人进去。至少，直到今晚都是。”</p><p>瑞若兹告诉你，威尔克斯先生显然要在他的顶层公寓举行一个宴会——一个让他向市外其他商人炫耀财力的机会。“他想要扩展销售区域，把脏肉运往城外。我们不能让他得逞。我们得去那场宴会。我还知道谁能帮我们进去。”</p><p>就跟应了他的话似的，餐馆的门铃响了。你随着警探瑞若兹的目光望去，看到一张熟悉的面孔进来了。是个圆脸秃头、衣衫凌乱的男子，他穿的灰西装已经破旧，还打了一条绿领带。查理·凯恩亲切地向女服务员点头示意，一边朝你们的座位走来，一屁股坐在了瑞若兹旁边。</p><p>“很高兴你能来，市长。”警探说到。</p><p>这句话让查理皱了眉头。“这事得赶快。”他说着回头望了一眼。</p><p>“担心他们还在追你？”瑞若兹问说。</p><p>查理严肃地望着警探：“他们一直在。”</p><p>你们一起想出了计划：凯恩会把你们的名字加到宴会的宾客名录中去。你们不仅会去，还会尝试拘捕威尔克斯。瑞若兹建议安排警力后援，以备不测，但查理摇了摇头。“威尔克斯会知道你的计划。”前市长说，“要是他听到一点风吹草动，没人知道他会做什么。”</p><p>Charlie glances 场外  windows 的  diner, scanning  dark 街道 outside as 他 speaks.</p><p>“那里’s 1 person 在 particular 你 应该 保留 an eye 场外 为: Priscilla Thomas. 她’s a savvy businesswoman 从 Boston looking 至 使 a distribution deal 与 Wilkes 至 get 他的 product shipped throughout  state. 它 会 是 best 至 try 和 convince 她的 这 是一张bad idea, however 你 need 至. But, according 至 my contacts, Miss Thomas isn’t 部分 的 Wilkes’s organization, so… well, try using words, 不 fists.”</p><p class='basic'>如果 那里 是 exactly 12 {'{'}blood{'}'} 标记 在  混乱袋, 跳至_Friends 在 Low 放置 4_. 否则,  调查队长 必须 decide (选择 1):</p><ul><li>“Thanks 为帮助, Charlie. 如果 你 decide 至 run 再次, I’ll 是 sure 至 vote 为 你 这 时间.” 前往_Friends 在 Low 放置 2_.</li><li><i>“你为什么不跟我们一起来呢，查理？让盯着你的家伙知道你不怕他们。”</i></li></ul>",
+    "friendsInLowPlaces2": "查理不屑地哼了一声。“我觉得自己不会再参选了。至少不会组织竞选活动了。”他说着将坚毅的目光牢牢放在了你身上。“你这次必不能失败。要是威尔克斯没被阻止，或者他和普利西拉达成了交易，那么整个马萨诸塞州很快就会全是那些……东西。”",
+    "friendsInLowPlaces4": "查理从位子上站了起来，先伸手向警探瑞若兹，然后是你。你握住他手的时候顿了一顿。你能听到从他的手传来的心跳加速声。你握手的时候感受到了他的脉搏，你闻得出他恐惧的气味越来越浓。片刻之后，他猛地抽出手，一句话也没说就冲了出去。",
+    "friendsInLowPlaces5": "<p>_狐朋狗友5_：查理叹了口气。“你帮了滨水区居民很多忙，”他说，“这些平民受威尔克斯之流控制，而你费尽心力确保正义得到伸张。好吧，我会参加聚会。”</p><ul><li>任意一位调查员可以拥有查理·凯恩剧情支援。这张支援可在_狐朋狗友_遭遇组中找到，遭遇组符号如下：<section class='encounter-sets'><img src='{setImgPath}/friends-in-low-places.png' /></section></li></ul><p class='basic right'>跳至_冒险III：血钱_。</p>",
+    "friendsInLowPlaces3": "<p>_Friends 在 Low 放置 3_: 查理眯起了眼睛，考虑着你的需求。你看得出，他在考虑迄今为止发生的一切，还有你帮助滨水区人民的努力……</p>",
+    "friendsInLowPlaces6": "<p>_Friends 在 Low 放置 6_: 查理叹了口气。“你帮了滨水区的人民很多。”他说，“但做的还不够，你还有未竟之事。更糟的是，你已经吸引了大量的注意力，这是我无法承受的。抱歉，但我已经做了很多。你得靠自己了。”</p><p class='basic right'>前往_冒险 III: Blood Money_.</p>",
+    "friendsInLowPlaces3Check": "如果下述情况均符合：",
+    "xp": {
+      "friendsInLowPlaces": "相关角色 相关角色 相关角色"
+    }
+  },
+  "epilogue": {
+    "title": "尾声故事",
+    "epilogue1": "你别无选择，只得放弃阿卡姆北区的顶层公寓。那头蹂躏宴会、将宴会变成一场血腥屠杀的怪物。无论你走多远，你都担心离它还不够远。没过多久，相关事件的风言风语就传遍了阿卡姆，怪物依然在深夜狩猎捕食，更多的失踪案层出不穷。最终你决定离开这座城，搬到波士顿，想着终于可以忘记米斯卡塔尼克河畔的灾变。\n但无论你走多远，无论你多么想忘记一切，只是过了几个月，你就听到了和阿卡姆那时的混乱类似的报道。孜卜拉牟特的污血、血色教派的阴谋正在整个新英格兰蔓延。再过多久，你就会无处可逃？",
+    "epilogue3": "北区顶层公寓的事情已经被你放下，看来阿卡姆终于可以松一口气了。日子一天天过去，然而关于那晚怪物的流言细语再次骚动。过了几周，阿卡姆似乎回到了滨水区当初的那一夜，仿佛宿命。城里传说有更多的失踪案，你担心怪物已经回来，在深夜狩猎捕食。最终你决定离开阿卡姆，搬到波士顿，想着终于可以忘记米斯卡塔尼克河畔的灾变。\n但无论你走多远，无论你多么想忘记一切，只是过了几个月，你就听到了和阿卡姆那时的混乱类似的报道。孜卜拉牟特的污血、血色教派的阴谋已经归来，正在整个新英格兰蔓延。再过多久，你就会无处可逃？",
+    "epilogue2": "<p>_尾声 2_: 北区顶层公寓的事情已经被你放下，看来阿卡姆终于可以松一口气了。日子一天天过去，被教派魔爪中孜卜拉牟特的污血支配的人们开始康复。他们虚弱、迷茫，丢失了自己变形的记忆。纵使万般不易，霍华德·威尔克斯和血色教派的邪恶密谋看来已经化解。</p><p class='basic'>如果 * 调查员 spared Julia Stern*, 跳至_尾声 4_.</p>",
+    "epilogue4": "<p>_尾声 4_: 几周后，你走在水岸街的步道上。太阳从东方又一次升起，那血腥而绝望的一夜已经仿佛遥远的记忆，消散在阴影中。你继续前行，却瞥见一张熟悉的面孔——一个长发紧紧束成髻的中年女子，穿着工厂工人的蓝色工作服。她过街的时候抬了头，你们的眼神交汇了一刻。她没有认出你，但你立刻就知道那就是朱利亚。她礼貌地微笑一下，继续往前，最终在熙攘的人群中渐渐消失。</p>",
+    "toEpilogue2": "调查员击败了孜卜拉牟特。",
+    "checkCampaignLog": "查看你的战役日志。",
+    "toEpilogue1": "如果 * 调查员 未能stop  《血之子嗣》*, 前往_尾声1_.",
+    "toEpilogue3": "如果 * 调查员 stopped  《血之子嗣》*, 跳至_尾声3_."
+  },
+  "additionalRulesAndClarifications": {
+    "bloodTokens": "<h3>鲜血标记</h3><p class='basic'>本扩展引入了一种新的混乱标记：鲜血（{'{'}blood{'}'}）标记。随着探险的深入，根据调查员的决策与发生的事件，{'{'}blood{'}'}标记可能会加入混乱袋（或从混乱袋移除），在被抽取时会改变调查员执行的每次技能检定成功的概率。混乱袋中加入的{'{'}blood{'}'}标记越多，其效果就越显著。</p><p class='center'><img width=150 src='{setImgPath}/../chaos-tokens/ct-blood.png' /><br><p class='center'>Blood ({'{'}blood{'}'}) 标记</p></p><ul><li>技能检定期间从混乱袋揭示的第一个{'{'}blood{'}'}标记有如下效果：“-1。再揭示一个标记。如果本次技能检定失败，将本次检定期间揭示的1个{'{'}blood{'}'}标记封印在执行检定的调查员上。”<ul><li>每位 额外 {'{'}blood{'}'} 标记 已揭示 从混乱袋 在……期间 a 技能 检定 有 下列效果: “–1. 揭示 另一 标记.”</li></ul><p><i>示例：托米攻击一个攻击值为3的敌人，且混乱袋中有两个{'{'}blood{'}'}标记。攻击期间，托米揭示了一个{'{'}blood{'}'}标记。这使他的技能值减1，且导致他再揭示额外一个标记。他接下来揭示的是一个-2，于是两个标记的总值是-3，使得托米攻击失败。结算失败检定的效果时，托米不将本次检定期间揭示的{'{'}blood{'}'}标记返回混乱袋中，改为封印在他的调查员卡牌上。</i></p></li><li>调查员身上封印有{'{'}blood{'}'}标记时，许多遭遇卡牌的效果会对该调查员变得更加危险，所以务必要小心！</li><li>任何时候，一位调查员身上封印的{'{'}blood{'}'}标记<b>总计不能超过三个</b>。</li><li>任何时候，混乱袋中和封印在场上卡牌上的{'{'}blood{'}'}标记<b>总计不能超过十二个</b>。</li><li>除非有其他卡牌效果规定，否则在非技能检定中揭示的{'{'}blood{'}'}标记没有效果。</li><li>A {'{'}blood{'}'} 标记 added 至  混乱袋 remains 在  混乱袋 从 冒险 至 冒险 unless removed 由 a 卡牌 或 游戏 效果. Use  “混乱袋” section 的  战役 log 至 记录 哪个 标记 是 currently 在  混乱袋.</li></ul><p class='basic'>为 你的 convenience, a Blood 标记 reference 卡牌 有 是 provided. 这 卡牌 可以 是 placed beside  冒险参考卡 在……期间 每位 冒险 的 这 战役.</p>",
+    "predator": "<h3>掠食</h3><p class='basic'>掠食是一个关键词能力。</p><p class='basic'>在……期间  敌人 阶段 (之后 hunter 敌人 移动 和 之前 敌人 攻击), 每位 ready, unengaged 敌人 与predator 关键词 deals 1 伤害 至 a non-_精英_ 敌人 于 它的 地点 与 a 战力 数值 lower 于 它的 own.</p><ul><li>若要在多个其他敌人间进行选择，带有掠食关键词的敌人会对剩余生命值最低（或同为最低）的敌人造成伤害。</li></ul>",
+    "title": "额外规则与说明"
+  }
+}

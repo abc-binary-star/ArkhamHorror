@@ -1,0 +1,123 @@
+{
+  "intro": {
+    "title": "冒险III：血钱",
+    "body": "霍华德·威尔克斯的宴会在他新装修的顶层公寓举行。这里位于北区一幢重建大楼的顶端，俯瞰着阿卡姆昏暗但熙攘的城区。你乘电梯上到四楼，沿着干干净净的走廊走了一小段就到了公寓门前。敲门后，一个穿着燕尾服的高个男子出来招呼，他问过你的名字，让你进去了。看来查理说到做到。\n你一进门厅，警探瑞若兹就朝你走来，他也穿了正装。“好的，你来了。”他说，“问题是威尔克斯没来，没人见到他。我建议我们先解决托马斯女士，劝她重新考虑下合同。之后我们再跟其他人谈谈，看看能发现什么。”他紧张地环顾其他宾客，他们都不无怀疑地望着他，和你。“我们要快点了。”"
+  },
+  "setup": {
+    "sanguineSecrets": "在收齐<b>血色秘密</b>遭遇组的卡牌时，只收齐三张血色异教徒和一张鲜血狂信徒敌人。不要收齐病变仪式诡计。",
+    "foyer": "将门厅放置入场，（无聊宴会）面朝上。",
+    "masterBedroom": "将主卧放在一边，位于场外。",
+    "startAt": "每位调查员从门厅开始游戏。",
+    "priscillaThomas": "将普利西拉·托马斯敌人生成在餐厅。",
+    "onePlayer": "……正好1位，将1个起疑心的客人生成在书房。将2张该敌人从游戏中移除。",
+    "twoPlayers": "……正好2位，将1个起疑心的客人生成在书房、1个起疑心的客人生成在办公室。将1张该敌人从游戏中移除。",
+    "threeOrFourPlayers": "……正好3位或4位，将1个起疑心的客人生成在书房、1个起疑心的客人生成在办公室、1个起疑心的客人生成在餐厅。",
+    "setAside": "将每张鲜血之子敌人、孜卜拉牟特的眷族敌人、血色重生诡计、孜卜拉牟特的选民双面剧情支援、<b>血色秘密</b>遭遇组的每张敌人放在一边，位于场外。",
+    "addCultist": "将1个{'{'}cultist{'}'}标记加入混乱袋，持续到这个剧本结束.",
+    "gatherSets": "找出下列遭遇组中的所有卡牌：<section class='encounter-sets grid'><div><img src='{setImgPath}/blood-money.png' /><span>Blood Money</span></div><div><img src='{setImgPath}/agents-of-zburamoarte.png' /><span>Agents 的 Zburamoarte</span></div><div><img src='{setImgPath}/bloodthirst.png' /><span>Bloodthirst</span></div><div>《血之子嗣》</div><div><img src='{setImgPath}/blood-blight.png' /><span>Blood Blight</span></div><div><img src='{setImgPath}/hunted.png' /><span>Hunted</span></div><div><img src='{setImgPath}/sanguine-secrets.png' /><span>Sanguine 秘密</span></div><div><img src='{setImgPath}/arcane-lock.png' /><span>Arcane Lock{'{'}asterisk{'}'}</span></div></section><div class='center'>{'{'}asterisk{'}'}这 遭遇 组 是 发现 在  Arkham 恐惧: The 卡牌 Game core 组.</div>",
+    "suspiciousGuests": "收齐每张起疑心的客人敌人。如果游戏中调查员的人数为……",
+    "agendaDeck": "检查剧本日志。",
+    "placeLocations": "将办公室、书房、餐厅、厨房地点放置入场。",
+    "feedingFrenzyV2": "使用密谋2a“狂乱觅食（版本二）”构建密谋牌库。将另一张密谋2a从游戏中移除。",
+    "feedingFrenzyV1": "使用密谋2a“狂乱觅食（版本一）”构建密谋牌库。将另一张密谋2a从游戏中移除。",
+    "firstChildOfZburamoarte": "如果正在进行简单难度，将霍华德·威尔克斯<i>（孜卜拉牟特长子）</i>放在一边，位于场外。将其他每张霍华德·威尔克斯从游戏中移除。",
+    "tooFarGone": "如果正在进行普通难度，将霍华德·威尔克斯<i>（无可挽回）</i>放在一边，位于场外。将其他每张霍华德·威尔克斯从游戏中移除。",
+    "ultimatePredator": "如果正在进行困难或专家难度，将霍华德·威尔克斯<i>（究极掠食）</i>放在一边，位于场外。将其他每张霍华德·威尔克斯从游戏中移除。",
+    "juliaStern": "将每张朱利亚·斯特恩敌人从游戏中移除。",
+    "firstVictimOfNewHorizons": "如果正在进行简单难度，将朱利亚·斯特恩<i>（新视野最初的受害者）</i>放在一边，位于场外。将其他每张朱利亚·斯特恩从游戏中移除。",
+    "outForBlood": "如果正在进行普通难度，将朱利亚·斯特恩<i>（血债血偿）</i>放在一边，位于场外。将其他每张朱利亚·斯特恩从游戏中移除。",
+    "childOfVengeance": "如果正在进行困难或专家难度，将朱利亚·斯特恩<i>（复仇之子）</i>放在一边，位于场外。将其他每张朱利亚·斯特恩从游戏中移除。",
+    "gatherAdditionalSets": "相关角色, 如果 是 3 或 4 调查员, 全部 卡牌 从 :<section class='encounter-sets grid'><div><img src='{setImgPath}/afflicted.png' /><span>相关角色</span></div></section>",
+    "balcony": "如果 你是 简单 或 标准 难度, 相关角色 , 场外. 否则, 移除 从 .",
+    "howardWilkes": "相关角色 每名 的 相关角色 相关角色 敌人."
+  },
+  "resolutions": {
+    "investigatorDefeat": {
+      "title": "调查员被击败",
+      "body": "<p class='basic'>之前 reading 任意 其他 结局, 如果 于 至少 1 调查员 是 被击败: The 被击败 调查员 阅读 _调查员 击败_ 第一.</p><p>_调查员 击败_: 你 struggle against  monsters, 但 他们的 numbers 和 ferocity overwhelm 你, feeding 在 你的 flesh as 你’re forced 至  floor. 你的 entire world 是一张blood-soaked tempest 的 blinding pain 在你finally give 在 至  黑暗 的 death.</p><ul><li>所有被击败的调查员都<b>阵亡</b>。</li><li>如果 另一 结局 是 到达, 剩余调查员 前往该 结局. 否则, 在 你的 战役 Log, 记录 * 调查员 未能stop  children 的 鲜血*. 调查员 失去  战役!</li></ul>"
+    },
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1_: 你 walk 场外 的  penthouse, leaving  被击败 Howard Wilkes 和  shattered remains 的 他的 cult 在……后. Arkham’s finest arrive as 你 头部 场外 进入  街道, 和 你 let Detective Reynolds handle 他们的 questions. 你 头部 返回 场外 进入 Arkham as  第一 rays 的  morning sun peek 场外 在Miskatonic 河流.</p><ul><li>In 你的 战役 log, 记录 * 调查员 stopped  children 的 鲜血*.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。<ul><li>每位调查员 获得 1 奖励 经验 每位_Civilian_ 敌人 beneath  冒险参考卡 当  冒险 ended.</li><li>_经验_: {xp}</li></ul></li><li>每位调查员 谁 会 不 有 The Blood Blight weakness 和 谁 ended  冒险 与 2 或 更多 {'{'}blood{'}'} 标记 sealed 在 他们的 调查员 becomes  bearer 的 a set-aside The Blood Blight weakness.<ul><li>如果 于 至少 1 调查员 有 The Blood Blight weakness 在 他们的 牌组,  调查员 有 earned  Chosen 的 Zburamoarte 战役 reward 卡牌. 加入 这 卡牌 至  player 卡牌 pool.</li></ul></li><li>调查成功。</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2_: 你 和  few guests 你 saved flee  penthouse as  Arkham police arrive. 你 watch as 他们 rush 进入  penthouse, 但 你 don’t stick around, heading 场外 进入 Arkham 只是 as  第一 rays 的  morning sun peek 场外 在Miskatonic 河流.</p><ul><li>In 你的 战役 log, 记录 * 调查员 未能stop  children 的 鲜血*.</li><li>调查员永远无法从血色教派的恐怖中完全恢复，每位调查员承受1点肉体创伤和1点精神创伤。</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。<ul><li>每位调查员 获得 1 奖励 经验 每位_Civilian_ 敌人 beneath  冒险参考卡 当  冒险 ended.</li><li>_经验_: {xp}</li></ul></li><li>每位调查员 谁 会 不 有 The Blood Blight weakness 和 谁 ended  冒险 与 2 或 更多 {'{'}blood{'}'} 标记 sealed 在 他们的 调查员 becomes  bearer 的 a set-aside The Blood Blight weakness.<ul><li>如果 于 至少 1 调查员 有 The Blood Blight weakness 在 他们的 牌组,  调查员 有 earned  Chosen 的 Zburamoarte 战役 reward 卡牌. 加入 这 卡牌 至  player 卡牌 pool.</li></ul></li><li>调查成功。</li></ul>"
+    },
+    "noResolution": {
+      "body": "<p>_如果 没有 结局 是 到达 because 每位 surviving 调查员 resigned 在……期间 act 1a 或 act 2a_: Unable 至 bear  chaos 的  party, 你 flee 进入  streets. 你 仅 hope 该  problems 的  新 Horizons meat 和  blighted 鲜血 将 solve themselves.</p><ul><li>In 你的 战役 Log, 记录 * 调查员 未能stop  children 的 鲜血*.</li><li>调查员永远无法从调查中目睹的一切中完全恢复，每位调查员承受1点肉体创伤和1点精神创伤。</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。<ul><li>_经验_: {xp}</li></ul></li><li>每位调查员 谁 会 不 有 The Blood Blight weakness 和 谁 ended  冒险 与 2 或 更多 {'{'}blood{'}'} 标记 sealed 在 他们的 调查员 becomes  bearer 的 a set-aside The Blood Blight weakness.</li><li>调查员 失去  战役!</li></ul>",
+      "title": "如果未达成任何结局"
+    },
+    "xp": {
+      "rescuedGuests": "为 每名 _相关角色_ 敌人"
+    }
+  },
+  "codex": {
+    "partyGuest": {
+      "body": "<p>你跟宾客攀谈起来，尽可能获取情报，同时确保他们不会打扰调查。</p><p class='basic'>揭示 随机 标记 从混乱袋 直到 你 揭示 a 标记 与 a 符号 该 isn’t sealed 在 an 敌人. 如果  标记 是…</p><ul><li>宾客带着疑心跟你打招呼。</li><li>…a {'{'}邪教徒{'}'} 标记: 这 guest 是 trying 至 不 是 noticed.</li><li>这个客人看起来在位子里相当舒服，正朝你笑呢。</li><li>这个客人正狼吞虎咽。</li><li>这个客人的打扮看上去就是来谈生意，而非赴宴。</li><li>这个客人站都站不稳了。</li><li>这个客人加入了交谈的小团体。</li></ul><p class='basic'>之后 resolving  codex matching  已揭示 标记, 任意 调查员可以 trigger 这 codex 再次.</p>",
+      "title": "相关角色 A: 相关角色 相关角色"
+    },
+    "partyGuestSkull": {
+      "body": "<p>这个客人开始讲一个冗长无聊、不知所云得让人痛苦的故事，说的是此人震惊地发现霍华德·威尔克斯居然选择了北区——这个“工作区，最出人意料的地方”——来办宴会——不仅如此，还把顶层公寓安置在此。你假装对这段闲扯感兴趣，找了个机会伺机溜走了。</p><p class='basic right'>自动躲避此敌人，将此标记封印在此敌人上（如果普利西拉·托马斯在场上，改为将此标记封印在她身上）。</p>",
+      "title": "相关角色 {'{'}skull{'}'}: 相关角色 相关角色"
+    },
+    "partyGuestCultist": {
+      "body": "<p>你接近这位客人，对方却死死地盯着你。你还没问发生了什么，对方就从夹克口袋里抽出一把看着像是用颗巨牙造就的匕首。“我知道你想干什么！”这位客人大喊，“一切已经开始，我们不会让你阻扰！”</p><p class='basic right'>弃掉 这 敌人 和 spawn 1 随机 set-aside 邪教徒 敌人 engaged 与 你. 封印 这 标记 在 该 敌人 (如果 Priscilla Thomas 是 在场, 封印 这 标记 在 她的 改为).</p>",
+      "title": "相关角色 {'{'}cultist{'}'}: 相关角色 相关角色"
+    },
+    "partyGuestTablet": {
+      "body": "<p>你跟这个客人谈了话，虽然你得知了法兰西山的一些奇怪事情，但也没什么帮助。</p><p class='basic right'>自动 躲避 这 敌人 和 封印 这 标记 在 它. 抽取 1 卡牌.</p>",
+      "title": "相关角色 {'{'}tablet{'}'}: 相关角色 相关角色"
+    },
+    "partyGuestElderThing": {
+      "body": "<p>“亲爱的，你可一定得尝尝这些前菜！”这个客人朝你走来，手上拿的脆饼涂了某种血红色的肉，要强行将它塞进你嘴巴。你咬紧牙关，借口要用洗手间赶紧溜了。</p><p class='basic right'>自动 躲避 这 敌人 和 封印 这 标记 在 它. 你 可以 移动 至 a connecting 地点.</p>",
+      "title": "相关角色 {'{'}elderThing{'}'}: 相关角色 相关角色"
+    },
+    "partyGuestBlood": {
+      "body": "<p>这位客人谈到霍华德·威尔克斯在阿卡姆推销他的产品时遭遇到的阻力，还有他自己是怎么在当地业界树立起了残忍的自大狂的名声。今晚就是他把普利西拉·托马斯带来的，想在整个产业资金耗尽前打开阿卡姆之外的市场。</p><p class='basic right'>自动躲避此敌人，将此标记封印在此敌人上（如果普利西拉·托马斯在场上，改为将此标记封印在她身上）。</p>",
+      "title": "相关角色 {'{'}blood{'}'}: 相关角色 相关角色"
+    },
+    "partyGuestAutoFail": {
+      "body": "<p>这位客人踉跄着重重倚在一尊大理石像上。你小心靠近，伸手问能怎么帮忙。你一碰到客人的肩膀，对方猛地转身，眼神疯狂，龇开了嘴。</p><p class='basic right'>此敌人攻击你。本次攻击后，该敌人与每位调查员解除交战，并移动到一个连接地点（如可能，移动到没有调查员的地点）。</p>",
+      "title": "相关角色 {'{'}autoFail{'}'}: 相关角色 相关角色"
+    },
+    "partyGuestElderSign": {
+      "body": "<p>你发现一小群客人正凑在一起轻声交谈。你正好能在小团体周围绕过，听到他们都在怀疑今晚的宴会。</p><p class='basic right'>自动 躲避 这 敌人. 获得 1 线索 (从标记 pool). 然后, 如果 Detective Reynolds 是 在场 在……下 an 调查员’s 控制, 该 调查员 gains 1 线索 (从标记 pool).</p>",
+      "title": "相关角色 {'{'}elderSign{'}'}: 相关角色 相关角色"
+    },
+    "priscillaThomas2": {
+      "body": "<p>_Priscilla Thomas 2_: 你 try talking 至 Miss Thomas 关于 她的 reason 为 是 于  party, attempting 至 sow  seeds 的 doubt 在 她的 mind regarding Howard Wilkes 和 他的 business.</p><p class='basic'>释放普利西拉·托马斯上封印的所有混乱标记。每以此方式释放一个混乱标记，在普利西拉·托马斯上放置1点恐惧<i>（从供应堆拿取）</i>。</p><p class='basic'>选择 an 调查员 在你的地点 至 检定 {'{'}willpower{'}'} 或 {'{'}intellect{'}'} (3). 如果 该 调查员 成功, 放置 1 恐惧 在 Priscilla Thomas. 然后, 如果 那里 是 4 或 更多 恐惧 在 Priscilla Thomas, 前往_Priscilla Thomas 3_.</p><p class='basic'>任意调查员均可以再次触发本抄本。</p>",
+      "title": "相关角色 B: 相关角色 相关角色"
+    },
+    "label": {
+      "healHorror": "治愈{count}点恐惧",
+      "gainResources": "获得{count}个资源"
+    },
+    "priscillaThomas1": {
+      "body": "<p>_Priscilla Thomas 1_: 普利西拉·托马斯站在餐厅门边，看着周围宾客的眼神无聊又失望。“宴会主人都迟到肯定不是好兆头。”她转过来，跟靠近的你打招呼，抬高了眉毛，显然是有所怀疑：“我想你也不清楚到底怎么回事，对吧？”</p><p class='basic right'>前往_Priscilla Thomas 2_.</p>",
+      "title": "相关角色 B: 相关角色 相关角色"
+    },
+    "priscillaThomas3": {
+      "body": "<p>_Priscilla Thomas 3_: 托马斯女士听着你的故事，表情未变，但眼神专注。最终她点了点头，把手中杯放在附近的桌上。“可以了。”她说，“我早已觉得这桩生意不对劲。你只是证实了我的担心。谢谢。”她转身离开，在门边停住。“要是你在波士顿想找活干，我倒是用得上你的调查技能。我不会小气的。”她说完就朝门厅走去。</p><p class='basic right'>移除 Priscilla Thomas 从 游戏. 每位调查员可以 恢复 2 恐惧 或 获得 3 资源.</p>",
+      "title": "相关角色 B: 相关角色 相关角色"
+    },
+    "priscillaThomas": {
+      "body": "<p class='basic'>如果 是 有 冒险, 前往 _相关角色 相关角色 1_. 否则, 跳至 _相关角色 相关角色 2_.</p>",
+      "title": "相关角色 B: 相关角色 相关角色"
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "skull": "-X. X 是 1 更多 于 数量 的 {'{'}blood{'}'} 标记 你的 调查员.",
+      "cultist": "-2. 如果 你 失败 在……期间 攻击 或 a _相关角色_ 敌人, 加入 1 {'{'}blood{'}'} 标记 混乱袋.",
+      "tablet": "-3. 如果 你 失败 和 是一张{'{'}blood{'}'} 标记 你的 调查员, 放置 1 的 你的 线索 你的 地点.",
+      "elderThing": "-4. 如果 你 失败, 最近的 _相关角色_ 敌人."
+    },
+    "hardExpert": {
+      "skull": "-X. X 是 2 更多 于 数量 的 {'{'}blood{'}'} 标记 你的 调查员.",
+      "cultist": "-3. 如果 标记 是 在……期间 攻击 或 a _相关角色_ 敌人, 检定 , 加入 1 {'{'}blood{'}'} 标记 混乱袋.",
+      "tablet": "-4. 如果 你 失败 和 是一张{'{'}blood{'}'} 标记 你的 调查员, 放置 1 的 你的 线索 你的 地点.",
+      "elderThing": "-5. 如果 你 失败, 最近的 _相关角色_ 敌人."
+    }
+  }
+}

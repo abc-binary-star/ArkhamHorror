@@ -1,0 +1,197 @@
+{
+  "intro": {
+    "dreamsOfDestruction": {
+      "title": "任务：毁灭之梦",
+      "choose": "你必须决定<i>(选择一项)</i>：",
+      "drownOut": "在剧本日志中，“毁灭之梦”下擦去1进展并承受1点精神创伤。你（且只有你）取得2点奖励经验值。",
+      "letItIn": "在剧本日志中，“毁灭之梦”下记录2进展。在黑曜石峡谷冒险中，当每位调查员的第一个回合开始时，该调查员必须抽取遭遇牌库顶的卡牌。",
+      "instructions": "_阅读 仅 如果 你 有  “毁灭之梦” 任务:_",
+      "body": "你 查看 , a 的 你的 . 相关角色, 你 你的 , 你的 你的 .",
+      "vision": "你的 , 你 a 的 , a 与 , 和 a , . 是一张? 或 记忆? 你 城市 的 从 .",
+      "sorrow": "相关角色 你 . 你是 —或 — . 相关角色 城市 , , 为 . 相关角色 是 你 , 你的 , 你的 , 你的 . 你 …"
+    },
+    "proveYourWorth": {
+      "title": "任务：证明价值",
+      "body": "探险队里没人赞赏你的才华。他们怎么能这样？你的职责就是提供帮助，向他们证明你就是本次该死的探险的绝佳人选。没人问你，但现在是证明你价值的绝佳时刻。",
+      "choose": "你必须决定<i>(选择一项)</i>：",
+      "ropesAreWrong": "不经过对方的同意，选择帮助一位调查员（如可能，不能选择你自己）。记住“[你的调查员的名字]帮忙打了绳索”（也记录下所选调查员的名字）。每位调查员少2起始资源开始下一场冒险。",
+      "trustTheirHandiwork": "<i>“我相信他们的手艺。”</i>",
+      "instructions": "_阅读 仅 如果 你 有  “证明价值” 任务:_"
+    },
+    "label": {
+      "dreamsOfDestruction": {
+        "drownOut": "<i>驱逐低语。</i>",
+        "letItIn": "<i>让它进来。</i>"
+      },
+      "proveYourWorth": {
+        "ropesAreWrong": "<i>这些绳索都绑错了，我能干得更好。”</i>",
+        "trustTheirHandiwork": "<i>“我相信他们的手艺。”</i>",
+        "chooseInvestigator": "选择一位调查员 至 帮助."
+      }
+    },
+    "obsidianCanyons3": "<p>_Obsidian Canyons 3_: The alien 城市 sprawls 为 miles. Chunks 的 broken spires 是 suspended 在  空气 above collapsed towers, 和 colorful reefs hang 从undersides 的 ancient bridges. Decaying wrecks 的 ancient ships lean precariously atop  obsidian spires, swaying gently. 你 和 你的 companions stare 在 awe 于  unbelievable landscape.<p><p>一阵近处的狂风差点将你吹翻。你稳住身子，向南看去，猛烈的黑色乌云带着绿色的能量啪作响。微风变强，直至狂暴，又突然静息。瘴气密布的云层扭曲旋转，下面的景观也似乎在随之重组。你头晕目眩，回望地平线的时候，似乎连它也完全变了个模样。</p>",
+    "checkCampaignLog": "查看你的战役日志。",
+    "title": "黑曜石峡谷",
+    "obsidianCanyons1": "<p>_Obsidian Canyons 1_: “我是在做梦吗？”安迪望向远方地平线说道。瞬息万变的形体先是融合，又在下面的迷雾中分离。你看到远方就是登陆时的黑曜石大门。你们之间的广阔空间全是叫人心思涣散的尖塔和有毒的绿色雾气。安迪从相机包里倒出水来，咒骂道：“蒂林哈斯特先生跟我保证说这个包是密封的。我跟他说了我想要的就是照片，或许能够出一本书。现在全都毁了。”</p><ul><li>跳至_Obsidian Canyons 3_.</li></ul>",
+    "obsidianCanyons2": "<p>_Obsidian Canyons 2_: 拉莱耶的街道全是浑浊的积水和一种你不能分辨的臭气。你花了几个小时，也没从登陆的地方前进多少，终于可算是找到一条路能爬上去。借由绳索和一点攀登装备，你抵达了最近的有利位置。远古的穹顶在远方召唤着你。“别往下看。”露比说道，“要是你摔下去了，我可不会把你从地里刮出来。”</p><ul><li>前往_Obsidian Canyons 3_.</li></ul>",
+    "resolveTasks": "如果 任意 调查员 有  毁灭之梦 或 证明价值 任务, 他们 结算 他们的 respective 剧情 在 这 页.",
+    "setupWest": "如果 探险 前往 西, 前往_冒险设置(版本一) – Western 探险_.",
+    "setupEast": "如果 探险 前往 东, 前往_冒险设置(版本二) – Eastern 探险_.",
+    "headedWest": "如果 探险 前往 西, 前往_黑曜石峡谷 1_.",
+    "headedEast": "如果 探险 前往 东, 前往_黑曜石峡谷 2_.",
+    "xp": {
+      "dreamsOfDestruction": "为"
+    }
+  },
+  "setup": {
+    "west": {
+      "title": "设置（版本一）——向西探险",
+      "gatherLocations": "收齐<i>黑曜石峡谷</i>遭遇组的所有地点。",
+      "removeLocations": "将古代穹顶从游戏中移除。",
+      "fillGrid": "用顶端牌库底部的卡牌填满示意图中拉莱耶街道上方和右方的每个空格，直至共有3行4列。",
+      "shuffleInCentralSpire": "将放在一边的中心尖塔混洗入顶端牌库顶部的3张卡牌。",
+      "beginAtRlyehStreets": "每位调查员从拉莱耶街道开始游戏",
+      "windsStoryCard": "找出双面的东风/西风剧情卡牌并放置入场，东风面朝上。",
+      "buildActAgendaDeck": "使用密谋1a“侵袭风暴”创建密谋牌库；使用场景1a“遍寻尖塔”、场景2a“致命天空”、场景3a“回到海岸”构建场景牌库。将其他每张场景和密谋从游戏中移除。",
+      "stormIntensity": "在冒险参考卡牌的风暴强度下放置1资源。",
+      "starSpawn": "混洗<i>星之眷族</i>遭遇组的每个敌人，将随机2个从游戏中移除。",
+      "buildEncounterDeck": "混洗剩余遭遇卡来创建遭遇牌堆。",
+      "readyToBegin": "現在你已經準備好開始遊戲了。",
+      "gatherSets": "找出下列遭遇组中的所有卡牌： *Obsidian Canyons*, *Cosmic Legacy*, *Elder Mist*, *The Inescapable*, *R’lyeh*, *Star Spawn*, *Ancient Evils*, *Chilling Cold*, *Nightgaunts*, 和 *Striking Fear*. 这些 遭遇组图标如下:<section class='encounter-sets'><img src='{setImgPath}/obsidian-canyons.png' /><img src='{setImgPath}/cosmic-legacy.png' /><img src='{setImgPath}/elder-mist.png' /><img src='{setImgPath}/the-inescapable.png' /><img src='{setImgPath}/rlyeh.png' /><img src='{setImgPath}/star-spawn.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/chilling-cold.png' /><img src='{setImgPath}/nightgaunts.png' /><img src='{setImgPath}/striking-fear.png' /></section>将<i>远古恶魔</i>、<i>寒冷刺骨</i>、<i>恐惧打击</i>遭遇组的14张卡牌放在一边，位于场外，作为“天空”（见下方<b>天空</b>说明）。",
+      "buildSummitDeck": "将剩余的_顶端_地点混洗成一个独立的牌库，未揭示面朝上。这就是<b>顶端牌库</b>。（见下方的<b>顶端牌库与滑动地点</b>）",
+      "placeStart": "将拉莱耶街道与四张放在一边的天空卡牌一起，按照下方场景1地点摆放示意图放置入场。",
+      "checkCampaignLogInescapable": "查看你的战役日志。 *如果  生物 是 被击败*, 移除 *穷途异魔* 遭遇组 从 游戏. 否则, spawn The Inescapable 敌人 于 地点 farthest 从 所有调查员, exhausted.",
+      "chooseExpeditionAsset": "按玩家顺序，每位玩家可以从<i>探险</i>遭遇组选择1张_道具_支援，使其位于自己控制之下开始游戏。该遭遇组的图标为：<img src='{setImgPath}/tdc_expedition.png' />",
+      "setAsideLocations": "将拉莱耶街道、中心尖塔、浮动尖塔、空中瀑布、字符太阳系仪{'{'}runeD{'}'}、西墙放在一边，位于场外。",
+      "setCardsAside": "将双面的天空遗物{'{'}runeF{'}'}剧情支援、剥蚀壁缘{'{'}runeE{'}'}诡计和黑曜石之爪剧情支援放在一边，位于场外。"
+    },
+    "east": {
+      "title": "设置（版本二）——向东探险",
+      "gatherLocations": "收齐<i>黑曜石峡谷</i>遭遇组的所有地点。",
+      "removeLocations": "将西墙和浮动尖塔从游戏中移除。",
+      "fillGrid": "用顶端牌库底部的卡牌填满示意图中拉莱耶街道上方和右方的每个空格，直至共有3行4列。",
+      "shuffleInCentralSpire": "将放在一边的中心尖塔混洗入顶端牌库顶部的3张卡牌。",
+      "beginAtRlyehStreets": "每位调查员从拉莱耶街道开始游戏",
+      "windsStoryCard": "找出双面的东风/西风剧情卡牌并放置入场，西风面朝上。",
+      "stormIntensity": "在冒险参考卡牌的风暴强度下放置1资源。",
+      "starSpawn": "混洗<i>星之眷族</i>遭遇组的每个敌人，将随机2个从游戏中移除。",
+      "removeStarVampire": "查找<i>黑曜石峡谷</i>遭遇组，找出一张星辰吸血鬼敌人，将其从游戏中移除。",
+      "buildEncounterDeck": "混洗剩余遭遇卡来创建遭遇牌堆。",
+      "readyToBegin": "現在你已經準備好開始遊戲了。",
+      "gatherSets": "找出下列遭遇组中的所有卡牌： *Obsidian Canyons*, *Cosmic Legacy*, *Elder Mist*, *The Inescapable*, *R’lyeh*, *Star Spawn*, *Chilling Cold*, *Nightgaunts*, 和 *Striking Fear*. 这些 遭遇组图标如下:<section class='encounter-sets'><img src='{setImgPath}/obsidian-canyons.png' /><img src='{setImgPath}/cosmic-legacy.png' /><img src='{setImgPath}/elder-mist.png' /><img src='{setImgPath}/the-inescapable.png' /><img src='{setImgPath}/rlyeh.png' /><img src='{setImgPath}/star-spawn.png' /><img src='{setImgPath}/chilling-cold.png' /><img src='{setImgPath}/nightgaunts.png' /><img src='{setImgPath}/striking-fear.png' /></section>将<i>寒冷刺骨</i>、<i>恐惧打击</i>遭遇组的11张卡牌放在一边，位于场外，作为“天空”（见下方<b>天空</b>说明）",
+      "buildSummitDeck": "将剩余的_顶端_地点混洗成一个独立的牌库，未揭示面朝上。这就是<b>顶端牌库</b>。（见下方的<b>顶端牌库与滑动地点</b>）",
+      "placeStart": "将拉莱耶街道与四张放在一边的天空卡牌一起，按照下方场景1地点摆放示意图放置入场。",
+      "buildActAgendaDeck": "使用密谋1a“异界风暴”创建密谋牌库；使用场景1a“搜寻尖塔”、场景2a“前往古代穹顶！”构建场景牌库。将其他每张场景和密谋从游戏中移除。",
+      "chooseExpeditionAsset": "按玩家顺序，每位玩家可以从<i>探险</i>遭遇组选择1张_道具_支援，使其位于自己控制之下开始游戏。该遭遇组的图标为：<section class='encounter-sets'><img src='{setImgPath}/tdc_expedition.png' /></section>",
+      "setAsideLocations": "将拉莱耶街道、中心尖塔、空中瀑布、字符太阳系仪{'{'}runeD{'}'}、古代穹顶放在一边，位于场外。",
+      "setCardsAside": "将双面的天空遗物{'{'}runeF{'}'}剧情支援、剥蚀壁缘{'{'}runeE{'}'}诡计、黑曜石之爪剧情支援和<i>穷途异魔</i>遭遇组一起，放在一边，位于场外。"
+    }
+  },
+  "rules": {
+    "openSky": {
+      "title": "天空",
+      "body": "<p class='basic'>本场冒险中，你会受到指示，拿取设置期间收齐的遭遇卡牌，以正面朝下放置“天空”卡牌到指定位置。</p><ul><li>天空在卡牌效果、地点相邻和确定地点之间的距离中，都算作一个地点。</li><li>除非有冒险效果指示，否则调查员不能移动进入天空。</li><li>天空不能被调查，线索也不能掉落在上面。如果线索因任何原因将要掉落或放置在天空上，调查员必须选择最近的已揭示地点，改为将线索放置在该地点上。</li><li>地点可以在已有天空卡牌的位置入场。若这种情况发生，原本占据该位置的天空卡牌离场。</li><li>如果天空因任何原因离场，将其放置到顶端牌库顶，不要将其放入遭遇弃牌堆。该天空上所有的敌人、标记和附属都被弃掉。</li></ul>"
+    },
+    "summitDeck": {
+      "title": "顶端牌库与滑动地点",
+      "body": "<p class='basic'>本场冒险期间，地点和天空将会通过顶端牌库入场和离场。这个牌库由顶端地点卡牌和单面的天空卡牌组成。</p><ul><li>顶端牌库的卡牌总是从底部抽取。</li><li>顶端牌库的遭遇卡牌总是正面朝下放置（如果是地点，则未揭示面朝上）。</li><li>如果因任何原因使得地点和/或天空之间出现了空隙，且没有立即因冒险卡牌的指示填满，那么用顶端牌库<b>底</b>的卡牌填满此空隙：如果是遭遇卡牌，正面朝下；如果是地点，未揭示面朝上。</li><li>调查员可能会受到指示，将一行朝左或右滑动。要这么做，就将该行的每张卡牌（地点和天空）朝指定的方向移动一次地点/天空上的所有卡牌和标记也一起移动。任何移动出了既有列范围的卡牌都放置到顶端牌库顶。</li><li>有些地点不能被移动。如果受到指示要移动一行的卡牌，而该行中有卡牌不能被移动，那么将该卡牌留在当前位置，“跳过”它，将原本要进入它所在格子的卡牌移动到最近出现的空隙中。</li></ul>"
+    },
+    "stormIntensity": {
+      "title": "风暴强度",
+      "body": "在本场冒险中，冒险参考卡牌“风暴强度”下方的资源数量表示着当前拉莱耶的异界狂风的强度。风暴强度越高，当前天气就越危险。风暴强度本身没有游戏效果；但是，某些冒险效果根据当前风暴强度，可能会改变或变得更强。"
+    },
+    "locationAdjacency": {
+      "body": "<p class='basic'>本场冒险期间，地点排列成一组方阵。<b>每个地点与其相邻的每个地点连接。</b></p><ul><li>共享一条边（上下左右）的地点即为相邻。</li><li>仅共享一个角的地点不相邻。</li></ul>",
+      "title": "地点 Adjacency 在 这 冒险"
+    }
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1_: Andy sits 在 a glistening boulder, doing 他的 best 不 至 查看 shaken. “Well. I thought 这 trip 是 going 至 使 my career. But as 它 turns 场外—between alien parasites, magnetic storms, 和, 你 知道,  Pacific Ocean—my career didn’t stand a chance,” 他 sighs. “At 至少 我们’re 返回 在 1 piece. Well, mostly,” 他 laughs, favoring 他的 bandaged 手臂.</p><p>等你们小队的其他人都聚齐之后，你们就上路返回登陆的海滩。</p><ul><li>更新剧本日志。<ul><li>如果  Obsidian Claw 是 在……下  控制 的 an 调查员 当  冒险 ended, 检查  框 旁边“Obsidian Claw” 在  “神器 Earned” section 的 你的 战役 Log.</li><li>In 你的 战役 Log, cross 场外 Obsidian Canyons 在  R’lyeh 地图.</li></ul></li><li>如果 任意 调查员 有  Prove 你的 Worth 任务, 他们 结算 他们的 respective 剧情 在 这 页.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>前往_The Sepulchre 的  Sleeper_.</li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>_结局 2_: 你 join Ruby 于  crest 的  ancient court. As 你 peer 向下 进入  depths, 你stunned 由  sheer breadth 的  structure. The shattered dome 哪里 你 stand 是 于 至少 a quarter mile 在 diameter, 和 caps a vast, airy chamber. Below, a towering lift stands 在  center 的 a cathedral-like nave, surrounded 由 spiraling ringed floors. 5 long apses radiate outward 从central structure 像 obsidian claws, dominating  otherworldly skyline.</p><p>露比站在开裂的缝隙边缘，看着下面的一望无垠。“我不知道自己能不能一眼望到底，但我想下面无论有什么都比这场风暴要好。”</p><p>你看着越来越黑的地平线，不得不表示同意。</p><ul><li>更新剧本日志。<ul><li>如果  Obsidian Claw 是 在……下  控制 的 an 调查员 当  冒险 ended, 检查  框 旁边“Obsidian Claw” 在  “神器 Earned” section 的 你的 战役 Log.</li><li>In 你的 战役 Log, cross 场外 Obsidian Canyons 在  R’lyeh 地图.</li></ul></li><li>如果 任意 调查员 有  Prove 你的 Worth 任务, 他们 结算 他们的 respective 剧情 在 这 页.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>前往_Court 的  Ancients_.</li></ul>"
+    },
+    "proveYourWorth": {
+      "title": "任务：证明价值",
+      "task1Chosen": "你先前选择帮助的调查员承受1点肉体创伤并获得2点奖励经验值。",
+      "task1Progress": "你对自己相当满意，不是吗？在剧本日志中，“证明价值”下记录2进展。",
+      "checkCampaignLog": "查看你的战役日志。",
+      "task2Trauma": "确实如此：你永远也不够好。在剧本日志中，“证明价值”下擦去1进展并承受1点精神创伤。",
+      "task1": "_任务 1_: 你应该对自己的所作所为感到自豪。探险队的其他人都对你干的好事印象深刻，你攀爬的时候还听到有人在念叨你的名字。可能是尖叫出来的，但你不能确定。无论是什么，他们似乎都不想再讨论了。可惜的是，你打的绳索好像没帮上什么忙。攀爬的时候有几根断了，另一位队员摔断了腿。真遗憾。肯定是绳子做工不好。",
+      "task2": "_任务 2_: “不，不是那样！”又有一个探险队员要插进来帮你。你咬紧牙关，没有回应。他们一点也不知道自己有多么粗鲁，也不在乎。干吗要向这些忘恩负义的人证明自己？他们一点也不值得。",
+      "instructions": "_阅读 仅 如果 你 有  “证明价值” 任务:_",
+      "helpedWithTheRopes": "如果 “[你的 调查员’s 名称] helped 与ropes,” 前往_任务 1_.",
+      "task2OtherInvestigators": "每位 其他 调查员 (except 你) gains 1 奖励经验值.",
+      "otherwise": "否则, 跳至 _任务 2_.",
+      "xp": {
+        "helped": "为",
+        "other": "为 与"
+      }
+    },
+    "noResolution": {
+      "body": "<p>_如果 没有 结局 是 到达 (每位调查员 是 被击败)_: The poisonous gales howl 穿过  黑色 stone corridors 的  ancient 城市 与 所有  force 的 a hurricane. As 你battered 在 所有 sides 由 stinging, sharp winds,  acrid vapors 使 你的 头部 spin 与 unsettling visions. 这些 unearthly 天气 patterns seem 至 blow 从 somewhere far beyond, 从 an undimensioned plane 的 existence.</p><p>你醒了过来，看到同伴都聚在身边。他们帮你站了起来，你转身不看闪亮的天际线和翻滚的云层。你一点也不记得自己晕了过去。你究竟是怎么来到这里的？</p><ul><li>在剧本日志中，拉莱耶地图的部分划掉“黑曜石峡谷”。</li><li>每位调查员 必须 搜索  收藏 为 a 随机 _Madness_ 或 _Omen_ basic weakness 和 加入 它 至 他们的 牌组 为remainder 的  战役.</li><li>如果 任意 调查员 有  Prove 你的 Worth 任务, 他们 结算 他们的 respective 剧情 在 这 页.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>检查 你的 战役 Log.<ul><li>如果  expedition 前往 西, 前往_The Sepulchre 的  Sleeper_.</li><li>如果  expedition 前往 东, 前往_Court 的  Ancients_.</li></ul></li></ul>",
+      "title": "如果未达成任何结局"
+    },
+    "xp": {
+      "bonus": "为 braving  黑曜石峡谷"
+    }
+  },
+  "label": {
+    "searchTheSpires": {
+      "chooseLocation": "选择一张卡牌 从底端 的  Summit 牌组.",
+      "chooseOrder": "选择 下一张卡牌 至 放置在顶部 的  Summit 牌组. The final 卡牌 chosen 将 是 topmost.",
+      "placeNone": "Do 不 放置 a 已揭示 地点 入场",
+      "restOnTop": "放置 剩余 卡牌 顶 的 相关角色 牌组 任意"
+    },
+    "noExpeditionAsset": "Do 不 受到 an 神器 或 探险 支援.",
+    "lostInTheClouds": {
+      "eachInvestigatorTakesHorror": "每位调查员 受到 2 直接 恐惧",
+      "resolveWinds": "结算 相关角色 效果 相关角色 相关角色/相关角色 相关角色 剧情卡 如果 你 a {eldersign} 符号 标记"
+    },
+    "chooseExpeditionAssetQuestion": "选择 支援 开始 在场 在……下 你的 .",
+    "cluesToSpend": "选择 线索 花费.",
+    "summitEntry": {
+      "spendClue": "花费 1 线索",
+      "test": "检定 {agility} (2)"
+    },
+    "summitDeck": {
+      "toTop": "放置 顶 的 相关角色 牌组",
+      "toBottom": "放置 底 的 相关角色 牌组"
+    },
+    "wingsOfTerror": {
+      "drawEnemy": "抽取 敌人",
+      "attack": "相关角色 敌人 你"
+    }
+  },
+  "tokens": {
+    "easyStandard": {
+      "cultist": "-4. 如果 这 检定 失败, 放置1个毁灭标记 在  nearest 敌人.",
+      "elderThing": "-2. 如果 那里 是一个敌人 在你的地点, 再抽出一个标记。",
+      "skull": "-X. X 是当前 风暴强度.",
+      "tablet": "-1 每位天空 adjacent 至 你的 当前 地点."
+    },
+    "hardExpert": {
+      "cultist": "-6. 放置1个毁灭标记 在  nearest 敌人.",
+      "elderThing": "-4. 如果 那里 是一个敌人 在你的地点, 再抽出一个标记。",
+      "skull": "-X. X 是 2 更多 于  当前 风暴强度.",
+      "tablet": "-2 每位天空 adjacent 至 你的 当前 地点."
+    }
+  },
+  "hangingShip": {
+    "slide": "Slide Hanging Ship 进入 an adjacent 天空"
+  },
+  "magneticSpires": {
+    "swap": "选择 an 天空 up 至 2 spaces away 和 swap Magnetic Spires 与 它"
+  },
+  "tooltips": {
+    "westernWall": {
+      "resign": "你 ."
+    },
+    "ancientDome": {
+      "resign": "你 ."
+    }
+  }
+}

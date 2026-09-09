@@ -1,14 +1,22 @@
 <script lang="ts">
 import { defineComponent, h } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { cardArt } from '@/arkham/cardImages';
 import { Game } from '@/arkham/types/Game';
 import { handleEmbeddedI18n } from '@/arkham/i18n';
+import { knownTranslationsFor, translateGameLogText } from '@/arkham/gameLogLocalization';
 import { chaosTokenImage } from '@/arkham/types/ChaosToken';
 
 export default defineComponent({
   props: {
     game: { type: Object as () => Game, required: true },
     msg: { type: String, required: true },
+  },
+  setup() {
+    // Global scope so the pair stays reactive when SettingsForm swaps the
+    // active locale at runtime via setLocaleMessage.
+    const { locale, messages } = useI18n({ useScope: 'global' })
+    return { activeLocale: locale, activeMessages: messages }
   },
   render() {
     const msg = handleEmbeddedI18n(this.msg, this.$t)
@@ -17,6 +25,9 @@ export default defineComponent({
       // renderable while new entries use the canonical homebrew slug.
       .replace(/\{token:"CustomToken "([^"]+)""\}/g, '{token:"$1"}')
     const splits = msg.split(/({[^}]+})/)
+    // Messages that are not $i18n tokens reach the log as raw English, so match
+    // them against the already-loaded en and active locale trees instead.
+    const knownTranslations = knownTranslationsFor(this.activeLocale, this.activeMessages)
     const els = splits.map(split => {
       if (/{card:"((?:[^"]|\\.)+)":"([^"]+)":"([^"]+)"}/.test(split)) {
         const found = split.match(/{card:"((?:[^"]|\\.)+)":"([^"]+)":"([^"]+)"}/)
@@ -76,7 +87,7 @@ export default defineComponent({
           }
         }
       }
-      return split
+      return translateGameLogText(split, this.$t, knownTranslations)
     })
 
     return h('div', { className: 'message-body' }, els)
@@ -86,7 +97,7 @@ export default defineComponent({
 
 <style scoped>
 span[data-image-id] {
-  color: #BBB;
+  color: var(--text-dim);
   cursor: pointer;
 }
 

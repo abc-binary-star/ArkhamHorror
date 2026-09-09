@@ -12,5 +12,173 @@
       "tablet": "-3. 如果你检定失败，受到1点伤害和1点恐惧，或在当前密谋上放置1个毁灭标记。",
       "elderThing": "+1. 黑猫指引你正确的方向。如果本标记是在调查期间抽出的，并且你检定成功，则发现额外1个线索。"
     }
+  },
+  "heading": "冒险II–A",
+  "setup": {
+    "putLocations": "将乌撒、斯凯河、狄拉斯-利恩放置入场。",
+    "beginInUlthar": "每位调查员从乌撒开始游戏。",
+    "setOtherLocationsAside": "将所有剩余地点放在一边，位于场外。",
+    "setEnemiesAside": "将以下敌人放在一边，位于场外：乌撒之猫，跟踪的蝎狮，蠕行之雾，夜色怪群，伊伯生物，2张黑暗夜魇，2张冷原海盗，3张千面祭司。",
+    "spawnVooniths": "从找出的遭遇卡中查找1张一群乌尼斯，并将其生成在斯凯河。如果有3到4位调查员参与本场游戏，查找遭遇牌堆，找出另一张一群乌尼斯，并将其生成在狄拉斯-利恩。",
+    "takeControlOfVirgil": "调查员队长控制维吉尔·格雷<i>(怪谈作家)</i>剧情支援，将其放置入场。",
+    "buildEncounterDeck": "混洗剩余遭遇卡牌来创建遭遇牌堆。",
+    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: *寻觅卡达斯*, *奈亚拉托提普的使徒*, *海盜*, *幻梦境*, *修普诺斯的低语*, 和 *Zoogs*. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/the-search-for-kadath.png' /><img src='{setImgPath}/agents-of-nyarlathotep.png' /><img src='{setImgPath}/corsairs.png' /><img src='{setImgPath}/dreamlands.png' /><img src='{setImgPath}/whispers-of-hypnos.png' /><img src='{setImgPath}/zoogs.png' /></section>"
+  },
+  "regionSetup": {
+    "oriab": {
+      "title": "奥瑞巴岛冒险设置",
+      "loseClues": "每位调查员失去自己的全部线索。",
+      "removeLocations": "将所有在场地点移出游戏(或者，如果该地点带有胜利X字样并且没有线索，将其放入胜利牌区)。丢弃这些地点上的每个敌人和每张叠加卡牌。调查员此进程期间不被击败。",
+      "placeInvestigators": "将每位调查员放到巴哈那港。",
+      "spawnNightriders": "从遭遇牌堆查找1张夜骑，将其生成在恩格拉尼克山脉。如果有3到4位调查员参与本场游戏，查找遭遇牌堆，找出另一张夜骑，并将其生成在无名遗迹。混洗遭遇牌堆。",
+      "advanceAct": "推进到场景2a—“奥瑞巴岛”。",
+      "putLocations": "将放在一边的所有_奥瑞巴_地点放置入场(巴哈那港、恩格拉尼克山脉、无名遗迹)。"
+    },
+    "mnar": {
+      "title": "米纳尔冒险设置",
+      "loseClues": "每位调查员失去自己的全部线索。",
+      "removeLocations": "将所有在场地点移出游戏(或者，如果该地点带有胜利X字样并且没有线索，将其放入胜利牌区)。丢弃这些地点上的每个敌人和每张叠加卡牌。调查员此进程期间不被击败。",
+      "placeInvestigators": "将每位调查员放到卡达瑟隆。",
+      "spawnBeingsOfIb": "将放在一边的伊伯生物敌人生成在伊伯遗迹。",
+      "advanceAct": "推进到场景2a—“昔日厄运”。",
+      "putLocations": "将放在一边的所有_米纳尔_地点放置入场(卡达瑟隆、萨尔纳斯、伊伯遗迹)。"
+    },
+    "forbiddenLands": {
+      "title": "禁闭之地冒险设置",
+      "loseClues": "每位调查员失去自己的全部线索。",
+      "removeLocations": "将所有在场地点移出游戏(或者，如果该地点带有胜利X字样并且没有线索，将其放入胜利牌区)。丢弃这些地点上的每个敌人和每张叠加卡牌。调查员此进程期间不被击败。",
+      "placeInvestigators": "将每个调查员放到伊莱克-瓦达。",
+      "spawnManticore": "将放在一边的跟踪的蝎狮敌人生成在禁闭之地。",
+      "spawnHorde": "将放在一边的夜色怪群敌人生成在祖兰-提克。",
+      "advanceAct": "推进到场景2a—“找寻黑夜”。",
+      "putLocations": "将放在一边的每个_禁闭_地点放置入场(伊莱克-瓦达、禁闭之地、祖兰-提克)。"
+    },
+    "timelessRealm": {
+      "title": "永恒王国冒险设置",
+      "loseClues": "每位调查员失去自己的全部线索。",
+      "removeLocations": "将所有在场地点移出游戏(或者，如果该地点带有胜利X字样并且没有线索，将其放入胜利牌区)。丢弃这些地点上的每个敌人和每张叠加卡牌。调查员此进程期间不被击败。",
+      "putLocations": "将塞勒菲斯、塞拉尼安、哈祖斯-克列格放置入场。",
+      "placeInvestigators": "将每个调查员放到塞勒菲斯。",
+      "shuffleCrawlingMist": "将放在一边的蠕行之雾洗入遭遇牌堆。",
+      "spawnPriests": "查找遭遇牌堆，找出1张千面祭司并将其生成在哈祖斯-克列格。如果有3到4位调查员参与本场游戏，查找遭遇牌堆，找出另一张千面祭司，并将其生成在塞勒菲斯。混洗遭遇牌堆。",
+      "advanceAct": "推进到场景2a—“王之判决”。"
+    }
+  },
+  "rules": {
+    "locations": {
+      "title": "寻觅卡达斯中的地点",
+      "body": "本场冒险中的每个地点均没有未揭示面，因此其进场时以已揭示面朝上放置。这些地点背面均改为剧情卡牌，而非未揭示面。每当本场冒险中有地点入场<i>(包括在设置期间)</i>，如常在该地点上放置数量等同于其线索值的线索。\n可以通过以下两种方式之一来将地点翻面：大多数通过掩藏关键词翻面，见下文描述。某些地点则通过印刷在该地点的能力翻面。\n<b>一旦调查员将一个地点翻面，并阅读其剧情文字，在本场游戏结束前，该地点不能被再次翻面，除非有特殊说明。</b>"
+    },
+    "veiled": {
+      "title": "掩藏",
+      "body": "本场冒险中的许多地点带有掩藏关键词。这个关键词表示该地点包含未知的知识，或者存在某种协助，调查员必须将其找出后才能收为己用。\n作为一个{'{'}fast{'}'}能力，位于没有线索的掩藏地点的调查员可以将该地点翻面，结算其背面的文字。"
+    },
+    "swarmingAndVictory": {
+      "title": "带有蜂拥和胜利关键词的敌人",
+      "body": "蜂拥敌人上出现“<b>胜利X</b>”时，这行文字只对这张头领卡牌生效。蜂拥卡牌不能进入胜利牌区，并且永远不会价值胜利点数。"
+    }
+  },
+  "flavorText": {
+    "investigatorDefeat": {
+      "title": "调查员被击败",
+      "body": "<p class='basic'>之前 resolving 任意 其他 结局, 如果 于 至少 1 调查员 是 被击败: The 被击败 调查员 阅读 _调查员 击败_ 第一.</p><p>_调查员 击败:_ 你 wake 至 找出 你自己 restrained 由 thick cords 的 hempen rope, lying 在 顶端 的 hard, moist wood. The floor rocks steadily 返回 和 forth, 和 你 hear ocean waves crashing against  walls. 你captive aboard some kind 的 galley. But 为什么?</p><ul><li>在冒险日志中，每位被击败的调查员记录下<i>(你调查员的名字)被俘</i>。</li><li>如果 a 被击败 调查员’s 牌组 contains Randolph Carter 和 于 至少 1 调查员 resigned, give ownership 的 Randolph Carter 至 an 调查员 谁 resigned.</li><li>前往the 结局  调查员 到达. 如果 没有 结局 是 到达…<ul><li>…和 于 至少 1 调查员 resigned, 前往_结局 1_.</li><li>…和 每位调查员 是 被击败, 跳至_结局 2_.</li></ul></li></ul>"
+    },
+    "intro1": {
+      "body": "这晚你在艾纳酒馆住下，但你完全没得到好好的休息。就算有人能在梦中睡著，那也绝对不是你。你对前方的探索充满了焦虑。你回想著黑猫关于清醒世界存在危险的提醒，你还想知道其他入梦者的情况，他们跟随著维吉尔·格雷走下睡眠的阶梯，穿过了被施魔法的森林。他们现在也在这个世界吗？或许你找到那座城堡，把幻梦境存在的证据带回去，就能拯救所有人：你自己、你的朋友们，还有其他入梦者。",
+      "title": "序章 1"
+    },
+    "intro2": {
+      "body": "<p>_序章 2:_ 当 白天 breaks 和 light peeks 穿过  curtains 的 你的 房间, 你 notice a 猫-shaped silhouette sitting 在 front 的  window. As 你的 vision adjusts, 你transfixed 由 它的 piercing yellow 眼睛, bright as  黎明 light. 你 recognize  形态 as Virgil’s talking 猫. 你 ask  黑色 猫 如何 long 它 有 是 sitting 那里.</p><p>“久到能知道你现在没睡著也没睡醒。”它所说的话有些自相矛盾。</p><p>你仍对这个世界感到困惑。有人在幻梦境睡著过吗？如果有的话，他们的意识会到哪去？你好奇地向黑猫提出这个问题。</p><p>“带著肉体里来的人才能入睡，而你完全不是。现在别想那些了，来说正事。”黑猫跳到你的床上，“我把你的口信带给了你的朋友们，提醒了他们。似乎他们现在也准备进入幻梦境。在这期间，我会待在你身边。毕竟总得有人照看你和我的宠物人类。”</p><p class='basic'>查看冒险日志。</p><ul><li>*如果 Luke Robinson 是 在 这 group*, 前往_序章 3_.</li><li>否则, 跳至_序章 4_.</li></ul>",
+      "title": "序章 2"
+    },
+    "intro3": {
+      "body": "早上，你看到维吉尔和伦道夫在艾纳酒馆外面的城镇广场聊天。你仍然不确定该如何看待他们二人，但你清楚自己接下来要去哪里。毕竟，这不是你第一次进入这传说中的梦之国度。你对伦道夫说，建议到附近那座供奉旧神的庙宇去，找阿塔尔大牧师谈谈。这名字是你上次在梦中造访乌撒之城所听到的，但在这之前，你都没有理由去寻求牧师的建议。伦道夫惊讶地看了你一眼，然后很快就咧嘴笑了起来：\n“真奇怪。”他说，“我刚要说这名字。阿塔尔的智慧非我们所能估量。他或许知道我们要找的地方在哪儿。”\n渴望踏上这场探索的维吉尔拍手叫好。“那我们还在等什么？朋友们，这边走！”\n你点点头，并朝城里最高的山上的神庙走去，那是一座圆形的象牙石塔。一小群猫咪在神庙的墙上巡逻。为首的猫咪正是你在树林里遇到的那只带著伤疤的老猫。它上前阻止你进入神庙，并对你们一行人讥讽道：\n“又见面了。”老猫尖声说道，“我猜汝等想叫我行个方便。”",
+      "title": "序章 3"
+    },
+    "intro4": {
+      "body": "第二天早上，你看到维吉尔和伦道夫在艾纳酒馆外面的城镇广场聊天。虽然你还不清楚他们是什么样的人，你只知道他们都很熟悉这片在你看来还很陌生的地方。你问他们下一步该怎么做。“我们该到那座供奉旧神的庙宇去，找阿塔尔大牧师谈谈。”伦道夫提议道，“他的智慧非你我所能估量，他或许知道我们要找的地方在哪儿。”你好奇神庙离这儿有多远，直接开口发问。\n“一点也不远。”伦道夫回答说，“它就在乌撒之城最高的山上。来吧，我来带路。”伦道夫带著你来到一座圆形的象牙石塔前，这里就是旧神的庙宇，而且有一小群猫咪拦在你们面前。为首的猫咪正是你在树林里遇到的那只带著伤疤的老猫。它上前阻止你进入神庙，并对你们一行人讥讽道：“又见面了。”老猫尖声说道，“我猜汝等想叫我行个方便。",
+      "title": "序章 4"
+    },
+    "intro5": {
+      "body": "“那还真是可惜。”老猫说著，尾巴高高地竖起。其他猫咪从侧面把你围住，其中几只还大声地咆哮。它们毛发竖起，眼露凶光。“我们的使命就是保护这个地方，不让汝等鲁莽的外乡人进入。这里不欢迎汝等。”\n“通融一下吧。”伦道夫恳求道，“我们只想跟阿塔尔谈谈。我们没有恶意。”\n“汝等大可说一套，做一套。”伤疤老猫踱著步说道，“马上离开这儿，别再回来。”",
+      "title": "序章 5"
+    },
+    "intro9": {
+      "body": "<p>_序章 9:_ At 牌堆顶 的  temple, seated 在 an ivory dais,  high priest Atal awaits 你. 他 是一张frail, wiry man 与 a long, wispy 黑色 beard, caved-in cheeks, 和  pale, milky 眼睛 的 1 afflicted 由 blindness. “Do 不 let 你的 眼睛 deceive 你,” Randolph whispers as 你 seat yourselves 在 front 的  dais. “Atal 是 在……上 3 centuries 旧, 但 他的 记忆 是 sharp as a tack.”</p><p>你向牧师询问关于你们的任务和目的地：伦道夫所说的他梦中的那座城堡，“你所说的是梦境诸神的歇息地，就在未知的卡达斯上方高空。即便是我，也不知道它确切的位置。不知道也好，因为试图到那个地方去的后果会很痛苦。我的同伴巴尔塞曾经登上一座有些神圣的山峰，从此渺无音讯。卡达斯的神明看似没有任何力量，但它们受外神保护，而最好不要议论外神。不去管那些神明，不去管这件蠢事比较好。”</p><p>阿塔尔提到的“神”使你感到好奇。你问什么样的神会在这样的地方。</p><p>牧师摇摇头：“它们不是我们的神，而是地球诸神，它们庇佑这个地方，但不是你们内心的缩影。”</p><p>你试图透过提问来从阿塔尔那里探究更多知识，但他依然重复之前那番话。“我连不该说的都告诉你们了。”他坚持道，“为了你们自己，请别再追寻疯狂了。”</p><ul><li>在冒险日志“卡达斯的证据”旁边作1次记录。</li></ul><p class='basic'>查看冒险日志。</p><ul><li>*如果  调查员 parleyed 与Zoogs*, 前往_序章 10_.</li><li>*如果  cats collected 他们的 tribute 从Zoogs, 或 如果  调查员 是 saved 由 Randolph Carter*, 跳至_序章 11_.</li></ul>",
+      "title": "序章 9"
+    },
+    "intro10": {
+      "body": "你突然灵光一闪，想起祖格鼠在魔幻森林里给你的月树酒。你倒了一些给阿塔尔，他落落大方地接受了。你给牧师一杯接一杯地倒酒，而你只是假装喝下。最后，阿塔尔松了口，他说起一些酒后才能吐露的禁忌之言。他说起奥瑞巴岛上的恩格拉尼克山脉，那里雕刻著一张面孔——是神的肖像，至少他是这么说的。他还说到了卡达瑟隆的柱子，那里记录著地球幻梦境的历史。他说到那些被夜色怪群屠杀，安葬在死亡之城祖兰-提克的地穴。他还说，有个不存在于地图上的、被遗忘的城市，那里上方有著一颗凶星。“如果你一定要在冰封荒土中寻找卡达斯。”他昏昏沉沉地说，“南边沿海地区有一座城市：狄拉斯-利恩。你可以在那找到入口。”",
+      "title": "序章 10"
+    },
+    "intro7": {
+      "body": "你们放弃之后，离开了这座山顶上的神庙。“我想，没有阿塔尔的智慧，我们只能将就著往下调查了。”伦道夫说著叹了口气，“无论如何，我们的目的地可能离这里很远——或许完全在另一块大陆上。我们走海路可以确保通畅。我提议，我们往南边去，到狄拉斯-利恩港口城。在那里我们会知道下一步该怎么做。”你点头，然后最后看了一眼那座石塔神庙，好奇你遗漏了什么信息。",
+      "title": "序章 7"
+    },
+    "intro11": {
+      "body": "阿塔尔拒绝再给你指示，所以你决定离开这座山顶上的神庙。“我们得到了很多信息，但我们还是不知道卡达斯的位置。”伦道夫叹气并说道，“我们的目的地可能离这里很远——或许完全在另一块大陆上。我们需要通过海路找到入口。我提议我们先往南边去，到狄拉斯-利恩港口城。在那里我们会知道下一步该怎么做。”",
+      "title": "序章 11"
+    },
+    "intro8": {
+      "body": "你告诉老猫，你无论如何都要进神庙，区区一只猫拦不住你。“你想跟我打个赌吗？”他咆哮道，伏下身子，准备猛扑。还有几只猫注意到这一幕，包围了你。你不想伤害这些猫，但你也不会让它们阻拦你。你向同伴点点头，然后迅速冲向神庙大门。你的四面八方爆发出如同狂风般的一阵咆哮声和愤怒的尖叫声，猫群不顾一切地阻拦你。无数的小爪子和尖牙在面前阻拦著你，但你无所畏惧地强行穿过。你砰地一声关上身后的石门，听见老猫在门的另一边大叫：“好啊，人类！见你的牧师去吧！但你别以为刚才你犯的罪行能得到宽恕！”",
+      "title": "序章 8"
+    },
+    "intro6": {
+      "title": "序章 6",
+      "body": "<p>_序章 6:_ 你 猫 你是 与 相关角色, 和 你 没有 . “, 没有 , ,” 猫 与 a — a 猫 可以 和 查看 . “你 . ’相关角色, I .” 你 a 的 猫: a , . 你 回合 你的 和 数量 你是 猫’ 面. “ ,” , 然后 .</p><p class='basic right'>跳至 _序章 9_.</p>"
+    }
+  },
+  "resolutions": {
+    "resolution1": {
+      "title": "结局1",
+      "body": "<p>_结局 1 (每位 被击败 调查员 应该 结算 调查员 击败 第一):_ 你 有 ventured far 和 wide, 从quaint cobbled villages 的  kingdom 的  Skai 至 wondrous lands 你 可以 有 never 在 a hundred years imagined. 你 learned much 的  Dreamlands 和 的  gods 谁 dwell atop unknown Kadath. Though 你closer 至 你的 goal, 你 still don’t 知道 它的 precise 地点. In  meantime, 你的 quest grows deadlier 与 每位 passing 白天. 没有 matter 哪里 你 go, foul, nightmarish creatures pursue 你 across land 和 sea. Winged beasts 与 没有 faces, horned Corsairs wielding razor-sharp cutlasses 和 commanding great 黑色 galleys— agents 的 你的 demise bear many shapes. 你 decide 至 return 至 你的 ship, safe 从many dangers 的  Dreamlands…或 so 你 thought.</p><p>Unfortunately, 你的 ship 是 没有 safe haven. 当 你 return,  crew 和 captain 是 nowhere 至 是 发现. 那里 是 没有 signs 的 struggle, 但 Virgil, 谁 returned 至  ship earlier 至 prepare 为 你的 下一 departure, 是 也 missing.</p><p>“恐怕他们已经……”伦道夫为他们哀悼，“如果那些邪恶的海盗抓了他们，那他们凶多吉少。那些海盗是外神的使徒，其真身与信使是蠕行混沌——<b>奈亚拉托提普</b>。”你一听到这个名字就莫名地发抖。你问他们可能会被带到什么地方去。他就像讨论寻常海港一样回答你：“那群海盗的海船是从月球启航的。如果我们想救回维吉尔和其他同伴，那我们必须到那儿去。”</p><ul><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li><li>本场冒险中调查员每发现1个神迹，在冒险日志中“卡达斯的证据”旁边作1次记录。</li><li>In 你的 战役 Log, 记录 *Virgil 是 captured*.</li><li>In 你的 战役 Log, 记录 *Randolph eluded capture*.</li><li>如果 你playing The 梦-Quest as a 4-部分 战役, 前往_冒险 3–A: Dark 面 的  月亮_.</li><li>如果 你playing The 梦-Quest 和 The Web 的 梦 as an interconnected 8-部分 战役…<ul><li>…和 你 有 不 yet 进行 _冒险 2–B: A Thousand Shapes 的 恐惧_, 前往该 冒险.</li><li>…和 你 有 already 进行 _冒险 2–B: A Thousand Shapes 的 恐惧_, 前往 改为 至 _幕间故事 II: The Oneironauts_.</li></ul></li></ul>"
+    },
+    "resolution2": {
+      "title": "结局2",
+      "body": "<p>你查看周遭时，发现包括维吉尔和伦道夫在内的其他同伴也被抓来了。他们此时都已昏迷，或许等他们醒来，你们可以一起想出自救的对策。尽管遭受了挫折，但你们已经知道了关于幻梦境的许多信息，以及居住在未知的卡达斯上方的神明。但你仍然不知道卡达斯具体的位置，如果你能从这艘可恶的海盗船逃出去，或许就能找到此行的希望。你强忍著内心的绝望，祈望你的旅程不会到此为止……</p><ul><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li><li>本场冒险中调查员每发现1个神迹，在冒险日志中“卡达斯的证据”旁边作1次记录。</li><li>In 你的 战役 Log, 记录 *Virgil 是 captured*.</li><li>In 你的 战役 Log, 记录 *Randolph 是 captured*.</li><li>如果 你playing The 梦-Quest as a 4-部分 战役, 前往_冒险 3–A: Dark 面 的  月亮_.</li><li>如果 你playing The 梦-Quest 和 The Web 的 梦 as an interconnected 8-部分 战役…<ul><li>…和 你 有 不 yet 进行 _冒险 2–B: A Thousand Shapes 的 恐惧_, 前往该 冒险.</li><li>…和 你 有 already 进行 _冒险 2–B: A Thousand Shapes 的 恐惧_, 前往 改为 至 _幕间故事 II: The Oneironauts_.</li></ul></li></ul>"
+    },
+    "noResolution": {
+      "title": "如果未达成任何结局",
+      "body": "<p class='basic'>_如果 未达成任何结局:_</p><ul><li>如果 于 至少 1 调查员 已撤退, 前往_结局1_.</li><li>如果 所有调查员都被击败, 跳至_结局2_.</li></ul>"
+    }
+  },
+  "specialRules": [
+    {
+      "title": "寻觅卡达斯中的地点",
+      "body": "本场冒险中的每个地点均没有未揭示面，因此其进场时以已揭示面朝上放置。这些地点背面均改为剧情卡牌，而非未揭示面。每当本场冒险中有地点入场<i>(包括在设置期间)</i>，如常在该地点上放置数量等同于其线索值的线索。\n可以通过以下两种方式之一来将地点翻面：大多数通过掩藏关键词翻面，见下文描述。某些地点则通过印刷在该地点的能力翻面。\n<b>一旦调查员将一个地点翻面，并阅读其剧情文字，在本场游戏结束前，该地点不能被再次翻面，除非有特殊说明。</b>"
+    },
+    {
+      "title": "掩藏",
+      "body": "本场冒险中的许多地点带有掩藏关键词。这个关键词表示该地点包含未知的知识，或者存在某种协助，调查员必须将其找出后才能收为己用。\n作为一个{fast}能力，位于没有线索的掩藏地点的调查员可以将该地点翻面，结算其背面的文字。"
+    },
+    {
+      "title": "带有蜂拥和胜利关键词的敌人",
+      "body": "蜂拥敌人上出现“<b>胜利X</b>”时，这行文字只对这张头领卡牌生效。蜂拥卡牌不能进入胜利牌区，并且永远不会价值胜利点数。"
+    }
+  ],
+  "label": {
+    "forceIntoTemple": "<i>强行进入神庙。</i>",
+    "leaveEmptyHanded": "<i>空手而回。</i>",
+    "virgilGray": {
+      "heal1HorrorFromVirgilGray": "治愈维吉尔·格雷的1点恐惧"
+    },
+    "placeNightgaunt": "放置 Tenebrous 夜魇 在 城市 地点"
+  },
+  "theDoomThatCameBefore": {
+    "label": {
+      "visitForbiddenLands": "前往北方的禁忌之地。结算剧本指南中的禁忌之地冒险设置。",
+      "visitTimelessRealm": "前往东方的永恒王国。结算剧本指南中的永恒王国冒险设置。",
+      "visitOriab": "前往南方的奥瑞巴岛。结算剧本指南中的奥瑞巴岛冒险设置。"
+    }
+  },
+  "waresOfBaharna": {
+    "label": {
+      "chooseInvestigator": "选择调查员 至 decide 在 returning 弃掉"
+    }
+  },
+  "dreamlandsEclipse": {
+    "label": {
+      "shroudPlus2": "你的 地点 gets +2 shroud 为 这 调查阶段"
+    }
   }
 }
