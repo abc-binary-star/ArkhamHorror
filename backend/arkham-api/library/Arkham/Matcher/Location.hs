@@ -20,8 +20,8 @@ import Arkham.LocationSymbol
 import {-# SOURCE #-} Arkham.Matcher.Ability
 import {-# SOURCE #-} Arkham.Matcher.Asset
 import Arkham.Matcher.Base
-import Arkham.Matcher.ChaosToken
 import Arkham.Matcher.Card
+import Arkham.Matcher.ChaosToken
 import Arkham.Matcher.Enemy
 import {-# SOURCE #-} Arkham.Matcher.Event
 import {-# SOURCE #-} Arkham.Matcher.Investigator
@@ -188,6 +188,11 @@ data LocationMatcher
   | LocationWithPlacedChaosToken ChaosTokenMatcher
   | -- | Must be replaced
     ThatLocation
+  | {- | The location reached by the leftmost connection printed on the matched location:
+    the first connection symbol on its card, resolved to whatever location carries that
+    symbol. Uses the revealed connections when the origin is revealed.
+    -}
+    LeftmostConnectionOf LocationMatcher
   deriving stock (Show, Eq, Ord, Data)
 
 location_ :: LocationMatcher -> LocationMatcher
@@ -195,6 +200,9 @@ location_ = id
 
 instance IsLabel "revealed" LocationMatcher where
   fromLabel = RevealedLocation
+
+instance IsLabel "unrevealed" LocationMatcher where
+  fromLabel = UnrevealedLocation
 
 instance IsLabel "investigatable" LocationMatcher where
   fromLabel = InvestigatableLocation
