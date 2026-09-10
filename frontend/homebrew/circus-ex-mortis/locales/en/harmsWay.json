@@ -1,5 +1,27 @@
 {
   "harmsWay": {
+    "tokens": {
+      "easyStandard": {
+        "skull": "-X, where X is half the number of Bystander cards in the victory display, rounded up.",
+        "cultist": "-3. If you have not moved this round, choose one: discard 1 card from your hand, or lose 1 resource.",
+        "tablet": "-3. If you have moved this round, choose one: discard 1 card from your hand, or lose 1 resource.",
+        "elderThing": "-2. If this test is failed, reveal a fury token."
+      },
+      "hardExpert": {
+        "skull": "-X, where X is 1 more than half the number of Bystander cards in the victory display, rounded up.",
+        "cultist": "-4. If you have not moved this round, choose one: discard 1 card from your hand, or lose 1 resource.",
+        "tablet": "-4. If you have moved this round, choose one: discard 1 card from your hand, or lose 1 resource.",
+        "elderThing": "-4. If this test is failed, reveal a fury token."
+      }
+    },
+    "furyReveal": {
+      "title": "Fury Token Revealed",
+      "moon": "Immediately reveal two additional fury tokens.",
+      "north": "<div><span>Each Towering Dark Young makes an immediate attack against each investigator at the location...</span><br><br><span>...directly above them.</span></div>",
+      "south": "<div><span>Each Towering Dark Young makes an immediate attack against each investigator at the location...</span><br><br><span>...directly below them.</span></div>",
+      "west": "<div><span>Each Towering Dark Young makes an immediate attack against each investigator at the location...</span><br><br><span>...directly to the left of them.</span></div>",
+      "east": "<div><span>Each Towering Dark Young makes an immediate attack against each investigator at the location...</span><br><br><span>...directly to the right of them.</span></div>"
+    },
     "intro": {
       "title": "Scenario III: Harm's Way",
       "body": "<p>When you slip back out of the ringmaster's trailer, ghastly growls and other less identifiable sounds rumble through the camp. You nearly flinch as a shadow sweeps across the moon, which leads your view to a worse spectacle. Four massive figures tower above the camp, large enough to be oak trees &mdash; and indeed resembling them in silhouette &mdash; but far more horrible. Like the smaller abominations you encountered in the woods, these things are a horrid jumble of tentacles, mouths, hooves, and horns. They writhe and roar dully with sluggish movements. Perhaps these monsters are rousing from sleep, which lends a little more urgency to the mission. Thea holds a hand over her mouth in shock, but soon lowers it with a shudder. Whether or not she's seen them in her visions before, this appears to be the first time in person. It goes without saying that you must plan how to proceed in finding and rescuing the captives.</p><ul><li>The investigators must decide (choose one):<ul><li>“The faster we get them out of here, the better.” Add a {'{'}cultist{'}'} token to the chaos bag for the remainder of the campaign.</li><li>“Caution first. Saving them won’t help otherwise.” Add a {'{'}tablet{'}'} token to the chaos bag for the remainder of the campaign.</li></ul></li></ul>",
@@ -7,6 +29,23 @@
         "faster": "“The faster we get them out of here, the better.”",
         "caution": "“Caution first. Saving them won’t help otherwise.”"
       }
+    },
+    "setup": {
+      "gatherSets": "Gather all cards from the <i>Harm's Way</i>, <i>Cult of Shub-Niggurath</i>, <i>Lunatic Night</i>, <i>New Moon Entertainers</i>, and <i>Panicked Masses</i> encounter sets. These sets are indicated by the following icons:<section class='encounter-sets'><img src='{imgPath}/homebrew/circus-ex-mortis/sets/040.png' /><img src='{imgPath}/homebrew/circus-ex-mortis/sets/cult-of-shub-niggurath.png' /><img src='{imgPath}/homebrew/circus-ex-mortis/sets/lunatic-night.png' /><img src='{imgPath}/homebrew/circus-ex-mortis/sets/new-moon-entertainers.png' /><img src='{imgPath}/homebrew/circus-ex-mortis/sets/panicked-masses.png' /></section>",
+      "placeLocations": "Randomly choose two of the four copies of Crowded Row and Secluded Tent and remove them from the game. Put the remaining copies into play along with the Ringmaster's Trailer location.",
+      "startAt": "Each investigator begins play at Ringmaster's Trailer.",
+      "toweringDarkYoung": "Randomly choose one of the five copies of Towering Dark Young and remove it from the game. Put the remaining four copies into play at each corner of the map, not at any location.",
+      "furyBag": "Create a separate bag consisting of a {cultist}, {tablet}, {skull}, and {elderThing} token. This is the fury bag, and these are fury tokens. They are not chaos tokens. This bag will be used during the scenario by other cards.",
+      "darkYoungStir": "Put the Dark Young Stir... story card into play next to the fury bag.",
+      "kidnappedCitizens": "Randomly choose two of the six copies of Kidnapped Citizen and remove them from the game. Put the remaining four copies into play at different copies of Crowded Row and Secluded Tent.",
+      "checkCampaignLogIllusions": "Check the Campaign Log:",
+      "bypassedTheIllusions": "If <i>the investigators bypassed the illusions</i>, the ringmaster will notice your earlier meddling and be back sooner. Place 2 doom on agenda 1a. This doom ignores the forced effect.",
+      "lostInTheArkhamWoods": "If <i>the investigators were lost in the Arkham woods</i>, the illusory wards are still in place. No changes are made.",
+      "checkCampaignLogAct": "Check the Campaign Log:",
+      "eyeOnYou": "If <i>the ringmaster has his eye on you</i>, for this scenario, use “Act 1 &ndash; Escape Act (v.I).” Remove the other copy of act 1 from the game.",
+      "doesNotSuspectYou": "If <i>the ringmaster does not suspect you</i>, for this scenario, use “Act 1 &ndash; Escape Act (v.II).” Remove the other copy of act 1 from the game.",
+      "setAside": "Set each copy of Camp Outskirts aside, out of play.",
+      "startingCards": "The investigators with Amalthea Weaver and De Cultus Bestiae in their decks may begin the game with those cards in their opening hands as additional cards."
     },
     "startingCards": {
       "instructions": "The investigators with Amalthea Weaver and De Cultus Bestiae in their decks may begin the game with those cards in their opening hands as additional cards.",

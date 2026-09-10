@@ -1833,6 +1833,13 @@ h2 {
   border-color: rgba(214, 205, 174, 0.7);
 }
 
+/* Keep focus rings inside clipped panels without changing button spacing. */
+.done:focus-visible,
+:deep(.question-choices button:focus-visible),
+:deep(.question-choices a.button:focus-visible) {
+  outline-offset: -4px;
+}
+
 .done {
   width: 100%;
   border: 0;
@@ -2184,8 +2191,13 @@ h2 {
   gap: 10px;
 }
 
-.question-wrapper:has(.haunted) {
+.question-wrapper:has(.haunted, .token-reveal) {
   gap: 0;
+
+  :deep(button:active:not(:disabled)),
+  :deep(a.button:active) {
+    transform: none !important;
+  }
 
   :deep(.question-choices) {
     gap: 0;
@@ -2197,6 +2209,9 @@ h2 {
     padding: 0;
   }
 
+}
+
+.question-wrapper:has(.haunted) {
   .done,
   :deep(.question-choices button),
   :deep(.question-choices a.button) {
