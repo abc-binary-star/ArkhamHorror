@@ -1770,11 +1770,11 @@ const bloodTokens = computed(
 )
 
 // Custom campaign tokens (e.g. the Circus Ex Mortis moon) that opt into the
-// totals bar via their campaign's homebrew tokens.json. Counted across the
-// chaos bag and every investigator's sealed tokens (where moon tokens live).
+// totals bar via their campaign's homebrew tokens.json. Counted out of the
+// chaos bag only, like the bless/curse/frost/blood totals above: sealing takes
+// a token out of the bag, and sealed tokens show on the card they sit on.
 const homebrewTotals = computed(() => {
-  const sealed = Object.values(props.game.investigators).flatMap((i) => i.sealedChaosTokens ?? [])
-  const all = [...props.scenario.chaosBag.chaosTokens, ...sealed]
+  const all = props.scenario.chaosBag.chaosTokens
   return homebrewTotalsTokens
     .map((cfg) => ({
       face: cfg.face,
