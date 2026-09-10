@@ -17,7 +17,6 @@ import KeyToken from '@/arkham/components/Key.vue'
 import { type ArkhamKey, keyToId } from '@/arkham/types/Key'
 import PoolItem from '@/arkham/components/PoolItem.vue'
 import { useDbCardStore } from '@/stores/dbCards'
-import { useI18n } from 'vue-i18n'
 import { type NarrationSegment, setCurrentNarration } from '@/arkham/narration'
 import { cardNarrationFromCsv } from '@/arkham/narrationCsv'
 import { cardNarrationCategory } from '@/arkham/narrationCategory'
@@ -55,7 +54,6 @@ type Pct = { top: number; left: number }
 
 const store = useDbCardStore()
 const debug = useDebug()
-const { t } = useI18n()
 
 const cardOverlay = ref<HTMLElement | null>(null)
 const hoveredElement = ref<HTMLElement | null>(null)
@@ -66,92 +64,12 @@ const playabilityData = ref<PlayabilityResponse | null>(null)
 let playabilityTimer: number | null = null
 const cardDefCache = new Map<string, CardDef | null>()
 const overlayCardDef = ref<CardDef | null>(null)
-let cosmicEmissaryTimer: number | null = null
-type CosmicEmissaryTimerContext = {
-  gameId: string
-  playerId: string
-}
-let cosmicEmissaryTimerContext: CosmicEmissaryTimerContext | null = null
-type CosmicEmissaryPrompt = {
-  gameId: string
-  playerId: string
-  agendaImage: string | null
-}
-const cosmicEmissaryPrompt = ref<CosmicEmissaryPrompt | null>(null)
-const COSMIC_EMISSARY_CARD_CODES = new Set([
-  '10662a',
-  '10662b',
-  '10663a',
-  '10663b',
-  '10664a',
-  '10664b',
-  '10665a',
-  '10665b',
-])
-const COSMIC_EMISSARY_STARE_MS = 15000
-
-const cosmicEmissaryData = (el: HTMLElement | null | undefined): CosmicEmissaryTimerContext | null => {
-  const code = normalizedCardCode(el?.dataset.cardCode ?? el?.dataset.imageId)
-  const gameId = el?.dataset.gameId
-  const playerId = el?.dataset.playerId
-  if (!code || !COSMIC_EMISSARY_CARD_CODES.has(code) || !gameId || !playerId) return null
-  return { gameId, playerId }
-}
-
-const sameCosmicEmissaryContext = (a: CosmicEmissaryTimerContext | null, b: CosmicEmissaryTimerContext | null) =>
-  !!a && !!b && a.gameId === b.gameId && a.playerId === b.playerId
-
-const currentCosmicEmissaryAgendaImage = (): string | null => {
-  const agendaCard = document.querySelector<HTMLImageElement>('.agenda-card img.card--agenda')
-  const src = agendaCard?.src
-  if (!src) return null
-
-  const match = src.match(/^(.*\/cards\/)(\d+)b(\.avif(?:\?.*)?)$/)
-  if (!match) return src
-
-  const [, prefix, code, suffix] = match
-  return `${prefix}${code}${suffix}`
-}
-
-function showCosmicEmissaryPrompt(gameId: string, playerId: string) {
-  cosmicEmissaryPrompt.value = {
-    gameId,
-    playerId,
-    agendaImage: currentCosmicEmissaryAgendaImage(),
-  }
-}
-
-function confirmCosmicEmissaryPrompt() {
-  const prompt = cosmicEmissaryPrompt.value
-  if (!prompt) return
-  debug.send(prompt.gameId, { tag: 'KonamiCode', contents: prompt.playerId })
-  cosmicEmissaryPrompt.value = null
-}
 
 watch(hoveredElement, (el) => {
   playabilityData.value = null
   if (playabilityTimer !== null) { clearTimeout(playabilityTimer); playabilityTimer = null }
 
   const code = normalizedCardCode(el?.dataset.cardCode ?? el?.dataset.imageId)
-  const cosmic = cosmicEmissaryData(el)
-  if (cosmic) {
-    if (!sameCosmicEmissaryContext(cosmicEmissaryTimerContext, cosmic)) {
-      if (cosmicEmissaryTimer !== null) { clearTimeout(cosmicEmissaryTimer); cosmicEmissaryTimer = null }
-      cosmicEmissaryTimerContext = cosmic
-      cosmicEmissaryTimer = window.setTimeout(() => {
-        const currentCosmic = cosmicEmissaryData(hoveredElement.value)
-        if (sameCosmicEmissaryContext(currentCosmic, cosmicEmissaryTimerContext)) {
-          clearOverlay()
-          debug.send(cosmic.gameId, { tag: 'KonamiCode', contents: cosmic.playerId })
-        }
-        cosmicEmissaryTimer = null
-        cosmicEmissaryTimerContext = null
-      }, COSMIC_EMISSARY_STARE_MS)
-    }
-  } else {
-    if (cosmicEmissaryTimer !== null) { clearTimeout(cosmicEmissaryTimer); cosmicEmissaryTimer = null }
-    cosmicEmissaryTimerContext = null
-  }
 
   if (!debug.active || !el) return
   const playabilityGameId = el.dataset.playabilityGameId
@@ -284,9 +202,6 @@ const clearOverlay = () => {
   hoverTimer = clearTimer(hoverTimer)
   pressTimer = clearTimer(pressTimer)
   playabilityTimer = clearTimer(playabilityTimer)
-  cosmicEmissaryTimer = clearTimer(cosmicEmissaryTimer)
-  cosmicEmissaryTimerContext = null
-  cosmicEmissaryPrompt.value = null
   hoveredElement.value = null
 }
 
@@ -962,25 +877,6 @@ const {
     </div>
     </div>
   </Teleport>
-  <Teleport to="body">
-    <div v-if="cosmicEmissaryPrompt" class="cosmic-emissary-prompt-backdrop">
-      <div class="cosmic-emissary-prompt" role="dialog" aria-modal="true" aria-labelledby="cosmic-emissary-prompt-title">
-        <img
-          v-if="cosmicEmissaryPrompt.agendaImage"
-          class="cosmic-emissary-prompt__agenda"
-          :src="cosmicEmissaryPrompt.agendaImage"
-          :alt="t('theFeastOfHemlockVale.fateOfTheVale.cosmicEmissary.prompt.agendaAlt')"
-        />
-        <div class="cosmic-emissary-prompt__body">
-          <h2 id="cosmic-emissary-prompt-title">{{ t('theFeastOfHemlockVale.fateOfTheVale.cosmicEmissary.prompt.title') }}</h2>
-          <p>{{ t('theFeastOfHemlockVale.fateOfTheVale.cosmicEmissary.prompt.body') }}</p>
-          <div class="cosmic-emissary-prompt__actions">
-            <button type="button" class="cosmic-emissary-prompt__confirm" @click="confirmCosmicEmissaryPrompt">{{ t('theFeastOfHemlockVale.fateOfTheVale.cosmicEmissary.prompt.continue') }}</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </Teleport>
 </template>
 
 <style scoped>
@@ -1287,77 +1183,4 @@ const {
 .check-name { word-break: break-word; }
 .check-detail { font-style: italic; color: #ffb74d; word-break: break-word; }
 
-.cosmic-emissary-prompt-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: var(--z-modal-overlay);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
-  background: rgba(0, 0, 0, 0.65);
-}
-
-.cosmic-emissary-prompt {
-  display: flex;
-  gap: 18px;
-  max-width: min(760px, 100%);
-  padding: 18px;
-  border: 1px solid rgba(79, 224, 214, 0.65);
-  border-radius: 14px;
-  background: linear-gradient(135deg, rgba(5, 29, 35, 0.98), rgba(12, 75, 82, 0.98));
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.7), 0 0 28px rgba(79, 224, 214, 0.38);
-  color: #d8fffb;
-}
-
-.cosmic-emissary-prompt__agenda {
-  width: min(280px, 34vw);
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
-}
-
-.cosmic-emissary-prompt__body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 360px;
-  font-family: Arial, sans-serif;
-}
-
-.cosmic-emissary-prompt__body h2 {
-  margin: 0 0 10px;
-  font-family: Teutonic, Georgia, serif;
-  font-size: 1.7rem;
-  color: #bffff8;
-}
-
-.cosmic-emissary-prompt__body p {
-  margin: 0;
-  line-height: 1.45;
-}
-
-.cosmic-emissary-prompt__actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 18px;
-}
-
-.cosmic-emissary-prompt__actions button {
-  padding: 8px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-}
-
-.cosmic-emissary-prompt__confirm {
-  background: rgba(12, 112, 119, 0.95);
-  box-shadow: 0 0 12px rgba(79, 224, 214, 0.28);
-}
-
-@media (max-width: 650px) {
-  .cosmic-emissary-prompt { flex-direction: column; align-items: center; }
-  .cosmic-emissary-prompt__agenda { width: min(280px, 72vw); }
-}
 </style>

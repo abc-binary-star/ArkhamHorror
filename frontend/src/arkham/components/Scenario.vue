@@ -32,7 +32,7 @@ import { type Enemy } from '@/arkham/types/Enemy'
 import { type ConcealedCard } from '@/arkham/types/ConcealedCard'
 import ConcealedCardView from '@/arkham/components/ConcealedCard.vue'
 import { type Position } from '@/arkham/types/Placement'
-import { type Card, cardId, cardImage } from '@/arkham/types/Card'
+import { type Card, cardId } from '@/arkham/types/Card'
 import { TarotCard, tarotCardImage } from '@/arkham/types/TarotCard'
 import { TokenType } from '@/arkham/types/Token'
 import { ModifierType, Hollow } from '@/arkham/types/Modifier'
@@ -3725,10 +3725,6 @@ async function addChaosToken(face: any) {
   bottom: 8px;
   transform: translateX(-50%);
   z-index: var(--z-index-10, 10);
-  padding: 4px 6px;
-  border-radius: 6px;
-  background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
 }
 
 .zoom-control--fullscreen {
@@ -3737,10 +3733,34 @@ async function addChaosToken(face: any) {
   right: 10px;
   z-index: var(--z-index-10, 10);
   display: flex !important;
+}
+
+/* The zoom control floats on the dark map, so it wears the table's lacquer
+   instead of the light archive panel. */
+.zoom-control--docked,
+.zoom-control--fullscreen {
   padding: 4px 6px;
-  border-radius: 6px;
-  background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, rgb(26 42 41 / 0.94), rgb(9 18 18 / 0.96)),
+    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg') center / cover no-repeat;
+  border: 1px solid rgb(205 175 107 / 0.42);
+  box-shadow: 0 4px 12px rgb(4 12 12 / 0.35);
+
+  button {
+    min-height: 28px;
+    padding: 2px 9px;
+    background-color: rgb(24 39 38);
+    background-image: none;
+    border-color: rgb(205 175 107 / 0.35);
+    color: var(--text-on-dark);
+    box-shadow: none;
+  }
+
+  button:hover:not(:disabled) {
+    background-color: rgb(38 58 56);
+    border-color: rgb(229 194 107 / 0.7);
+  }
 }
 
 /* Keep the player zone (hand + in-play assets) usable while the board is a
@@ -3751,7 +3771,11 @@ async function addChaosToken(face: any) {
   right: 0;
   bottom: 0;
   z-index: calc(var(--z-index-50) + 1);
-  background: var(--background);
+  background:
+    radial-gradient(ellipse at 50% 42%, rgba(205, 175, 107, 0.08), transparent 48%),
+    linear-gradient(180deg, rgba(20, 33, 34, 0.42), rgba(12, 20, 21, 0.35)),
+    var(--deep-sea, #26373a) url('/assets/veiled-harbour/02-牌桌材质.png') center / cover no-repeat;
+  border-top: 1px solid rgba(208, 180, 123, 0.35);
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.5);
 }
 
