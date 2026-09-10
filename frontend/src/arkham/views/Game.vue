@@ -34,6 +34,7 @@ import {
   RectangleStackIcon,
   SpeakerWaveIcon,
   SpeakerXMarkIcon,
+  XMarkIcon,
 } from '@heroicons/vue/20/solid'
 import { LottieAnimation } from 'lottie-web-vue'
 import * as JsonDecoder from 'ts.data.json'
@@ -58,8 +59,8 @@ import { useUserStore } from '@/stores/user'
 import { useEventStore } from '@/arkham/stores/event'
 import { useEventTimer } from '@/arkham/composables/useEventTimer'
 import { awaitingOrganizer, type SharedEventState } from '@/arkham/types/EpicEvent'
-import { useMenu } from '@/composable/menu'
-import useEmitter from '@/composable/useEmitter'
+import { useMenu } from '@/arkham/composables/menu'
+import useEmitter from '@/arkham/composables/useEmitter'
 import { useDebug } from '@/arkham/debug'
 import { cardImg, imgsrc, isTypingTarget } from '@/arkham/helpers'
 import { cardFaceImages, cardHasDistinctBack } from '@/arkham/cardImages'
@@ -199,17 +200,20 @@ watch(
 // Main Street can transfer this player's complete investigator state to a
 // sibling game. EventChanged refreshes the roster; follow that authoritative
 // membership so the old websocket is replaced by the destination game's room.
-watch(
-  [() => eventStore.event, () => userStore.currentUser?.username],
-  ([event, username]) => {
-    if (!event || !username || event.role === 'organizer' || props.spectate) return
-    const currentGroup = event.groups.find((group) => group.gameId === props.gameId)
-    if (currentGroup?.players.some((player) => player.username === username)) return
-    const destination = event.groups.find((group) => group.players.some((player) => player.username === username))
-    if (!destination?.gameId) return
-    void router.replace({ name: 'Game', params: { gameId: destination.gameId }, query: { event: event.id } })
-  },
-)
+watch([() => eventStore.event, () => userStore.currentUser?.username], ([event, username]) => {
+  if (!event || !username || event.role === 'organizer' || props.spectate) return
+  const currentGroup = event.groups.find((group) => group.gameId === props.gameId)
+  if (currentGroup?.players.some((player) => player.username === username)) return
+  const destination = event.groups.find((group) =>
+    group.players.some((player) => player.username === username),
+  )
+  if (!destination?.gameId) return
+  void router.replace({
+    name: 'Game',
+    params: { gameId: destination.gameId },
+    query: { event: event.id },
+  })
+})
 
 // "Epic Multiplayer" time limit. The event id this game view actively
 // PARTICIPATES in for the timer: a seated player (or an organizer playing a
@@ -271,8 +275,8 @@ watch(game, (g) => {
   const missing = (code: string) => isCustomCardCode(code) && !customCardDef(code)
   // A custom investigator never appears in `cards`; it is only a seat.
   const unknown =
-    Object.values(g.cards).some((c) => missing(asCardCode(c)))
-    || Object.values(g.investigators).some((i) => missing(i.cardCode))
+    Object.values(g.cards).some((c) => missing(asCardCode(c))) ||
+    Object.values(g.investigators).some((i) => missing(i.cardCode))
   if (unknown) store.fetchCustomCards(props.gameId)
 })
 
@@ -367,7 +371,10 @@ const cthulhuDeckCardCodes = new Set([
 ])
 const isCthulhuDeckReveal = computed(() => {
   const focusedCard = gameCard.value
-  return focusedCard !== null && cthulhuDeckCardCodes.has(toCardContents(focusedCard.card).cardCode.replace(/^c/, ''))
+  return (
+    focusedCard !== null &&
+    cthulhuDeckCardCodes.has(toCardContents(focusedCard.card).cardCode.replace(/^c/, ''))
+  )
 })
 const showTheSilenceModal = ref(false)
 const playabilityInfo = ref<PlayabilityInfo | null>(null)
@@ -376,17 +383,22 @@ const playerId = ref<string | null>(null)
 const ready = ref(false)
 const resultQueue = ref<any>([])
 const showLog = ref(false)
+const showTools = ref(false)
 const showShortcuts = ref(false)
 const isMobileViewport = () =>
   typeof window !== 'undefined' && window.matchMedia('(max-width: 800px)').matches
 const showSidebar = ref(
-  isMobileViewport() ? false : JSON.parse(getGameLocalStorageItem(props.gameId, 'showSidebar') ?? 'true'),
+  isMobileViewport()
+    ? false
+    : JSON.parse(getGameLocalStorageItem(props.gameId, 'showSidebar') ?? 'true'),
 )
 const socketError = ref(false)
 const error = ref<string | null>(null)
 const solo = ref(false)
 const soundsDisabled = ref(localStorage.getItem('arkhamSoundsDisabled') === 'true')
-const showOtherPlayersHands = ref(getGameLocalStorageItem(props.gameId, 'showOtherPlayersHands') === 'true')
+const showOtherPlayersHands = ref(
+  getGameLocalStorageItem(props.gameId, 'showOtherPlayersHands') === 'true',
+)
 watch(showOtherPlayersHands, (v) => {
   setGameLocalStorageItem(props.gameId, 'showOtherPlayersHands', v ? 'true' : 'false')
 })
@@ -492,7 +504,10 @@ const choicesSourceByPlayer = computed(() => {
   if (!currentGame) return new Map<string, Source | null>()
 
   return new Map(
-    Object.keys(currentGame.question).map((pid) => [pid, ArkhamGame.choicesSource(currentGame, pid)]),
+    Object.keys(currentGame.question).map((pid) => [
+      pid,
+      ArkhamGame.choicesSource(currentGame, pid),
+    ]),
   )
 })
 const choicesTooltipByPlayer = computed(() => {
@@ -500,7 +515,10 @@ const choicesTooltipByPlayer = computed(() => {
   if (!currentGame) return new Map<string, string | null>()
 
   return new Map(
-    Object.keys(currentGame.question).map((pid) => [pid, ArkhamGame.choicesTooltip(currentGame, pid)]),
+    Object.keys(currentGame.question).map((pid) => [
+      pid,
+      ArkhamGame.choicesTooltip(currentGame, pid),
+    ]),
   )
 })
 const gameIndexes = computed(() => buildGameIndexes(game.value))
@@ -617,12 +635,14 @@ const isActualScenarioView = computed(() => {
   if (Object.entries(g.investigators).length === 0) return false
 
   const activeQuestionTag = questionTag(question.value)
-  return activeQuestionTag !== 'ChooseUpgradeDeck'
-    && activeQuestionTag !== 'ChooseDeck'
-    && activeQuestionTag !== 'ChooseJoinDeck'
-    && activeQuestionTag !== 'PickScenarioSettings'
-    && activeQuestionTag !== 'PickCampaignSettings'
-    && activeQuestionTag !== 'ContinueCampaign'
+  return (
+    activeQuestionTag !== 'ChooseUpgradeDeck' &&
+    activeQuestionTag !== 'ChooseDeck' &&
+    activeQuestionTag !== 'ChooseJoinDeck' &&
+    activeQuestionTag !== 'PickScenarioSettings' &&
+    activeQuestionTag !== 'PickCampaignSettings' &&
+    activeQuestionTag !== 'ContinueCampaign'
+  )
 })
 
 const realityAcidLightOverride = ref<boolean | null>(null)
@@ -631,7 +651,9 @@ const realityAcidLightMetaActive = computed(() => {
   return scenario?.id === 'c85001' && scenario.meta?.lightActive === true
 })
 
-const realityAcidLightActive = computed(() => realityAcidLightOverride.value ?? realityAcidLightMetaActive.value)
+const realityAcidLightActive = computed(
+  () => realityAcidLightOverride.value ?? realityAcidLightMetaActive.value,
+)
 
 watch(realityAcidLightMetaActive, () => {
   realityAcidLightOverride.value = null
@@ -645,7 +667,11 @@ watch(question, async () => {
 const realityAcidLightDevoured = computed(() => {
   const scenario = game.value?.scenario
   if (scenario?.id !== 'c85001') return false
-  return realityAcidLightMetaActive.value || scenario.meta?.lightDevoured === true || realityAcidLightOverride.value !== null
+  return (
+    realityAcidLightMetaActive.value ||
+    scenario.meta?.lightDevoured === true ||
+    realityAcidLightOverride.value !== null
+  )
 })
 
 const toggleRealityAcidLight = () => {
@@ -664,7 +690,8 @@ const activePlayerId = computed(() => game.value?.activePlayerId ?? null)
 function activePlayerBelongsToCurrentPlayer(g: Arkham.Game, currentPlayerId: string) {
   if (g.activePlayerId === currentPlayerId) return true
   return Object.values(g.investigators).some(
-    (investigator) => investigator.id === g.activePlayerId && investigator.playerId === currentPlayerId,
+    (investigator) =>
+      investigator.id === g.activePlayerId && investigator.playerId === currentPlayerId,
   )
 }
 
@@ -728,18 +755,24 @@ function skipTriggerEntries(g: Arkham.Game): SkipTriggerEntry[] {
   return result
 }
 
-function investigatorBelongsToPlayer(g: Arkham.Game, investigatorId: string, targetPlayerId: string) {
+function investigatorBelongsToPlayer(
+  g: Arkham.Game,
+  investigatorId: string,
+  targetPlayerId: string,
+) {
   return g.investigators[investigatorId]?.playerId === targetPlayerId
 }
 
 function isInvestigatorTurn(g: Arkham.Game) {
-  return g.phaseStep?.tag === 'InvestigationPhaseStep'
-    && [
+  return (
+    g.phaseStep?.tag === 'InvestigationPhaseStep' &&
+    [
       'NextInvestigatorsTurnBeginsStep',
       'NextInvestigatorsTurnBeginsWindow',
       'InvestigatorTakesActionStep',
       'InvestigatorsTurnEndsStep',
     ].includes(g.phaseStep.contents)
+  )
 }
 
 function canCurrentPlayerSkipAllWindows(g: Arkham.Game, currentPlayerId: string) {
@@ -792,8 +825,12 @@ const loadError = ref(false)
 const loadGame = async () => {
   loadError.value = false
   try {
-    const { game: newGame, playerId: newPlayerId, multiplayerMode, eventId } =
-      await fetchGame(props.gameId, props.spectate)
+    const {
+      game: newGame,
+      playerId: newPlayerId,
+      multiplayerMode,
+      eventId,
+    } = await fetchGame(props.gameId, props.spectate)
 
     preloadImages(newGame)
     ;(window as Window & { g?: Arkham.Game }).g = newGame
@@ -890,13 +927,19 @@ function entitiesMoved(previous: Arkham.Game, current: Arkham.Game) {
   const placementChanged = (
     previousEntities: Record<string, { placement: unknown }>,
     currentEntities: Record<string, { placement: unknown }>,
-  ) => Object.entries(currentEntities).some(([id, entity]) => {
-    const previousEntity = previousEntities[id]
-    return previousEntity && JSON.stringify(previousEntity.placement) !== JSON.stringify(entity.placement)
-  })
+  ) =>
+    Object.entries(currentEntities).some(([id, entity]) => {
+      const previousEntity = previousEntities[id]
+      return (
+        previousEntity &&
+        JSON.stringify(previousEntity.placement) !== JSON.stringify(entity.placement)
+      )
+    })
 
-  return placementChanged(previous.investigators, current.investigators)
-    || placementChanged(previous.enemies, current.enemies)
+  return (
+    placementChanged(previous.investigators, current.investigators) ||
+    placementChanged(previous.enemies, current.enemies)
+  )
 }
 
 function applyGameUpdate(updatedGame: Arkham.Game, locked: boolean) {
@@ -911,7 +954,11 @@ function applyGameUpdate(updatedGame: Arkham.Game, locked: boolean) {
     startViewTransition?: (callback: () => Promise<void>) => unknown
   }
 
-  if (previousGame && entitiesMoved(previousGame, nextGame) && transitionDocument.startViewTransition) {
+  if (
+    previousGame &&
+    entitiesMoved(previousGame, nextGame) &&
+    transitionDocument.startViewTransition
+  ) {
     transitionDocument.startViewTransition(apply)
   } else {
     void apply()
@@ -1004,7 +1051,9 @@ function playAudioFile(fileName: string) {
 function continueSkipAll() {
   if (skipAllPending.value.size === 0) return
   if (!game.value) return
-  const next = authorizedSkipTriggerEntries(game.value).find((e) => skipAllPending.value.has(e.playerId))
+  const next = authorizedSkipTriggerEntries(game.value).find((e) =>
+    skipAllPending.value.has(e.playerId),
+  )
   if (!next) {
     skipAllPending.value = new Set()
     return
@@ -1585,7 +1634,9 @@ const handleKeyPress = (event: KeyboardEvent) => {
       if (investigator && investigator.remainingActions > 0 && !endTurnKeyArmed.value) {
         endTurnKeyArmed.value = true
         if (endTurnKeyArmTimer !== null) clearTimeout(endTurnKeyArmTimer)
-        endTurnKeyArmTimer = setTimeout(() => { endTurnKeyArmed.value = false }, 3000)
+        endTurnKeyArmTimer = setTimeout(() => {
+          endTurnKeyArmed.value = false
+        }, 3000)
         toast.info(t('game.confirmEndTurnKeyboard', { n: investigator.remainingActions }))
         return
       }
@@ -1738,9 +1789,7 @@ async function loadAllImages(game: Arkham.Game): Promise<void> {
 }
 
 async function loadImages(urls: string[]): Promise<void> {
-  const pending = [...new Set(urls)].filter(
-    (url) => !preloaded.has(url) && !preloading.has(url),
-  )
+  const pending = [...new Set(urls)].filter((url) => !preloaded.has(url) && !preloading.has(url))
   if (pending.length === 0) return
   pending.forEach((url) => preloading.add(url))
 
@@ -1916,7 +1965,10 @@ provide('chooseAmounts', chooseAmounts)
 provide('scenarioSpecificAnswer', scenarioSpecificAnswer)
 provide('switchInvestigator', switchInvestigator)
 provide('solo', solo)
-provide('spectate', computed(() => props.spectate))
+provide(
+  'spectate',
+  computed(() => props.spectate),
+)
 provide('processing', processing)
 provide('storyAnswerPending', storyAnswerPending)
 provide('uiLock', uiLock)
@@ -1926,13 +1978,21 @@ provide('skipAllInProgress', skipAllInProgress)
 provide('showOtherPlayersHands', showOtherPlayersHands)
 
 function updateFocusLight() {
-  const highlighted = [...document.querySelectorAll<HTMLElement>(
-    '.source-highlight, .ability-target, .card-frame-inner.highlighted, .cards-under-indicator--highlighted',
-  )].find((el) => {
+  const highlighted = [
+    ...document.querySelectorAll<HTMLElement>(
+      '.source-highlight, .ability-target, .card-frame-inner.highlighted, .cards-under-indicator--highlighted',
+    ),
+  ].find((el) => {
     if (el.closest('.scenario-cards')) return false
     const rect = el.getBoundingClientRect()
-    return rect.width > 0 && rect.height > 0 && rect.bottom >= 0 && rect.right >= 0
-      && rect.top <= window.innerHeight && rect.left <= window.innerWidth
+    return (
+      rect.width > 0 &&
+      rect.height > 0 &&
+      rect.bottom >= 0 &&
+      rect.right >= 0 &&
+      rect.top <= window.innerHeight &&
+      rect.left <= window.innerWidth
+    )
   })
 
   if (!highlighted) {
@@ -1983,7 +2043,11 @@ onMounted(() => {
   ;(window as any).debugChoose = choose
   document.addEventListener('mousemove', onMove, { passive: true })
   focusLightObserver = new MutationObserver(scheduleFocusLightUpdate)
-  focusLightObserver.observe(document.body, { attributes: true, attributeFilter: ['class'], subtree: true })
+  focusLightObserver.observe(document.body, {
+    attributes: true,
+    attributeFilter: ['class'],
+    subtree: true,
+  })
   scheduleFocusLightUpdate()
   document.addEventListener('keydown', handleKeyPress)
   window.addEventListener('arkham-setting-change', handleSettingChange)
@@ -2023,7 +2087,11 @@ onUnmounted(() => {
   </div>
   <LoadState v-else-if="loadError" error @retry="loadGame" />
   <LoadState v-else-if="!ready" />
-  <div class="tabletop-shell" v-else-if="ready && game && playerId" :style="{ '--epic-bar-height': epicBarHeight + 'px' }">
+  <div
+    class="tabletop-shell"
+    v-else-if="ready && game && playerId"
+    :style="{ '--epic-bar-height': epicBarHeight + 'px' }"
+  >
     <dialog v-if="error" class="error-dialog">
       <span class="status-seal status-seal--danger" aria-hidden="true"></span>
       <h2>{{ $t('error') }}</h2>
@@ -2140,12 +2208,15 @@ onUnmounted(() => {
               </div>
               <div class="shortcut-row">
                 <div class="shortcut-name">{{ $t('gameBar.shortcutSelectInvestigator') }}</div>
-                <div class="shortcut-keys"><kbd>1</kbd><span class="chord-arrow">…</span><kbd>4</kbd></div>
+                <div class="shortcut-keys">
+                  <kbd>1</kbd><span class="chord-arrow">…</span><kbd>4</kbd>
+                </div>
               </div>
               <div v-if="solo" class="shortcut-row">
                 <div class="shortcut-name">{{ $t('gameBar.shortcutSwitchPerspective') }}</div>
                 <div class="shortcut-keys">
-                  <kbd>Shift</kbd><span class="chord-arrow">+</span><kbd>1</kbd><span class="chord-arrow">…</span><kbd>4</kbd>
+                  <kbd>Shift</kbd><span class="chord-arrow">+</span><kbd>1</kbd
+                  ><span class="chord-arrow">…</span><kbd>4</kbd>
                 </div>
               </div>
               <template v-for="item in menuItems" :key="item.id">
@@ -2197,29 +2268,22 @@ onUnmounted(() => {
         <p>{{ $t('outOfSyncHint') }}</p>
       </div>
     </div>
-    <div class="game-bar">
-      <div class="game-bar-item">
+    <aside v-if="showTools" class="game-tools-drawer" :aria-label="$t('gameBar.tabletopTools')">
+      <div class="game-tools-drawer__header">
         <div>
-          <button
-            @click="toggleSounds"
-            v-tooltip="$t('gameBar.sounds')"
-            :aria-pressed="!soundsDisabled"
-          >
-            <SpeakerWaveIcon v-if="!soundsDisabled" aria-hidden="true" />
-            <SpeakerXMarkIcon v-else aria-hidden="true" />
-            <span class="sounds-label">{{ $t('gameBar.sounds') }}</span>
-          </button>
+          <span class="game-tools-drawer__eyebrow">CASEWORK</span>
+          <h2>{{ $t('gameBar.tabletopTools') }}</h2>
         </div>
+        <button type="button" class="game-tools-drawer__close" @click="showTools = false">
+          <XMarkIcon aria-hidden="true" />
+          <span class="sr-only">{{ $t('close') }}</span>
+        </button>
       </div>
-      <div class="game-bar-item">
-        <div>
-          <button @click="showLog = !showLog">
-            <DocumentTextIcon aria-hidden="true" />
-            {{ showLog ? $t('gameBar.closeLog') : $t('gameBar.viewLog') }}
-          </button>
-        </div>
-      </div>
-      <div>
+      <div class="game-tools-drawer__body">
+        <button type="button" class="game-tools-action" @click="showLog = !showLog; showTools = false">
+          <DocumentTextIcon aria-hidden="true" />
+          {{ showLog ? $t('gameBar.closeLog') : $t('gameBar.viewLog') }}
+        </button>
         <Menu>
           <EyeIcon aria-hidden="true" />
           {{ $t('gameBar.view') }}
@@ -2241,8 +2305,6 @@ onUnmounted(() => {
             </template>
           </template>
         </Menu>
-      </div>
-      <div>
         <Menu>
           <BeakerIcon aria-hidden="true" />
           {{ $t('gameBar.debug') }}
@@ -2270,8 +2332,6 @@ onUnmounted(() => {
             </MenuItem>
           </template>
         </Menu>
-      </div>
-      <div>
         <Menu>
           <BackwardIcon aria-hidden="true" />
           {{ $t('gameBar.undo') }}
@@ -2291,64 +2351,47 @@ onUnmounted(() => {
                 <span>{{ $t('game.undoTo') }}</span>
                 <span class="chord-prefix"><kbd>U</kbd> + <span class="chord-hint">…</span></span>
               </div>
-              <MenuItem v-if="canUndoAction" v-slot="{ active }">
-                <button class="undo-jump scope-action" :class="{ active }" @click="undoActionStart">
-                  <ArrowUturnLeftIcon aria-hidden="true" />
-                  <span class="undo-jump-label">{{ $t('game.startOfAction') }}</span>
-                  <kbd class="chord-key">A</kbd>
-                </button>
-              </MenuItem>
-              <MenuItem v-if="canUndoTurn" v-slot="{ active }">
-                <button class="undo-jump scope-turn" :class="{ active }" @click="undoTurnStart">
-                  <ClockIcon aria-hidden="true" />
-                  <span class="undo-jump-label">{{ $t('game.startOfTurn') }}</span>
-                  <kbd class="chord-key">T</kbd>
-                </button>
-              </MenuItem>
-              <MenuItem v-if="canUndoPhase" v-slot="{ active }">
-                <button class="undo-jump scope-phase" :class="{ active }" @click="undoPhaseStart">
-                  <RectangleStackIcon aria-hidden="true" />
-                  <span class="undo-jump-label">{{ $t('game.startOfPhase') }}</span>
-                  <kbd class="chord-key">P</kbd>
-                </button>
-              </MenuItem>
-              <MenuItem v-if="canUndoRound" v-slot="{ active }">
-                <button class="undo-jump scope-round" :class="{ active }" @click="undoRoundStart">
-                  <ArrowPathIcon aria-hidden="true" />
-                  <span class="undo-jump-label">{{ $t('game.startOfRound') }}</span>
-                  <kbd class="chord-key">R</kbd>
-                </button>
-              </MenuItem>
-              <MenuItem v-if="canUndoScenario" v-slot="{ active }">
-                <button
-                  class="undo-jump scope-scenario"
-                  :class="{ active }"
-                  @click="confirmingUndoScenario = true"
-                >
-                  <FlagIcon aria-hidden="true" />
-                  <span class="undo-jump-label">{{ $t('gameBar.restartScenario') }}</span>
-                  <kbd class="chord-key">S</kbd>
-                </button>
-              </MenuItem>
+              <MenuItem v-if="canUndoAction" v-slot="{ active }"><button class="undo-jump scope-action" :class="{ active }" @click="undoActionStart"><ArrowUturnLeftIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfAction') }}</span><kbd class="chord-key">A</kbd></button></MenuItem>
+              <MenuItem v-if="canUndoTurn" v-slot="{ active }"><button class="undo-jump scope-turn" :class="{ active }" @click="undoTurnStart"><ClockIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfTurn') }}</span><kbd class="chord-key">T</kbd></button></MenuItem>
+              <MenuItem v-if="canUndoPhase" v-slot="{ active }"><button class="undo-jump scope-phase" :class="{ active }" @click="undoPhaseStart"><RectangleStackIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfPhase') }}</span><kbd class="chord-key">P</kbd></button></MenuItem>
+              <MenuItem v-if="canUndoRound" v-slot="{ active }"><button class="undo-jump scope-round" :class="{ active }" @click="undoRoundStart"><ArrowPathIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfRound') }}</span><kbd class="chord-key">R</kbd></button></MenuItem>
+              <MenuItem v-if="canUndoScenario" v-slot="{ active }"><button class="undo-jump scope-scenario" :class="{ active }" @click="confirmingUndoScenario = true"><FlagIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('gameBar.restartScenario') }}</span><kbd class="chord-key">S</kbd></button></MenuItem>
             </div>
           </template>
         </Menu>
-      </div>
-      <div>
-        <button @click="filingBug = true">
+        <button type="button" class="game-tools-action" @click="filingBug = true">
           <ExclamationTriangleIcon aria-hidden="true" /> {{ $t('fileBug') }}
         </button>
-      </div>
-      <div v-for="item in menuItems" :key="item.id">
-        <template v-if="item.nested === null || item.nested === undefined">
-          <button @click="item.action">
+        <template v-for="item in menuItems" :key="item.id">
+          <button v-if="item.nested === null || item.nested === undefined" type="button" class="game-tools-action" @click="item.action">
             <component v-if="item.icon" v-bind:is="item.icon"></component>
             {{ item.content }}
           </button>
         </template>
       </div>
+    </aside>
+    <div class="game-bar">
+      <div class="game-bar-item game-bar-item--sounds">
+        <div>
+          <button
+            @click="toggleSounds"
+            v-tooltip="$t('gameBar.sounds')"
+            :aria-pressed="!soundsDisabled"
+          >
+            <SpeakerWaveIcon v-if="!soundsDisabled" aria-hidden="true" />
+            <SpeakerXMarkIcon v-else aria-hidden="true" />
+            <span class="sounds-label">{{ $t('gameBar.sounds') }}</span>
+          </button>
+        </div>
+      </div>
+      <div class="game-bar-tools game-bar-tools--primary">
+        <button type="button" :class="{ active: showTools }" @click="showTools = !showTools">
+          <AdjustmentsHorizontalIcon aria-hidden="true" />
+          <span>{{ showTools ? $t('gameBar.closeTools') : $t('gameBar.tabletopTools') }}</span>
+        </button>
+      </div>
       <div class="right">
-        <button v-if="isActualScenarioView" @click="toggleSidebar">
+        <button v-if="isActualScenarioView" class="sidebar-toggle-button" @click="toggleSidebar">
           <ArrowsRightLeftIcon aria-hidden="true" /> {{ $t('gameBar.toggleSidebar') }}
         </button>
         <NarrationMenu />
@@ -2388,12 +2431,7 @@ onUnmounted(() => {
           :closeSettings="() => (showSettings = false)"
         />
       </Draggable>
-      <CampaignLog
-        v-if="showLog && game !== null"
-        :game="game"
-        :cards="cards"
-        :playerId="playerId"
-      >
+      <CampaignLog v-if="showLog && game !== null" :game="game" :cards="cards" :playerId="playerId">
         <template #header-leading>
           <button class="back-button" @click="showLog = false">
             <font-awesome-icon icon="arrow-left" class="back-icon" />
@@ -2403,13 +2441,27 @@ onUnmounted(() => {
       </CampaignLog>
       <div v-else class="game-main">
         <div v-if="showTheSilenceModal" class="the-silence-modal-backdrop">
-          <div class="the-silence-modal" role="dialog" aria-modal="true" aria-labelledby="the-silence-modal-title">
-            <img class="the-silence-modal__agenda no-overlay" :src="imgsrc('cards/10652.avif')" alt="The Silence" />
+          <div
+            class="the-silence-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="the-silence-modal-title"
+          >
+            <img
+              class="the-silence-modal__agenda no-overlay"
+              :src="imgsrc('cards/10652.avif')"
+              alt="The Silence"
+            />
             <div class="the-silence-modal__body">
               <h2 id="the-silence-modal-title">The Silence</h2>
-              <p>If you look at the Cosmic Emissary enemy for more than 15 seconds at a time, you are <strong>driven insane</strong>.</p>
+              <p>
+                If you look at the Cosmic Emissary enemy for more than 15 seconds at a time, you are
+                <strong>driven insane</strong>.
+              </p>
               <div class="the-silence-modal__actions">
-                <button type="button" class="the-silence-modal__confirm" @click="continueUI">{{ $t('ok') }}</button>
+                <button type="button" class="the-silence-modal__confirm" @click="continueUI">
+                  {{ $t('ok') }}
+                </button>
               </div>
             </div>
           </div>
@@ -2427,7 +2479,9 @@ onUnmounted(() => {
                 :class="{ 'cthulhu-revelation-card': isCthulhuDeckReveal }"
                 :role="isCthulhuDeckReveal ? 'button' : undefined"
                 :tabindex="isCthulhuDeckReveal ? 0 : undefined"
-                :aria-label="isCthulhuDeckReveal ? `${format(gameCard.title)}. Click to enact.` : undefined"
+                :aria-label="
+                  isCthulhuDeckReveal ? `${format(gameCard.title)}. Click to enact.` : undefined
+                "
                 @click="isCthulhuDeckReveal && continueUI()"
                 @keydown.enter="isCthulhuDeckReveal && continueUI()"
                 @keydown.space.prevent="isCthulhuDeckReveal && continueUI()"
@@ -2552,10 +2606,7 @@ onUnmounted(() => {
         <div
           class="sidebar"
           :class="{ 'sidebar--empty-log': gameLog.length === 0 }"
-          v-if="
-            showSidebar &&
-            isActualScenarioView
-          "
+          v-if="showSidebar && isActualScenarioView"
         >
           <GameLog :game="game" :gameLog="gameLog" @undo="undo" />
         </div>
@@ -2581,7 +2632,7 @@ onUnmounted(() => {
       v-if="confirmingUndoScenario"
       prompt="$game.areYouSureUndoScenario"
       :yes="undoScenario"
-      :no="() => confirmingUndoScenario = false"
+      :no="() => (confirmingUndoScenario = false)"
     />
   </div>
 </template>
@@ -2602,7 +2653,10 @@ onUnmounted(() => {
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
 
   .back-icon {
     font-size: 0.85em;
@@ -2794,7 +2848,7 @@ onUnmounted(() => {
   }
 }
 
-.tabletop-shell {
+  .tabletop-shell {
   --game-bar-height: 56px;
   width: 100vw;
   display: flex;
@@ -2803,13 +2857,53 @@ onUnmounted(() => {
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+  isolation: isolate;
   background:
-    linear-gradient(180deg, rgba(20, 33, 34, 0.42), rgba(20, 33, 34, 0.06) 26%, rgba(12, 20, 21, 0.35)),
+    radial-gradient(ellipse at 50% 42%, rgba(205, 175, 107, 0.08), transparent 48%),
+    radial-gradient(ellipse at 50% 50%, transparent 44%, rgba(4, 12, 13, 0.32) 100%),
+    linear-gradient(
+      180deg,
+      rgba(20, 33, 34, 0.42),
+      rgba(20, 33, 34, 0.06) 26%,
+      rgba(12, 20, 21, 0.35)
+    ),
     var(--deep-sea, #26373a) url('/assets/veiled-harbour/02-牌桌材质.png') center / cover no-repeat;
   background-attachment: fixed;
   border-top: 1px solid rgba(208, 180, 123, 0.35);
+  animation: table-enter 280ms ease-out both;
+
+  /* A candle-glow that breathes over the felt. Negative index keeps it under
+     the play content because the shell isolates its stacking context. */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 38%, rgba(229, 194, 107, 0.09), transparent 56%);
+    animation: table-candle 9s ease-in-out infinite alternate;
+  }
+
   &:has(.scroll-container) {
     overflow: auto;
+  }
+}
+
+@keyframes table-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes table-candle {
+  from {
+    opacity: 0.55;
+  }
+  to {
+    opacity: 1;
   }
 }
 
@@ -2859,7 +2953,6 @@ onUnmounted(() => {
   align-items: center;
   justify-self: center;
   align-self: center;
-
 }
 
 .socket-warning-card {
@@ -3234,7 +3327,9 @@ header {
   border: 1px solid rgba(79, 224, 214, 0.65);
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(5, 29, 35, 0.98), rgba(12, 75, 82, 0.98));
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.7), 0 0 28px rgba(79, 224, 214, 0.38);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.7),
+    0 0 28px rgba(79, 224, 214, 0.38);
   color: #d8fffb;
 }
 
@@ -3415,7 +3510,9 @@ header {
   h2 {
     color: #cad8bd;
     letter-spacing: 0.08em;
-    text-shadow: 0 2px 2px rgba(0, 0, 0, 0.9), 0 0 8px rgba(72, 129, 105, 0.42);
+    text-shadow:
+      0 2px 2px rgba(0, 0, 0, 0.9),
+      0 0 8px rgba(72, 129, 105, 0.42);
   }
 }
 
@@ -3423,7 +3520,9 @@ header {
   cursor: pointer;
   outline: none;
   filter: drop-shadow(0 20px 24px rgba(0, 4, 5, 0.8));
-  transition: transform 220ms ease, filter 220ms ease;
+  transition:
+    transform 220ms ease,
+    filter 220ms ease;
 
   &:hover,
   &:focus-visible {
@@ -3681,7 +3780,7 @@ header {
   overflow-y: hidden;
   background:
     linear-gradient(180deg, rgb(26 42 41 / 0.96), rgb(9 18 18 / 0.98)),
-    url('/assets/veiled-harbour/35-底部行动托盘-v2.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png') center / cover no-repeat;
   border-top: 1px solid rgba(208, 180, 123, 0.42);
   box-shadow: 0 -6px 18px rgba(8, 14, 15, 0.45);
   color: var(--text-on-dark, #f4efe4);
@@ -3709,11 +3808,11 @@ header {
     background-size: 400% 100%;
     background-position: 0 center;
     border: 1px solid transparent;
-    border-radius: var(--radius-lg);
+    border-radius: 4px;
     color: var(--text-on-dark, #f4efe4);
-    font-weight: 700;
-    height: 38px;
-    min-height: 38px;
+    font-weight: 600;
+    height: 34px;
+    min-height: 34px;
     min-width: 38px;
     padding: 0 12px;
     display: flex;
@@ -3759,6 +3858,103 @@ header {
   color: var(--title);
 }
 
+/* Toolbar controls are instrument labels, not a row of identical green
+   plaques. Give each utility its own material and reserve enough width for
+   the brass corner treatment to breathe. */
+.game-bar > .game-bar-item--sounds > div > button,
+.game-bar > .game-bar-tools--primary > button,
+.game-bar > .right > .sidebar-toggle-button,
+.game-bar > .right :deep(.narration-button) {
+  min-width: 108px;
+  height: 36px;
+  min-height: 36px;
+  padding-inline: 14px;
+  border-radius: 4px;
+  border: 1px solid rgb(205 175 107 / 0.58);
+  background-image: none;
+  box-shadow:
+    inset 0 1px 0 rgb(244 239 228 / 0.1),
+    0 2px 6px rgb(4 12 12 / 0.24);
+  font-family: Teutonic, Georgia, serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.game-bar > .game-bar-item--sounds > div > button {
+  min-width: 116px;
+  background:
+    linear-gradient(180deg, rgb(57 57 48 / 0.96), rgb(24 29 28 / 0.98)),
+    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg') center / cover no-repeat;
+  color: rgb(248 239 211 / 0.96);
+}
+
+.game-bar > .game-bar-item--sounds > div > button:hover,
+.game-bar > .game-bar-item--sounds > div > button:focus-visible {
+  background:
+    linear-gradient(180deg, rgb(104 87 48 / 0.95), rgb(42 39 29 / 0.98)),
+    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg') center / cover no-repeat;
+  border-color: rgb(229 194 107 / 0.92);
+}
+
+.game-bar > .game-bar-tools--primary > button {
+  min-width: 148px;
+  background:
+    linear-gradient(180deg, rgb(112 91 53 / 0.98), rgb(52 44 30 / 0.98)),
+    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png') center / cover no-repeat;
+  border-color: rgb(229 194 107 / 0.74);
+  color: rgb(255 246 220 / 0.98);
+}
+
+.game-bar > .game-bar-tools--primary > button:hover,
+.game-bar > .game-bar-tools--primary > button:focus-visible {
+  background:
+    linear-gradient(180deg, rgb(146 119 67 / 0.98), rgb(74 58 35 / 0.98)),
+    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png') center / cover no-repeat;
+  border-color: rgb(248 218 137 / 0.98);
+}
+
+.game-bar > .right > .sidebar-toggle-button {
+  min-width: 164px;
+  background: linear-gradient(180deg, rgb(45 67 67 / 0.98), rgb(19 32 33 / 0.98));
+  border-color: rgb(122 155 151 / 0.58);
+  color: rgb(226 235 225 / 0.94);
+}
+
+.game-bar > .right > .sidebar-toggle-button:hover,
+.game-bar > .right > .sidebar-toggle-button:focus-visible {
+  background: linear-gradient(180deg, rgb(67 93 88 / 0.98), rgb(28 49 48 / 0.98));
+  border-color: rgb(177 204 184 / 0.9);
+}
+
+.game-bar > .right :deep(.narration-button) {
+  min-width: 112px;
+  background: linear-gradient(180deg, rgb(63 55 43 / 0.98), rgb(29 29 27 / 0.98));
+  border-color: rgb(174 151 104 / 0.56);
+  color: rgb(224 214 188 / 0.94);
+}
+
+.game-bar > .right :deep(.narration-button:hover),
+.game-bar > .right :deep(.narration-button:focus-visible),
+.game-bar > .right :deep(.narration-button.open),
+.game-bar > .right :deep(.narration-button.active) {
+  background: linear-gradient(180deg, rgb(104 86 53 / 0.98), rgb(45 38 28 / 0.98));
+  border-color: rgb(229 194 107 / 0.9);
+  color: #fff7df;
+}
+
+/* Below 1440px the plaque min-widths would push the primary action row into
+   horizontal scrolling; let them shrink to their label instead. */
+@media (max-width: 1440px) {
+  .game-bar > .game-bar-item--sounds > div > button,
+  .game-bar > .game-bar-tools--primary > button,
+  .game-bar > .right > .sidebar-toggle-button,
+  .game-bar > .right :deep(.narration-button) {
+    min-width: 0;
+    padding-inline: 10px;
+    font-size: 0.82rem;
+  }
+}
+
 @media (max-width: 800px) {
   .tabletop-shell {
     --game-bar-height: 60px;
@@ -3772,6 +3968,42 @@ header {
       min-width: 44px;
       padding-inline: 8px;
     }
+
+    .game-bar-item--sounds > div > button,
+    .game-bar-tools--primary > button,
+    > .right > .sidebar-toggle-button,
+    > .right :deep(.narration-button) {
+      min-width: 44px;
+      padding-inline: 10px;
+    }
+  }
+}
+
+@media (min-width: 801px) {
+  .tabletop-shell {
+    --game-bar-height: 44px;
+  }
+
+  .game-bar {
+    /* The site header occupies the first 60px of the viewport. Dock the
+       action tray immediately beneath it so the controls remain visible while
+       the map starts below the reserved 44px bar height. */
+    top: 60px;
+    bottom: auto;
+    z-index: 90;
+    gap: 4px;
+    padding-inline: 10px;
+    background-color: rgb(13 27 25 / 0.96);
+  }
+
+  .game-bar > div > :deep(button),
+  .game-bar > div > div > :deep(button) {
+    padding-inline: 9px;
+  }
+
+  .game-main {
+    padding-top: var(--game-bar-height);
+    padding-bottom: 0;
   }
 }
 
@@ -4160,5 +4392,202 @@ dialog {
   font-weight: bold;
   width: 1rem;
   flex-shrink: 0;
+}
+
+/* The game bar is deliberately quiet; infrequent actions live in one drawer so
+   they cannot compete with the board or cover the phase rail. */
+.game-tools-drawer {
+  position: fixed;
+  top: 60px;
+  bottom: 0;
+  left: 0;
+  z-index: 140;
+  width: min(340px, calc(100vw - 24px));
+  display: flex;
+  flex-direction: column;
+  color: var(--text-on-dark, #f4efe4);
+  background:
+    linear-gradient(180deg, rgb(20 38 37 / 0.98), rgb(8 18 18 / 0.99)),
+    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png') center / cover no-repeat;
+  border-right: 1px solid rgb(205 175 107 / 0.58);
+  box-shadow: 14px 0 30px rgb(4 10 10 / 0.42);
+}
+
+.game-tools-drawer__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid rgb(205 175 107 / 0.32);
+}
+
+.game-tools-drawer__header h2 {
+  margin: 3px 0 0;
+  color: var(--text-on-dark, #f4efe4);
+  font-family: Teutonic, Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.game-tools-drawer__eyebrow {
+  color: rgb(214 186 128 / 0.8);
+  font-family: Typewriter, monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+}
+
+.game-tools-drawer__close {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  padding: 0;
+  border: 1px solid rgb(205 175 107 / 0.52);
+  border-radius: 4px;
+  background: rgb(213 187 131 / 0.12);
+  color: var(--text-on-dark, #f4efe4);
+  cursor: pointer;
+}
+
+.game-tools-drawer__close:hover,
+.game-tools-drawer__close:focus-visible {
+  background: rgb(213 187 131 / 0.26);
+  color: #fff;
+}
+
+.game-tools-drawer__close svg {
+  width: 18px;
+}
+
+.game-tools-drawer__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  overflow-y: auto;
+}
+
+.game-tools-drawer__body > :deep(button),
+.game-tools-drawer__body > :deep(div) > :deep(button),
+.game-tools-action {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid rgb(205 175 107 / 0.4);
+  border-radius: 4px;
+  background: rgb(22 45 43 / 0.9) !important;
+  color: var(--text-on-dark, #f4efe4) !important;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.game-tools-drawer__body > :deep(button:hover),
+.game-tools-drawer__body > :deep(div) > :deep(button:hover),
+.game-tools-action:hover,
+.game-tools-drawer__body > :deep(button:focus-visible),
+.game-tools-drawer__body > :deep(div) > :deep(button:focus-visible),
+.game-tools-action:focus-visible {
+  background: rgb(205 175 107 / 0.22);
+  border-color: rgb(229 194 107 / 0.9);
+  color: #fff;
+  outline: 2px solid rgb(229 194 107 / 0.56);
+  outline-offset: 1px;
+}
+
+/* HeadlessUI's Menu root does not carry a class, so its trigger is a direct
+   child of an anonymous wrapper. Give that trigger the same always-visible
+   plaque as the explicit actions above. */
+.game-tools-drawer__body > div > :deep(button) {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid rgb(205 175 107 / 0.4);
+  border-radius: 4px;
+  background: rgb(22 45 43 / 0.9) !important;
+  color: var(--text-on-dark, #f4efe4) !important;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.game-tools-drawer__body > div > :deep(button:hover),
+.game-tools-drawer__body > div > :deep(button:focus-visible) {
+  background: rgb(205 175 107 / 0.22) !important;
+  border-color: rgb(229 194 107 / 0.9);
+  color: #fff !important;
+  outline: 2px solid rgb(229 194 107 / 0.56);
+  outline-offset: 1px;
+}
+
+.game-tools-drawer__body > div {
+  position: relative;
+}
+
+.game-tools-drawer__body > div > :deep([role='menu']) {
+  position: static !important;
+  width: 100%;
+  margin-top: 4px;
+  overflow: hidden;
+  border: 1px solid rgb(205 175 107 / 0.36);
+  border-radius: 4px;
+  background: rgb(11 28 27 / 0.96);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.04);
+}
+
+.game-tools-drawer__body > div > :deep([role='menu'] button) {
+  width: 100%;
+  min-height: 38px;
+  padding: 8px 10px;
+  border: 0;
+  border-bottom: 1px solid rgb(205 175 107 / 0.16);
+  border-radius: 0;
+  background: transparent;
+  color: var(--text-on-dark, #f4efe4);
+  text-align: left;
+}
+
+.game-tools-drawer__body > div > :deep([role='menu'] button:hover),
+.game-tools-drawer__body > div > :deep([role='menu'] button:focus-visible) {
+  background: rgb(205 175 107 / 0.2);
+  color: #fff;
+  outline: none;
+}
+
+.game-tools-drawer__body :deep(svg) {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+}
+
+.game-tools-drawer .game-tools-action {
+  background: rgb(22 45 43 / 0.9) !important;
+  color: var(--text-on-dark, #f4efe4) !important;
+}
+
+.game-tools-drawer__body :deep(.relative) {
+  display: block;
+}
+
+.game-tools-drawer__body :deep(.absolute) {
+  z-index: 2;
+}
+
+@media (max-width: 800px) {
+  .game-tools-drawer {
+    top: 0;
+    width: min(360px, calc(100vw - 16px));
+  }
 }
 </style>

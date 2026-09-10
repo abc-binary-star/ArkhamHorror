@@ -18,10 +18,10 @@ import { MessageType } from '@/arkham/types/Message'
 import { cardId, toCardContents } from '@/arkham/types/Card'
 import SealedChaosTokens from '@/arkham/components/SealedChaosTokens.vue';
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
-import { useMenu } from '@/composable/menu';
+import { useMenu } from '@/arkham/composables/menu';
 import { useI18n } from 'vue-i18n';
-import useEmitter from '@/composable/useEmitter';
-import useHighlighter from '@/composable/useHighlighter';
+import useEmitter from '@/arkham/composables/useEmitter';
+import useHighlighter from '@/arkham/composables/useHighlighter';
 import Resources from '@/arkham/components/Resources.vue';
 import Draw from '@/arkham/components/Draw.vue';
 import { IsMobile } from '@/arkham/isMobile';
@@ -597,6 +597,7 @@ const spadeInjury = computed(() => {
               @click="$emit('choose', ability.index)"
               />
             <button
+            class="end-turn-button"
             :class="{ active: endTurnAction !== -1 && investigator.remainingActions === 0 }"
             :disabled="endTurnAction == -1"
             :data-game-actionable="endTurnAction !== -1 || undefined"
@@ -776,55 +777,43 @@ i.action {
 
 .guardianActionButton {
   background-color: var(--guardian) !important;
-  border: var(--edge-width) solid color-mix(in srgb, var(--guardian-dark) 72%, var(--edge-dim));
-  border-radius: var(--control-radius);
-  min-width: var(--control-height-icon);
-  min-height: var(--control-height-icon);
+  border: 0;
+  border-radius: 2px;
   margin: 0 2px;
 }
 
 .seekerActionButton {
   background-color: var(--seeker) !important;
-  border: var(--edge-width) solid color-mix(in srgb, var(--seeker-extra-dark) 72%, var(--edge-dim));
-  border-radius: var(--control-radius);
-  min-width: var(--control-height-icon);
-  min-height: var(--control-height-icon);
+  border: 0;
+  border-radius: 2px;
   margin: 0 2px;
 }
 
 .rogueActionButton {
   background-color: var(--rogue) !important;
-  border: var(--edge-width) solid color-mix(in srgb, var(--rogue-extra-dark) 72%, var(--edge-dim));
-  border-radius: var(--control-radius);
-  min-width: var(--control-height-icon);
-  min-height: var(--control-height-icon);
+  border: 0;
+  border-radius: 2px;
   margin: 0 2px;
 }
 
 .mysticActionButton {
   background-color: var(--mystic) !important;
-  border: var(--edge-width) solid color-mix(in srgb, var(--mystic-extra-dark) 72%, var(--edge-dim));
-  border-radius: var(--control-radius);
-  min-width: var(--control-height-icon);
-  min-height: var(--control-height-icon);
+  border: 0;
+  border-radius: 2px;
   margin: 0 2px;
 }
 
 .survivorActionButton {
   background-color: var(--survivor) !important;
-  border: var(--edge-width) solid color-mix(in srgb, var(--survivor-extra-dark) 72%, var(--edge-dim));
-  border-radius: var(--control-radius);
-  min-width: var(--control-height-icon);
-  min-height: var(--control-height-icon);
+  border: 0;
+  border-radius: 2px;
   margin: 0 2px;
 }
 
 .neutralActionButton {
   background-color: var(--neutral) !important;
-  border: var(--edge-width) solid var(--edge-dim);
-  border-radius: var(--control-radius);
-  min-width: var(--control-height-icon);
-  min-height: var(--control-height-icon);
+  border: 0;
+  border-radius: 2px;
   margin: 0 2px;
 }
 
@@ -994,8 +983,7 @@ i.action {
 }
 
 .activeButton {
-  border-color: var(--brass);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brass) 72%, transparent), var(--shadow-1);
+  border: 1px solid var(--select);
 }
 
 @keyframes become-ghost {
@@ -1050,15 +1038,6 @@ i.action {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  width: 100%;
-  :deep(button) {
-    min-height: var(--control-height);
-    width: 100%;
-    height: auto;
-    line-height: 1.35;
-    white-space: normal;
-    box-sizing: border-box;
-  }
   @media (max-width: 800px) and (orientation: portrait) {
     flex-direction: column;
     align-items: flex-start;
@@ -1072,46 +1051,18 @@ i.action {
 }
 
 .button-group--skip-all-pending > :not(.skip-triggers-group) {
-  opacity: 0.58;
+  opacity: 0.35;
   filter: grayscale(1);
   pointer-events: none;
 }
 
 .button-group--skip-all-pending .skip-triggers-button {
-  opacity: 0.72;
+  opacity: 0.55;
   pointer-events: none;
-}
-
-.button-group > button[data-game-actionable] {
-  background-color: var(--spooky-green-dark);
-  background-image: url('/assets/veiled-harbour/36-行动按钮四态铭牌组-v2.png');
-  background-repeat: no-repeat;
-  background-size: 400% 100%;
-  background-position: 0 center;
-  border: 1px solid transparent;
-  border-radius: var(--radius-lg);
-  color: var(--text-on-dark, #f4efe4);
-
-  &:hover {
-    background-position: 33.333% center;
-    filter: brightness(1.1);
-  }
-
-  &:active,
-  &.active {
-    background-position: 66.666% center;
-  }
-
-  &:disabled {
-    background-position: 100% center;
-    filter: brightness(0.68) saturate(0.45) var(--button-disabled-filter);
-  }
 }
 
 .player-buttons {
   margin-left: 10px;
-  min-width: 128px;
-  flex-shrink: 0;
   display: flex;
   gap: 2px;
   flex-direction: column;
@@ -1137,23 +1088,50 @@ i.action {
 
 .skip-triggers-button {
   transition: all 0.2s ease-in;
-  background-color: var(--spooky-green-dark);
-  background-image: url('/assets/veiled-harbour/36-行动按钮四态铭牌组-v2.png');
-  background-repeat: no-repeat;
-  background-size: 400% 100%;
-  background-position: 0 center;
-  color: var(--text-on-dark, #f4efe4);
-  border: 1px solid transparent;
-  border-radius: var(--control-radius);
+  background-color: var(--select);
+  color: white;
+  border: 0;
+  border-radius: 2px;
 
   &[disabled] {
-    filter: var(--button-disabled-filter);
-    opacity: 0.72;
+    background-color: #999;
+    color: #666;
   }
 
   &:not([disabled]):hover {
+    background-color: var(--select-dark);
+  }
+}
+
+.end-turn-button {
+  min-height: 40px;
+  border: 1px solid rgb(205 175 107 / 0.72);
+  border-radius: 4px;
+  background:
+    linear-gradient(180deg, rgb(205 175 107 / 0.22), rgb(71 54 29 / 0.4)),
+    url('/assets/veiled-harbour/36-行动按钮四态铭牌组-v2.png') 0 center / 400% 100% no-repeat;
+  color: rgb(249 241 218 / 0.98);
+  font-family: Teutonic, Georgia, serif;
+  letter-spacing: 0.05em;
+  text-shadow: 0 1px 2px rgb(4 12 12 / 0.72);
+  box-shadow:
+    inset 0 1px 0 rgb(244 239 228 / 0.12),
+    0 2px 6px rgb(4 12 12 / 0.28);
+
+  &:not(:disabled):hover,
+  &.active {
     background-position: 33.333% center;
-    filter: brightness(1.1);
+    border-color: rgb(229 194 107 / 0.96);
+    color: #fff;
+  }
+
+  &:not(:disabled):active {
+    background-position: 66.666% center;
+  }
+
+  &:disabled {
+    background-position: 100% center;
+    color: rgb(205 207 196 / 0.72);
   }
 }
 
@@ -1163,11 +1141,11 @@ i.action {
 
 .skip-all-triggers-button {
   transition: all 0.2s ease-in;
-  background-color: var(--spooky-green-dark);
-  color: var(--text-on-dark, #f4efe4);
-  border: 1px solid var(--brass-dim);
+  background-color: var(--select);
+  color: white;
+  border: 0;
   border-left: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 0 var(--control-radius) var(--control-radius) 0;
+  border-radius: 0 2px 2px 0;
   padding-inline: 6px;
   display: inline-flex;
   align-items: center;
@@ -1175,7 +1153,7 @@ i.action {
   cursor: pointer;
 
   &:hover {
-    background-color: var(--spooky-green);
+    background-color: var(--select-dark);
   }
 }
 
@@ -1282,11 +1260,10 @@ img.card.ability-target {
 
 button.active {
   background-color: var(--select-dark-20);
-  border-color: var(--brass);
-  border-radius: var(--control-radius);
+  border-color: var(--select-dark-20);
+  border-radius: 2px;
   border-style: solid;
   color: white;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--brass) 72%, transparent), var(--shadow-1);
 }
 
 i.spade {

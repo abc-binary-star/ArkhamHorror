@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 
-import { useMenu } from '@/composable/menu';
+import { useMenu } from '@/arkham/composables/menu';
 import Draggable from '@/components/Draggable.vue';
 import PoolItem from '@/arkham/components/PoolItem.vue';
 import { computed, ref } from 'vue';

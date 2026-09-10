@@ -31,7 +31,7 @@ import TokenPool from '@/arkham/components/TokenPool.vue'
 import * as Arkham from '@/arkham/types/Location'
 import { TokenType } from '@/arkham/types/Token'
 import { cardFacedown, Card } from '../types/Card'
-import useHighlighter from '@/composable/useHighlighter'
+import useHighlighter from '@/arkham/composables/useHighlighter'
 import { IsMobile } from '@/arkham/isMobile'
 import { useDbCardStore } from '@/stores/dbCards'
 import { useSettings } from '@/stores/settings'
@@ -309,7 +309,9 @@ const locationTokens = computed(() => {
   const { Clue, ...rest } = props.location.tokens
   return rest
 })
-const hasTokenPoolTokens = computed(() => Object.values(locationTokens.value).some((amount) => (amount ?? 0) > 0))
+const hasTokenPoolTokens = computed(() =>
+  Object.values(locationTokens.value).some((amount) => (amount ?? 0) > 0),
+)
 
 const hasPool = computed(() => {
   return (
@@ -352,8 +354,10 @@ const uiRotation = computed<number>(() => {
   return 0
 })
 
-const darkTraitRemoved = computed(() =>
-  modifiers.value?.some((m) => m.type.tag === 'RemoveTrait' && m.type.contents === 'Dark') ?? false
+const darkTraitRemoved = computed(
+  () =>
+    modifiers.value?.some((m) => m.type.tag === 'RemoveTrait' && m.type.contents === 'Dark') ??
+    false,
 )
 
 const explosion = computed(() => {
@@ -407,7 +411,7 @@ const clues = computed(() => props.location.tokens[TokenType.Clue])
 // are not on the location and cannot be discovered by any means.
 const cluesAround = computed(() => {
   if (props.location.cardCode !== 'c86024') return 0
-  return props.game.scenario?.counts["CluesAroundHubDimension"] ?? 0
+  return props.game.scenario?.counts['CluesAroundHubDimension'] ?? 0
 })
 
 const cluesAroundPositions = computed(() => {
@@ -462,7 +466,6 @@ const investigators = computed(() => {
     .map((i) => props.game.investigators[i])
     .filter((i) => i.placement.tag === 'AtLocation')
 })
-
 
 const floodLevel = computed(() => {
   if (!props.location.floodLevel) return
@@ -529,7 +532,7 @@ function onDrop(event: DragEvent) {
 const cardsUnderneathToShow = computed(() =>
   debug.active || isTillinghastEsoterica.value
     ? props.location.cardsUnderneath
-    : playerCardsUnderneath.value
+    : playerCardsUnderneath.value,
 )
 const hasFacedownCardsUnderneath = computed(() => props.location.cardsUnderneath.some(cardFacedown))
 const canShowCardsUnderneath = computed(() => {
@@ -539,9 +542,14 @@ const canShowCardsUnderneath = computed(() => {
   }
   return playerCardsUnderneath.value.length > 0 && !hasFacedownCardsUnderneath.value
 })
-const showCardsUnderneath = () => emits('show', cardsUnderneathToShow, 'Cards Underneath', false, debug.active)
-const isAttackTarget = computed(() => props.game.enemyAttackTargets.some((e) => e.target.contents === props.location.id))
-const highlighted = computed(() => highlighter.highlighted.value === props.location.id || isAttackTarget.value)
+const showCardsUnderneath = () =>
+  emits('show', cardsUnderneathToShow, 'Cards Underneath', false, debug.active)
+const isAttackTarget = computed(() =>
+  props.game.enemyAttackTargets.some((e) => e.target.contents === props.location.id),
+)
+const highlighted = computed(
+  () => highlighter.highlighted.value === props.location.id || isAttackTarget.value,
+)
 
 function isVehicleAsset(assetId: string): boolean {
   const asset = props.game.assets[assetId]
@@ -552,15 +560,20 @@ function isVehicleAsset(assetId: string): boolean {
 }
 
 const vehicleAssetIds = computed(() => props.location.assets.filter(isVehicleAsset))
-const nonVehicleAssetIds = computed(() => props.location.assets.filter((assetId) => !isVehicleAsset(assetId)))
+const nonVehicleAssetIds = computed(() =>
+  props.location.assets.filter((assetId) => !isVehicleAsset(assetId)),
+)
 const hasAnyLocationVehicleAssets = computed(() =>
-  Object.values(props.game.locations).some((location) => location.assets.some(isVehicleAsset))
+  Object.values(props.game.locations).some((location) => location.assets.some(isVehicleAsset)),
 )
 </script>
 
 <template>
   <div>
-    <div class="location-container" :class="{ 'location-container--has-vehicle-column': hasAnyLocationVehicleAssets }">
+    <div
+      class="location-container"
+      :class="{ 'location-container--has-vehicle-column': hasAnyLocationVehicleAssets }"
+    >
       <div class="location-investigator-column">
         <div
           v-for="investigator in investigators"
@@ -591,7 +604,16 @@ const hasAnyLocationVehicleAssets = computed(() =>
         />
       </div>
       <div class="location-column">
-        <div class="card-frame" :class="{ explosion, 'location--objective': hasObjective, 'objective-ring': hasObjective }" ref="frame" @click="clicked">
+        <div
+          class="card-frame"
+          :class="{
+            explosion,
+            'location--objective': hasObjective,
+            'objective-ring': hasObjective,
+          }"
+          ref="frame"
+          @click="clicked"
+        >
           <Locus v-if="locus" class="locus" />
           <span v-if="blocked" class="status-icon" v-tooltip="'Blocked'">
             <font-awesome-icon :icon="['fab', 'expeditedssl']" />
@@ -620,7 +642,13 @@ const hasAnyLocationVehicleAssets = computed(() =>
           <div
             ref="innerFrame"
             class="card-frame-inner"
-            :class="{ highlighted, blocked, 'blocked--selectable': blocked && canInteract && !hasObjective, exhausted: isExhausted, 'card--flipping': flipping && !locationStory }"
+            :class="{
+              highlighted,
+              blocked,
+              'blocked--selectable': blocked && canInteract && !hasObjective,
+              exhausted: isExhausted,
+              'card--flipping': flipping && !locationStory,
+            }"
             :style="{ '--ui-rotation': `${uiRotation}deg` }"
             :data-rotation="uiRotation || undefined"
           >
@@ -641,7 +669,10 @@ const hasAnyLocationVehicleAssets = computed(() =>
                 :data-id="id"
                 class="card card--locations"
                 :src="displayedImage"
-                :class="{ 'location--can-interact': canInteract && !hasObjective && !blocked, 'location--can-interact-cursor': canInteract }"
+                :class="{
+                  'location--can-interact': canInteract && !hasObjective && !blocked,
+                  'location--can-interact-cursor': canInteract,
+                }"
                 draggable="false"
                 @drop="onDrop"
                 @dragover.prevent="dragover"
@@ -650,12 +681,7 @@ const hasAnyLocationVehicleAssets = computed(() =>
             </template>
           </div>
 
-          <FlameWrap
-            v-if="onFire"
-            class="on-fire"
-            :target="innerFrame"
-            :options="fireOptions"
-          />
+          <FlameWrap v-if="onFire" class="on-fire" :target="innerFrame" :options="fireOptions" />
 
           <div v-if="!flipping && cluesAroundPositions.length > 0" class="clues-around">
             <img
@@ -1008,21 +1034,10 @@ const hasAnyLocationVehicleAssets = computed(() =>
 .location-investigator-column {
   grid-area: investigators;
   justify-self: end;
-  padding-top: 4px;
 
   &:deep(.portrait) {
-    width: clamp(28px, calc(var(--card-width) * 0.58), 40px);
-    height: clamp(28px, calc(var(--card-width) * 0.58), 40px);
-    aspect-ratio: 1;
-    object-fit: cover;
-    padding: 2px;
-    box-sizing: border-box;
-    border: 2px solid rgb(205 175 107 / 0.86);
-    border-radius: 50%;
-    background: rgb(16 39 38 / 0.96);
-    box-shadow:
-      0 3px 7px rgb(4 14 15 / 0.5),
-      inset 0 0 0 1px rgb(244 239 228 / 0.18);
+    height: 25%;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.45);
   }
 
   &:deep(img) {
@@ -1030,7 +1045,7 @@ const hasAnyLocationVehicleAssets = computed(() =>
   }
 
   div {
-    margin-top: -42%;
+    margin-top: -100%;
   }
 
   div:first-child {
@@ -1280,40 +1295,42 @@ const hasAnyLocationVehicleAssets = computed(() =>
 
 @keyframes locus {
   0% {
-    filter: drop-shadow(0px 0px 0px #fff) drop-shadow(0px 0px 0px #fff)
-      drop-shadow(0px 0px 0px #ff80b3) drop-shadow(0px 0px 0px #ff4d94)
-      drop-shadow(0px 0px 0px #ff0066);
+    filter: drop-shadow(0px 0px 0px #fdf6e3) drop-shadow(0px 0px 0px #fdf6e3)
+      drop-shadow(0px 0px 0px #e5c26b) drop-shadow(0px 0px 0px #c8ad78)
+      drop-shadow(0px 0px 0px #9b7d45);
   }
   25% {
-    filter: drop-shadow(0px 0px 0px #fff) drop-shadow(0px 0px 0px #fff)
-      drop-shadow(0px 0px 0px #ff80b3) drop-shadow(0px 0px 0px #ff4d94)
-      drop-shadow(0px 0px 0px #ff0066);
+    filter: drop-shadow(0px 0px 0px #fdf6e3) drop-shadow(0px 0px 0px #fdf6e3)
+      drop-shadow(0px 0px 0px #e5c26b) drop-shadow(0px 0px 0px #c8ad78)
+      drop-shadow(0px 0px 0px #9b7d45);
   }
   100% {
-    filter: drop-shadow(0px 0px 1px #fff) drop-shadow(0px 0px 1px #fff)
-      drop-shadow(0px 0px 3px #ff80b3) drop-shadow(0px 0px 10px #ff4d94)
-      drop-shadow(0px 0px 15px #ff0066);
+    filter: drop-shadow(0px 0px 1px #fdf6e3) drop-shadow(0px 0px 1px #fdf6e3)
+      drop-shadow(0px 0px 3px #e5c26b) drop-shadow(0px 0px 10px #c8ad78)
+      drop-shadow(0px 0px 15px #9b7d45);
   }
 }
 
 .location {
-  min-width: calc(var(--card-width) + 120px);
+  /* The visible card owns its footprint. Auxiliary entities are rendered in
+     their own compact bands instead of reserving two permanent 60px rails. */
+  min-width: calc(var(--card-width) + 12px);
 }
 
 .location-container {
-  min-height: calc(var(--card-width) / var(--card-aspect) + 40px);
+  min-height: calc(var(--card-width) / var(--card-aspect) + 12px);
   display: grid;
   grid-template-areas:
     'investigators location    assetsAndEnemies'
     'investigators attachments assetsAndEnemies';
-  grid-template-columns: 60px 1fr 60px;
-  grid-column-gap: 10px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-column-gap: 5px;
 
   &.location-container--has-vehicle-column {
     grid-template-areas:
       'investigators vehicleAssets location    assetsAndEnemies'
       'investigators vehicleAssets attachments assetsAndEnemies';
-    grid-template-columns: 60px 60px 1fr 60px;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
   }
 
   @media (max-width: 800px) and (orientation: portrait) {

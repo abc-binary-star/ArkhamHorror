@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, watch, ref } from 'vue';
 import { Dropdown } from 'floating-vue';
-import useHighlighter from '@/composable/useHighlighter';
+import useHighlighter from '@/arkham/composables/useHighlighter';
 import { useDebug } from '@/arkham/debug';
 import { TokenType } from '@/arkham/types/Token';
 import { imgsrc } from '@/arkham/helpers';

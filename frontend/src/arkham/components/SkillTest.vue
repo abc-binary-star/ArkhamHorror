@@ -22,8 +22,8 @@ import { cardArt, portraitImage, sourceCardCode } from '@/arkham/cardImages';
 import ChaosBagView from '@/arkham/components/ChaosBag.vue';
 import Token from '@/arkham/components/Token.vue';
 import { useI18n } from 'vue-i18n';
-import { useMenu } from '@/composable/menu';
-import { useSettingsFocus } from '@/composable/settingsFocus';
+import { useMenu } from '@/arkham/composables/menu';
+import { useSettingsFocus } from '@/arkham/composables/settingsFocus';
 
 const debug = useDebug()
 const { t } = useI18n()

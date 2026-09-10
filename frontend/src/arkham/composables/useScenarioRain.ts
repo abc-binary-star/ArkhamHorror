@@ -2,7 +2,7 @@ import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { type Game } from '@/arkham/types/Game'
 import { supportsHtmlInCanvas } from '@/arkham/droplets'
 import { createRainAudio, type RainAudioInstance } from '@/arkham/rainAudio'
-import { useSoundsDisabled } from '@/composable/useSoundsDisabled'
+import { useSoundsDisabled } from '@/arkham/composables/useSoundsDisabled'
 import {
   getGameLocalStorageItem,
   setGameLocalStorageItem,

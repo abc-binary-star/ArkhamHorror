@@ -7,7 +7,7 @@ import { updateGameRaw } from '@/arkham/api'
 import { gameLocalStorageKey, getGameLocalStorageItem, removeGameLocalStorageItem, setGameLocalStorageItem } from '@/arkham/localStorage'
 import campaignJSON from '@/arkham/data/campaigns.json'
 import { BugAntIcon } from '@heroicons/vue/20/solid'
-import { useSettingsFocus } from '@/composable/settingsFocus'
+import { useSettingsFocus } from '@/arkham/composables/settingsFocus'
 import { useSettings } from '@/stores/settings'
 import CardOptionsSettings from '@/arkham/components/CardOptionsSettings.vue'
 

@@ -5,7 +5,7 @@ import { useDebug } from '@/arkham/debug';
 import { imgsrc } from '@/arkham/helpers';
 import type { Game } from '@/arkham/types/Game';
 import type { ConcealedCard } from '@/arkham/types/ConcealedCard';
-import { useMenu } from '@/composable/menu';
+import { useMenu } from '@/arkham/composables/menu';
 
 const props = defineProps<{
   game: Game
