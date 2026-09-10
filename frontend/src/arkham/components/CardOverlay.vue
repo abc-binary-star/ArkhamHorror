@@ -638,7 +638,7 @@ const additionalCard = computed<string | null>(() => {
 const {
   dbCardName, dbCardTypeName, dbCardFactionName, dbCardFactionCode,
   dbCardTraits, dbCardText, dbCardFlavor, dbCardCustomizationText, dbCardData,
-} = useDbCardFallback(card, cardCode)
+} = useDbCardFallback(card)
 
 </script>
 

@@ -4,10 +4,7 @@ import { useDbCardStore, ArkhamDBCard } from '@/stores/dbCards'
 import { homebrewTokenMap } from '@/arkham/homebrewAssets'
 import type { ComputedRef } from 'vue'
 
-export function useDbCardFallback(
-  card: ComputedRef<string | null>,
-  _cardCode: ComputedRef<string | null>,
-) {
+export function useDbCardFallback(card: ComputedRef<string | null>) {
   const store = useDbCardStore()
   const dbCardName = ref<string>('')
   const dbCardTypeName = ref<string>('')
