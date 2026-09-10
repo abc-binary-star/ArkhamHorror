@@ -13,9 +13,10 @@ body {
   background-color: var(--background);
   background-image:
     radial-gradient(var(--texture-dot) 0.8px, transparent 0.8px),
+    radial-gradient(ellipse at 50% 0%, transparent 42%, rgba(70, 66, 58, 0.22) 100%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 42%);
-  background-size: var(--texture-grid) var(--texture-grid), 100% 100%;
-  background-repeat: repeat, no-repeat;
+  background-size: var(--texture-grid) var(--texture-grid), 100% 100%, 100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat;
   background-attachment: fixed;
   font-size: min(16px, 2vw);
   @media (max-width: 800px) and (orientation: portrait) {
@@ -24,7 +25,8 @@ body {
 }
 
 #app {
-  font-family: "Noto Sans", Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Noto Sans", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", Avenir, Helvetica,
+    Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
@@ -56,10 +58,9 @@ button {
   background-color: var(--button);
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.03)),
-    url('/assets/veiled-harbour/C02-象牙档案纸微纹理.jpg');
+    url('/assets/veiled-harbour/C02-象牙档案纸微纹理.avif');
   background-size: 100% 100%, 256px 256px;
   background-repeat: no-repeat, repeat;
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--control-radius);
   box-shadow: var(--shadow-1);
   cursor: pointer;
@@ -186,6 +187,18 @@ footer {
     color: var(--text-dim);
     transition: color 120ms ease;
     &:hover { color: var(--teal); }
+  }
+
+  /* Outbound marker so the FFG links read as leaving the site. */
+  a[target='_blank']::after {
+    content: '';
+    display: inline-block;
+    width: 0.85em;
+    height: 0.85em;
+    margin-left: 0.22em;
+    vertical-align: -0.06em;
+    background: url('/assets/veiled-harbour/C06-界面工具图标-外链.svg') center / contain no-repeat;
+    opacity: 0.75;
   }
 
   @media (max-width: 800px) and (orientation: portrait) {

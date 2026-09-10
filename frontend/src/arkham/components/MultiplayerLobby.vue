@@ -204,7 +204,6 @@ async function takeSeat() {
   gap: 10px;
   padding: 16px;
   color: var(--text);
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: var(--radius-lg);
   background: var(--surface-panel);
   box-shadow: var(--shadow-3);
@@ -236,7 +235,7 @@ async function takeSeat() {
   h2 {
     margin: 0;
     color: var(--title);
-    font-family: Arno, "Noto Serif SC", serif;
+    font-family: Arno, 'Source Han Serif', serif;
     font-size: 1.8em;
   }
 }
@@ -284,7 +283,6 @@ async function takeSeat() {
   button {
     padding: 6px 12px;
     background: var(--button-2);
-    border: var(--edge-width) solid var(--edge-dim);
     color: var(--button-2-text);
     border-radius: 6px;
     cursor: pointer;
@@ -297,7 +295,6 @@ async function takeSeat() {
 .investigators {
   padding: 10px;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   display: flex;
   gap: 10px;
   flex-direction: column;
@@ -306,7 +303,6 @@ async function takeSeat() {
 
 .claim-btn {
   background: var(--button-1);
-  border: var(--edge-width) solid var(--edge-on-accent);
   color: var(--button-1-text);
   padding: 7px 18px;
   border-radius: 6px;
@@ -349,7 +345,6 @@ async function takeSeat() {
 }
 
 .continue-btn {
-  border: var(--edge-width) solid var(--edge-dim);
   background: var(--button-2);
   color: var(--button-2-text);
   font-size: 1.2em;

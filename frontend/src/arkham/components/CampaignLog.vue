@@ -1246,7 +1246,7 @@ watch(
 }
 
 h1 {
-  font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
+  font-family: Arno, 'Source Han Serif', serif;
   font-size: 2.2em;
   margin: 0;
   padding: 0;
@@ -1264,7 +1264,6 @@ h1 {
   font-size: 0.9rem;
   font-style: italic;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-lg);
 }
 
@@ -1309,7 +1308,6 @@ h1 {
   padding: 8px 14px;
   border-radius: var(--radius-md);
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 
@@ -1341,12 +1339,11 @@ h1 {
 
 .supplies-container {
   background: var(--box-background);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-lg);
   padding: 14px 16px;
 
   h2 {
-    font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
+    font-family: Arno, 'Source Han Serif', serif;
     font-size: 1.1em;
     font-weight: normal;
     color: var(--text);

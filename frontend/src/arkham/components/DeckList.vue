@@ -482,7 +482,6 @@ watch(deckRef, (el) => {
   display: flex;
   gap: 2px;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 6px;
   padding: 2px;
   width: fit-content;
@@ -765,7 +764,6 @@ watch(deckRef, (el) => {
 .attachments-panel {
   padding: 8px;
   background: rgba(0, 0, 0, 0.26);
-  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 9px;
 }
 

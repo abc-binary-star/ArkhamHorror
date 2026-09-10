@@ -120,7 +120,6 @@ function startDrag(event: DragEvent, card: (CardContents | CardT.Card)) {
 }
 
 button {
-  border: var(--edge-width) solid var(--edge-dim);
   padding: 10px;
   text-transform: uppercase;
   background-color: var(--button-2);
@@ -150,7 +149,6 @@ button {
   box-shadow: var(--shadow-5);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
-  border: var(--edge-width) solid var(--border-panel);
   z-index: var(--z-index-9998);
 }
 

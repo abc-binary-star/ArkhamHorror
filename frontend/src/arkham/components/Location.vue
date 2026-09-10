@@ -908,7 +908,6 @@ const hasAnyLocationVehicleAssets = computed(() =>
 
 .button {
   margin-top: 2px;
-  border: var(--edge-width) solid var(--edge-dim);
   color: var(--text);
   background: var(--surface-raised);
   border-radius: 4px;

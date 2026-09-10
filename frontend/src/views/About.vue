@@ -72,7 +72,7 @@ const isSupportPage = computed(() => route.query.support !== undefined)
 
 <style scoped>
 .about-page {
-  background: var(--background-dark) url('/assets/veiled-harbour/29-档案页底图.png') center top /
+  background: var(--background-dark) url('/assets/veiled-harbour/29-档案页底图.avif') center top /
     cover fixed no-repeat;
   color: var(--text);
 }
@@ -84,7 +84,6 @@ const isSupportPage = computed(() => route.query.support !== undefined)
   margin: 20px auto;
   padding: clamp(24px, 4vw, 52px);
   background: rgba(233, 225, 210, 0.92);
-  border: 1px solid color-mix(in srgb, var(--brass) 70%, var(--edge-dim));
   box-shadow:
     0 16px 42px rgba(25, 31, 30, 0.28),
     inset 0 0 0 5px rgba(244, 239, 228, 0.3);
@@ -145,7 +144,7 @@ const isSupportPage = computed(() => route.query.support !== undefined)
   gap: 10px;
   margin: 0 0 8px;
   color: var(--spooky-green);
-  font-family: Arno, 'Noto Serif SC', serif;
+  font-family: Arno, 'Source Han Serif', serif;
   font-size: 0.68rem;
   letter-spacing: 0.18em;
   font-weight: 700;
@@ -160,7 +159,7 @@ const isSupportPage = computed(() => route.query.support !== undefined)
 
 h1,
 h2 {
-  font-family: Arno, 'Noto Serif SC', 'Noto Serif CJK SC', serif;
+  font-family: Arno, 'Source Han Serif', serif;
 }
 
 h1 {
@@ -258,7 +257,6 @@ h2 {
   box-sizing: border-box;
   padding: 20px 22px;
   background: linear-gradient(135deg, rgba(244, 239, 228, 0.9), rgba(232, 225, 210, 0.86));
-  border: 1px solid rgba(129, 123, 112, 0.72);
   border-left: 3px solid var(--brass);
   box-shadow:
     0 3px 10px rgba(37, 39, 37, 0.1),

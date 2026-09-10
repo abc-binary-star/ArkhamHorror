@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 import { useStorage } from '@vueuse/core'
-import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import type { Ref } from 'vue';
-import type { Game } from '@/arkham/types/Game';
-import Tab from '@/arkham/components/Tab.vue';
-import Player from '@/arkham/components/Player.vue';
-import { ArrowPathIcon } from '@heroicons/vue/20/solid';
-import * as ArkhamGame from '@/arkham/types/Game';
-import type { Investigator } from '@/arkham/types/Investigator';
-import type { Question } from '@/arkham/types/Question';
-import { MessageType } from '@/arkham/types/Message';
-import type { TarotCard } from '@/arkham/types/TarotCard';
-import { imgsrc, isTypingTarget } from '@/arkham/helpers';
-import { gameLocalStorageKey } from '@/arkham/localStorage';
-import { IsMobile } from '@/arkham/isMobile';
+import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import type { Ref } from 'vue'
+import type { Game } from '@/arkham/types/Game'
+import Tab from '@/arkham/components/Tab.vue'
+import Player from '@/arkham/components/Player.vue'
+import { ArrowPathIcon } from '@heroicons/vue/20/solid'
+import * as ArkhamGame from '@/arkham/types/Game'
+import type { Investigator } from '@/arkham/types/Investigator'
+import type { Question } from '@/arkham/types/Question'
+import { MessageType } from '@/arkham/types/Message'
+import type { TarotCard } from '@/arkham/types/TarotCard'
+import { imgsrc, isTypingTarget } from '@/arkham/helpers'
+import { gameLocalStorageKey } from '@/arkham/localStorage'
+import { IsMobile } from '@/arkham/isMobile'
 import { useDbCardStore } from '@/stores/dbCards'
 
 export interface Props {
@@ -35,22 +35,31 @@ const solo = inject<Ref<boolean>>('solo')
 const spectate = inject<Ref<boolean>>('spectate', ref(false))
 const processing = inject<Ref<boolean>>('processing', ref(false))
 const uiLock = inject<Ref<boolean>>('uiLock', ref(false))
-const switchInvestigator = inject<((i: string) => void)>('switchInvestigator')
+const switchInvestigator = inject<(i: string) => void>('switchInvestigator')
 const hasChoices = (iid: string) => ArkhamGame.choices(props.game, iid).length > 0
-const isWaiting = (investigator: Investigator) => props.playerOrder.length > 1 && investigator.playerId in props.game.question
-const investigators = computed(() => 
-  props.playerOrder.filter(iid => !props.game.investigators[iid]?.eliminated).map(iid => props.players[iid])
+const isWaiting = (investigator: Investigator) =>
+  props.playerOrder.length > 1 && investigator.playerId in props.game.question
+const investigators = computed(() =>
+  props.playerOrder
+    .filter((iid) => !props.game.investigators[iid]?.eliminated)
+    .map((iid) => props.players[iid]),
 )
-const inactiveInvestigators = computed(() => props.playerOrder.filter(iid => props.game.investigators[iid]?.eliminated ?? false).map(iid => props.players[iid]))
+const inactiveInvestigators = computed(() =>
+  props.playerOrder
+    .filter((iid) => props.game.investigators[iid]?.eliminated ?? false)
+    .map((iid) => props.players[iid]),
+)
 const lead = computed(() => `url('${imgsrc(`tokens/lead-investigator.png`)}')`)
-const { isMobile } = IsMobile();
+const { isMobile } = IsMobile()
 const store = useDbCardStore()
 
 function tabClass(investigator: Investigator) {
   const pid = investigator.playerId
 
-  const investigatorClass = 
-    ['c03006', 'c90087'].includes(investigator.cardCode) && investigator.meta !== 'Neutral' ? (investigator.meta ?? investigator.class) : investigator.class
+  const investigatorClass =
+    ['c03006', 'c90087'].includes(investigator.cardCode) && investigator.meta !== 'Neutral'
+      ? (investigator.meta ?? investigator.class)
+      : investigator.class
   return [
     {
       'tab--selected': pid === selectedTab.value,
@@ -115,12 +124,14 @@ function selectTabExtended(i: string) {
 }
 
 function tarotCardsFor(i: string) {
-  return props.tarotCards.filter(c => c.scope.tag === 'InvestigatorTarot' && c.scope.contents === i)
+  return props.tarotCards.filter(
+    (c) => c.scope.tag === 'InvestigatorTarot' && c.scope.contents === i,
+  )
 }
 
 function getInvestigatorName(cardTitle: string): string {
   const language = localStorage.getItem('language') || 'en'
-  return language === 'en'? cardTitle : store.getCardName(cardTitle, "investigator")
+  return language === 'en' ? cardTitle : store.getCardName(cardTitle, 'investigator')
 }
 
 // New actionable controls should use data-game-actionable. The class selectors
@@ -174,8 +185,9 @@ function humanQuestionPlayers() {
 // tied to something that just happened and still deserve focus.
 function isDeclinableFastWindow(playerId: string) {
   if (!ArkhamGame.activeQuestionIsPlayerWindow(props.game, playerId)) return false
-  return ArkhamGame.choices(props.game, playerId)
-    .some(choice => choice.tag === MessageType.SKIP_TRIGGERS_BUTTON)
+  return ArkhamGame.choices(props.game, playerId).some(
+    (choice) => choice.tag === MessageType.SKIP_TRIGGERS_BUTTON,
+  )
 }
 
 // Question seats allowed to claim the perspective. If every seat is a declinable fast
@@ -183,7 +195,7 @@ function isDeclinableFastWindow(playerId: string) {
 // leaving the only answerable question unreachable.
 function focusQuestionPlayers() {
   const players = humanQuestionPlayers()
-  const focusable = players.filter(pid => !isDeclinableFastWindow(pid))
+  const focusable = players.filter((pid) => !isDeclinableFastWindow(pid))
   return focusable.length > 0 ? focusable : players
 }
 
@@ -209,8 +221,12 @@ function questionKind(playerId: string) {
 
 function playerCanAnswerAllQuestionsFrom(playerId: string, otherPlayerId: string) {
   if (questionKind(playerId) !== questionKind(otherPlayerId)) return false
-  const available = new Set(ArkhamGame.choices(props.game, playerId).map(choice => JSON.stringify(choice)))
-  return ArkhamGame.choices(props.game, otherPlayerId).every(choice => available.has(JSON.stringify(choice)))
+  const available = new Set(
+    ArkhamGame.choices(props.game, playerId).map((choice) => JSON.stringify(choice)),
+  )
+  return ArkhamGame.choices(props.game, otherPlayerId).every((choice) =>
+    available.has(JSON.stringify(choice)),
+  )
 }
 
 function frameIsStillNeeded(frame: SwitchFrame, tabs: Set<string>) {
@@ -240,7 +256,11 @@ function applyFrame(frame: SwitchFrame) {
 
 const automaticSwitchStackEnabled = false
 
-function pushAutomaticFrame(tab: string, perspective: string, reason: Exclude<SwitchReason, 'baseline'>) {
+function pushAutomaticFrame(
+  tab: string,
+  perspective: string,
+  reason: Exclude<SwitchReason, 'baseline'>,
+) {
   if (!automaticSwitchStackEnabled) {
     // One-way routing: meeting another criterion may switch again, but ending a
     // criterion never restores an earlier tab. The user can always choose one.
@@ -265,7 +285,10 @@ function unwindSwitchStack(tabs: Set<string>) {
   applyFrame(switchStack.value.at(-1)!)
 }
 
-const tabbableInvestigators = computed(() => [...investigators.value, ...inactiveInvestigators.value])
+const tabbableInvestigators = computed(() => [
+  ...investigators.value,
+  ...inactiveInvestigators.value,
+])
 
 function seatShortcutIndex(event: KeyboardEvent): number | null {
   const code = /^(?:Digit|Numpad)([1-4])$/.exec(event.code)
@@ -347,27 +370,41 @@ function inspectActions() {
   const { tabs, outsideTab } = actionLocations()
   const questionPlayers = focusQuestionPlayers()
   const soleQuestionPlayer = questionPlayers.length === 1 ? questionPlayers[0] : null
-  const answerableQuestionPlayers = questionPlayers.filter(pid => ArkhamGame.choices(props.game, pid).length > 0)
-  const soleAnswerableQuestionPlayer = questionPlayers.length > 1 && answerableQuestionPlayers.length === 1
-    ? answerableQuestionPlayers[0]
-    : null
+  const answerableQuestionPlayers = questionPlayers.filter(
+    (pid) => ArkhamGame.choices(props.game, pid).length > 0,
+  )
+  const soleAnswerableQuestionPlayer =
+    questionPlayers.length > 1 && answerableQuestionPlayers.length === 1
+      ? answerableQuestionPlayers[0]
+      : null
   const skillTestPlayer = skillTestPlayerId()
   const activeQuestionPlayer = activeInvestigatorPlayerId()
-  const activePlayerCoversOtherQuestions = solo?.value === true
-    && questionPlayers.length > 1
-    && activeQuestionPlayer !== undefined
-    && questionPlayers.includes(activeQuestionPlayer)
-    && questionPlayers.every(pid => pid === activeQuestionPlayer || playerCanAnswerAllQuestionsFrom(activeQuestionPlayer, pid))
+  const activePlayerCoversOtherQuestions =
+    solo?.value === true &&
+    questionPlayers.length > 1 &&
+    activeQuestionPlayer !== undefined &&
+    questionPlayers.includes(activeQuestionPlayer) &&
+    questionPlayers.every(
+      (pid) =>
+        pid === activeQuestionPlayer || playerCanAnswerAllQuestionsFrom(activeQuestionPlayer, pid),
+    )
 
   // Some shared prompts create a question for every investigator but only give
   // one of them choices. Route to that investigator instead of leaving an
   // empty version of the prompt in front of the active investigator.
   if (solo?.value === true && soleAnswerableQuestionPlayer) {
     automaticSwitchCandidate = null
-    if (selectedTab.value !== soleAnswerableQuestionPlayer || props.playerId !== soleAnswerableQuestionPlayer) {
+    if (
+      selectedTab.value !== soleAnswerableQuestionPlayer ||
+      props.playerId !== soleAnswerableQuestionPlayer
+    ) {
       // This decision comes from the settled game question rather than
       // transient DOM controls, so it does not need the action stability delay.
-      pushAutomaticFrame(soleAnswerableQuestionPlayer, soleAnswerableQuestionPlayer, 'sole-question')
+      pushAutomaticFrame(
+        soleAnswerableQuestionPlayer,
+        soleAnswerableQuestionPlayer,
+        'sole-question',
+      )
     }
     return
   }
@@ -391,7 +428,12 @@ function inspectActions() {
   // location (#5495). The sole-question rule below would otherwise keep the
   // question owner's own -- empty -- tab in front of them. Keep their
   // perspective while showing the only tab where the control can be selected.
-  if (solo?.value === true && soleQuestionPlayer && tabs.size === 1 && !tabs.has(soleQuestionPlayer)) {
+  if (
+    solo?.value === true &&
+    soleQuestionPlayer &&
+    tabs.size === 1 &&
+    !tabs.has(soleQuestionPlayer)
+  ) {
     const [actionTab] = tabs
     if (selectedTab.value !== actionTab || props.playerId !== soleQuestionPlayer) {
       if (!automaticSwitchIsStable(`action-tab:${actionTab}:${soleQuestionPlayer}`)) return
@@ -416,9 +458,9 @@ function inspectActions() {
   // has to claim the perspective even then; otherwise the sole answerable
   // question sits behind a tab with no control rendered anywhere on screen.
   const skillTestHoldsFocus =
-    !!skillTestPlayer
-    && soleQuestionPlayer !== skillTestPlayer
-    && isDeclinableFastWindow(soleQuestionPlayer as string)
+    !!skillTestPlayer &&
+    soleQuestionPlayer !== skillTestPlayer &&
+    isDeclinableFastWindow(soleQuestionPlayer as string)
   if (solo?.value === true && soleQuestionPlayer && !skillTestHoldsFocus) {
     if (selectedTab.value !== soleQuestionPlayer || props.playerId !== soleQuestionPlayer) {
       if (!automaticSwitchIsStable(`sole-question:${soleQuestionPlayer}`)) return
@@ -466,7 +508,14 @@ onBeforeUnmount(() => {
 })
 
 watch(
-  () => [props.playerId, props.game.scenarioSteps, props.game.question, processing.value, uiLock.value] as const,
+  () =>
+    [
+      props.playerId,
+      props.game.scenarioSteps,
+      props.game.question,
+      processing.value,
+      uiLock.value,
+    ] as const,
   scheduleActionInspection,
   { deep: true },
 )
@@ -475,47 +524,67 @@ watch(
 <template>
   <div ref="playerInfo" class="player-info">
     <div class="tabs-row">
-    <ul class='tabs__header'>
-      <li v-for='investigator in investigators'
-        :key='investigator.name.title'
-        @click='selectTab(investigator.playerId)'
-        :class='tabClass(investigator)'
-      >
-        <span v-if="isMobile">{{ getInvestigatorName(investigator.name.title).split(' ')[0] }}</span>
-        <span v-else>{{ getInvestigatorName(investigator.name.title) }}</span>
-        <button
-          v-if="solo"
-          v-tooltip="instructions(investigator)"
-          :disabled="investigator.playerId === props.playerId"
-          class="switch-investigators"
-          @click.stop="selectTabExtended(investigator.playerId)"><font-awesome-icon icon="eye" :class="{ 'fa-icon': hasSwitch(investigator) }" /></button>
-        <span
-          v-else-if="isWaiting(investigator)"
-          class="waiting-indicator"
-          v-tooltip="$t('waitingOn.label')"
-        ><ArrowPathIcon class="waiting-spinner" aria-hidden="true" /><span v-if="!isMobile" class="waiting-text">{{ $t('waitingOn.short') }}</span></span>
-      </li>
-      <li v-for='investigator in inactiveInvestigators'
-        :key='investigator.name.title'
-        @click='selectTab(investigator.playerId)'
-        class="inactive"
-        :class='tabClass(investigator)'
-      >
-        <span>{{ investigator.name.title }}</span>
-        <button
-          v-if="solo"
-          v-tooltip="instructions(investigator)"
-          :disabled="investigator.playerId === props.playerId"
-          class="switch-investigators"
-          @click.stop="selectTabExtended(investigator.playerId)"><font-awesome-icon icon="eye" :class="{ 'fa-icon': hasSwitch(investigator) }" /></button>
-        <span
-          v-else-if="isWaiting(investigator)"
-          class="waiting-indicator"
-          v-tooltip="$t('waitingOn.label')"
-        ><ArrowPathIcon class="waiting-spinner" aria-hidden="true" /><span v-if="!isMobile" class="waiting-text">{{ $t('waitingOn.short') }}</span></span>
-      </li>
-    </ul>
-    <slot />
+      <ul class="tabs__header">
+        <li
+          v-for="investigator in investigators"
+          :key="investigator.name.title"
+          @click="selectTab(investigator.playerId)"
+          :class="tabClass(investigator)"
+        >
+          <span v-if="isMobile">{{
+            getInvestigatorName(investigator.name.title).split(' ')[0]
+          }}</span>
+          <span v-else>{{ getInvestigatorName(investigator.name.title) }}</span>
+          <button
+            v-if="solo"
+            v-tooltip="instructions(investigator)"
+            :disabled="investigator.playerId === props.playerId"
+            class="switch-investigators"
+            @click.stop="selectTabExtended(investigator.playerId)"
+          >
+            <font-awesome-icon icon="eye" :class="{ 'fa-icon': hasSwitch(investigator) }" />
+          </button>
+          <span
+            v-else-if="isWaiting(investigator)"
+            class="waiting-indicator"
+            v-tooltip="$t('waitingOn.label')"
+            ><ArrowPathIcon class="waiting-spinner" aria-hidden="true" /><span
+              v-if="!isMobile"
+              class="waiting-text"
+              >{{ $t('waitingOn.short') }}</span
+            ></span
+          >
+        </li>
+        <li
+          v-for="investigator in inactiveInvestigators"
+          :key="investigator.name.title"
+          @click="selectTab(investigator.playerId)"
+          class="inactive"
+          :class="tabClass(investigator)"
+        >
+          <span>{{ investigator.name.title }}</span>
+          <button
+            v-if="solo"
+            v-tooltip="instructions(investigator)"
+            :disabled="investigator.playerId === props.playerId"
+            class="switch-investigators"
+            @click.stop="selectTabExtended(investigator.playerId)"
+          >
+            <font-awesome-icon icon="eye" :class="{ 'fa-icon': hasSwitch(investigator) }" />
+          </button>
+          <span
+            v-else-if="isWaiting(investigator)"
+            class="waiting-indicator"
+            v-tooltip="$t('waitingOn.label')"
+            ><ArrowPathIcon class="waiting-spinner" aria-hidden="true" /><span
+              v-if="!isMobile"
+              class="waiting-text"
+              >{{ $t('waitingOn.short') }}</span
+            ></span
+          >
+        </li>
+      </ul>
+      <slot />
     </div>
     <Tab
       v-for="investigator in investigators"
@@ -562,6 +631,41 @@ watch(
 .tabs-row {
   display: flex;
   align-items: flex-end;
+  min-height: 0;
+}
+
+/* In the new tabletop hierarchy the tab strip is a compact investigator rail;
+   the selected player's hand and cards fill the remaining footer width. */
+.tabs-row > .player-info,
+.tabs-row :deep(.player-info) {
+  min-width: 0;
+  min-height: 0;
+}
+
+@media (min-width: 801px) {
+  .tabs-row {
+    align-items: stretch;
+  }
+
+  ul.tabs__header {
+    flex: 0 0 200px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 3px;
+    padding: 6px;
+    overflow-y: auto;
+  }
+
+  ul.tabs__header > li {
+    margin-right: 0;
+    border-radius: 3px;
+    writing-mode: horizontal-tb;
+    white-space: nowrap;
+  }
+
+  ul.tabs__header > li span {
+    padding: 6px 8px;
+  }
 }
 
 ul.tabs__header {
@@ -599,9 +703,15 @@ ul.tabs__header > li {
 ul.tabs__header > li.tab--selected {
   font-weight: bold;
   opacity: 1;
-  background: color-mix(in srgb, var(--surface-table, #626e70) 72%, var(--surface-chrome, #303a3d));
+  background-image:
+    linear-gradient(180deg, rgb(38 55 58 / 0.18), rgb(38 55 58 / 0.62)),
+    url('/assets/veiled-harbour/18-调查员状态卡.avif');
+  background-position: center;
+  background-size: cover;
   border: 1px solid color-mix(in srgb, var(--accent-brass-bright, #d5bb83) 68%, transparent);
-  box-shadow: 0 2px 8px rgb(8 14 15 / 0.28), inset 0 0 0 1px rgb(244 239 228 / 0.1);
+  box-shadow:
+    0 2px 8px rgb(8 14 15 / 0.28),
+    inset 0 0 0 1px rgb(244 239 228 / 0.1);
 }
 
 ul.tabs__header > li.tab--has-actions {
@@ -639,18 +749,17 @@ ul.tabs__header > li.tab--has-actions {
 .tab--active-player {
   &:before {
     font-weight: normal;
-    font-family: "Arkham";
-    content: "\0058" / "Active Player";
+    font-family: 'Arkham';
+    content: '\0058' / 'Active Player';
     margin-left: 5px;
     align-self: center;
   }
 }
 
-
 .tab--lead-player {
   &:after {
     position: absolute;
-    content: "";
+    content: '';
     inset: 0;
     top: -5px;
     margin-inline: auto;
@@ -719,7 +828,9 @@ ul.tabs__header > li.tab--has-actions {
 }
 
 @keyframes waiting-on-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes tab-action-pulse {
@@ -749,8 +860,8 @@ ul.tabs__header > li.tab--has-actions {
 ul.tabs__header > li.inactive {
   filter: grayscale(100%);
   &:before {
-    font-family: "ArkhamIcons";
-    content: "\e912";
+    font-family: 'ArkhamIcons';
+    content: '\e912';
     font-size: 0.8em;
     margin-left: 5px;
   }
@@ -759,5 +870,4 @@ ul.tabs__header > li.inactive {
 .glow-effect {
   box-shadow: inset 0 -10px 20px -10px rgba(0, 255, 0, 0.7); /* Inset shadow for glow effect */
 }
-
 </style>

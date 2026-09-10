@@ -210,7 +210,6 @@ onUnmounted(() => clearInterval(interval.value))
     flex: 1;
     width: 30px;
     height: 30px;
-    border: var(--edge-width) solid var(--edge-dim);
     border-radius: var(--radius-md);
     background: var(--surface-raised);
     color: var(--text);
@@ -241,7 +240,6 @@ onUnmounted(() => clearInterval(interval.value))
   padding: 12px 16px;
   transform: translateX(-50%);
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-4);
   color: var(--text);

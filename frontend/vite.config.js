@@ -25,18 +25,16 @@ const homebrewImages = () => ({
   },
 })
 
-// Dev-only lazy mirror of the CDN image assets. From this network the
-// CloudFront edge misses (~6s per image, no Cache-Control), so every page
+// Lazy mirror of the CDN image assets, active for `vite serve` and `vite
+// preview`. From this network the CloudFront edge misses (~6s per image, no Cache-Control), so every page
 // switch re-waits on dozens of images. The first request for a path is fetched
 // upstream once and cached under node_modules/.cache (never committed); later
 // requests stream from disk. Needs VITE_ASSET_HOST= in .env.development.local
 // so imgsrc() emits local /img/arkham/* URLs. Homebrew paths are left to the
 // homebrewImages plugin above.
 const CDN_ASSET_HOST = 'https://assets.arkhamhorror.app'
-const assetMirror = () => ({
-  name: 'cdn-asset-mirror',
-  apply: 'serve',
-  configureServer(server) {
+const assetMirror = () => {
+  const install = (server) => {
     const cacheDir = path.join(server.config.root, 'node_modules', '.cache', 'arkham-assets')
     const inflight = new Map()
     const types = {
@@ -88,11 +86,12 @@ const assetMirror = () => ({
       }
       if (!fs.existsSync(file)) return next()
       res.setHeader('Content-Type', types[path.extname(file).toLowerCase()] || 'application/octet-stream')
-      res.setHeader('Cache-Control', 'public, max-age=86400')
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable')
       fs.createReadStream(file).pipe(res)
     })
-  },
-})
+  }
+  return { name: 'cdn-asset-mirror', configureServer: install, configurePreviewServer: install }
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({

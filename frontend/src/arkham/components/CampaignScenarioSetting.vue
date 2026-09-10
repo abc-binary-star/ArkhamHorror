@@ -190,7 +190,6 @@ const forceDisabled = (setting: CampaignSetting, option: ChooseKey) => {
 <style scoped>
 .settings-group {
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--edge-dim);
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
@@ -200,7 +199,7 @@ const forceDisabled = (setting: CampaignSetting, option: ChooseKey) => {
       margin: 0;
       text-transform: none;
       color: var(--text-dim) !important;
-      font-family: Arno, 'Noto Serif SC', serif;
+      font-family: Arno, 'Source Han Serif', serif;
     }
   }
 }
@@ -214,7 +213,6 @@ input[type=radio] + label {
   display:inline-block;
   padding: 4px 12px;
   background-color: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-md);
   color: var(--text);
   cursor: pointer;
@@ -246,7 +244,6 @@ input[type=checkbox] + label {
   display:inline-block;
   padding: 4px 12px;
   background-color: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-md);
   color: var(--text);
   cursor: pointer;

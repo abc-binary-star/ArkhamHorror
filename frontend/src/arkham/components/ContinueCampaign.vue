@@ -594,7 +594,6 @@ const setIcon = computed(() => {
   }
   padding: 16px;
   color: var(--text);
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: 8px;
   background: var(--surface-panel);
   box-shadow: var(--shadow-3);
@@ -608,7 +607,7 @@ const setIcon = computed(() => {
 .scenario-info {
   h2 {
     color: var(--title);
-    font-family: Arno, "Noto Serif SC", serif;
+    font-family: Arno, 'Source Han Serif', serif;
     font-size: 1.8em;
   }
 }
@@ -625,7 +624,6 @@ const setIcon = computed(() => {
     gap: 10px;
     justify-content: flex-end;
     button {
-      border: var(--edge-width) solid var(--edge-dim);
       background: var(--button-2);
       color: var(--button-2-text);
       font-size: 1.2em;
@@ -669,7 +667,7 @@ const setIcon = computed(() => {
 .side-story-selection {
   > h2 {
     color: var(--title);
-    font-family: Arno, "Noto Serif SC", serif;
+    font-family: Arno, 'Source Han Serif', serif;
     font-size: 1.5em;
     margin-bottom: 10px;
   }
@@ -677,7 +675,6 @@ const setIcon = computed(() => {
   flex-direction: column;
   gap: 10px;
   .side-story-option {
-    border: var(--edge-width) solid var(--border-panel);
     border-radius: 8px;
     padding: 10px;
     background: var(--surface-panel);
@@ -701,7 +698,6 @@ const setIcon = computed(() => {
 }
 
 button {
-  border: var(--edge-width) solid var(--edge-dim);
   background: var(--button-2);
   color: var(--button-2-text);
   font-size: 1em;
@@ -808,7 +804,6 @@ button {
 #investigators {
   padding: 10px;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   display: flex;
   gap: 10px;
   flex-direction: column;
@@ -827,7 +822,6 @@ button {
   flex-direction: column;
   gap: 8px;
   padding: 10px;
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: 8px;
   background: var(--surface-panel);
 }

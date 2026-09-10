@@ -621,7 +621,7 @@ const needsReply = computed(() => {
 
 <style scoped>
 .container {
-  background: var(--background);
+  background: linear-gradient(rgb(15 31 30 / 0.86), rgb(12 24 24 / 0.94)), url('/assets/veiled-harbour/12-深海航图叠层.avif') center / cover;
   width: 100%;
   max-width: unset;
   height: 100%;
@@ -631,9 +631,10 @@ const needsReply = computed(() => {
 .investigators {
   width: 100%;
   color: #FFF;
-  padding: 10px;
+  padding: 24px;
+  box-sizing: border-box;
   border-radius: 3px;
-  max-width: 800px;
+  max-width: 920px;
   margin-inline: auto;
   margin-top: 20px;
 }
@@ -642,8 +643,8 @@ const needsReply = computed(() => {
   margin: 0 0 12px 0;
   padding: 0;
   text-transform: uppercase;
-  color: var(--title);
-  font-family: Teutonic;
+  color: #ece5d2;
+  font-family: "Source Han Serif", "Arno", serif;
   font-size: 1.8em;
   letter-spacing: 0.04em;
 }
@@ -656,9 +657,8 @@ const needsReply = computed(() => {
 
 .investigator-row {
   padding: 12px;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 10px;
+  background: rgba(17, 35, 33, 0.8);
+  border-radius: 3px;
   display: flex;
   gap: 12px;
   align-items: flex-start;
@@ -732,7 +732,6 @@ const needsReply = computed(() => {
 .deck-requirements-card {
   padding: 10px 12px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 211, 112, 0.18);
   background: rgba(95, 65, 10, 0.24);
 }
 
@@ -798,7 +797,6 @@ const needsReply = computed(() => {
   gap: 3px;
   padding: 3px;
   background: rgba(0,0,0,0.30);
-  border: 1px solid rgba(255,255,255,0.08);
   border-radius: 8px;
 
   button {
@@ -820,7 +818,8 @@ const needsReply = computed(() => {
     }
 
     &.current {
-      background: rgba(110, 134, 64, 0.88);
+      background: #3d594d;
+      box-shadow: inset 0 0 0 1px #a9976a;
       color: white;
       box-shadow: 0 1px 4px rgba(0,0,0,0.35);
     }
@@ -864,7 +863,6 @@ const needsReply = computed(() => {
   gap: 12px;
   padding: 10px 12px;
   background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.06);
   border-left: 3px solid transparent;
   border-radius: 6px;
   cursor: pointer;
@@ -954,7 +952,6 @@ const needsReply = computed(() => {
   width: 34px;
   height: 34px;
   border-radius: 5px;
-  border: 1px solid rgba(255,255,255,0.10);
   color: white;
   cursor: pointer;
   display: flex;
@@ -1049,7 +1046,6 @@ const needsReply = computed(() => {
 
 .weakness-pool-panel {
   margin-top: 10px;
-  border: 1px solid rgba(255,255,255,0.09);
   border-radius: 8px;
   background: rgba(0,0,0,0.16);
   overflow: hidden;
@@ -1119,7 +1115,6 @@ const needsReply = computed(() => {
 }
 
 .weakness-pool-actions button {
-  border: 1px solid rgba(255,255,255,0.10);
   border-radius: 999px;
   background: rgba(255,255,255,0.07);
   color: rgba(255,255,255,0.78);

@@ -729,7 +729,6 @@ watch(deckRef, (el) => {
   min-height: 0;
   margin-bottom: 18px;
   background: rgba(48, 58, 61, 0.035);
-  border: 1px solid var(--box-border);
   border-radius: 12px;
   overflow: hidden;
 
@@ -876,7 +875,6 @@ watch(deckRef, (el) => {
   display: flex;
   gap: 2px;
   background: rgba(48, 58, 61, 0.06);
-  border: 1px solid var(--box-border);
   border-radius: 6px;
   padding: 2px;
   width: fit-content;

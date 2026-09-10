@@ -259,7 +259,7 @@ const earnedDate = (row: Achievement): string | null => {
   min-height: 0;
   width: 100%;
   overflow: auto;
-  background: var(--background-dark) url('/assets/veiled-harbour/29-档案页底图.png') center top /
+  background: var(--background-dark) url('/assets/veiled-harbour/29-档案页底图.avif') center top /
     cover fixed no-repeat;
 }
 
@@ -272,7 +272,6 @@ const earnedDate = (row: Achievement): string | null => {
 }
 
 .clear-btn {
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-sm);
   background: var(--surface-raised);
   color: var(--text-dim);
@@ -307,7 +306,6 @@ const earnedDate = (row: Achievement): string | null => {
   margin-bottom: 20px;
   padding: clamp(24px, 4vw, 52px);
   background: rgba(233, 225, 210, 0.92);
-  border: 1px solid color-mix(in srgb, var(--brass) 70%, var(--edge-dim));
   box-shadow:
     0 16px 42px rgba(25, 31, 30, 0.28),
     inset 0 0 0 5px rgba(244, 239, 228, 0.3);
@@ -362,7 +360,7 @@ const earnedDate = (row: Achievement): string | null => {
   gap: 9px;
   margin: 0 0 7px;
   color: var(--spooky-green);
-  font-family: Arno, 'Noto Serif SC', serif;
+  font-family: Arno, 'Source Han Serif', serif;
   font-size: 0.66rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -395,7 +393,7 @@ const earnedDate = (row: Achievement): string | null => {
 }
 
 h1 {
-  font-family: Arno, 'Noto Serif SC', 'Noto Serif CJK SC', serif;
+  font-family: Arno, 'Source Han Serif', serif;
   font-size: clamp(2rem, 4vw, 3rem);
   margin: 0;
   color: var(--title);
@@ -407,7 +405,6 @@ h1 {
 .campaign-section {
   --accent: #b3922f;
   background: linear-gradient(135deg, rgba(244, 239, 228, 0.9), rgba(232, 225, 210, 0.86));
-  border: 1px solid rgba(129, 123, 112, 0.72);
   border-left: 3px solid var(--brass);
   padding: 16px 18px;
   box-shadow:
@@ -485,7 +482,7 @@ h1 {
 }
 
 h2 {
-  font-family: Arno, 'Noto Serif SC', 'Noto Serif CJK SC', serif;
+  font-family: Arno, 'Source Han Serif', serif;
   font-size: clamp(1.05rem, 2vw, 1.35rem);
   font-weight: 600;
   color: var(--text);
@@ -532,7 +529,6 @@ h2 {
   gap: 10px;
   padding: 10px 12px;
   background: rgba(244, 239, 228, 0.66);
-  border: 1px solid rgba(169, 163, 152, 0.76);
   border-left: 3px solid var(--edge-faint);
   transition:
     background 120ms ease,

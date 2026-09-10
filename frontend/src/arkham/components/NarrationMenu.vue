@@ -261,7 +261,6 @@ onBeforeUnmount(() => {
   padding: 12px;
   color: var(--text);
   background: var(--background-mid);
-  border: 1px solid var(--box-border);
   box-shadow: 0 8px 24px rgb(0 0 0 / 35%);
 }
 
@@ -294,7 +293,6 @@ fieldset label,
   min-height: 34px;
   padding: 5px 8px;
   background: var(--background-dark);
-  border: 1px solid var(--box-border);
 }
 
 .transport svg {
@@ -357,6 +355,5 @@ legend {
   flex: 0 0 auto;
   padding: 4px 8px;
   background: var(--background-dark);
-  border: 1px solid var(--box-border);
 }
 </style>

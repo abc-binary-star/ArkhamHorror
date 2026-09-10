@@ -742,7 +742,6 @@ img.card.ability-target {
   padding: 0 8px;
   color: #c8a96e;
   background: rgba(0, 0, 0, 0.72);
-  border: 1px solid rgba(200, 169, 110, 0.52);
   border-radius: 999px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
   cursor: pointer;
@@ -782,7 +781,6 @@ img.card.ability-target {
   padding: 3px 7px;
   color: #e8e1d2;
   background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 6px;
 }
 

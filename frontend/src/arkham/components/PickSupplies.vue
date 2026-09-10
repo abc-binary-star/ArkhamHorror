@@ -82,7 +82,6 @@ const lowerFirst = (s: string) => s.charAt(0).toLowerCase() + s.slice(1)
 }
 
 button {
-  border: var(--edge-width) solid var(--edge-dim);
   margin: 0 10px;
   padding: 10px;
   text-transform: uppercase;
@@ -102,7 +101,6 @@ button {
 
 .pick-supplies-container {
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--border-panel);
   box-shadow: var(--shadow-3);
   width: calc(100% - 20px);
   margin: 0 auto;
@@ -116,7 +114,6 @@ button {
 
 .pick-supplies {
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--border-panel);
   box-shadow: var(--shadow-3);
   width: calc(100% - 20px);
   margin: 0 auto;
@@ -139,7 +136,6 @@ button {
 .done-button {
   margin: 0;
   width: 100%;
-  border: var(--edge-width) solid var(--edge-dim);
   text-align: center;
   padding: 10px;
   text-transform: uppercase;
@@ -194,7 +190,6 @@ ul li {
   text-align: left;
   padding: 10px;
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-2);
 

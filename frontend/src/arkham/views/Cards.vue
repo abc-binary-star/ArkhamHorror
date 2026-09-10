@@ -16,8 +16,9 @@ import { isDevBuild } from '@/arkham/displayRules'
 import { homebrewCampaigns } from '@/arkham/homebrewData'
 import { imgsrc, isTypingTarget } from '@/arkham/helpers'
 import { cardGroupKey, groupCards } from '@/arkham/cardDetails'
+import { buildSetNameIndex, localizeCardDef, usesLocalizedCardData } from '@/arkham/cardLocalization'
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 
 enum View {
   Image = "IMAGE",
@@ -181,9 +182,14 @@ const setCachedCards = (cards: Arkham.CardDef[]) => {
 const loadError = ref(false)
 
 const fetchData = async () => {
+  // Started before the cache is consulted, so a cache hit still gets its card
+  // names in the selected language. `initDbCards` never rejects: a missing
+  // database only costs the translations, never the page.
+  const cardData = usesLocalizedCardData() ? store.initDbCards() : Promise.resolve(false)
   const cached = getCachedCards()
   if (cached) {
     allCards.value = cached
+    await cardData
     return
   }
 
@@ -191,8 +197,11 @@ const fetchData = async () => {
   // with nothing to click. The official pool is required; homebrew is not --
   // that endpoint 404s against backends that do not serve it.
   try {
-    const officialCards = await fetchCards('both')
-    const homebrewCards = dev ? await fetchHomebrewCards().catch(() => []) : []
+    const [officialCards, homebrewCards] = await Promise.all([
+      fetchCards('both'),
+      dev ? fetchHomebrewCards().catch(() => []) : Promise.resolve([]),
+      cardData,
+    ])
     const sorted = sortCards([...officialCards, ...homebrewCards])
     setCachedCards(sorted)
     allCards.value = sorted
@@ -247,9 +256,9 @@ interface CardSearchIndex {
   set?: CardSet
   setCode?: string
   cycle?: number
-  nameLower: string
+  namesLower: string[]
   codeLower: string
-  typeLower: string
+  typesLower: string[]
   classSymbolsLower: string[]
   traitsLower: string[]
   encounterCode?: string
@@ -315,33 +324,25 @@ watch(() => activeChapter.value, (newChapter) => {
   }
 })
 
-watch(() => allCards.value, () => {
-  const language = localStorage.getItem('language') || 'en'
-  if (language === 'en') return
-  if (!allCards.value) return
+// The ArkhamDB dump arrives after the card pool, so translating inside these
+// computeds -- reading the store is what registers the dependency -- is what
+// makes the page switch to the selected language once it lands.
+const localizedCards = (cards: Arkham.CardDef[]) =>
+  usesLocalizedCardData()
+    ? cards.map((card) => localizeCardDef(card, store.getDbCard(card.art)))
+    : cards
 
-  for (const card of allCards.value) {
-    const match: ArkhamDBCard | null = store.getDbCard(card.art)
-    if (!match) continue
-
-    // Name
-    card.name.title = match.name
-    if (match.subname) card.name.subtitle = match.subname
-
-    // Class
-    if (match.faction_name && card.classSymbols.length > 0) card.classSymbols[0] = match.faction_name
-    if (match.faction2_name && card.classSymbols.length > 1) {
-      card.classSymbols[1] = match.faction2_name
-      if (match.faction3_name && card.classSymbols.length > 2) card.classSymbols[2] = match.faction3_name
-    }
-
-    // Type
-    card.cardType = match.type_name
-
-    // Traits
-    if (match.traits) card.cardTraits = match.traits.split('.').filter(item => item != "" && item != " ")
-  }
+const localizedSetNames = computed(() => {
+  if (!usesLocalizedCardData() || store.dbCards.length === 0) return new Map<string, string>()
+  return buildSetNameIndex(allSets.filter((set) => !set.homebrew), (art) => store.getDbCard(art))
 })
+
+const setName = (set: CardSet) => localizedSetNames.value.get(set.code) ?? set.name
+
+const cycleName = (cycle: CardCycle) => {
+  const key = `cardsView.cycleNames.${cycle.code}`
+  return te(key) ? t(key) : cycle.name
+}
 
 const chapter1Cycles = computed(() => allCycles.filter((c) => !CHAPTER_2_CYCLES.has(c.cycle) && c.cycle !== HOMEBREW_CYCLE))
 const chapter2Cycles = computed(() => allCycles.filter((c) => CHAPTER_2_CYCLES.has(c.cycle)))
@@ -354,6 +355,11 @@ const displayedCycles = computed(() => {
 const cardSearchIndex = computed(() => {
   const index = new Map<string, CardSearchIndex>()
 
+  // Query terms are written in English while the printed fields are in the
+  // selected language, so a card is indexed under both spellings.
+  const searchTerms = (values: string[]) =>
+    Array.from(new Set(values.map((value) => value.toLowerCase().trim()).filter((value) => value !== '')))
+
   for (const card of allCards.value ?? []) {
     const set = findCardSetByArt(card.art)
     const match: ArkhamDBCard | null = store.getDbCard(card.art)
@@ -362,11 +368,11 @@ const cardSearchIndex = computed(() => {
       set,
       setCode: set?.code,
       cycle: set?.cycle,
-      nameLower: cardName(card).toLowerCase(),
+      namesLower: searchTerms([cardName(card), match?.name ?? '']),
       codeLower: card.cardCode.toLowerCase(),
-      typeLower: cardType(card).toLowerCase().trim(),
-      classSymbolsLower: card.classSymbols.map((cs) => cs.toLowerCase()),
-      traitsLower: card.cardTraits.map((trait) => trait.toLowerCase()),
+      typesLower: searchTerms([cardType(card), match?.type_name ?? '']),
+      classSymbolsLower: searchTerms(card.classSymbols),
+      traitsLower: searchTerms([...card.cardTraits, ...(match?.traits?.split('.') ?? [])]),
       encounterCode: match?.encounter_code,
     })
   }
@@ -458,13 +464,13 @@ const filteredCardsIgnoringPool = computed(() => {
     }
 
     if (textLower.length > 0) {
-      const cardNameMatches = textLower.some((term) => meta.nameLower.includes(term))
+      const cardNameMatches = textLower.some((term) => meta.namesLower.some((name) => name.includes(term)))
       const cardCodeMatches = codeText.some((term) => meta.codeLower === term)
       if (!cardNameMatches && !cardCodeMatches) return false
     }
 
     if (level && c.level !== level) return false
-    if (cardTypeSet && !cardTypeSet.has(meta.typeLower)) return false
+    if (cardTypeSet && !meta.typesLower.some((type) => cardTypeSet.has(type))) return false
 
     return true
   })
@@ -479,7 +485,9 @@ const cardPoolAvailable = (mode: CardPoolMode) => {
   return canShowBothCards.value
 }
 
-const cards = computed(() => filteredCardsIgnoringPool.value.filter((c) => cardInPool(c, cardPoolMode.value)))
+const cards = computed(() =>
+  localizedCards(filteredCardsIgnoringPool.value.filter((c) => cardInPool(c, cardPoolMode.value))),
+)
 
 // A stand-in for a card the engine doesn't implement yet: enough of a CardDef
 // for CardImage to show its art, and nothing else.
@@ -765,11 +773,11 @@ const stepCard = (delta: number) => {
         v-if="!sidebarCollapsed"
         class="sidebar-collapse"
         type="button"
-        aria-label="Hide card sets"
-        title="Hide card sets"
+        :aria-label="$t('cardsView.hideSets')"
+        :title="$t('cardsView.hideSets')"
         @click="sidebarCollapsed = true"
       >
-        <span class="collapse-glyph" aria-hidden="true" data-tooltip="Hide card sets">«</span>
+        <span class="collapse-glyph" aria-hidden="true" :data-tooltip="$t('cardsView.hideSets')">«</span>
       </button>
       <div class="sidebar-content">
       <button class="sidebar-close" @click="showSidebar = false"><font-awesome-icon icon="times" /></button>
@@ -783,7 +791,7 @@ const stepCard = (delta: number) => {
         <input type="radio" :checked="cardPoolMode === 'both'" :disabled="!cardPoolAvailable('both')" id="card-pool-both-mobile" @change="setCardPoolMode('both')" />
         <label for="card-pool-both-mobile">{{ $t('cardsView.bothCards') }}</label>
       </div>
-      <div :class="['chapter-tabs segmented', dev ? 'segmented-3' : 'segmented-2']" role="radiogroup" aria-label="Card chapter">
+      <div :class="['chapter-tabs segmented', dev ? 'segmented-3' : 'segmented-2']" role="radiogroup" :aria-label="$t('cardsView.cardChapter')">
         <input type="radio" :checked="activeChapter === 1" id="chapter-1" @change="activeChapter = 1" />
         <label for="chapter-1">{{ t('cardsView.chapter1') }}</label>
         <input type="radio" :checked="activeChapter === 2" id="chapter-2" @change="activeChapter = 2" />
@@ -801,9 +809,9 @@ const stepCard = (delta: number) => {
                 class="set-icon set-icon--homebrew"
                 :style="{ '--set-icon-url': `url(${setIconSrc(set)})` }"
                 role="img"
-                :aria-label="set.name"
+                :aria-label="setName(set)"
               ></span>
-              <a href="#" @click.prevent="setSet(set)">{{set.name}}</a>
+              <a href="#" @click.prevent="setSet(set)">{{setName(set)}}</a>
               <span class="count">{{setCountText(set)}}</span>
             </div>
           </li>
@@ -817,9 +825,9 @@ const stepCard = (delta: number) => {
                 class="set-icon"
                 :style="{ '--set-icon-url': `url(${cycleIconSrc(cycle)})` }"
                 role="img"
-                :aria-label="cycle.name"
+                :aria-label="cycleName(cycle)"
               ></span>
-              <a href="#" @click.prevent="setCycle(cycle)">{{cycle.name}}</a>
+              <a href="#" @click.prevent="setCycle(cycle)">{{cycleName(cycle)}}</a>
               <span class="count">{{cycleCountText(cycle)}}</span>
             </div>
             <ol class="set-list">
@@ -831,9 +839,9 @@ const stepCard = (delta: number) => {
                     class="set-icon"
                     :style="{ '--set-icon-url': `url(${setIconSrc(set)})` }"
                     role="img"
-                    :aria-label="set.name"
+                    :aria-label="setName(set)"
                   ></span>
-                  <a href="#" @click.prevent="setSet(set)">{{set.name}}</a>
+                  <a href="#" @click.prevent="setSet(set)">{{setName(set)}}</a>
                   <span class="count">{{setCountText(set)}}</span>
                 </div>
               </li>
@@ -849,7 +857,7 @@ const stepCard = (delta: number) => {
           v-if="sidebarCollapsed"
           class="desktop-sidebar-toggle"
           @click="sidebarCollapsed = false"
-          title="Show card sets"
+          :title="$t('cardsView.showSets')"
         >
           <font-awesome-icon class="toggle-arrow" icon="chevron-right" />
           <font-awesome-icon icon="book" />
@@ -1340,7 +1348,6 @@ header {
   display: flex;
   gap: 3px;
   background: rgba(48, 58, 61, 0.06);
-  border: 1px solid var(--box-border);
   border-radius: 8px;
   padding: 3px;
 

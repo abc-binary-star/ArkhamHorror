@@ -30,7 +30,7 @@ async function logout() {
 </script>
 
 <template>
-  <header id="nav">
+  <header id="nav" @keydown.esc="mobileOpen = false; expanded = false">
     <button
       v-if="currentUser"
       type="button"
@@ -109,7 +109,7 @@ async function logout() {
       >
     </nav>
 
-    <OnClickOutside @trigger="expanded = false">
+    <OnClickOutside class="account-menu" @trigger="expanded = false">
       <div class="user-links">
         <template v-if="currentUser">
           <button
@@ -128,12 +128,12 @@ async function logout() {
           </button>
           <div v-if="expanded" class="user-dropdown">
             <router-link @click="expanded = false" to="/settings">{{ $t('settings') }}</router-link>
-            <a href="#" @click="logout">Logout</a>
+            <a href="#" @click="logout">{{ $t('logOut') }}</a>
           </div>
         </template>
         <template v-else>
-          <router-link to="/sign-in">Login</router-link>
-          <router-link to="/sign-up">Register</router-link>
+          <router-link to="/sign-in">{{ $t('logIn') }}</router-link>
+          <router-link to="/sign-up">{{ $t('register') }}</router-link>
         </template>
       </div>
     </OnClickOutside>
@@ -177,7 +177,7 @@ async function logout() {
   background-color: var(--background-dark);
   background-image:
     linear-gradient(180deg, rgba(244, 239, 228, 0.08), transparent 26%, rgba(12, 22, 22, 0.18)),
-    url('/assets/veiled-harbour/39-顶部导航漆面底板-v1.png');
+    url('/assets/veiled-harbour/39-顶部导航漆面底板-v1.avif');
   background-position: center;
   background-size: cover;
   border-bottom: 1px solid var(--brass, #9b7d45);
@@ -237,7 +237,7 @@ async function logout() {
     width: 18px;
     height: 18px;
     transform: translateY(-50%);
-    background: url('/assets/veiled-harbour/40-导航黄铜索引压印-v1.png') center / contain no-repeat;
+    background: url('/assets/veiled-harbour/40-导航黄铜索引压印-v1.avif') center / contain no-repeat;
     opacity: 0.42;
     pointer-events: none;
   }
@@ -371,14 +371,15 @@ async function logout() {
   }
 
   .home-plaque {
-    position: absolute;
-    left: 50%;
+    position: relative;
+    flex: 1;
     min-width: 0;
     padding: 0;
-    transform: translateX(-50%);
+    justify-content: center;
+    transform: none;
   }
   .home-plaque:hover {
-    transform: translate(-50%, -1px);
+    transform: translateY(-1px);
   }
   .home-plaque::after {
     display: none;
@@ -409,7 +410,6 @@ async function logout() {
   height: 40px;
   padding: 0;
   background: rgba(244, 239, 228, 0.04);
-  border: 1px solid rgba(200, 173, 120, 0.5);
   border-radius: 3px;
   box-shadow: 0 2px 4px rgba(18, 25, 25, 0.22);
   color: var(--text-dim-on-dark, #c7cfcc);
@@ -440,7 +440,6 @@ async function logout() {
   padding: 8px;
   background: var(--surface-panel, #e8e1d2) url('/assets/veiled-harbour/03-档案纸纹理.svg') center /
     320px 320px;
-  border: 1px solid var(--border-panel, #817b70);
   border-top: 2px solid var(--brass, #9b7d45);
   border-radius: 4px;
   box-shadow: 0 12px 28px rgba(18, 25, 25, 0.34);
@@ -493,6 +492,8 @@ async function logout() {
     }
   }
 }
+
+.account-menu { margin-left: auto; min-width: 0; }
 
 /* ── User section ──────────────────────────────────────────────────────── */
 
@@ -553,7 +554,6 @@ async function logout() {
   max-width: 180px;
   padding: 0 11px;
   background: rgba(244, 239, 228, 0.04);
-  border: 1px solid rgba(200, 173, 120, 0.46);
   border-radius: 3px;
   box-shadow: 0 2px 4px rgba(18, 25, 25, 0.2);
   color: var(--text-on-dark, #f4efe4);
@@ -602,7 +602,6 @@ async function logout() {
   padding: 5px;
   background: var(--surface-panel, #e8e1d2) url('/assets/veiled-harbour/03-档案纸纹理.svg') center /
     320px 320px;
-  border: 1px solid var(--border-panel, #817b70);
   border-top: 2px solid var(--brass, #9b7d45);
   border-radius: 4px;
   box-shadow: 0 12px 28px rgba(18, 25, 25, 0.34);
@@ -642,5 +641,16 @@ async function logout() {
       color: var(--status-danger-text, #873d39);
     }
   }
+}
+.user-btn > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+@media (max-width: 768px) {
+  .user-btn { max-width: 100px; }
+  .brand-mark { width: 26px; height: 26px; flex-basis: 26px; }
+  .home-plaque { gap: 5px; }
 }
 </style>

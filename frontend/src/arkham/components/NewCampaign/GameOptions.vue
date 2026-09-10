@@ -517,7 +517,7 @@ function setOptEnabled(o: RecommendedToggle, enabled: boolean) {
 
       <div v-if="canStandalone" class="card">
         <div class="card-title">{{ $t('create.campaignType') }}</div>
-        <div class="segmented segmented-3">
+        <div class="segmented" :class="campaign?.settings ? 'segmented-3' : 'segmented-2'">
           <input type="radio" v-model="fullCampaign" :value="'FullCampaign'" id="full" />
           <label for="full">{{ $t('create.fullCampaign') }}</label>
 
@@ -785,20 +785,20 @@ function setOptEnabled(o: RecommendedToggle, enabled: boolean) {
 .selection-img {
   inset: 0;
   width: 100%;
-  border-radius: 14px;
+  border-radius: 3px;
   display: block;
   object-fit: cover;
   object-position: 50% 50%;
   filter: contrast(1.05);
-  outline: 1px solid rgba(154 196 78 / 0.55);
+  outline: 1px solid #9e8a60;
   pointer-events: none;
 }
 
 /* Cards */
 .card {
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  background: rgba(12, 27, 27, 0.68);
+  border: 1px solid rgba(188, 166, 119, 0.2);
   padding: 12px;
   box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
 }
@@ -873,7 +873,6 @@ function setOptEnabled(o: RecommendedToggle, enabled: boolean) {
 .text {
   width: 100%;
   outline: 0;
-  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 10px;
   padding: 10px 12px;
   background: rgba(0, 0, 0, 0.22);
@@ -886,12 +885,22 @@ function setOptEnabled(o: RecommendedToggle, enabled: boolean) {
 
 /* Segmented controls */
 input[type='radio'] {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+}
+input[type='radio']:focus-visible + label {
+  outline: 2px solid #c5b17c;
+  outline-offset: -3px;
 }
 
 .segmented {
   display: grid;
-  border-radius: 12px;
+  border-radius: 3px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.12);
@@ -903,6 +912,14 @@ input[type='radio'] {
 .segmented-5 { grid-template-columns: repeat(5, 1fr); }
 
 .segmented label {
+  color: #ded9c9;
+  min-width: 0;
+  min-height: 44px;
+  box-sizing: border-box;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -933,8 +950,9 @@ input[type='radio'] {
 }
 
 input[type='radio']:checked + label {
-  background: rgba(110, 134, 64, 0.95);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.10);
+  color: #fff5dc;
+  background: #3d594d;
+  box-shadow: inset 0 0 0 1px #a9976a;
 }
 
 /* Scenario picker */
@@ -954,7 +972,7 @@ input[type='radio']:checked + label {
   border: 0;
   padding: 0;
   background: transparent;
-  border-radius: 12px;
+  border-radius: 3px;
   overflow: hidden;
   cursor: pointer;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
@@ -964,7 +982,7 @@ input[type='radio']:checked + label {
 .scenario-tile img {
   width: 100%;
   display: block;
-  filter: grayscale(100%);
+  filter: saturate(0.78);
   transition: filter 220ms ease, transform 220ms ease;
 }
 
@@ -1000,8 +1018,7 @@ input[type='radio']:checked + label {
 .callout {
   margin-top: 10px;
   padding: 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 3px;
   background: rgba(0,0,0,0.18);
   box-shadow: 0 10px 22px rgba(0,0,0,0.22);
 }
@@ -1097,11 +1114,10 @@ input[type='radio']:checked + label {
 .alpha-warning {
   margin-top: 12px;
   padding: 12px;
-  border-radius: 12px;
+  border-radius: 3px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 13px;
-  border: 1px solid rgba(255,255,255,0.08);
   box-shadow: 0 10px 22px rgba(0,0,0,0.22);
 }
 
@@ -1228,7 +1244,6 @@ input[type='radio']:checked + label {
   gap: 4px;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.12);
   color: inherit;
   cursor: pointer;
@@ -1269,7 +1284,6 @@ input[type='radio']:checked + label {
 .as-if-at-option {
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.12);
   cursor: pointer;
   transition: background 150ms ease, border-color 150ms ease;
@@ -1320,7 +1334,6 @@ input[type='radio']:checked + label {
   text-transform: uppercase;
   padding: 2px 8px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
   background: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.6);
 }
@@ -1371,7 +1384,6 @@ input[type='radio']:checked + label {
   gap: 10px;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.12);
   cursor: pointer;
   transition: background 150ms ease, border-color 150ms ease;

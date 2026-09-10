@@ -134,7 +134,7 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
 <template>
   <div class="chapter-select" :style="{ '--item-count': chapterGroups.length }">
     <template v-for="group in chapterGroups" :key="group.id">
-      <input :id="`chapter-${group.id}`" v-model="campaignGroup" type="radio" :value="group.id" />
+      <input :id="`chapter-${group.id}`" v-model="campaignGroup" type="radio" name="campaign-chapter" :value="group.id" />
       <label :for="`chapter-${group.id}`">{{ $t(group.label) }}</label>
     </template>
   </div>
@@ -142,6 +142,7 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
   <div class="mode-toggle segmented segmented-2">
     <input
       id="campaign"
+      name="game-mode"
       type="radio"
       :checked="gameMode === 'Campaign'"
       :disabled="!hasCampaigns"
@@ -151,6 +152,7 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
 
     <input
       id="sideStory"
+      name="game-mode"
       type="radio"
       :checked="gameMode === 'SideStory'"
       :disabled="!hasSideStories"
@@ -165,7 +167,7 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
     :style="{ '--item-count': scenarioGroups.length }"
   >
     <template v-for="group in scenarioGroups" :key="group.id">
-      <input :id="`scenario-${group.id}`" v-model="scenarioGroup" type="radio" :value="group.id" />
+      <input :id="`scenario-${group.id}`" v-model="scenarioGroup" type="radio" name="scenario-group" :value="group.id" />
       <label :for="`scenario-${group.id}`">{{ $t(group.label) }}</label>
     </template>
   </div>
@@ -182,11 +184,13 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
           :style="selectedScenario == s.id ? { 'view-transition-name': 'selected-game-box' } : {}"
           :class="{ beta: s.beta, alpha: s.alpha }"
         >
-          <img
+          <input
+            type="image"
+            :alt="s.name"
             class="scenario-box"
             :class="{ 'selected-scenario': selectedScenario == s.id }"
             :src="imgsrc(`boxes/${s.id}.jpg`)"
-            @click="selectedScenario = s.id; emits('go')"
+            @click.prevent="selectedScenario = s.id; emits('go')"
           />
         </div>
         <span v-if="s.requiredInvestigator" class="requires-investigator">
@@ -214,6 +218,7 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
             <input
               v-if="!c.homebrew || !missingBoxArt[c.id]"
               type="image"
+              :alt="c.name"
               class="campaign-box"
               :class="{ 'selected-campaign': selectedCampaign == c.id }"
               :src="campaignBoxSrc(c)"
@@ -241,7 +246,17 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
 
 <style lang="css" scoped>
 input[type='radio'] {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  clip-path: inset(50%);
+  overflow: hidden;
+}
+input[type='radio']:focus-visible + label {
+  outline: 2px solid #c5b17c;
+  outline-offset: -3px;
 }
 
 .segmented {
@@ -317,9 +332,11 @@ input[type='radio'] {
   justify-content: center;
   padding: 8px 10px;
   border-bottom: 2px solid transparent;
-  color: var(--text-dim);
+  color: #c9c6b6;
   cursor: pointer;
-  font-size: 11px;
+  min-height: 44px;
+  box-sizing: border-box;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -328,8 +345,8 @@ input[type='radio'] {
 
 .chapter-select label:hover,
 .chapter-select input[type='radio']:checked + label {
-  border-bottom-color: var(--button-1);
-  color: var(--text);
+  border-bottom-color: #b8a273;
+  color: #f2ebda;
 }
 
 .scenario-select {
@@ -339,7 +356,6 @@ input[type='radio'] {
   width: min(100%, 560px);
   margin: 14px auto 4px;
   padding: 4px;
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-lg);
   background: var(--surface-raised);
   box-shadow: var(--shadow-1);
@@ -393,7 +409,9 @@ input[type='radio'] {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 6px 8px;
+  padding: 10px 8px;
+  min-height: 44px;
+  box-sizing: border-box;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   font-size: 11px;
@@ -417,8 +435,8 @@ input[type='radio'] {
   cursor: not-allowed;
 }
 
-input[type='radio']:checked + label {
-  color: var(--text);
+.segmented input[type='radio']:checked + label {
+  color: #f4efdf;
 }
 
 .segmented:hover::before {
@@ -434,17 +452,15 @@ input[type='radio']:checked + label {
 }
 
 .campaigns {
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
 }
 
 .scenarios {
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
 }
 
-@media (max-width: 1500px) {
-  .campaigns, .scenarios {
-    grid-template-columns: repeat(3, 1fr);
-  }
+@media (max-width: 600px) {
+  .campaigns, .scenarios { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 .campaign,
@@ -464,7 +480,8 @@ input[type='radio']:checked + label {
 
 .vt-box {
   display: block;
-  border-radius: 14px;
+  border-radius: 3px;
+  padding: 5px;
   position: relative;
   overflow: hidden;
   background: rgba(0,0,0,0.18);
@@ -473,6 +490,7 @@ input[type='radio']:checked + label {
   transition: transform 160ms ease, box-shadow 160ms ease, outline-color 160ms ease;
 }
 
+.vt-box:focus-within,
 .vt-box:hover {
   transform: translateY(-2px);
   box-shadow: 0 16px 34px rgba(0,0,0,0.45);
@@ -483,11 +501,18 @@ input[type='radio']:checked + label {
 .scenario-box {
   width: 100%;
   display: block;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 1px;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
 }
 
 .campaign-box:not(.selected-campaign),
 .scenario-box:not(.selected-scenario) {
-  filter: grayscale(100%) contrast(1.05) brightness(0.95);
+  filter: saturate(0.78) brightness(0.94);
   transition: filter 220ms ease;
 }
 
@@ -502,11 +527,11 @@ input[type='radio']:checked + label {
 }
 
 .vt-box[style*="view-transition-name"] {
-  outline-color: rgba(154, 196, 78, 0.55);
+  outline-color: rgba(190, 163, 106, 0.55);
   box-shadow:
     0 18px 40px rgba(0,0,0,0.55),
-    0 0 0 1px rgba(154, 196, 78, 0.25),
-    0 0 24px rgba(154, 196, 78, 0.18);
+    0 0 0 1px rgba(190, 163, 106, 0.25),
+    0 0 24px rgba(190, 163, 106, 0.18);
 }
 
 .vt-box.beta:after,
@@ -548,7 +573,6 @@ input[type='radio']:checked + label {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 13px;
-  border: 1px solid rgba(255,255,255,0.08);
   box-shadow: 0 10px 22px rgba(0,0,0,0.22);
 }
 

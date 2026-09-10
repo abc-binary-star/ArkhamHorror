@@ -191,7 +191,6 @@ onUnmounted(() => {
   position: fixed;
   padding: min(3px, 1vw);
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-float);
   display: flex;
@@ -241,7 +240,6 @@ onUnmounted(() => {
 .abilities.anchored.right { position-area: right span-bottom; margin-left: 8px; }
 
 .play-card-button {
-  border: var(--edge-width) solid var(--edge-dim);
   color: var(--text);
   cursor: pointer;
   border-radius: 4px;

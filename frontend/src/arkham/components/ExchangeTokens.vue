@@ -154,7 +154,6 @@ async function adjustAmount(delta: number) {
     font-size: 1.1em;
     background: var(--surface-raised);
     color: var(--text);
-    border: var(--edge-width) solid var(--edge-dim);
     padding: 2px 10px;
     cursor: pointer;
     &:first-of-type {
@@ -182,7 +181,6 @@ async function adjustAmount(delta: number) {
     font-weight: bold;
     background-color: var(--button-2);
     color: var(--button-2-text);
-    border: var(--edge-width) solid var(--edge-dim);
     border-radius: 0.6em;
     border-top-left-radius: 0;
     border-top-right-radius: 0;

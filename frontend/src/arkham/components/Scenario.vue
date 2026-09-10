@@ -9,8 +9,6 @@ import {
   LockClosedIcon,
   LockOpenIcon,
   ArrowUturnLeftIcon,
-  ArrowsPointingOutIcon,
-  ArrowsPointingInIcon,
 } from '@heroicons/vue/20/solid'
 import {
   watchEffect,
@@ -66,7 +64,6 @@ import Connections from '@/arkham/components/Connections.vue'
 import RainOverlay from '@/arkham/components/RainOverlay.vue'
 import { useScenarioRain } from '@/arkham/composables/useScenarioRain'
 import { useAtlachNachaLegs } from '@/arkham/composables/useAtlachNachaLegs'
-import { useHoldRepeat } from '@/arkham/composables/useHoldRepeat'
 import PoolItem from '@/arkham/components/PoolItem.vue'
 import { chaosTokenImage } from '@/arkham/types/ChaosToken'
 import { homebrewTotalsTokens } from '@/arkham/homebrewData'
@@ -132,7 +129,6 @@ const { rainEnabled, rainAvailable, showRain, rainOptions } = useScenarioRain(
 )
 
 useAtlachNachaLegs(() => props.scenario.id)
-const { startHold, stopHold } = useHoldRepeat()
 
 const { splitView } = storeToRefs(settingsStore)
 const { toggleSplitView, setGameId } = settingsStore
@@ -262,13 +258,10 @@ function zoomStep(value: number): number {
   return Math.max(min, max * Math.exp(-Math.pow(value - center, 2) / (2 * sigma * sigma)))
 }
 
-function increaseZoom() {
-  locationsZoom.value = parseFloat((locationsZoom.value + zoomStep(locationsZoom.value)).toFixed(3))
-}
-
-function decreaseZoom() {
+function onMapWheel(event: WheelEvent) {
+  const delta = event.deltaY < 0 ? zoomStep(locationsZoom.value) : -zoomStep(locationsZoom.value)
   locationsZoom.value = parseFloat(
-    Math.max(0.01, locationsZoom.value - zoomStep(locationsZoom.value)).toFixed(3),
+    Math.min(6, Math.max(0.25, locationsZoom.value + delta)).toFixed(3),
   )
 }
 
@@ -1338,6 +1331,8 @@ const scenarioDeckStyles = computed(() => {
 })
 const players = computed(() => props.game.investigators)
 const playerOrder = computed(() => props.game.playerOrder)
+const seatsTiled = computed(() => playerOrder.value.length > 1)
+const seatsGrid = computed(() => playerOrder.value.length > 2)
 const discards = computed<Card[]>(() =>
   props.scenario.discard.map((c) => ({ tag: 'EncounterCard', contents: c })),
 )
@@ -2180,6 +2175,8 @@ async function addChaosToken(face: any) {
       :class="{
         'split-view': splitView,
         'scenario-body--notifier-overlays': showScenarioNotifierBar,
+        'seats-multi': seatsTiled,
+        'seats-grid': seatsGrid,
       }"
     >
       <Draggable v-if="showOutOfPlay || forcedShowOutOfPlay">
@@ -2893,41 +2890,10 @@ async function addChaosToken(face: any) {
           }"
           @dblclick.passive="toggleZoom"
         >
-          <!-- ponytail: in-board mirror of the player-zone zoom-control; duplicated markup
-             beats prop-drilling ~10 handlers into a shared child. Keep the two in sync.
-             Used for fullscreen (floating, top right) and for split view, where the
-             player zone is too narrow for it and it docks to the bottom of the board
-             instead. The player-zone copy hides itself in split view. -->
-          <div
-            v-if="locationsFullscreen || splitView"
-            class="zoom-control"
-            :class="locationsFullscreen ? 'zoom-control--fullscreen' : 'zoom-control--docked'"
-            @dblclick.stop
-          >
-            <button
-              class="zoom-btn"
-              @pointerdown.stop="startHold(decreaseZoom)"
-              @pointerup="stopHold"
-              @pointerleave="stopHold"
-            >
-              −
-            </button>
-            <input
-              v-model.number="locationsZoom"
-              type="range"
-              min="0.25"
-              max="6"
-              step="0.05"
-              class="zoom-slider"
-            />
-            <button
-              class="zoom-btn"
-              @pointerdown.stop="startHold(increaseZoom)"
-              @pointerup="stopHold"
-              @pointerleave="stopHold"
-            >
-              +
-            </button>
+          <!-- Map controls pinned to the top-right corner: lock/unlock dragging,
+             plus layout reset once anything has been dragged. Zoom lives on the
+             mouse wheel; fullscreen lives in the game bar. -->
+          <div class="map-corner-controls">
             <button
               class="zoom-btn"
               :class="{ 'zoom-btn--active': locationsUnlocked }"
@@ -2945,23 +2911,11 @@ async function addChaosToken(face: any) {
             >
               <ArrowUturnLeftIcon class="zoom-btn__icon" />
             </button>
-            <button
-              class="zoom-btn"
-              :class="{ 'zoom-btn--active': locationsFullscreen }"
-              @click.stop="locationsFullscreen = !locationsFullscreen"
-              v-tooltip="
-                locationsFullscreen
-                  ? 'Exit fullscreen locations (Esc)'
-                  : 'Expand locations to full screen'
-              "
-            >
-              <ArrowsPointingInIcon v-if="locationsFullscreen" class="zoom-btn__icon" />
-              <ArrowsPointingOutIcon v-else class="zoom-btn__icon" />
-            </button>
           </div>
           <div
             class="location-cards-scroller"
             ref="scrollerRef"
+            @wheel.prevent="onMapWheel"
             @pointerdown="onStagePointerDown"
             @pointermove="onStagePointerMove"
             @pointerup="onStagePointerUp"
@@ -3147,79 +3101,23 @@ async function addChaosToken(face: any) {
           :tarotCards="props.scenario.tarotCards"
           @choose="choose"
         >
-          <div v-if="!splitView" class="zoom-control">
-            <button
-              class="zoom-btn"
-              @pointerdown.stop="startHold(decreaseZoom)"
-              @pointerup="stopHold"
-              @pointerleave="stopHold"
-            >
-              −
-            </button>
-            <input
-              v-model.number="locationsZoom"
-              type="range"
-              min="0.25"
-              max="6"
-              step="0.05"
-              class="zoom-slider"
+          <div id="totals">
+            <PoolItem type="doom" :amount="game.totalDoom" tooltip="Total Doom" />
+            <PoolItem type="clue" :amount="game.totalClues" tooltip="Total Spendable Clues" />
+            <PoolItem v-if="blessTokens > 0" type="chaos-tokens/ct-bless" :amount="blessTokens" />
+            <PoolItem v-if="curseTokens > 0" type="chaos-tokens/ct-curse" :amount="curseTokens" />
+            <PoolItem v-if="frostTokens > 0" type="chaos-tokens/ct-frost" :amount="frostTokens" />
+            <PoolItem v-if="bloodTokens > 0" type="chaos-tokens/ct-blood" :amount="bloodTokens" />
+            <PoolItem
+              v-for="t in homebrewTotals"
+              :key="t.face"
+              type="custom-token"
+              :image="t.image"
+              :amount="t.count"
+              :tooltip="t.tooltip"
             />
-            <button
-              class="zoom-btn"
-              @pointerdown.stop="startHold(increaseZoom)"
-              @pointerup="stopHold"
-              @pointerleave="stopHold"
-            >
-              +
-            </button>
-            <button
-              class="zoom-btn"
-              :class="{ 'zoom-btn--active': locationsUnlocked }"
-              @click.stop="toggleLocationsUnlocked"
-              v-tooltip="locationsUnlocked ? 'Lock locations' : 'Unlock locations to drag'"
-            >
-              <LockOpenIcon v-if="locationsUnlocked" class="zoom-btn__icon" />
-              <LockClosedIcon v-else class="zoom-btn__icon" />
-            </button>
-            <button
-              v-if="hasAnyOffset"
-              class="zoom-btn"
-              @click.stop="resetLocationsLayout"
-              v-tooltip="'Reset location positions'"
-            >
-              <ArrowUturnLeftIcon class="zoom-btn__icon" />
-            </button>
-            <button
-              class="zoom-btn"
-              :class="{ 'zoom-btn--active': locationsFullscreen }"
-              @click.stop="locationsFullscreen = !locationsFullscreen"
-              v-tooltip="
-                locationsFullscreen
-                  ? 'Exit fullscreen locations (Esc)'
-                  : 'Expand locations to full screen'
-              "
-            >
-              <ArrowsPointingInIcon v-if="locationsFullscreen" class="zoom-btn__icon" />
-              <ArrowsPointingOutIcon v-else class="zoom-btn__icon" />
-            </button>
           </div>
         </PlayerTabs>
-        <div id="totals">
-          <PoolItem type="doom" :amount="game.totalDoom" tooltip="Total Doom" />
-          <PoolItem type="clue" :amount="game.totalClues" tooltip="Total Spendable Clues" />
-          <PoolItem v-if="blessTokens > 0" type="chaos-tokens/ct-bless" :amount="blessTokens" />
-          <PoolItem v-if="curseTokens > 0" type="chaos-tokens/ct-curse" :amount="curseTokens" />
-          <PoolItem v-if="frostTokens > 0" type="chaos-tokens/ct-frost" :amount="frostTokens" />
-          <PoolItem v-if="bloodTokens > 0" type="chaos-tokens/ct-blood" :amount="bloodTokens" />
-          <PoolItem
-            v-for="t in homebrewTotals"
-            :key="t.face"
-            type="custom-token"
-            :image="t.image"
-            :amount="t.count"
-            :tooltip="t.tooltip"
-          />
-        </div>
       </div>
     </div>
     <div class="phases">
@@ -3454,7 +3352,7 @@ async function addChaosToken(face: any) {
   z-index: var(--z-index-neg-2);
   background:
     linear-gradient(180deg, rgb(16 31 32 / 0.94), rgb(24 44 43 / 0.88)),
-    url('/assets/veiled-harbour/T01-调查地图底场.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/T01-调查地图底场.avif') center / cover no-repeat;
   border-bottom: 1px solid rgb(205 175 107 / 0.42);
   box-shadow: 0 4px 14px rgb(5 12 13 / 0.3);
 
@@ -3681,7 +3579,7 @@ async function addChaosToken(face: any) {
     radial-gradient(ellipse at 50% 46%, rgb(229 194 107 / 0.07), transparent 46%),
     radial-gradient(ellipse at 50% 50%, transparent 44%, rgb(4 14 15 / 0.32) 100%),
     linear-gradient(180deg, rgb(14 36 34 / 0.04), rgb(9 28 28 / 0.1)),
-    url('/assets/veiled-harbour/T04-地点地图底板-v2.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/T04-地点地图底板-v2.avif') center / cover no-repeat;
   border-bottom: 1px solid rgb(205 175 107 / 0.22);
 
   &::before {
@@ -3711,57 +3609,11 @@ async function addChaosToken(face: any) {
     radial-gradient(ellipse at 50% 46%, rgb(229 194 107 / 0.07), transparent 46%),
     radial-gradient(ellipse at 50% 50%, transparent 44%, rgb(4 14 15 / 0.32) 100%),
     linear-gradient(180deg, rgb(14 36 34 / 0.04), rgb(9 28 28 / 0.1)),
-    url('/assets/veiled-harbour/T04-地点地图底板-v2.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/T04-地点地图底板-v2.avif') center / cover no-repeat;
 }
 
-/* Split view: docked to the bottom of the locations board. Positioned against
-   .location-cards-container, which is the relative ancestor whether or not the
-   rain overlay is wrapping it. Deliberately does NOT force display, so the
-   coarse-pointer rule on .zoom-control still hides it on touch exactly as the
-   player-zone copy does today. */
-.zoom-control--docked {
-  position: absolute;
-  left: 50%;
-  bottom: 8px;
-  transform: translateX(-50%);
-  z-index: var(--z-index-10, 10);
-}
-
-.zoom-control--fullscreen {
-  position: absolute;
-  top: 45px;
-  right: 10px;
-  z-index: var(--z-index-10, 10);
-  display: flex !important;
-}
-
-/* The zoom control floats on the dark map, so it wears the table's lacquer
-   instead of the light archive panel. */
-.zoom-control--docked,
-.zoom-control--fullscreen {
-  padding: 4px 6px;
-  border-radius: 4px;
-  background:
-    linear-gradient(180deg, rgb(26 42 41 / 0.94), rgb(9 18 18 / 0.96)),
-    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg') center / cover no-repeat;
-  border: 1px solid rgb(205 175 107 / 0.42);
-  box-shadow: 0 4px 12px rgb(4 12 12 / 0.35);
-
-  button {
-    min-height: 28px;
-    padding: 2px 9px;
-    background-color: rgb(24 39 38);
-    background-image: none;
-    border-color: rgb(205 175 107 / 0.35);
-    color: var(--text-on-dark);
-    box-shadow: none;
-  }
-
-  button:hover:not(:disabled) {
-    background-color: rgb(38 58 56);
-    border-color: rgb(229 194 107 / 0.7);
-  }
-}
+/* Split view and the old locations-fullscreen docked control bars are gone:
+   the map's only controls are the corner cluster above and the wheel zoom. */
 
 /* Keep the player zone (hand + in-play assets) usable while the board is a
    fixed fullscreen overlay: pin it to the viewport bottom above the overlay. */
@@ -3774,7 +3626,7 @@ async function addChaosToken(face: any) {
   background:
     radial-gradient(ellipse at 50% 42%, rgba(205, 175, 107, 0.08), transparent 48%),
     linear-gradient(180deg, rgba(20, 33, 34, 0.42), rgba(12, 20, 21, 0.35)),
-    var(--deep-sea, #26373a) url('/assets/veiled-harbour/02-牌桌材质.png') center / cover no-repeat;
+    var(--deep-sea, #26373a) url('/assets/veiled-harbour/02-牌桌材质.avif') center / cover no-repeat;
   border-top: 1px solid rgba(208, 180, 123, 0.35);
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.5);
 }
@@ -4054,13 +3906,6 @@ async function addChaosToken(face: any) {
     flex-direction: row;
     overflow-x: auto;
     overflow-y: hidden;
-  }
-
-  .scenario-body > #player-zone #totals {
-    order: -1;
-    flex-direction: row;
-    margin: 8px;
-    overflow-x: auto;
   }
 
   .scenario > .phases {
@@ -4747,25 +4592,6 @@ async function addChaosToken(face: any) {
   }
 }
 
-.zoom-control {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 2px 8px;
-  flex-shrink: 0;
-  align-self: center;
-
-  @media (pointer: coarse) {
-    display: none;
-  }
-}
-
-@media not screen {
-  .zoom-control {
-    display: none;
-  }
-}
-
 .zoom-btn {
   background: none;
   border: none;
@@ -4804,6 +4630,18 @@ async function addChaosToken(face: any) {
 .zoom-btn__icon {
   width: 14px;
   height: 14px;
+}
+
+/* Lock + reset float on the map's top-right corner: bare ghost icons, no
+   frame, matching the game-bar control language. */
+.map-corner-controls {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  z-index: var(--z-index-30, 30);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .location-cell {
@@ -4914,8 +4752,8 @@ async function addChaosToken(face: any) {
   .scenario > .phases {
     position: absolute;
     top: 0;
-    left: 300px;
-    right: 280px;
+    left: 0;
+    right: 0;
     z-index: var(--z-index-40, 40);
     display: flex;
     width: auto;
@@ -5068,7 +4906,7 @@ async function addChaosToken(face: any) {
     background:
       radial-gradient(circle at 50% 8%, rgb(205 175 107 / 0.08), transparent 34%),
       linear-gradient(180deg, rgb(16 31 32 / 0.97), rgb(10 23 23 / 0.96)),
-      url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png') center / cover no-repeat;
+      url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.avif') center / cover no-repeat;
     box-shadow: inset 0 0 30px rgb(4 14 15 / 0.34), -4px 0 16px rgb(4 12 12 / 0.2);
   }
 
@@ -5091,32 +4929,6 @@ async function addChaosToken(face: any) {
     display: none;
   }
 
-  #player-zone :deep(.zoom-control) {
-    margin: 4px 8px;
-    padding: 4px 6px;
-    border: 1px solid rgb(205 175 107 / 0.38);
-    border-radius: 5px;
-    background: rgb(14 32 31 / 0.9);
-  }
-
-  #player-zone :deep(.zoom-btn) {
-    width: 30px;
-    height: 30px;
-    border: 1px solid rgb(205 175 107 / 0.46);
-    border-radius: 4px;
-    background: rgb(32 58 55 / 0.94);
-    color: #f4efe4;
-  }
-
-  #player-zone :deep(.zoom-btn:hover),
-  #player-zone :deep(.zoom-btn:focus-visible),
-  #player-zone :deep(.zoom-btn--active) {
-    background: rgb(205 175 107 / 0.3);
-    color: #fff;
-    outline: 2px solid rgb(229 194 107 / 0.52);
-    outline-offset: 1px;
-  }
-
   #player-zone :deep(.player-info),
   #player-zone :deep(.player-cards),
   #player-zone :deep(.player) {
@@ -5135,15 +4947,6 @@ async function addChaosToken(face: any) {
   .scenario-body {
     grid-template-rows: minmax(56px, auto) minmax(360px, 1fr) minmax(150px, 24vh);
   }
-
-  #player-zone :deep(.zoom-btn) {
-    width: 30px;
-    height: 30px;
-    border: 1px solid rgb(205 175 107 / 0.46);
-    border-radius: 4px;
-    background: rgb(32 58 55 / 0.94);
-    color: #f4efe4;
-  }
 }
 
 .location--unlocked {
@@ -5158,46 +4961,6 @@ async function addChaosToken(face: any) {
   cursor: grabbing;
   z-index: var(--z-index-50);
   transition: none !important;
-}
-
-.zoom-slider {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 90px;
-  height: 4px;
-  background: var(--box-border);
-  border-radius: 2px;
-  outline: none;
-  cursor: pointer;
-}
-
-.zoom-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #5a9465;
-  cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-  transition:
-    background 0.15s,
-    transform 0.1s;
-}
-
-.zoom-slider::-webkit-slider-thumb:hover {
-  background: #6aaa75;
-  transform: scale(1.2);
-}
-
-.zoom-slider::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: #5a9465;
-  cursor: pointer;
-  border: none;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 
 .barrier {
@@ -5287,7 +5050,7 @@ async function addChaosToken(face: any) {
   background:
     radial-gradient(ellipse at 50% 0%, rgb(229 194 107 / 0.08), transparent 42%),
     linear-gradient(180deg, rgb(17 29 27 / 0.12), rgb(11 20 19 / 0.48)),
-    url('/assets/veiled-harbour/T02-调查员皮革桌垫.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/T02-调查员皮革桌垫.avif') center / cover no-repeat;
   border-top: 1px solid rgb(205 175 107 / 0.6);
   box-shadow: 0 -6px 18px rgb(5 12 13 / 0.36);
   .player-info {
@@ -5321,7 +5084,7 @@ async function addChaosToken(face: any) {
   background:
     radial-gradient(circle at 50% 10%, rgb(229 194 107 / 0.1), transparent 30%),
     linear-gradient(180deg, rgb(16 31 32 / 0.97), rgb(10 23 23 / 0.98)),
-    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.avif') center / cover no-repeat;
   box-shadow:
     inset 0 0 30px rgb(4 14 15 / 0.38),
     inset 1px 0 0 rgb(244 239 228 / 0.05),
@@ -5341,7 +5104,7 @@ async function addChaosToken(face: any) {
 #player-zone :deep(.hand-area) {
   background:
     linear-gradient(180deg, rgb(12 28 27 / 0.68), rgb(7 17 17 / 0.58)),
-    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.avif') center / cover no-repeat;
   border-color: rgb(205 175 107 / 0.38);
   box-shadow: inset 0 1px 0 rgb(244 239 228 / 0.05);
 }
@@ -5352,16 +5115,16 @@ async function addChaosToken(face: any) {
   text-transform: uppercase;
 }
 
+/* Doom/clue counters sit inline at the end of the investigator-tab row; they
+   no longer own a bordered strip of the player zone. */
 #totals {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding: 5px;
-  background: rgb(12 24 23 / 0.76);
-  margin: 10px 8px 10px 0;
-  border: 1px solid rgb(205 175 107 / 0.42);
-  border-radius: 5px;
-  box-shadow: 0 3px 10px rgb(5 12 13 / 0.24);
+  flex-direction: row;
+  align-items: center;
+  gap: 2px;
+  margin: 0 6px 0 auto;
+  padding: 2px 4px;
+  align-self: center;
 }
 
 .tri-button {
@@ -5547,6 +5310,110 @@ async function addChaosToken(face: any) {
         var(--card-shadow);
       filter: brightness(1.08);
     }
+  }
+}
+
+@media (min-width: 1200px) {
+  /* This is a 1-4 investigator game: with more than one investigator the rail
+     widens and every seat panel goes on the table at once, two per row. */
+  .scenario-body.seats-multi {
+    grid-template-columns: min(580px, 40vw) minmax(0, 1fr) 280px;
+  }
+
+  .scenario-body.seats-multi #player-zone :deep(.player-info) {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: max-content;
+    grid-auto-rows: minmax(max-content, 1fr);
+    align-content: start;
+    gap: 6px;
+    padding: 4px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* Three or four seats need two panel rows; keep them at content height and
+     scroll the panel grid instead of squeezing every seat. */
+  .scenario-body.seats-multi.seats-grid #player-zone :deep(.player-info) {
+    grid-auto-rows: max-content;
+  }
+
+  /* The seat strip collapses from a full-height vertical rail into one compact
+     row of chips above the panels. */
+  .scenario-body.seats-multi #player-zone :deep(.tabs-row) {
+    grid-column: 1 / -1;
+    align-items: center;
+    min-height: 0;
+  }
+
+  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) {
+    flex: 0 1 auto;
+    min-width: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 3px;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li {
+    margin-right: 0;
+    border-radius: 4px;
+    line-height: 1;
+  }
+
+  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li span {
+    padding: 2px 7px;
+    font-size: 0.8rem;
+  }
+
+  /* The global `button { min-height: 42px }` would turn every seat chip into a
+     42px slab and wrap the strip onto several rows. */
+  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li .switch-investigators,
+  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li .waiting-indicator {
+    min-height: 0;
+    height: auto;
+    align-self: stretch;
+    padding: 2px 6px;
+  }
+
+  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li .switch-investigators svg,
+  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li .waiting-indicator svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li.tab--lead-player::after {
+    display: none;
+  }
+
+  /* `v-show` leaves an inline display:none on every unselected seat, so
+     !important is the only way to put all of them on the table at once. */
+  .scenario-body.seats-multi #player-zone :deep(.tab) {
+    display: flex !important;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    border: 1px solid rgb(205 175 107 / 0.42);
+    border-radius: 6px;
+    background: rgb(10 23 22 / 0.45);
+    overflow: hidden;
+  }
+
+  .scenario-body.seats-multi #player-zone :deep(.tab--active) {
+    border-color: color-mix(in srgb, var(--select) 62%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--select) 28%, transparent);
+  }
+
+  /* The hand belongs to the seat you act as; the other seats keep their
+     investigator, slots and play area. */
+  .scenario-body.seats-multi #player-zone :deep(.tab:not(.tab--active) .hand-area) {
+    display: none;
+  }
+
+  .scenario-body.seats-multi #player-zone :deep(.tab:not(.tab--active) .in-play) {
+    flex: 1 1 auto;
   }
 }
 </style>

@@ -2,7 +2,7 @@
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import Question from '@/arkham/components/Question.vue';
 import { useDebug } from '@/arkham/debug'
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { ChaosBag } from '@/arkham/types/ChaosBag';
 import * as Cards from '@/arkham/types/Card';
 import { chaosTokenImage, type TokenFace } from '@/arkham/types/ChaosToken';
@@ -23,6 +23,7 @@ import ChaosBagView from '@/arkham/components/ChaosBag.vue';
 import Token from '@/arkham/components/Token.vue';
 import { useI18n } from 'vue-i18n';
 import { useMenu } from '@/arkham/composables/menu';
+import { useSoundsDisabled } from '@/arkham/composables/useSoundsDisabled';
 import { useSettingsFocus } from '@/arkham/composables/settingsFocus';
 
 const debug = useDebug()
@@ -52,6 +53,22 @@ const skills = computed(() => {
 })
 const skillTestResults = computed(() => props.game.skillTestResults)
 const emit = defineEmits(['choose'])
+
+// The moment the test resolves is the one beat in a turn that wants a sound.
+// Only the failure cue exists as an asset today; a success cue still has to be
+// authored, so silence is preferable to reusing the impact there.
+const { soundsDisabled } = useSoundsDisabled()
+watch(
+  () => skillTestResults.value?.skillTestResultsSuccess,
+  (success, previous) => {
+    if (success === undefined || success === previous) return
+    if (success || soundsDisabled.value) return
+    new Audio('/audio/impactPunch_heavy_000.ogg')
+      .play()
+      .catch((error) => console.warn('Unable to play skill test failure cue', error))
+  },
+)
+
 const shouldRender = (mod: Modifier) => {
   const { type } = mod
   if (!('tag' in type)) return false
@@ -586,7 +603,6 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
   gap: 5px;
   color: var(--text);
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   box-shadow: var(--shadow-4);
 }
 
@@ -819,7 +835,6 @@ i.iconSkillAgility {
   margin: 2px;
   background-color: var(--surface-raised);
   color: var(--text);
-  border: var(--edge-width) solid var(--edge-dim);
   cursor: pointer;
 
   &:hover {
@@ -1101,7 +1116,6 @@ i.iconSkillAgility {
   width: auto;
   padding: 5px 14px;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 999px;
   color: #f4ecf8;
   font-family: Teutonic, serif;

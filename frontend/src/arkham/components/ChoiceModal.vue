@@ -689,7 +689,7 @@ const title = computed(() => {
   color: var(--text);
   background:
     linear-gradient(rgba(233, 225, 210, 0.86), rgba(233, 225, 210, 0.86)),
-    url('/assets/veiled-harbour/14-选择弹窗纸面.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/14-选择弹窗纸面.avif') center / cover no-repeat;
   padding: 10px;
   border-radius: 10px;
   border: 1px solid color-mix(in srgb, var(--brass) 54%, var(--border-panel));
@@ -702,35 +702,9 @@ const title = computed(() => {
   flex-direction: column;
   gap: 10px;
   padding: 18px;
-  background:
-    linear-gradient(rgb(233 225 210 / 0.82), rgb(233 225 210 / 0.82)),
-    url('/assets/veiled-harbour/29-故事抉择内框-v2.png') center / cover no-repeat;
-  border: 1px solid color-mix(in srgb, var(--brass) 62%, var(--border-panel));
+  background: url('/assets/veiled-harbour/C02-象牙档案纸微纹理.avif') center / 256px 256px repeat;
   border-radius: 8px;
-  box-shadow: var(--shadow-4), inset 0 0 0 1px rgb(255 255 255 / 0.18);
-}
-
-.choice-modal-wrapper::before,
-.choice-modal-wrapper::after {
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  content: '';
-  pointer-events: none;
-  background-repeat: no-repeat;
-  background-size: contain;
-}
-
-.choice-modal-wrapper::before {
-  top: 0;
-  left: 0;
-  background-image: url('/assets/veiled-harbour/C04-黄铜压线角件-左上.svg');
-}
-
-.choice-modal-wrapper::after {
-  right: 0;
-  bottom: 0;
-  background-image: url('/assets/veiled-harbour/C04-黄铜压线角件-右下.svg');
+  box-shadow: var(--shadow-2);
 }
 
 .choice-modal-wrapper--processing {

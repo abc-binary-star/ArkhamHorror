@@ -14,11 +14,14 @@ import { useToast } from 'vue-toastification'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import confetti from '@/effects/confetti'
-import { useWebSocket, useResizeObserver } from '@vueuse/core'
+import { useWebSocket, useResizeObserver, useFullscreen } from '@vueuse/core'
 import { MenuItem } from '@headlessui/vue'
 import {
   AdjustmentsHorizontalIcon,
+  ArrowLeftIcon,
   ArrowPathIcon,
+  ArrowsPointingInIcon,
+  ArrowsPointingOutIcon,
   ArrowsRightLeftIcon,
   ArrowUturnLeftIcon,
   BackwardIcon,
@@ -457,6 +460,12 @@ function toggleSounds() {
     }),
   )
 }
+
+function leaveGame() {
+  void router.push({ name: 'Home' })
+}
+
+const { isFullscreen, isSupported: fullscreenSupported, toggle: toggleFullscreen } = useFullscreen()
 
 function updateGameLog(nextLog: readonly string[]) {
   const currentLog = gameLog.value
@@ -2371,6 +2380,14 @@ onUnmounted(() => {
       </div>
     </aside>
     <div class="game-bar">
+      <div class="game-bar-item game-bar-item--leave">
+        <div>
+          <button @click="leaveGame" v-tooltip="$t('gameBar.leaveGame')">
+            <ArrowLeftIcon aria-hidden="true" />
+            <span>{{ $t('gameBar.leaveGame') }}</span>
+          </button>
+        </div>
+      </div>
       <div class="game-bar-item game-bar-item--sounds">
         <div>
           <button
@@ -2391,6 +2408,17 @@ onUnmounted(() => {
         </button>
       </div>
       <div class="right">
+        <button
+          v-if="fullscreenSupported"
+          type="button"
+          :aria-pressed="isFullscreen"
+          v-tooltip="$t('gameBar.fullscreen')"
+          @click="toggleFullscreen"
+        >
+          <ArrowsPointingInIcon v-if="isFullscreen" aria-hidden="true" />
+          <ArrowsPointingOutIcon v-else aria-hidden="true" />
+          <span>{{ $t('gameBar.fullscreen') }}</span>
+        </button>
         <button v-if="isActualScenarioView" class="sidebar-toggle-button" @click="toggleSidebar">
           <ArrowsRightLeftIcon aria-hidden="true" /> {{ $t('gameBar.toggleSidebar') }}
         </button>
@@ -2645,7 +2673,6 @@ onUnmounted(() => {
   padding: 8px 16px;
   border-radius: 8px;
   background: var(--surface-panel, #e8e1d2);
-  border: 1px solid var(--box-border);
   color: var(--text);
   font-family: teutonic, sans-serif;
   font-size: 0.95em;
@@ -2857,6 +2884,9 @@ onUnmounted(() => {
   min-width: 0;
   min-height: 0;
   overflow: hidden;
+  /* Both atmosphere layers below are absolutely positioned, so the shell has
+     to be their containing block. */
+  position: relative;
   isolation: isolate;
   background:
     radial-gradient(ellipse at 50% 42%, rgba(205, 175, 107, 0.08), transparent 48%),
@@ -2867,7 +2897,7 @@ onUnmounted(() => {
       rgba(20, 33, 34, 0.06) 26%,
       rgba(12, 20, 21, 0.35)
     ),
-    var(--deep-sea, #26373a) url('/assets/veiled-harbour/02-牌桌材质.png') center / cover no-repeat;
+    var(--deep-sea, #26373a) url('/assets/veiled-harbour/02-牌桌材质.avif') center / cover no-repeat;
   background-attachment: fixed;
   border-top: 1px solid rgba(208, 180, 123, 0.35);
   animation: table-enter 280ms ease-out both;
@@ -2881,7 +2911,23 @@ onUnmounted(() => {
     z-index: -1;
     pointer-events: none;
     background: radial-gradient(ellipse at 50% 38%, rgba(229, 194, 107, 0.09), transparent 56%);
-    animation: table-candle 9s ease-in-out infinite alternate;
+    animation: table-candle 11s ease-in-out infinite alternate;
+  }
+
+  /* Air moving across the table. Two soft banks on a long, offset cycle, so
+     the felt never looks perfectly still without ever reading as a moving
+     layer. */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -14% -8%;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      radial-gradient(58% 38% at 24% 32%, rgba(214, 232, 226, 0.055), transparent 70%),
+      radial-gradient(46% 34% at 70% 64%, rgba(198, 216, 210, 0.045), transparent 72%);
+    background-repeat: no-repeat;
+    animation: table-mist 52s ease-in-out infinite alternate;
   }
 
   &:has(.scroll-container) {
@@ -2898,12 +2944,25 @@ onUnmounted(() => {
   }
 }
 
+/* Uneven steps rather than a two-stop pulse: a real flame does not fade
+   smoothly between two levels. */
 @keyframes table-candle {
+  0% { opacity: 0.62; }
+  17% { opacity: 0.95; }
+  26% { opacity: 0.71; }
+  40% { opacity: 1; }
+  57% { opacity: 0.79; }
+  72% { opacity: 0.97; }
+  86% { opacity: 0.73; }
+  100% { opacity: 0.92; }
+}
+
+@keyframes table-mist {
   from {
-    opacity: 0.55;
+    transform: translate3d(-3%, 1.5%, 0) scale(1.02);
   }
   to {
-    opacity: 1;
+    transform: translate3d(4%, -2%, 0) scale(1.06);
   }
 }
 
@@ -2911,7 +2970,7 @@ onUnmounted(() => {
   .tabletop-shell {
     background:
       linear-gradient(180deg, rgb(20 33 34 / 0.2), rgb(12 20 21 / 0.38)),
-      url('/assets/veiled-harbour/23-移动端牌桌竖版.png') center / cover no-repeat;
+      url('/assets/veiled-harbour/23-移动端牌桌竖版.avif') center / cover no-repeat;
     background-attachment: scroll;
   }
 }
@@ -2963,8 +3022,7 @@ onUnmounted(() => {
   padding: 18px 22px;
   background:
     linear-gradient(180deg, rgb(232 225 210 / 0.96), rgb(218 207 187 / 0.96)),
-    url('/assets/veiled-harbour/17-调查日志纸卷.png') center / cover no-repeat;
-  border: 1px solid var(--accent-brass, #a5824b);
+    url('/assets/veiled-harbour/17-调查日志纸卷.avif') center / cover no-repeat;
   border-radius: 4px;
   box-shadow: 0 18px 46px rgb(0 0 0 / 0.42);
   color: var(--text, #2e3233);
@@ -2981,7 +3039,7 @@ onUnmounted(() => {
   width: 62px;
   height: 62px;
   flex: 0 0 auto;
-  background-image: url('/assets/veiled-harbour/34-案件状态印章组-v2.png');
+  background-image: url('/assets/veiled-harbour/34-案件状态印章组-v2.avif');
   background-repeat: no-repeat;
   background-size: 400% 100%;
   background-position: 100% center;
@@ -3004,7 +3062,7 @@ onUnmounted(() => {
   flex-direction: column;
   background:
     linear-gradient(rgba(232, 225, 210, 0.56), rgba(232, 225, 210, 0.56)),
-    #d0d9dc url('/assets/veiled-harbour/32-侧栏档案抽屉-v2.png') center / cover no-repeat;
+    #d0d9dc url('/assets/veiled-harbour/32-侧栏档案抽屉-v2.avif') center / cover no-repeat;
   border-left: 1px solid rgba(165, 130, 75, 0.5);
 
   @media (max-width: 800px) {
@@ -3082,7 +3140,6 @@ onUnmounted(() => {
 
 #invite {
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   color: var(--text);
   width: 800px;
   margin: 0 auto;
@@ -3207,7 +3264,6 @@ header {
   p {
     text-transform: uppercase;
     background: var(--surface-raised);
-    border: var(--edge-width) solid var(--edge-dim);
     width: 100%;
     padding: 10px 20px;
     color: var(--text);
@@ -3324,7 +3380,6 @@ header {
   gap: 18px;
   max-width: min(760px, 100%);
   padding: 18px;
-  border: 1px solid rgba(79, 224, 214, 0.65);
   border-radius: 14px;
   background: linear-gradient(135deg, rgba(5, 29, 35, 0.98), rgba(12, 75, 82, 0.98));
   box-shadow:
@@ -3369,7 +3424,6 @@ header {
 
 .the-silence-modal__actions button {
   padding: 8px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 8px;
   color: white;
   cursor: pointer;
@@ -3399,7 +3453,7 @@ header {
   z-index: calc(var(--z-index-1000) - 1);
   background:
     linear-gradient(rgba(3, 12, 14, 0.28), rgba(3, 12, 14, 0.34)),
-    url('/assets/veiled-harbour/38-调查揭示暗幕-v2.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/38-调查揭示暗幕-v2.avif') center / cover no-repeat;
   cursor: pointer;
 }
 
@@ -3779,11 +3833,16 @@ header {
   overflow-x: auto;
   overflow-y: hidden;
   background:
-    linear-gradient(180deg, rgb(26 42 41 / 0.96), rgb(9 18 18 / 0.98)),
-    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png') center / cover no-repeat;
+    linear-gradient(180deg, rgb(26 42 41 / 0.74), rgb(9 18 18 / 0.9)),
+    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.avif') center / cover no-repeat;
   border-top: 1px solid rgba(208, 180, 123, 0.42);
   box-shadow: 0 -6px 18px rgba(8, 14, 15, 0.45);
   color: var(--text-on-dark, #f4efe4);
+  /* The document is `color-scheme: light` for the archive surfaces, which
+     gives dark chrome a bright scrollbar stripe; and the global scrollbar
+     colours are tuned for ivory. */
+  color-scheme: dark;
+  scrollbar-color: rgb(205 175 107 / 0.42) transparent;
   > div {
     display: flex;
     align-items: center;
@@ -3795,48 +3854,47 @@ header {
       align-items: center;
     }
   }
-  /* Bar-level buttons only: direct children of the wrapper divs, or of a
-     child component's root div (Menu/NarrationMenu). :deep is required
-     because those buttons carry the child component's scope id, and Menu's
-     own scoped `button { background: none }` otherwise strips the plaque.
-     Dropdown panel buttons sit deeper and are deliberately not matched. */
+  /* Bar-level buttons are quiet ghost controls: bare icon + label, no frame,
+     a soft tint on hover. :deep is required because the narration button
+     carries its child component's scope id, and Menu's own scoped
+     `button { background: none }` matches this ghost look. Dropdown panel
+     buttons sit deeper and are deliberately not matched. */
   > div > :deep(button),
   > div > div > :deep(button) {
-    background-color: var(--spooky-green-dark);
-    background-image: url('/assets/veiled-harbour/36-行动按钮四态铭牌组-v2.png');
-    background-repeat: no-repeat;
-    background-size: 400% 100%;
-    background-position: 0 center;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    color: var(--text-on-dark, #f4efe4);
-    font-weight: 600;
-    height: 34px;
-    min-height: 34px;
-    min-width: 38px;
-    padding: 0 12px;
     display: flex;
-    gap: 5px;
     align-items: center;
+    gap: 6px;
+    height: 36px;
+    min-height: 36px;
+    min-width: 38px;
+    padding: 0 10px;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+    color: rgb(244 239 228 / 0.78);
+    font-weight: 600;
+    letter-spacing: 0.02em;
     white-space: nowrap;
+    cursor: pointer;
     svg {
-      width: 15px;
+      width: 16px;
+      height: 16px;
     }
     &:hover {
-      background-position: 33.333% center;
-      filter: brightness(1.12) saturate(0.92);
-      color: var(--text-on-dark, #f4efe4);
+      background: rgb(244 239 228 / 0.08);
+      color: #fff1cc;
     }
     &:active {
-      background-position: 66.666% center;
-      filter: brightness(0.92);
+      background: rgb(244 239 228 / 0.14);
+      filter: none;
     }
     &:disabled {
-      background-position: 100% center;
-      filter: brightness(0.68) saturate(0.45) var(--button-disabled-filter);
+      color: rgb(244 239 228 / 0.35);
+      filter: none;
     }
     &.active {
-      background-position: 66.666% center;
+      background: rgb(244 239 228 / 0.1);
+      color: #fff1cc;
     }
     &:focus-visible {
       outline: 2px solid var(--button-focus-ring);
@@ -3858,101 +3916,9 @@ header {
   color: var(--title);
 }
 
-/* Toolbar controls are instrument labels, not a row of identical green
-   plaques. Give each utility its own material and reserve enough width for
-   the brass corner treatment to breathe. */
-.game-bar > .game-bar-item--sounds > div > button,
-.game-bar > .game-bar-tools--primary > button,
-.game-bar > .right > .sidebar-toggle-button,
-.game-bar > .right :deep(.narration-button) {
-  min-width: 108px;
-  height: 36px;
-  min-height: 36px;
-  padding-inline: 14px;
-  border-radius: 4px;
-  border: 1px solid rgb(205 175 107 / 0.58);
-  background-image: none;
-  box-shadow:
-    inset 0 1px 0 rgb(244 239 228 / 0.1),
-    0 2px 6px rgb(4 12 12 / 0.24);
-  font-family: Teutonic, Georgia, serif;
-  font-size: 0.9rem;
-  letter-spacing: 0.04em;
-}
-
-.game-bar > .game-bar-item--sounds > div > button {
-  min-width: 116px;
-  background:
-    linear-gradient(180deg, rgb(57 57 48 / 0.96), rgb(24 29 28 / 0.98)),
-    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg') center / cover no-repeat;
-  color: rgb(248 239 211 / 0.96);
-}
-
-.game-bar > .game-bar-item--sounds > div > button:hover,
-.game-bar > .game-bar-item--sounds > div > button:focus-visible {
-  background:
-    linear-gradient(180deg, rgb(104 87 48 / 0.95), rgb(42 39 29 / 0.98)),
-    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg') center / cover no-repeat;
-  border-color: rgb(229 194 107 / 0.92);
-}
-
-.game-bar > .game-bar-tools--primary > button {
-  min-width: 148px;
-  background:
-    linear-gradient(180deg, rgb(112 91 53 / 0.98), rgb(52 44 30 / 0.98)),
-    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png') center / cover no-repeat;
-  border-color: rgb(229 194 107 / 0.74);
-  color: rgb(255 246 220 / 0.98);
-}
-
-.game-bar > .game-bar-tools--primary > button:hover,
-.game-bar > .game-bar-tools--primary > button:focus-visible {
-  background:
-    linear-gradient(180deg, rgb(146 119 67 / 0.98), rgb(74 58 35 / 0.98)),
-    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png') center / cover no-repeat;
-  border-color: rgb(248 218 137 / 0.98);
-}
-
-.game-bar > .right > .sidebar-toggle-button {
-  min-width: 164px;
-  background: linear-gradient(180deg, rgb(45 67 67 / 0.98), rgb(19 32 33 / 0.98));
-  border-color: rgb(122 155 151 / 0.58);
-  color: rgb(226 235 225 / 0.94);
-}
-
-.game-bar > .right > .sidebar-toggle-button:hover,
-.game-bar > .right > .sidebar-toggle-button:focus-visible {
-  background: linear-gradient(180deg, rgb(67 93 88 / 0.98), rgb(28 49 48 / 0.98));
-  border-color: rgb(177 204 184 / 0.9);
-}
-
-.game-bar > .right :deep(.narration-button) {
-  min-width: 112px;
-  background: linear-gradient(180deg, rgb(63 55 43 / 0.98), rgb(29 29 27 / 0.98));
-  border-color: rgb(174 151 104 / 0.56);
-  color: rgb(224 214 188 / 0.94);
-}
-
-.game-bar > .right :deep(.narration-button:hover),
-.game-bar > .right :deep(.narration-button:focus-visible),
-.game-bar > .right :deep(.narration-button.open),
-.game-bar > .right :deep(.narration-button.active) {
-  background: linear-gradient(180deg, rgb(104 86 53 / 0.98), rgb(45 38 28 / 0.98));
-  border-color: rgb(229 194 107 / 0.9);
-  color: #fff7df;
-}
-
-/* Below 1440px the plaque min-widths would push the primary action row into
-   horizontal scrolling; let them shrink to their label instead. */
-@media (max-width: 1440px) {
-  .game-bar > .game-bar-item--sounds > div > button,
-  .game-bar > .game-bar-tools--primary > button,
-  .game-bar > .right > .sidebar-toggle-button,
-  .game-bar > .right :deep(.narration-button) {
-    min-width: 0;
-    padding-inline: 10px;
-    font-size: 0.82rem;
-  }
+.game-bar > .right :deep(.narration-button.open) {
+  background: rgb(244 239 228 / 0.1);
+  color: #fff1cc;
 }
 
 @media (max-width: 800px) {
@@ -3962,19 +3928,15 @@ header {
 
   .game-bar {
     padding-inline: 6px;
+    /* Outranks the mobile hand sheet (--z-index-100). The sheet's collapsed
+       strip rests in the same bottom band, and the tray's buttons have to stay
+       reachable; the sheet only keeps the 50px above the tray. */
+    z-index: var(--z-index-199);
 
     > div > :deep(button),
     > div > div > :deep(button) {
       min-width: 44px;
       padding-inline: 8px;
-    }
-
-    .game-bar-item--sounds > div > button,
-    .game-bar-tools--primary > button,
-    > .right > .sidebar-toggle-button,
-    > .right :deep(.narration-button) {
-      min-width: 44px;
-      padding-inline: 10px;
     }
   }
 }
@@ -3985,10 +3947,9 @@ header {
   }
 
   .game-bar {
-    /* The site header occupies the first 60px of the viewport. Dock the
-       action tray immediately beneath it so the controls remain visible while
-       the map starts below the reserved 44px bar height. */
-    top: 60px;
+    /* The navbar is hidden during play, so the action tray docks to the top
+       edge and the board claims the full viewport beneath it. */
+    top: 0;
     bottom: auto;
     z-index: 90;
     gap: 4px;
@@ -4004,6 +3965,10 @@ header {
   .game-main {
     padding-top: var(--game-bar-height);
     padding-bottom: 0;
+  }
+
+  .game-tools-drawer {
+    top: var(--game-bar-height);
   }
 }
 
@@ -4070,7 +4035,6 @@ header {
   align-items: center;
   padding: 10px 14px;
   background: var(--box-background);
-  border: 1px solid var(--box-border);
   border-radius: 5px;
 }
 
@@ -4170,7 +4134,7 @@ button:hover .shortcut {
   backdrop-filter: blur(3px);
   background:
     linear-gradient(180deg, rgb(232 225 210 / 0.97), rgb(218 207 187 / 0.97)),
-    url('/assets/veiled-harbour/17-调查日志纸卷.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/17-调查日志纸卷.avif') center / cover no-repeat;
   position: absolute;
   padding: 0;
   padding-block: 10px;
@@ -4179,7 +4143,6 @@ button:hover .shortcut {
   z-index: var(--z-index-100);
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--accent-brass, #a5824b);
   border-radius: 4px;
   box-shadow: 0 22px 56px rgb(0 0 0 / 0.44);
   color: var(--text, #2e3233);
@@ -4329,7 +4292,6 @@ dialog {
 
 .debug-playability-modal {
   background: var(--surface-chrome);
-  border: 1px solid var(--button-highlight);
   border-radius: 8px;
   padding: 1.5rem;
   min-width: 300px;
@@ -4398,7 +4360,7 @@ dialog {
    they cannot compete with the board or cover the phase rail. */
 .game-tools-drawer {
   position: fixed;
-  top: 60px;
+  top: 0;
   bottom: 0;
   left: 0;
   z-index: 140;
@@ -4407,10 +4369,27 @@ dialog {
   flex-direction: column;
   color: var(--text-on-dark, #f4efe4);
   background:
-    linear-gradient(180deg, rgb(20 38 37 / 0.98), rgb(8 18 18 / 0.99)),
-    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png') center / cover no-repeat;
+    linear-gradient(180deg, rgb(20 38 37 / 0.76), rgb(8 18 18 / 0.92)),
+    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.avif') center / cover no-repeat;
   border-right: 1px solid rgb(205 175 107 / 0.58);
   box-shadow: 14px 0 30px rgb(4 10 10 / 0.42);
+
+  /* The action list is short and the drawer is full height; without this the
+     lower half is a dead slab. The ornament is a corner fitting, so it is
+     anchored to the drawer's own bottom-left corner rather than floated in
+     the middle, where its L-bracket reads as a broken frame. */
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 150px;
+    height: 150px;
+    background: url('/assets/veiled-harbour/04-黄铜角饰.svg') left bottom / contain no-repeat;
+    transform: scaleY(-1);
+    opacity: 0.22;
+    pointer-events: none;
+  }
 }
 
 .game-tools-drawer__header {
@@ -4468,10 +4447,19 @@ dialog {
   gap: 8px;
   padding: 14px;
   overflow-y: auto;
+  /* See `.game-bar`: dark chrome needs a dark scrollbar and dark native
+     controls. */
+  color-scheme: dark;
+  scrollbar-color: rgb(205 175 107 / 0.42) transparent;
 }
 
-.game-tools-drawer__body > :deep(button),
-.game-tools-drawer__body > :deep(div) > :deep(button),
+/* Every action row in the drawer is the same brass plate. HeadlessUI's Menu
+   root carries no class, so its trigger is reached through the anonymous
+   wrapper div — hence `:deep(div > button)`. Only one `:deep()` per selector:
+   the compiler leaves a second one in the output, which invalidates the whole
+   list and silently drops the rule. */
+.game-tools-drawer__body > button,
+.game-tools-drawer__body > :deep(div > button),
 .game-tools-action {
   display: flex;
   align-items: center;
@@ -4479,54 +4467,31 @@ dialog {
   width: 100%;
   min-height: 42px;
   padding: 9px 11px;
-  border: 1px solid rgb(205 175 107 / 0.4);
-  border-radius: 4px;
-  background: rgb(22 45 43 / 0.9) !important;
-  color: var(--text-on-dark, #f4efe4) !important;
+  border: var(--plaque-border) !important;
+  border-radius: var(--control-radius);
+  background: var(--plaque-plate) !important;
+  color: var(--plaque-ink) !important;
+  text-shadow: var(--plaque-text-shadow);
+  box-shadow: var(--plaque-shadow);
   font: inherit;
   font-weight: 600;
   text-align: left;
   cursor: pointer;
+  transition:
+    filter 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease;
 }
 
-.game-tools-drawer__body > :deep(button:hover),
-.game-tools-drawer__body > :deep(div) > :deep(button:hover),
+.game-tools-drawer__body > button:hover,
+.game-tools-drawer__body > :deep(div > button:hover),
 .game-tools-action:hover,
-.game-tools-drawer__body > :deep(button:focus-visible),
-.game-tools-drawer__body > :deep(div) > :deep(button:focus-visible),
+.game-tools-drawer__body > button:focus-visible,
+.game-tools-drawer__body > :deep(div > button:focus-visible),
 .game-tools-action:focus-visible {
-  background: rgb(205 175 107 / 0.22);
-  border-color: rgb(229 194 107 / 0.9);
-  color: #fff;
-  outline: 2px solid rgb(229 194 107 / 0.56);
-  outline-offset: 1px;
-}
-
-/* HeadlessUI's Menu root does not carry a class, so its trigger is a direct
-   child of an anonymous wrapper. Give that trigger the same always-visible
-   plaque as the explicit actions above. */
-.game-tools-drawer__body > div > :deep(button) {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  width: 100%;
-  min-height: 42px;
-  padding: 9px 11px;
-  border: 1px solid rgb(205 175 107 / 0.4);
-  border-radius: 4px;
-  background: rgb(22 45 43 / 0.9) !important;
-  color: var(--text-on-dark, #f4efe4) !important;
-  font: inherit;
-  font-weight: 600;
-  text-align: left;
-  cursor: pointer;
-}
-
-.game-tools-drawer__body > div > :deep(button:hover),
-.game-tools-drawer__body > div > :deep(button:focus-visible) {
-  background: rgb(205 175 107 / 0.22) !important;
-  border-color: rgb(229 194 107 / 0.9);
+  border: var(--plaque-border-hover) !important;
   color: #fff !important;
+  filter: brightness(1.14);
   outline: 2px solid rgb(229 194 107 / 0.56);
   outline-offset: 1px;
 }
@@ -4546,22 +4511,27 @@ dialog {
   box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.04);
 }
 
+/* Dropdown rows stay flat: the plaque rules above match every button under a
+   direct child of the drawer body, which includes these, and their
+   `!important` would otherwise plate each row of the menu. */
 .game-tools-drawer__body > div > :deep([role='menu'] button) {
   width: 100%;
   min-height: 38px;
   padding: 8px 10px;
-  border: 0;
-  border-bottom: 1px solid rgb(205 175 107 / 0.16);
-  border-radius: 0;
-  background: transparent;
-  color: var(--text-on-dark, #f4efe4);
+  border: 0 !important;
+  border-bottom: 1px solid rgb(205 175 107 / 0.16) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--text-on-dark, #f4efe4) !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
   text-align: left;
 }
 
 .game-tools-drawer__body > div > :deep([role='menu'] button:hover),
 .game-tools-drawer__body > div > :deep([role='menu'] button:focus-visible) {
-  background: rgb(205 175 107 / 0.2);
-  color: #fff;
+  background: rgb(205 175 107 / 0.2) !important;
+  color: #fff !important;
   outline: none;
 }
 
@@ -4569,11 +4539,6 @@ dialog {
   width: 17px;
   height: 17px;
   flex: 0 0 auto;
-}
-
-.game-tools-drawer .game-tools-action {
-  background: rgb(22 45 43 / 0.9) !important;
-  color: var(--text-on-dark, #f4efe4) !important;
 }
 
 .game-tools-drawer__body :deep(.relative) {

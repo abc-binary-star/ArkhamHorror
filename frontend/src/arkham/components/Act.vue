@@ -654,7 +654,6 @@ const chooseFromStoryCollection = (choice: number) => {
 
 .button {
   margin-top: 2px;
-  border: var(--edge-width) solid var(--edge-dim);
   color: var(--text);
   border-radius: 4px;
 }
@@ -671,7 +670,6 @@ const chooseFromStoryCollection = (choice: number) => {
 .abilities {
   padding: 10px;
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 10px;
   button {
     padding: 4px;

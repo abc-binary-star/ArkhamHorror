@@ -205,7 +205,7 @@ onMounted(() => {
 .section-header h2 {
   color: var(--title);
   flex: 1;
-  font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
+  font-family: Arno, 'Source Han Serif', serif;
   font-size: 1.6rem;
   line-height: 1;
   margin: 0;

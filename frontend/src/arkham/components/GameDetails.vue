@@ -72,7 +72,6 @@ h2 {
 .game {
   display: flex;
   background-image: var(--panel-gradient);
-  border: var(--edge-width) solid var(--edge-dim);
   border-left: 10px solid var(--button-1);
   color: var(--text);
   border-radius: var(--radius-md);
@@ -136,7 +135,7 @@ h2 {
 
 .title {
   flex: 1;
-  font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
+  font-family: Arno, 'Source Han Serif', serif;
   font-weight: 600;
   font-size: 1.6em;
   a {
@@ -251,7 +250,6 @@ h2 {
   border-radius: 10px;
   text-transform: uppercase;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   flex: 1;
   display: flex;
   padding: 10px;
@@ -261,7 +259,6 @@ h2 {
 .game-difficulty {
   padding: 5px 15px;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   color: var(--text);
   border-radius: 10px;
   text-transform: uppercase;

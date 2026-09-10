@@ -659,7 +659,6 @@ h2 {
 .panel {
   border-radius: 12px;
   background: var(--box-background);
-  border: 1px solid var(--box-border);
   padding: 20px 24px;
   display: flex;
   flex-direction: row;
@@ -871,7 +870,6 @@ button {
   font-weight: 600;
   padding: 0 18px;
   min-height: 38px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 6px;
   background-color: var(--button-1);
   color: #f4f4f4;

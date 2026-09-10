@@ -15,7 +15,7 @@ defineEmits(['click'])
   background-color: var(--spooky-green);
   background-image:
     linear-gradient(180deg, rgba(53, 84, 76, 0.62), rgba(20, 40, 37, 0.58)),
-    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg');
+    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.avif');
   background-size: 100% 100%, 256px 256px;
   background-repeat: no-repeat, repeat;
   border: var(--edge-width) solid var(--edge-on-accent);
@@ -63,7 +63,7 @@ defineEmits(['click'])
     background-color: var(--survivor-dark);
     background-image:
       linear-gradient(180deg, rgba(184, 66, 60, 0.7), rgba(111, 36, 33, 0.78)),
-      url('/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg');
+      url('/assets/veiled-harbour/C01-墨绿漆面微纹理.avif');
     background-size: 100% 100%, 256px 256px;
     background-repeat: no-repeat, repeat;
     border-color: var(--survivor);

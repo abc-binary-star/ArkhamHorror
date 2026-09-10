@@ -1203,7 +1203,6 @@ section {
   margin: 2px;
   background-color: var(--surface-raised);
   color: var(--text);
-  border: var(--edge-width) solid var(--edge-dim);
   cursor: pointer;
   transition: transform 80ms ease;
 }
@@ -1442,12 +1441,9 @@ button:hover {
 
 .modal {
   transition: opacity 0.3s linear;
-  background:
-    linear-gradient(rgba(233, 225, 210, 0.68), rgba(233, 225, 210, 0.68)),
-    url('/assets/veiled-harbour/29-故事抉择内框-v2.png') center / cover no-repeat;
-  border: 1px solid color-mix(in srgb, var(--brass) 54%, var(--border-panel));
+  background: url('/assets/veiled-harbour/C02-象牙档案纸微纹理.avif') center / 256px 256px repeat;
   border-radius: 8px;
-  box-shadow: var(--shadow-4), inset 0 0 0 1px rgb(255 255 255 / 0.2);
+  box-shadow: var(--shadow-2);
 }
 
 .choices {
@@ -1666,7 +1662,6 @@ h2 {
   min-width: 0;
   padding: 12px 14px;
   background: rgba(255, 255, 255, 0.11);
-  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 14px;
   box-sizing: border-box;
 }
@@ -1798,7 +1793,6 @@ h2 {
   width: 100%;
   box-sizing: border-box;
   padding: 12px;
-  border: 1px solid rgba(214, 205, 174, 0.18);
   border-radius: 10px;
   background: rgba(20, 16, 24, 0.74);
   box-shadow:
@@ -2193,11 +2187,7 @@ h2 {
   box-sizing: border-box;
   gap: 10px;
   padding: 10px;
-  button {
-    border: 1px solid var(--button-highlight);
-  }
   border-radius: inherit;
-  border: 1px solid var(--button-highlight);
 }
 
 .question-wrapper {

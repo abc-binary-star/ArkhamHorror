@@ -3,12 +3,7 @@ import { iconPlaceholderPattern } from '@/arkham/icons'
 
 const localeLoaders = {
   en: () => import('@/locales/en'),
-  fr: () => import('@/locales/fr'),
-  it: () => import('@/locales/it'),
-  ko: () => import('@/locales/ko'),
-  es: () => import('@/locales/es'),
   zh: () => import('@/locales/zh'),
-  de: () => import('@/locales/de'),
 } satisfies Record<UiLocale, () => Promise<unknown>>
 
 export type SupportedLocale = keyof typeof localeLoaders

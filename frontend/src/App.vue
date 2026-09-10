@@ -6,7 +6,7 @@
     </section>
   </div>
   <template v-else>
-    <NavBar/>
+    <NavBar v-if="!route.meta.hideNav"/>
     <main class="router-container">
       <Suspense>
         <router-view v-slot="{ Component }">
@@ -15,23 +15,35 @@
           </transition>
         </router-view>
         <template #fallback>
-          Loading...
+          <div class="app-loading" role="status">{{ $t('loadState.loading') }}</div>
         </template>
       </Suspense>
     </main>
     <ModalsContainer />
   </template>
-  <footer><a href="https://www.fantasyflightgames.com/en/products/arkham-horror-the-card-game/" rel="noreferrer" target="_blank" tabindex="-1">Arkham Horror: The Card Game™</a> and all related content © <a href="https://www.fantasyflightgames.com" rel="noreferrer" target="_blank" tabindex="-1">Fantasy Flight Games (FFG)</a>. This site is not produced, endorsed by or affiliated with FFG. <router-link to="/about">{{$t('nav.about')}}.</router-link></footer>
+  <footer class="app-footer"><a href="https://www.fantasyflightgames.com/en/products/arkham-horror-the-card-game/" rel="noreferrer" target="_blank" tabindex="-1">Arkham Horror: The Card Game™</a> and all related content © <a href="https://www.fantasyflightgames.com" rel="noreferrer" target="_blank" tabindex="-1">Fantasy Flight Games (FFG)</a>. This site is not produced, endorsed by or affiliated with FFG. <router-link to="/about">{{$t('nav.about')}}.</router-link></footer>
 </template>
 
 <script lang="ts" setup>
 import { ModalsContainer } from 'vue-final-modal'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useSiteSettingsStore } from '@/stores/site_settings'
 import { checkImageExists } from '@/arkham/helpers'
 import NavBar from '@/components/NavBar.vue'
 
+const route = useRoute()
 const settingsStore = useSiteSettingsStore()
+
+// index.html ships `lang="en"` as the neutral default; the UI locale decides
+// what the document actually is, which CJK line breaking, hyphenation and
+// screen-reader pronunciation all read.
+const { locale } = useI18n({ useScope: 'global' })
+function syncDocumentLang(value: string) {
+  document.documentElement.lang = value === 'zh' ? 'zh-Hans' : value
+}
+watch(locale, syncDocumentLang, { immediate: true })
 
 onMounted(async () => {
   await settingsStore.init()
@@ -50,3 +62,26 @@ const checkAvifSupport = (): Promise<boolean> => {
 };
 </script>
 
+
+<style scoped>
+.app-footer {
+  position: relative;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  padding: 5px 16px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: #bebeb0;
+  background: #182725;
+  border-top: 1px solid rgb(163 142 94 / 0.26);
+}
+.app-footer a { color: #d1c7ae; text-underline-offset: 2px; }
+.app-footer a:hover { color: #fff1cc; }
+.app-loading {
+  display: grid;
+  place-items: center;
+  color: var(--text-dim);
+  font-family: 'Source Han Serif', 'Arno', serif;
+  letter-spacing: 0.12em;
+}
+</style>

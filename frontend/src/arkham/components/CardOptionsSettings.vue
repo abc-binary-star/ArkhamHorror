@@ -180,7 +180,6 @@ const { groups, label, isOn, valueOf, valuesOf, valueLabel, inputId, set } =
   overflow-y: auto;
   overscroll-behavior: contain;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 5px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 }

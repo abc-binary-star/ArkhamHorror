@@ -1,4 +1,5 @@
 {
+  "window": {"minimize": "收起窗口", "restore": "展开窗口"},
   "serviceUnavailable": "服务不可用",
   "pleaseTryAgainLater": "请稍后再试。",
   "gameLog": {
@@ -19,16 +20,15 @@
     "sessionExpired": "登录已过期——重新登录后会回到你刚才的页面。"
   },
   "nav": {
+    "menu": "导航菜单",
     "home": "首页",
-    "menu": "打开导航菜单",
     "about": "关于",
     "achievements": "成就",
     "admin": "管理员",
     "cards": "卡牌",
     "myDecks": "我的牌组",
     "support": "Patreon 赞助",
-    "cardBuilder": "卡牌编辑器",
-    "deckBuilder": "卡组构筑"
+    "cardBuilder": "卡牌编辑器"
   },
   "activeGames": "进行中的游戏",
   "checkCampaignLog": "查看你的战役日志。",
@@ -50,9 +50,12 @@
   "invalidEmailOrPassword": "邮箱或密码错误",
   "language": "语言",
   "logIn": "登录",
+  "logOut": "退出登录",
+  "signInTagline": "雾起诡镇，档案待启。",
   "newGame": "新游戏",
   "newPassword": "新密码",
   "password": "密码",
+  "passwordResetInstructions": "请检查电子邮箱（包括垃圾邮件文件夹），按照邮件中的说明重置密码。",
   "passwordResetRequested": "密码重置已请求",
   "passwordUpdatedSuccessfully": "密码已成功更新",
   "register": "注册",
@@ -356,6 +359,9 @@
   },
   "cardsView": {
     "browseSets": "浏览扩展包",
+    "showSets": "显示扩展包列表",
+    "hideSets": "隐藏扩展包列表",
+    "cardChapter": "卡牌章节",
     "searchCards": "搜索卡牌...",
     "listView": "列表视图",
     "imageView": "图像视图",
@@ -365,7 +371,28 @@
     "campaignCards": "战役卡牌",
     "bothCards": "两者",
     "chapter1": "第一章",
-    "chapter2": "第二章"
+    "chapter2": "第二章",
+    "cycleNames": {
+      "core": "基础游戏",
+      "dwl": "敦威治遗产",
+      "ptc": "卡尔克萨之路",
+      "tfa": "失落的时代",
+      "tcu": "万象无终",
+      "tde": "食梦者",
+      "tic": "印斯茅斯暗潮",
+      "eoe": "地球边缘",
+      "tsk": "猩红钥匙",
+      "fhv": "毒堇谷盛宴",
+      "tdc": "淹没之城",
+      "core2026": "基础游戏（2026）",
+      "small_campaign_expansions": "小型战役扩充",
+      "return": "重返……",
+      "investigator": "调查员起始牌组",
+      "investigator2": "调查员起始牌组（第二章）",
+      "side_stories": "独立战役",
+      "promotional": "促销卡牌",
+      "parallel": "平行卡组"
+    }
   },
   "cardDetails": {
     "close": "关闭",
@@ -482,6 +509,7 @@
     "grouped": "分组"
   },
   "player": {
+    "hand": "手牌",
     "viewDeck": "查看牌组",
     "silenceCard": "静默——隐藏时跳过此卡牌的快速触发和反应",
     "unsilenceCard": "解除静默——再次提供此卡牌的触发能力"
@@ -576,10 +604,10 @@
     "supportBody": "运行此服务的基础设施费用相当昂贵。该项目依赖于社区的贡献来支付这些费用。如果你能在财务上支持这个项目，请访问我们的 Patreon。",
     "supportNote": "请注意，没有功能被锁定在付费墙后。此项目对所有人免费，并将在其持续运行期间保持免费。",
     "copyrightTitle": "版权声明",
-    "copyrightBody": "此应用中提供的关于 <a href=\"https://www.fantasyflightgames.com/en/products/arkham-horror-the-card-game/\">Arkham 恐惧: The 卡牌 Game™（诡镇奇谈：卡牌版）</a> 的文本和图形信息，版权归 Fantasy Flight Games 2024 所有。此应用是一个粉丝项目，不是由 Fantasy Flight Games 制作、认可、支持或与其有任何附属关系。",
-    "copyrightArtwork": "所有艺术作品和插图的知识产权归其各自的创作者所有。所有 Arkham 恐惧: The 卡牌 Game™ 图像和图形均由 Fantasy Flight Games 享有版权。",
+    "copyrightBody": "此应用中提供的关于 <a href=\"https://www.fantasyflightgames.com/en/products/arkham-horror-the-card-game/\">Arkham Horror: The Card Game™（诡镇奇谈：卡牌版）</a> 的文本和图形信息，版权归 Fantasy Flight Games 2024 所有。此应用是一个粉丝项目，不是由 Fantasy Flight Games 制作、认可、支持或与其有任何附属关系。",
+    "copyrightArtwork": "所有艺术作品和插图的知识产权归其各自的创作者所有。所有 Arkham Horror: The Card Game™ 图像和图形均由 Fantasy Flight Games 享有版权。",
     "projectTitle": "项目详情",
-    "projectBody": "此应用程序由 <a href=\"https://github.com/halogenandtoast\">halogenandtoast</a> 及贡献者创建，旨在支持 Arkham 恐惧: The 卡牌 Game 社区。此项目的源代码可在 <a href=\"https://github.com/halogenandtoast/ArkhamHorror\">Github</a> 获取。欢迎通过 Github 提议或 Mythos Busters discord 服务器上的专用频道提供反馈和错误报告。"
+    "projectBody": "此应用程序由 <a href=\"https://github.com/halogenandtoast\">halogenandtoast</a> 及贡献者创建，旨在支持 诡镇奇谈社区。此项目的源代码可在 <a href=\"https://github.com/halogenandtoast/ArkhamHorror\">Github</a> 获取。欢迎通过 Github 提议或 Mythos Busters discord 服务器上的专用频道提供反馈和错误报告。"
   },
   "settingsForm": {
     "languageHelp": "这将更改卡牌和应用的语言。如果所选语言中没有可用的卡牌或文本，将默认显示英语。（译者：中文相关bug，请在QQ群里反馈）",

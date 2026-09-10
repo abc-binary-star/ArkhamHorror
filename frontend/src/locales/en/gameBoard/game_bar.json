@@ -2,6 +2,53 @@
     "closeLog": "Close Campaign Log",
     "viewLog": "View Campaign Log",
     "sounds": "Sounds",
+    "tabletopTools": "Tabletop tools",
+    "closeTools": "Close tools",
+    "leaveGame": "Leave game",
+    "fullscreen": "Fullscreen",
+    "narration": {
+        "title": "Narration",
+        "autoRead": "Read new content automatically",
+        "readCurrent": "Read current content",
+        "pause": "Pause",
+        "resume": "Resume",
+        "stop": "Stop",
+        "voice": "Voice",
+        "systemVoice": "System default",
+        "rate": "Rate",
+        "volume": "Volume",
+        "csvLoading": "Loading card narration…",
+        "csvError": "Card narration failed to load",
+        "csvLoaded": "Loaded {count} card narration entries",
+        "csvReload": "Reload",
+        "groups": {
+            "content": "Story content",
+            "scenarioCards": "Scenario cards",
+            "cardFields": "Card fields"
+        },
+        "categories": {
+            "story": "Story",
+            "interlude": "Interlude",
+            "resolution": "Resolution",
+            "codex": "Codex",
+            "campaignLog": "Campaign log",
+            "actAgenda": "Acts and agendas",
+            "locationEnemy": "Locations and enemies",
+            "encounter": "Encounter cards",
+            "playerCard": "Player cards",
+            "cardName": "Card name",
+            "cardSubname": "Card subtitle",
+            "cardTraits": "Card traits",
+            "cardText": "Card text",
+            "cardFlavor": "Flavor text"
+        },
+        "references": {
+            "card": "Card {code}",
+            "tarot": "Tarot card {name}",
+            "chaosToken": "Chaos token {name}",
+            "chaosTokenMorph": "Chaos token changes from {from} to {to}"
+        }
+    },
 
     "view": "View",
     "shortcuts": "Shortcuts",
@@ -71,52 +118,5 @@
 
     "toggleSidebar": "Toggle Sidebar",
 
-    "rotateLayout": "Rotate Location Layout",
-
-    "narration": {
-        "title": "Read Aloud",
-        "autoRead": "Automatically read new content",
-        "readCurrent": "Read Current",
-        "pause": "Pause",
-        "resume": "Resume",
-        "stop": "Stop",
-        "voice": "Voice",
-        "systemVoice": "System Default",
-        "rate": "Rate",
-        "volume": "Volume",
-        "csvLoading": "Loading card CSV",
-        "csvLoaded": "Card CSV loaded ({count} cards)",
-        "csvError": "Unable to load card CSV",
-        "csvReload": "Reload",
-
-        "groups": {
-            "content": "Story Content",
-            "scenarioCards": "Game Cards",
-            "cardFields": "Card Fields"
-        },
-
-        "categories": {
-            "story": "Intro and Story",
-            "interlude": "Interludes",
-            "resolution": "Resolutions",
-            "codex": "Codex",
-            "campaignLog": "Campaign Log",
-            "actAgenda": "Acts and Agendas",
-            "locationEnemy": "Locations and Enemies",
-            "encounter": "Encounter Cards",
-            "playerCard": "Player Cards",
-            "cardName": "Name",
-            "cardSubname": "Subtitle",
-            "cardTraits": "Traits",
-            "cardText": "Rules Text",
-            "cardFlavor": "Flavor Text"
-        },
-
-        "references": {
-            "card": "Card {code}",
-            "tarot": "Tarot card {name}",
-            "chaosToken": "Chaos token {name}",
-            "chaosTokenMorph": "Chaos token changes from {from} to {to}"
-        }
-    }
+    "rotateLayout": "Rotate Location Layout"
 }

@@ -99,7 +99,6 @@ watchEffect(() => {
   height: 15px;
   padding: 0;
   border-radius: 50%;
-  border: var(--edge-width) solid var(--edge-dim);
   background: var(--surface-raised);
   color: var(--text);
   cursor: pointer;

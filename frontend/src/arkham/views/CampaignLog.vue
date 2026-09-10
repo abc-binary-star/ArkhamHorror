@@ -71,7 +71,6 @@ onUnmounted(() => document.removeEventListener('keydown', onKeyDown))
   padding: 8px 16px;
   border-radius: 8px;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   color: var(--text-dim);
   font-family: "Noto Sans", Avenir, Helvetica, Arial, sans-serif;
   font-size: 0.95em;

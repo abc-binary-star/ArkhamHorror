@@ -225,7 +225,6 @@ defineExpose({
   gap: 12px;
   padding: 10px 12px;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-lg);
 }
 
@@ -292,7 +291,6 @@ defineExpose({
   display: flex;
   border-radius: 4px;
   overflow: hidden;
-  border: 1px solid var(--box-border);
 }
 
 .mode-picker input[type="radio"] {
@@ -337,7 +335,6 @@ defineExpose({
 .select-btn {
   padding: 7px 16px;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   color: var(--title);
   border-radius: 6px;
   cursor: pointer;

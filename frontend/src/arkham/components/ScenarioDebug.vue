@@ -293,7 +293,6 @@ const setCount = (key: string) => {
   width: min(520px, 100%);
   max-height: 90vh;
   overflow: visible;
-  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
   background: rgba(20, 24, 32, 0.96);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
@@ -335,7 +334,6 @@ const setCount = (key: string) => {
 
 .scenario-debug-options button {
   min-width: 0;
-  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.65);
   color: white;

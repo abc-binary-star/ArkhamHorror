@@ -236,7 +236,6 @@ async function setDayTime(row: number, col: number) {
   display: grid;
   grid-template-columns: 56px 56px;
   width: max-content;
-  border: 1px solid rgba(70, 50, 30, 0.65);
   margin-right: auto;
 }
 

@@ -105,7 +105,6 @@ const earnedDate = (row: Achievement | null): string | null => {
 .log-section {
   --accent: #b3922f;
   background: var(--box-background);
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: 8px;
   padding: 14px 16px;
 }
@@ -151,7 +150,6 @@ const earnedDate = (row: Achievement | null): string | null => {
   align-items: flex-start;
   gap: 10px;
   padding: 10px 12px;
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 8px;
   background: var(--surface-raised);
   color: var(--text-dim);

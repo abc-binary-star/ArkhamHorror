@@ -181,7 +181,6 @@ const areaText = (id: string, field: 'name' | 'scenarioName' | 'ref', fallback: 
 .area-box {
   width: 18px;
   height: 18px;
-  border: 1px solid rgba(70, 50, 30, 0.55);
   border-radius: 2px;
   background: rgba(255, 255, 255, 0.35);
   position: relative;

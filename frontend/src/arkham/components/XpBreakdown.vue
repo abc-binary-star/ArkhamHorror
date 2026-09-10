@@ -211,7 +211,6 @@ const scenarioIcon = computed<string | null>(() => campaignStepIcon(props.step))
 
 .breakdown {
   background: var(--box-background);
-  border: 1px solid rgba(255,255,255,0.07);
   border-radius: 8px;
   padding: 14px 16px;
   display: flex;
@@ -382,7 +381,6 @@ h2.title {
 
 .group {
   background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
   border-radius: 6px;
   padding: 10px 12px;
   display: flex;

@@ -105,7 +105,7 @@ h1 {
   color: var(--text);
   font-size: 2em;
   text-transform: none;
-  font-family: Arno, 'Noto Serif SC', serif;
+  font-family: Arno, 'Source Han Serif', serif;
   background-color: var(--surface-raised);
   border-bottom: var(--edge-width) solid var(--edge-dim);
 }
@@ -138,7 +138,6 @@ h1 {
 }
 
 button {
-  border: var(--edge-width) solid var(--edge-dim);
   margin: 0 10px;
   padding: 10px;
   text-transform: uppercase;
@@ -159,7 +158,6 @@ button {
 .done-button {
   margin: 0;
   width: 100%;
-  border: var(--edge-width) solid var(--edge-dim);
   text-align: center;
   padding: 10px;
   text-transform: uppercase;

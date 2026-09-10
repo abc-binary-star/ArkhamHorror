@@ -1097,10 +1097,6 @@ function closeHand() {
               @showCards="doShowCards"
             />
 
-            <div v-for="(slot, idx) in emptySlots" :key="idx" class="slot" :data-index="`${slot.tag}${idx}`">
-              <img :src="slotImg(slot)" />
-            </div>
-
             <div v-if="debug.active" key="debug-add-slots" class="debug-add-slots" :class="{ expanded: showDebugSlotMenu }">
               <button
                 type="button"
@@ -1126,6 +1122,17 @@ function closeHand() {
             </div>
 
           </transition-group>
+
+          <div class="equip-slots">
+            <div
+              v-for="(slot, idx) in emptySlots"
+              :key="idx"
+              class="slot"
+              :data-index="`${slot.tag}${idx}`"
+            >
+              <img :src="slotImg(slot)" />
+            </div>
+          </div>
         </section>
       </transition>
       <CardsUnderIndicator
@@ -1252,6 +1259,10 @@ function closeHand() {
         />
       </div>
       <div v-if="!isMobile" class="hand hand-area">
+        <div class="hand-area__header">
+          <span>{{ $t('player.hand') }}</span>
+          <span>{{ totalHandSize }}/{{ investigator.handSize }}</span>
+        </div>
         <transition-group tag="section" class="hand" @enter="onEnter" @leave="onLeave" @before-enter="onBeforeEnter"
           @drop="onDropHand($event)"
           @dragover.prevent="dragover($event)"
@@ -1329,7 +1340,15 @@ function closeHand() {
         <div v-if="investigator.handSize" class="hand-size" :class="handSizeClasses" :current-length="totalHandSize">{{ t('handSize') }}: {{totalHandSize}}/{{investigator.handSize}}</div>
       </div>
     </div>
-    <div v-if="isMobile" class="hand hand-area-IsMobile" :style="{ bottom: `${handAreaMarginBottom}px` }" @click="toggleHandAreaMarginBottom">
+    <!-- The action tray is fixed to the same bottom edge on narrow viewports,
+         so the sheet has to clear it — otherwise the collapsed strip sits on
+         top of the tray and swallows its buttons. -->
+    <div
+      v-if="isMobile"
+      class="hand hand-area-IsMobile"
+      :style="{ bottom: `calc(${handAreaMarginBottom}px + var(--game-bar-height, 0px) + env(safe-area-inset-bottom, 0px))` }"
+      @click="toggleHandAreaMarginBottom"
+    >
       <button
         v-if="debug.active"
         v-show="handAreaPointerEvents === 'auto'"
@@ -1476,20 +1495,29 @@ function closeHand() {
 .in-play-toggle {
   display: none;
   width: 100%;
-  height: 12px;
+  height: 14px;
+  /* The global `button { min-height: 42px }` would otherwise blow this grip up
+     into a 42px slab across the table. */
+  min-height: 14px;
   align-items: center;
   justify-content: center;
-  background: color-mix(in srgb, var(--surface-table, #626e70) 78%, var(--ink));
+  /* A brass-trimmed leather rail rather than a bare grey bar: it sits on the
+     table next to the action tray, so it reads as part of that object. */
   border: none;
+  border-top: 1px solid rgb(205 175 107 / 0.42);
+  border-bottom: 1px solid rgb(205 175 107 / 0.2);
+  background:
+    linear-gradient(180deg, rgb(28 48 45 / 0.92), rgb(11 22 21 / 0.96)),
+    url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.avif') center / cover no-repeat;
   box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.4);
   cursor: pointer;
   flex-shrink: 0;
 
   &::before {
     content: '';
-    width: 32px;
+    width: 34px;
     height: 3px;
-    background: rgba(255, 255, 255, 0.25);
+    background: linear-gradient(90deg, transparent, rgb(229 194 107 / 0.85), transparent);
     border-radius: 2px;
   }
 
@@ -1520,7 +1548,6 @@ function closeHand() {
   flex-shrink: 0;
   padding: 10px 10px 10px 5px;
   background: rgb(10 23 22 / 0.72);
-  border: 1px solid rgb(205 175 107 / 0.28);
   border-radius: 5px;
 }
 
@@ -1569,7 +1596,6 @@ function closeHand() {
   gap: 5px;
   background: rgb(10 23 22 / 0.62);
   padding: 10px;
-  border: 1px solid rgb(205 175 107 / 0.28);
   border-radius: 5px;
   max-height: 300px;
   transition: max-height 0.15s cubic-bezier(0.4, 0, 0.2, 1), padding 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.1s ease;
@@ -1783,6 +1809,29 @@ function closeHand() {
   }
 }
 
+/* Empty equipment slots live in their own two-row grid at the end of the play
+   row, so all slots stay visible without scrolling the assets; slightly larger
+   than a card to read as the equipment rack. */
+.equip-slots {
+  display: grid;
+  grid-template-rows: repeat(2, auto);
+  grid-auto-flow: column;
+  gap: 5px;
+  align-content: center;
+  margin-left: 3px;
+
+  .slot {
+    --slot-width: min(calc(2.5vw + 22px), 60px);
+    width: var(--slot-width);
+    height: calc(var(--slot-width) * 7 / 5);
+
+    img {
+      width: calc(var(--slot-width) / 2);
+      filter: invert(75%);
+    }
+  }
+}
+
 .debug-add-slots {
   display: flex;
   flex-direction: column;
@@ -1794,7 +1843,6 @@ function closeHand() {
   }
 
   button {
-    border: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 5px;
     background: rgba(0, 0, 0, 0.42);
     color: white;
@@ -1902,19 +1950,49 @@ function closeHand() {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  align-items: flex-start;
+  align-items: stretch;
   flex: 1;
   max-width: 100%;
   min-width: 0;
   padding: 0 10px 10px;
-  border: 1px solid rgb(205 175 107 / 0.28);
   border-radius: 5px;
   background: rgb(10 23 22 / 0.48);
 }
 
+.hand-area__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  flex: 0 0 auto;
+  padding: 4px 2px 2px;
+  border-bottom: 1px solid rgb(205 175 107 / 0.32);
+  color: var(--text-on-dark, #f4efe4);
+  font-family: Teutonic, Georgia, serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+}
+
+.hand-area__header span:last-child {
+  color: rgb(214 186 128 / 0.88);
+  font-family: Typewriter, monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+@media (min-width: 1200px) {
+  .hand-area > section.hand {
+    width: auto !important;
+    max-width: 100%;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    align-self: stretch !important;
+    box-sizing: border-box;
+  }
+}
+
 .hand-debug-actions button,
 .hand-debug-add-button {
-  border: 1px solid var(--button-highlight);
   border-radius: 4px;
   background: var(--surface-raised, #f4efe4);
   color: var(--text);
@@ -1938,7 +2016,7 @@ function closeHand() {
   height: calc(var(--card-height) * 4);
   background:
     linear-gradient(180deg, rgb(18 36 34 / 0.12), rgb(8 18 18 / 0.72)),
-    url('/assets/veiled-harbour/T02-调查员皮革桌垫.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/T02-调查员皮革桌垫.avif') center / cover no-repeat;
   border-top: 1px solid rgb(205 175 107 / 0.52);
   transition: bottom 0.3s ease;
   overflow: hidden;

@@ -132,7 +132,7 @@ async function sync(deck: Arkham.Deck) {
       <LoadState v-if="loadError" error @retry="loadDecks" />
       <LoadState v-else-if="!loaded" />
       <div v-else-if="decks.length === 0" class="empty-state">
-        <img class="empty-state-card" src="/assets/veiled-harbour/24-空档案纸牌.png" alt="" aria-hidden="true" />
+        <img class="empty-state-card" src="/assets/veiled-harbour/24-空档案纸牌.avif" alt="" aria-hidden="true" />
         <p>{{ $t(allDecks.length === 0 ? 'noDecksYet' : 'noDecksMatchFilters') }}</p>
       </div>
       <div v-else class="deck-grid">
@@ -165,7 +165,7 @@ async function sync(deck: Arkham.Deck) {
   padding: 28px 0 72px;
   background:
     linear-gradient(rgba(233, 225, 210, 0.78), rgba(233, 225, 210, 0.78)),
-    url('/assets/veiled-harbour/09-牌组工作台纸面.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/09-牌组工作台纸面.avif') center / cover no-repeat;
   border: 1px solid color-mix(in srgb, var(--brass) 30%, transparent);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-2);
@@ -191,7 +191,7 @@ async function sync(deck: Arkham.Deck) {
     flex: 1;
     color: var(--title);
     font-size: 2em;
-    font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
+    font-family: Arno, 'Source Han Serif', serif;
     font-weight: 600;
     letter-spacing: 0.02em;
     margin: 0;
@@ -205,7 +205,6 @@ async function sync(deck: Arkham.Deck) {
 
 .new-deck-panel {
   background: var(--surface-panel) url('/assets/veiled-harbour/03-档案纸纹理.svg') repeat;
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-3);
   padding: 20px;

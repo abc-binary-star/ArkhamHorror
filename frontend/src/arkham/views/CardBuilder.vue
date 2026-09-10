@@ -376,7 +376,6 @@ async function onImport(event: Event) {
     }
   }
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-3);
   padding: 1rem;
@@ -414,7 +413,7 @@ async function onImport(event: Event) {
   margin-bottom: 0.6rem;
 
   h2 {
-    font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
+    font-family: Arno, 'Source Han Serif', serif;
     font-size: 1.3em;
     font-weight: 600;
     margin: 0;
@@ -423,7 +422,6 @@ async function onImport(event: Event) {
 
 .new-card {
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-sm);
   color: var(--title);
   cursor: pointer;
@@ -447,7 +445,6 @@ async function onImport(event: Event) {
 
 .tool {
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-sm);
   color: var(--title);
   cursor: pointer;
@@ -611,7 +608,6 @@ async function onImport(event: Event) {
 
 .builder {
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-3);
   flex: 1 1 auto;
@@ -641,7 +637,7 @@ async function onImport(event: Event) {
   margin-bottom: 0.75rem;
 
   h2 {
-    font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
+    font-family: Arno, 'Source Han Serif', serif;
     font-size: 1.3em;
     font-weight: 600;
     margin: 0;
@@ -672,7 +668,6 @@ async function onImport(event: Event) {
 
 button {
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-sm);
   color: var(--title);
   cursor: pointer;

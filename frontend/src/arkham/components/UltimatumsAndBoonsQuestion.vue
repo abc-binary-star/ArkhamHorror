@@ -70,7 +70,6 @@ function pick(index: number) {
   padding: 20px 24px;
   border-radius: 10px;
   background: var(--box-background);
-  border: 1px solid rgba(179, 146, 47, 0.45);
 }
 
 .morrigan-title {

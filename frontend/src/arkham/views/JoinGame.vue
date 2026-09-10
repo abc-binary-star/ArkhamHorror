@@ -87,7 +87,6 @@ async function join() {
     width: 100%;
     padding: 12px;
     background: var(--spooky-green);
-    border: var(--edge-width) solid var(--edge-on-accent);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-3);
     text-transform: uppercase;
@@ -180,7 +179,7 @@ async function join() {
 h2 {
   color: var(--title);
   margin-left: 10px;
-  font-family: Arno, "Noto Serif SC", "Noto Serif CJK SC", serif;
+  font-family: Arno, 'Source Han Serif', serif;
   font-weight: 600;
   letter-spacing: 0.06em;
   text-shadow: none;

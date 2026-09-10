@@ -362,7 +362,6 @@ const isBuildSpiritDeckQuestion = (q: Question): q is Question & { tag: Question
   align-items: center;
   align-self: center;
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: 999px;
   color: var(--text);
   display: flex;
@@ -385,14 +384,11 @@ const isBuildSpiritDeckQuestion = (q: Question): q is Question & { tag: Question
 
 .question-content {
   width: 60%;
-  background:
-    linear-gradient(rgba(233, 225, 210, 0.68), rgba(233, 225, 210, 0.68)),
-    url('/assets/veiled-harbour/29-故事抉择内框-v2.png') center / cover no-repeat;
-  border: 1px solid color-mix(in srgb, var(--brass) 54%, var(--border-panel));
+  background: url('/assets/veiled-harbour/C02-象牙档案纸微纹理.avif') center / 256px 256px repeat;
   padding: 20px;
   color: var(--text);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-4), inset 0 0 0 1px rgb(255 255 255 / 0.2);
+  box-shadow: var(--shadow-2);
   &:has(h2) { padding: 0; }
 }
 .question-label {
@@ -415,7 +411,6 @@ p {
 }
 
 button {
-  border: var(--edge-width) solid var(--edge-dim);
   margin: 0 10px;
   padding: 10px;
   text-transform: uppercase;

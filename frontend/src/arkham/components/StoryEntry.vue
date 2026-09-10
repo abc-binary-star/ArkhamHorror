@@ -196,6 +196,7 @@ const flippableCard = (cardCode: string) => {
     <div class="entry-row" :class="{ 'task-layout': readChoices.some((choice) => 'label' in choice && !!drownedCityTaskCardCode(choice.label)) }">
       <div class="entry">
         <h1
+          class="story-heading"
           v-if="question.flavorText.title"
           v-html="formatContent(maybeFormat(question.flavorText.title))"
         ></h1>
@@ -366,7 +367,6 @@ const flippableCard = (cardCode: string) => {
       0 0 40px rgba(66, 69, 28, 0.45),
       0 0 80px rgba(66, 69, 28, 0.25);
     color: #c1c49c;
-    border: 1px solid rgba(66, 69, 28, 0.5);
     position: relative;
     overflow: hidden;
     isolation: isolate;
@@ -389,7 +389,6 @@ const flippableCard = (cardCode: string) => {
       position: absolute;
       inset: 6px;
       pointer-events: none;
-      border: 1px solid rgba(131, 137, 56, 0.25);
       box-shadow:
         inset 0 0 40px rgba(131, 137, 56, 0.15),
         inset 0 0 4px rgba(131, 137, 56, 0.35);
@@ -535,13 +534,14 @@ const flippableCard = (cardCode: string) => {
 
 .intro-text {
   color: var(--neutral-dark);
-  font-size: 1.5em;
+  font-size: clamp(16px, 1.4vw, 20px);
+  line-height: 1.75;
   overflow: auto;
   height: 100%;
   padding: 20px;
   margin-bottom: 20px;
   :deep(h1) {
-    font-family: "Teutonic";
+    font-family: "Source Han Serif", "Arno", serif;
     font-weight: 500;
     color: var(--green-title);
     margin: 0;
@@ -561,6 +561,10 @@ const flippableCard = (cardCode: string) => {
     font-style: italic;
   }
 
+}
+
+.intro-text .entry > .story-heading {
+  font-family: "Source Han Serif", "Arno", serif;
 }
 
 .entry-row {

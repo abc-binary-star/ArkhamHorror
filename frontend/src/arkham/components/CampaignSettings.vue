@@ -435,7 +435,6 @@ input[type=radio] + label {
   display:inline-block;
   padding: 4px 12px;
   background-color: var(--surface-panel);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-md);
   color: var(--text);
   cursor: pointer;
@@ -460,7 +459,6 @@ input[type=checkbox] + label {
   display:inline-block;
   padding: 4px 12px;
   background-color: var(--surface-panel);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-md);
   color: var(--text);
   cursor: pointer;

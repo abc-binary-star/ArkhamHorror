@@ -167,7 +167,7 @@ dialog[open]::backdrop {
   background: var(--button);
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.03)),
-    url('/assets/veiled-harbour/C02-象牙档案纸微纹理.jpg');
+    url('/assets/veiled-harbour/C02-象牙档案纸微纹理.avif');
   background-size: 100% 100%, 256px 256px;
   background-repeat: no-repeat, repeat;
   color: var(--text);

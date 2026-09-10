@@ -161,7 +161,6 @@ watch(activeSettings, (settings) => {
   margin-top: 10px;
   padding: 10px;
   background-color: var(--surface-raised);
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: var(--radius-lg);
   font-size: 1.5em;
   color: var(--text);
@@ -175,7 +174,7 @@ h2 {
   padding: 0;
   margin: 0;
   text-transform: none;
-  font-family: Arno, 'Noto Serif SC', serif;
+  font-family: Arno, 'Source Han Serif', serif;
   font-weight: 600;
   font-size: 1.5em;
 }
@@ -183,7 +182,6 @@ h2 {
 button {
   width: 100%;
   background-color: var(--button-1);
-  border: var(--edge-width) solid var(--edge-on-accent);
   border-radius: var(--radius-md);
   text-transform: uppercase;
   color: var(--button-1-text);
@@ -212,7 +210,6 @@ input[type=radio] + label {
   display:inline-block;
   padding: 4px 12px;
   background-color: var(--surface-panel);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-md);
   color: var(--text);
   cursor: pointer;
@@ -236,7 +233,6 @@ input[type=checkbox] + label {
   display:inline-block;
   padding: 4px 12px;
   background-color: var(--surface-panel);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-md);
   color: var(--text);
   cursor: pointer;
@@ -279,7 +275,6 @@ input[type=checkbox]:checked + label {
   flex-direction: column;
   gap: 10px;
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--edge-dim);
   padding: 10px;
   border-radius: 5px;
   .options {
@@ -300,7 +295,6 @@ input[type=checkbox]:checked + label {
 
 .records {
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 5px;
   padding: 10px;
   display: flex;

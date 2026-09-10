@@ -583,7 +583,6 @@ h2 {
 .advance-panel {
   margin-bottom: 16px;
   padding: 14px 16px;
-  border: 1px solid var(--important, #d8a657);
   border-radius: 6px;
   background: rgba(216, 166, 87, 0.08);
 }
@@ -697,7 +696,6 @@ h2 {
   background:
     linear-gradient(120deg, rgba(110, 134, 64, 0.1), rgba(110, 134, 64, 0) 56%),
     var(--box-background);
-  border: 1px solid color-mix(in srgb, var(--spooky-green) 28%, var(--box-border));
   border-radius: 3px;
   margin-bottom: 10px;
   overflow: hidden;

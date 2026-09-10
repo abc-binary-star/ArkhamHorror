@@ -1088,28 +1088,32 @@ i.action {
 
 .skip-triggers-button {
   transition: all 0.2s ease-in;
-  background-color: var(--select);
-  color: white;
-  border: 0;
-  border-radius: 2px;
+  border: var(--plaque-border);
+  border-radius: var(--control-radius);
+  background: var(--plaque-plate);
+  color: var(--plaque-ink);
+  text-shadow: var(--plaque-text-shadow);
+  box-shadow: var(--plaque-shadow);
 
   &[disabled] {
-    background-color: #999;
-    color: #666;
+    border: var(--plaque-border-disabled);
+    background: var(--plaque-plate-disabled);
+    color: var(--plaque-ink-disabled);
   }
 
   &:not([disabled]):hover {
-    background-color: var(--select-dark);
+    border: var(--plaque-border-hover);
+    color: #fff;
+    filter: brightness(1.14);
   }
 }
 
 .end-turn-button {
   min-height: 40px;
-  border: 1px solid rgb(205 175 107 / 0.72);
   border-radius: 4px;
   background:
     linear-gradient(180deg, rgb(205 175 107 / 0.22), rgb(71 54 29 / 0.4)),
-    url('/assets/veiled-harbour/36-行动按钮四态铭牌组-v2.png') 0 center / 400% 100% no-repeat;
+    url('/assets/veiled-harbour/36-行动按钮四态铭牌组-v2.avif') 0 center / 400% 100% no-repeat;
   color: rgb(249 241 218 / 0.98);
   font-family: Teutonic, Georgia, serif;
   letter-spacing: 0.05em;

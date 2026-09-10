@@ -161,7 +161,7 @@ const dismissNotification = (notification: AppNotification) => {
           <p class="hero-caption">{{ $t('home.heroCaption') }}</p>
           <div class="hero-actions">
             <PrimaryButton :label="leadGame ? $t('continue') : $t('newGame')" @click="leadGame ? router.push(`/games/${leadGame.id}`) : toggleNewGame()" />
-            <button v-if="currentUser" class="hero-secondary" type="button" @click="toggleImportGame">{{ $t('home.loadGame') }}</button>
+            <button v-if="currentUser" class="hero-secondary plaque plaque--paper" type="button" @click="toggleImportGame">{{ $t('home.loadGame') }}</button>
           </div>
         </div>
         <div class="home-hero-seal" aria-hidden="true">
@@ -176,7 +176,7 @@ const dismissNotification = (notification: AppNotification) => {
           <h2>{{$t('activeGames')}}</h2>
         </div>
         <div class="header-actions">
-          <button v-if="currentUser" class="secondary-cta" type="button" @click="toggleImportGame">
+          <button v-if="currentUser" class="secondary-cta plaque plaque--paper" type="button" @click="toggleImportGame">
             {{ $t('home.loadGame') }}
           </button>
           <PrimaryButton :label="$t('newGame')" @click="toggleNewGame" />
@@ -190,10 +190,10 @@ const dismissNotification = (notification: AppNotification) => {
               <div class="panel-header">
                 <h3>{{ $t('home.loadGame') }}</h3>
                 <div class="panel-actions">
-                  <button class="panel-close" type="button" @click="toggleImportGame">{{ $t('cancel') }}</button>
+                  <button class="panel-close plaque plaque--paper" type="button" @click="toggleImportGame">{{ $t('cancel') }}</button>
                   <button
                     v-if="importGameSelected"
-                    class="panel-load"
+                    class="panel-load plaque"
                     type="button"
                     :disabled="!importGameCanSubmit"
                     @click="submitImportGame"
@@ -261,7 +261,6 @@ h2 {
     outline: 0;
     padding: 10px 15px;
     background: var(--spooky-green);
-    border: var(--edge-width) solid var(--edge-on-accent);
     box-shadow: var(--shadow-2);
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -306,9 +305,9 @@ button.cancel-new-game-button {
   font-weight: var(--font-black);
   letter-spacing: 0.05em;
   width: fit-content;
-  background-color: var(--survivor-dark);
-  border-color: var(--survivor);
-  color: #fff2f0;
+  background: rgb(19 34 33 / 0.72);
+  border-color: #9d8c66;
+  color: #efe8d6;
 }
 
 button.new-game-button {
@@ -327,7 +326,6 @@ p {
 
 .box {
   background-image: var(--panel-gradient);
-  border: var(--edge-width) solid var(--box-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-2);
   color: var(--text);
@@ -358,7 +356,6 @@ header {
     height: fit-content;
     align-self: center;
     background-color: var(--spooky-green);
-    border: var(--edge-width) solid var(--edge-on-accent);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-2);
     outline: 0;
@@ -388,15 +385,9 @@ header {
   justify-content: flex-end;
 }
 
-/* Ghost buttons carry no shadow until hovered, so they read as secondary
-   next to the filled CTA. */
+/* Material comes from `.plaque--paper`. */
 .secondary-cta {
   align-self: center;
-  background: transparent;
-  border: var(--edge-width) solid var(--box-border);
-  border-radius: var(--radius-md);
-  box-shadow: none;
-  color: var(--text-dim);
   cursor: pointer;
   font-size: 0.85em;
   font-weight: var(--font-bold);
@@ -404,13 +395,6 @@ header {
   outline: 0;
   padding: 8px 12px;
   text-transform: uppercase;
-
-  &:hover {
-    border-color: var(--edge);
-    background: rgba(48, 58, 61, 0.08);
-    box-shadow: var(--shadow-2);
-    color: var(--text);
-  }
 
   @media (max-width: 768px) {
     padding: 6px 9px;
@@ -420,7 +404,6 @@ header {
 
 .load-game-panel {
   background-image: var(--panel-gradient);
-  border: var(--edge-width) solid var(--box-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-4);
   padding: 14px;
@@ -451,10 +434,9 @@ header {
   gap: 8px;
 }
 
+/* Material comes from `.plaque` / `.plaque--paper`. */
 .panel-load,
 .panel-close {
-  border: var(--edge-width) solid var(--edge-dim);
-  border-radius: var(--radius-md);
   cursor: pointer;
   font-size: 0.8em;
   font-weight: var(--font-bold);
@@ -464,33 +446,16 @@ header {
 }
 
 .panel-load {
-  background: var(--spooky-green);
-  border-color: var(--edge-on-accent);
-  box-shadow: var(--shadow-2);
-  color: var(--button-1-text);
   font-weight: var(--font-black);
-
-  &:hover:not(:disabled) {
-    filter: brightness(1.1);
-  }
 
   &:disabled {
     cursor: not-allowed;
     opacity: 0.45;
-    box-shadow: var(--shadow-1);
   }
 }
 
 .panel-close {
-  background: transparent;
-  box-shadow: none;
-  color: var(--text-dim);
-
-  &:hover {
-    border-color: var(--edge);
-    background: rgba(48, 58, 61, 0.08);
-    color: var(--text);
-  }
+  font-weight: var(--font-bold);
 }
 
 /* Brass notice strip. Deliberately does not shadow the global --text /
@@ -500,7 +465,6 @@ header {
   flex-direction: row;
   box-sizing: border-box;
   padding: 12px 14px;
-  border: var(--edge-width) solid var(--brass-dim);
   border-radius: var(--radius-lg);
   background-image: linear-gradient(
     to bottom,
@@ -551,17 +515,55 @@ header.main-header {
   display: flex;
   align-items: stretch;
   margin: 0 0 30px;
-  border: 1px solid rgba(45, 55, 54, 0.5);
   border-radius: 8px;
-  background: #bfc0b8 url('/assets/veiled-harbour/01-诡镇奇谈主视觉.png') center / cover no-repeat;
-  box-shadow: 0 18px 40px rgba(34, 40, 38, 0.22), 0 2px 5px rgba(34, 40, 38, 0.14);
+  background: #bfc0b8 url('/assets/veiled-harbour/01-诡镇奇谈主视觉.avif') center / cover no-repeat;
+  box-shadow:
+    inset 0 0 70px rgba(18, 30, 31, 0.32),
+    0 18px 40px rgba(34, 40, 38, 0.22),
+    0 2px 5px rgba(34, 40, 38, 0.14);
 }
 
+/* The veil exists so the title clears AA over the key art; it should not be a
+   flat milk wash across half the hero. Concentrate it in the first third,
+   then let the art fall into its own shadow — same two colours, only the
+   alphas and stops change. */
 .home-hero-wash {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: linear-gradient(90deg, rgba(248, 244, 234, 0.88) 0%, rgba(248, 244, 234, 0.67) 27%, rgba(248, 244, 234, 0.16) 52%, rgba(29, 42, 43, 0.08) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(248, 244, 234, 0.94) 0%,
+    rgba(248, 244, 234, 0.86) 17%,
+    rgba(248, 244, 234, 0.52) 33%,
+    rgba(248, 244, 234, 0.14) 45%,
+    rgba(29, 42, 43, 0.12) 62%,
+    rgba(18, 30, 31, 0.4) 100%
+  );
+}
+
+/* Harbour haze, drifting across the art. Slow enough that it is atmosphere
+   rather than animation. */
+.home-hero::after {
+  content: '';
+  position: absolute;
+  inset: -10% -6%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(52% 34% at 62% 46%, rgba(236, 240, 235, 0.16), transparent 72%),
+    radial-gradient(40% 30% at 84% 72%, rgba(226, 234, 230, 0.12), transparent 74%);
+  background-repeat: no-repeat;
+  animation: hero-mist 64s ease-in-out infinite alternate;
+}
+
+@keyframes hero-mist {
+  from {
+    transform: translate3d(-2.5%, 1%, 0) scale(1.02);
+  }
+  to {
+    transform: translate3d(3.5%, -1.5%, 0) scale(1.07);
+  }
 }
 
 .home-hero-content {
@@ -637,20 +639,14 @@ header.main-header {
 
 .hero-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
+/* Material comes from `.plaque--paper`; only sizing and rhythm live here. */
 .hero-secondary {
   height: 40px;
   padding: 0 14px;
-  border: 1px solid rgba(45, 55, 54, 0.48);
-  border-radius: 4px;
-  background: rgba(247, 241, 230, 0.42);
-  box-shadow: 0 1px 2px rgba(25, 32, 30, 0.1);
-  color: #2c3936;
   font-size: 0.82rem;
   font-weight: 600;
   letter-spacing: 0.04em;
 }
-
-.hero-secondary:hover { background: rgba(247, 241, 230, 0.72); color: var(--harbour-teal, #28615d); }
 
 .home-hero-seal {
   position: absolute;
@@ -689,13 +685,12 @@ header.main-header {
   position: relative;
   overflow: hidden;
   padding: 20px;
-  border: 1px solid var(--box-border);
   border-radius: 5px;
   background: var(--paper, #e9e1d2) url('/assets/veiled-harbour/03-档案纸纹理.svg') repeat;
   box-shadow: var(--shadow-2);
 }
 
-.archive-note::before { content: ''; position: absolute; inset: 8px; border: 1px solid rgba(165, 130, 75, 0.45); pointer-events: none; }
+.archive-note::before { content: ''; position: absolute; inset: 8px; pointer-events: none; }
 .archive-note > * { position: relative; }
 .archive-note-label { margin: 0 0 18px; color: var(--brass-dim); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; }
 .archive-note-title { margin: 0; color: var(--ink); font-family: 'Arno', 'Source Han Serif', serif; font-size: 1.38rem; font-weight: 600; line-height: 1.3; }
@@ -723,11 +718,11 @@ header.main-header {
   .home-hero {
     min-height: 430px;
     margin-bottom: 24px;
-    background-image: linear-gradient(180deg, rgba(248, 244, 234, 0.22), rgba(29, 42, 43, 0.22)), url('/assets/veiled-harbour/15-移动端诡镇奇谈竖版.png');
+    background-image: linear-gradient(180deg, rgba(248, 244, 234, 0.22), rgba(29, 42, 43, 0.22)), url('/assets/veiled-harbour/15-移动端诡镇奇谈竖版.avif');
     background-position: center;
     background-size: cover;
   }
-  .home-hero-wash { background: linear-gradient(180deg, rgba(248, 244, 234, 0.9) 0%, rgba(248, 244, 234, 0.66) 54%, rgba(29, 42, 43, 0.12) 100%); }
+  .home-hero-wash { background: linear-gradient(180deg, rgba(248, 244, 234, 0.94) 0%, rgba(248, 244, 234, 0.84) 26%, rgba(248, 244, 234, 0.5) 46%, rgba(29, 42, 43, 0.16) 68%, rgba(18, 30, 31, 0.42) 100%); }
   .home-hero-content { width: auto; max-width: 100%; padding: 28px 22px; justify-content: flex-start; }
   .home-hero h1 { font-size: 2.5rem; }
   .home-hero-seal { right: 14px; bottom: 12px; }

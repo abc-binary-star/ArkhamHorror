@@ -92,7 +92,6 @@ const discovered = computed(() => {
 <style scoped>
 .log-section {
   background: var(--box-background);
-  border: 1px solid rgba(255,255,255,0.07);
   border-radius: 8px;
   padding: 14px 16px;
 }

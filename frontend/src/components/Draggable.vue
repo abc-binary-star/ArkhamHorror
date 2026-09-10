@@ -346,7 +346,7 @@ function moveUp() {
         <span class="header-title">
           <slot name="handle"></slot>
         </span>
-        <button class="minimize-btn" @click.stop="minimize">
+        <button class="minimize-btn" type="button" :aria-label="isMinimized ? $t('window.restore') : $t('window.minimize')" :aria-expanded="!isMinimized" @click.stop="minimize">
           <svg v-if="isMinimized" width="12" height="12" viewBox="0 0 24 24">
             <path d="M12 9l-6 6h12l-6-6z" fill="currentColor" />
           </svg>
@@ -516,7 +516,7 @@ function moveUp() {
     align-items: center;
     position: relative;
     padding: 5px 10px;
-    font-family: Teutonic;
+    font-family: "Source Han Serif", "Arno", serif;
     background: rgba(0, 0, 0, 0.5);
     color: white;
     text-transform: uppercase;
@@ -536,11 +536,13 @@ function moveUp() {
     }
 
     .minimize-btn {
-      border: none;
-      color: white;
-      border-radius: 50%;
-      width: min(24px, 2vw);
-      height: min(24px, 2vw);
+      color: #efe4c9;
+      border-radius: 3px;
+      width: 36px;
+      height: 36px;
+      min-height: 36px;
+      padding: 0;
+      flex: 0 0 36px;
       aspect-ratio: 1;
       display: flex;
       align-items: center;
@@ -550,12 +552,13 @@ function moveUp() {
       justify-self: flex-end;
       cursor: pointer;
       pointer-events: auto;
-      background: #3C4F5A;
+      background: #263d38;
       &:hover {
-        background: #546E7A;
+        background: #3b554b;
       }
 
       svg {
+        flex-shrink: 0;
         fill: currentColor;
       }
     }

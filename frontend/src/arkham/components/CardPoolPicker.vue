@@ -93,7 +93,6 @@ const candidatesLabel = computed(() => formatContent(t(props.candidatesKey)))
   flex-direction: column;
   gap: 10px;
   padding: 12px;
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: var(--radius-lg);
   background: var(--surface-panel);
   box-shadow: var(--shadow-3);
@@ -108,7 +107,7 @@ const candidatesLabel = computed(() => formatContent(t(props.candidatesKey)))
   padding-bottom: 7px;
   border-bottom: var(--edge-width) solid var(--edge-dim);
   color: var(--title);
-  font-family: Arno, "Noto Serif SC", serif;
+  font-family: Arno, 'Source Han Serif', serif;
   font-size: 1.05rem;
   font-weight: 400;
   letter-spacing: 0.04em;

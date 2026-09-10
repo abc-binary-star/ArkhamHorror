@@ -99,3 +99,14 @@
   font-family: "ArkhamFlavor";
   src: url("/fonts/ArnoPro-ItalicCaption.ttf");
 }
+
+/* Bundled GB2312 subset (SIL OFL) so CJK display type is identical on every
+   platform. Registered under the family name the existing display stacks
+   already ask for. */
+@font-face {
+  font-family: "Source Han Serif";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/fonts/SourceHanSerifSC-SemiBold.woff2") format("woff2");
+}

@@ -160,7 +160,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
   padding: 20px;
   overflow: auto;
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-5);
 
@@ -252,7 +251,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
     padding: 2px 8px;
     color: var(--brass-dim);
     background: color-mix(in srgb, var(--brass) 16%, var(--surface-raised));
-    border: var(--edge-width) solid var(--brass);
     border-radius: 999px;
     font-size: 0.72rem;
     font-weight: 700;

@@ -208,7 +208,6 @@ function playSeat(group: GroupDigest) {
 
 .play-seat-btn {
   background: var(--spooky-green);
-  border: var(--edge-width) solid var(--edge-on-accent);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-2);
   color: var(--button-1-text);

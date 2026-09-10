@@ -321,7 +321,6 @@ h4 {
   width: 1em;
   height: auto;
   aspect-ratio: 1;
-  border: 1px solid #5C757C;
   background: rgba(255, 255, 255, 0.08);
   border-right: none;
   /* no right border except last */

@@ -121,7 +121,6 @@ onMounted(async () => {
   background:
     linear-gradient(120deg, rgba(110, 134, 64, 0.14), rgba(110, 134, 64, 0) 58%),
     var(--box-background);
-  border: 1px solid color-mix(in srgb, var(--spooky-green) 40%, var(--box-border));
   border-radius: 3px;
   margin-bottom: 10px;
   overflow: hidden;
@@ -236,7 +235,6 @@ onMounted(async () => {
 .event-group-card {
   min-width: 0;
   overflow: hidden;
-  border: var(--edge-width) solid color-mix(in srgb, var(--spooky-green) 45%, var(--edge-dim));
   border-radius: var(--radius-md);
   background: var(--surface-raised);
 }

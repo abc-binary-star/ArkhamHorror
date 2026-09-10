@@ -81,8 +81,7 @@ async function loadOlder() {
 .game-log {
   background:
     linear-gradient(rgb(246 240 225 / 0.2), rgb(246 240 225 / 0.2)),
-    url('/assets/veiled-harbour/T03-日志书页.png') center / cover no-repeat;
-  border: 1px solid color-mix(in srgb, var(--brass) 62%, var(--border-panel));
+    url('/assets/veiled-harbour/T03-日志书页.avif') center / cover no-repeat;
   width: calc(100% - 20px);
   border-radius: 2px;
   margin: 12px 10px;
@@ -108,7 +107,6 @@ async function loadOlder() {
   width: 100%;
   padding: 6px 10px;
   margin: 0 0 12px -12px;
-  border: 1px solid color-mix(in srgb, var(--brass) 52%, var(--edge-faint));
   border-radius: 2px;
   background: rgb(255 252 242 / 0.48);
   color: var(--text);

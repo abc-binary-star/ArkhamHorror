@@ -180,7 +180,6 @@ h2 {
   display: flex;
   color: var(--text);
   background-image: var(--panel-gradient);
-  border: var(--edge-width) solid var(--box-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-2);
   margin-bottom: 12px;
@@ -461,7 +460,6 @@ h2 {
 .game-difficulty {
   padding: 2px 10px;
   background: var(--panel-inset);
-  border: 1px solid var(--edge-dim);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-1);
   color: var(--text-dim);

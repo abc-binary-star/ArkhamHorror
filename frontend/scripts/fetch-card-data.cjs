@@ -21,22 +21,11 @@ const { spawnSync } = require('child_process')
 
 const DEFAULT_LANGS = [
   'en',
-  'de',
-  'es',
-  'fr',
-  'it',
-  'ko',
-  'pl',
-  'po',
-  'ru',
-  'uk',
   'zh',
 ]
 
-// Local app historically uses cards_po.json. ArkhamDB's Portuguese subdomain is pt.
 const HOST_LANG = {
   en: '',
-  po: 'pt',
 }
 
 const args = process.argv.slice(2)

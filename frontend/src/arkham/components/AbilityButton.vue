@@ -493,7 +493,7 @@ const classObject = computed(() => {
   min-height: var(--control-height);
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.06), rgba(0, 0, 0, 0.08)),
-    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg');
+    url('/assets/veiled-harbour/C01-墨绿漆面微纹理.avif');
   background-size: 100% 100%, 256px 256px;
   background-repeat: no-repeat, repeat;
   box-shadow: var(--shadow-1);

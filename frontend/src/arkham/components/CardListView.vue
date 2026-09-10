@@ -435,7 +435,6 @@ a {
 
 .overlay-controls button {
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--box-border);
   border-radius: 3px;
   color: var(--title);
   cursor: pointer;

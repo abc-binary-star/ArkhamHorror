@@ -367,7 +367,6 @@ function confirm() {
   font-size: 0.85rem;
   color: #ccc;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 4px;
   outline: none;
   width: 200px;
@@ -384,7 +383,6 @@ function confirm() {
   gap: 8px;
   padding: 10px 12px;
   background: rgba(49, 54, 155, 0.12);
-  border: 1px solid rgba(120, 160, 230, 0.25);
   border-radius: 8px;
 }
 
@@ -586,7 +584,6 @@ function confirm() {
   min-width: 240px;
   height: 48px;
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(110, 134, 64, 0.95);
   color: #fff;
   letter-spacing: 0.08em;

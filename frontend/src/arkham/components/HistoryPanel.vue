@@ -582,7 +582,6 @@ function damagedFallbackText(view: DamagedTargetView): string {
 
 .history-panel {
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: var(--radius-lg);
   padding: 1rem 1.25rem 1.25rem;
   width: min(90vw, 900px);

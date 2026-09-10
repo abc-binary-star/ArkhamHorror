@@ -508,16 +508,14 @@ async function createGame() {
   min-height: 0;
   box-sizing: border-box;
   padding-top: 20px;
-  padding-bottom: 10px;
+  padding-bottom: 36px;
   background:
     linear-gradient(180deg, rgba(26, 40, 41, 0.72), rgba(26, 40, 41, 0.9)),
-    url('/assets/veiled-harbour/12-深海航图叠层.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/12-深海航图叠层.avif') center / cover no-repeat;
 }
 
 #new-campaign {
-  width: 70vw;
-  max-width: 98vw;
-  min-width: 60vw;
+  width: min(1120px, calc(100% - 48px));
   color: var(--text);
   border-radius: 3px;
   margin: 0 auto 20px;
@@ -530,7 +528,6 @@ async function createGame() {
   width: 100%;
   padding: 12px;
   background: var(--spooky-green);
-  border: var(--edge-width) solid var(--edge-on-accent);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-2);
   text-transform: uppercase;
@@ -569,14 +566,14 @@ async function createGame() {
   background: transparent;
   border-color: var(--edge-dim);
   box-shadow: none;
-  color: var(--text-dim);
+  color: #d6d1bf;
 }
 
 #new-campaign button.secondary:hover:not([disabled]) {
   background: rgba(48, 58, 61, 0.08);
   border-color: var(--edge);
   box-shadow: var(--shadow-2);
-  color: var(--text);
+  color: #f0ead9;
   filter: none;
 }
 
@@ -602,9 +599,9 @@ async function createGame() {
 }
 
 h2 {
-  color: var(--title);
+  color: #f0ead9;
   margin-left: 10px;
-  font-family: "Arno", "Noto Sans", sans-serif;
+  font-family: "Source Han Serif", "Arno", serif;
   font-size: 2em;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -613,9 +610,7 @@ h2 {
 }
 
 header {
-  width: 70vw;
-  max-width: 98vw;
-  min-width: 60vw;
+  width: min(1120px, calc(100% - 48px));
   margin: 0 auto 10px;
   display: flex;
   align-items: center;
@@ -635,7 +630,6 @@ input[type='radio'] + label {
   display: inline-block;
   padding: 4px 12px;
   background-color: var(--surface-raised, #f4efe4);
-  border: 1px solid var(--box-border);
   color: var(--text);
 }
 

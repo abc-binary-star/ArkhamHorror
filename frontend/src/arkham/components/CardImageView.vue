@@ -211,7 +211,7 @@ const cardName = (card: Arkham.CardDef) => {
   border-radius: var(--radius-md);
   background:
     linear-gradient(rgba(233, 225, 210, 0.46), rgba(233, 225, 210, 0.46)),
-    url('/assets/veiled-harbour/13-卡槽纸面.png') center / cover no-repeat;
+    url('/assets/veiled-harbour/13-卡槽纸面.avif') center / cover no-repeat;
   box-shadow: var(--shadow-2);
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
 
@@ -229,7 +229,7 @@ const cardName = (card: Arkham.CardDef) => {
     bottom: 2px;
     height: 28px;
     pointer-events: none;
-    background: url('/assets/veiled-harbour/33-卡牌交互状态带-v2.png') center / 100% 100% no-repeat;
+    background: url('/assets/veiled-harbour/33-卡牌交互状态带-v2.avif') center / 100% 100% no-repeat;
     mix-blend-mode: multiply;
     opacity: 0;
     transform: translateY(4px);
@@ -274,7 +274,7 @@ const cardName = (card: Arkham.CardDef) => {
   inset: 22% 28%;
   z-index: 0;
   pointer-events: none;
-  background: url('/assets/veiled-harbour/16-卡牌背面纹章.png') center / contain no-repeat;
+  background: url('/assets/veiled-harbour/16-卡牌背面纹章.avif') center / contain no-repeat;
   opacity: 0.16;
   mix-blend-mode: multiply;
 }
@@ -347,7 +347,6 @@ const cardName = (card: Arkham.CardDef) => {
 .attachments-panel {
   padding: 8px;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 9px;
 }
 
@@ -428,7 +427,6 @@ const cardName = (card: Arkham.CardDef) => {
 
 .overlay-controls button {
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 3px;
   color: var(--text);
   cursor: pointer;

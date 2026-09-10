@@ -51,6 +51,10 @@ async function bootstrap() {
     use(router).
     use(pinia).
     use(FloatingVue, {
+      // flip/shift keep a popper inside the viewport, but with the library's
+      // default padding of 0 they stop it flush against the edge. Keep a small
+      // margin so tooltips and dropdowns stay clear of the screen border.
+      overflowPadding: 8,
       themes: {
         'stack-indicator-popover': {
           $extend: 'dropdown',

@@ -92,7 +92,6 @@ defineProps<{
   align-items: center;
   padding: 10px 14px;
   background: var(--box-background);
-  border: 1px solid var(--box-border);
   border-radius: 5px;
 }
 

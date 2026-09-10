@@ -129,7 +129,7 @@ const choose = (idx: number) => emit('choose', idx)
   <div class="chaos-bag">
     <img
       class="chaos-seal"
-      src="/assets/veiled-harbour/11-混沌袋仪式纹章.png"
+      src="/assets/veiled-harbour/11-混沌袋仪式纹章.avif"
       alt=""
       aria-hidden="true"
     />
@@ -308,7 +308,6 @@ const choose = (idx: number) => emit('choose', idx)
   position: relative;
   padding: 10px;
   background: var(--surface-panel);
-  border: var(--edge-width) solid var(--border-panel);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-2);
   display: flex;

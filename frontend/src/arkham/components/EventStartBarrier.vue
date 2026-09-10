@@ -51,7 +51,7 @@
   display: block;
   width: 74px;
   height: 74px;
-  background-image: url('/assets/veiled-harbour/34-案件状态印章组-v2.png');
+  background-image: url('/assets/veiled-harbour/34-案件状态印章组-v2.avif');
   background-repeat: no-repeat;
   background-size: 400% 100%;
   background-position: 66.666% center;
