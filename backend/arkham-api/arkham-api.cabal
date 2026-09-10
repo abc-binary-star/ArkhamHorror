@@ -2296,6 +2296,7 @@ library
       Arkham.Campaign.Campaigns.TheScarletKeys.Achievements
       Arkham.Campaign.Import.Lifted
       Arkham.Campaign.Option
+      Arkham.Campaign.Overlay
       Arkham.Campaign.Runner
       Arkham.Campaign.Types
       Arkham.CampaignLog
@@ -8523,6 +8524,7 @@ test-suite spec
       Arkham.Asset.Assets.ZoeysCrossSpec
       Arkham.Asset.RunnerSpec
       Arkham.Campaign.NightOfTheZealot.ScenariosSpec
+      Arkham.Campaign.OverlaySpec
       Arkham.Campaign.RelicOfAgesSpec
       Arkham.Campaign.ReloadDecksSpec
       Arkham.Campaign.TheCircleUndone.ScenariosSpec
