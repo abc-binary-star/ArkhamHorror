@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { BookOpen, Zap, Skull, Layers, Archive, Move } from '@lucide/vue'
+import { BookOpen, Zap, Skull, Layers, Archive } from '@lucide/vue'
 import { useMediaQuery } from '@vueuse/core'
 import UpgradeDeck from '@/arkham/components/UpgradeDeck.vue'
 import {
@@ -8,9 +8,6 @@ import {
   ViewColumnsIcon,
   ArchiveBoxXMarkIcon,
   ArrowPathIcon,
-  LockClosedIcon,
-  LockOpenIcon,
-  ArrowUturnLeftIcon,
 } from '@heroicons/vue/20/solid'
 import {
   watchEffect,
@@ -84,6 +81,7 @@ import { useGameChoices } from '@/arkham/composables/useGameChoices'
 import { isMinimizedSkillTestKey, soloKey } from '@/arkham/injectionKeys'
 import { useMapViewport } from '@/arkham/composables/useMapViewport'
 import ScenarioPhases from '@/arkham/components/ScenarioPhases.vue'
+import ScenarioMapControls from '@/arkham/components/ScenarioMapControls.vue'
 import { setLocationOffset, resetLocationOffsets, updateGameRaw } from '@/arkham/api'
 import { useDebug, scenarioHasDebugOptions } from '@/arkham/debug'
 import { storeToRefs } from 'pinia'
@@ -3140,34 +3138,13 @@ async function addChaosToken(face: any) {
           }"
           @dblclick.passive="toggleZoom"
         >
-          <!-- Map controls pinned to the top-right corner: lock/unlock dragging,
-             plus layout reset once anything has been dragged. Zoom lives on the
-             mouse wheel; fullscreen lives in the game bar. -->
-          <div class="map-corner-controls">
-            <button type="button" class="zoom-btn" :class="{ 'zoom-btn--active': mapMoveMode }" :aria-pressed="mapMoveMode" :aria-label="t('multiplayerTable.moveMap')" v-tooltip="t('multiplayerTable.moveMap')" @click.stop="mapMoveMode = !mapMoveMode">
-              <Move class="zoom-btn__icon" />
-            </button>
-            <button
-              class="zoom-btn"
-              :class="{ 'zoom-btn--active': locationsUnlocked }"
-              @click.stop="toggleLocationsUnlocked"
-              v-tooltip="$t(locationsUnlocked ? 'multiplayerTable.lockLocations' : 'multiplayerTable.unlockLocations')"
-            >
-              <LockOpenIcon v-if="locationsUnlocked" class="zoom-btn__icon" />
-              <LockClosedIcon v-else class="zoom-btn__icon" />
-            </button>
-            <button
-              type="button"
-              :disabled="mapResetting"
-              :aria-label="t('multiplayerTable.resetMap')"
-              class="zoom-btn map-reset-button"
-              @click.stop="resetLocationsLayout"
-              v-tooltip="$t('multiplayerTable.resetMap')"
-            >
-              <ArrowUturnLeftIcon class="zoom-btn__icon" />
-              <span>{{ t('multiplayerTable.resetMapShort') }}</span>
-            </button>
-          </div>
+          <ScenarioMapControls
+            v-model:map-move-mode="mapMoveMode"
+            :locations-unlocked="locationsUnlocked"
+            :map-resetting="mapResetting"
+            @toggle-lock="toggleLocationsUnlocked"
+            @reset="resetLocationsLayout"
+          />
           <div
             class="location-cards-scroller"
             ref="scrollerRef"
@@ -4621,58 +4598,8 @@ async function addChaosToken(face: any) {
   }
 }
 
-.zoom-btn {
-  background: none;
-  border: none;
-  color: var(--text-on-dark);
-  font-size: 18px;
-  width: 22px;
-  height: 22px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  line-height: 1;
-  padding: 0;
-  transition:
-    background 0.15s,
-    color 0.15s;
-  flex-shrink: 0;
-
-  &:hover {
-    background: rgb(244 239 228 / 0.08);
-    color: #fff1cc;
-  }
-
-  &:active {
-    background: var(--button-1-highlight);
-    color: white;
-  }
-}
-
-.zoom-btn--active {
-  background: var(--button-1-highlight);
-  color: white;
-}
-
-.zoom-btn__icon {
-  width: 14px;
-  height: 14px;
-}
-
 /* Lock + reset float on the map's top-right corner: bare ghost icons, no
    frame, matching the game-bar control language. */
-.map-corner-controls {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  z-index: var(--z-index-30, 30);
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
 .location-cell {
   /* Grid placement + TransitionGroup FLIP target. The inner .location carries
      the user's drag offset transform, so rotation reshuffles (which FLIP-
@@ -6969,23 +6896,4 @@ async function addChaosToken(face: any) {
 .location-cards-scroller:active { cursor: grabbing; }
 .location-cards-scroller--moving :deep(*) { cursor: grab !important; }
 .location-cards-scroller--moving:active :deep(*) { cursor: grabbing !important; }
-.map-corner-controls {
-  top: 12px;
-  right: 18px;
-  max-width: calc(100% - 36px);
-  padding: 3px 6px;
-  background: rgb(8 25 21 / 0.88);
-  border-radius: 4px;
-}
-.map-corner-controls .map-reset-button {
-  width: auto;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding-inline: 8px;
-  color: #dfcd9d;
-  white-space: nowrap;
-  font-size: 0.75rem;
-}
 </style>
