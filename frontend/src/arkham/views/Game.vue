@@ -486,7 +486,7 @@ function leaveGame() {
   void router.push({ name: 'Home' })
 }
 
-const { isFullscreen, isSupported: fullscreenSupported, toggle: toggleFullscreen } = useFullscreen()
+const { isFullscreen, isSupported: fullscreenSupported, enter: enterFullscreen, toggle: toggleFullscreen } = useFullscreen()
 
 // Fullscreen + the "hide the toolbar" preference: the action bar stops reserving
 // space and slides out of view until the pointer reaches the top edge. While the
@@ -2004,6 +2004,16 @@ onMounted(() => {
   document.addEventListener('keydown', handleKeyPress)
   window.addEventListener('pointermove', handleToolbarPointerMove, { passive: true })
   window.addEventListener('arkham-setting-change', handleSettingChange)
+
+  // The tabletop is laid out for the whole viewport and starts with the bar
+  // auto-hidden, so the seat asks for fullscreen as it opens. Coming from the
+  // campaign log this is still the user's click, so the request carries their
+  // activation; a direct URL load has none and the browser refuses it — that
+  // rejection is expected and ignored, the bar's own fullscreen button remains
+  // the way in by hand.
+  if (fullscreenSupported.value && !isMobileViewport()) {
+    void enterFullscreen().catch(() => {})
+  }
 })
 
 onBeforeRouteLeave(() => close())
@@ -3045,7 +3055,9 @@ onUnmounted(() => {
 .sidebar {
   height: 100%;
   width: 25vw;
-  max-width: 300px;
+  /* Narrower cap so the drawer's left edge lands on the pile shelf's dashed rule.
+     Mirrored by the workbench's reclaim margin below. */
+  max-width: 195px;
   display: flex;
   flex-direction: column;
   background:
@@ -3087,7 +3099,14 @@ onUnmounted(() => {
 .sidebar__title {
   flex: 0 0 auto;
   margin: 0;
-  padding: 13px 14px 11px;
+  /* The phase rail above the board is 34px, and the drawer starts at its lower
+     edge, so this row is that height: the rule under the title then lands on the
+     rail's edge instead of a dozen pixels below it. */
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
   border-bottom: 1px solid rgb(205 175 107 / 0.32);
   /* Centred on the glyphs' own width: `letter-spacing` adds a trailing space
      after the last character, which would otherwise pull the block left. */
@@ -3121,7 +3140,7 @@ onUnmounted(() => {
   }
 
   .game-main--sidebar :deep(#player-zone:not(.player-zone--fullscreen)) {
-    margin-right: calc(min(25vw, 300px) * -1);
+    margin-right: calc(min(25vw, 195px) * -1);
   }
 }
 

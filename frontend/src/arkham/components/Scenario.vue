@@ -2143,6 +2143,17 @@ async function addChaosToken(face: any) {
           <section class="scenario-seat scenario-seat--act" :style="{ '--seat-card-count': Math.max(1, Object.keys(game.acts).length) }">
             <header class="scenario-seat__heading"><BookOpen aria-hidden="true" /><span>{{ $t('multiplayerTable.actArea') }}</span><i aria-hidden="true">◇</i></header>
             <div class="scenario-seat__cards">
+            <!-- The spendable clue total reads off the act frame's corner, the
+                 way the agenda frame already carries doom. It lives inside the
+                 card area so that area's own clipping trims the badge's ring at
+                 the card's edge, exactly as it does on the agenda. -->
+            <PoolItem
+              v-if="desktopTable"
+              class="act-clue-total"
+              type="clue"
+              :amount="game.totalClues"
+              tooltip="Total Spendable Clues"
+            />
           <TransitionGroup name="deck-advance" :duration="{ enter: 0, leave: 420 }">
             <Act
               v-for="(act, key) in game.acts"
@@ -2992,8 +3003,12 @@ async function addChaosToken(face: any) {
           @choose="choose"
         >
           <div id="totals">
-            <PoolItem type="doom" :amount="game.totalDoom" tooltip="Total Doom" />
-            <PoolItem type="clue" :amount="game.totalClues" tooltip="Total Spendable Clues" />
+            <!-- The tabletop reads doom off the agenda frame and the clue total
+                 off the act frame, so the strip only keeps chaos-token pools. -->
+            <template v-if="!desktopTable">
+              <PoolItem type="doom" :amount="game.totalDoom" tooltip="Total Doom" />
+              <PoolItem type="clue" :amount="game.totalClues" tooltip="Total Spendable Clues" />
+            </template>
             <PoolItem v-if="blessTokens > 0" type="chaos-tokens/ct-bless" :amount="blessTokens" />
             <PoolItem v-if="curseTokens > 0" type="chaos-tokens/ct-curse" :amount="curseTokens" />
             <PoolItem v-if="frostTokens > 0" type="chaos-tokens/ct-frost" :amount="frostTokens" />
@@ -4767,8 +4782,10 @@ async function addChaosToken(face: any) {
        height, so this column must stay at least as wide as they are: with the
        height cap binding, the frames fill their halves and meet each other, and
        the map's edge lands on the frame. Any narrower and the width takes over
-       as the cap, the cards shrink, and the two frames part. */
-    grid-template-columns: clamp(248px, 26vw, 372px) minmax(0, 1fr);
+       as the cap, the cards shrink, and the two frames part. The workbench's
+       seam is derived from this same width, so the clamp lives here alone. */
+    --shelf-width: clamp(248px, 26vw, 372px);
+    grid-template-columns: var(--shelf-width) minmax(0, 1fr);
     /* The workbench is sized by its own contents. A fixed height squeezed the
        in-play and hand rows (both clip with overflow: hidden), which cut the
        bottom off every card; the map above simply takes what is left. */
@@ -4781,16 +4798,18 @@ async function addChaosToken(face: any) {
   }
 
   .scenario-body.scenario-body--multiseat.scenario-body--online {
+    --shelf-width: clamp(240px, 21vw, 372px);
     grid-template-columns:
-      clamp(240px, 21vw, 372px)
+      var(--shelf-width)
       minmax(0, 1fr)
       clamp(200px, 15vw, 236px);
   }
 
   /* An opened teammate needs room for a character card and its stats. */
   .scenario-body.scenario-body--multiseat.scenario-body--online.scenario-body--teammate-open {
+    --shelf-width: clamp(320px, 26vw, 392px);
     grid-template-columns:
-      clamp(320px, 26vw, 392px)
+      var(--shelf-width)
       minmax(0, 1fr)
       clamp(184px, 13vw, 216px);
   }
@@ -5194,10 +5213,13 @@ async function addChaosToken(face: any) {
     overflow: hidden;
     border-top: 1px solid rgb(205 175 107 / 0.58);
     border-right: 0;
-    /* Keep the printed character card wide enough for its 1.4:1 landscape
-       ratio; the extra breathing room also moves the workbench divider away
-       from the card edge. */
-    --identity-width: clamp(300px, calc(23vw + 16px), 384px);
+    /* The character-card column runs from the screen's left edge to the x the
+       card had before, which is also where the workbench's dashed seam belongs:
+       the seam is the map plate's left edge carried down the table, so the
+       column follows the shelf column rather than a hand-tuned clamp. 17px =
+       the 14px column gap + the 3px the map overhangs its own column (the
+       grid's own 12px inset is gone — see .player-cards' padding). */
+    --identity-width: calc(var(--shelf-width) - 17px);
     --pile-width: clamp(70px, 5.4vw, 92px);
     --card-width: min(82px, calc((100cqw - var(--identity-width) - 3 * var(--pile-width) - 92px) / 10 - 5px));
     container-type: inline-size;
@@ -5299,7 +5321,9 @@ async function addChaosToken(face: any) {
     min-height: 30px;
     align-items: stretch;
     gap: 6px;
-    padding: 0 12px;
+    /* No inset: the first seat name starts on the screen's own edge, level with
+       the character card below it. */
+    padding: 0;
     border-bottom: 1px solid rgb(205 175 107 / 0.3);
     background: rgb(9 23 22 / 0.62);
   }
@@ -5420,7 +5444,10 @@ async function addChaosToken(face: any) {
     flex: 1 1 auto;
     width: 100%;
     min-height: 0;
-    padding: 8px 12px;
+    /* The identity column starts on the screen's own edge; the width it gains
+       here is credited to --identity-width, so every column after it keeps the
+       x it had. */
+    padding: 8px 12px 8px 0;
     overflow: hidden;
   }
 
@@ -5519,10 +5546,13 @@ async function addChaosToken(face: any) {
     filter: drop-shadow(0 1px 3px #000);
   }
 
+  /* The band's trailing edge is the screen's own: the strip no longer carries
+     the doom/clue readouts to its right, so the end-turn and skip-triggers
+     buttons close on the right edge. */
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-controls) {
     position: absolute;
     top: 0;
-    right: 96px;
+    right: 0;
     z-index: 11;
     display: flex;
     align-items: center;
@@ -6109,6 +6139,27 @@ async function addChaosToken(face: any) {
   .scenario-body.scenario-body--multiseat .scenario-seat--act {
     align-self: end;
   }
+  /* The clue total sits on the act frame's top-left corner, mirroring the doom
+     token on the agenda frame. 2px/1px are the small inset the agenda's own disc
+     ends up with: its art leaves a rim inside its box (clue.png does not) and it
+     is centred inside the agenda frame's 2em-tall pool. Its containing block is
+     the card area, whose overflow does the same edge trim the agenda's badge
+     gets -- the badge's ring spills 5px, so left to itself it would paint across
+     the frame's edges. */
+  .scenario-body.scenario-body--multiseat .scenario-seat--act .act-clue-total {
+    position: absolute;
+    top: 4px;
+    left: 2px;
+    z-index: 2;
+    /* The two token assets are not drawn alike: clue.png's disc runs to the
+       edges of its square, doom.png's is inset to ~92% of it. At the shared
+       --pool-token-width the clue disc therefore read a size larger, so this
+       badge's box carries the same 92% to land on the doom disc's diameter. */
+    --pool-token-width: 26px;
+    /* The frame is the click target that advances the act; the readout must not
+       eat its corner. */
+    pointer-events: none;
+  }
   .scenario-body.scenario-body--multiseat .scenario-seat__heading {
     display: flex;
     align-items: center;
@@ -6128,6 +6179,10 @@ async function addChaosToken(face: any) {
     gap: 4px;
     flex: 1 1 0;
     min-height: 0;
+    /* Containing block for the seat's corner badges, and the box that trims
+       their overhanging rings at the card's edges (the agenda badge has always
+       been clipped here; its sibling on the act frame relies on it too). */
+    position: relative;
     overflow: auto;
     /* No visible bar beside the card: the card is sized to the seat (see
        --card-width), so the bar only ever read as a stray hairline next to it.
@@ -6209,13 +6264,38 @@ async function addChaosToken(face: any) {
     max-width: none;
     min-height: 0;
     margin: 0;
-    padding: 0 8px 0 0;
+    padding: 0;
     box-sizing: border-box;
-    /* This column's own edge carries the same dashed rule and wash as the ones
-       beside the hand and the piles, instead of the solid stroke the narrow
-       layouts draw here. */
-    border-right: 1px dashed var(--table-rule, rgb(170 104 87 / 0.4));
-    background-image: linear-gradient(270deg, rgb(40 97 93 / 0.22), transparent 18px);
+    /* This column's leading edge carries the same dashed rule and wash as the
+       ones beside the hand and the piles, instead of the solid stroke the narrow
+       layouts draw here. On the left it is also the character card's divider and
+       lands on the map plate's edge above, so the seam runs unbroken from the
+       shelf down the workbench. */
+    border-left: 1px dashed var(--table-rule, rgb(170 104 87 / 0.4));
+    /* The narrow layouts draw a solid stroke on the trailing edge; the rule has
+       moved, so nothing is left there. */
+    border-right: 0;
+    background-image: linear-gradient(90deg, rgb(40 97 93 / 0.22), transparent 18px);
+  }
+  /* The caption occupies exactly the empty-slot frames' box, so its ghost sits
+     on the frames' left edge and its collapse toggle on the frames' right edge
+     instead of on the column's own edges. 16px = .threat-cards' 8px left inset
+     + its 4px padding on both sides. max-content is the floor: on a workbench
+     narrow enough that --card-width falls below the caption's own width, a
+     one-line caption wins and the toggle stops short of the frames. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.threat-area-label) {
+    width: min(var(--card-width, 82px), calc(100% - 16px));
+    min-width: max-content;
+    margin-left: 12px;
+    padding: 0;
+  }
+  /* The count rides next to its caption; the auto margin belongs to the toggle,
+     which is what should meet the frames' right edge. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.threat-area-label .threat-count) {
+    margin-left: 0;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.threat-area-label .threat-toggle) {
+    margin-left: auto;
   }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.threat-cards) {
     position: absolute;
@@ -6224,8 +6304,10 @@ async function addChaosToken(face: any) {
        frame's. Its bottom already lands on the hand row's bottom. */
     top: 24px;
     bottom: 0;
-    left: 0;
-    right: 8px;
+    /* The rule is on this column's leading edge now, so the frames keep their
+       8px clearance there instead. */
+    left: 8px;
+    right: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;

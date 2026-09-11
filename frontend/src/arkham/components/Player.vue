@@ -938,7 +938,7 @@ function closeHand() { mobileHandOpen.value = false }
           <Ghost aria-hidden="true" />
           <span>{{ $t('multiplayerTable.threatArea') }}</span>
           <span class="threat-count" aria-live="polite">{{ threatCount }}</span>
-          <span aria-hidden="true">{{ threatAreaCollapsed ? '+' : '−' }}</span>
+          <span class="threat-toggle" aria-hidden="true">{{ threatAreaCollapsed ? '+' : '−' }}</span>
         </button>
         <div v-show="!threatAreaCollapsed" class="in-play threat-cards">
           <transition-group @enter="onEnter" @leave="onLeave" @before-enter="onBeforeEnter">

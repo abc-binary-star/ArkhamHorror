@@ -30,7 +30,9 @@ const CUSTOM_CARDS_KEY = 'arkhamCustomCardsEnabled'
 
 // Tuck the action toolbar away while the browser is fullscreen, so the board owns
 // the whole viewport. The toolbar slides back when the pointer reaches the top
-// edge. Off by default: the toolbar is the only way to leave the game.
+// edge. On by default: the tabletop is built for the full viewport and asks for
+// fullscreen as the seat opens (see Game.vue), so this is the state it wants to
+// start in. An explicit "off" is remembered and never overridden.
 const AUTO_HIDE_TOOLBAR_KEY = 'arkhamAutoHideToolbarInFullscreen'
 
 export const useSettings = defineStore("settings", () => {
@@ -128,7 +130,7 @@ export const useSettings = defineStore("settings", () => {
     showBonded.value = !showBonded.value
   }
 
-  const autoHideToolbarInFullscreen = ref(localStorage.getItem(AUTO_HIDE_TOOLBAR_KEY) === 'true')
+  const autoHideToolbarInFullscreen = ref(localStorage.getItem(AUTO_HIDE_TOOLBAR_KEY) !== 'false')
 
   function setAutoHideToolbarInFullscreen(enabled: boolean) {
     autoHideToolbarInFullscreen.value = enabled
