@@ -7,7 +7,7 @@ import TokenPool from '@/arkham/components/TokenPool.vue'
 import KeyToken from '@/arkham/components/Key.vue'
 import Seal from '@/arkham/components/Seal.vue'
 import type { Message } from '@/arkham/types/Message'
-import * as Arkham from '@/arkham/types/Investigator'
+import * as ArkhamInvestigator from '@/arkham/types/Investigator'
 import type { Game } from '@/arkham/types/Game'
 import { useDebug } from '@/arkham/debug'
 import { MessageType } from '@/arkham/types/Message'
@@ -18,7 +18,7 @@ const emits = defineEmits<{
 
 export interface Props {
   choices: readonly Message[]
-  investigator: Arkham.Investigator
+  investigator: ArkhamInvestigator.Investigator
   game: Game
   portrait?: boolean
   playerId: string

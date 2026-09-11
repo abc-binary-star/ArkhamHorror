@@ -16,7 +16,7 @@ import OverlayEditor from '@/arkham/components/debug/OverlayEditor.vue'
 import { customCardDef, isCustomCardCode, stripCardCodePrefix } from '@/arkham/customCards'
 import { loadLibrary } from '@/arkham/customCardLibrary'
 import { cardImg, localizeArkhamDBBaseUrl } from '@/arkham/helpers';
-import * as Arkham from '@/arkham/types/CardDef';
+import * as ArkhamCardDef from '@/arkham/types/CardDef'
 import type {Deck, ArkhamDbDecklist} from '@/arkham/types/Deck';
 import * as DeckHelpers from '@/arkham/types/Deck';
 import Prompt from '@/components/Prompt.vue'
@@ -37,7 +37,7 @@ export interface Props {
 const props = defineProps<Props>()
 const router = useRouter()
 const toast = useToast()
-const allCards = shallowRef<Arkham.CardDef[]>([])
+const allCards = shallowRef<ArkhamCardDef.CardDef[]>([])
 const ready = ref(false)
 const deleting = ref(false)
 const deck = shallowRef<Deck | null>(null)
@@ -95,13 +95,13 @@ function setOverlayInvestigator(code: string | null) {
 }
 
 /* How many copies of a card the overlay has taken out. */
-function removedCount(card: Arkham.CardDef): number {
+function removedCount(card: ArkhamCardDef.CardDef): number {
   const base = deck.value?.list.slots ?? {}
   const key = slotKey(base, card.art) ?? slotKey(overlay.value.add, card.art)
   return key ? (overlay.value.remove[key] ?? 0) : 0
 }
 
-function takeOne(card: Arkham.CardDef) {
+function takeOne(card: ArkhamCardDef.CardDef) {
   const base = deck.value?.list.slots ?? {}
   // A card the overlay itself put in comes back out of `add` rather than being
   // "removed": the deck never had it.
@@ -119,7 +119,7 @@ function takeOne(card: Arkham.CardDef) {
   overlay.value = { ...overlay.value, remove: { ...overlay.value.remove, [key]: taken } }
 }
 
-function restoreOne(card: Arkham.CardDef) {
+function restoreOne(card: ArkhamCardDef.CardDef) {
   const base = deck.value?.list.slots ?? {}
   const key = slotKey(base, card.art)
   if (!key) return
@@ -307,7 +307,7 @@ loadDeck()
 
 const view = ref(View.List)
 
-function localizeCard(result: Arkham.CardDef | undefined): Arkham.CardDef | undefined {
+function localizeCard(result: ArkhamCardDef.CardDef | undefined): ArkhamCardDef.CardDef | undefined {
   if (!result) return undefined
 
   const language = localStorage.getItem('language') || 'en'
@@ -338,7 +338,7 @@ function localizeCard(result: Arkham.CardDef | undefined): Arkham.CardDef | unde
   return localized
 }
 
-function findCardByDeckCode(code: string): Arkham.CardDef | undefined {
+function findCardByDeckCode(code: string): ArkhamCardDef.CardDef | undefined {
   if (code === "c01000") {
     return { cardCode: code, doubleSided: false, classSymbols: [], cardType: "Treachery", art: "01000", level: 0, name: { title: "Random Basic Weakness", subtitle: null }, cardTraits: [], skills: [], cost: null, otherSide: null, meta: {}, errata: null }
   }
@@ -351,7 +351,7 @@ function findCardByDeckCode(code: string): Arkham.CardDef | undefined {
   return localizeCard(allCards.value.find((c) => c.art === normalized))
 }
 
-const cardsFromSlots = (slots: Record<string, number> | undefined): Arkham.CardDef[] => {
+const cardsFromSlots = (slots: Record<string, number> | undefined): ArkhamCardDef.CardDef[] => {
   if (!slots) return []
 
   return Object.entries(slots).flatMap(([key, value]) => {
@@ -363,11 +363,11 @@ const cardsFromSlots = (slots: Record<string, number> | undefined): Arkham.CardD
   })
 }
 
-const cardsFromList = (codes: string): Arkham.CardDef[] => {
+const cardsFromList = (codes: string): ArkhamCardDef.CardDef[] => {
   return codes
     .split(',')
     .map((code) => findCardByDeckCode(code.trim()))
-    .filter((card): card is Arkham.CardDef => !!card)
+    .filter((card): card is ArkhamCardDef.CardDef => !!card)
 }
 
 /* Everything shown is the deck as it will be played, so an overlay is visible
@@ -386,7 +386,7 @@ const playList = computed(() => {
 
 /* What the overlay leaves of a card. Null when nothing is being edited, so the
  * views fall back to counting the copies they were handed. */
-function overlayCount(card: Arkham.CardDef): number | null {
+function overlayCount(card: ArkhamCardDef.CardDef): number | null {
   if (!overlayEditing.value) return null
   const slots = playList.value?.slots ?? {}
   const key = slotKey(slots, card.art)
@@ -405,7 +405,7 @@ const hasFromTheBeyond = computed(() => {
   return !!playList.value?.slots['90052'] || !!playList.value?.slots['c90052']
 })
 
-const withoutCards = (source: Arkham.CardDef[], cardsToRemove: Arkham.CardDef[]) => {
+const withoutCards = (source: ArkhamCardDef.CardDef[], cardsToRemove: ArkhamCardDef.CardDef[]) => {
   const remaining = new Map<string, number>()
   cardsToRemove.forEach((card) => remaining.set(card.cardCode, (remaining.get(card.cardCode) ?? 0) + 1))
 
@@ -427,11 +427,11 @@ const hunchDeckCards = computed(() => {
   return typeof hunchCards === 'string' ? cardsFromList(hunchCards) : []
 })
 
-const hasTrait = (card: Arkham.CardDef, traitName: string) => {
+const hasTrait = (card: ArkhamCardDef.CardDef, traitName: string) => {
   return card.cardTraits.some((trait) => trait.toLowerCase() === traitName.toLowerCase())
 }
 
-const isSpiritDeckCard = (card: Arkham.CardDef) => {
+const isSpiritDeckCard = (card: ArkhamCardDef.CardDef) => {
   return hasTrait(card, 'Ally') || hasTrait(card, 'Geist') || hasTrait(card, 'Spirit')
 }
 
@@ -462,8 +462,8 @@ const sideSlotCardsAreSpiritDeck = computed(() => {
 
 const sideDeckCards = computed(() => sideSlotCardsAreSpiritDeck.value ? [] : sideSlotCardsWithoutAttachments.value)
 
-const attachments = computed<Record<string, Arkham.CardDef[]>>(() => {
-  const result: Record<string, Arkham.CardDef[]> = {}
+const attachments = computed<Record<string, ArkhamCardDef.CardDef[]>>(() => {
+  const result: Record<string, ArkhamCardDef.CardDef[]> = {}
 
   Object.entries(deckMeta.value).forEach(([key, value]) => {
     const match = key.match(/^attachments_(\d+)$/)

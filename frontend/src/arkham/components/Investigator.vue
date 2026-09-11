@@ -3,7 +3,6 @@ import { CircleCheck, SkipForward } from '@lucide/vue'
 import { useSettings } from '@/stores/settings';
 import { storeToRefs } from 'pinia';
 import { onUnmounted, onMounted, computed, inject, ref, watch } from 'vue'
-import type { Ref } from 'vue'
 import Draggable from '@/components/Draggable.vue';
 import CardView from '@/arkham/components/Card.vue';
 import Modifiers from '@/arkham/components/Modifiers.vue';
@@ -13,7 +12,7 @@ import { ForwardIcon, PaperClipIcon } from '@heroicons/vue/20/solid'
 import type { Game } from '@/arkham/types/Game'
 import { imgsrc } from '@/arkham/helpers'
 import { cardArt, cardImage, portraitImage, sourceCardCode } from '@/arkham/cardImages'
-import * as Arkham from '@/arkham/types/Investigator'
+import * as ArkhamInvestigator from '@/arkham/types/Investigator'
 import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Message'
 import { MessageType } from '@/arkham/types/Message'
 import { cardId, toCardContents } from '@/arkham/types/Card'
@@ -26,11 +25,17 @@ import useHighlighter from '@/arkham/composables/useHighlighter';
 import Resources from '@/arkham/components/Resources.vue';
 import Draw from '@/arkham/components/Draw.vue';
 import { IsMobile } from '@/arkham/isMobile';
+import {
+  skipAllAvailableKey,
+  skipAllInProgressKey,
+  skipAllTriggersKey,
+  soloKey,
+} from '@/arkham/injectionKeys';
 const { t } = useI18n();
 
 export interface Props {
   choices: readonly Message[]
-  investigator: Arkham.Investigator
+  investigator: ArkhamInvestigator.Investigator
   playerId: string
   game: Game
   portrait?: boolean
@@ -182,10 +187,10 @@ const skipTriggersAction = computed(() => {
     .findIndex((c) => c.tag === MessageType.SKIP_TRIGGERS_BUTTON && c.investigatorId === id.value);
 })
 
-const skipAllTriggers = inject<(() => void)>('skipAllTriggers')
-const skipAllAvailable = inject<Ref<boolean>>('skipAllAvailable')
-const skipAllInProgress = inject<Ref<boolean>>('skipAllInProgress')
-const solo = inject<Ref<boolean>>('solo')
+const skipAllTriggers = inject(skipAllTriggersKey)
+const skipAllAvailable = inject(skipAllAvailableKey)
+const skipAllInProgress = inject(skipAllInProgressKey)
+const solo = inject(soloKey)
 const isCurrentPlayersInvestigator = computed(() => props.investigator.playerId === props.playerId)
 const showSkipAll = computed(() => {
   if (solo?.value === true) {

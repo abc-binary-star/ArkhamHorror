@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import Draggable from '@/components/Draggable.vue'
 import { computed } from 'vue'
-import * as Arkham from '@/arkham/types/Story'
+import * as ArkhamStory from '@/arkham/types/Story'
 import { ChaosToken, chaosTokenImage, compareTokenFaces } from '@/arkham/types/ChaosToken'
 
 const props = defineProps<{
-  story: Arkham.Story
+  story: ArkhamStory.Story
 }>()
 
 const emit = defineEmits<{ close: [] }>()
@@ -26,19 +26,19 @@ const sections = computed<BagSection[]>(() => {
     if (meta.predationTokens && meta.predationTokens.length > 0) {
       result.push({
         label: 'In Bag',
-        tokens: meta.predationTokens.map(Arkham.predationAsChaosToken).slice().sort(sortTokens),
+        tokens: meta.predationTokens.map(ArkhamStory.predationAsChaosToken).slice().sort(sortTokens),
       })
     }
     if (meta.predationCurrentToken) {
       result.push({
         label: 'Current Reveal',
-        tokens: [Arkham.predationAsChaosToken(meta.predationCurrentToken)],
+        tokens: [ArkhamStory.predationAsChaosToken(meta.predationCurrentToken)],
       })
     }
     if (meta.predationSetAside && meta.predationSetAside.length > 0) {
       result.push({
         label: 'Set Aside',
-        tokens: meta.predationSetAside.map(Arkham.predationAsChaosToken).slice().sort(sortTokens),
+        tokens: meta.predationSetAside.map(ArkhamStory.predationAsChaosToken).slice().sort(sortTokens),
       })
     }
   }
@@ -47,19 +47,19 @@ const sections = computed<BagSection[]>(() => {
     if (meta.infestationTokens && meta.infestationTokens.length > 0) {
       result.push({
         label: 'In Bag',
-        tokens: meta.infestationTokens.map(Arkham.infestationAsChaosToken).slice().sort(sortTokens),
+        tokens: meta.infestationTokens.map(ArkhamStory.infestationAsChaosToken).slice().sort(sortTokens),
       })
     }
     if (meta.infestationCurrentToken) {
       result.push({
         label: 'Current Reveal',
-        tokens: [Arkham.infestationAsChaosToken(meta.infestationCurrentToken)],
+        tokens: [ArkhamStory.infestationAsChaosToken(meta.infestationCurrentToken)],
       })
     }
     if (meta.infestationSetAside && meta.infestationSetAside.length > 0) {
       result.push({
         label: 'Set Aside',
-        tokens: meta.infestationSetAside.map(Arkham.infestationAsChaosToken).slice().sort(sortTokens),
+        tokens: meta.infestationSetAside.map(ArkhamStory.infestationAsChaosToken).slice().sort(sortTokens),
       })
     }
   }

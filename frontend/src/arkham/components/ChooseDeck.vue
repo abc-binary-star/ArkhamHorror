@@ -8,7 +8,7 @@ import { stripCardCodePrefix } from '@/arkham/customCards'
 import { overlayIsEmpty } from '@/arkham/deckOverlay'
 import { hasLibraryCards, loadLibrary } from '@/arkham/customCardLibrary'
 import { portraitImage as portraitImageHelper } from '@/arkham/cardImages'
-import * as Arkham from '@/arkham/types/Deck'
+import * as ArkhamDeck from '@/arkham/types/Deck'
 import {deckClass} from '@/arkham/types/Deck'
 import { deckInvestigatorCode, deckRequirementDescriptions, deckRestrictionError, hasValidatedUltimatumDeckConstraints, type SelectableDeckList } from '@/arkham/deckRestrictions'
 import type { ArkhamDbDecklist, DeckMeta } from '@/arkham/types/Deck'
@@ -22,10 +22,11 @@ import NewDeck from '@/arkham/components/NewDeck.vue'
 import DeckToolbar from '@/arkham/components/DeckToolbar.vue'
 import { useI18n } from 'vue-i18n'
 import { handleEmbeddedI18n } from '@/arkham/i18n'
+import { chooseDeckKey, chooseDeckListKey } from '@/arkham/injectionKeys'
 
 const { t } = useI18n()
 
-const decks = ref<Arkham.Deck[]>([])
+const decks = ref<ArkhamDeck.Deck[]>([])
 const ready = ref(false)
 const deckId = ref<string | null>(null)
 const unsavedDeckList = ref<ArkhamDbDecklist | null>(null)
@@ -44,20 +45,20 @@ const CLASS_ORDER: Record<string, number> = {
 }
 const allClasses: InvestigatorClass[] = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"]
 
-function deckPortraitCode(deck: Arkham.Deck): string {
+function deckPortraitCode(deck: ArkhamDeck.Deck): string {
   // The overlay edited here applies to this game only, but the row should still
   // show who you are about to play.
   if (deck.id === deckId.value && overlay.value?.investigator) {
     return stripCardCodePrefix(overlay.value.investigator)
   }
-  return deckInvestigatorCode(Arkham.deckPlayList(deck))
+  return deckInvestigatorCode(ArkhamDeck.deckPlayList(deck))
 }
 
 // A laid-over deck plays differently from the one it was built as, so say so.
-const deckHasOverlay = (deck: Arkham.Deck) => !overlayIsEmpty(deck.overlay ?? null)
+const deckHasOverlay = (deck: ArkhamDeck.Deck) => !overlayIsEmpty(deck.overlay ?? null)
 
-function deckTaboo(deck: Arkham.Deck): string | null {
-  const list = Arkham.deckPlayList(deck)
+function deckTaboo(deck: ArkhamDeck.Deck): string | null {
+  const list = ArkhamDeck.deckPlayList(deck)
   return list.taboo_id ? displayTabooId(list.taboo_id) : null
 }
 
@@ -68,7 +69,7 @@ const filteredDecks = computed(() => {
       filterClasses.value.some((k) => cls[k])
     const matchesSearch = !searchText.value ||
       deck.name.toLowerCase().includes(searchText.value.toLowerCase())
-    const matchesValidity = !validOnly.value || deckError(Arkham.deckPlayList(deck)) === null
+    const matchesValidity = !validOnly.value || deckError(ArkhamDeck.deckPlayList(deck)) === null
     return matchesClass && matchesSearch && matchesValidity
   })
 
@@ -90,8 +91,8 @@ const props = defineProps<{
   playerId: string
 }>()
 
-const chooseDeck = inject<(deckId: string, overlay?: any) => Promise<void>>('chooseDeck')
-const chooseDeckList = inject<(deckList: ArkhamDbDecklist) => Promise<void>>('chooseDeckList')
+const chooseDeck = inject(chooseDeckKey)
+const chooseDeckList = inject(chooseDeckListKey)
 const question = computed(() => props.game.question[props.playerId])
 const deckRequirements = computed(() => deckRequirementDescriptions(props.game.scenario?.id, {
   campaignId: props.game.campaign?.id,
@@ -155,8 +156,8 @@ const weaknessPoolSummary = computed(() => {
   return names.length <= 2 ? names.join(', ') : `${names.length} products selected`
 })
 
-function deckToArkhamDbDecklist(deck: Arkham.Deck): ArkhamDbDecklist {
-  const list = Arkham.deckPlayList(deck)
+function deckToArkhamDbDecklist(deck: ArkhamDeck.Deck): ArkhamDbDecklist {
+  const list = ArkhamDeck.deckPlayList(deck)
   return {
     id: deck.id,
     name: deck.name,
@@ -211,7 +212,7 @@ function setWeaknessPool(tokens: string[]) {
   weaknessPoolTouched.value = true
 }
 
-async function toggleWeaknessPoolForDeck(deck: Arkham.Deck) {
+async function toggleWeaknessPoolForDeck(deck: ArkhamDeck.Deck) {
   if (deckId.value === deck.id) {
     weaknessPoolOpen.value = !weaknessPoolOpen.value
     return
@@ -240,7 +241,7 @@ async function setPortrait(src: string) {
   createdPortrait.value = src
 }
 
-async function addDeck(d: Arkham.Deck) {
+async function addDeck(d: ArkhamDeck.Deck) {
   decks.value = [...decks.value, d]
   deckId.value = d.id
   unsavedDeckList.value = null
@@ -312,7 +313,7 @@ const error = computed(() => {
   }
 
   const deck = decks.value.find((d) => d.id === deckId.value)
-  return deck ? deckError(Arkham.deckPlayList(deck)) : null
+  return deck ? deckError(ArkhamDeck.deckPlayList(deck)) : null
 })
 
 const unsavedDeckError = computed(() => {
@@ -376,7 +377,7 @@ async function choose() {
   }
 }
 
-async function selectAndChoose(deck: Arkham.Deck) {
+async function selectAndChoose(deck: ArkhamDeck.Deck) {
   deckId.value = deck.id
   if (error.value !== null) return
   await choose()

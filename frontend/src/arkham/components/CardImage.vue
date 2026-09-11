@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { useAttrs, inject, ref, computed, watch, type Ref } from 'vue'
+import { useAttrs, inject, ref, computed, watch } from 'vue'
 import { altFrontImage, cardBackImage, cardFrontImage } from '@/arkham/cardArt'
+import { cardFlipAllKey } from '@/arkham/injectionKeys'
 import { CardDef } from '@/arkham/types/CardDef'
 import { ArrowPathIcon } from '@heroicons/vue/20/solid'
 
@@ -16,7 +17,7 @@ const props = defineProps<{ card: CardDef }>()
 // An ancestor (e.g. the card browser) can provide a shared flip state to flip
 // every card it renders at once. Individual flips still work on top of it, and
 // cards rendered later (a new filter) start on the side everything else is on.
-const flipAll = inject<Ref<boolean> | null>('cardFlipAll', null)
+const flipAll = inject(cardFlipAllKey)
 
 const wantsFlip = ref(flipAll?.value ?? false)
 

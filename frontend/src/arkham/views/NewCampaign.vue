@@ -2,7 +2,7 @@
 import { watch, ref, computed, onMounted, onUnmounted } from 'vue'
 import { useUserStore } from '@/stores/user'
 import { useRoute, useRouter } from 'vue-router'
-import * as Arkham from '@/arkham/types/Deck'
+import * as ArkhamDeck from '@/arkham/types/Deck'
 import { fetchDecks, newGame, createEvent } from '@/arkham/api'
 import { useToast } from 'vue-toastification'
 import { useI18n } from 'vue-i18n'
@@ -46,7 +46,7 @@ const campaignGroup = ref<CampaignGroup>('chapter1')
 const gameMode = ref<GameMode>('Campaign')
 const includeTarotReadings = ref(false)
 const strictAsIfAt = ref(false)
-const decks = ref<Arkham.Deck[]>([])
+const decks = ref<ArkhamDeck.Deck[]>([])
 const ready = ref(false)
 
 const playerCount = ref(1)

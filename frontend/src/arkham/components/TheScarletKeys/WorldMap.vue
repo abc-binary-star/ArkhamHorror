@@ -2,6 +2,7 @@
 import { imgsrc } from '@/arkham/helpers';
 import { watch, computed, ref, inject, onMounted, onUnmounted } from 'vue'
 import { Game } from '@/arkham/types/Game';
+import { sendKey } from '@/arkham/injectionKeys';
 import { useI18n } from 'vue-i18n';
 import WorldMapDrawerContent from '@/arkham/components/TheScarletKeys/WorldMapDrawerContent.vue';
 
@@ -56,7 +57,7 @@ export interface MapData {
   locations: [string, LocationInputData][]
 } 
 
-const send = inject<(msg: string) => void>('send', () => {})
+const send = inject(sendKey, () => {})
 
 const props = defineProps<{
   game: Game

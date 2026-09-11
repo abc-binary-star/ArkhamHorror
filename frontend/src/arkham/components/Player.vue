@@ -3,7 +3,7 @@ import { Layers, Hand, Skull } from '@lucide/vue';
 import type { CardContents } from '@/arkham/types/Card';
 import * as CardT from '@/arkham/types/Card';
 import gsap from 'gsap';
-import { computed, inject, Ref, ref, ComputedRef, reactive, watch, onMounted, onBeforeUnmount } from 'vue';
+import { computed, inject, ref, ComputedRef, reactive, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useDebug } from '@/arkham/debug';
 import { Game } from '@/arkham/types/Game';
 import { toCardContents } from '@/arkham/types/Card';
@@ -24,7 +24,7 @@ import CustomCardPicker from '@/arkham/components/debug/CustomCardPicker.vue';
 import Investigator from '@/arkham/components/Investigator.vue';
 import ChoiceModal from '@/arkham/components/ChoiceModal.vue';
 import { TarotCard, tarotCardImage } from '@/arkham/types/TarotCard';
-import * as Arkham from '@/arkham/types/Investigator';
+import * as ArkhamInvestigator from '@/arkham/types/Investigator'
 import { useI18n } from 'vue-i18n';
 import Draw from '@/arkham/components/Draw.vue'
 import { IsMobile } from '@/arkham/isMobile';
@@ -40,6 +40,11 @@ import { storeToRefs } from 'pinia';
 import { useSettings } from '@/stores/settings';
 import { useCardStore } from '@/stores/cards';
 import { getGameLocalStorageItem, setGameLocalStorageItem } from '@/arkham/localStorage';
+import {
+  isMinimizedSkillTestKey,
+  showOtherPlayersHandsKey,
+  soloKey,
+} from '@/arkham/injectionKeys';
 const { t } = useI18n();
 
 interface RefWrapper<T> {
@@ -48,14 +53,14 @@ interface RefWrapper<T> {
 
 export interface Props {
   game: Game
-  investigator: Arkham.Investigator
+  investigator: ArkhamInvestigator.Investigator
   playerId: string
   tarotCards: TarotCard[]
 }
 
 const props = defineProps<Props>()
-const solo = inject<Ref<boolean>>('solo')
-const showOtherPlayersHands = inject<Ref<boolean>>('showOtherPlayersHands')
+const solo = inject(soloKey)
+const showOtherPlayersHands = inject(showOtherPlayersHandsKey)
 
 const investigatorId = computed(() => props.investigator.id)
 const ENCOUNTER_BACK = imgsrc("backs/back_encounter.jpg")
@@ -327,7 +332,7 @@ const facedownThreatCards = computed(() =>
 const facedownThreatCardImage = (cardId: string) => {
   if (!debug.active) return ENCOUNTER_BACK
   const card = props.game.cards[cardId]
-  return card ? imgsrc(CardT.cardImage({ ...toCardContents(card), facedown: false })) : ENCOUNTER_BACK
+  return card ? imgsrc(CardT.cardImagePath({ ...toCardContents(card), facedown: false })) : ENCOUNTER_BACK
 }
 
 const threatCount = computed(() =>
@@ -766,7 +771,7 @@ const debugSlotTypes: { type: DebugSlotType; label: string; icon: string }[] = [
 const showDebugSlotMenu = ref(false)
 const { isMobile } = IsMobile();
 
-const slotImg = (slot: Arkham.Slot) => {
+const slotImg = (slot: ArkhamInvestigator.Slot) => {
   switch (slot.tag) {
     case 'HeadSlot':
       return imgsrc('slots/head.png')
@@ -920,7 +925,7 @@ const handAreaPointerEvents = ref('none');
 onMounted(() => {
   if (isMobile) {
     document.addEventListener('click',toggleHandAreaMarginBottom)
-    const isMinimized_SkillTest = inject('isMinimized_SkillTest', ref(false))
+    const isMinimized_SkillTest = inject(isMinimizedSkillTestKey, ref(false))
     watch([() => props.game.skillTest, isMinimized_SkillTest], ([newSkillTest,isMinimized]) => {
       if (newSkillTest && !isMinimized) {
         handAreaMarginBottom.value = handCardExposedHeight_MAX;
@@ -1314,8 +1319,8 @@ function closeHand() {
             >
               <img
                 class="card phantom-hand-card"
-                :src="imgsrc(CardT.cardImage(card))"
-                :data-image="imgsrc(CardT.cardImage(card))"
+                :src="imgsrc(CardT.cardImagePath(card))"
+                :data-image="imgsrc(CardT.cardImagePath(card))"
               />
             </span>
             <CardsUnderIndicator
@@ -1418,8 +1423,8 @@ function closeHand() {
           >
             <img
               class="card phantom-hand-card"
-              :src="imgsrc(CardT.cardImage(card))"
-              :data-image="imgsrc(CardT.cardImage(card))"
+              :src="imgsrc(CardT.cardImagePath(card))"
+              :data-image="imgsrc(CardT.cardImagePath(card))"
             />
           </span>
           <CardsUnderIndicator

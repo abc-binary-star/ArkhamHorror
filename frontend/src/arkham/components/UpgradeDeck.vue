@@ -15,6 +15,7 @@ import Question from '@/arkham/components/Question.vue';
 import { isUsableDecklist, loadUpgradeDeckFromJsonText } from '@/arkham/upgradeDeckUpload';
 import { deckRestrictionError, normalizeCardCode } from '@/arkham/deckRestrictions';
 import { useI18n } from 'vue-i18n';
+import { soloKey } from '@/arkham/injectionKeys';
 
 // TODO should we pass in the investigator
 export interface Props {
@@ -86,7 +87,7 @@ onUnmounted(() => {
 const deck = ref<string | null>(null)
 const deckUrl = ref<string | null>(null)
 const deckList = ref<ArkhamDbDecklist | null>(null)
-const solo = inject('solo', false)
+const solo = inject(soloKey, ref(false))
 const deckInvestigator = ref<string | null>(null)
 const investigator = computed(() => {
   return Object.values(props.game.investigators).find((i) => {

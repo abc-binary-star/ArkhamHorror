@@ -55,6 +55,21 @@ export function cardBackImage(card: CardDef): string {
   return imgsrc(PLAYER_BACK)
 }
 
+// The back art a card shows when it has one of its own, or null when the back is
+// a generic card back (which `cardBackImage` serves instead). Used where only a
+// distinct back is worth acting on — preloading, or showing both sides at once.
+export function cardDistinctBackImage(card: CardDef): string | null {
+  const { cardType, otherSide, doubleSided } = card
+
+  if (isBackPrimary(card)) return cardImg(card.art)
+  if (otherSide) return cardImg(otherSide.replace(/^c/, ''))
+  if (['ActType', 'AgendaType', 'ScenarioType', 'InvestigatorType'].includes(cardType))
+    return cardImg(`${card.art.replace(/a$/, '')}b`)
+  if (cardType === 'LocationType' && doubleSided) return cardImg(card.art)
+  if (doubleSided) return cardImg(`${card.art.replace(/a$/, '')}b`)
+  return null
+}
+
 // Whether the back is art of its own rather than a generic card back, i.e.
 // whether it is worth showing alongside the front.
 export function hasCardBackArt(card: CardDef): boolean {

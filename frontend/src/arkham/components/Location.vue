@@ -28,7 +28,7 @@ import SealedChaosTokens from '@/arkham/components/SealedChaosTokens.vue'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import PoolItem from '@/arkham/components/PoolItem.vue'
 import TokenPool from '@/arkham/components/TokenPool.vue'
-import * as Arkham from '@/arkham/types/Location'
+import * as ArkhamLocation from '@/arkham/types/Location'
 import { TokenType } from '@/arkham/types/Token'
 import { cardFacedown, Card } from '../types/Card'
 import useHighlighter from '@/arkham/composables/useHighlighter'
@@ -39,7 +39,7 @@ import { isCthulhuBoardEnemy } from '@/arkham/components/TheDrownedCity/cthulhuB
 
 export interface Props {
   game: Game
-  location: Arkham.Location
+  location: ArkhamLocation.Location
   playerId: string
 }
 

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Game } from '@/arkham/types/Game'
-import { cardImage as cardCodeImage } from '@/arkham/cardImages'
+import { cardImage as cardImage } from '@/arkham/cardImages'
 
 // playerId is the seat whose question this is (the one choosing). viewOnly is
 // set when the current viewer isn't that seat, so other players see the same
@@ -54,7 +54,7 @@ function pick(index: number) {
         :disabled="viewOnly"
         @click="pick(index)"
       >
-        <img :src="cardCodeImage(cardCode)" :alt="cardCode" />
+        <img :src="cardImage(cardCode)" :alt="cardCode" />
         <span v-if="!viewOnly" class="return-label">{{ t('ultimatumsAndBoons.morrigan.returnAction') }}</span>
       </button>
     </div>

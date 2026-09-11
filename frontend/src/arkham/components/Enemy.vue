@@ -30,7 +30,7 @@ import Skill from '@/arkham/components/Skill.vue'
 import SealedChaosTokens from '@/arkham/components/SealedChaosTokens.vue'
 import Story from '@/arkham/components/Story.vue'
 import ScarletKey from '@/arkham/components/ScarletKey.vue'
-import * as Arkham from '@/arkham/types/Enemy'
+import * as ArkhamEnemy from '@/arkham/types/Enemy'
 import { Source } from '@/arkham/types/Source'
 import { isManifestedSpiritEnemy } from '@/arkham/spiritVisuals'
 import { type Card as ArkhamCard, toCardContents } from '@/arkham/types/Card'
@@ -39,7 +39,7 @@ import { isUnvaluedCalculation } from '@/arkham/types/Calculation'
 const props = withDefaults(
   defineProps<{
     game: Game
-    enemy: Arkham.Enemy
+    enemy: ArkhamEnemy.Enemy
     playerId: string
     atLocation?: boolean
     attached?: boolean
@@ -394,7 +394,7 @@ async function chooseAbility(ability: number) {
   emits('choose', ability)
 }
 
-function startDrag(event: DragEvent, enemy: Arkham.Enemy) {
+function startDrag(event: DragEvent, enemy: ArkhamEnemy.Enemy) {
   dragging.value = true
   if (event.dataTransfer) {
     event.dataTransfer.effectAllowed = 'move'

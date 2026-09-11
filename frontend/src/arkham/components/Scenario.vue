@@ -26,7 +26,6 @@ import {
   provide,
   inject,
 } from 'vue'
-import type { Ref } from 'vue'
 import { type Game } from '@/arkham/types/Game'
 import type { Investigator as InvestigatorState } from '@/arkham/types/Investigator'
 import { type Scenario, usesHardExpertReference } from '@/arkham/types/Scenario'
@@ -49,7 +48,7 @@ import {
   getGameLocalStorageItem,
   setGameLocalStorageItem,
 } from '@/arkham/localStorage'
-import { cardArt, cardImage as cardCodeImage, investigatorPortrait } from '@/arkham/cardImages'
+import { cardArt, cardImage as cardImage, investigatorPortrait } from '@/arkham/cardImages'
 import { useMenu } from '@/arkham/composables/menu'
 import { useSettings } from '@/stores/settings'
 import { keyToId } from '@/arkham/types/Key'
@@ -86,6 +85,7 @@ import Asset from '@/arkham/components/Asset.vue'
 import Location from '@/arkham/components/Location.vue'
 import TreacheryView from '@/arkham/components/Treachery.vue'
 import { useGameChoices } from '@/arkham/composables/useGameChoices'
+import { isMinimizedSkillTestKey, soloKey } from '@/arkham/injectionKeys'
 import { setLocationOffset, resetLocationOffsets, updateGameRaw } from '@/arkham/api'
 import { useDebug, scenarioHasDebugOptions } from '@/arkham/debug'
 import { storeToRefs } from 'pinia'
@@ -1037,11 +1037,11 @@ const scenarioGuide = computed(() => {
   if (props.scenario.id === 'c10501' || referenceBase === '10501' || referenceBase === '10502') {
     const referenceSide = referenceCode.endsWith('b') ? 'b' : ''
     const writtenInRockReference = hardExpertSide ? '10502' : '10501'
-    return cardCodeImage(`${writtenInRockReference}${referenceSide}`)
+    return cardImage(`${writtenInRockReference}${referenceSide}`)
   }
 
   const difficultySuffix = hardExpertSide ? 'b' : ''
-  return cardCodeImage(reference, difficultySuffix)
+  return cardImage(reference, difficultySuffix)
 })
 
 const changeScenarioDifficulty = (event: Event) => {
@@ -1051,7 +1051,7 @@ const changeScenarioDifficulty = (event: Event) => {
 }
 
 const additionalReferences = computed(() => {
-  return props.scenario.additionalReferences.map((s) => cardCodeImage(s))
+  return props.scenario.additionalReferences.map((s) => cardImage(s))
 })
 const abyssIsLocation = computed(
   () => props.scenario.id === 'c10651' && props.scenario.meta?.abyssIsLocation === true,
@@ -1367,7 +1367,7 @@ const scenarioDeckStyles = computed(() => {
     'grid-row-gap': '10px',
   }
 })
-const soloMode = inject<Ref<boolean>>('solo', ref(false))
+const soloMode = inject(soloKey, ref(false))
 const players = computed(() => props.game.investigators)
 const playerOrder = computed(() => props.game.playerOrder)
 const multiSeatBoard = computed(() => playerOrder.value.length > 1)
@@ -1615,7 +1615,7 @@ const removedFromPlay = computed(() => props.game.removedFromPlay)
 const noCards = computed<Card[]>(() => [])
 const topOfEncounterDiscard = computed(() => {
   if (!props.scenario.discard[0]) return null
-  return cardCodeImage(props.scenario.discard[0].cardCode)
+  return cardImage(props.scenario.discard[0].cardCode)
 })
 const spectralEncounterDeck = computed(
   () => props.scenario.encounterDecks['SpectralEncounterDeck']?.[0],
@@ -1626,7 +1626,7 @@ const spectralDiscards = computed<Card[]>(() =>
 )
 const topOfSpectralDiscard = computed(() => {
   if (!spectralDiscard.value || !spectralDiscard.value[0]) return null
-  return cardCodeImage(spectralDiscard.value[0].cardCode)
+  return cardImage(spectralDiscard.value[0].cardCode)
 })
 const activePlayerId = computed(() => props.game.activeInvestigatorId)
 const globalStories = computed(() =>
@@ -1812,7 +1812,7 @@ const resolvingCthulhuDeckStory = computed(
 )
 const resolvingCthulhuDeckStoryImage = computed(() => {
   const story = resolvingCthulhuDeckStory.value
-  return story ? cardCodeImage(story.flipped ? story.flippedArt : story.art) : null
+  return story ? cardImage(story.flipped ? story.flippedArt : story.art) : null
 })
 
 /* The Doom of Arkham Pt II. The three Cthulhu facets are at Cthulhu's location and
@@ -2251,7 +2251,7 @@ const tarotCardAbility = (card: TarotCard) => {
 const victoryDisplay = computed(() => props.scenario.victoryDisplay)
 
 const isMinimized_SkillTest = ref(false)
-provide('isMinimized_SkillTest', isMinimized_SkillTest)
+provide(isMinimizedSkillTestKey, isMinimized_SkillTest)
 function minimize_SkillTest(isMinimized: boolean) {
   if (isMobile) {
     isMinimized_SkillTest.value = isMinimized
@@ -3055,7 +3055,7 @@ async function addChaosToken(face: any) {
         </header>
         <section v-if="focusedTeammate" class="teammate-detail">
           <div class="teammate-detail__top">
-            <img class="teammate-detail__card" :src="cardCodeImage(focusedTeammate.art)" alt="" />
+            <img class="teammate-detail__card" :src="cardImage(focusedTeammate.art)" alt="" />
             <div class="teammate-detail__identity">
               <strong>{{ displayInvestigatorName(focusedTeammate) }}</strong>
               <small>{{ investigatorLocation(focusedTeammate) }}</small>
@@ -3213,7 +3213,7 @@ async function addChaosToken(face: any) {
             <img
               v-for="asset in investigatorAssets(investigator).slice(0, 3)"
               :key="asset.id"
-              :src="cardCodeImage(asset.cardCode)"
+              :src="cardImage(asset.cardCode)"
               alt=""
             />
             <em v-if="investigatorAssets(investigator).length > 3"

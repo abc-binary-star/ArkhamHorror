@@ -2,21 +2,21 @@
 import { computed } from 'vue'
 import { useDbCardStore } from '@/stores/dbCards'
 import type { ArkhamDBCard } from '@/stores/dbCards'
-import * as Arkham from '@/arkham/types/CardDef'
+import * as ArkhamCardDef from '@/arkham/types/CardDef'
 import { localizeArkhamDBBaseUrl } from '@/arkham/helpers'
 import { cardCost, cardGroupKey as groupKey, cardIcons, cardName, cardSetText, cardTraits, cardType, groupCards, levelText } from '@/arkham/cardDetails'
 
 const props = withDefaults(defineProps<{
-  cards: Arkham.CardDef[],
-  attachments?: Record<string, Arkham.CardDef[]>,
+  cards: ArkhamCardDef.CardDef[],
+  attachments?: Record<string, ArkhamCardDef.CardDef[]>,
   showCounts?: boolean,
   /* Editing an overlay: each card gets take-one/put-one-back controls right
    * where it is listed, rather than in a separate pane. */
   overlayEditing?: boolean,
-  overlayRemoved?: (card: Arkham.CardDef) => number,
+  overlayRemoved?: (card: ArkhamCardDef.CardDef) => number,
   /* What the overlay leaves of a card, when that differs from the copies
    * listed. Zero means it is out but still shown, so it can be put back. */
-  overlayCount?: (card: Arkham.CardDef) => number | null,
+  overlayCount?: (card: ArkhamCardDef.CardDef) => number | null,
 }>(), {
   attachments: () => ({}),
   showCounts: true,
@@ -25,15 +25,15 @@ const props = withDefaults(defineProps<{
   overlayCount: () => () => null,
 })
 
-const shownCount = (card: Arkham.CardDef, count: number) => props.overlayCount(card) ?? count
-const isOut = (card: Arkham.CardDef) => props.overlayCount(card) === 0
+const shownCount = (card: ArkhamCardDef.CardDef, count: number) => props.overlayCount(card) ?? count
+const isOut = (card: ArkhamCardDef.CardDef) => props.overlayCount(card) === 0
 
-const emit = defineEmits<{ 'overlay-take': [card: Arkham.CardDef]; 'overlay-restore': [card: Arkham.CardDef] }>()
+const emit = defineEmits<{ 'overlay-take': [card: ArkhamCardDef.CardDef]; 'overlay-restore': [card: ArkhamCardDef.CardDef] }>()
 
 const store = useDbCardStore()
 
 // The set name is localized from the ArkhamDB card data when we have it.
-const setText = (card: Arkham.CardDef) => {
+const setText = (card: ArkhamCardDef.CardDef) => {
   const language = localStorage.getItem('language') || 'en'
   if (language === 'en') return cardSetText(card)
 
@@ -43,9 +43,9 @@ const setText = (card: Arkham.CardDef) => {
 
 const groupedCards = computed(() => groupCards(props.cards))
 
-const attachedCards = (card: Arkham.CardDef) => props.attachments[card.art] ?? []
+const attachedCards = (card: ArkhamCardDef.CardDef) => props.attachments[card.art] ?? []
 
-const groupedAttachedCards = (card: Arkham.CardDef) => groupCards(attachedCards(card))
+const groupedAttachedCards = (card: ArkhamCardDef.CardDef) => groupCards(attachedCards(card))
 
 const underworldMarketCards = () => props.attachments['09077'] ?? []
 const spiritDeckCards = () => props.attachments['90052'] ?? []
@@ -54,7 +54,7 @@ const ancestralKnowledgeCards = () => props.attachments['07303'] ?? []
 const bewitchingCards = () => props.attachments['10079'] ?? []
 const eldritchBrandCards = () => props.attachments['11080'] ?? []
 
-const countCards = (cards: Arkham.CardDef[]) => {
+const countCards = (cards: ArkhamCardDef.CardDef[]) => {
   const counts = new Map<string, number>()
   for (const card of cards) counts.set(card.art, (counts.get(card.art) ?? 0) + 1)
   return counts
@@ -67,28 +67,28 @@ const ancestralKnowledgeCardCounts = computed(() => countCards(ancestralKnowledg
 const bewitchingCardCounts = computed(() => countCards(bewitchingCards()))
 const eldritchBrandCardCounts = computed(() => countCards(eldritchBrandCards()))
 
-const marketCardCount = (card: Arkham.CardDef) => marketCardCounts.value.get(card.art) ?? 0
-const spiritCardCount = (card: Arkham.CardDef) => spiritCardCounts.value.get(card.art) ?? 0
-const stickToThePlanCardCount = (card: Arkham.CardDef) => stickToThePlanCardCounts.value.get(card.art) ?? 0
-const ancestralKnowledgeCardCount = (card: Arkham.CardDef) => ancestralKnowledgeCardCounts.value.get(card.art) ?? 0
-const bewitchingCardCount = (card: Arkham.CardDef) => bewitchingCardCounts.value.get(card.art) ?? 0
-const eldritchBrandCardCount = (card: Arkham.CardDef) => eldritchBrandCardCounts.value.get(card.art) ?? 0
+const marketCardCount = (card: ArkhamCardDef.CardDef) => marketCardCounts.value.get(card.art) ?? 0
+const spiritCardCount = (card: ArkhamCardDef.CardDef) => spiritCardCounts.value.get(card.art) ?? 0
+const stickToThePlanCardCount = (card: ArkhamCardDef.CardDef) => stickToThePlanCardCounts.value.get(card.art) ?? 0
+const ancestralKnowledgeCardCount = (card: ArkhamCardDef.CardDef) => ancestralKnowledgeCardCounts.value.get(card.art) ?? 0
+const bewitchingCardCount = (card: ArkhamCardDef.CardDef) => bewitchingCardCounts.value.get(card.art) ?? 0
+const eldritchBrandCardCount = (card: ArkhamCardDef.CardDef) => eldritchBrandCardCounts.value.get(card.art) ?? 0
 
-const marketTooltip = (card: Arkham.CardDef) => `Attached to Market deck (x ${marketCardCount(card)})`
-const spiritTooltip = (card: Arkham.CardDef) => `In Spirit deck (x ${spiritCardCount(card)})`
-const stickToThePlanTooltip = (card: Arkham.CardDef) => `Attached to Stick to the Plan (x ${stickToThePlanCardCount(card)})`
-const ancestralKnowledgeTooltip = (card: Arkham.CardDef) => `Attached to Ancestral Knowledge (x ${ancestralKnowledgeCardCount(card)})`
-const bewitchingTooltip = (card: Arkham.CardDef) => `Attached to Bewitching (x ${bewitchingCardCount(card)})`
-const eldritchBrandTooltip = (card: Arkham.CardDef) => `Branded by Eldritch Brand (x ${eldritchBrandCardCount(card)})`
+const marketTooltip = (card: ArkhamCardDef.CardDef) => `Attached to Market deck (x ${marketCardCount(card)})`
+const spiritTooltip = (card: ArkhamCardDef.CardDef) => `In Spirit deck (x ${spiritCardCount(card)})`
+const stickToThePlanTooltip = (card: ArkhamCardDef.CardDef) => `Attached to Stick to the Plan (x ${stickToThePlanCardCount(card)})`
+const ancestralKnowledgeTooltip = (card: ArkhamCardDef.CardDef) => `Attached to Ancestral Knowledge (x ${ancestralKnowledgeCardCount(card)})`
+const bewitchingTooltip = (card: ArkhamCardDef.CardDef) => `Attached to Bewitching (x ${bewitchingCardCount(card)})`
+const eldritchBrandTooltip = (card: ArkhamCardDef.CardDef) => `Branded by Eldritch Brand (x ${eldritchBrandCardCount(card)})`
 
-const isUnderworldMarketCard = (card: Arkham.CardDef) => marketCardCount(card) > 0
-const isSpiritDeckCard = (card: Arkham.CardDef) => spiritCardCount(card) > 0
-const isStickToThePlanCard = (card: Arkham.CardDef) => stickToThePlanCardCount(card) > 0
-const isAncestralKnowledgeCard = (card: Arkham.CardDef) => ancestralKnowledgeCardCount(card) > 0
-const isBewitchingCard = (card: Arkham.CardDef) => bewitchingCardCount(card) > 0
-const isEldritchBrandCard = (card: Arkham.CardDef) => eldritchBrandCardCount(card) > 0
+const isUnderworldMarketCard = (card: ArkhamCardDef.CardDef) => marketCardCount(card) > 0
+const isSpiritDeckCard = (card: ArkhamCardDef.CardDef) => spiritCardCount(card) > 0
+const isStickToThePlanCard = (card: ArkhamCardDef.CardDef) => stickToThePlanCardCount(card) > 0
+const isAncestralKnowledgeCard = (card: ArkhamCardDef.CardDef) => ancestralKnowledgeCardCount(card) > 0
+const isBewitchingCard = (card: ArkhamCardDef.CardDef) => bewitchingCardCount(card) > 0
+const isEldritchBrandCard = (card: ArkhamCardDef.CardDef) => eldritchBrandCardCount(card) > 0
 
-const attachmentHeading = (card: Arkham.CardDef) => {
+const attachmentHeading = (card: ArkhamCardDef.CardDef) => {
   if (card.art === '90052') return 'Spirit deck'
   if (card.art === '09077') return 'Underworld Market'
   if (card.art === '11080') return 'Eldritch Brand'

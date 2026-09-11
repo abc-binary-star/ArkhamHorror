@@ -5,12 +5,12 @@ import * as ArkhamGame from '@/arkham/types/Game'
 import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/types/Message'
 import { cardImage } from '@/arkham/cardImages'
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
-import * as Arkham from '@/arkham/types/ScarletKey'
+import * as ArkhamScarletKey from '@/arkham/types/ScarletKey'
 import TokenPool from '@/arkham/components/TokenPool.vue';
 
 export interface Props {
   game: Game
-  scarletKey: Arkham.ScarletKey
+  scarletKey: ArkhamScarletKey.ScarletKey
   playerId: string
   atLocation?: boolean
   attached?: boolean

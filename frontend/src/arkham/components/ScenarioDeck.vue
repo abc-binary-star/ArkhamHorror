@@ -2,7 +2,7 @@
 import { computed, ComputedRef } from 'vue';
 import { useDebug } from '@/arkham/debug';
 import type { Card } from '@/arkham/types/Card';
-import { cardImage, toCardContents } from '@/arkham/types/Card';
+import { cardImagePath, toCardContents } from '@/arkham/types/Card';
 import { imgsrc } from '@/arkham/helpers';
 import { homebrewScenarioDeckDisplay } from '@/arkham/homebrewAssets';
 import { investigatorPortrait as portraitFor } from '@/arkham/cardImages';
@@ -62,7 +62,7 @@ const deckImage = computed(() => {
     const topCard = props.deck[1][0]
     if (topCard) {
       const contents = toCardContents(topCard)
-      return imgsrc(cardImage({ ...contents, isFlipped: true, facedown: false }))
+      return imgsrc(cardImagePath({ ...contents, isFlipped: true, facedown: false }))
     }
     return imgsrc("backs/back_encounter.jpg")
   }
@@ -85,7 +85,7 @@ const deckImage = computed(() => {
     case 'OtherworldDeck':
       let topCard = props.deck[1][0];
       if (topCard) {
-        return imgsrc(cardImage(topCard));
+        return imgsrc(cardImagePath(topCard));
       }
     case 'WoodsDeck':
       return imgsrc("cards/10612b.avif");
@@ -103,7 +103,7 @@ const deckImage = computed(() => {
       const topCard = props.deck[1][0]
       if (topCard) {
         const contents = toCardContents(topCard)
-        return imgsrc(cardImage({ ...contents, isFlipped: true, facedown: false }))
+        return imgsrc(cardImagePath({ ...contents, isFlipped: true, facedown: false }))
       }
       return imgsrc("cards/11649b.avif")
     }
@@ -119,7 +119,7 @@ const topOfDiscard = computed(() => {
 
 const topOfDiscardImage = computed(() => {
   if (!topOfDiscard.value) return null
-  return imgsrc(cardImage(topOfDiscard.value))
+  return imgsrc(cardImagePath(topOfDiscard.value))
 })
 
 const deckLabel = computed(() => {

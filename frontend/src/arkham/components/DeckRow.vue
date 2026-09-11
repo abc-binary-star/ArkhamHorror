@@ -3,11 +3,11 @@ import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { displayTabooId } from '@/arkham/taboo';
 import {cardImg, localizeArkhamDBBaseUrl, investigatorClass} from '@/arkham/helpers';
-import * as Arkham from '@/arkham/types/Deck'
+import * as ArkhamDeck from '@/arkham/types/Deck'
 import { overlayIsEmpty } from '@/arkham/deckOverlay'
 
 interface Props {
-  deck: Arkham.Deck
+  deck: ArkhamDeck.Deck
   sync?: () => void
   markDelete?: () => void
 }
@@ -27,7 +27,7 @@ const deckUrlToPage = (url: string): string => {
 }
 
 // An overlay can replace the investigator, so the row follows the play list.
-const deckInvestigator = computed(() => Arkham.deckInvestigator(props.deck))
+const deckInvestigator = computed(() => ArkhamDeck.deckInvestigator(props.deck))
 
 const deckClass = computed(() => {
   if (deckInvestigator.value) {
@@ -40,7 +40,7 @@ const deckClass = computed(() => {
 const hasOverlay = computed(() => !overlayIsEmpty(props.deck.overlay ?? null))
 
 const tabooList = computed(() => {
-  const list = Arkham.deckPlayList(props.deck)
+  const list = ArkhamDeck.deckPlayList(props.deck)
   return list.taboo_id ? displayTabooId(list.taboo_id) : null
 })
 </script>

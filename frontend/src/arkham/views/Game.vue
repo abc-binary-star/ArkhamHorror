@@ -65,7 +65,6 @@ import { cardImg, imgsrc, isTypingTarget } from '@/arkham/helpers'
 import { cardFaceImages, cardHasDistinctBack } from '@/arkham/cardImages'
 import { handleEmbeddedI18n } from '@/arkham/i18n'
 import { getGameLocalStorageItem, setGameLocalStorageItem } from '@/arkham/localStorage'
-import * as Arkham from '@/arkham/types/Game'
 import * as ArkhamGame from '@/arkham/types/Game'
 import {
   choicesByPlayerKey,
@@ -73,6 +72,24 @@ import {
   choicesTooltipByPlayerKey,
 } from '@/arkham/composables/useGameChoices'
 import { buildGameIndexes, gameIndexesKey } from '@/arkham/composables/useGameIndexes'
+import {
+  chooseAmountsKey,
+  chooseDeckKey,
+  chooseDeckListKey,
+  choosePaymentAmountsKey,
+  processingKey,
+  scenarioSpecificAnswerKey,
+  sendKey,
+  showOtherPlayersHandsKey,
+  skipAllAvailableKey,
+  skipAllInProgressKey,
+  skipAllTriggersKey,
+  soloKey,
+  spectateKey,
+  storyAnswerPendingKey,
+  switchInvestigatorKey,
+  uiLockKey,
+} from '@/arkham/injectionKeys'
 import { Card, asCardCode, cardDecoder, toCardContents } from '@/arkham/types/Card'
 import { customCardDef, isCustomCardCode } from '@/arkham/customCards'
 import * as Message from '@/arkham/types/Message'
@@ -263,7 +280,7 @@ interface PlayabilityInfo {
   checks: [string, string | null][]
 }
 
-const game = shallowRef<Arkham.Game | null>(null)
+const game = shallowRef<ArkhamGame.Game | null>(null)
 
 /* A custom card someone else created shows up in the game payload before this
  * client has its def; refetch the game's custom cards when an unknown one
@@ -606,7 +623,7 @@ function questionTag(q: Question | null | undefined): string | null {
 // which Campaign.vue renders under exactly this condition. Read off an explicit
 // game rather than game.value: applyGameUpdate can defer the game.value swap into
 // a view transition, so an incoming update must be inspected directly.
-function followPendingUpgradeQuestion(g: Arkham.Game) {
+function followPendingUpgradeQuestion(g: ArkhamGame.Game) {
   if (!solo.value || g.gameState.tag !== 'IsChooseDecks') return
   const currentPlayerId = playerId.value
   if (currentPlayerId && g.question[currentPlayerId]) return
@@ -622,7 +639,7 @@ watch([game, playerId, solo], ([currentGame]) => {
   if (currentGame) followPendingUpgradeQuestion(currentGame)
 })
 
-function scenarioBoardMounted(g: Arkham.Game) {
+function scenarioBoardMounted(g: ArkhamGame.Game) {
   const scenario = g.scenario
   if (!scenario) return false
   if (g.gameState.tag !== 'IsActive' && g.gameState.tag !== 'IsOver') return false
@@ -691,7 +708,7 @@ const toggleRealityAcidLight = () => {
 
 const activePlayerId = computed(() => game.value?.activePlayerId ?? null)
 
-function activePlayerBelongsToCurrentPlayer(g: Arkham.Game, currentPlayerId: string) {
+function activePlayerBelongsToCurrentPlayer(g: ArkhamGame.Game, currentPlayerId: string) {
   if (g.activePlayerId === currentPlayerId) return true
   return Object.values(g.investigators).some(
     (investigator) =>
@@ -746,7 +763,7 @@ watch(activePlayerId, (newActivePlayerId, oldActivePlayerId) => {
 
 type SkipTriggerEntry = { playerId: string; choiceIdx: number; investigatorId: string }
 
-function skipTriggerEntries(g: Arkham.Game): SkipTriggerEntry[] {
+function skipTriggerEntries(g: ArkhamGame.Game): SkipTriggerEntry[] {
   const result: SkipTriggerEntry[] = []
   for (const pid of Object.keys(g.question)) {
     const cs = ArkhamGame.choices(g, pid)
@@ -760,14 +777,14 @@ function skipTriggerEntries(g: Arkham.Game): SkipTriggerEntry[] {
 }
 
 function investigatorBelongsToPlayer(
-  g: Arkham.Game,
+  g: ArkhamGame.Game,
   investigatorId: string,
   targetPlayerId: string,
 ) {
   return g.investigators[investigatorId]?.playerId === targetPlayerId
 }
 
-function isInvestigatorTurn(g: Arkham.Game) {
+function isInvestigatorTurn(g: ArkhamGame.Game) {
   return (
     g.phaseStep?.tag === 'InvestigationPhaseStep' &&
     [
@@ -779,7 +796,7 @@ function isInvestigatorTurn(g: Arkham.Game) {
   )
 }
 
-function canCurrentPlayerSkipAllWindows(g: Arkham.Game, currentPlayerId: string) {
+function canCurrentPlayerSkipAllWindows(g: ArkhamGame.Game, currentPlayerId: string) {
   if (solo.value) return true
 
   if (g.skillTest) {
@@ -793,7 +810,7 @@ function canCurrentPlayerSkipAllWindows(g: Arkham.Game, currentPlayerId: string)
   return true
 }
 
-function authorizedSkipTriggerEntries(g: Arkham.Game): SkipTriggerEntry[] {
+function authorizedSkipTriggerEntries(g: ArkhamGame.Game): SkipTriggerEntry[] {
   if (!playerId.value) return []
   if (!canCurrentPlayerSkipAllWindows(g, playerId.value)) return []
   return skipTriggerEntries(g)
@@ -837,7 +854,7 @@ const loadGame = async () => {
     } = await fetchGame(props.gameId, props.spectate)
 
     preloadImages(newGame)
-    ;(window as Window & { g?: Arkham.Game }).g = newGame
+    ;(window as Window & { g?: ArkhamGame.Game }).g = newGame
     game.value = newGame
     solo.value = multiplayerMode === 'Solo'
     // Engage the Epic event this game belongs to even when the URL lacks
@@ -927,7 +944,7 @@ const qPop = () => {
 let decoding = false
 let pendingUpdate: string | null = null
 
-function entitiesMoved(previous: Arkham.Game, current: Arkham.Game) {
+function entitiesMoved(previous: ArkhamGame.Game, current: ArkhamGame.Game) {
   const placementChanged = (
     previousEntities: Record<string, { placement: unknown }>,
     currentEntities: Record<string, { placement: unknown }>,
@@ -946,7 +963,7 @@ function entitiesMoved(previous: Arkham.Game, current: Arkham.Game) {
   )
 }
 
-function applyGameUpdate(updatedGame: Arkham.Game, locked: boolean) {
+function applyGameUpdate(updatedGame: ArkhamGame.Game, locked: boolean) {
   const nextGame = locked ? { ...updatedGame, question: {} } : updatedGame
   const previousGame = game.value
   const apply = async () => {
@@ -975,7 +992,7 @@ function scheduleApplyUpdate(payload: string) {
     return
   }
   decoding = true
-  Arkham.gameDecoder
+  ArkhamGame.gameDecoder
     .decodePromise(payload)
     .then((updatedGame) => {
       const locked = uiLock.value
@@ -1754,13 +1771,13 @@ const continueUI = () => {
   uiLock.value = false
 }
 
-function preloadImages(game: Arkham.Game): void {
+function preloadImages(game: ArkhamGame.Game): void {
   void loadAllImages(game).catch((e: unknown) => {
     console.error(e)
   })
 }
 
-async function loadAllImages(game: Arkham.Game): Promise<void> {
+async function loadAllImages(game: ArkhamGame.Game): Promise<void> {
   const cards = Object.values(game.cards)
   const visibleImages = cards.map((card) => {
     const { cardCode, isFlipped } = toCardContents(card)
@@ -1923,7 +1940,7 @@ async function chooseAmounts(amounts: Record<string, number>): Promise<void> {
   }
 }
 
-async function update(state: Arkham.Game) {
+async function update(state: ArkhamGame.Game) {
   game.value = state
   followPendingUpgradeQuestion(state)
 }
@@ -1961,25 +1978,25 @@ provide(choicesByPlayerKey, choicesByPlayer)
 provide(choicesSourceByPlayerKey, choicesSourceByPlayer)
 provide(choicesTooltipByPlayerKey, choicesTooltipByPlayer)
 provide(gameIndexesKey, gameIndexes)
-provide('chooseDeck', chooseDeck)
-provide('chooseDeckList', chooseDeckList)
-provide('send', send)
-provide('choosePaymentAmounts', choosePaymentAmounts)
-provide('chooseAmounts', chooseAmounts)
-provide('scenarioSpecificAnswer', scenarioSpecificAnswer)
-provide('switchInvestigator', switchInvestigator)
-provide('solo', solo)
+provide(chooseDeckKey, chooseDeck)
+provide(chooseDeckListKey, chooseDeckList)
+provide(sendKey, send)
+provide(choosePaymentAmountsKey, choosePaymentAmounts)
+provide(chooseAmountsKey, chooseAmounts)
+provide(scenarioSpecificAnswerKey, scenarioSpecificAnswer)
+provide(switchInvestigatorKey, switchInvestigator)
+provide(soloKey, solo)
 provide(
-  'spectate',
+  spectateKey,
   computed(() => props.spectate),
 )
-provide('processing', processing)
-provide('storyAnswerPending', storyAnswerPending)
-provide('uiLock', uiLock)
-provide('skipAllTriggers', skipAllTriggers)
-provide('skipAllAvailable', skipAllAvailable)
-provide('skipAllInProgress', skipAllInProgress)
-provide('showOtherPlayersHands', showOtherPlayersHands)
+provide(processingKey, processing)
+provide(storyAnswerPendingKey, storyAnswerPending)
+provide(uiLockKey, uiLock)
+provide(skipAllTriggersKey, skipAllTriggers)
+provide(skipAllAvailableKey, skipAllAvailable)
+provide(skipAllInProgressKey, skipAllInProgress)
+provide(showOtherPlayersHandsKey, showOtherPlayersHands)
 
 function updateFocusLight() {
   const highlighted = [

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, Ref, ref, watch } from 'vue'
+import { computed, inject, onMounted, ref, watch } from 'vue'
 import { CardContents, type Card } from '@/arkham/types/Card'
 import type { Game } from '@/arkham/types/Game'
 import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Message'
@@ -12,6 +12,7 @@ import * as ArkhamGame from '@/arkham/types/Game'
 import { IsMobile } from '@/arkham/isMobile'
 import { useDebug } from '@/arkham/debug'
 import { useCardStore } from '@/stores/cards'
+import { showOtherPlayersHandsKey, soloKey } from '@/arkham/injectionKeys'
 
 export interface Props {
   game: Game
@@ -70,8 +71,8 @@ const cardAction = computed(() => {
   })
 })
 
-const solo = inject<Ref<boolean>>('solo')
-const showOtherPlayersHands = inject<Ref<boolean>>('showOtherPlayersHands')
+const solo = inject(soloKey)
+const showOtherPlayersHands = inject(showOtherPlayersHandsKey)
 
 function isAbility(v: Message): v is AbilityLabel {
   if (v.tag !== 'AbilityLabel') {

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, ref, watch, type Ref } from 'vue';
+import { computed, inject, ref, watch } from 'vue';
 import { imgsrc, formatContent } from '@/arkham/helpers';
 import { cardArt, cardImage } from '@/arkham/cardImages';
 import { Game } from '@/arkham/types/Game';
@@ -12,6 +12,7 @@ import FormattedEntry from '@/arkham/components/FormattedEntry.vue';
 import CardImage from '@/arkham/components/CardImage.vue';
 import { setCurrentNarration } from '@/arkham/narration';
 import { flavorTextNarration } from '@/arkham/narrationText';
+import { storyAnswerPendingKey } from '@/arkham/injectionKeys';
 
 export interface Props {
   game: Game
@@ -27,7 +28,7 @@ const props = defineProps<Props>()
 const emit = defineEmits(['choose'])
 // The passage stays on screen while its answer is in flight so the page does not
 // blank between bodies of text; ignore any further clicks until it is replaced.
-const answerPending = inject<Ref<boolean>>('storyAnswerPending', ref(false))
+const answerPending = inject(storyAnswerPendingKey, ref(false))
 const choose = (idx: number) => {
   if (answerPending.value) return
   emit('choose', idx)

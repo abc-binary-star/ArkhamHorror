@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import * as Arkham from '@/arkham/types/Game'
+import * as ArkhamGame from '@/arkham/types/Game'
 import { LogContents, LogKey, formatKey, homebrewScopeFromCampaignId, logContentsDecoder } from '@/arkham/types/Log'
 import { toCapitalizedWords, formatContent } from '@/arkham/helpers'
 import { cardArt } from '@/arkham/cardImages'
@@ -42,7 +42,7 @@ import AreasSurveyed from '@/arkham/components/TheFeastOfHemlockVale/AreasSurvey
 import DayTimeTracker from '@/arkham/components/TheFeastOfHemlockVale/DayTimeTracker.vue'
 
 export interface Props {
-  game: Arkham.Game
+  game: ArkhamGame.Game
   cards: CardDef[]
   playerId: string
 }

@@ -7,11 +7,11 @@ import * as ArkhamGame from '@/arkham/types/Game';
 import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/types/Message';
 import { cardImg } from '@/arkham/helpers';
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
-import * as Arkham from '@/arkham/types/Skill';
+import * as ArkhamSkill from '@/arkham/types/Skill'
 
 export interface Props {
   game: Game
-  skill: Arkham.Skill
+  skill: ArkhamSkill.Skill
   playerId: string
   attached?: boolean
 }

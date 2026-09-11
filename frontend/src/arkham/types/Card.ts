@@ -61,7 +61,7 @@ export function cardId(card: Card | CardContents): string {
   return toCardContents(card).id
 }
 
-export function cardImage(card: Card | CardContents) {
+export function cardImagePath(card: Card | CardContents) {
   if (cardFacedown(card)) {
     return card.tag === 'PlayerCard' || card.tag === 'CardContents' ? 'backs/back_player.jpg' : 'backs/back_encounter.jpg'
   }

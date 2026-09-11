@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import * as Arkham from '@/arkham/types/Deck'
+import * as ArkhamDeck from '@/arkham/types/Deck'
 import Prompt from '@/components/Prompt.vue'
 import LoadState from '@/components/LoadState.vue'
 import { fetchDecks, deleteDeck, syncDeck } from '@/arkham/api'
@@ -22,7 +22,7 @@ const { t } = useI18n()
 const { customCardsEnabled } = storeToRefs(useSettings())
 if (customCardsEnabled.value) loadLibrary()
 
-const allDecks = ref<Arkham.Deck[]>([])
+const allDecks = ref<ArkhamDeck.Deck[]>([])
 const deleteId = ref<string | null>(null)
 const toast = useToast()
 const showNewDeck = ref(false)
@@ -35,7 +35,7 @@ const CLASS_ORDER: Record<string, number> = {
 }
 const allClasses: InvestigatorClass[] = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"]
 
-async function addDeck(d: Arkham.Deck) {
+async function addDeck(d: ArkhamDeck.Deck) {
   allDecks.value.push(d)
   showNewDeck.value = false
 }
@@ -83,7 +83,7 @@ onUnmounted(() => {
 const decks = computed(() => {
   let result = allDecks.value.filter((deck) => {
     const matchesClass = filterClasses.value.length === 0 ||
-      filterClasses.value.some((k) => Arkham.deckClass(deck)[k])
+      filterClasses.value.some((k) => ArkhamDeck.deckClass(deck)[k])
     const matchesSearch = !searchText.value ||
       deck.name.toLowerCase().includes(searchText.value.toLowerCase())
     return matchesClass && matchesSearch
@@ -93,7 +93,7 @@ const decks = computed(() => {
     result = [...result].sort((a, b) => a.name.localeCompare(b.name))
   } else if (sortBy.value === 'class') {
     result = [...result].sort((a, b) => {
-      const classObj = (d: Arkham.Deck) => Arkham.deckClass(d)
+      const classObj = (d: ArkhamDeck.Deck) => ArkhamDeck.deckClass(d)
       const ca = allClasses.find(k => classObj(a)[k]) ?? 'neutral'
       const cb = allClasses.find(k => classObj(b)[k]) ?? 'neutral'
       return (CLASS_ORDER[ca] ?? 5) - (CLASS_ORDER[cb] ?? 5)
@@ -103,7 +103,7 @@ const decks = computed(() => {
   return result
 })
 
-async function sync(deck: Arkham.Deck) {
+async function sync(deck: ArkhamDeck.Deck) {
   syncDeck(deck.id).then(() => {
     toast.success(t('deckSyncedSuccessfully'), { timeout: 3000 })
   })

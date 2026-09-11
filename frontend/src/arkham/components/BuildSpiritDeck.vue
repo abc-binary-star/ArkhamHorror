@@ -6,6 +6,7 @@ import type { Question } from '@/arkham/types/Question'
 import { QuestionType } from '@/arkham/types/Question'
 import { capitalize, imgsrc, type InvestigatorClass } from '@/arkham/helpers'
 import { cardImage } from '@/arkham/cardImages'
+import { scenarioSpecificAnswerKey } from '@/arkham/injectionKeys'
 import { useDbCardStore } from '@/stores/dbCards'
 
 const DISCRIMINATOR = 'laidToRest.buildSpiritDeck'
@@ -25,7 +26,7 @@ const props = defineProps<{
 
 const { t } = useI18n()
 const dbCardStore = useDbCardStore()
-const scenarioSpecificAnswer = inject<(key: string, value: unknown) => Promise<void>>('scenarioSpecificAnswer')
+const scenarioSpecificAnswer = inject(scenarioSpecificAnswerKey)
 
 // Ensure the card metadata is loaded so names/classes resolve.
 onMounted(() => { void dbCardStore.initDbCards() })

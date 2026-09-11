@@ -7,7 +7,7 @@ import { TokenType } from '@/arkham/types/Token'
 import { imgsrc } from '@/arkham/helpers'
 import { cardArt, cardImage } from '@/arkham/cardImages'
 import {
-  cardImage as cardToImage,
+  cardImagePath,
   asCardCode,
   toCardContents,
   type Card as ArkhamCard,
@@ -33,7 +33,7 @@ import MissingCardBadge from '@/arkham/components/MissingCardBadge.vue'
 import Story from '@/arkham/components/Story.vue'
 import { useCardFlip } from '@/arkham/composables/useCardFlip'
 import SealedChaosTokens from '@/arkham/components/SealedChaosTokens.vue'
-import * as Arkham from '@/arkham/types/Asset'
+import * as ArkhamAsset from '@/arkham/types/Asset'
 import { useSettings } from '@/stores/settings'
 import { isManifestedSpiritAsset } from '@/arkham/spiritVisuals'
 import { useDbCardStore } from '@/stores/dbCards'
@@ -42,7 +42,7 @@ import { useCardStore } from '@/stores/cards'
 const props = withDefaults(
   defineProps<{
     game: Game
-    asset: Arkham.Asset
+    asset: ArkhamAsset.Asset
     playerId: string
     atLocation?: boolean
     // Played, but held out of play until a slot frees up
@@ -104,7 +104,7 @@ const investigators = computed(() =>
 )
 const marketPopoverShown = ref(false)
 const knownMarketDeck = computed(() => props.asset.knownMarketDeck ?? [])
-const marketDeckCardImage = (card: ArkhamCard) => imgsrc(cardToImage(card))
+const marketDeckCardImage = (card: ArkhamCard) => imgsrc(cardImagePath(card))
 
 // Heretics are shuffled into the spirit deck enemy-side faceup, so their identity
 // is public. They arrive as EncounterCards (the allies / Vengeful Shade are
@@ -114,7 +114,7 @@ const spiritDeckTop = computed<ArkhamCard | null>(() => props.asset.spiritDeck?.
 const spiritDeckTopRevealed = computed(() => spiritDeckTop.value?.tag === 'EncounterCard')
 const spiritDeckTopImage = computed(() =>
   spiritDeckTopRevealed.value && spiritDeckTop.value
-    ? imgsrc(cardToImage(spiritDeckTop.value))
+    ? imgsrc(cardImagePath(spiritDeckTop.value))
     : imgsrc('backs/back_player.jpg'),
 )
 const marketDeckCardCode = (card: ArkhamCard) => asCardCode(card).replace(/^c/, '')

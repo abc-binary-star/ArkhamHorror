@@ -9,13 +9,13 @@ import { useCardFlip } from '@/arkham/composables/useCardFlip'
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import Token from '@/arkham/components/Token.vue'
 import DebugStory from '@/arkham/components/debug/Story.vue'
-import * as Arkham from '@/arkham/types/Story'
+import * as ArkhamStory from '@/arkham/types/Story'
 import TokenPool from '@/arkham/components/TokenPool.vue';
 import { TokenType } from '@/arkham/types/Token';
 
 export interface Props {
   game: Game
-  story: Arkham.Story
+  story: ArkhamStory.Story
   playerId: string
   atLocation?: boolean
 }
@@ -160,7 +160,7 @@ const sealedChaosTokens = computed(() => props.story.sealedChaosTokens ?? [])
       </button>
     </div>
     <div v-if="setAsideInfestationTokens.length > 0" class="infestation-tokens">
-      <Token v-for="token in setAsideInfestationTokens" :key="token.infestationTokenId" :token="Arkham.infestationAsChaosToken(token)" :playerId="playerId" :game="game" @choose="choose" />
+      <Token v-for="token in setAsideInfestationTokens" :key="token.infestationTokenId" :token="ArkhamStory.infestationAsChaosToken(token)" :playerId="playerId" :game="game" @choose="choose" />
     </div>
     <DebugStory v-if="debugging" :story="story" @close="debugging = false" />
   </div>

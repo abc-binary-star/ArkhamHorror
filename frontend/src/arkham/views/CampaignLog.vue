@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import * as Arkham from '@/arkham/types/Game'
+import * as ArkhamGame from '@/arkham/types/Game'
 import { shallowRef, ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { fetchGame } from '@/arkham/api'
@@ -15,7 +15,7 @@ const props = defineProps<Props>()
 const store = useCardStore()
 const router = useRouter()
 store.fetchCards()
-const game = shallowRef<Arkham.Game | null>(null)
+const game = shallowRef<ArkhamGame.Game | null>(null)
 const loaded = ref(false)
 const loadError = ref(false)
 

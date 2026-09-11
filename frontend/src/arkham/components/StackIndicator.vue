@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { Dropdown } from 'floating-vue'
-import { type Card, cardImage, toCardContents, asCardCode } from '@/arkham/types/Card'
+import { type Card, cardImagePath, toCardContents, asCardCode } from '@/arkham/types/Card'
 import { resolvedSideArt } from '@/arkham/cardImages'
 import { cardImg, imgsrc } from '@/arkham/helpers'
 import StackPopoverCard from '@/arkham/components/StackPopoverCard.vue'
@@ -57,7 +57,7 @@ const popoverGroups = computed<StackIndicatorGroup[]>(() => {
     ...props.completedCards.map((card, i) => ({
       label: `${props.label} ${i + 1}`,
       state: 'completed' as const,
-      images: [{ src: imgsrc(cardImage(card)), back: backImageFor(card), passed: true }],
+      images: [{ src: imgsrc(cardImagePath(card)), back: backImageFor(card), passed: true }],
     })),
     {
       label: `${props.label} ${props.current}`,
@@ -67,7 +67,7 @@ const popoverGroups = computed<StackIndicatorGroup[]>(() => {
     ...props.remainingCards.map((card, i) => ({
       label: `${props.label} ${props.current + i + 1}`,
       state: 'remaining' as const,
-      images: [{ src: imgsrc(cardImage(card)) }],
+      images: [{ src: imgsrc(cardImagePath(card)) }],
     })),
   ]
 })

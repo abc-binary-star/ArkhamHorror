@@ -9,11 +9,11 @@ import { cardImage } from '@/arkham/cardImages';
 import TokenPool from '@/arkham/components/TokenPool.vue';
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import Token from '@/arkham/components/Token.vue';
-import * as Arkham from '@/arkham/types/Event';
+import * as ArkhamEvent from '@/arkham/types/Event'
 
 export interface Props {
   game: Game
-  event: Arkham.Event
+  event: ArkhamEvent.Event
   playerId: string
   attached?: boolean
 }

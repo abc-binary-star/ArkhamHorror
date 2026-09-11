@@ -7,11 +7,11 @@ import { cardImg } from '@/arkham/helpers';
 import type { Game } from '@/arkham/types/Game';
 import PoolItem from '@/arkham/components/PoolItem.vue';
 import Modifier from '@/arkham/components/Modifier.vue';
-import * as Arkham from '@/arkham/types/Enemy'
+import * as ArkhamEnemy from '@/arkham/types/Enemy'
 
 const props = defineProps<{
   game: Game
-  enemy: Arkham.Enemy
+  enemy: ArkhamEnemy.Enemy
   playerId: string
 }>()
 

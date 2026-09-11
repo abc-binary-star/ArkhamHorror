@@ -3,7 +3,7 @@ import { ComputedRef, computed, ref, watch } from 'vue'
 import { Dropdown } from 'floating-vue'
 import { useCardStore } from '@/stores/cards'
 import { type Game } from '@/arkham/types/Game'
-import { type Card, cardImage, asCardCode, toCardContents } from '@/arkham/types/Card'
+import { type Card, cardImagePath, asCardCode, toCardContents } from '@/arkham/types/Card'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import { useDebug } from '@/arkham/debug'
 import PoolItem from '@/arkham/components/PoolItem.vue'
@@ -21,13 +21,13 @@ import { MessageType } from '@/arkham/types/Message'
 import { keyToId } from '@/arkham/types/Key'
 import { cardImg, imgsrc } from '@/arkham/helpers'
 import { resolvedSideArt } from '@/arkham/cardImages'
-import * as Arkham from '@/arkham/types/Act'
+import * as ArkhamAct from '@/arkham/types/Act'
 import { useEventStore } from '@/arkham/stores/event'
 import { actContribution, actSpend } from '@/arkham/types/EpicEvent'
 import { useCardFlip } from '@/arkham/composables/useCardFlip'
 
 const props = defineProps<{
-  act: Arkham.Act
+  act: ArkhamAct.Act
   game: Game
   cardsUnder: Card[]
   cardsNextTo: Card[]
@@ -91,7 +91,7 @@ const { displayedImage, flipping, flippingDiagonally } = useCardFlip(image)
 const choices = computed(() => ArkhamGame.choices(props.game, props.playerId))
 
 function imageForCard(card: Card) {
-  return imgsrc(cardImage(card))
+  return imgsrc(cardImagePath(card))
 }
 
 function isCardAction(c: Message): boolean {
@@ -240,7 +240,7 @@ const groupedActStack = computed<StackIndicatorGroup[]>(() => {
       asCardCode(card),
       `Act ${i + 1}`,
       null,
-      { src: imgsrc(cardImage(card)), back: resolvedSideImage(card), passed: true },
+      { src: imgsrc(cardImagePath(card)), back: resolvedSideImage(card), passed: true },
       'completed',
       i,
     )
@@ -260,7 +260,7 @@ const groupedActStack = computed<StackIndicatorGroup[]>(() => {
       asCardCode(card),
       `Act ${props.completedStack.length + i + 2}`,
       null,
-      { src: imgsrc(cardImage(card)) },
+      { src: imgsrc(cardImagePath(card)) },
       'remaining',
       props.completedStack.length + i + 1,
     )

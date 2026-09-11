@@ -3,7 +3,7 @@ import { Layers, Archive } from '@lucide/vue'
 import { useDebug } from '@/arkham/debug'
 import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Message'
 import * as ArkhamCard from '@/arkham/types/Card';
-import * as Arkham from '@/arkham/types/Investigator'
+import * as ArkhamInvestigator from '@/arkham/types/Investigator'
 import * as ArkhamGame from '@/arkham/types/Game';
 import type { Game } from '@/arkham/types/Game'
 import {computed, ref, watch} from 'vue'
@@ -18,7 +18,7 @@ const { t } = useI18n();
 
 export interface Props {
   game: Game
-  investigator: Arkham.Investigator
+  investigator: ArkhamInvestigator.Investigator
   playerId: string
 }
 

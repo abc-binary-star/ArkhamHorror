@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, type Ref } from 'vue';
+import { computed, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { handleEmbeddedI18n } from '@/arkham/i18n';
 import type { Game } from '@/arkham/types/Game';
@@ -16,6 +16,7 @@ import FormattedEntry from '@/arkham/components/FormattedEntry.vue';
 import * as ArkhamGame from '@/arkham/types/Game';
 import WorldMap, { type MapData } from '@/arkham/components/TheScarletKeys/WorldMap.vue';
 import BuildSpiritDeck from '@/arkham/components/BuildSpiritDeck.vue';
+import { soloKey } from '@/arkham/injectionKeys';
 
 export interface Props {
   game: Game
@@ -24,7 +25,7 @@ export interface Props {
 
 const props = defineProps<Props>()
 const emit = defineEmits(['choose'])
-const solo = inject<Ref<boolean>>('solo')
+const solo = inject(soloKey)
 
 const ownQuestion = computed(() => props.game.question[props.playerId])
 

@@ -6,13 +6,13 @@ import PoolItem from '@/arkham/components/PoolItem.vue';
 import { computed, ref } from 'vue';
 import { useDebug } from '@/arkham/debug';
 import type { Game } from '@/arkham/types/Game';
-import * as Arkham from '@/arkham/types/Location';
+import * as ArkhamLocation from '@/arkham/types/Location'
 import { cardImg } from '@/arkham/helpers';
 import { TokenType, type Token } from '@/arkham/types/Token';
 
 type Props = {
   game: Game
-  location: Arkham.Location
+  location: ArkhamLocation.Location
   playerId: string
 }
 
@@ -22,7 +22,7 @@ const { addEntry } = useMenu()
 const placeTokens = ref(false);
 const placeTokenType = ref<Token>("Clue");
 const tokenTypes = Object.values(TokenType);
-const floodLevels: Arkham.FloodLevel[] = ['Unflooded', 'PartiallyFlooded', 'FullyFlooded'];
+const floodLevels: ArkhamLocation.FloodLevel[] = ['Unflooded', 'PartiallyFlooded', 'FullyFlooded'];
 
 const isNumber = (value: unknown): value is number => typeof value === 'number';
 const anyTokens = computed(() => Object.values(props.location.tokens).some(t => isNumber(t) && t > 0))
@@ -31,7 +31,7 @@ const canAdjustFloodLevel = computed(() => {
   const scenarioId = props.game.scenario?.id.replace(/^c/, '');
   return campaignId === '07' || campaignId === '11' || scenarioId?.startsWith('07') || scenarioId?.startsWith('11');
 })
-const currentFloodLevel = computed<Arkham.FloodLevel>(() => props.location.floodLevel ?? 'Unflooded')
+const currentFloodLevel = computed<ArkhamLocation.FloodLevel>(() => props.location.floodLevel ?? 'Unflooded')
 
 addEntry({
   id: `close-debug-${props.location.id}`,
@@ -50,7 +50,7 @@ const image = computed(() => {
 
 const clues = computed(() => props.location.tokens[TokenType.Clue])
 
-const setFloodLevel = (level: Arkham.FloodLevel) => {
+const setFloodLevel = (level: ArkhamLocation.FloodLevel) => {
   debug.send(props.game.id, { tag: 'SetFloodLevel', contents: [id.value, level] })
 }
 

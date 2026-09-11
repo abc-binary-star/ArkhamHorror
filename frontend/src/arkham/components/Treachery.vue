@@ -11,11 +11,11 @@ import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import { IsMobile } from '@/arkham/isMobile'
 import Token from '@/arkham/components/Token.vue'
-import * as Arkham from '@/arkham/types/Treachery'
+import * as ArkhamTreachery from '@/arkham/types/Treachery'
 
 export interface Props {
   game: Game
-  treachery: Arkham.Treachery
+  treachery: ArkhamTreachery.Treachery
   playerId: string
   attached?: boolean
   overlayDelay?: number

@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { imgsrc } from '@/arkham/helpers'
 import EnemyView from '@/arkham/components/Enemy.vue'
-import * as Arkham from '@/arkham/types/Enemy'
+import * as ArkhamEnemy from '@/arkham/types/Enemy'
 import { Game } from '@/arkham/types/Game'
 import { CTHULHU_BOARD_SLOTS } from '@/arkham/components/TheDrownedCity/cthulhuBoard'
 
@@ -17,7 +17,7 @@ import { CTHULHU_BOARD_SLOTS } from '@/arkham/components/TheDrownedCity/cthulhuB
 const props = defineProps<{
   game: Game
   playerId: string
-  enemies: Arkham.Enemy[]
+  enemies: ArkhamEnemy.Enemy[]
 }>()
 
 defineEmits<{ choose: [value: number] }>()

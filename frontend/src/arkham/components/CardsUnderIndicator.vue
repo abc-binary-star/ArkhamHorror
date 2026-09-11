@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { Dropdown } from 'floating-vue'
-import { type Card as ArkhamCard, type CardContents, cardImage, toCardContents } from '@/arkham/types/Card'
+import { type Card as ArkhamCard, type CardContents, cardImagePath, toCardContents } from '@/arkham/types/Card'
 import type { Message } from '@/arkham/types/Message'
 import type { Source } from '@/arkham/types/Source'
 import { imgsrc } from '@/arkham/helpers'
@@ -256,7 +256,7 @@ onBeforeUnmount(() => finishDrag())
             />
             <img
               v-else
-              :src="imgsrc(cardImage(card))"
+              :src="imgsrc(cardImagePath(card))"
               class="card cards-under-popover__card"
             />
             <slot name="cardOverlay" :card="card" :index="i" />

@@ -3,8 +3,8 @@ import { LottieAnimation } from "lottie-web-vue"
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import processingJSON from "@/assets/processing.json"
-import { ref, provide, watch, computed, onMounted, onUnmounted } from 'vue'
-import * as Arkham from '@/arkham/types/Game'
+import { ref, watch, computed, onMounted, onUnmounted } from 'vue'
+import * as ArkhamGame from '@/arkham/types/Game'
 import { fetchGameReplay } from '@/arkham/api'
 import { isTypingTarget } from '@/arkham/helpers'
 import GameLog from '@/arkham/components/GameLog.vue'
@@ -19,10 +19,8 @@ export interface Props {
 
 const props = defineProps<Props>()
 const { t } = useI18n()
-const debug = ref(false)
-provide('debug', debug)
 const ready = ref(false)
-const game = ref<Arkham.Game | null>(null)
+const game = ref<ArkhamGame.Game | null>(null)
 const playerId = ref<string | null>(null)
 const gameLog = ref<readonly string[]>(Object.freeze([]))
 const totalSteps = ref(0)

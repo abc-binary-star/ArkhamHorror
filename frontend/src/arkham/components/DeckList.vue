@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { watch, ref, computed, onMounted } from 'vue';
 import { cardImg, localizeArkhamDBBaseUrl } from '@/arkham/helpers';
-import * as Arkham from '@/arkham/types/CardDef';
+import * as ArkhamCardDef from '@/arkham/types/CardDef'
 import type { Deck} from '@/arkham/types/Deck';
 import { useDbCardStore, ArkhamDBCard } from '@/stores/dbCards'
 import { useCardStore } from '@/stores/cards'
@@ -32,10 +32,10 @@ const enum View {
   List = "LIST",
 }
 
-const image = (card: Arkham.CardDef) => cardImg(card.art)
+const image = (card: ArkhamCardDef.CardDef) => cardImg(card.art)
 const view = ref(View.List)
 
-function localizeCard(result: Arkham.CardDef | undefined): Arkham.CardDef | undefined {
+function localizeCard(result: ArkhamCardDef.CardDef | undefined): ArkhamCardDef.CardDef | undefined {
   if (!result) return undefined
 
   const language = localStorage.getItem('language') || 'en'
@@ -59,7 +59,7 @@ function localizeCard(result: Arkham.CardDef | undefined): Arkham.CardDef | unde
   return localized
 }
 
-function findCardByDeckCode(code: string): Arkham.CardDef | undefined {
+function findCardByDeckCode(code: string): ArkhamCardDef.CardDef | undefined {
   if (code === "c01000") {
     return { cardCode: code, doubleSided: false, classSymbols: [], cardType: "Treachery", art: "01000", level: 0, name: { title: "Random Basic Weakness", subtitle: null }, cardTraits: [], skills: [], cost: null, otherSide: null, meta: {}, errata: null }
   }
@@ -77,7 +77,7 @@ const allCards = computed(() => {
 })
 
 const groupedCards = computed(() => {
-  return allCards.value.reduce<Array<{ card: Arkham.CardDef; count: number }>>((acc, card) => {
+  return allCards.value.reduce<Array<{ card: ArkhamCardDef.CardDef; count: number }>>((acc, card) => {
     const existing = acc.find((entry) => entry.card.art === card.art)
     if (existing) existing.count += 1
     else acc.push({ card, count: 1 })
@@ -85,8 +85,8 @@ const groupedCards = computed(() => {
   }, [])
 })
 
-const attachments = computed<Record<string, Arkham.CardDef[]>>(() => {
-  const result: Record<string, Arkham.CardDef[]> = {}
+const attachments = computed<Record<string, ArkhamCardDef.CardDef[]>>(() => {
+  const result: Record<string, ArkhamCardDef.CardDef[]> = {}
 
   try {
     const meta = props.deck.list.meta ? JSON.parse(props.deck.list.meta) as Record<string, unknown> : {}
@@ -97,7 +97,7 @@ const attachments = computed<Record<string, Arkham.CardDef[]>>(() => {
       const attachedCards = value
         .split(',')
         .map((code) => findCardByDeckCode(code.trim()))
-        .filter((card): card is Arkham.CardDef => !!card)
+        .filter((card): card is ArkhamCardDef.CardDef => !!card)
 
       if (attachedCards.length > 0) result[match[1]] = attachedCards
     })
@@ -128,7 +128,7 @@ const attachments = computed<Record<string, Arkham.CardDef[]>>(() => {
       const extraCards = meta.extra_deck
         .split(',')
         .map((code) => findCardByDeckCode(code.trim()))
-        .filter((card): card is Arkham.CardDef => !!card)
+        .filter((card): card is ArkhamCardDef.CardDef => !!card)
       if (extraCards.length > 0) result['90052'] = extraCards
     }
 
@@ -138,10 +138,10 @@ const attachments = computed<Record<string, Arkham.CardDef[]>>(() => {
   }
 })
 
-const attachedCards = (card: Arkham.CardDef) => attachments.value[card.art] ?? []
+const attachedCards = (card: ArkhamCardDef.CardDef) => attachments.value[card.art] ?? []
 
-const groupedAttachedCards = (card: Arkham.CardDef) => {
-  return attachedCards(card).reduce<Array<{ card: Arkham.CardDef; count: number }>>((acc, attached) => {
+const groupedAttachedCards = (card: ArkhamCardDef.CardDef) => {
+  return attachedCards(card).reduce<Array<{ card: ArkhamCardDef.CardDef; count: number }>>((acc, attached) => {
     const existing = acc.find((entry) => entry.card.art === attached.art)
     if (existing) existing.count += 1
     else acc.push({ card: attached, count: 1 })
@@ -152,13 +152,13 @@ const groupedAttachedCards = (card: Arkham.CardDef) => {
 const underworldMarketCards = () => attachments.value['09077'] ?? []
 const spiritDeckCards = () => attachments.value['90052'] ?? []
 
-const marketCardCount = (card: Arkham.CardDef) => underworldMarketCards().filter((c) => c.art === card.art).length
-const spiritCardCount = (card: Arkham.CardDef) => spiritDeckCards().filter((c) => c.art === card.art).length
+const marketCardCount = (card: ArkhamCardDef.CardDef) => underworldMarketCards().filter((c) => c.art === card.art).length
+const spiritCardCount = (card: ArkhamCardDef.CardDef) => spiritDeckCards().filter((c) => c.art === card.art).length
 
-const marketTooltip = (card: Arkham.CardDef) => `Attached to Market deck (x ${marketCardCount(card)})`
-const spiritTooltip = (card: Arkham.CardDef) => `In Spirit deck (x ${spiritCardCount(card)})`
+const marketTooltip = (card: ArkhamCardDef.CardDef) => `Attached to Market deck (x ${marketCardCount(card)})`
+const spiritTooltip = (card: ArkhamCardDef.CardDef) => `In Spirit deck (x ${spiritCardCount(card)})`
 
-const isUnderworldMarketCard = (card: Arkham.CardDef, idx?: number) => {
+const isUnderworldMarketCard = (card: ArkhamCardDef.CardDef, idx?: number) => {
   const marketCount = marketCardCount(card)
   if (marketCount === 0) return false
   if (idx === undefined) return true
@@ -167,7 +167,7 @@ const isUnderworldMarketCard = (card: Arkham.CardDef, idx?: number) => {
   return occurrence <= marketCount
 }
 
-const isSpiritDeckCard = (card: Arkham.CardDef, idx?: number) => {
+const isSpiritDeckCard = (card: ArkhamCardDef.CardDef, idx?: number) => {
   const spiritCount = spiritCardCount(card)
   if (spiritCount === 0) return false
   if (idx === undefined) return true
@@ -176,19 +176,19 @@ const isSpiritDeckCard = (card: Arkham.CardDef, idx?: number) => {
   return occurrence <= spiritCount
 }
 
-const attachmentHeading = (card: Arkham.CardDef) => {
+const attachmentHeading = (card: ArkhamCardDef.CardDef) => {
   if (card.art === '90052') return 'Spirit deck'
   if (card.art === '09077') return 'Underworld Market'
   return `Attached cards for ${cardName(card)}`
 }
 
-const cardName = (card: Arkham.CardDef) => {
+const cardName = (card: ArkhamCardDef.CardDef) => {
   const subtitle = card.name.subtitle === null ? "" : `: ${card.name.subtitle}`
 
   return `${card.name.title}${subtitle}`
 }
 
-const cardCost = (card: Arkham.CardDef) => {
+const cardCost = (card: ArkhamCardDef.CardDef) => {
   if (card.cost?.tag === "StaticCost") return card.cost.contents
   if (card.cost?.tag === "DynamicCost") return -2
   if (card.cost?.tag === "DeferredCost") return -2
@@ -197,7 +197,7 @@ const cardCost = (card: Arkham.CardDef) => {
   return null
 }
 
-const cardType = (card: Arkham.CardDef) => {
+const cardType = (card: ArkhamCardDef.CardDef) => {
   switch(card.cardType) {
     case "PlayerTreacheryType":
       return "Treachery"
@@ -208,17 +208,17 @@ const cardType = (card: Arkham.CardDef) => {
   }
 }
 
-const cardTraits = (card: Arkham.CardDef) => {
+const cardTraits = (card: ArkhamCardDef.CardDef) => {
   if (card.cardTraits.length === 0) { return '' }
   return `${card.cardTraits.join('. ')}.`
 }
 
-const levelText = (card: Arkham.CardDef) => {
+const levelText = (card: ArkhamCardDef.CardDef) => {
   if (card.level === 0 || card.level === null) return ''
   return ` (${card.level})`
 }
 
-const cardIcons = (card: Arkham.CardDef) => {
+const cardIcons = (card: ArkhamCardDef.CardDef) => {
   return card.skills.map((s) => {
     if(s.tag === "SkillIcon") {
       switch(s.contents) {
@@ -238,12 +238,12 @@ const cardIcons = (card: Arkham.CardDef) => {
   })
 }
 
-const cardSet = (card: Arkham.CardDef) => {
+const cardSet = (card: ArkhamCardDef.CardDef) => {
   const cardCode = parseInt(card.art)
   return sets.find((s) => cardCode >= s.min && cardCode <= s.max)
 }
 
-const cardSetText = (card: Arkham.CardDef) => {
+const cardSetText = (card: ArkhamCardDef.CardDef) => {
   const setNumber = parseInt(card.art.slice(2,))
   const language = localStorage.getItem('language') || 'en'
   var setName = ''

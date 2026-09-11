@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch, type CSSProperties, type Ref } from 'vue';
+import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch, type CSSProperties } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Game } from '@/arkham/types/Game';
 import * as ArkhamGame from '@/arkham/types/Game';
@@ -11,6 +11,7 @@ import { handleEmbeddedI18n } from '@/arkham/i18n';
 import { QuestionType } from '@/arkham/types/Question';
 import Draggable from '@/components/Draggable.vue';
 import Question from '@/arkham/components/Question.vue';
+import { processingKey } from '@/arkham/injectionKeys';
 
 export interface Props {
   game: Game
@@ -21,7 +22,7 @@ export interface Props {
 const props = withDefaults(defineProps<Props>(), { noStory: false })
 const emit = defineEmits(['choose'])
 const { t, te } = useI18n()
-const processing = inject<Ref<boolean>>('processing')
+const processing = inject(processingKey)
 const isProcessing = computed(() => processing?.value ?? false)
 
 async function choose(idx: number) {

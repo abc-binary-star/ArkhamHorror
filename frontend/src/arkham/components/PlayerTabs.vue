@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useStorage } from '@vueuse/core'
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import type { Ref } from 'vue'
 import type { Game } from '@/arkham/types/Game'
 import Tab from '@/arkham/components/Tab.vue'
 import Player from '@/arkham/components/Player.vue'
@@ -14,6 +13,13 @@ import type { TarotCard } from '@/arkham/types/TarotCard'
 import { imgsrc, isTypingTarget } from '@/arkham/helpers'
 import { gameLocalStorageKey } from '@/arkham/localStorage'
 import { IsMobile } from '@/arkham/isMobile'
+import {
+  processingKey,
+  soloKey,
+  spectateKey,
+  switchInvestigatorKey,
+  uiLockKey,
+} from '@/arkham/injectionKeys'
 import { useDbCardStore } from '@/stores/dbCards'
 import { useI18n } from 'vue-i18n'
 
@@ -36,11 +42,11 @@ const storageKey = computed(() => gameLocalStorageKey(props.game.id, 'selected-t
 const selectedTab = useStorage<string>(storageKey, props.playerId)
 const playerInfo = ref<HTMLElement | null>(null)
 
-const solo = inject<Ref<boolean>>('solo')
-const spectate = inject<Ref<boolean>>('spectate', ref(false))
-const processing = inject<Ref<boolean>>('processing', ref(false))
-const uiLock = inject<Ref<boolean>>('uiLock', ref(false))
-const switchInvestigator = inject<(i: string) => void>('switchInvestigator')
+const solo = inject(soloKey)
+const spectate = inject(spectateKey, ref(false))
+const processing = inject(processingKey, ref(false))
+const uiLock = inject(uiLockKey, ref(false))
+const switchInvestigator = inject(switchInvestigatorKey)
 const hasChoices = (iid: string) => ArkhamGame.choices(props.game, iid).length > 0
 const isWaiting = (investigator: Investigator) =>
   props.playerOrder.length > 1 && investigator.playerId in props.game.question

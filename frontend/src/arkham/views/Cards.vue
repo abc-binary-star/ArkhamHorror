@@ -3,7 +3,7 @@ import { watch, ref, computed, provide, onMounted, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { fetchCards, fetchHomebrewCards, type CardPoolMode } from '@/arkham/api';
 import { useRouter, useRoute, LocationQueryValue } from 'vue-router';
-import * as Arkham from '@/arkham/types/CardDef';
+import * as ArkhamCardDef from '@/arkham/types/CardDef'
 import CardListView from '@/arkham/components/CardListView.vue';
 import CardImageView from '@/arkham/components/CardImageView.vue';
 import CardDetailsModal from '@/arkham/components/CardDetailsModal.vue';
@@ -17,6 +17,7 @@ import { homebrewCampaigns } from '@/arkham/homebrewData'
 import { imgsrc, isTypingTarget } from '@/arkham/helpers'
 import { cardGroupKey, groupCards } from '@/arkham/cardDetails'
 import { buildSetNameIndex, localizeCardDef, usesLocalizedCardData } from '@/arkham/cardLocalization'
+import { cardFlipAllKey } from '@/arkham/injectionKeys'
 
 const { t, te } = useI18n()
 
@@ -101,7 +102,7 @@ const fromView = (view: View): string => {
 const router = useRouter()
 const route = useRoute()
 const queryText = route.query.q ? route.query.q.toString() : "e:core"
-const allCards = shallowRef<Arkham.CardDef[] | null>(null)
+const allCards = shallowRef<ArkhamCardDef.CardDef[] | null>(null)
 const query = ref<string>(queryText)
 const view = ref(route.query.view? toView(route.query.view) : View.List)
 const activeChapter = ref<number>(route.query.chapter ? parseInt(route.query.chapter.toString()) : 1)
@@ -109,7 +110,7 @@ const activeChapter = ref<number>(route.query.chapter ? parseInt(route.query.cha
 // Pressing `f` flips every card currently shown in image view. CardImage picks
 // this up via inject and mirrors it into its own flipped state.
 const flipAll = ref(false)
-provide('cardFlipAll', flipAll)
+provide(cardFlipAllKey, flipAll)
 
 const onKeydown = (event: KeyboardEvent) => {
   if (event.key !== 'f' && event.key !== 'F') return
@@ -135,9 +136,9 @@ const CACHE_KEY_PREFIX = 'arkham_cards_cache_'
 const CACHE_VERSION = 'v3'
 const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutes
 
-let cachedAllCards: Arkham.CardDef[] | null = null
+let cachedAllCards: ArkhamCardDef.CardDef[] | null = null
 
-const sortCards = (cards: Arkham.CardDef[]) => [...cards].sort((a, b) => {
+const sortCards = (cards: ArkhamCardDef.CardDef[]) => [...cards].sort((a, b) => {
   if (a.art < b.art) return -1
   if (a.art > b.art) return 1
   return 0
@@ -147,14 +148,14 @@ const sortCards = (cards: Arkham.CardDef[]) => [...cards].sort((a, b) => {
 // test would file it with the player cards.
 const setlessEncounterCards = new Set(['13119'])
 
-const isCampaignCard = (card: Arkham.CardDef) => card.encounterSet != null || setlessEncounterCards.has(card.art)
+const isCampaignCard = (card: ArkhamCardDef.CardDef) => card.encounterSet != null || setlessEncounterCards.has(card.art)
 
-const cardInPool = (card: Arkham.CardDef, cardPool: CardPoolMode) => {
+const cardInPool = (card: ArkhamCardDef.CardDef, cardPool: CardPoolMode) => {
   if (cardPool === 'both') return true
   return cardPool === 'campaign' ? isCampaignCard(card) : !isCampaignCard(card)
 }
 
-const getCachedCards = (): Arkham.CardDef[] | null => {
+const getCachedCards = (): ArkhamCardDef.CardDef[] | null => {
   if (cachedAllCards) return cachedAllCards
 
   const key = `${CACHE_KEY_PREFIX}${CACHE_VERSION}_all`
@@ -171,7 +172,7 @@ const getCachedCards = (): Arkham.CardDef[] | null => {
   return null
 }
 
-const setCachedCards = (cards: Arkham.CardDef[]) => {
+const setCachedCards = (cards: ArkhamCardDef.CardDef[]) => {
   cachedAllCards = cards
   const key = `${CACHE_KEY_PREFIX}${CACHE_VERSION}_all`
   try {
@@ -327,7 +328,7 @@ watch(() => activeChapter.value, (newChapter) => {
 // The ArkhamDB dump arrives after the card pool, so translating inside these
 // computeds -- reading the store is what registers the dependency -- is what
 // makes the page switch to the selected language once it lands.
-const localizedCards = (cards: Arkham.CardDef[]) =>
+const localizedCards = (cards: ArkhamCardDef.CardDef[]) =>
   usesLocalizedCardData()
     ? cards.map((card) => localizeCardDef(card, store.getDbCard(card.art)))
     : cards
@@ -491,7 +492,7 @@ const cards = computed(() =>
 
 // A stand-in for a card the engine doesn't implement yet: enough of a CardDef
 // for CardImage to show its art, and nothing else.
-const unimplementedCard = (code: string, set: CardSet): Arkham.CardDef => ({
+const unimplementedCard = (code: string, set: CardSet): ArkhamCardDef.CardDef => ({
   cardCode: `unimplemented-${code}`,
   art: code,
   doubleSided: false,
@@ -526,7 +527,7 @@ const unimplementedCards = computed(() => {
 
   return previewSets.value.flatMap((set) => {
     const missing = new Set(set.missing ?? [])
-    const placeholders: Arkham.CardDef[] = []
+    const placeholders: ArkhamCardDef.CardDef[] = []
 
     for (let code = set.min; code <= set.max; code++) {
       const art = String(code)
@@ -651,13 +652,13 @@ const filterString = (f: Filter): string => {
 
 setFilter()
 
-const cardName = (card: Arkham.CardDef) => {
+const cardName = (card: ArkhamCardDef.CardDef) => {
   const subtitle = card.name.subtitle === null ? "" : `: ${card.name.subtitle}`
 
   return `${card.name.title}${subtitle}`
 }
 
-const cardType = (card: Arkham.CardDef) => {
+const cardType = (card: ArkhamCardDef.CardDef) => {
   switch(card.cardType) {
     case "PlayerTreacheryType":
       return "Treachery"
@@ -668,7 +669,7 @@ const cardType = (card: Arkham.CardDef) => {
   }
 }
 
-const cardSet = (card: Arkham.CardDef) => findCardSetByArt(card.art)
+const cardSet = (card: ArkhamCardDef.CardDef) => findCardSetByArt(card.art)
 
 const cycleSets = (cycle: CardCycle) => setsByCycle.get(cycle.cycle) ?? []
 
@@ -743,7 +744,7 @@ watch([hasPlayerCards, hasCampaignCards, cardPoolMode], ([hasPlayer, hasCampaign
 
 const showSidebar = ref(false)
 const sidebarCollapsed = ref(false)
-const selectedCard = ref<Arkham.CardDef | null>(null)
+const selectedCard = ref<ArkhamCardDef.CardDef | null>(null)
 
 // The details modal steps through the cards in the order the grid shows them,
 // which groups two defs that are one physical card into a single tile.

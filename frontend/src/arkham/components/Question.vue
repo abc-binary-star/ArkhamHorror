@@ -8,12 +8,12 @@ import { formatCost } from '@/arkham/cost';
 import { choiceRequiresModal, MessageType, CardLabel, ChaosTokenLabel, type Message, type TargetLabel } from '@/arkham/types/Message';
 import { computed, inject, ref, watch, onMounted } from 'vue';
 import { imgsrc, formatContent } from '@/arkham/helpers';
-import { cardArt, cardImage as cardCodeImage, investigatorPortrait } from '@/arkham/cardImages';
+import { cardArt, cardImage, investigatorPortrait } from '@/arkham/cardImages';
 import { AmountChoice, QuestionType, amountTargetUnmet } from '@/arkham/types/Question';
 import Card from '@/arkham/components/Card.vue';
 import * as ArkhamGame from '@/arkham/types/Game';
 import { tarotCardImage } from '@/arkham/types/TarotCard';
-import { cardImage, toCardContents, type Card as ArkhamCard, type CardContents } from '@/arkham/types/Card';
+import { cardImagePath, toCardContents, type Card as ArkhamCard, type CardContents } from '@/arkham/types/Card';
 import DropDown from '@/components/DropDown.vue';
 import Token from '@/arkham/components/Token.vue';
 import type { Game } from '@/arkham/types/Game';
@@ -23,6 +23,7 @@ import FormattedEntry from '@/arkham/components/FormattedEntry.vue';
 import QuestionChoices from '@/arkham/components/QuestionChoices.vue';
 import CardImage from '@/arkham/components/CardImage.vue';
 import CardPoolPicker from '@/arkham/components/CardPoolPicker.vue';
+import { chooseAmountsKey, choosePaymentAmountsKey } from '@/arkham/injectionKeys';
 import { cardPoolForLabelKey } from '@/arkham/cardPools';
 
 export interface Props {
@@ -81,8 +82,8 @@ const questionChoices = computed(() => {
 
   return withoutDone
 })
-const choosePaymentAmounts = inject<(amounts: Record<string, number>) => Promise<void>>('choosePaymentAmounts')
-const chooseAmounts = inject<(amounts: Record<string, number>) => Promise<void>>('chooseAmounts')
+const choosePaymentAmounts = inject(choosePaymentAmountsKey)
+const chooseAmounts = inject(chooseAmountsKey)
 const question = computed(() => props.game.question[props.playerId])
 const wizardQuestion = computed(() =>
   question.value?.tag === QuestionType.CHOOSE_ONE_WIZARD ? question.value : null
@@ -725,7 +726,7 @@ const submitAmounts = async () => {
   }
 }
 
-const cardLabelImage = (cardCode: string) => cardCodeImage(cardCode)
+const cardLabelImage = (cardCode: string) => cardImage(cardCode)
 
 const questionImage = computed(() => {
   if (!question.value) {
@@ -745,7 +746,7 @@ const questionImage = computed(() => {
 
 const cardIdImage = (cardId: string) => {
   const card = props.game.cards[cardId]
-  return card ? imgsrc(cardImage(card)) : ''
+  return card ? imgsrc(cardImagePath(card)) : ''
 }
 
 const portraitLabelImage = (investigatorId: string) => investigatorPortrait(props.game, investigatorId)
@@ -900,7 +901,7 @@ const filteredCards = computed<{ choice: CardLabel; index: number }[]>(() => {
 
     <div class="intro-text" v-if="question && question.tag === QuestionType.READ && !suppressReadInSkillTest">
       <div v-if="readCards.length > 0" class="story-with-card">
-        <img :src="cardCodeImage(cardCode)" v-for="cardCode in readCards" :key="cardCode" class="card no-overlay" />
+        <img :src="cardImage(cardCode)" v-for="cardCode in readCards" :key="cardCode" class="card no-overlay" />
         <div>
           <FormattedEntry v-for="(paragraph, index) in question.flavorText.body" :key="index" :entry="paragraph" />
         </div>

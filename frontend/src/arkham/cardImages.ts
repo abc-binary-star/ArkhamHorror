@@ -1,5 +1,6 @@
 import { cardImg, imgsrc } from '@/arkham/helpers'
 import { cardArtReference, customCardDef, isCustomCardCode } from '@/arkham/customCards'
+import { cardDistinctBackImage, cardFrontImage } from '@/arkham/cardArt'
 import type { CardDef } from '@/arkham/types/CardDef'
 import type { Game } from '@/arkham/types/Game'
 import type { Source } from '@/arkham/types/Source'
@@ -40,26 +41,7 @@ export function cardHasDistinctBack(card: CardDef): boolean {
 }
 
 export function cardFaceImages(card: CardDef): { front: string; back: string | null } {
-  const backPrimary = !!(
-    card.doubleSided
-    && card.otherSide
-    && /b$/.test(card.art)
-    && card.otherSide.replace(/^c/, '') === card.art.replace(/b$/, '')
-  )
-
-  const front = card.cardType === 'LocationType' && card.doubleSided
-    ? cardImg(`${card.art}b`)
-    : cardImg(backPrimary ? card.otherSide!.replace(/^c/, '') : card.art)
-
-  let back: string | null = null
-  if (backPrimary) back = cardImg(card.art)
-  else if (card.otherSide) back = cardImg(card.otherSide.replace(/^c/, ''))
-  else if (['ActType', 'AgendaType', 'ScenarioType', 'InvestigatorType'].includes(card.cardType)) {
-    back = cardImg(`${card.art.replace(/a$/, '')}b`)
-  } else if (card.cardType === 'LocationType' && card.doubleSided) back = cardImg(card.art)
-  else if (card.doubleSided) back = cardImg(`${card.art.replace(/a$/, '')}b`)
-
-  return { front, back }
+  return { front: cardFrontImage(card), back: cardDistinctBackImage(card) }
 }
 
 export function portraitImage(cardCode: string, suffix: string = ''): string {

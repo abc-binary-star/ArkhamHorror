@@ -6,7 +6,8 @@ import type { Game } from '@/arkham/types/Game';
 import type { History, SkillTestResult, DefeatedEnemy } from '@/arkham/types/History';
 import Card from '@/arkham/components/Card.vue';
 import { useDbCardStore } from '@/stores/dbCards';
-import { cardImg, imgsrc } from '@/arkham/helpers';
+import { imgsrc } from '@/arkham/helpers';
+import { cardImage } from '@/arkham/cardImages';
 
 const props = defineProps<{
   game: Game
@@ -240,10 +241,6 @@ function strippedCode(code: string): string {
   return code.startsWith('c') ? code.slice(1) : code
 }
 
-function cardImageFor(code: string): string {
-  return cardImg(strippedCode(code))
-}
-
 const clueIcon = imgsrc('icons/clue-icon.png')
 const healthIcon = imgsrc('icons/health-icon.png')
 
@@ -448,7 +445,7 @@ function damagedFallbackText(view: DamagedTargetView): string {
             <h4>{{ $t('historyPanel.section.treacheriesDrawn') }}<span class="section-count">{{ selected.historyTreacheriesDrawn.length }}</span></h4>
             <div class="enemy-grid">
               <figure v-for="(code, idx) in selected.historyTreacheriesDrawn" :key="idx" class="enemy-tile">
-                <img :src="cardImageFor(code)" :alt="cardCodeName(code)" :data-image-id="strippedCode(code)" class="enemy-img" />
+                <img :src="cardImage(code)" :alt="cardCodeName(code)" :data-image-id="strippedCode(code)" class="enemy-img" />
               </figure>
             </div>
           </div>
@@ -457,7 +454,7 @@ function damagedFallbackText(view: DamagedTargetView): string {
             <h4>{{ $t('historyPanel.section.enemiesDrawn') }}<span class="section-count">{{ selected.historyEnemiesDrawn.length }}</span></h4>
             <div class="enemy-grid">
               <figure v-for="(code, idx) in selected.historyEnemiesDrawn" :key="idx" class="enemy-tile">
-                <img :src="cardImageFor(code)" :alt="cardCodeName(code)" :data-image-id="strippedCode(code)" class="enemy-img" />
+                <img :src="cardImage(code)" :alt="cardCodeName(code)" :data-image-id="strippedCode(code)" class="enemy-img" />
               </figure>
             </div>
           </div>
@@ -466,7 +463,7 @@ function damagedFallbackText(view: DamagedTargetView): string {
             <h4>{{ $t('historyPanel.section.enemiesDefeated') }}<span class="section-count">{{ defeatedEnemies.length }}</span></h4>
             <div class="enemy-grid">
               <figure v-for="(e, idx) in defeatedEnemies" :key="idx" class="enemy-tile">
-                <img :src="cardImageFor(e.cardCode)" :alt="e.name" :data-image-id="strippedCode(e.cardCode)" class="enemy-img" />
+                <img :src="cardImage(e.cardCode)" :alt="e.name" :data-image-id="strippedCode(e.cardCode)" class="enemy-img" />
                 <figcaption>
                   <span class="enemy-meta health-meta">
                     <span class="token-mask token-mask--health" :style="{ maskImage: `url(${healthIcon})`, WebkitMaskImage: `url(${healthIcon})` }"></span>{{ e.health }}
@@ -480,7 +477,7 @@ function damagedFallbackText(view: DamagedTargetView): string {
             <h4>{{ $t('historyPanel.section.enemiesAttackedBy') }}<span class="section-count">{{ attackedByEnemies.length }}</span></h4>
             <div class="enemy-grid">
               <figure v-for="(item, idx) in attackedByEnemies" :key="idx" class="enemy-tile">
-                <img v-if="item.enemy.tag !== 'unknown'" :src="cardImageFor(item.enemy.cardCode)" :alt="item.enemy.name" :data-image-id="strippedCode(item.enemy.cardCode)" class="enemy-img" />
+                <img v-if="item.enemy.tag !== 'unknown'" :src="cardImage(item.enemy.cardCode)" :alt="item.enemy.name" :data-image-id="strippedCode(item.enemy.cardCode)" class="enemy-img" />
                 <figcaption v-else>
                   <span class="enemy-name">{{ item.enemy.enemyId }}</span>
                 </figcaption>
@@ -493,13 +490,13 @@ function damagedFallbackText(view: DamagedTargetView): string {
             <div class="enemy-grid">
               <template v-for="(view, idx) in damagedTargets" :key="idx">
                 <figure v-if="view.kind === 'enemy' && view.enemy.tag !== 'unknown'" class="enemy-tile">
-                  <img :src="cardImageFor(view.enemy.cardCode)" :alt="view.enemy.name" :data-image-id="strippedCode(view.enemy.cardCode)" class="enemy-img" />
+                  <img :src="cardImage(view.enemy.cardCode)" :alt="view.enemy.name" :data-image-id="strippedCode(view.enemy.cardCode)" class="enemy-img" />
                   <figcaption v-if="view.enemy.tag === 'defeated'">
                     <span class="enemy-meta">{{ $t('historyPanel.enemy.defeated') }}</span>
                   </figcaption>
                 </figure>
                 <figure v-else-if="view.kind === 'asset' && view.cardCode" class="enemy-tile">
-                  <img :src="cardImageFor(view.cardCode)" :alt="view.name" :data-image-id="strippedCode(view.cardCode)" class="enemy-img" />
+                  <img :src="cardImage(view.cardCode)" :alt="view.name" :data-image-id="strippedCode(view.cardCode)" class="enemy-img" />
                 </figure>
                 <span v-else class="chip">{{ damagedFallbackText(view) }}</span>
               </template>
@@ -511,7 +508,7 @@ function damagedFallbackText(view: DamagedTargetView): string {
             <div class="enemy-grid">
               <template v-for="(item, idx) in locationsInvestigated" :key="idx">
                 <figure v-if="item.location.tag === 'live'" class="enemy-tile">
-                  <img :src="cardImageFor(item.location.cardCode)" :alt="item.location.name ?? ''" :data-image-id="strippedCode(item.location.cardCode)" class="enemy-img" />
+                  <img :src="cardImage(item.location.cardCode)" :alt="item.location.name ?? ''" :data-image-id="strippedCode(item.location.cardCode)" class="enemy-img" />
                 </figure>
                 <span v-else class="chip">{{ item.lid }}</span>
               </template>
@@ -523,7 +520,7 @@ function damagedFallbackText(view: DamagedTargetView): string {
             <div class="enemy-grid">
               <template v-for="c in cluesDiscovered" :key="c.lid">
                 <figure v-if="c.location.tag === 'live'" class="enemy-tile">
-                  <img :src="cardImageFor(c.location.cardCode)" :alt="c.location.name ?? ''" :data-image-id="strippedCode(c.location.cardCode)" class="enemy-img" />
+                  <img :src="cardImage(c.location.cardCode)" :alt="c.location.name ?? ''" :data-image-id="strippedCode(c.location.cardCode)" class="enemy-img" />
                   <figcaption>
                     <span class="enemy-meta clue-meta">
                       <span class="clue-badge">

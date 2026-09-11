@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import * as Arkham from '@/arkham/types/Game'
+import * as ArkhamGame from '@/arkham/types/Game'
 import { ref, computed } from 'vue';
 import { Investigator } from '@/arkham/types/Investigator';
 import Card from '@/arkham/components/Card.vue'
@@ -11,7 +11,7 @@ import type { CardContents } from '@/arkham/types/Card';
 
 export interface Props {
   investigator: Investigator
-  game: Arkham.Game
+  game: ArkhamGame.Game
   bonusXp?: number | null;
   showExpand?: boolean;
   /** Fade the portrait and stats: an investigator who is not in the campaign right now. */

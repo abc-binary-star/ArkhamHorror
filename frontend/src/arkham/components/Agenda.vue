@@ -6,8 +6,8 @@ import { useDebug } from '@/arkham/debug';
 import { useI18n } from 'vue-i18n';
 import { cardImg, imgsrc, groupBy } from '@/arkham/helpers';
 import { type Game } from '@/arkham/types/Game';
-import { type Card, cardImage, asCardCode, toCardContents } from '@/arkham/types/Card'
-import { cardImage as cardCodeImage, resolvedSideArt } from '@/arkham/cardImages'
+import { type Card, cardImagePath, asCardCode, toCardContents } from '@/arkham/types/Card'
+import { cardImage, resolvedSideArt } from '@/arkham/cardImages'
 import * as ArkhamGame from '@/arkham/types/Game';
 import { AbilityLabel, AbilityMessage, type Message } from '@/arkham/types/Message';
 import { MessageType } from '@/arkham/types/Message';
@@ -18,11 +18,11 @@ import Event from '@/arkham/components/Event.vue';
 import Enemy from '@/arkham/components/Enemy.vue';
 import Story from '@/arkham/components/Story.vue';
 import StackIndicator from '@/arkham/components/StackIndicator.vue';
-import * as Arkham from '@/arkham/types/Agenda';
+import * as ArkhamAgenda from '@/arkham/types/Agenda'
 import { useCardFlip } from '@/arkham/composables/useCardFlip';
 
 const props = defineProps<{
-  agenda: Arkham.Agenda
+  agenda: ArkhamAgenda.Agenda
   game: Game
   cardsUnder: Card[]
   cardsNextTo: Card[]
@@ -56,11 +56,11 @@ const image = computed(() => {
     // c03276a and c03279a flip to their own 'b' side; other agendas drop the
     // trailing 'a' before appending 'b'.
     if (["c03276a", "c03279a"].includes(id.value)) {
-      return cardCodeImage(id.value, 'b')
+      return cardImage(id.value, 'b')
     }
-    return cardCodeImage(id.value.replace(/a$/, ''), 'b')
+    return cardImage(id.value.replace(/a$/, ''), 'b')
   }
-  return cardCodeImage(id.value)
+  return cardImage(id.value)
 })
 const { displayedImage, flipping, flippingDiagonally } = useCardFlip(image)
 
@@ -199,7 +199,7 @@ const groupedAgendaStack = computed<StackIndicatorGroup[]>(() => {
   }
 
   props.completedStack.forEach((card, i) => {
-    addToGroup(asCardCode(card), `Agenda ${i + 1}`, null, { src: imgsrc(cardImage(card)), back: resolvedSideImage(card), passed: true }, 'completed', i)
+    addToGroup(asCardCode(card), `Agenda ${i + 1}`, null, { src: imgsrc(cardImagePath(card)), back: resolvedSideImage(card), passed: true }, 'completed', i)
   })
 
   addToGroup(
@@ -216,7 +216,7 @@ const groupedAgendaStack = computed<StackIndicatorGroup[]>(() => {
       asCardCode(card),
       `Agenda ${props.completedStack.length + i + 2}`,
       null,
-      { src: imgsrc(cardImage(card)) },
+      { src: imgsrc(cardImagePath(card)) },
       'remaining',
       props.completedStack.length + i + 1,
     )
@@ -326,7 +326,7 @@ const wards = computed(() => props.agenda.tokens[TokenType.Ward])
         v-for="(card, idx) in cardsNextTo"
         class="card card--sideways"
         :key="idx"
-        :src="imgsrc(cardImage(card))"
+        :src="imgsrc(cardImagePath(card))"
       />
       <AbilityButton
         v-for="ability in abilities"

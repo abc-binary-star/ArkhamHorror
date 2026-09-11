@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { inject, computed, ref, onMounted, watch, type Ref } from 'vue'
+import { inject, computed, ref, onMounted, watch } from 'vue'
 import { toCamelCase } from '@/arkham/helpers'
 import { imgsrc } from '@/arkham/helpers'
 import { Game } from '@/arkham/types/Game'
@@ -24,6 +24,7 @@ import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { filterDisplayable, isDevBuild } from '@/arkham/displayRules'
 import { hasParallelContent } from '@/arkham/deckRestrictions'
+import { sendKey, soloKey } from '@/arkham/injectionKeys'
 
 const props = defineProps<{
   game: Game
@@ -41,7 +42,7 @@ const route = useRoute()
 const router = useRouter()
 const store = useUserStore()
 const { currentUser } = storeToRefs(store)
-const send = inject<(msg: string) => void>('send', () => {})
+const send = inject(sendKey, () => {})
 const addSideStory = ref(false)
 const hasSent = ref(false)
 const alpha = ref(false)
@@ -307,7 +308,7 @@ const expeditionLeader = computed(() => {
 // --- Joining and leaving a campaign (between scenarios) -------------------
 // Only the seat holding the continuation ask can change the roster; the server
 // rejects everyone else, so the controls are hidden rather than left to fail.
-const solo = inject<Ref<boolean>>('solo', ref(false))
+const solo = inject(soloKey, ref(false))
 const rosterBusy = ref(false)
 const rosterError = ref<string | null>(null)
 const confirmingRetire = ref<string | null>(null)

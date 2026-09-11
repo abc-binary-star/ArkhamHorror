@@ -4,13 +4,13 @@ import { computed, ref } from 'vue';
 import { useDebug } from '@/arkham/debug';
 import { TokenType, Token } from '@/arkham/types/Token';
 import { cardImg, imgsrc } from '@/arkham/helpers';
-import { cardImage as cardToImage, asCardCode, toCardContents, type Card as ArkhamCard } from '@/arkham/types/Card';
+import { cardImagePath, asCardCode, toCardContents, type Card as ArkhamCard } from '@/arkham/types/Card';
 import { keyToId } from '@/arkham/types/Key'
 import type { Game } from '@/arkham/types/Game';
 import KeyToken from '@/arkham/components/Key.vue';
 import PoolItem from '@/arkham/components/PoolItem.vue';
 import TokenView from '@/arkham/components/Token.vue';
-import * as Arkham from '@/arkham/types/Asset';
+import * as ArkhamAsset from '@/arkham/types/Asset'
 import {isUse} from '@/arkham/types/Token';
 import { useDbCardStore } from '@/stores/dbCards'
 import { useCardStore } from '@/stores/cards'
@@ -18,7 +18,7 @@ import { isCustomCardCode } from '@/arkham/customCards'
 
 const props = defineProps<{
   game: Game
-  asset: Arkham.Asset
+  asset: ArkhamAsset.Asset
   playerId: string
 }>()
 
@@ -67,7 +67,7 @@ const horror = computed(() => props.asset.tokens[TokenType.Horror])
 
 const tokenTypes = Object.values(TokenType);
 const spiritDeck = computed(() => props.asset.spiritDeck ?? [])
-const spiritDeckCardImage = (card: ArkhamCard) => imgsrc(cardToImage(card))
+const spiritDeckCardImage = (card: ArkhamCard) => imgsrc(cardImagePath(card))
 const spiritDeckCardImageId = (card: ArkhamCard) => toCardContents(card).art ?? asCardCode(card).replace(/^c/, '')
 const spiritDeckCardName = (card: ArkhamCard) => {
   const contents = toCardContents(card)
