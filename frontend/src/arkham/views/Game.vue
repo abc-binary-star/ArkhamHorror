@@ -1962,6 +1962,39 @@ const onPlayabilityResult = (result: any) => {
 }
 emitter.on('playabilityResult', onPlayabilityResult)
 
+// How tall the map band is: from the top of the board down to the workbench's top
+// edge. The log drawer is sized to it so the drawer and the workbench stack
+// instead of sharing the board's width. The workbench's height follows the game
+// state (hand size, opened piles), so it is tracked, not measured once.
+const gameMainRef = ref<HTMLElement | null>(null)
+const sidebarBandHeight = ref<number | null>(null)
+let workbenchObserver: ResizeObserver | null = null
+
+const measureSidebarBand = () => {
+  const main = gameMainRef.value
+  const workbench = main?.querySelector<HTMLElement>('#player-zone')
+  if (!main || !workbench) {
+    sidebarBandHeight.value = null
+    return
+  }
+  const band = workbench.getBoundingClientRect().top - main.getBoundingClientRect().top
+  sidebarBandHeight.value = band > 0 ? Math.round(band) : null
+}
+
+const trackWorkbench = async () => {
+  await nextTick()
+  workbenchObserver?.disconnect()
+  workbenchObserver = null
+  measureSidebarBand()
+  const workbench = gameMainRef.value?.querySelector<HTMLElement>('#player-zone')
+  if (!workbench) return
+  workbenchObserver = new ResizeObserver(measureSidebarBand)
+  workbenchObserver.observe(workbench)
+}
+
+useResizeObserver(gameMainRef, measureSidebarBand)
+watch([game, gameMainRef, isActualScenarioView], trackWorkbench, { immediate: true })
+
 onMounted(() => {
   ;(window as any).sendDebug = async (msg: any) => {
     if (game.value) await debug.send(game.value.id, msg)
@@ -1975,6 +2008,8 @@ onMounted(() => {
 
 onBeforeRouteLeave(() => close())
 onUnmounted(() => {
+  workbenchObserver?.disconnect()
+  workbenchObserver = null
   document.removeEventListener('keydown', handleKeyPress)
   window.removeEventListener('pointermove', handleToolbarPointerMove)
   window.removeEventListener('arkham-setting-change', handleSettingChange)
@@ -2411,7 +2446,17 @@ onUnmounted(() => {
           </button>
         </template>
       </CampaignLog>
-      <div v-else class="game-main">
+      <div
+        v-else
+        ref="gameMainRef"
+        class="game-main"
+        :class="{ 'game-main--sidebar': showSidebar && isActualScenarioView }"
+        :style="
+          sidebarBandHeight === null
+            ? undefined
+            : { '--sidebar-band-height': `${sidebarBandHeight}px` }
+        "
+      >
         <div v-if="showTheSilenceModal" class="the-silence-modal-backdrop">
           <div
             class="the-silence-modal"
@@ -2580,6 +2625,9 @@ onUnmounted(() => {
           :class="{ 'sidebar--empty-log': gameLog.length === 0 }"
           v-if="showSidebar && isActualScenarioView"
         >
+          <!-- Reuses the campaign log's own label: the drawer is the same thing to
+               a reader, and every locale already carries the words. -->
+          <h2 class="sidebar__title">{{ $t('campaignLog.tabs.log') }}</h2>
           <GameLog :game="game" :gameLog="gameLog" @undo="undo" />
         </div>
         <div class="game-over" v-if="gameOver">
@@ -3034,6 +3082,43 @@ onUnmounted(() => {
 
   /* Keep the log readable even when the operating system is in dark mode;
      game chrome owns its dark surface explicitly. */
+}
+
+.sidebar__title {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 13px 14px 11px;
+  border-bottom: 1px solid rgb(205 175 107 / 0.32);
+  color: var(--text-on-dark, #f4efe4);
+  font-family: Teutonic, Georgia, serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+/* The log is the drawer's surface, not a box inside it: its own card margins put
+   10-12px of empty drawer on every side. */
+.sidebar :deep(.game-log) {
+  margin: 0;
+  width: 100%;
+  border: 0;
+  border-radius: 0;
+}
+
+/* The drawer is a flow sibling of the board, so opening it narrows the board's
+   whole width — map and workbench alike. It should only take the map's band: the
+   workbench below keeps the full board width (its column is given back to it),
+   and the drawer stops at the workbench's top edge (--sidebar-band-height,
+   measured in the component) instead of running down beside it. Only the desktop
+   in-flow drawer does this; the overlay regimes measured below are unaffected. */
+@media (min-width: 1200px), (min-width: 1101px) and (pointer: fine) {
+  .sidebar {
+    height: var(--sidebar-band-height, 100%);
+  }
+
+  .game-main--sidebar :deep(#player-zone:not(.player-zone--fullscreen)) {
+    margin-right: calc(min(25vw, 300px) * -1);
+  }
 }
 
 .sidebar--empty-log {
