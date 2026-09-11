@@ -140,7 +140,7 @@ button {
   padding: 10px;
   text-transform: uppercase;
   border-radius: 0;
-  background-color: var(--button-2);
+  background: var(--button-2);
   font-weight: bold;
   color: var(--button-2-text);
   font: Arial, sans-serif;

@@ -639,7 +639,7 @@ const flippableCard = (cardCode: string) => {
 
 .confirm-task-button {
   margin-top: 10px;
-  background-color: #2f6141;
+  background: #2f6141;
   &:hover { background-color: #3c7d54; }
 }
 
@@ -673,7 +673,7 @@ button, a.button {
   text-align: left;
   padding: 10px;
   text-transform: uppercase;
-  background-color: var(--button-2);
+  background: var(--button-2);
   font-weight: bold;
   color: #CFCFCF;
   font: Arial, sans-serif;

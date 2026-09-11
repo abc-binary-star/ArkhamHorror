@@ -112,7 +112,7 @@ button.close {
   border: 0;
   padding: 10px;
   text-transform: uppercase;
-  background-color: var(--button-2);
+  background: var(--button-2);
   font-weight: bold;
   border-radius: 0.6em;
   border-top-left-radius: 0;

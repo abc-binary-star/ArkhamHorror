@@ -4493,27 +4493,32 @@ async function addChaosToken(face: any) {
   justify-content: space-around;
 
   .blessed {
-    background-color: var(--blessed);
+    background: var(--blessed);
+    color: var(--text-on-dark);
   }
 
   .cursed {
-    background-color: var(--cursed);
+    background: var(--cursed);
+    color: var(--text-on-dark);
   }
 
   .auto-fail-button {
-    background-color: var(--auto-fail);
+    background: var(--auto-fail);
+    color: var(--text-on-dark);
   }
 
   .elder-sign-button {
-    background-color: var(--elder-sign);
+    background: var(--elder-sign);
+    color: var(--text-on-dark);
   }
 
   .frost {
-    background-color: var(--frost);
+    background: var(--frost);
+    color: var(--text-on-dark);
   }
 
   .blood {
-    background-color: var(--blood);
+    background: var(--blood);
     color: var(--blood-red);
   }
 

@@ -477,10 +477,10 @@ const classObject = computed(() => {
 .button{
   border: var(--edge-width) solid color-mix(in srgb, var(--edge-on-accent) 70%, transparent);
   margin-top: 2px;
-  color: var(--text-on-dark);
+  color: var(--button-text);
   cursor: pointer;
   border-radius: var(--control-radius);
-  background-color: var(--button);
+  background: var(--button);
   z-index: var(--z-index-1000);
   width: 100%;
   min-width: max-content;
@@ -585,10 +585,12 @@ const classObject = computed(() => {
 
 .objective-button {
   background-color: #465550;
+  color: var(--text-on-dark);
 }
 
 .button:has(.skill-intellect) {
   background-color: var(--intellect);
+  color: var(--text-on-dark);
 }
 
 .button {
@@ -638,16 +640,24 @@ const classObject = computed(() => {
   }
 }
 
+/* Gradient multi-skill variants opt back into light ink. */
+.button[class*='-to-'] {
+  color: var(--text-on-dark);
+}
+
 .button:has(.skill-combat) {
   background-color: var(--combat);
+  color: var(--text-on-dark);
 }
 
 .button:has(.skill-agility) {
   background-color: var(--agility);
+  color: var(--text-on-dark);
 }
 
 .button:has(.skill-willpower) {
   background-color: var(--willpower);
+  color: var(--text-on-dark);
 }
 
 :deep(.skill-intellect) {
@@ -693,7 +703,7 @@ const classObject = computed(() => {
     font-family: "arkham";
     content: "\0049";
     margin-right: 5px;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(37, 39, 37, 0.55);
   }
 }
 
@@ -720,6 +730,7 @@ const classObject = computed(() => {
 
 .reaction-ability-button {
   background-color: #A02ECB;
+  color: var(--text-on-dark);
   &:before {
     font-family: "arkham";
     content: "\0059";

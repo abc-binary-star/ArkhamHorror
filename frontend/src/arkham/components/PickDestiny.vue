@@ -141,7 +141,7 @@ button {
   margin: 0 10px;
   padding: 10px;
   text-transform: uppercase;
-  background-color: var(--button-2);
+  background: var(--button-2);
   font-weight: bold;
   border-radius: 0.6em;
   color: var(--button-2-text);
@@ -162,7 +162,7 @@ button {
   padding: 10px;
   text-transform: uppercase;
   border-radius: 0;
-  background-color: var(--button-2);
+  background: var(--button-2);
   font-weight: bold;
   color: var(--button-2-text);
   font: Arial, sans-serif;

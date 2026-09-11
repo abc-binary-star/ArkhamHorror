@@ -223,7 +223,7 @@ input[type="radio"] {
 }
 
 .btn-danger {
-  background-color: var(--delete);
+  background: var(--delete);
   color: white;
   border: none;
   padding: 8px 16px;

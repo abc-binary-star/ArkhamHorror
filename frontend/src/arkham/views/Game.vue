@@ -4144,7 +4144,8 @@ button:hover .shortcut {
   width: 100%;
   font-size: 1.2em;
   border: 0;
-  background-color: var(--spooky-green);
+  background: var(--spooky-green);
+  color: var(--button-1-text);
   &:hover {
     background-color: var(--spooky-green-dark);
   }

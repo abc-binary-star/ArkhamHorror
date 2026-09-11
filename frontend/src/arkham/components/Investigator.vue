@@ -1280,7 +1280,7 @@ img.card.ability-target {
 }
 
 button.active {
-  background-color: var(--select-dark-20);
+  background: var(--select-dark-20);
   border-color: var(--select-dark-20);
   border-radius: 2px;
   border-style: solid;

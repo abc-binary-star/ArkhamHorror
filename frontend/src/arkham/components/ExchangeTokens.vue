@@ -179,7 +179,7 @@ async function adjustAmount(delta: number) {
     padding: 0.8em;
     font-size: 1em;
     font-weight: bold;
-    background-color: var(--button-2);
+    background: var(--button-2);
     color: var(--button-2-text);
     border-radius: 0.6em;
     border-top-left-radius: 0;

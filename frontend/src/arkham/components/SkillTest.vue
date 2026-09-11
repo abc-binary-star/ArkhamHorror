@@ -729,7 +729,7 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
   transition: all 0.3s ease-in;
   border: 0;
   padding: 10px;
-  background-color: var(--button-2);
+  background: var(--button-2);
   color: var(--button-2-text);
 }
 
@@ -741,7 +741,7 @@ button {
   transition: all 0.2s ease-in;
   border: 0;
   padding: 10px;
-  background-color: var(--select-dark-30);
+  background: var(--select-dark-30);
   &:hover {
     background-color: var(--select-dark-20);
   }
@@ -749,14 +749,14 @@ button {
 }
 
 .success {
-  background-color: var(--spooky-green);
+  background: var(--spooky-green);
   text-transform: uppercase;
   text-align: center;
   color: var(--button-1-text);
 }
 
 .failure {
-  background-color: var(--delete);
+  background: var(--delete);
   text-transform: uppercase;
   text-align: center;
   color: #fff4f1;
@@ -872,7 +872,7 @@ i.iconSkillAgility {
     padding: 10px;
     margin: 0 !important;
     border-radius: 0;
-    background-color: var(--select-dark-30);
+    background: var(--select-dark-30);
     &:hover {
       background-color: var(--select-dark-20);
     }

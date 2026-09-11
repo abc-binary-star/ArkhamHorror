@@ -1368,7 +1368,7 @@ button {
   transition: all 0.3s ease-in;
   border: 0;
   padding: 10px;
-  background-color: var(--button-2);
+  background: var(--button-2);
   text-align: justify;
   border-radius: 0.6em;
   color: var(--button-2-text);
@@ -1539,7 +1539,7 @@ h2 {
       transition: all 0.3s ease-in;
       border: 0;
       padding: 10px;
-      background-color: var(--button-2);
+      background: var(--button-2);
       border-radius: 0.6em;
       color: #EEE;
       font: Arial, sans-serif;
@@ -1769,7 +1769,7 @@ h2 {
   border: 0;
   padding: 10px;
   text-transform: uppercase;
-  background-color: var(--spooky-green);
+  background: var(--spooky-green);
   font-weight: bold;
   border-radius: var(--radius-lg);
   color: #EEE;
@@ -1854,7 +1854,7 @@ h2 {
   margin: 0;
   padding: 10px;
   text-transform: uppercase;
-  background-color: var(--button-2);
+  background: var(--button-2);
   font-weight: bold;
   border-radius: 0 0 1.2em 1.2em;
   color: #EEE;

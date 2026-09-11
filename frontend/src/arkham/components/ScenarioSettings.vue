@@ -181,7 +181,7 @@ h2 {
 
 button {
   width: 100%;
-  background-color: var(--button-1);
+  background: var(--button-1);
   border-radius: var(--radius-md);
   text-transform: uppercase;
   color: var(--button-1-text);

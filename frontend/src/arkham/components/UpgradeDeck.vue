@@ -872,7 +872,7 @@ button {
   padding: 0 18px;
   min-height: 38px;
   border-radius: 6px;
-  background-color: var(--button-1);
+  background: var(--button-1);
   color: #f4f4f4;
   cursor: pointer;
   transition: background 160ms ease, transform 120ms ease, box-shadow 160ms ease;
@@ -901,7 +901,7 @@ button.secondary {
 }
 
 button.skip {
-  background-color: darkgoldenrod;
+  background: darkgoldenrod;
 
   &:hover:not(:disabled) {
     background-color: #c8810a;

@@ -122,7 +122,7 @@ function startDrag(event: DragEvent, card: (CardContents | CardT.Card)) {
 button {
   padding: 10px;
   text-transform: uppercase;
-  background-color: var(--button-2);
+  background: var(--button-2);
   font-weight: bold;
   border-radius: 0.6em;
   border-top-left-radius: 0;

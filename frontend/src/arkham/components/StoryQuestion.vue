@@ -415,7 +415,7 @@ button {
   margin: 0 10px;
   padding: 10px;
   text-transform: uppercase;
-  background-color: var(--spooky-green);
+  background: var(--spooky-green);
   font-weight: bold;
   border-radius: var(--radius-lg);
   color: var(--button-2-text);

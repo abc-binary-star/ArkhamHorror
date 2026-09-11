@@ -355,7 +355,7 @@ header {
   button {
     height: fit-content;
     align-self: center;
-    background-color: var(--spooky-green);
+    background: var(--spooky-green);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-2);
     outline: 0;
