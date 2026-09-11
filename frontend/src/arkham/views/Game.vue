@@ -2,7 +2,6 @@
 import { clientLog, clientError } from '@/utils/clientLog'
 import { isTabletopFrame, TABLETOP_DISMISS, tabletopDocument, useFixedTabletop } from '@/arkham/composables/useFixedTabletop'
 import { useGameAudio } from '@/arkham/composables/useGameAudio'
-import { setCampaignOverlays } from '@/arkham/campaignOverlays'
 import { ArrowLeft, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight, Monitor, Eye, EyeOff } from '@lucide/vue'
 import {
   computed,
@@ -297,7 +296,6 @@ interface PlayabilityInfo {
 }
 
 const game = shallowRef<ArkhamGame.Game | null>(null)
-watch(() => game.value?.campaign?.overlays, overlays => setCampaignOverlays(overlays ?? []), { immediate: true, flush: 'sync' })
 
 /* A custom card someone else created shows up in the game payload before this
  * client has its def; refetch the game's custom cards when an unknown one
@@ -2169,7 +2167,6 @@ onBeforeRouteLeave(() => close())
 onUnmounted(() => {
   workbenchObserver?.disconnect()
   workbenchObserver = null
-  setCampaignOverlays([])
   document.removeEventListener('keydown', handleKeyPress)
   window.removeEventListener('pointermove', handleToolbarPointerMove)
   window.removeEventListener('arkham-setting-change', handleSettingChange)
