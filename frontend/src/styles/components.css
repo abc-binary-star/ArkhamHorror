@@ -328,7 +328,9 @@ button.discard-view-control:hover:not(:disabled) { background: transparent; colo
 button.discard-view-control:focus-visible { outline: 2px solid #ddc798; outline-offset: 2px; }
 button.discard-view-control:disabled { opacity: 0.55; cursor: default; }
 .discard-view-control svg { width: 13px; height: 13px; flex-shrink: 0; }
-.discard-view-count { margin-left: auto; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.discard-view-count,
+.pile-count { flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.pile-count { margin-left: 4px; }
 
 /* Pile captions stay on one line even in narrow workbench columns. */
 button.discard-view-control { white-space: nowrap; flex-wrap: nowrap; }

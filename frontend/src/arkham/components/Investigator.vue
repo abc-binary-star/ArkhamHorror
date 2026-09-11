@@ -516,7 +516,7 @@ const spadeInjury = computed(() => {
       v-else
       :src="investigatorPortraitImage"
       class="portrait"
-      :class="portraitClasses"
+      :class="[portraitClasses, `portrait--${investigatorClass.toLowerCase()}`]"
       :draggable="debug.active"
       @click="clicked"
       @dragstart="startDrag($event)"

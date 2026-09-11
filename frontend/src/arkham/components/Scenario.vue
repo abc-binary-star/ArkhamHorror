@@ -2027,7 +2027,10 @@ async function addChaosToken(face: any) {
         </Teleport>
         <Teleport :to="encounterPilesHost || 'body'" :disabled="!desktopTabletop || !encounterPilesHost">
         <div class="scenario-encounter-decks">
-          <span class="encounter-piles-label"><Layers class="shelf-label-icon" aria-hidden="true" />{{ $t('multiplayerTable.encounterDeck') }}</span>
+          <span class="encounter-piles-label">
+            <Layers class="shelf-label-icon" aria-hidden="true" /><span>{{ $t('multiplayerTable.encounterDeck') }}</span>
+            <span class="pile-count">{{ game.encounterDeckSize }}</span>
+          </span>
           <div v-if="topOfEncounterDiscard || (props.scenario.hasEncounterDeck && !hideEncounterDeck)" class="discard" style="grid-area: encounterDiscard">
             <button type="button" class="discard-view-control" :disabled="discards.length === 0" @click="showDiscards">
               <Archive aria-hidden="true" /><span>{{ t('multiplayerTable.viewDiscardPile') }}</span>
@@ -2036,6 +2039,7 @@ async function addChaosToken(face: any) {
             <div v-if="topOfEncounterDiscard" class="discard-card">
               <img :src="topOfEncounterDiscard" class="card" />
             </div>
+            <div v-else class="discard-empty" aria-hidden="true">—</div>
 
             <button v-if="debug.active && discards.length > 0" @click="debug.send(game.id, { tag: 'ShuffleEncounterDiscardBackIn' })">
               {{ $t('scenarioComponent.shuffleBackIn') }}
@@ -5668,15 +5672,13 @@ async function addChaosToken(face: any) {
     text-align: center;
   }
 
+  /* Layout only: the frame itself comes from the shared empty-slot rule
+     further down, so every empty slot on the table wears the same seal. */
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard-empty) {
     display: grid;
     place-items: center;
     width: 100%;
     aspect-ratio: 5 / 7;
-    border: 1px dashed rgb(205 175 107 / 0.4);
-    border-radius: 6px;
-    color: rgb(214 186 128 / 0.45);
-    background: rgb(4 14 14 / 0.24);
     font:
       1.5rem Georgia,
       serif;
@@ -5855,7 +5857,6 @@ async function addChaosToken(face: any) {
     text-align: center;
     white-space: nowrap;
   }
-  #player-zone .scenario-encounter-decks .encounter-discard-placeholder { display: none; }
   /* The discard top card is itself the button: clicking it opens the pile view.
      It also sinks to the rail's floor so both shelf columns share one bottom
      edge with the hand row and the character card. */
@@ -5882,8 +5883,23 @@ async function addChaosToken(face: any) {
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.piles) {
     border-left: 1px dashed rgb(205 175 107 / 0.42);
     margin-left: -8px;
-    padding-left: 8px;
+    /* The piles hug the dashed rule that marks the shelf's edge; the negative
+       margin is what pins the rule itself where it has always been. */
+    padding-left: 2px;
     width: calc(100% + 8px);
+  }
+  /* The captions carry the counts, so the card backs stop repeating them. Only
+     the tabletop regime hides them: below 1200px there is no caption and the
+     back-of-card number is the pile's only count. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.piles .deck-size),
+  .scenario-body.scenario-body--multiseat > #player-zone .scenario-encounter-decks :deep(.deck-size) {
+    display: none;
+  }
+  /* One caption style across the shelf: same size, each centred over the track
+     it names, whether it is drawn as a caption or as a pile view button. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard-view-control) {
+    justify-content: center;
+    font-size: 0.72rem;
   }
   .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.agenda-container),
   .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.act-container) {
@@ -5957,21 +5973,31 @@ async function addChaosToken(face: any) {
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.play-area-label) {
     left: 12px;
   }
-  .scenario-body.scenario-body--multiseat > #player-zone :deep(.equip-slots .slot) {
-    border: 1px solid rgb(179 153 96 / 0.35);
+  /* One seal for every empty slot on the table. The dashed rule says "nothing
+     here yet" — the same on the piles, the asset slots and the threat area —
+     and the brass corner pieces, lit by a deep-sea wash, are the dressing a
+     filled slot never needs. The slot's own centred content (the pile dash, an
+     asset icon, the enemy skull) is untouched.
+     The corner tiles are 52px so the art renders near the scale it was drawn
+     at; much smaller and its 1.25px strokes turn to haze. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard-empty),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.equip-slots .slot),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.threat-enemy-slot) {
+    border: 1px dashed var(--table-rule);
     border-radius: 4px;
-    background: linear-gradient(145deg, rgb(29 43 34 / 0.32), rgb(4 15 13 / 0.32));
-    box-shadow: inset 0 0 0 2px rgb(4 13 10 / 0.28);
+    background:
+      url('/assets/veiled-harbour/C04-黄铜压线角件-左上.svg') left top / 52px 52px no-repeat,
+      url('/assets/veiled-harbour/C04-黄铜压线角件-右上.svg') right top / 52px 52px no-repeat,
+      url('/assets/veiled-harbour/C04-黄铜压线角件-左下.svg') left bottom / 52px 52px no-repeat,
+      url('/assets/veiled-harbour/C04-黄铜压线角件-右下.svg') right bottom / 52px 52px no-repeat,
+      radial-gradient(ellipse 76% 58% at 50% 44%, rgb(40 97 93 / 0.34), transparent 74%),
+      linear-gradient(180deg, rgb(6 20 18 / 0.5), rgb(3 13 11 / 0.34));
+    box-shadow: inset 0 0 18px rgb(0 0 0 / 0.38);
+    color: rgb(197 173 120 / 0.42);
   }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.equip-slots .slot img) {
     opacity: 0.72;
     filter: sepia(0.5) saturate(0.65) invert(0.72);
-  }
-  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard-empty) {
-    border: 1px dashed var(--table-rule);
-    border-radius: 4px;
-    background: rgb(3 13 11 / 0.16);
-    color: rgb(197 173 120 / 0.42);
   }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play),
   .scenario-body.scenario-body--multiseat > #player-zone :deep(section.hand) {
@@ -6316,8 +6342,8 @@ async function addChaosToken(face: any) {
 }
 .location-cards-container :deep(.location-investigator-column div) { margin-top: 0; }
 .location-cards-container :deep(.location-investigator-column .portrait) {
-  width: calc(var(--card-width) * 0.34);
-  height: calc(var(--card-width) * 0.34);
+  width: calc(var(--card-width) * 0.44);
+  height: calc(var(--card-width) * 0.44);
   object-fit: cover;
   object-position: center 25%;
   border: 2px solid #ac915b;
@@ -6325,6 +6351,11 @@ async function addChaosToken(face: any) {
   box-sizing: border-box;
   box-shadow: 0 2px 3px rgb(30 24 13 / 0.6), inset 0 0 0 1px #403521;
 }
+.location-cards-container :deep(.location-investigator-column .portrait--guardian) { border-color: var(--guardian); }
+.location-cards-container :deep(.location-investigator-column .portrait--seeker) { border-color: var(--seeker); }
+.location-cards-container :deep(.location-investigator-column .portrait--rogue) { border-color: var(--rogue); }
+.location-cards-container :deep(.location-investigator-column .portrait--mystic) { border-color: var(--mystic); }
+.location-cards-container :deep(.location-investigator-column .portrait--survivor) { border-color: var(--survivor); }
 .location-cards-container :deep(.location-summary) {
   position: relative;
   order: 2;

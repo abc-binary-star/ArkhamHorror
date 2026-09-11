@@ -82,6 +82,13 @@ const checkAvifSupport = (): Promise<boolean> => {
 }
 .app-footer a { color: #d1c7ae; text-underline-offset: 2px; }
 .app-footer a:hover { color: #fff1cc; }
+/* Fullscreen is for the board: this strip would otherwise hold a row at the
+   bottom of the map. #app is a flex column, so removing it gives that row to
+   the view. */
+html:fullscreen .app-footer,
+html:-webkit-full-screen .app-footer {
+  display: none;
+}
 .app-loading {
   display: grid;
   place-items: center;

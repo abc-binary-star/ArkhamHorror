@@ -244,7 +244,10 @@ watch(choices, (newChoices) => {
     <button v-if="debug.active && discards.length > 0" class="view-discard-button" @click="debug.send(game.id, {tag: 'ShuffleDiscardBackIn', contents: investigatorId})">{{ $t('draw.shuffleBackIn') }}</button>
   </div>
   <div class="deck-container">
-    <span class="pile-label"><Layers aria-hidden="true" />{{ t('multiplayerTable.playerDrawPile') }}</span>
+    <span class="pile-label">
+      <Layers aria-hidden="true" /><span>{{ t('multiplayerTable.playerDrawPile') }}</span>
+      <span class="pile-count">{{ investigator.deckSize }}</span>
+    </span>
     <div
       class="top-of-deck"
       :class="{ 'top-of-deck--drop-target': deckDropIndicator }"
@@ -463,6 +466,8 @@ watch(choices, (newChoices) => {
   .piles .deck, .piles .card, .piles .discard :deep(.card) { width: 90px; max-width: 90px; min-width: 0; }
   .piles button { min-height: 44px; white-space: normal; }
   .piles .pile-label { display: block; margin-bottom: 6px; font-size: 13px; }
+  /* The caption carries the count now, so the card back stops repeating it. */
+  .piles .deck-size { display: none; }
 
 }
 </style>

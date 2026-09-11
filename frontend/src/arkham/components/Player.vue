@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Layers, Hand, Skull } from '@lucide/vue';
+import { Ghost, Layers, Hand, Skull } from '@lucide/vue';
 import type { CardContents } from '@/arkham/types/Card';
 import * as CardT from '@/arkham/types/Card';
 import gsap from 'gsap';
@@ -935,6 +935,7 @@ function closeHand() { mobileHandOpen.value = false }
     <div class="in-play-row">
       <section class="player-card-zone threat-zone" :class="{ 'threat-zone--occupied': threatCount > 0, 'threat-zone--collapsed': threatAreaCollapsed }" :aria-label="t('multiplayerTable.threatArea')">
         <button type="button" class="threat-area-label" :aria-expanded="!threatAreaCollapsed" @click="threatAreaCollapsed = !threatAreaCollapsed">
+          <Ghost aria-hidden="true" />
           <span>{{ $t('multiplayerTable.threatArea') }}</span>
           <span class="threat-count" aria-live="polite">{{ threatCount }}</span>
           <span aria-hidden="true">{{ threatAreaCollapsed ? '+' : '−' }}</span>
@@ -1467,6 +1468,7 @@ function closeHand() { mobileHandOpen.value = false }
   font-size: 0.72rem;
 }
 .play-area-label svg { width: 13px; height: 13px; }
+.threat-area-label svg { width: 13px; height: 13px; flex-shrink: 0; }
 .player-card-zone { position: relative; min-width: 0; }
 .asset-zone { flex: 1; display: flex; flex-wrap: wrap; align-content: flex-start; }
 .asset-zone > .play-area-label { flex-basis: 100%; }
