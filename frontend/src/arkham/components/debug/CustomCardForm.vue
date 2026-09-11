@@ -1203,57 +1203,6 @@ defineExpose({ loadCard, reset, buildCustomCard, cardType: computed(() => form.c
 </template>
 
 <style scoped lang="scss">
-.custom-card-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: var(--z-index-max);
-}
-
-.custom-card-modal {
-  background: var(--surface-panel);
-  border: 1px solid var(--box-border);
-  border-radius: 8px;
-  color: var(--text);
-  padding: 1.25rem 1.5rem 1.5rem;
-  width: min(900px, 94vw);
-  max-height: 92vh;
-  overflow: auto;
-}
-
-.custom-card-tabs {
-  display: flex;
-  gap: 0.25rem;
-  border-bottom: 1px solid var(--box-border);
-  margin-bottom: 1rem;
-
-  button {
-    background: none;
-    border: none;
-    border-bottom: 2px solid transparent;
-    color: var(--text-dim);
-    cursor: pointer;
-    font-size: 0.95rem;
-    padding: 0.5rem 0.9rem;
-
-    &.on {
-      border-bottom-color: var(--spooky-green);
-      color: var(--spooky-green);
-    }
-  }
-
-  .count {
-    background: var(--panel-inset);
-    border-radius: 999px;
-    font-size: 0.75rem;
-    margin-left: 0.25rem;
-    padding: 0.05rem 0.4rem;
-  }
-}
-
 .custom-card-body {
   display: flex;
   gap: 1.25rem;
@@ -1580,19 +1529,6 @@ fieldset {
   }
 }
 
-.custom-card-library {
-  min-height: 200px;
-}
-
-.library-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 0.75rem;
-  max-height: 60vh;
-  overflow: auto;
-  padding: 0.25rem;
-}
-
 .library-card {
   position: relative;
   display: flex;
@@ -1626,76 +1562,10 @@ fieldset {
   }
 }
 
-.library-edit {
-  position: absolute;
-  top: 0.35rem;
-  left: 0.35rem;
-  background: rgba(0, 0, 0, 0.65);
-  border: none;
-  border-radius: 50%;
-  color: #eee;
-  cursor: pointer;
-  font-size: 0.8rem;
-  height: 1.4rem;
-  line-height: 1;
-  opacity: 0;
-  width: 1.4rem;
-
-  .library-card:hover & {
-    opacity: 1;
-  }
-}
-
-.library-forget {
-  position: absolute;
-  top: 0.35rem;
-  right: 0.35rem;
-  background: rgba(0, 0, 0, 0.65);
-  border: none;
-  border-radius: 50%;
-  color: #eee;
-  cursor: pointer;
-  font-size: 0.9rem;
-  height: 1.4rem;
-  line-height: 1;
-  opacity: 0;
-  width: 1.4rem;
-
-  .library-card:hover & {
-    opacity: 1;
-  }
-}
-
 details summary {
   cursor: pointer;
   font-size: 0.85rem;
   opacity: 0.85;
-}
-
-.custom-card-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
-
-  button {
-    background: var(--button);
-    border: var(--edge-width) solid var(--edge-dim);
-    border-radius: 4px;
-    color: var(--button-text);
-    cursor: pointer;
-    padding: 0.5rem 0.8rem;
-
-    &:disabled {
-      opacity: 0.5;
-      cursor: default;
-    }
-
-    &.secondary {
-      border-color: var(--edge-dim);
-      margin-left: auto;
-    }
-  }
 }
 
 .link {
@@ -1706,18 +1576,6 @@ details summary {
   font-size: 0.8rem;
   padding: 0;
   text-align: left;
-}
-
-.custom-card-status {
-  opacity: 0.8;
-}
-
-.editing-banner {
-  background: color-mix(in srgb, var(--teal) 10%, transparent);
-  border-left: 3px solid var(--teal);
-  font-size: 0.85rem;
-  margin: 0 0 0.75rem;
-  padding: 0.5rem 0.7rem;
 }
 
 .custom-card-error {
