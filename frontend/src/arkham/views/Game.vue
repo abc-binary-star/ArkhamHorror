@@ -3089,6 +3089,10 @@ onUnmounted(() => {
   margin: 0;
   padding: 13px 14px 11px;
   border-bottom: 1px solid rgb(205 175 107 / 0.32);
+  /* Centred on the glyphs' own width: `letter-spacing` adds a trailing space
+     after the last character, which would otherwise pull the block left. */
+  text-align: center;
+  text-indent: 0.04em;
   color: var(--text-on-dark, #f4efe4);
   font-family: Teutonic, Georgia, serif;
   font-size: 1.05rem;

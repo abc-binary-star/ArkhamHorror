@@ -4494,7 +4494,10 @@ async function addChaosToken(face: any) {
   background:
     radial-gradient(ellipse at 50% 0%, rgb(229 194 107 / 0.08), transparent 42%),
     linear-gradient(180deg, rgb(17 29 27 / 0.12), rgb(11 20 19 / 0.48)),
-    url('/assets/veiled-harbour/T02-调查员皮革桌垫.avif') center / cover no-repeat;
+    /* 110% over-scans the plate: its printed edge trim sits ~1% inside its own
+       edges, so at `cover` it lands on ours and reads as a stray rule. Height
+       stays auto so the grain keeps its proportions. */
+    url('/assets/veiled-harbour/T02-调查员皮革桌垫.avif') center / 110% auto no-repeat;
   border-top: 1px solid rgb(205 175 107 / 0.6);
   box-shadow: 0 -6px 18px rgb(5 12 13 / 0.36);
   .player-info {
@@ -4760,20 +4763,26 @@ async function addChaosToken(face: any) {
 @media (min-width: 1200px) {
   .scenario-body.scenario-body--multiseat {
     /* The scenario shelf leads: agenda and act sit against the left edge, the
-       investigation map takes the rest. */
-    grid-template-columns: clamp(232px, 19vw, 300px) minmax(0, 1fr);
+       investigation map takes the rest. The cards are capped by half the shelf's
+       height, so this column must stay at least as wide as they are: with the
+       height cap binding, the frames fill their halves and meet each other, and
+       the map's edge lands on the frame. Any narrower and the width takes over
+       as the cap, the cards shrink, and the two frames part. */
+    grid-template-columns: clamp(248px, 26vw, 372px) minmax(0, 1fr);
     /* The workbench is sized by its own contents. A fixed height squeezed the
        in-play and hand rows (both clip with overflow: hidden), which cut the
        bottom off every card; the map above simply takes what is left. */
     grid-template-rows: minmax(0, 1fr) auto;
     column-gap: 0;
     row-gap: 0;
-    padding-top: 38px;
+    /* The phase rail is exactly 34px tall, so this much clears it and no more:
+       any extra reads as a bare band above the map's top edge and the shelf. */
+    padding-top: 34px;
   }
 
   .scenario-body.scenario-body--multiseat.scenario-body--online {
     grid-template-columns:
-      clamp(232px, 18vw, 288px)
+      clamp(240px, 21vw, 372px)
       minmax(0, 1fr)
       clamp(200px, 15vw, 236px);
   }
@@ -4790,6 +4799,15 @@ async function addChaosToken(face: any) {
   .scenario-body.scenario-body--multiseat > .rain-host {
     grid-column: 2;
     grid-row: 1;
+  }
+  /* The shelf's column is a hair wider than the agenda/act frames, and that
+     sliver of table showed between the frames and the map. The plate crops its
+     own margin on all four sides, so its brass line sits on the element's edge:
+     widening the box leftward brings that edge onto the frame's right edge, the
+     same way the other three sides meet their neighbours. The column keeps its
+     width, so the cards are untouched. */
+  .scenario-body.scenario-body--multiseat > .location-cards-container {
+    margin-left: -3px;
   }
 
   /* ---- scenario shelf ---- */
@@ -5185,7 +5203,8 @@ async function addChaosToken(face: any) {
     container-type: inline-size;
     background:
       linear-gradient(180deg, rgb(18 37 34 / 0.3), rgb(8 19 19 / 0.66)),
-      url('/assets/veiled-harbour/T02-调查员皮革桌垫.avif') center / cover no-repeat;
+      /* 110%: over-scan, so the plate's edge trim stays outside the box. */
+    url('/assets/veiled-harbour/T02-调查员皮革桌垫.avif') center / 110% auto no-repeat;
     box-shadow:
       0 -8px 22px rgb(4 12 12 / 0.3),
       inset 0 1px 0 rgb(244 239 228 / 0.06);
@@ -5567,9 +5586,12 @@ async function addChaosToken(face: any) {
     grid-auto-flow: column;
     gap: 4px;
     align-content: start;
-    margin-left: 8px;
-    padding-left: 8px;
-    border-left: 1px solid rgb(205 175 107 / 0.2);
+    /* Flush with the in-play frame's left edge, like the hand row below it: the
+       row used to carry its own 16px inset and a divider rule, which put the
+       asset cards' left edge 16px right of the hand's. */
+    margin-left: 0;
+    padding-left: 0;
+    border-left: 0;
   }
 
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.equip-slots .slot) {
@@ -5870,8 +5892,13 @@ async function addChaosToken(face: any) {
   }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row),
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area) {
-    border-left: 1px dashed rgb(205 175 107 / 0.42);
+    /* Same ink and rhythm as the empty-slot seal, so every dashed rule on the
+       workbench reads as one set. The fallback is the tone this rule carried
+       before the seal existed (the token only exists at 1200px and up). */
+    border-left: 1px dashed var(--table-rule, rgb(205 175 107 / 0.42));
     padding-left: 12px;
+    /* The seal's deep-sea wash, hugging the rule. */
+    background-image: linear-gradient(90deg, rgb(40 97 93 / 0.22), transparent 18px);
   }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row) {
     margin-left: -12px;
@@ -5881,12 +5908,15 @@ async function addChaosToken(face: any) {
     width: calc(100% + 12px);
   }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.piles) {
-    border-left: 1px dashed rgb(205 175 107 / 0.42);
-    margin-left: -8px;
-    /* The piles hug the dashed rule that marks the shelf's edge; the negative
-       margin is what pins the rule itself where it has always been. */
-    padding-left: 2px;
-    width: calc(100% + 8px);
+    border-left: 1px dashed var(--table-rule, rgb(205 175 107 / 0.42));
+    /* The rule marks the shelf's edge and sits 4px further out than the boxes'
+       shared edge; the margin/padding pair moves the rule without moving the
+       piles, which stay where they were. */
+    margin-left: -12px;
+    padding-left: 6px;
+    width: calc(100% + 12px);
+    /* Same wash as the rule beside the hand, so both read as one set. */
+    background-image: linear-gradient(90deg, rgb(40 97 93 / 0.22), transparent 18px);
   }
   /* The captions carry the counts, so the card backs stop repeating them. Only
      the tabletop regime hides them: below 1200px there is no caption and the
@@ -5942,7 +5972,8 @@ async function addChaosToken(face: any) {
     background:
       radial-gradient(ellipse at 8% 75%, rgb(141 112 51 / 0.065), transparent 30%),
       linear-gradient(180deg, rgb(18 32 28 / 0.4), rgb(6 18 17 / 0.72)),
-      url('/assets/veiled-harbour/T02-调查员皮革桌垫.avif') center / cover no-repeat;
+      /* 110%: over-scan, so the plate's edge trim stays outside the box. */
+    url('/assets/veiled-harbour/T02-调查员皮革桌垫.avif') center / 110% auto no-repeat;
     box-shadow: 0 -3px 14px rgb(0 8 7 / 0.3), inset 0 1px rgb(244 225 175 / 0.06);
   }
   .scenario-body.scenario-body--multiseat > .scenario-cards {
@@ -5950,8 +5981,11 @@ async function addChaosToken(face: any) {
       radial-gradient(ellipse at 50% 0%, rgb(174 139 68 / 0.075), transparent 45%),
       linear-gradient(180deg, rgb(16 29 26 / 0.96), rgb(6 20 18 / 0.97)),
       url('/assets/veiled-harbour/41-多人牌桌底场-v1.avif') center / cover no-repeat;
-    scrollbar-width: thin;
-    scrollbar-color: rgb(185 157 98 / 0.34) transparent;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row),
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area),
@@ -6026,15 +6060,20 @@ async function addChaosToken(face: any) {
     border: 0;
     background: none;
     box-shadow: none;
-    container-type: normal;
+    /* The seats size their cards against the shelf's width and height: cq units
+       on the seats themselves resolve against an ancestor container, never
+       against the seats, so the shelf has to carry it. */
+    container-type: size;
   }
   .scenario-body.scenario-body--multiseat > .scenario-cards::before { display: none; }
   .scenario-body.scenario-body--multiseat > .scenario-cards > .scenario-decks {
     display: grid !important;
     grid-template-areas: none !important;
     grid-template-columns: minmax(0, 1fr);
+    /* Two equal halves, one per card. */
     grid-template-rows: repeat(2, minmax(0, 1fr));
-    align-items: stretch;
+    align-items: start;
+    justify-items: start;
     flex: 1 1 0;
     min-height: 0;
     gap: 0;
@@ -6045,13 +6084,30 @@ async function addChaosToken(face: any) {
     flex-direction: column;
     min-width: 0;
     min-height: 0;
-    container-type: size;
+    /* The card's height: what its width (the seat's inner width, aspect-locked
+       at --card-sideways-aspect) allows, or this seat's share of the shelf when
+       that is smaller, so two cards always fit a short shelf. 2px = the seat's
+       borders, 4px = the gap between side by side cards, 20px = the borders plus
+       the 18px label row, 40px = two of those. The child reads this property. */
+    --seat-card-height: min(
+      calc((100cqw - 2px - 4px * (var(--seat-card-count) - 1)) / var(--seat-card-count) / var(--card-sideways-aspect)),
+      calc((100cqh - 40px) / 2)
+    );
+    /* The frame is the card plus its label, and nothing else: the width is the
+       card's width (its height times the aspect) plus this seat's 2px borders,
+       so no bare frame shows left or right of the card, and the height is that
+       card height plus the 1px borders and the 18px label row. */
+    width: calc(var(--seat-card-height) * var(--card-sideways-aspect) + 2px);
+    height: calc(20px + var(--seat-card-height));
     padding: 0;
     border: 1px solid rgb(184 154 91 / 0.32);
     background:
       radial-gradient(ellipse at 50% 0, rgb(160 125 55 / 0.1), transparent 65%),
       linear-gradient(150deg, rgb(22 37 31 / 0.92), rgb(7 21 18 / 0.95));
     box-shadow: 0 3px 10px rgb(0 7 5 / 0.25);
+  }
+  .scenario-body.scenario-body--multiseat .scenario-seat--act {
+    align-self: end;
   }
   .scenario-body.scenario-body--multiseat .scenario-seat__heading {
     display: flex;
@@ -6073,9 +6129,16 @@ async function addChaosToken(face: any) {
     flex: 1 1 0;
     min-height: 0;
     overflow: auto;
-    scrollbar-width: thin;
-    scrollbar-color: rgb(185 157 98 / 0.32) transparent;
-    --card-width: max(24px, min(calc((100cqw - 4px * (var(--seat-card-count) - 1)) / var(--seat-card-count) / var(--card-sideways-aspect)), calc(100cqh - 18px)));
+    /* No visible bar beside the card: the card is sized to the seat (see
+       --card-width), so the bar only ever read as a stray hairline next to it.
+       Scrolling itself stays available. */
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    --card-width: var(--seat-card-height);
   }
   .scenario-body.scenario-body--multiseat .scenario-seat__cards > :deep(.agenda-container),
   .scenario-body.scenario-body--multiseat .scenario-seat__cards > :deep(.act-container) {
@@ -6148,10 +6211,18 @@ async function addChaosToken(face: any) {
     margin: 0;
     padding: 0 8px 0 0;
     box-sizing: border-box;
+    /* This column's own edge carries the same dashed rule and wash as the ones
+       beside the hand and the piles, instead of the solid stroke the narrow
+       layouts draw here. */
+    border-right: 1px dashed var(--table-rule, rgb(170 104 87 / 0.4));
+    background-image: linear-gradient(270deg, rgb(40 97 93 / 0.22), transparent 18px);
   }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.threat-cards) {
     position: absolute;
-    top: 28px;
+    /* 24px = the label row above both columns (the asset zone's label row and
+       this one's own label), so the threat frame's top edge meets the in-play
+       frame's. Its bottom already lands on the hand row's bottom. */
+    top: 24px;
     bottom: 0;
     left: 0;
     right: 8px;
@@ -6162,6 +6233,10 @@ async function addChaosToken(face: any) {
     max-height: none;
     overflow: auto;
     padding: 4px;
+    /* The lower slot starts on the hand row's line so both columns read as two
+       rows: the 4px row gap + the hand header's line box (32px) + the hand's
+       own 5px gap. The upper slot already sits level with the asset row. */
+    gap: 41px;
   }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.asset-zone) {
     grid-area: in-play;
@@ -6269,7 +6344,11 @@ async function addChaosToken(face: any) {
   --select: #c5a368;
   --hidden-location-action-glow: rgb(197 163 104 / 0.4);
   --hidden-location-action-soft: rgb(197 163 104 / 0.15);
-  background: #102b26 url('/assets/veiled-harbour/T04-地点地图底板-v2.avif') center / 100% 100% no-repeat;
+  /* Over-scanned by the plate's own margin: its brass frame is printed 10px in
+     from the left/right edges and 11px from the top/bottom (of 1536x1024), so
+     at 100% a seam of bare plate sat between the frame and whatever abuts the
+     map. Any further and the corner compass roses lose their outer arms. */
+  background: #102b26 url('/assets/veiled-harbour/T04-地点地图底板-v2.avif') center / 101.3% 102.2% no-repeat;
 }
 .location-cards-container::before {
   inset: 0;
