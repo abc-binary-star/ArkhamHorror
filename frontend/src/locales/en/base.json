@@ -1,4 +1,6 @@
 {
+  "showCardText": "Show text",
+  "hideCardText": "Hide text",
   "window": {"minimize": "Minimize window", "restore": "Restore window"},
   "serviceUnavailable": "Service Unavailable",
   "pleaseTryAgainLater": "Please try again later.",
@@ -504,7 +506,14 @@
     "debug": "Debug"
   },
   "location": {
-    "under": "Under ({count})"
+    "under": "Under ({count})",
+    "current": "Current location",
+    "investigatorCount": "{count} investigator(s)",
+    "clues": "{count} clue(s)",
+    "shroud": "Shroud {count}",
+    "exhausted": "Exhausted",
+    "blocked": "Blocked",
+    "darkTraitRemoved": "Dark trait removed"
   },
   "concealedCard": {
     "debug": "Debug"

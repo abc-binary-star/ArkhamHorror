@@ -15,6 +15,7 @@ import { imgsrc, isTypingTarget } from '@/arkham/helpers'
 import { gameLocalStorageKey } from '@/arkham/localStorage'
 import { IsMobile } from '@/arkham/isMobile'
 import { useDbCardStore } from '@/stores/dbCards'
+import { useI18n } from 'vue-i18n'
 
 export interface Props {
   game: Game
@@ -29,6 +30,7 @@ export interface Props {
 }
 
 const props = defineProps<Props>()
+const { t } = useI18n()
 
 const storageKey = computed(() => gameLocalStorageKey(props.game.id, 'selected-tab'))
 const selectedTab = useStorage<string>(storageKey, props.playerId)
@@ -56,6 +58,26 @@ const lead = computed(() => `url('${imgsrc(`tokens/lead-investigator.png`)}')`)
 const { isMobile } = IsMobile()
 const store = useDbCardStore()
 
+const actingInvestigator = computed(() => props.players[props.activePlayerId] ?? null)
+const viewedInvestigator = computed(() =>
+  [...investigators.value, ...inactiveInvestigators.value].find(
+    (investigator) => investigator.playerId === selectedTab.value,
+  ) ?? null,
+)
+const actionContext = computed(() => {
+  const viewed = viewedInvestigator.value
+  const acting = actingInvestigator.value
+  if (!viewed) return ''
+  if (acting && viewed.playerId !== acting.playerId) {
+    return hasChoices(viewed.playerId) ? t('multiplayerTable.pendingChoice') : t('multiplayerTable.viewOnly')
+  }
+  if (hasChoices(viewed.playerId)) return t('multiplayerTable.pendingChoice')
+  if (viewed.remainingActions > 0) {
+    return t('multiplayerTable.readyForAction', { count: viewed.remainingActions })
+  }
+  return t('multiplayerTable.actionsSpent')
+})
+
 function tabClass(investigator: Investigator) {
   const pid = investigator.playerId
 
@@ -82,7 +104,7 @@ function hasSwitch(investigator: Investigator) {
 
 function instructions(investigator: Investigator) {
   if (investigator.playerId !== props.playerId) {
-    return "Switch to this investigator's perspective"
+    return t('multiplayerTable.switchPerspective')
   }
 
   return null
@@ -583,7 +605,7 @@ watch(
           class="inactive"
           :class="tabClass(investigator)"
         >
-          <span>{{ investigator.name.title }}</span>
+          <span>{{ getInvestigatorName(investigator.name.title) }}</span>
           <button
             v-if="solo"
             v-tooltip="instructions(investigator)"
@@ -653,6 +675,78 @@ watch(
   display: flex;
   align-items: flex-end;
   min-height: 0;
+  gap: 8px;
+}
+
+.player-context {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px 8px;
+  padding: 4px 7px;
+  color: #eee5cf;
+  background: rgb(9 18 19 / 0.72);
+  border: 1px solid rgb(213 187 131 / 0.28);
+  border-radius: 4px;
+  font-size: 0.72rem;
+}
+
+.player-context__line {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 12px;
+}
+
+.player-context__item {
+  min-width: 0;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.player-context__label {
+  color: #cbb47f;
+  white-space: nowrap;
+}
+
+.player-context__item strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-context__item small,
+.player-context__status {
+  color: #c7cbc0;
+}
+
+.player-context__status {
+  grid-column: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-context__return {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  padding: 4px 7px;
+  color: #171b1a;
+  background: #d5bb83;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.player-context__return:hover { background: #f1d99f; }
+
+@media (max-width: 800px) {
+  .tabs-row { flex-wrap: wrap; gap: 4px; }
+  .player-context { flex-basis: 100%; order: 3; }
 }
 
 /* In the new tabletop hierarchy the tab strip is a compact investigator rail;

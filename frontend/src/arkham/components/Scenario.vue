@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { BookOpen, Users, Zap, Skull, Search, Layers } from '@lucide/vue'
+import { BookOpen, Zap, Skull, Layers, Archive, Move } from '@lucide/vue'
 import { useMediaQuery } from '@vueuse/core'
 import UpgradeDeck from '@/arkham/components/UpgradeDeck.vue'
 import {
@@ -49,8 +49,7 @@ import {
   getGameLocalStorageItem,
   setGameLocalStorageItem,
 } from '@/arkham/localStorage'
-import { cardImage as cardCodeImage, investigatorPortrait } from '@/arkham/cardImages'
-import { fullName } from '@/arkham/types/Name'
+import { cardArt, cardImage as cardCodeImage, investigatorPortrait } from '@/arkham/cardImages'
 import { useMenu } from '@/arkham/composables/menu'
 import { useSettings } from '@/stores/settings'
 import { keyToId } from '@/arkham/types/Key'
@@ -91,6 +90,7 @@ import { setLocationOffset, resetLocationOffsets, updateGameRaw } from '@/arkham
 import { useDebug, scenarioHasDebugOptions } from '@/arkham/debug'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
+import { useDbCardStore } from '@/stores/dbCards'
 import { IsMobile } from '@/arkham/isMobile'
 const { t } = useI18n()
 
@@ -116,6 +116,7 @@ const allowCurvedPaths = computed(() => {
 })
 const emit = defineEmits(['choose', 'update', 'toggleRealityAcidLight'])
 const debug = useDebug()
+const dbCards = useDbCardStore()
 const { addEntry, removeEntry } = useMenu()
 
 const upgradeDeck = computed(() =>
@@ -141,9 +142,6 @@ const { toggleSplitView, setGameId } = settingsStore
 const showChaosBag = ref(false)
 const showOutOfPlay = ref(false)
 const forcedShowOutOfPlay = ref(false)
-const forcedShowDiscard = ref(false)
-const encounterDiscardPopoverShown = ref(false)
-const spectralDiscardPopoverShown = ref(false)
 const hollowedPopoverShown = ref(false)
 const showScenarioDebugOptions = ref(false)
 const realityAcidLightAnchor = ref<HTMLElement | null>(null)
@@ -164,12 +162,15 @@ let cosmicEmissaryResizeObserver: ResizeObserver | null = null
 let hiddenLocationActionObserver: MutationObserver | null = null
 let hiddenLocationActionResizeObserver: ResizeObserver | null = null
 let hiddenLocationActionRaf: number | null = null
+const mapTranslation = ref({ x: 0, y: 0 })
+const mapMoveMode = ref(false)
+const mapResetting = ref(false)
 let stagePan: {
   pointerId: number
   startX: number
   startY: number
-  scrollLeft: number
-  scrollTop: number
+  baseX: number
+  baseY: number
   moved: boolean
 } | null = null
 let suppressNextStageClick = false
@@ -621,21 +622,54 @@ function clearCosmicEmissaryCompactStyles() {
   cosmicEmissaryFormationHasMeasured.value = false
 }
 
-function resetLocationsLayout() {
-  if (!hasAnyOffset.value) return
-  pendingOffsets.value = {}
-  if (props.scenario.id === 'c10651') clearCosmicEmissaryCompactStyles()
-  void resetLocationOffsets(props.game.id)
-    .catch((err) => {
-      console.error('[scenario] could not reset location offsets', err)
-    })
-    .finally(() => {
-      if (props.scenario.id === 'c10651') {
-        requestCosmicEmissaryCompact(true)
-        setTimeout(() => requestCosmicEmissaryCompact(true), 100)
-        setTimeout(() => requestCosmicEmissaryCompact(true), 500)
-      }
-    })
+async function resetLocationsLayout() {
+  if (mapResetting.value) return
+  mapResetting.value = true
+  cancelActiveDrag()
+  if (stagePan && scrollerRef.value?.hasPointerCapture(stagePan.pointerId)) {
+    scrollerRef.value.releasePointerCapture(stagePan.pointerId)
+  }
+  stagePan = null
+  mapMoveMode.value = false
+  try {
+    if (hasAnyOffset.value) {
+      await resetLocationOffsets(props.game.id)
+      pendingOffsets.value = Object.fromEntries(locations.value.map(location => [location.id, { x: 0, y: 0 }]))
+    }
+    if (props.scenario.id === 'c10651') {
+      clearCosmicEmissaryCompactStyles()
+      requestCosmicEmissaryCompact(true)
+    }
+    mapTranslation.value = { x: 0, y: 0 }
+    locationsZoom.value = 1
+    doubleZoomActive.value = false
+    await nextTick()
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
+    const scroller = scrollerRef.value
+    if (!scroller) return
+    scroller.scrollLeft = 0
+    scroller.scrollTop = 0
+    const cardBounds = () => Array.from(scroller.querySelectorAll<HTMLElement>('.location-wrapper'))
+      .map(el => el.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0)
+    let rects = cardBounds()
+    if (!rects.length) return
+    const width = Math.max(...rects.map(r => r.right)) - Math.min(...rects.map(r => r.left))
+    const height = Math.max(...rects.map(r => r.bottom)) - Math.min(...rects.map(r => r.top))
+    locationsZoom.value = Math.max(0.1, Math.min(1, (scroller.clientWidth - 96) / width, (scroller.clientHeight - 96) / height))
+    await nextTick()
+    await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
+    rects = cardBounds()
+    const viewport = scroller.getBoundingClientRect()
+    mapTranslation.value = {
+      x: viewport.left + scroller.clientWidth / 2 - (Math.min(...rects.map(r => r.left)) + Math.max(...rects.map(r => r.right))) / 2,
+      y: viewport.top + scroller.clientHeight / 2 - (Math.min(...rects.map(r => r.top)) + Math.max(...rects.map(r => r.bottom))) / 2,
+    }
+    window.dispatchEvent(new Event('arkham-location-layout-change'))
+  } catch (err) {
+    console.error('[scenario] could not reset location offsets', err)
+  } finally {
+    mapResetting.value = false
+  }
 }
 
 function requestCosmicEmissaryCompact(force = false) {
@@ -726,7 +760,7 @@ function onStagePointerDown(event: PointerEvent) {
   if (!scroller) return
   const target = event.target as HTMLElement | null
   if (
-    target?.closest(
+    !mapMoveMode.value && target?.closest(
       [
         'button',
         'a',
@@ -744,11 +778,10 @@ function onStagePointerDown(event: PointerEvent) {
     )
   )
     return
-  if (
-    scroller.scrollWidth <= scroller.clientWidth &&
-    scroller.scrollHeight <= scroller.clientHeight
-  )
-    return
+  if (mapMoveMode.value) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
 
   // Do NOT capture the pointer here. Capturing on pointerdown retargets the
   // browser-synthesized click to the scroller, swallowing clicks on any board
@@ -759,8 +792,8 @@ function onStagePointerDown(event: PointerEvent) {
     pointerId: event.pointerId,
     startX: event.clientX,
     startY: event.clientY,
-    scrollLeft: scroller.scrollLeft,
-    scrollTop: scroller.scrollTop,
+    baseX: mapTranslation.value.x,
+    baseY: mapTranslation.value.y,
     moved: false,
   }
 }
@@ -780,8 +813,7 @@ function onStagePointerMove(event: PointerEvent) {
   }
   if (!stagePan.moved) return
   event.preventDefault()
-  scroller.scrollLeft = stagePan.scrollLeft - dx
-  scroller.scrollTop = stagePan.scrollTop - dy
+  mapTranslation.value = { x: stagePan.baseX + dx, y: stagePan.baseY + dy }
 }
 
 function onStagePointerUp(event: PointerEvent) {
@@ -793,7 +825,7 @@ function onStagePointerUp(event: PointerEvent) {
 }
 
 function onStageClick(event: MouseEvent) {
-  if (!suppressNextStageClick) return
+  if (!suppressNextStageClick && !mapMoveMode.value) return
   suppressNextStageClick = false
   event.preventDefault()
   event.stopPropagation()
@@ -1341,6 +1373,10 @@ const playerOrder = computed(() => props.game.playerOrder)
 const multiSeatBoard = computed(() => playerOrder.value.length > 1)
 const encounterPilesHost = ref<HTMLElement | null>(null)
 const desktopTable = useMediaQuery('(min-width: 1200px)')
+// The single-seat desktop layout is retired: from 1200px up every game uses the
+// tabletop arrangement, whatever the seat count. `multiSeatBoard` stays for the
+// things that genuinely need more than one seat (the teammate rail).
+const desktopTabletop = computed(() => desktopTable.value || multiSeatBoard.value)
 const navigationSummaryHost = ref<HTMLElement | null>(null)
 onMounted(() => {
   navigationSummaryHost.value = document.getElementById('table-navigation-summary')
@@ -1354,6 +1390,21 @@ const onlineMultiSeat = computed(() => multiSeatBoard.value && !soloMode.value)
 const activeInvestigator = computed(
   () => props.game.investigators[props.game.activeInvestigatorId] ?? null,
 )
+function displayInvestigatorName(investigator: InvestigatorState): string {
+  const dbCard = dbCards.getDbCard(cardArt(investigator.cardCode))
+  const title = dbCard?.name ?? dbCards.getCardName(investigator.name.title, 'investigator')
+  const subtitle = dbCard?.subname ?? investigator.name.subtitle
+  return subtitle ? `${title}: ${subtitle}` : title
+}
+const localizedScenarioName = computed(() => {
+  const dbCard = dbCards.getDbCard(cardArt(props.scenario.reference))
+  return {
+    title: dbCard?.name ?? props.scenario.name.title,
+    subtitle: dbCard?.subname ?? props.scenario.name.subtitle,
+  }
+})
+const currentAgenda = computed(() => Object.values(props.game.agendas)[0] ?? null)
+const currentAct = computed(() => Object.values(props.game.acts)[0] ?? null)
 const orderedInvestigators = computed(() =>
   playerOrder.value
     .map((investigatorId) => players.value[investigatorId])
@@ -1362,7 +1413,11 @@ const orderedInvestigators = computed(() =>
 const investigatorToken = (investigator: InvestigatorState, token: keyof typeof TokenType) =>
   investigator.tokens[token] ?? 0
 const investigatorLocation = (investigator: InvestigatorState) =>
-  props.game.locations[investigator.location]?.label ?? t('multiplayerTable.locationUnknown')
+  (() => {
+    const location = props.game.locations[investigator.location]
+    if (!location?.revealed) return t('multiplayerTable.locationUnknown')
+    return dbCards.getDbCard(cardArt(location.cardCode))?.name ?? location.label
+  })()
 const investigatorAssets = (investigator: InvestigatorState) =>
   investigator.assets.map((assetId) => props.game.assets[assetId]).filter(Boolean)
 const investigatorEnemies = (investigator: InvestigatorState) =>
@@ -1438,7 +1493,7 @@ const playerLocationZones = computed(() =>
     return [
       {
         investigatorId,
-        name: fullName(investigator.name),
+        name: displayInvestigatorName(investigator),
         locations: playerLocations,
       },
     ]
@@ -1711,7 +1766,6 @@ const isEncounterDiscardChoice = (c: Message) => {
   if (c.target.tag !== 'CardIdTarget') return false
   return discards.value.some((card) => cardId(card) === c.target.contents)
 }
-const encounterDiscardCardsAction = computed(() => choices.value.some(isEncounterDiscardChoice))
 
 const resources = computed(() => props.scenario.tokens[TokenType.Resource])
 const damage = computed(() => props.scenario.tokens[TokenType.Damage])
@@ -1793,6 +1847,7 @@ const doShowCards = (
 }
 const showRemovedFromPlay = () => doShowCards(removedFromPlay, t('scenario.removedFromPlay'), true)
 const showDiscards = () => doShowCards(discards, t('scenario.discards'), true)
+const showSpectralDiscards = () => doShowCards(spectralDiscards, t('multiplayerTable.spectralDiscardPile'), true)
 const hideCards = () => {
   showCards.ref = noCards
   revealingCards.value = false
@@ -1879,16 +1934,13 @@ watchEffect(() => {
   const showDiscard = choices.value.some(isEncounterDiscardChoice)
   const showHollowedCards = choices.value.some(isHollowedChoice)
   if (showDiscard) {
-    encounterDiscardPopoverShown.value = true
     hideCards()
-    forcedShowDiscard.value = true
+    showDiscards()
     hollowedPopoverShown.value = false
   } else if (showHollowedCards) {
     hollowedPopoverShown.value = true
-    forcedShowDiscard.value = false
   } else {
     hideCards()
-    forcedShowDiscard.value = false
     hollowedPopoverShown.value = false
   }
 })
@@ -2263,7 +2315,7 @@ async function addChaosToken(face: any) {
       :class="{
         'split-view': splitView,
         'scenario-body--notifier-overlays': showScenarioNotifierBar,
-        'scenario-body--multiseat': multiSeatBoard,
+        'scenario-body--multiseat': desktopTabletop,
         'scenario-body--online': onlineMultiSeat,
         'scenario-body--teammate-open': focusedTeammate !== null,
       }"
@@ -2433,23 +2485,17 @@ async function addChaosToken(face: any) {
         class="scenario-cards"
         :class="{ 'scenario-cards--has-badges': showScenarioNotifierBar }"
       >
-        <Teleport v-if="multiSeatBoard" :to="navigationSummaryHost || 'body'" :disabled="!summaryInNavigation">
+        <Teleport v-if="desktopTabletop" :to="navigationSummaryHost || 'body'" :disabled="!summaryInNavigation">
           <section class="table-shelf-header" :class="{ 'table-shelf-header--navigation': summaryInNavigation }">
-            <div class="table-summary-title" :title="[scenario.name.title, scenario.name.subtitle].filter(Boolean).join(' · ')">
+            <div class="table-summary-title" :title="[localizedScenarioName.title, localizedScenarioName.subtitle].filter(Boolean).join(' · ')">
               <BookOpen class="shelf-label-icon" aria-hidden="true" />
-              <strong>{{ scenario.name.title }}</strong>
-              <span v-if="scenario.name.subtitle">{{ scenario.name.subtitle }}</span>
+              <strong>{{ localizedScenarioName.title }}</strong>
+              <span v-if="localizedScenarioName.subtitle">{{ localizedScenarioName.subtitle }}</span>
             </div>
-            <div v-if="activeInvestigator" class="table-summary-action" :title="fullName(activeInvestigator.name)">
+            <div v-if="activeInvestigator" class="table-summary-action" :title="displayInvestigatorName(activeInvestigator)">
               <Zap class="shelf-label-icon" aria-hidden="true" />
-              <span class="table-summary-investigator">{{ fullName(activeInvestigator.name) }}</span>
+              <span class="table-summary-investigator">{{ displayInvestigatorName(activeInvestigator) }}</span>
               <small>{{ $t('multiplayerTable.actionsRemaining', { count: activeInvestigator.remainingActions }) }}</small>
-            </div>
-            <div class="table-summary-totals">
-              <span :title="$t('multiplayerTable.players', { count: playerOrder.length })"><Users class="shelf-label-icon" aria-hidden="true" />{{ playerOrder.length }}</span>
-              <span :title="$t('multiplayerTable.doom')"><Skull class="shelf-label-icon" aria-hidden="true" />{{ game.totalDoom }}</span>
-              <span :title="$t('multiplayerTable.clues')"><Search class="shelf-label-icon" aria-hidden="true" />{{ game.totalClues }}</span>
-              <span :title="$t('multiplayerTable.encounterDeck')"><Layers class="shelf-label-icon" aria-hidden="true" />{{ game.encounterDeckSize }}</span>
             </div>
             <button
               v-if="summaryInNavigation"
@@ -2465,42 +2511,23 @@ async function addChaosToken(face: any) {
             </button>
           </section>
         </Teleport>
-        <Teleport :to="encounterPilesHost || 'body'" :disabled="!desktopTable || !multiSeatBoard || !encounterPilesHost">
+        <Teleport :to="encounterPilesHost || 'body'" :disabled="!desktopTabletop || !encounterPilesHost">
         <div class="scenario-encounter-decks">
           <span class="encounter-piles-label"><Layers class="shelf-label-icon" aria-hidden="true" />{{ $t('multiplayerTable.encounterDeck') }}</span>
-          <div v-if="topOfEncounterDiscard" class="discard" style="grid-area: encounterDiscard">
-            <div class="discard-card">
+          <div v-if="topOfEncounterDiscard || (props.scenario.hasEncounterDeck && !hideEncounterDeck)" class="discard" style="grid-area: encounterDiscard">
+            <button type="button" class="discard-view-control" :disabled="discards.length === 0" @click="showDiscards">
+              <Archive aria-hidden="true" /><span>{{ t('multiplayerTable.viewDiscardPile') }}</span>
+              <span class="discard-view-count">{{ discards.length }}</span>
+            </button>
+            <div v-if="topOfEncounterDiscard" class="discard-card">
               <img :src="topOfEncounterDiscard" class="card" />
-              <span class="deck-size">{{ discards.length }}</span>
             </div>
 
-            <div v-if="discards.length > 0" class="buttons">
-              <CardsUnderIndicator
-                v-if="discards.length > 0"
-                v-model:shown="encounterDiscardPopoverShown"
-                class="view-discard-button"
-                :cards="discards"
-                :game="game"
-                :playerId="playerId"
-                :label="t('scenario.discards')"
-                :isDiscards="true"
-                :highlighted="encounterDiscardCardsAction"
-                :fullWidth="true"
-                @choose="choose"
-              />
-              <template v-if="debug.active">
-                <button @click="debug.send(game.id, { tag: 'ShuffleEncounterDiscardBackIn' })">
-                  {{ $t('scenarioComponent.shuffleBackIn') }}
-                </button>
-              </template>
-            </div>
+            <button v-if="debug.active && discards.length > 0" @click="debug.send(game.id, { tag: 'ShuffleEncounterDiscardBackIn' })">
+              {{ $t('scenarioComponent.shuffleBackIn') }}
+            </button>
           </div>
-          <div
-            v-else-if="props.scenario.hasEncounterDeck && !hideEncounterDeck"
-            class="encounter-discard-placeholder"
-            style="grid-area: encounterDiscard"
-            aria-hidden="true"
-          ></div>
+
 
           <EncounterDeck
             :game="game"
@@ -2510,24 +2537,16 @@ async function addChaosToken(face: any) {
             v-if="props.scenario.hasEncounterDeck && !hideEncounterDeck"
           />
 
-          <div v-if="topOfSpectralDiscard" class="discard" style="grid-area: spectralDiscard">
-            <div class="discard-card">
+          <div v-if="topOfSpectralDiscard || spectralEncounterDeck" class="discard" style="grid-area: spectralDiscard">
+            <button type="button" class="discard-view-control" :disabled="spectralDiscards.length === 0" @click="showSpectralDiscards">
+              <Archive aria-hidden="true" /><span>{{ t('multiplayerTable.viewDiscardPile') }}</span>
+              <span class="discard-view-count">{{ spectralDiscards.length }}</span>
+            </button>
+            <div v-if="topOfSpectralDiscard" class="discard-card">
               <img :src="topOfSpectralDiscard" class="card" />
-              <span class="deck-size">{{ spectralDiscards.length }}</span>
             </div>
 
             <div v-if="spectralDiscards.length > 0" class="buttons">
-              <CardsUnderIndicator
-                v-model:shown="spectralDiscardPopoverShown"
-                class="view-discard-button"
-                :cards="spectralDiscards"
-                :game="game"
-                :playerId="playerId"
-                :label="t('scenario.discards')"
-                :isDiscards="true"
-                :fullWidth="true"
-                @choose="choose"
-              />
               <template v-if="debug.active">
                 <button
                   @click="
@@ -2567,7 +2586,7 @@ async function addChaosToken(face: any) {
               v-for="(agenda, key) in game.agendas"
               :key="key"
               :agenda="agenda"
-              :hideStackControl="desktopTable && multiSeatBoard"
+              :hideStackControl="desktopTabletop"
               :data-area-label="$t('multiplayerTable.agendaArea')"
               :cardsUnder="cardsUnderAgenda"
               :cardsNextTo="cardsNextToAgenda"
@@ -2611,7 +2630,7 @@ async function addChaosToken(face: any) {
               v-for="(act, key) in game.acts"
               :key="key"
               :act="act"
-              :hideStackControl="desktopTable && multiSeatBoard"
+              :hideStackControl="desktopTabletop"
               :data-area-label="$t('multiplayerTable.actArea')"
               :cardsUnder="cardsUnderAct"
               :cardsNextTo="cardsNextToAct"
@@ -2630,7 +2649,7 @@ async function addChaosToken(face: any) {
 
         <div
           class="scenario-accessories"
-          :class="{ 'is-open': scenarioAccessoriesOpen || !desktopTable || !multiSeatBoard }"
+          :class="{ 'is-open': scenarioAccessoriesOpen || !desktopTabletop }"
         >
           <div class="scenario-accessories__content">
 
@@ -2948,7 +2967,7 @@ async function addChaosToken(face: any) {
         >
         </SkillTest>
 
-        <div v-if="showScenarioNotifierBar" class="scenario-badges" aria-label="Scenario reminders">
+        <div v-if="showScenarioNotifierBar" class="scenario-badges" :aria-label="$t('multiplayerTable.scenarioReminders')">
           <div
             v-for="badge in scenarioBadges"
             :key="badge.key"
@@ -2967,14 +2986,14 @@ async function addChaosToken(face: any) {
             type="button"
             class="scenario-badge rain-switch"
             :class="{ 'rain-switch--on': rainEnabled }"
-            :title="rainEnabled ? 'Stop the rain' : 'Let it rain'"
+            :title="$t(rainEnabled ? 'multiplayerTable.stopRain' : 'multiplayerTable.startRain')"
             @click="rainEnabled = !rainEnabled"
           >
             <span class="rain-switch-track" aria-hidden="true">
               <span class="rain-switch-knob"></span>
             </span>
             <span class="scenario-badge-text rain-switch-label">
-              <strong>{{ rainEnabled ? 'Rain on' : 'Rain off' }}</strong>
+              <strong>{{ $t(rainEnabled ? 'multiplayerTable.rainOn' : 'multiplayerTable.rainOff') }}</strong>
             </span>
           </button>
           <span
@@ -2987,7 +3006,7 @@ async function addChaosToken(face: any) {
               <span class="reality-acid-light-switch-knob"></span>
             </span>
             <span class="scenario-badge-text reality-acid-light-switch-label">
-              <strong>{{ realityAcidLightActive ? 'Lights off' : 'Lights on' }}</strong>
+              <strong>{{ $t(realityAcidLightActive ? 'multiplayerTable.lightsOff' : 'multiplayerTable.lightsOn') }}</strong>
             </span>
           </span>
           <Teleport to="body">
@@ -3002,14 +3021,14 @@ async function addChaosToken(face: any) {
                 width: `${realityAcidLightRect.width}px`,
                 height: `${realityAcidLightRect.height}px`,
               }"
-              :title="realityAcidLightActive ? 'Turn the lights back on' : 'Turn the lights off'"
+              :title="$t(realityAcidLightActive ? 'multiplayerTable.turnLightsOn' : 'multiplayerTable.turnLightsOff')"
               @click="$emit('toggleRealityAcidLight')"
             >
               <span class="reality-acid-light-switch-track" aria-hidden="true">
                 <span class="reality-acid-light-switch-knob"></span>
               </span>
               <span class="scenario-badge-text reality-acid-light-switch-label">
-                <strong>{{ realityAcidLightActive ? 'Lights off' : 'Lights on' }}</strong>
+                <strong>{{ $t(realityAcidLightActive ? 'multiplayerTable.lightsOff' : 'multiplayerTable.lightsOn') }}</strong>
               </span>
             </button>
           </Teleport>
@@ -3038,7 +3057,7 @@ async function addChaosToken(face: any) {
           <div class="teammate-detail__top">
             <img class="teammate-detail__card" :src="cardCodeImage(focusedTeammate.art)" alt="" />
             <div class="teammate-detail__identity">
-              <strong>{{ fullName(focusedTeammate.name) }}</strong>
+              <strong>{{ displayInvestigatorName(focusedTeammate) }}</strong>
               <small>{{ investigatorLocation(focusedTeammate) }}</small>
               <em
                 v-if="teammateState(focusedTeammate)"
@@ -3158,7 +3177,7 @@ async function addChaosToken(face: any) {
             alt=""
           />
           <span class="teammate-card__name">
-            {{ fullName(investigator.name) }}
+            {{ displayInvestigatorName(investigator) }}
             <em
               v-if="teammateState(investigator)"
               :class="`teammate-card__state teammate-card__state--${teammateState(investigator)}`"
@@ -3223,35 +3242,42 @@ async function addChaosToken(face: any) {
              plus layout reset once anything has been dragged. Zoom lives on the
              mouse wheel; fullscreen lives in the game bar. -->
           <div class="map-corner-controls">
+            <button type="button" class="zoom-btn" :class="{ 'zoom-btn--active': mapMoveMode }" :aria-pressed="mapMoveMode" :aria-label="t('multiplayerTable.moveMap')" v-tooltip="t('multiplayerTable.moveMap')" @click.stop="mapMoveMode = !mapMoveMode">
+              <Move class="zoom-btn__icon" />
+            </button>
             <button
               class="zoom-btn"
               :class="{ 'zoom-btn--active': locationsUnlocked }"
               @click.stop="toggleLocationsUnlocked"
-              v-tooltip="locationsUnlocked ? 'Lock locations' : 'Unlock locations to drag'"
+              v-tooltip="$t(locationsUnlocked ? 'multiplayerTable.lockLocations' : 'multiplayerTable.unlockLocations')"
             >
               <LockOpenIcon v-if="locationsUnlocked" class="zoom-btn__icon" />
               <LockClosedIcon v-else class="zoom-btn__icon" />
             </button>
             <button
-              v-if="hasAnyOffset"
-              class="zoom-btn"
+              type="button"
+              :disabled="mapResetting"
+              :aria-label="t('multiplayerTable.resetMap')"
+              class="zoom-btn map-reset-button"
               @click.stop="resetLocationsLayout"
-              v-tooltip="'Reset location positions'"
+              v-tooltip="$t('multiplayerTable.resetMap')"
             >
               <ArrowUturnLeftIcon class="zoom-btn__icon" />
+              <span>{{ t('multiplayerTable.resetMapShort') }}</span>
             </button>
           </div>
           <div
             class="location-cards-scroller"
             ref="scrollerRef"
             @wheel.prevent="onMapWheel"
-            @pointerdown="onStagePointerDown"
+            :class="{ 'location-cards-scroller--moving': mapMoveMode }"
+            @pointerdown.capture="onStagePointerDown"
             @pointermove="onStagePointerMove"
             @pointerup="onStagePointerUp"
             @pointercancel="onStagePointerUp"
             @click.capture="onStageClick"
           >
-            <div class="location-cards-stage">
+            <div class="location-cards-stage" :style="{ transform: `translate(${mapTranslation.x}px, ${mapTranslation.y}px)` }">
               <Connections
                 :game="game"
                 :playerId="playerId"
@@ -3425,7 +3451,7 @@ async function addChaosToken(face: any) {
         <p v-if="onlineMultiSeat && workbenchInvestigator" class="workbench-label">
           <span class="workbench-label__title">
             {{ $t('multiplayerTable.myArea') }} ·
-            <strong>{{ fullName(workbenchInvestigator.name) }}</strong>
+            <strong>{{ displayInvestigatorName(workbenchInvestigator) }}</strong>
           </span>
           <span class="workbench-label__stats">
             <span>
@@ -4721,6 +4747,22 @@ async function addChaosToken(face: any) {
   gap: 10px;
 }
 
+.scenario-encounter-decks > .discard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.scenario-encounter-decks .pile-label--discard {
+  display: block;
+  color: rgb(214 186 128 / 0.85);
+  font-size: 0.68rem;
+  line-height: 1.1;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .encounter-discard-placeholder {
   width: var(--card-width);
   aspect-ratio: var(--card-aspect);
@@ -5696,7 +5738,9 @@ async function addChaosToken(face: any) {
    --------------------------------------------------------------------------- */
 @media (min-width: 1200px) {
   .scenario-body.scenario-body--multiseat {
-    grid-template-columns: minmax(0, 1fr) clamp(232px, 19vw, 300px);
+    /* The scenario shelf leads: agenda and act sit against the left edge, the
+       investigation map takes the rest. */
+    grid-template-columns: clamp(232px, 19vw, 300px) minmax(0, 1fr);
     /* The workbench is sized by its own contents. A fixed height squeezed the
        in-play and hand rows (both clip with overflow: hidden), which cut the
        bottom off every card; the map above simply takes what is left. */
@@ -5708,28 +5752,28 @@ async function addChaosToken(face: any) {
 
   .scenario-body.scenario-body--multiseat.scenario-body--online {
     grid-template-columns:
+      clamp(232px, 18vw, 288px)
       minmax(0, 1fr)
-      clamp(200px, 15vw, 236px)
-      clamp(232px, 18vw, 288px);
+      clamp(200px, 15vw, 236px);
   }
 
   /* An opened teammate needs room for a character card and its stats. */
   .scenario-body.scenario-body--multiseat.scenario-body--online.scenario-body--teammate-open {
     grid-template-columns:
+      clamp(320px, 26vw, 392px)
       minmax(0, 1fr)
-      clamp(184px, 13vw, 216px)
-      clamp(320px, 26vw, 392px);
+      clamp(184px, 13vw, 216px);
   }
 
   .scenario-body.scenario-body--multiseat > .location-cards-container,
   .scenario-body.scenario-body--multiseat > .rain-host {
-    grid-column: 1;
+    grid-column: 2;
     grid-row: 1;
   }
 
   /* ---- scenario shelf ---- */
   .scenario-body.scenario-body--multiseat > .scenario-cards {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1;
     align-self: stretch;
     min-height: 0;
@@ -5739,14 +5783,15 @@ async function addChaosToken(face: any) {
     overflow-y: auto;
     align-items: stretch;
     gap: 10px;
-    border-left: 1px solid rgb(205 175 107 / 0.38);
+    border: 0;
+    border-right: 1px solid rgb(205 175 107 / 0.38);
     background:
       radial-gradient(circle at 50% 8%, rgb(229 194 107 / 0.09), transparent 34%),
       linear-gradient(180deg, rgb(16 31 32 / 0.97), rgb(9 22 22 / 0.98)),
       url('/assets/veiled-harbour/41-多人牌桌底场-v1.avif') center / cover no-repeat;
     box-shadow:
-      inset 1px 0 0 rgb(244 239 228 / 0.05),
-      -5px 0 18px rgb(4 12 12 / 0.2);
+      inset -1px 0 0 rgb(244 239 228 / 0.05),
+      5px 0 18px rgb(4 12 12 / 0.2);
   }
 
   .scenario-body.scenario-body--multiseat > .scenario-cards .scenario-encounter-decks {
@@ -6169,8 +6214,11 @@ async function addChaosToken(face: any) {
     overflow: hidden;
     border-top: 1px solid rgb(205 175 107 / 0.58);
     border-right: 0;
-    --identity-width: clamp(264px, 22vw, 352px);
-    --pile-width: clamp(82px, 6.2vw, 108px);
+    /* Keep the printed character card wide enough for its 1.4:1 landscape
+       ratio; the extra breathing room also moves the workbench divider away
+       from the card edge. */
+    --identity-width: clamp(300px, calc(23vw + 16px), 384px);
+    --pile-width: clamp(70px, 5.4vw, 92px);
     --card-width: min(82px, calc((100cqw - var(--identity-width) - 3 * var(--pile-width) - 92px) / 10 - 5px));
     container-type: inline-size;
     background:
@@ -6376,12 +6424,15 @@ async function addChaosToken(face: any) {
   /* ---- the workbench grid itself ---- */
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-cards) {
     display: grid;
-    grid-template-columns: var(--identity-width) minmax(0, 1fr) var(--pile-width) var(--pile-width) var(--pile-width);
-    /* Every row is content-sized so a card is never taller than its row. */
-    grid-template-rows: auto auto;
+    /* Threats span both card rows; assets and hand share one column. */
+    --threat-column-width: 100px;
+    grid-template-columns: var(--identity-width) var(--threat-column-width) minmax(0, 1fr) var(--pile-width) var(--pile-width);
+    /* Keep the asset row at its content height instead of distributing the
+       taller pile column's extra space between assets and hand. */
+    grid-template-rows: max-content auto;
     grid-template-areas:
-      'identity in-play deck discard encounter'
-      'identity hand deck discard encounter';
+      'identity threat in-play deck discard'
+      'identity threat hand    deck discard';
     align-content: start;
     column-gap: 14px;
     row-gap: 4px;
@@ -6429,8 +6480,7 @@ async function addChaosToken(face: any) {
     min-height: 0;
   }
 
-  /* Fill the identity column: as large as the two rows allow, keeping the
-     printed proportion so the card text stays readable. */
+  /* Preserve the printed character card's natural proportions. */
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-image > .card) {
     width: 100%;
     max-width: 100%;
@@ -6596,25 +6646,31 @@ async function addChaosToken(face: any) {
     align-items: flex-start;
   }
 
-  /* Deck and discard become the narrow seat at the end of the hand row. */
-  .scenario-body.scenario-body--multiseat > #player-zone :deep(.deck-container) {
+  /* Deck and discard become the narrow seat at the end of the hand row:
+     one shelf column with my deck on top and my discard under it. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-cards .piles) {
     grid-area: deck;
-    --card-width: var(--pile-width);
-    align-self: start;
-    justify-self: stretch;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* Deck pins to the top, discard sinks to the workbench floor, so the pile
+       shelf shares its bottom edge with the hand row and the character card. */
+    justify-content: space-between;
+    gap: 8px;
     min-width: 0;
-    min-height: 0;
+    /* Tall enough for both stacked piles even when the in-play and hand
+       rows are nearly empty: one label row, two cards, one gap. */
+    min-height: calc(23px + 2 * (var(--pile-width) / var(--card-aspect)) + 8px);
   }
 
+  /* Draw.vue ships the discard first; the shelf reads deck-over-discard. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-cards .piles > .deck-container) {
+    order: -1;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.deck-container),
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard) {
-    grid-area: discard;
     --card-width: var(--pile-width);
-    align-self: start;
-    justify-self: stretch;
-    width: 100%;
     min-width: 0;
-    min-height: 0;
   }
 
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.deck-container .deck),
@@ -6648,6 +6704,9 @@ async function addChaosToken(face: any) {
     margin-bottom: 6px;
     color: rgb(214 186 128 / 0.85);
     font-size: 0.72rem;
+    /* Pinned, together with the encounter labels: the encounter row is offset
+       from the top of the pile tracks by this label and the 6px under it. */
+    line-height: 17px;
     text-align: center;
   }
 
@@ -6725,6 +6784,23 @@ async function addChaosToken(face: any) {
 .table-summary-action { font-size: 0.72rem; color: #d5d7cb; }
 .table-summary-action small { flex: 0 0 auto; color: #bfa976; }
 .table-summary-totals { gap: 10px; color: #cbb47f; font-size: 0.7rem; }
+.scenario-progress {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px 12px;
+  width: 100%;
+  padding: 4px 8px;
+  color: #d8d5c8;
+  background: rgb(8 18 18 / 0.58);
+  border: 1px solid rgb(205 175 107 / 0.24);
+  border-radius: 4px;
+  font-size: 0.68rem;
+}
+.scenario-progress__item { display: inline-flex; align-items: baseline; gap: 4px; }
+.scenario-progress__item span { color: #cbb47f; }
+.scenario-progress__item strong { color: #f0e4c2; font-size: 0.82rem; }
+.scenario-progress p { margin: 0 0 0 auto; color: #bfc5bc; }
 .table-shelf-header--navigation {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
@@ -6794,32 +6870,63 @@ async function addChaosToken(face: any) {
 @media (min-width: 1200px) {
   .scenario-body.scenario-body--multiseat > #player-zone > .workbench-encounter-piles {
     position: absolute;
+    /* Level with my pile shelf, and pinned to the same floor line: label and
+       deck stay at the top, the discard sinks to the workbench bottom. */
     top: 38px;
+    bottom: 8px;
     right: 12px;
+    /* One shelf track: the discard top card is its own view button. */
     width: var(--pile-width);
-    max-height: calc(100% - 46px);
-    overflow-y: auto;
     z-index: 10;
+    /* The rail's own box stays click-through so it cannot eat clicks on my
+       piles; only the encounter piles themselves take pointer events. */
+    pointer-events: none;
     --card-width: var(--pile-width);
   }
+  .scenario-body.scenario-body--multiseat
+    > #player-zone
+    > .workbench-encounter-piles
+    > .scenario-encounter-decks
+    > * {
+    pointer-events: auto;
+  }
   .scenario-body.scenario-body--multiseat #player-zone .scenario-encounter-decks {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: grid;
+    /* Same shelf logic as my column: deck on top, discard under it. */
+    grid-template-areas:
+      'encounterDeckLabel'
+      'encounterDeck'
+      'encounterDiscard';
+    grid-template-columns: var(--pile-width);
+    grid-template-rows: auto auto 1fr;
+    row-gap: 6px;
+    align-items: start;
+    height: 100%;
     width: 100%;
     margin: 0;
   }
   #player-zone .encounter-piles-label {
     display: block;
-    order: -3;
+    grid-area: encounterDeckLabel;
     font-size: 0.72rem;
+    /* Matches the pile labels, so the encounter row lands under my piles. */
+    line-height: 17px;
     color: rgb(214 186 128 / 0.85);
     text-align: center;
     white-space: nowrap;
   }
-  #player-zone .scenario-encounter-decks :deep(.encounter-deck) { order: -2; }
   #player-zone .scenario-encounter-decks .encounter-discard-placeholder { display: none; }
-  #player-zone .scenario-encounter-decks > .discard { height: auto; }
+  /* The discard top card is itself the button: clicking it opens the pile view.
+     It also sinks to the rail's floor so both shelf columns share one bottom
+     edge with the hand row and the character card. */
+  #player-zone .scenario-encounter-decks > .discard {
+    align-self: end;
+    height: auto;
+  }
+  #player-zone .scenario-encounter-decks > .discard > .discard-card {
+    position: relative;
+    cursor: default;
+  }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row),
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area) {
     border-left: 1px dashed rgb(205 175 107 / 0.42);
@@ -6832,12 +6939,11 @@ async function addChaosToken(face: any) {
     margin-left: -12px;
     width: calc(100% + 12px);
   }
-  .scenario-body.scenario-body--multiseat > #player-zone :deep(.deck-container) {
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.piles) {
     border-left: 1px dashed rgb(205 175 107 / 0.42);
     margin-left: -8px;
     padding-left: 8px;
     width: calc(100% + 8px);
-    align-self: stretch;
   }
   .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.agenda-container),
   .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.act-container) {
@@ -6893,7 +6999,7 @@ async function addChaosToken(face: any) {
   }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row),
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area),
-  .scenario-body.scenario-body--multiseat > #player-zone :deep(.deck-container),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.piles),
   .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.act-container) {
     border-color: var(--table-rule);
   }
@@ -6928,14 +7034,14 @@ async function addChaosToken(face: any) {
     color: rgb(197 173 120 / 0.42);
   }
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play),
-  .scenario-body.scenario-body--multiseat > #player-zone :deep(section.hand),
-  .scenario-body.scenario-body--multiseat > #player-zone > .workbench-encounter-piles {
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(section.hand) {
     scrollbar-width: thin;
     scrollbar-color: rgb(185 157 98 / 0.34) transparent;
   }
+  /* The online workbench carries its own seat label above the tabs, so the pile
+     shelf starts 26px lower and the encounter rail follows it down. */
   .scenario-body.scenario-body--multiseat.scenario-body--online > #player-zone > .workbench-encounter-piles {
     top: 64px;
-    max-height: calc(100% - 72px);
   }
 }
 .scenario-seat,
@@ -7035,7 +7141,7 @@ async function addChaosToken(face: any) {
   }
   .scenario-body.scenario-body--multiseat .scenario-accessories.is-open > .scenario-accessories__content {
     position: absolute;
-    right: 0;
+    left: 0;
     bottom: 0;
     z-index: 110;
     display: flex;
@@ -7050,5 +7156,292 @@ async function addChaosToken(face: any) {
     box-shadow: 0 8px 30px rgb(0 0 0 / 0.5);
     --card-width: 92px;
   }
+}
+/* Each workbench card zone owns its heading and horizontal card scroll. */
+.scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row) {
+  padding-top: 0;
+}
+.scenario-body.scenario-body--multiseat > #player-zone :deep(.asset-zone > .play-area-label) {
+  position: static;
+  padding-left: 4px;
+  min-height: 24px;
+}
+@media (min-width: 1200px) {
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-cards:has(.threat-zone--occupied:not(.threat-zone--collapsed))) {
+    --threat-column-width: min(180px, 12cqw);
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row) {
+    display: contents;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.threat-zone) {
+    grid-area: threat;
+    position: relative;
+    width: 100%;
+    max-width: none;
+    min-height: 0;
+    margin: 0;
+    padding: 0 8px 0 0;
+    box-sizing: border-box;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.threat-cards) {
+    position: absolute;
+    top: 28px;
+    bottom: 0;
+    left: 0;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 0;
+    max-height: none;
+    overflow: auto;
+    padding: 4px;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.asset-zone) {
+    grid-area: in-play;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 24px auto;
+    align-content: start;
+    min-width: 0;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.asset-zone > .play-area-label) {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding: 0;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.asset-zone > .in-play) {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.asset-zone > .inert-stack) {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area) {
+    width: 100%;
+    margin: 0;
+    padding-left: 0;
+    border-left: 0;
+    box-sizing: border-box;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area__header) {
+    flex: 0 0 24px;
+    min-height: 24px;
+    padding-left: 0;
+  }
+}
+/* Both pile columns use the same fixed card frames and vertical rhythm. */
+@media (min-width: 1200px) {
+  .scenario-body.scenario-body--multiseat > #player-zone {
+    --pile-card-height: calc(var(--pile-width) * 7 / 5);
+    --pile-row-gap: 6px;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-cards .piles) {
+    justify-content: flex-start;
+    gap: var(--pile-row-gap);
+    min-height: calc(23px + 2 * var(--pile-card-height) + 26px + 2 * var(--pile-row-gap));
+  }
+  .scenario-body.scenario-body--multiseat #player-zone .scenario-encounter-decks {
+    grid-template-rows: 17px var(--pile-card-height) auto;
+    row-gap: 6px;
+    align-content: start;
+  }
+  .scenario-body.scenario-body--multiseat #player-zone .scenario-encounter-decks > .discard {
+    align-self: start;
+    margin-top: 0;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard) {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--pile-row-gap);
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard-view-control) {
+    flex: 0 0 26px;
+    height: 26px;
+    min-height: 26px;
+    margin: 0;
+    width: 100%;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.pile-label),
+  .scenario-body.scenario-body--multiseat #player-zone .encounter-piles-label {
+    height: 17px;
+    line-height: 17px;
+    padding: 0;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.top-of-deck),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard-card),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard-empty) {
+    width: var(--pile-width);
+    height: var(--pile-card-height);
+    min-height: var(--pile-card-height);
+    box-sizing: border-box;
+    margin: 0;
+    flex-shrink: 0;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.top-of-deck img.deck),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.top-of-deck img.card),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard-card .card) {
+    display: block;
+    width: var(--pile-width);
+    height: var(--pile-card-height);
+    max-width: none;
+    box-sizing: border-box;
+    object-fit: contain;
+    margin: 0;
+  }
+}
+/* The engraved chart fills the map viewport; card mounts remain distinct. */
+.location-cards-container,
+.location-cards-container--fullscreen {
+  --select: #c5a368;
+  --hidden-location-action-glow: rgb(197 163 104 / 0.4);
+  --hidden-location-action-soft: rgb(197 163 104 / 0.15);
+  background: #102b26 url('/assets/veiled-harbour/T04-地点地图底板-v2.avif') center / 100% 100% no-repeat;
+}
+.location-cards-container::before {
+  inset: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: inset 0 0 18px rgb(3 17 14 / 0.2);
+}
+.location-cards-scroller { position: relative; padding: 32px; }
+.location-wrapper,
+.location-cell--occupied > .location-wrapper,
+.location-cell--current-player > .location-wrapper,
+.location-cell--can-interact > .location-wrapper {
+  padding: 8px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.location-cards-container :deep(.card-frame)::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 1px solid #cbb988;
+  outline: 1px solid rgb(210 191 140 / 0.38);
+  outline-offset: 2px;
+  border-radius: 5px;
+  background: #a69c7b;
+  box-shadow: inset 0 0 0 2px #d1c5a3, 0 2px 4px rgb(0 10 7 / 0.55);
+  pointer-events: none;
+}
+.location-cards-container :deep(.card-frame)::after {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  background:
+    linear-gradient(#c7ab70, #c7ab70) left top / 12px 1px,
+    linear-gradient(#c7ab70, #c7ab70) left top / 1px 12px,
+    linear-gradient(#c7ab70, #c7ab70) right top / 12px 1px,
+    linear-gradient(#c7ab70, #c7ab70) right top / 1px 12px,
+    linear-gradient(#c7ab70, #c7ab70) left bottom / 12px 1px,
+    linear-gradient(#c7ab70, #c7ab70) left bottom / 1px 12px,
+    linear-gradient(#c7ab70, #c7ab70) right bottom / 12px 1px,
+    linear-gradient(#c7ab70, #c7ab70) right bottom / 1px 12px;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+.location-cell--current-player :deep(.card-frame)::before {
+  border-color: #ecd49a;
+  outline-color: #c7ab70;
+  box-shadow: inset 0 0 0 2px #dbc18a, 0 0 0 3px rgb(197 163 104 / 0.15);
+}
+.location-cell--can-interact :deep(.card-frame)::before {
+  border-color: #f0d998;
+  outline-color: #d1b476;
+  background: #dbc18a;
+}
+.location-cards-container :deep(.card-frame-inner) {
+  border-radius: 3px;
+  box-shadow: 0 1px 2px rgb(0 8 5 / 0.65);
+}
+.location-cards-container :deep(.location-container) { position: relative; }
+.location-cards-container :deep(.location-investigator-column) {
+  position: absolute;
+  top: -10px;
+  left: -15px;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.location-cards-container :deep(.location-investigator-column div) { margin-top: 0; }
+.location-cards-container :deep(.location-investigator-column .portrait) {
+  width: calc(var(--card-width) * 0.34);
+  height: calc(var(--card-width) * 0.34);
+  object-fit: cover;
+  object-position: center 25%;
+  border: 2px solid #ac915b;
+  border-radius: 50%;
+  box-sizing: border-box;
+  box-shadow: 0 2px 3px rgb(30 24 13 / 0.6), inset 0 0 0 1px #403521;
+}
+.location-cards-container :deep(.location-summary) {
+  position: relative;
+  order: 2;
+  top: auto;
+  left: auto;
+  transform: none;
+  width: calc(var(--card-width) + 4px);
+  max-width: none;
+  box-sizing: border-box;
+  margin-top: 10px;
+  padding: 3px 0;
+  color: #dfd2ae;
+  background: transparent;
+  border: 0;
+  border-top: 1px solid rgb(199 171 112 / 0.32);
+  box-shadow: none;
+  font-family: 'Source Han Serif', Georgia, serif;
+  line-height: 1.35;
+}
+.location-cards-container :deep(.location-summary__status) { color: #b6b498; font-size: 0.58rem; }
+.location-cards-container :deep(.line:not(.mine-cart-next-line)) {
+  stroke: #aa9870;
+  stroke-width: 1.1px;
+  stroke-dasharray: 3 5;
+  filter: none;
+}
+.location-cards-container :deep(.line.active:not(.mine-cart-next-line)) {
+  stroke: #dcc28b !important;
+  stroke-width: 1.7px;
+  filter: none;
+}
+.location-cards-container :deep(.chevrons) { fill: #aa9870; filter: none; }
+@media (max-width: 800px) {
+  .location-cards-container::before { inset: 0; }
+  .location-cards-scroller { padding: 28px; }
+}
+.location-cards-scroller { cursor: grab; touch-action: none; }
+.location-cards-scroller:active { cursor: grabbing; }
+.location-cards-scroller--moving :deep(*) { cursor: grab !important; }
+.location-cards-scroller--moving:active :deep(*) { cursor: grabbing !important; }
+.map-corner-controls {
+  top: 12px;
+  right: 18px;
+  max-width: calc(100% - 36px);
+  padding: 3px 6px;
+  background: rgb(8 25 21 / 0.88);
+  border-radius: 4px;
+}
+.map-corner-controls .map-reset-button {
+  width: auto;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding-inline: 8px;
+  color: #dfcd9d;
+  white-space: nowrap;
+  font-size: 0.75rem;
 }
 </style>

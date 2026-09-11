@@ -79,13 +79,19 @@ async function loadOlder() {
 
 <style scoped>
 .game-log {
-  background:
-    linear-gradient(rgb(246 240 225 / 0.2), rgb(246 240 225 / 0.2)),
-    url('/assets/veiled-harbour/T03-日志书页.avif') center / cover no-repeat;
+  --text: #ddd8c8;
+  --text-dim: #aeb7a8;
+  --title: #cfb77e;
+  --brass: #bda36b;
+  color-scheme: dark;
+  color: var(--text);
+  box-sizing: border-box;
+  border: 1px solid rgb(189 163 107 / 0.22);
+  background: linear-gradient(160deg, rgb(26 43 36 / 0.82), rgb(9 24 21 / 0.95));
   width: calc(100% - 20px);
   border-radius: 2px;
   margin: 12px 10px;
-  padding: 16px 16px 18px 28px;
+  padding: 12px 10px;
   flex: 1 1 auto;
   min-height: 0;
   overflow-x: hidden;
@@ -97,6 +103,8 @@ async function loadOlder() {
     padding: 0;
     flex: 1 1 auto;
     min-height: 0;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(189 163 107 / 0.4) transparent;
     overflow-y: auto;
     overflow-x: hidden;
   }
@@ -106,14 +114,15 @@ async function loadOlder() {
   flex: 0 0 auto;
   width: 100%;
   padding: 6px 10px;
-  margin: 0 0 12px -12px;
+  margin: 0 0 12px;
   border-radius: 2px;
-  background: rgb(255 252 242 / 0.48);
-  color: var(--text);
+  background: rgb(189 163 107 / 0.08);
+  border: 1px solid rgb(189 163 107 / 0.3);
+  color: var(--title);
   font-size: 0.8em;
   cursor: pointer;
   &:hover {
-    background: var(--background);
+    background: rgb(189 163 107 / 0.17);
   }
 }
 
@@ -123,16 +132,19 @@ async function loadOlder() {
   border: 0;
   border-left: 2px solid color-mix(in srgb, var(--brass) 40%, transparent);
   border-radius: 0;
-  color: var(--text-on-paper, var(--text));
+  color: var(--text);
   font-weight: 500;
   font-size: 0.8em;
 
   &:nth-child(even) {
-    background: rgb(255 252 242 / 0.26);
+    background: rgb(189 163 107 / 0.045);
   }
 
   &:last-child {
     border-left-color: var(--brass);
   }
 }
+.load-older:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.log-entry :deep(a) { color: #dec58b; }
+.log-entry :deep(a:hover) { color: #f1dfaf; }
 </style>

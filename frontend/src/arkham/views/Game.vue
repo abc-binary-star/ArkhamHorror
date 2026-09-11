@@ -17,6 +17,7 @@ import { useI18n } from 'vue-i18n'
 import confetti from '@/effects/confetti'
 import { useWebSocket, useResizeObserver, useFullscreen } from '@vueuse/core'
 import { MenuItem } from '@headlessui/vue'
+import { Dropdown } from 'floating-vue'
 import {
   AdjustmentsHorizontalIcon,
   ArrowPathIcon,
@@ -95,7 +96,6 @@ import EventActAdvanceBarrier from '@/arkham/components/EventActAdvanceBarrier.v
 import StandaloneScenario from '@/arkham/components/StandaloneScenario.vue'
 import StoryQuestion from '@/arkham/components/StoryQuestion.vue'
 import AchievementToast from '@/arkham/components/AchievementToast.vue'
-import NarrationMenu from '@/arkham/components/NarrationMenu.vue'
 import { clearCurrentNarration, stopNarration } from '@/arkham/narration'
 import Draggable from '@/components/Draggable.vue'
 import Menu from '@/components/Menu.vue'
@@ -2336,33 +2336,6 @@ onUnmounted(() => {
             </MenuItem>
           </template>
         </Menu>
-        <Menu>
-          <BackwardIcon aria-hidden="true" />
-          {{ $t('gameBar.undo') }}
-          <template #items>
-            <MenuItem v-slot="{ active }">
-              <button :class="{ active }" @click="undo">
-                <BackwardIcon aria-hidden="true" /> {{ $t('gameBar.undo') }}
-                <span class="shortcut">u</span>
-              </button>
-            </MenuItem>
-            <div
-              v-if="canUndoAction || canUndoTurn || canUndoPhase || canUndoRound || canUndoScenario"
-              class="undo-jump-group"
-              :class="{ armed: undoChordArmed }"
-            >
-              <div class="undo-jump-header">
-                <span>{{ $t('game.undoTo') }}</span>
-                <span class="chord-prefix"><kbd>U</kbd> + <span class="chord-hint">…</span></span>
-              </div>
-              <MenuItem v-if="canUndoAction" v-slot="{ active }"><button class="undo-jump scope-action" :class="{ active }" @click="undoActionStart"><ArrowUturnLeftIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfAction') }}</span><kbd class="chord-key">A</kbd></button></MenuItem>
-              <MenuItem v-if="canUndoTurn" v-slot="{ active }"><button class="undo-jump scope-turn" :class="{ active }" @click="undoTurnStart"><ClockIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfTurn') }}</span><kbd class="chord-key">T</kbd></button></MenuItem>
-              <MenuItem v-if="canUndoPhase" v-slot="{ active }"><button class="undo-jump scope-phase" :class="{ active }" @click="undoPhaseStart"><RectangleStackIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfPhase') }}</span><kbd class="chord-key">P</kbd></button></MenuItem>
-              <MenuItem v-if="canUndoRound" v-slot="{ active }"><button class="undo-jump scope-round" :class="{ active }" @click="undoRoundStart"><ArrowPathIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfRound') }}</span><kbd class="chord-key">R</kbd></button></MenuItem>
-              <MenuItem v-if="canUndoScenario" v-slot="{ active }"><button class="undo-jump scope-scenario" :class="{ active }" @click="confirmingUndoScenario = true"><FlagIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('gameBar.restartScenario') }}</span><kbd class="chord-key">S</kbd></button></MenuItem>
-            </div>
-          </template>
-        </Menu>
         <button type="button" class="game-tools-action" @click="filingBug = true">
           <ExclamationTriangleIcon aria-hidden="true" /> {{ $t('fileBug') }}
         </button>
@@ -2377,9 +2350,12 @@ onUnmounted(() => {
     <div class="game-bar">
       <div class="game-bar-item game-bar-item--leave">
         <div>
-          <button @click="leaveGame" v-tooltip="$t('gameBar.leaveGame')">
+          <button
+            @click="leaveGame"
+            v-tooltip="$t('gameBar.leaveGame')"
+            :aria-label="$t('gameBar.leaveGame')"
+          >
             <ArrowLeft aria-hidden="true" />
-            <span>{{ $t('gameBar.leaveGame') }}</span>
           </button>
         </div>
       </div>
@@ -2388,19 +2364,60 @@ onUnmounted(() => {
           <button
             @click="toggleSounds"
             v-tooltip="$t('gameBar.sounds')"
+            :aria-label="$t('gameBar.sounds')"
             :aria-pressed="!soundsDisabled"
           >
             <Volume2 v-if="!soundsDisabled" aria-hidden="true" />
             <VolumeX v-else aria-hidden="true" />
-            <span class="sounds-label">{{ $t('gameBar.sounds') }}</span>
           </button>
         </div>
       </div>
       <div class="game-bar-tools game-bar-tools--primary">
-        <button type="button" :class="{ active: showTools }" @click="showTools = !showTools">
+        <button
+          type="button"
+          :class="{ active: showTools }"
+          v-tooltip="$t('gameBar.tabletopTools')"
+          :aria-label="$t('gameBar.tabletopTools')"
+          :aria-expanded="showTools"
+          @click="showTools = !showTools"
+        >
           <SlidersHorizontal aria-hidden="true" />
-          <span>{{ showTools ? $t('gameBar.closeTools') : $t('gameBar.tabletopTools') }}</span>
         </button>
+      </div>
+      <div class="game-bar-undo">
+        <Dropdown :triggers="['click']" theme="game-bar-undo" placement="bottom" :distance="6">
+          <button
+            type="button"
+            v-tooltip="$t('gameBar.undo')"
+            :aria-label="$t('gameBar.undo')"
+          >
+            <BackwardIcon aria-hidden="true" />
+          </button>
+          <template #popper>
+            <div class="undo-panel">
+              <button type="button" class="undo-panel__row" v-close-popper @click="undo">
+                <BackwardIcon aria-hidden="true" />
+                <span>{{ $t('gameBar.undo') }}</span>
+                <span class="shortcut">u</span>
+              </button>
+              <div
+                v-if="canUndoAction || canUndoTurn || canUndoPhase || canUndoRound || canUndoScenario"
+                class="undo-jump-group"
+                :class="{ armed: undoChordArmed }"
+              >
+                <div class="undo-jump-header">
+                  <span>{{ $t('game.undoTo') }}</span>
+                  <span class="chord-prefix"><kbd>U</kbd> + <span class="chord-hint">…</span></span>
+                </div>
+                <button v-if="canUndoAction" type="button" class="undo-jump scope-action" v-close-popper @click="undoActionStart"><ArrowUturnLeftIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfAction') }}</span><kbd class="chord-key">A</kbd></button>
+                <button v-if="canUndoTurn" type="button" class="undo-jump scope-turn" v-close-popper @click="undoTurnStart"><ClockIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfTurn') }}</span><kbd class="chord-key">T</kbd></button>
+                <button v-if="canUndoPhase" type="button" class="undo-jump scope-phase" v-close-popper @click="undoPhaseStart"><RectangleStackIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfPhase') }}</span><kbd class="chord-key">P</kbd></button>
+                <button v-if="canUndoRound" type="button" class="undo-jump scope-round" v-close-popper @click="undoRoundStart"><ArrowPathIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfRound') }}</span><kbd class="chord-key">R</kbd></button>
+                <button v-if="canUndoScenario" type="button" class="undo-jump scope-scenario" v-close-popper @click="confirmingUndoScenario = true"><FlagIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('gameBar.restartScenario') }}</span><kbd class="chord-key">S</kbd></button>
+              </div>
+            </div>
+          </template>
+        </Dropdown>
       </div>
       <div id="table-navigation-summary"></div>
       <div class="right">
@@ -2409,16 +2426,22 @@ onUnmounted(() => {
           type="button"
           :aria-pressed="isFullscreen"
           v-tooltip="$t('gameBar.fullscreen')"
+          :aria-label="$t('gameBar.fullscreen')"
           @click="toggleFullscreen"
         >
           <Minimize v-if="isFullscreen" aria-hidden="true" />
           <Maximize v-else aria-hidden="true" />
-          <span>{{ $t('gameBar.fullscreen') }}</span>
         </button>
-        <button v-if="isActualScenarioView" class="sidebar-toggle-button" @click="toggleSidebar">
-          <PanelRight aria-hidden="true" /> {{ $t('gameBar.toggleSidebar') }}
+        <button
+          v-if="isActualScenarioView"
+          type="button"
+          class="sidebar-toggle-button"
+          v-tooltip="$t('gameBar.toggleSidebar')"
+          :aria-label="$t('gameBar.toggleSidebar')"
+          @click="toggleSidebar"
+        >
+          <PanelRight aria-hidden="true" />
         </button>
-        <NarrationMenu />
       </div>
     </div>
     <div v-if="hasEventBar" ref="epicBarRef" class="epic-bar-slot">
@@ -2754,10 +2777,6 @@ onUnmounted(() => {
   }
 }
 
-.game-bar div .undo-jump-header {
-  display: flex;
-}
-
 .undo-jump-header {
   font-size: 10px;
   font-weight: 700;
@@ -3057,8 +3076,10 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   background:
-    linear-gradient(rgba(232, 225, 210, 0.56), rgba(232, 225, 210, 0.56)),
-    #d0d9dc url('/assets/veiled-harbour/32-侧栏档案抽屉-v2.avif') center / cover no-repeat;
+    linear-gradient(rgb(10 25 23 / 0.93), rgb(5 16 15 / 0.96)),
+    #091b18 url('/assets/veiled-harbour/32-侧栏档案抽屉-v2.avif') center / cover no-repeat;
+  color-scheme: dark;
+  color: #ddd8c8;
   border-left: 1px solid rgba(165, 130, 75, 0.5);
 
   @media (max-width: 800px) {
@@ -3912,9 +3933,61 @@ header {
   color: var(--title);
 }
 
-.game-bar > .right :deep(.narration-button.open) {
-  background: rgb(244 239 228 / 0.1);
-  color: #fff1cc;
+.game-bar-undo {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* Undo dropdown. The trigger is a normal bar ghost button; only the popper
+   body needs its own skin, since the bar's ghost rules stop at the trigger. */
+.undo-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 224px;
+}
+
+/* Deliberately no `background` here: the jump rows carry their own plate and
+   a shorthand would win on specificity and flatten it. */
+.undo-panel button {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.undo-panel__row {
+  background: none;
+}
+
+.undo-panel__row svg,
+.undo-jump svg {
+  width: 16px;
+  height: 16px;
+}
+
+.undo-panel button:hover,
+.undo-panel button:focus-visible,
+.undo-panel button.active {
+  background: rgb(205 175 107 / 0.2);
+  color: #fff;
+  outline: none;
+}
+
+.undo-panel .undo-jump-group {
+  border-top: 1px solid rgb(205 175 107 / 0.22);
+  border-radius: 0;
+}
+
+.undo-panel .undo-jump-header {
+  display: flex;
 }
 
 @media (max-width: 800px) {
@@ -4562,5 +4635,22 @@ dialog {
     min-width: 0;
     margin-inline: 12px;
   }
+}
+</style>
+
+<!-- Unscoped: the undo popper is teleported to <body>, outside this
+     component's scope attribute tree. -->
+<style>
+.v-popper--theme-game-bar-undo .v-popper__inner {
+  padding: 4px;
+  border: 1px solid rgb(205 175 107 / 0.42);
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgb(20 38 37 / 0.98), rgb(8 18 18 / 0.99));
+  box-shadow: 0 12px 28px rgb(4 10 10 / 0.5);
+  color: var(--text-on-dark, #f4efe4);
+}
+
+.v-popper--theme-game-bar-undo .v-popper__arrow-container {
+  display: none;
 }
 </style>

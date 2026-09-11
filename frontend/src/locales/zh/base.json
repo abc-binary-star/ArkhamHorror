@@ -1,4 +1,6 @@
 {
+  "showCardText": "显示说明",
+  "hideCardText": "收起说明",
   "window": {"minimize": "收起窗口", "restore": "展开窗口"},
   "serviceUnavailable": "服务不可用",
   "pleaseTryAgainLater": "请稍后再试。",
@@ -518,7 +520,14 @@
     "debug": "调试"
   },
   "location": {
-    "under": "在({count})下方"
+    "under": "在({count})下方",
+    "current": "当前位置",
+    "investigatorCount": "{count}位调查员",
+    "clues": "{count}个线索",
+    "shroud": "遮蔽 {count}",
+    "exhausted": "已耗竭",
+    "blocked": "已封锁",
+    "darkTraitRemoved": "已移除黑暗特性"
   },
   "concealedCard": {
     "debug": "调试"

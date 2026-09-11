@@ -13,7 +13,6 @@ import { useI18n } from 'vue-i18n';
 import AbilityButton from '@/arkham/components/AbilityButton.vue';
 import Card from '@/arkham/components/Card.vue';
 import Treachery from '@/arkham/components/Treachery.vue';
-import CardsUnderIndicator from '@/arkham/components/CardsUnderIndicator.vue';
 
 const { t } = useI18n();
 
@@ -24,7 +23,7 @@ export interface Props {
 }
 
 const props = defineProps<Props>()
-const emit = defineEmits(['choose'])
+const emit = defineEmits(['choose', 'showCards'])
 const investigatorId = computed(() => props.investigator.id)
 const debug = useDebug()
 
@@ -121,9 +120,6 @@ function isDiscardChoice(c: Message) {
   return false
 }
 
-const discardCardsAction = computed(() => choices.value.some(isDiscardChoice))
-
-
 const topOfDeckTreachery = computed(() => {
   const mTreacheryId = Object.values(props.game.treacheries).
     filter((t) => t.placement.tag === "OnTopOfDeck" && t.placement.contents === id.value).
@@ -214,44 +210,41 @@ const canSelectDraw = computed(() => {
 })
 
 const discards = computed<ArkhamCard.Card[]>(() => props.investigator.discard.map(c => { return { tag: 'PlayerCard', contents: c }}))
-const discardPopoverShown = ref(false)
 
-watch(choices, async (newChoices) => {
+function showDiscardView(e?: Event) {
+  if (discards.value.length === 0) return
+  emit('showCards', e ?? new Event('click'), discards, t('multiplayerTable.discardPile'), true)
+}
+
+// With the pill gone, surface the discard view unprompted when every remaining
+// choice targets a card in it — otherwise nothing on the pile says "click me".
+watch(choices, (newChoices) => {
   const actionableChoices = newChoices.filter(choice => choice.tag !== 'SkipTriggersButton')
 
-  if (actionableChoices.length > 0 && actionableChoices.every(isDiscardChoice)) {
-    discardPopoverShown.value = true
-  }
+  if (actionableChoices.length > 0 && actionableChoices.every(isDiscardChoice)) showDiscardView()
 }, { immediate: true })
 
 </script>
 
 <template>
-  <div class="discard"
-    @drop="onDropDiscard($event)"
-    @dragover.prevent="dragover($event)"
-    @dragenter.prevent
-  >
-    <span class="pile-label"><Archive aria-hidden="true" />{{ t('multiplayerTable.discardPile') }} · {{ discards.length }}</span>
+  <div class="piles">
+    <div class="discard"
+      @drop="onDropDiscard($event)"
+      @dragover.prevent="dragover($event)"
+      @dragenter.prevent
+    >
+    <button type="button" class="discard-view-control" :disabled="discards.length === 0" @click="showDiscardView">
+      <Archive aria-hidden="true" /><span>{{ t('multiplayerTable.viewDiscardPile') }}</span>
+      <span class="discard-view-count">{{ discards.length }}</span>
+    </button>
+    <div v-if="topOfDiscard" class="discard-card">
+      <Card :game="game" :card="topOfDiscard" :playerId="playerId" :allowAbilityButtons="false" :allowInteractions="false" />
+    </div>
     <div v-if="!topOfDiscard" class="discard-empty" aria-hidden="true">—</div>
-    <Card v-if="topOfDiscard" :game="game" :card="topOfDiscard" :playerId="playerId" :allowAbilityButtons="false" :allowInteractions="false" />
-    <CardsUnderIndicator
-      v-if="discards.length > 0"
-      class="view-discard-button"
-      :cards="discards"
-      :game="game"
-      :playerId="playerId"
-      v-model:shown="discardPopoverShown"
-      :label="t('investigator.discards')"
-      :isDiscards="true"
-      :highlighted="discardCardsAction"
-      :fullWidth="true"
-      @choose="emit('choose', $event)"
-    />
     <button v-if="debug.active && discards.length > 0" class="view-discard-button" @click="debug.send(game.id, {tag: 'ShuffleDiscardBackIn', contents: investigatorId})">{{ $t('draw.shuffleBackIn') }}</button>
   </div>
   <div class="deck-container">
-    <span class="pile-label"><Layers aria-hidden="true" />{{ t('multiplayerTable.drawPile') }}</span>
+    <span class="pile-label"><Layers aria-hidden="true" />{{ t('multiplayerTable.playerDrawPile') }}</span>
     <div
       class="top-of-deck"
       :class="{ 'top-of-deck--drop-target': deckDropIndicator }"
@@ -302,13 +295,19 @@ watch(choices, async (newChoices) => {
       <button @click="debug.send(game.id, {tag: 'ShuffleDeck', contents: {tag: 'InvestigatorDeck', contents: investigatorId}})">{{ $t('draw.shuffle') }}</button>
     </template>
   </div>
+  </div>
 </template>
 
 <style scoped>
 .pile-label, .discard-empty { display: none; }
+.pile-label { white-space: nowrap; }
+
+/* Pure grouping hook: outside the desktop multiseat table the two piles keep
+   participating in the parent layout as before. */
+.piles { display: contents; }
 
 .discard {
-  cursor: pointer;
+  cursor: default;
   button {
     white-space: nowrap;
     text-wrap: pretty;
@@ -348,6 +347,10 @@ watch(choices, async (newChoices) => {
   }
 }
 
+.discard-card {
+  position: relative;
+}
+
 .discard--can-use{
   &::before {
     content: '';
@@ -379,17 +382,6 @@ watch(choices, async (newChoices) => {
   width: 100%;
   @media (max-width: 800px) and (orientation: portrait) {
     width: fit-content;
-  }
-}
-
-.view-discard-button.cards-under-indicator {
-  display: flex;
-  width: var(--card-width);
-  max-width: var(--card-width);
-
-  @media (max-width: 800px) and (orientation: portrait) {
-    width: calc(var(--pool-token-width)*1.2);
-    max-width: calc(var(--pool-token-width)*1.2);
   }
 }
 

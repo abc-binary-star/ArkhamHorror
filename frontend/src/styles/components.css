@@ -295,3 +295,38 @@ h2.title {
   overflow-wrap: anywhere;
   overscroll-behavior: contain;
 }
+
+/* Shared entry point for player and encounter discard piles. */
+button.discard-view-control {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  width: 100%;
+  min-height: 26px;
+  margin: 0 0 4px;
+  padding: 4px 0;
+  box-sizing: border-box;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #ddc798;
+  font-size: 0.68rem;
+  line-height: 1.25;
+  cursor: pointer;
+}
+button.discard-view-control:hover:not(:disabled) { background: transparent; color: #fff0c8; }
+button.discard-view-control:focus-visible { outline: 2px solid #ddc798; outline-offset: 2px; }
+button.discard-view-control:disabled { opacity: 0.55; cursor: default; }
+.discard-view-control svg { width: 13px; height: 13px; flex-shrink: 0; }
+.discard-view-count { margin-left: auto; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
+/* Pile captions stay on one line even in narrow workbench columns. */
+button.discard-view-control { white-space: nowrap; flex-wrap: nowrap; }
+.discard-view-control > span:first-of-type {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Layers, Hand } from '@lucide/vue';
+import { Layers, Hand, Skull } from '@lucide/vue';
 import type { CardContents } from '@/arkham/types/Card';
 import * as CardT from '@/arkham/types/Card';
 import gsap from 'gsap';
@@ -330,9 +330,20 @@ const facedownThreatCardImage = (cardId: string) => {
   return card ? imgsrc(CardT.cardImage({ ...toCardContents(card), facedown: false })) : ENCOUNTER_BACK
 }
 
-const hasThreatArea = computed(() =>
-  stories.value.length > 0 || engagedEnemies.value.length > 0 || props.investigator.treacheries.length > 0
-    || facedownThreatCards.value.length > 0
+const threatCount = computed(() =>
+  spawningEnemies.value.length + stories.value.length + engagedEnemies.value.length
+    + visibleTreacheries.value.length + facedownThreatCards.value.length
+)
+const threatAreaCollapsed = ref(false)
+watch(
+  () => [investigatorId.value, ...spawningEnemies.value.map(e => e.id),
+    ...engagedEnemies.value.map(e => e.id), ...stories.value.map(s => s.id),
+    ...visibleTreacheries.value.map(t => t.id), ...facedownThreatCards.value.map(c => c.id)],
+  (current, previous) => {
+    if (current[0] !== previous?.[0] || current.some(id => !previous?.includes(id))) {
+      threatAreaCollapsed.value = false
+    }
+  }
 )
 
 const inHandEnemies = computed(() =>
@@ -956,15 +967,13 @@ function closeHand() {
   <div class="player-cards">
     <button class="in-play-toggle" @click="playAreaCollapsed = !playAreaCollapsed"></button>
     <div class="in-play-row">
-      <div class="play-area-label"><Layers aria-hidden="true" />{{ $t('multiplayerTable.inPlay') }}</div>
-      <transition name="grow">
-        <section
-          class="in-play"
-          :class="{ 'in-play--collapsed': playAreaCollapsed }"
-          @drop="onDrop($event)"
-          @dragover.prevent="dragover($event)"
-          @dragenter.prevent
-        >
+      <section class="player-card-zone threat-zone" :class="{ 'threat-zone--occupied': threatCount > 0, 'threat-zone--collapsed': threatAreaCollapsed }" :aria-label="t('multiplayerTable.threatArea')">
+        <button type="button" class="threat-area-label" :aria-expanded="!threatAreaCollapsed" @click="threatAreaCollapsed = !threatAreaCollapsed">
+          <span>{{ $t('multiplayerTable.threatArea') }}</span>
+          <span class="threat-count" aria-live="polite">{{ threatCount }}</span>
+          <span aria-hidden="true">{{ threatAreaCollapsed ? '+' : '−' }}</span>
+        </button>
+        <div v-show="!threatAreaCollapsed" class="in-play threat-cards">
           <transition-group @enter="onEnter" @leave="onLeave" @before-enter="onBeforeEnter">
             <EnemyView
               v-for="enemy in spawningEnemies"
@@ -999,6 +1008,15 @@ function closeHand() {
               @choose="$emit('choose', $event)"
             />
 
+            <div
+              v-for="slot in Math.max(0, 2 - spawningEnemies.length - engagedEnemies.length)"
+              :key="`empty-enemy-slot-${slot}`"
+              class="threat-enemy-slot"
+              aria-hidden="true"
+            >
+              <Skull />
+            </div>
+
             <Treachery
               v-for="treachery in visibleTreacheries"
               :key="treachery.id"
@@ -1019,8 +1037,20 @@ function closeHand() {
               <img class="card" :src="facedownThreatCardImage(facedown.cardId)" />
             </div>
 
-            <div v-if="hasThreatArea" :key="'threat-divider'" class="threat-divider" />
-
+          </transition-group>
+        </div>
+      </section>
+      <div class="player-card-zone asset-zone">
+      <div class="play-area-label"><Layers aria-hidden="true" />{{ $t('multiplayerTable.inPlay') }}</div>
+      <transition name="grow">
+        <section
+          class="in-play"
+          :class="{ 'in-play--collapsed': playAreaCollapsed }"
+          @drop="onDrop($event)"
+          @dragover.prevent="dragover($event)"
+          @dragenter.prevent
+        >
+          <transition-group @enter="onEnter" @leave="onLeave" @before-enter="onBeforeEnter">
             <template v-if="tarotCards.length > 0">
               <div v-for="tarotCard in tarotCards" :key="tarotCard.arcana" :data-index="tarotCard.arcana">
                 <img :src="imgsrc(`tarot/${tarotCardImage(tarotCard)}`)" class="card tarot-card" :class="{ [tarotCard.facing]: true, 'can-interact': tarotCardAbility(tarotCard) !== -1 }" @click="$emit('choose', tarotCardAbility(tarotCard))"/>
@@ -1170,6 +1200,7 @@ function closeHand() {
           </button>
         </template>
       </CardsUnderIndicator>
+      </div>
     </div>
 
     <ChoiceModal
@@ -1258,12 +1289,17 @@ function closeHand() {
           :playerId="playerId"
           :investigator="investigator"
           @choose="$emit('choose', $event)"
+          @showCards="doShowCards"
         />
       </div>
       <div v-if="!isMobile" class="hand hand-area">
         <div class="hand-area__header">
-          <span><Hand class="table-label-icon" aria-hidden="true" />{{ $t('player.hand') }}</span>
-          <span>{{ totalHandSize }}/{{ investigator.handSize }}</span>
+          <span class="hand-area__title"><Hand class="table-label-icon" aria-hidden="true" />{{ $t('player.hand') }}</span>
+          <span
+            v-if="investigator.handSize"
+            class="hand-area__count"
+            :class="handSizeClasses"
+          >{{ totalHandSize }}/{{ investigator.handSize }}</span>
         </div>
         <transition-group tag="section" class="hand" @enter="onEnter" @leave="onLeave" @before-enter="onBeforeEnter"
           @drop="onDropHand($event)"
@@ -1339,7 +1375,6 @@ function closeHand() {
           <button type="button" @click="openDebugAddCard">+ Card to hand</button>
           <button v-if="customCardsEnabled" type="button" @click="showCustomCardPicker = true">+ Custom card</button>
         </div>
-        <div v-if="investigator.handSize" class="hand-size" :class="handSizeClasses" :current-length="totalHandSize">{{ t('handSize') }}: {{totalHandSize}}/{{investigator.handSize}}</div>
       </div>
     </div>
     <!-- The action tray is fixed to the same bottom edge on narrow viewports,
@@ -1454,7 +1489,58 @@ function closeHand() {
 </template>
 
 <style scoped>
-.play-area-label { display: none; }
+.play-area-label,
+.threat-area-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 24px;
+  color: rgb(214 186 128 / 0.9);
+  font-size: 0.72rem;
+}
+.play-area-label svg { width: 13px; height: 13px; }
+.player-card-zone { position: relative; min-width: 0; }
+.asset-zone { flex: 1; display: flex; flex-wrap: wrap; align-content: flex-start; }
+.asset-zone > .play-area-label { flex-basis: 100%; }
+.asset-zone > .in-play { flex: 1; min-width: 0; }
+.threat-zone {
+  flex: 0 0 100px;
+  min-width: 0;
+  margin-right: 8px;
+  padding-right: 8px;
+  border-right: 1px solid rgb(170 104 87 / 0.4);
+}
+.threat-zone--occupied:not(.threat-zone--collapsed) {
+  flex: 0 1 180px;
+  max-width: 25%;
+}
+.threat-area-label {
+  width: 100%;
+  padding: 0 4px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.threat-area-label:focus-visible { outline: 2px solid var(--highlight); outline-offset: -2px; }
+.threat-count { margin-left: auto; font-variant-numeric: tabular-nums; }
+.threat-zone--occupied .threat-area-label { color: #e6aa98; }
+.threat-cards { min-height: 36px; background: rgb(65 25 23 / 0.25); }
+.threat-enemy-slot {
+  display: grid;
+  place-items: center;
+  width: min(var(--card-width, 82px), 100%);
+  aspect-ratio: 5 / 7;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  border: 1px solid rgb(179 153 96 / 0.35);
+  border-radius: 4px;
+  background: linear-gradient(145deg, rgb(29 43 34 / 0.25), rgb(4 15 13 / 0.3));
+  box-shadow: inset 0 0 0 2px rgb(4 13 10 / 0.28);
+  pointer-events: none;
+}
+.threat-enemy-slot svg { width: 42%; height: auto; color: rgb(183 180 157 / 0.45); }
+.threat-zone--occupied .threat-cards { box-shadow: inset 0 0 0 1px rgb(170 104 87 / 0.3); }
+
 .table-label-icon { width: 13px; height: 13px; margin-right: 5px; vertical-align: -2px; }
 .player {
   display: flex;
@@ -1597,6 +1683,7 @@ function closeHand() {
   display: flex;
   flex-wrap: nowrap;
   overflow: auto;
+  scrollbar-width: none;
   gap: 5px;
   background: rgb(10 23 22 / 0.62);
   padding: 10px;
@@ -1604,11 +1691,14 @@ function closeHand() {
   max-height: 300px;
   transition: max-height 0.15s cubic-bezier(0.4, 0, 0.2, 1), padding 0.15s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.1s ease;
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   > * {
     flex-shrink: 0;
   }
 
-  .threat-divider,
   .pending-divider {
     width: 2px;
     align-self: stretch;
@@ -1920,36 +2010,6 @@ function closeHand() {
   }
 }
 
-.hand-size {
-  align-self: flex-start;
-  padding: 3px 8px;
-  justify-items: center;
-  font-size: 0.7rem;
-  color: var(--text-dim-on-dark, #c7cfcc);
-  background: transparent;
-  border-top: 1px solid rgb(205 175 107 / 0.28);
-  display: grid;
-  grid-template-columns: 1fr;
-  width: auto;
-  max-width: 100%;
-  min-width: 0;
-
-}
-
-.hand-size-ok {
-  color: var(--text-dim-on-dark, #c7cfcc);
-}
-
-.hand-size-warn {
-  color: #e3c26b;
-  border-top-color: color-mix(in srgb, #e3c26b 72%, transparent);
-}
-
-.hand-size-alert {
-  color: #e08a83;
-  border-top-color: color-mix(in srgb, #e08a83 72%, transparent);
-}
-
 .hand-area {
   display: flex;
   flex-direction: column;
@@ -1965,8 +2025,9 @@ function closeHand() {
 
 .hand-area__header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 6px;
   width: 100%;
   flex: 0 0 auto;
   padding: 4px 2px 2px;
@@ -1977,11 +2038,19 @@ function closeHand() {
   letter-spacing: 0.08em;
 }
 
-.hand-area__header span:last-child {
+.hand-area__count {
   color: rgb(214 186 128 / 0.88);
   font-family: Typewriter, monospace;
   font-size: 0.7rem;
   letter-spacing: 0.04em;
+}
+
+.hand-area__count.hand-size-warn {
+  color: #e3c26b;
+}
+
+.hand-area__count.hand-size-alert {
+  color: #e08a83;
 }
 
 @media (min-width: 1200px) {

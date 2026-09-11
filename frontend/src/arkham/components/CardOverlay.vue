@@ -11,6 +11,7 @@ import {
 import { cardImg, formatContent, imgsrc, toCamelCase } from '@/arkham/helpers'
 import { BugAntIcon } from '@heroicons/vue/20/solid'
 import { useDebug } from '@/arkham/debug'
+import { useI18n } from 'vue-i18n'
 import { fetchCard, fetchPlayability, type PlayabilityResponse } from '@/arkham/api'
 import type { CardDef } from '@/arkham/types/CardDef'
 import KeyToken from '@/arkham/components/Key.vue'
@@ -52,6 +53,9 @@ type Pct = { top: number; left: number }
  * Stores & reactive top-level state
  * ========================================================================== */
 
+const { t } = useI18n()
+const showCardText = ref(false)
+const overlayPinned = ref(false)
 const store = useDbCardStore()
 const debug = useDebug()
 
@@ -66,6 +70,7 @@ const cardDefCache = new Map<string, CardDef | null>()
 const overlayCardDef = ref<CardDef | null>(null)
 
 watch(hoveredElement, (el) => {
+  showCardText.value = false
   playabilityData.value = null
   if (playabilityTimer !== null) { clearTimeout(playabilityTimer); playabilityTimer = null }
 
@@ -147,25 +152,33 @@ const queueHover = (el: HTMLElement) => {
 }
 
 const onMouseOver = (e: MouseEvent) => {
-  if (currentPointerType === 'touch' || dragActive) return
+  if (e.target instanceof Node && cardOverlay.value?.contains(e.target)) {
+    hoverTimer = clearTimer(hoverTimer)
+    return
+  }
+  if (overlayPinned.value || currentPointerType === 'touch' || dragActive) return
   lastPointer.value = { clientX: e.clientX, clientY: e.clientY }
   const el = targetFromEvent(e)
   hoverTimer = clearTimer(hoverTimer)
   if (!el || el.classList.contains('dragging') || el.classList.contains('no-overlay')) {
-    hoveredElement.value = null
+    hoverTimer = window.setTimeout(() => { hoveredElement.value = null }, 150)
     return
   }
   queueHover(el)
 }
 
 const onMouseLeave = () => {
-  if (currentPointerType === 'touch') return
+  if (overlayPinned.value || currentPointerType === 'touch') return
   hoverTimer = clearTimer(hoverTimer)
   hoveredElement.value = null
 }
 
 const onPointerDown = (e: PointerEvent) => {
   currentPointerType = e.pointerType
+  if (overlayPinned.value) {
+    if (e.target instanceof Node && cardOverlay.value?.contains(e.target)) return
+    clearOverlay()
+  }
   if (e.pointerType === 'touch') {
     const el = targetFromEvent(e)
     if (!el) return
@@ -177,6 +190,7 @@ const onPointerDown = (e: PointerEvent) => {
 const onPointerMove = (e: PointerEvent) => {
   currentPointerType = e.pointerType
   lastPointer.value = { clientX: e.clientX, clientY: e.clientY }
+  if (overlayPinned.value) return
   if (e.pointerType === 'touch') {
     if (hoveredElement.value?.classList.contains('card--locations')) {
       hoveredElement.value = null
@@ -186,6 +200,7 @@ const onPointerMove = (e: PointerEvent) => {
 }
 
 const onPointerUp = (e: PointerEvent) => {
+  if (overlayPinned.value) return
   // A control layered on top of a card can change which face that card shows (the
   // act/agenda stack popover's flip button). Clicking it must leave the overlay up,
   // otherwise every click after the first dismisses it.
@@ -198,7 +213,22 @@ const onPointerUp = (e: PointerEvent) => {
   }
 }
 
+const toggleCardText = () => {
+  // Opening or closing the panel changes the hit target under the pointer.
+  // Keep this preview until explicit dismissal, including while it repositions.
+  hoverTimer = clearTimer(hoverTimer)
+  pressTimer = clearTimer(pressTimer)
+  overlayPinned.value = true
+  showCardText.value = !showCardText.value
+}
+
+const onOverlayKeyDown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape' && overlayPinned.value) clearOverlay()
+}
+
 const clearOverlay = () => {
+  overlayPinned.value = false
+  showCardText.value = false
   hoverTimer = clearTimer(hoverTimer)
   pressTimer = clearTimer(pressTimer)
   playabilityTimer = clearTimer(playabilityTimer)
@@ -225,6 +255,7 @@ onMounted(() => {
   document.addEventListener('pointermove', onPointerMove, { passive: true })
   document.addEventListener('pointerup', onPointerUp, { passive: true })
   document.addEventListener('mouseover', onMouseOver)
+  document.addEventListener('keydown', onOverlayKeyDown)
   document.addEventListener('mouseleave', onMouseLeave)
   document.addEventListener('dragstart', onDragStart)
   document.addEventListener('dragend', onDragEnd)
@@ -238,6 +269,7 @@ onUnmounted(() => {
   document.removeEventListener('pointermove', onPointerMove)
   document.removeEventListener('pointerup', onPointerUp)
   document.removeEventListener('mouseover', onMouseOver)
+  document.removeEventListener('keydown', onOverlayKeyDown)
   document.removeEventListener('mouseleave', onMouseLeave)
   document.removeEventListener('dragstart', onDragStart)
   document.removeEventListener('dragend', onDragEnd)
@@ -323,6 +355,7 @@ const cardErrata = computed<string | null>(() => {
 })
 
 watch(overlayCardCode, async (code) => {
+  showCardText.value = false
   overlayCardDef.value = null
   if (!code) return
   if (cardDefCache.has(code)) {
@@ -385,40 +418,44 @@ let posRAF: number | null = null
 
 const getPosition = (el: HTMLElement): { top: number; left: number } => {
   const rect = el.getBoundingClientRect()
-  const width = sideways.value ? OVERLAY_W / CARD_RATIO : OVERLAY_W
-  const height = sideways.value ? OVERLAY_W : Math.round(OVERLAY_W / CARD_RATIO)
-
-  const gap = 2
-  const hasCust = !!customizationsCard.value
-  const totalWidth = hasCust ? (width * 2 + gap) : width
-
-  if (el.dataset.overlayPosition === 'cursor-right' && lastPointer.value) {
-    const cursorGap = 18
-    const viewportPad = 10
-    const desiredTop = lastPointer.value.clientY + window.scrollY - 40
-    const maxTop = window.scrollY + window.innerHeight - height - viewportPad
-    const top = Math.max(window.scrollY + viewportPad, Math.min(desiredTop, maxTop))
-    const desiredLeft = lastPointer.value.clientX + window.scrollX + cursorGap
-    const maxLeft = window.scrollX + window.innerWidth - totalWidth - viewportPad
-    const left = Math.max(window.scrollX + viewportPad, Math.min(desiredLeft, maxLeft))
-    return { top, left }
+  const bounds = cardOverlay.value?.getBoundingClientRect()
+  const width = bounds?.width ?? OVERLAY_W
+  const height = bounds?.height ?? Math.round(OVERLAY_W / CARD_RATIO)
+  const pad = 10
+  const cursor = el.dataset.overlayPosition === 'cursor-right' ? lastPointer.value : null
+  const right = cursor ? cursor.clientX + 18 : rect.right + 10
+  const left = right + width <= window.innerWidth - pad ? right : rect.left - width - 10
+  return {
+    top: Math.max(pad, Math.min((cursor?.clientY ?? rect.top) - 40, window.innerHeight - height - pad)),
+    left: Math.max(pad, Math.min(left, window.innerWidth - width - pad)),
   }
-
-  const top = rect.top + window.scrollY - 40
-  const bottom = top + height
-  const newTop = Math.max(0, bottom > window.innerHeight ? rect.bottom - height + window.scrollY - 40 : top)
-
-  const rightSide = rect.left + window.scrollX + rect.width + 10
-  return (rightSide + totalWidth >= window.innerWidth)
-    ? { top: newTop, left: rect.left - totalWidth - 10 }
-    : { top: newTop, left: rightSide }
 }
 
-watch([hoveredElement, sideways], ([el]) => {
-  if (!el) { overlayPosition.value = { top: 0, left: 0 }; return }
+const updateOverlayPosition = () => {
   if (posRAF !== null) cancelAnimationFrame(posRAF)
-  posRAF = requestAnimationFrame(() => { overlayPosition.value = getPosition(el as HTMLElement) })
-}, { flush: 'post' })
+  posRAF = requestAnimationFrame(() => {
+    posRAF = null
+    const el = hoveredElement.value
+    overlayPosition.value = el ? getPosition(el) : { top: 0, left: 0 }
+  })
+}
+watch([hoveredElement, sideways], updateOverlayPosition, { flush: 'post' })
+// Localized text and extra panels arrive asynchronously; measure again as they grow.
+let overlayResizeObserver: ResizeObserver | null = null
+onMounted(() => {
+  overlayResizeObserver = new ResizeObserver(updateOverlayPosition)
+  if (cardOverlay.value) overlayResizeObserver.observe(cardOverlay.value)
+  window.addEventListener('resize', updateOverlayPosition)
+  document.addEventListener('fullscreenchange', updateOverlayPosition)
+  document.addEventListener('scroll', updateOverlayPosition, true)
+})
+onUnmounted(() => {
+  overlayResizeObserver?.disconnect()
+  window.removeEventListener('resize', updateOverlayPosition)
+  document.removeEventListener('fullscreenchange', updateOverlayPosition)
+  document.removeEventListener('scroll', updateOverlayPosition, true)
+  if (posRAF !== null) cancelAnimationFrame(posRAF)
+})
 
 /* =============================================================================
  * SVG sizing & transforms
@@ -651,6 +688,16 @@ const {
       :class="{ sideways, tarot, isMobile, overPopover }"
     >
     <div class="card-image">
+      <button
+        v-if="card && (dbCardData || dbCardCustomizationText)"
+        type="button"
+        class="card-text-toggle"
+        data-keep-card-overlay
+        :aria-expanded="showCardText"
+        @pointerdown.stop
+        @pointerup.stop
+        @click.stop="toggleCardText"
+      >{{ t(showCardText ? 'hideCardText' : 'showCardText') }}</button>
       <svg
         v-if="card"
         class="card-svg"
@@ -818,7 +865,7 @@ const {
 
     <div
       class="card-data"
-      v-if="dbCardData"
+      v-if="showCardText && dbCardData"
       :class="{ reversed, Reversed: upsideDown, [`faction-${dbCardFactionCode || 'neutral'}`]: true }"
     >
       <div class="card-data-header">
@@ -855,7 +902,7 @@ const {
       <KeyToken v-for="k in spentKeys" :key="keyToId(k)" :keyToken="k" @choose="() => {}"/>
     </div>
 
-    <div class="card-data" v-if="dbCardCustomizationText">
+    <div class="card-data" v-if="showCardText && dbCardCustomizationText">
       <p v-if="dbCardName"><b>{{ dbCardName }}</b></p>
       <p v-if="dbCardCustomizationText" v-html="dbCardCustomizationText" style="font-size: 0.85em;"></p>
     </div>
@@ -938,8 +985,12 @@ const {
 .card-data {
   position: relative;
   width: 300px;
-  min-height: inherit;
-  overflow-y: visible;
+  min-height: 0;
+  max-height: calc(100dvh - 20px);
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  flex-shrink: 0;
+  overscroll-behavior: contain;
   margin-left: 2px;
   border-radius: 12px;
   font-family: Arial;
@@ -1032,14 +1083,19 @@ const {
 }
 
 .card-overlay {
-  position: absolute;
+  position: fixed;
   z-index: var(--z-card-hover-overlay);
   display: flex;
   width: max-content;
+  max-width: calc(100vw - 20px);
+  max-height: calc(100dvh - 20px);
+  overflow: auto;
+  align-items: flex-start;
+  overscroll-behavior: contain;
   height: auto;
   top: 0;
   left: 2px;
-  pointer-events: none;
+  pointer-events: auto;
   animation: fadeIn 0.5s;
 }
 .card-overlay.overPopover {
@@ -1053,8 +1109,8 @@ const {
   }
 }
 .card-overlay.tarot {
-  height: 500px !important;
-  width: fit-content !important;
+  height: auto;
+  width: max-content;
 }
 
 .card-svg {
@@ -1068,7 +1124,21 @@ const {
 
 .reversed, .Reversed { transform: rotateZ(180deg); }
 
-.card-image { position: relative; }
+.card-image { position: relative; flex-shrink: 0; }
+.card-text-toggle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 1;
+  padding: 5px 10px;
+  border: 1px solid #b99d62;
+  border-radius: 4px;
+  background: rgb(8 24 21 / 0.94);
+  color: #f0dfb9;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.card-text-toggle:focus-visible { outline: 2px solid #f0dfb9; outline-offset: 2px; }
 
 .card-errata {
   width: 300px;
