@@ -24,12 +24,12 @@ defineProps<{ title: string; bodyKey: string }>()
   font-family: teutonic, sans-serif;
   font-size: 1.1em;
   font-weight: normal;
-  color: rgba(255,255,255,0.75);
+  color: var(--title);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0 0 10px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
 }
 
 .additional-log-body {

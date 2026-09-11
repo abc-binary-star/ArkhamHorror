@@ -118,7 +118,7 @@ const scenarioIcon = computed(() => {
           </div>
           <Prompt
             v-if="deleting && deleteGame"
-            prompt="Are you sure you want to delete this game?"
+            :prompt="$t('doDeleteGame')"
             :yes="deleteGame"
             :no="() => (deleting = false)"
           />

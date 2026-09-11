@@ -15,6 +15,7 @@ const gameLog = {
   draws: '抽取了',
   chaosToken: '混乱标记',
   chaosTokens: '混乱标记',
+  discoveredClues: '发现了线索',
   remember: '记住“{value}”',
   forgot: '忘记“{value}”',
   record: '记录“{value}”',
@@ -88,6 +89,7 @@ test('the fragments that surround a card reference are translated with spacing i
   assert.equal(translateGameLogText(' draws ', t, empty), ' 抽取了 ')
   assert.equal(translateGameLogText(' chaos token', t, empty), ' 混乱标记')
   assert.equal(translateGameLogText(' chaos tokens', t, empty), ' 混乱标记')
+  assert.equal(translateGameLogText(' discovered clue(s)', t, empty), ' 发现了线索')
 })
 
 test('remember/forgot/record directives translate both the verb and the recorded value', async (t2) => {

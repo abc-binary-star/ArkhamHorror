@@ -45,9 +45,12 @@ export interface Props {
   game: ArkhamGame.Game
   cards: CardDef[]
   playerId: string
+  /* Rendered over the game board's dark artwork (in-game / game over) rather
+     than on the paper page, so the board-level chrome flips to light ink. */
+  onDark?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), { onDark: false })
 const emit = defineEmits<{ refresh: [] }>()
 const store = useDbCardStore()
 const { t, tm } = useI18n()
@@ -848,7 +851,7 @@ watch(
 
 <template>
   <LogIcons />
-  <div class="content column" ref="contentEl">
+  <div class="content column" :class="{ 'tone-dark': onDark }" ref="contentEl">
     <div class="log-column">
       <div class="campaign-log column" ref="campaignLogEl">
         <div class="campaign-log-header">
@@ -1208,6 +1211,26 @@ watch(
 .log-tabs button.active {
   color: var(--title);
   border-bottom-color: var(--select, var(--button-1));
+}
+
+/* Over the game board the log has no paper behind it, so its chrome flips to
+   light ink. Panel contents keep their own dark ink on the ivory sections. */
+.content.tone-dark {
+  h1 {
+    color: var(--text-on-dark);
+  }
+
+  .log-tabs button {
+    color: var(--text-dim-on-dark);
+  }
+
+  .log-tabs button:hover {
+    color: var(--text-on-dark);
+  }
+
+  .log-tabs button.active {
+    color: var(--text-on-dark);
+  }
 }
 
 /* ── Investigators ───────────────────────────────────────── */

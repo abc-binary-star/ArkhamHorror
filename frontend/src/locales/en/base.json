@@ -9,6 +9,7 @@
     "draws": "draws",
     "chaosToken": "chaos token",
     "chaosTokens": "chaos tokens",
+    "discoveredClues": "discovered clue(s)",
     "remember": "Remember \"{value}\"",
     "forgot": "Forgot \"{value}\"",
     "record": "Record \"{value}\""

@@ -1915,6 +1915,7 @@ runGameMessage msg g = case msg of
         let controller = fromMaybe owner $ listToMaybe [c | PlayUnderControlOf c <- cardMods]
 
         send $ format investigator' <> " played " <> format card
+        sendAudio "card-play.mp3"
         g' <- runGameMessage (PutCardIntoPlay controller card mtarget payment windows') g
         let
           recordLimit g'' = \case

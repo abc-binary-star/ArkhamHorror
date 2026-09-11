@@ -1,4 +1,6 @@
 {
+  "expandMapControls": "Expand map controls",
+  "collapseMapControls": "Collapse map controls",
   "resetMapShort": "Reset",
   "resetMap": "Reset and center map",
   "moveMap": "Move entire map",

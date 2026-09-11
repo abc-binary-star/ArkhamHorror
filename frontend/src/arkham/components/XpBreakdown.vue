@@ -226,11 +226,11 @@ const scenarioIcon = computed<string | null>(() => campaignStepIcon(props.step))
   align-items: center;
   gap: 12px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
   cursor: pointer;
   user-select: none;
 
-  &:hover h2.title { color: rgba(255,255,255,0.7); }
+  &:hover h2.title { color: var(--text); }
 }
 
 .breakdown:has(.chevron.collapsed) .breakdown-header {
@@ -243,7 +243,7 @@ const scenarioIcon = computed<string | null>(() => campaignStepIcon(props.step))
   height: 28px;
   object-fit: contain;
   flex-shrink: 0;
-  filter: brightness(0) invert(1) opacity(0.75);
+  filter: brightness(0) opacity(0.7);
 }
 
 .title-row {
@@ -258,7 +258,7 @@ h2.title {
   font-family: teutonic, sans-serif;
   font-size: 1.1em;
   font-weight: normal;
-  color: rgba(255,255,255,0.75);
+  color: var(--title);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0;
@@ -274,7 +274,7 @@ h2.title {
 .chevron {
   width: 1.2em;
   height: 1.2em;
-  color: rgba(255,255,255,0.3);
+  color: var(--text-dim);
   flex-shrink: 0;
   transition: transform 0.2s ease;
 
@@ -323,7 +323,7 @@ h2.title {
   min-width: 1.8em;
   padding: 1px 7px;
   background: rgba(74,196,86,0.15);
-  color: #6dd97a;
+  color: var(--spooky-green);
   border: 1px solid rgba(74,196,86,0.25);
   border-radius: 4px;
   font-size: 0.78rem;
@@ -335,20 +335,20 @@ h2.title {
 
 .amount--negative {
   background: rgba(180,30,30,0.2);
-  color: #e07878;
+  color: var(--delete);
   border-color: rgba(180,30,30,0.35);
 }
 
 .unspendable {
   background: rgba(0,128,128,0.2);
-  color: #4fc0c0;
+  color: var(--teal);
   border-color: rgba(0,128,128,0.35);
 }
 
 /* Campaign counters are not experience — give them their own tone. */
 .tally {
   background: rgba(214,178,92,0.15);
-  color: #d6b25c;
+  color: var(--brass-dim);
   border-color: rgba(214,178,92,0.3);
 }
 
@@ -380,7 +380,7 @@ h2.title {
 }
 
 .group {
-  background: rgba(255,255,255,0.03);
+  background: rgba(0, 0, 0, 0.03);
   border-radius: 6px;
   padding: 10px 12px;
   display: flex;
@@ -401,7 +401,7 @@ h2.title {
     font-family: teutonic, sans-serif;
     font-size: 0.95em;
     font-weight: normal;
-    color: rgba(255,255,255,0.6);
+    color: var(--text-dim);
     letter-spacing: 0.04em;
     margin: 0;
   }
@@ -421,13 +421,13 @@ h2.title {
   gap: 8px;
   padding: 6px 10px;
   border-radius: 4px;
-  background: rgba(255,255,255,0.04);
+  background: rgba(0, 0, 0, 0.04);
   font-size: 0.88rem;
   color: var(--title);
 
   &::before {
     content: '–';
-    color: rgba(255,255,255,0.25);
+    color: var(--text-dim);
     flex-shrink: 0;
   }
 

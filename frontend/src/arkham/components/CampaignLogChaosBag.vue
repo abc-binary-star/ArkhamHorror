@@ -49,21 +49,21 @@ const showHistory = ref(false)
   font-family: teutonic, sans-serif;
   font-size: 1.1em;
   font-weight: normal;
-  color: rgba(255,255,255,0.75);
+  color: var(--title);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0 0 10px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
 }
 
 .history-toggle {
   margin-left: auto;
   padding: 3px 10px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(0, 0, 0, 0.05);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 4px;
-  color: rgba(255,255,255,0.6);
+  color: var(--text-dim);
   font-family: inherit;
   font-size: 0.7em;
   letter-spacing: 0.08em;
@@ -71,8 +71,8 @@ const showHistory = ref(false)
   cursor: pointer;
 
   &:hover {
-    background: rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.85);
+    background: rgba(0, 0, 0, 0.09);
+    color: var(--text);
   }
 }
 
@@ -85,7 +85,7 @@ button.history-toggle:active:not(:disabled) {
 .history {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(255,255,255,0.07);
+  border-top: var(--edge-width) solid var(--edge-dim);
 }
 
 .tokens {
@@ -98,7 +98,7 @@ button.history-toggle:active:not(:disabled) {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: var(--edge-width) solid var(--edge-dim);
   box-shadow: 0 2px 4px rgba(0,0,0,0.5);
   transition: transform 0.15s;
 

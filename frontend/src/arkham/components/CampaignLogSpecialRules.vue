@@ -57,12 +57,12 @@ const scrollToRule = (i: number) => {
   font-family: teutonic, sans-serif;
   font-size: 1.1em;
   font-weight: normal;
-  color: rgba(255,255,255,0.75);
+  color: var(--title);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0 0 10px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
 }
 
 .rule-jump {
@@ -76,10 +76,10 @@ const scrollToRule = (i: number) => {
   font-family: teutonic, sans-serif;
   font-size: 0.85em;
   letter-spacing: 0.03em;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--title);
   text-decoration: none;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.05);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 999px;
   padding: 3px 12px;
   cursor: pointer;
@@ -87,8 +87,8 @@ const scrollToRule = (i: number) => {
 }
 
 .rule-jump-link:hover {
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--text);
 }
 
 .rules {

@@ -1,4 +1,6 @@
 {
+  "expandMapControls": "展开地图工具栏",
+  "collapseMapControls": "收起地图工具栏",
   "resetMapShort": "复位",
   "resetMap": "一键复位并居中",
   "moveMap": "移动整张地图",

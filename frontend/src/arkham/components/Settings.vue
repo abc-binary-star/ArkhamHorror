@@ -51,6 +51,11 @@ const hideInertCards = computed({
   set: (value: boolean) => settings.setHideInertCards(value),
 })
 
+const autoHideToolbarInFullscreen = computed({
+  get: () => settings.autoHideToolbarInFullscreen,
+  set: (value: boolean) => settings.setAutoHideToolbarInFullscreen(value),
+})
+
 const soundsDisabled = ref(localStorage.getItem('arkhamSoundsDisabled') === 'true')
 
 watch(soundsDisabled, (value) => {
@@ -220,7 +225,7 @@ onBeforeUnmount(() => {
 
     <div class="settings-body">
       <section class="settings-section">
-        <h3 class="section-title">Investigator Settings</h3>
+        <h3 class="section-title">{{ $t('gameBar.viewSectionInvestigator') }}</h3>
 
         <div class="toggle-list">
           <div class="toggle-row" :ref="setSettingRef('skipTriggers')" :class="{ 'toggle-row--highlighted': highlightedSetting === 'skipTriggers' }">
@@ -239,7 +244,7 @@ onBeforeUnmount(() => {
       </section>
 
       <section class="settings-section">
-        <h3 class="section-title">Your View Settings</h3>
+        <h3 class="section-title">{{ $t('gameBar.viewSectionViewSettings') }}</h3>
         <div class="toggle-list">
           <div class="toggle-row" v-if="canShowOtherHands">
             <div class="toggle-text">
@@ -256,11 +261,8 @@ onBeforeUnmount(() => {
 
           <div class="toggle-row">
             <div class="toggle-text">
-              <div class="toggle-name">Hide Cards With No Ongoing Effect</div>
-              <div class="toggle-desc">
-                Once setup is over, tuck permanents whose text only applied at deck creation or
-                setup — In the Thick of It, Adaptable, Observed — into a stack beside the play area.
-              </div>
+              <div class="toggle-name">{{ $t('gameBar.viewSettingHideInertCardsTitle') }}</div>
+              <div class="toggle-desc">{{ $t('gameBar.viewSettingHideInertCards') }}</div>
             </div>
             <div class="segmented toggle-control">
               <input type="radio" id="opt-hideInertCards-on" name="opt-hideInertCards" :checked="hideInertCards" @change="hideInertCards = true" />
@@ -272,8 +274,21 @@ onBeforeUnmount(() => {
 
           <div class="toggle-row">
             <div class="toggle-text">
-              <div class="toggle-name">Sounds</div>
-              <div class="toggle-desc">Play sound effects in this browser.</div>
+              <div class="toggle-name">{{ $t('gameBar.viewSettingHideToolbarTitle') }}</div>
+              <div class="toggle-desc">{{ $t('gameBar.viewSettingHideToolbar') }}</div>
+            </div>
+            <div class="segmented toggle-control">
+              <input type="radio" id="opt-autoHideToolbar-on" name="opt-autoHideToolbar" :checked="autoHideToolbarInFullscreen" @change="autoHideToolbarInFullscreen = true" />
+              <label for="opt-autoHideToolbar-on">{{ $t('On') }}</label>
+              <input type="radio" id="opt-autoHideToolbar-off" name="opt-autoHideToolbar" :checked="!autoHideToolbarInFullscreen" @change="autoHideToolbarInFullscreen = false" />
+              <label for="opt-autoHideToolbar-off">{{ $t('Off') }}</label>
+            </div>
+          </div>
+
+          <div class="toggle-row">
+            <div class="toggle-text">
+              <div class="toggle-name">{{ $t('gameBar.viewSettingSoundsTitle') }}</div>
+              <div class="toggle-desc">{{ $t('gameBar.viewSettingSounds') }}</div>
             </div>
             <div class="segmented toggle-control">
               <input type="radio" id="opt-sounds-on" name="opt-sounds" :checked="!soundsDisabled" @change="soundsDisabled = false" />
@@ -285,12 +300,11 @@ onBeforeUnmount(() => {
 
           <div class="toggle-row">
             <div class="toggle-text">
-              <div class="toggle-name">Extra Animations</div>
+              <div class="toggle-name">{{ $t('gameBar.viewSettingExtraAnimationsTitle') }}</div>
               <div class="toggle-desc">
-                Decorative effects like burning locations and the Cosmic Emissary beams. Never
-                affects anything you need to see to play.
+                {{ $t('gameBar.viewSettingExtraAnimations') }}
                 <template v-if="settings.prefersReducedMotion">
-                  Currently off anyway, because this device asks for reduced motion.
+                  {{ $t('gameBar.viewSettingExtraAnimationsReducedMotion') }}
                 </template>
               </div>
             </div>
@@ -304,12 +318,12 @@ onBeforeUnmount(() => {
 
           <div class="toggle-row">
             <div class="toggle-text">
-              <div class="toggle-name">Extra Animations (this scenario)</div>
-              <div class="toggle-desc">Override the setting above for this game only.</div>
+              <div class="toggle-name">{{ $t('gameBar.viewSettingScenarioAnimationsTitle') }}</div>
+              <div class="toggle-desc">{{ $t('gameBar.viewSettingScenarioAnimations') }}</div>
             </div>
             <div class="segmented toggle-control">
               <input type="radio" id="opt-extraAnimationsScenario-default" name="opt-extraAnimationsScenario" :checked="extraAnimationsOverride === 'default'" @change="extraAnimationsOverride = 'default'" />
-              <label for="opt-extraAnimationsScenario-default">Default</label>
+              <label for="opt-extraAnimationsScenario-default">{{ $t('gameBar.viewSettingDefault') }}</label>
               <input type="radio" id="opt-extraAnimationsScenario-on" name="opt-extraAnimationsScenario" :checked="extraAnimationsOverride === 'on'" @change="extraAnimationsOverride = 'on'" />
               <label for="opt-extraAnimationsScenario-on">{{ $t('On') }}</label>
               <input type="radio" id="opt-extraAnimationsScenario-off" name="opt-extraAnimationsScenario" :checked="extraAnimationsOverride === 'off'" @change="extraAnimationsOverride = 'off'" />
@@ -319,8 +333,8 @@ onBeforeUnmount(() => {
 
           <div class="toggle-row" v-if="showCosmicEmissaryAnimationSetting">
             <div class="toggle-text">
-              <div class="toggle-name">Enable Cosmic Emissary Animation</div>
-              <div class="toggle-desc">Shows animated Cosmic Emissary connection effects for Fate of the Vale.</div>
+              <div class="toggle-name">{{ $t('gameBar.viewSettingCosmicEmissaryTitle') }}</div>
+              <div class="toggle-desc">{{ $t('gameBar.viewSettingCosmicEmissary') }}</div>
             </div>
             <div class="segmented toggle-control">
               <input type="radio" id="opt-cosmicEmissaryAnimation-on" name="opt-cosmicEmissaryAnimation" :checked="enableCosmicEmissaryAnimation" @change="enableCosmicEmissaryAnimation = true" />
@@ -335,18 +349,18 @@ onBeforeUnmount(() => {
       <CardOptionsSettings :game="game" :playerId="playerId" />
 
       <section class="settings-section">
-        <h3 class="section-title">Shared Game Settings</h3>
+        <h3 class="section-title">{{ $t('gameBar.viewSectionSharedGame') }}</h3>
         <div class="toggle-list">
           <div class="toggle-row">
             <div class="toggle-text">
-              <div class="toggle-name">"As If" Ruling</div>
-              <div class="toggle-desc">Swap between Chapter 1 and Chapter 2 handling for "as if" effects during nested window checks. This affects everyone in the game.</div>
+              <div class="toggle-name">{{ $t('gameBar.viewSettingAsIfRulingTitle') }}</div>
+              <div class="toggle-desc">{{ $t('gameBar.viewSettingAsIfRuling') }}</div>
             </div>
             <div class="segmented toggle-control">
               <input type="radio" id="opt-asIfRuling-chapter1" name="opt-asIfRuling" :checked="asIfRuling === 'chapter1'" @change="asIfRuling = 'chapter1'" />
-              <label for="opt-asIfRuling-chapter1">Chapter 1</label>
+              <label for="opt-asIfRuling-chapter1">{{ $t('gameBar.viewSettingChapter1') }}</label>
               <input type="radio" id="opt-asIfRuling-chapter2" name="opt-asIfRuling" :checked="asIfRuling === 'chapter2'" @change="asIfRuling = 'chapter2'" />
-              <label for="opt-asIfRuling-chapter2">Chapter 2</label>
+              <label for="opt-asIfRuling-chapter2">{{ $t('gameBar.viewSettingChapter2') }}</label>
             </div>
           </div>
 
@@ -399,7 +413,7 @@ onBeforeUnmount(() => {
       </section>
     </div>
 
-    <button class="settings-footer" @click="closeSettings">{{$t('close')}}</button>
+    <button class="settings-footer" @click="closeSettings">{{$t('cardDetails.close')}}</button>
   </div>
 </template>
 

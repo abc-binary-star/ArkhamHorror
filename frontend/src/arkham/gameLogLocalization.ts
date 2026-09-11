@@ -35,6 +35,7 @@ const fixedFragments = [
   [' draws ', 'gameLog.draws', (text: string) => ` ${text} `],
   [' chaos token', 'gameLog.chaosToken', (text: string) => ` ${text}`],
   [' chaos tokens', 'gameLog.chaosTokens', (text: string) => ` ${text}`],
+  [' discovered clue(s)', 'gameLog.discoveredClues', (text: string) => ` ${text}`],
 ] as const
 
 export function translateGameLogText(

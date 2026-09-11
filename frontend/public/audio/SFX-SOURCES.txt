@@ -1,0 +1,12 @@
+Gameplay sound effects
+
+User-provided Suno-generated audio, approved after trimming on 2026-09-11.
+Source: Desktop/yinxiao/裁剪版. Original recordings are preserved there.
+Trimmed with short fades, without time stretching.
+
+card-draw.mp3: 抽牌, 0.92 s
+card-play.mp3: 出牌, 0.54 s
+attack.mp3: 攻击, 0.52 s
+investigate.mp3: 调查, 1.28 s
+damage.mp3: 受到攻击, 1.26 s
+horror.mp3: 恐惧, 2.10 s

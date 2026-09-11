@@ -28,6 +28,11 @@ const HIDE_INERT_CARDS_KEY = 'arkhamHideInertCards'
 // happily run but no printed card would ever do.
 const CUSTOM_CARDS_KEY = 'arkhamCustomCardsEnabled'
 
+// Tuck the action toolbar away while the browser is fullscreen, so the board owns
+// the whole viewport. The toolbar slides back when the pointer reaches the top
+// edge. Off by default: the toolbar is the only way to leave the game.
+const AUTO_HIDE_TOOLBAR_KEY = 'arkhamAutoHideToolbarInFullscreen'
+
 export const useSettings = defineStore("settings", () => {
   const gameId = ref<string | null>(null)
   const splitView = ref(false)
@@ -122,6 +127,13 @@ export const useSettings = defineStore("settings", () => {
   function toggleShowBonded() {
     showBonded.value = !showBonded.value
   }
+
+  const autoHideToolbarInFullscreen = ref(localStorage.getItem(AUTO_HIDE_TOOLBAR_KEY) === 'true')
+
+  function setAutoHideToolbarInFullscreen(enabled: boolean) {
+    autoHideToolbarInFullscreen.value = enabled
+    localStorage.setItem(AUTO_HIDE_TOOLBAR_KEY, String(enabled))
+  }
   return {
     splitView,
     toggleSplitView,
@@ -142,5 +154,7 @@ export const useSettings = defineStore("settings", () => {
     setHideInertCards,
     customCardsEnabled,
     setCustomCardsEnabled,
+    autoHideToolbarInFullscreen,
+    setAutoHideToolbarInFullscreen,
   }
 })

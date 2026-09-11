@@ -1089,6 +1089,8 @@ handleCheckDefeated a@InvestigatorAttrs {..} source = do
   pure a
 
 handleAssignDamage a@InvestigatorAttrs {..} target = do
+  when (investigatorAssignedHealthDamage > 0) $ sendAudio "damage.mp3"
+  when (investigatorAssignedSanityDamage > 0) $ sendAudio "horror.mp3"
   push $ AssignedDamage target investigatorAssignedHealthDamage investigatorAssignedSanityDamage
   pure
     $ a

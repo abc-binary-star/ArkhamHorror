@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { clientLog, clientError } from '@/utils/clientLog'
+import { useGameAudio } from '@/arkham/composables/useGameAudio'
 import { ArrowLeft, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight } from '@lucide/vue'
 import {
   computed,
@@ -18,6 +19,8 @@ import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import confetti from '@/effects/confetti'
 import { useResizeObserver, useFullscreen } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
+import { useSettings } from '@/stores/settings'
 import { MenuItem } from '@headlessui/vue'
 import { Dropdown } from 'floating-vue'
 import {
@@ -416,6 +419,7 @@ const socketError = ref(false)
 const error = ref<string | null>(null)
 const solo = ref(false)
 const soundsDisabled = ref(localStorage.getItem('arkhamSoundsDisabled') === 'true')
+const { playAudioFile } = useGameAudio(soundsDisabled)
 const showOtherPlayersHands = ref(
   getGameLocalStorageItem(props.gameId, 'showOtherPlayersHands') === 'true',
 )
@@ -483,6 +487,42 @@ function leaveGame() {
 }
 
 const { isFullscreen, isSupported: fullscreenSupported, toggle: toggleFullscreen } = useFullscreen()
+
+// Fullscreen + the "hide the toolbar" preference: the action bar stops reserving
+// space and slides out of view until the pointer reaches the top edge. While the
+// bar's own surfaces are open (tools drawer, settings, shortcuts, undo popper)
+// the bar has to stay reachable, so it stays put.
+const TOOLBAR_REVEAL_ZONE_PX = 8
+const TOOLBAR_HIDE_ZONE_PX = 60
+
+const { autoHideToolbarInFullscreen } = storeToRefs(useSettings())
+const toolbarRevealed = ref(false)
+const undoMenuOpen = ref(false)
+const toolbarAutoHide = computed(() => isFullscreen.value && autoHideToolbarInFullscreen.value)
+const toolbarHidden = computed(
+  () =>
+    toolbarAutoHide.value &&
+    !toolbarRevealed.value &&
+    !showTools.value &&
+    !showSettings.value &&
+    !showShortcuts.value &&
+    !undoMenuOpen.value,
+)
+
+function handleToolbarPointerMove(event: PointerEvent) {
+  if (!toolbarAutoHide.value) return
+  if (event.clientY <= TOOLBAR_REVEAL_ZONE_PX) {
+    toolbarRevealed.value = true
+  } else if (event.clientY > TOOLBAR_HIDE_ZONE_PX) {
+    toolbarRevealed.value = false
+  }
+}
+
+// Leaving fullscreen (or turning the preference off) must never strand the bar
+// out of view with nothing left to summon it.
+watch(toolbarAutoHide, (active) => {
+  if (!active) toolbarRevealed.value = false
+})
 
 function updateGameLog(nextLog: readonly string[]) {
   const currentLog = gameLog.value
@@ -1035,15 +1075,6 @@ const scheduleApplyUpdate = useSingleFlight(
   applyDecodedUpdate,
   recoverFromFailedDecode,
 )
-
-function playAudioFile(fileName: string) {
-  if (soundsDisabled.value) return
-  // Only allow simple filenames from the server; audio files live under public/audio.
-  if (!/^[a-zA-Z0-9_.-]+\.(ogg|mp3|wav)$/i.test(fileName)) return
-
-  const audio = new Audio(`/audio/${fileName}`)
-  audio.play().catch((error) => console.warn(`Unable to play audio file: ${fileName}`, error))
-}
 
 function continueSkipAll() {
   if (skipAllPending.value.size === 0) return
@@ -1938,12 +1969,14 @@ onMounted(() => {
   ;(window as any).undo = undo
   ;(window as any).debugChoose = choose
   document.addEventListener('keydown', handleKeyPress)
+  window.addEventListener('pointermove', handleToolbarPointerMove, { passive: true })
   window.addEventListener('arkham-setting-change', handleSettingChange)
 })
 
 onBeforeRouteLeave(() => close())
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeyPress)
+  window.removeEventListener('pointermove', handleToolbarPointerMove)
   window.removeEventListener('arkham-setting-change', handleSettingChange)
   if (endTurnKeyArmTimer !== null) clearTimeout(endTurnKeyArmTimer)
   if (chooseDecksPoll !== null) clearTimeout(chooseDecksPoll)
@@ -1971,6 +2004,7 @@ onUnmounted(() => {
   <LoadState v-else-if="!ready" />
   <div
     class="tabletop-shell"
+    :class="{ 'tabletop-shell--toolbar-hidden': toolbarHidden }"
     v-else-if="ready && game && playerId"
     :style="{ '--epic-bar-height': epicBarHeight + 'px' }"
   >
@@ -2276,7 +2310,7 @@ onUnmounted(() => {
         </button>
       </div>
       <div class="game-bar-undo">
-        <Dropdown :triggers="['click']" theme="game-bar-undo" placement="bottom" :distance="6">
+        <Dropdown v-model:show="undoMenuOpen" :triggers="['click']" theme="game-bar-undo" placement="bottom" :distance="6">
           <button
             type="button"
             v-tooltip="$t('gameBar.undo')"
@@ -2369,7 +2403,7 @@ onUnmounted(() => {
           :closeSettings="() => (showSettings = false)"
         />
       </Draggable>
-      <CampaignLog v-if="showLog && game !== null" :game="game" :cards="cards" :playerId="playerId">
+      <CampaignLog v-if="showLog && game !== null" :game="game" :cards="cards" :playerId="playerId" on-dark>
         <template #header-leading>
           <button class="back-button" @click="showLog = false">
             <font-awesome-icon icon="arrow-left" class="back-icon" />
@@ -2556,7 +2590,7 @@ onUnmounted(() => {
           >
             {{ $t('watchReplay') }}
           </button>
-          <CampaignLog v-if="game !== null" :game="game" :cards="cards" :playerId="playerId" />
+          <CampaignLog v-if="game !== null" :game="game" :cards="cards" :playerId="playerId" on-dark />
         </div>
         <div
           v-if="showSidebar && isActualScenarioView"
@@ -3386,7 +3420,7 @@ header {
     text-transform: uppercase;
     background-color: var(--button-2);
     font-weight: bold;
-    color: #eee;
+    color: var(--button-text);
     font: Arial, sans-serif;
     &:hover {
       background-color: #311b3e;
@@ -3919,6 +3953,20 @@ header {
     gap: 4px;
     padding-inline: 10px;
     background-color: rgb(13 27 25 / 0.96);
+    transition: transform 180ms ease;
+  }
+
+  /* Auto-hidden toolbar (see `toolbarHidden`): the board takes the band the bar
+     was reserving, and the bar slides out until the pointer reaches the top
+     edge, where it overlays that band again. `pointer-events: none` keeps the
+     hidden bar from swallowing clicks aimed at the board beneath it. */
+  .tabletop-shell--toolbar-hidden .game-main {
+    padding-top: 0;
+  }
+
+  .tabletop-shell--toolbar-hidden .game-bar {
+    transform: translateY(-100%);
+    pointer-events: none;
   }
 
   .game-bar > div > :deep(button),
@@ -3933,6 +3981,13 @@ header {
 
   .game-tools-drawer {
     top: var(--game-bar-height);
+  }
+}
+
+/* After the desktop block above, so it wins the tie on the toolbar transition. */
+@media (prefers-reduced-motion: reduce) {
+  .game-bar {
+    transition: none;
   }
 }
 

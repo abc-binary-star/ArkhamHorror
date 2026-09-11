@@ -6,6 +6,7 @@ import { imgsrc, toCamelCase } from '@/arkham/helpers'
 import { useI18n } from 'vue-i18n';
 import { scenarioIdToI18n } from '@/arkham/types/Scenario'
 import { ScenarioOptions, defaultScenarioOptions, scenarioOptionsDecoder } from '@/arkham/types/ScenarioOptions';
+import { useDbCardStore } from '@/stores/dbCards'
 
 // Resolves a scenario name by id, including scenarios nested inside
 // multi-scenario side stories (e.g. Guardians of the Abyss).
@@ -17,6 +18,12 @@ function findScenarioName(scenarioId: string): string | undefined {
     if (part) return part.name
   }
   return undefined
+}
+
+// The card database carries the localized scenario titles; the scenarios table
+// is English-only, so it is only the fallback.
+function findScenarioTitle(scenarioId: string): string | undefined {
+  return useDbCardStore().getDbCard(scenarioId)?.name ?? findScenarioName(scenarioId)
 }
 
 export type CampaignStep
@@ -295,7 +302,7 @@ export function campaignStepName(game: Game, step: CampaignStep, scenario?: Scen
       if (te(key)) return t(key)
     }
 
-    return findScenarioName(scenarioId) || "Unknown Scenario"
+    return findScenarioTitle(scenarioId) || "Unknown Scenario"
   }
 
   if (step.tag === 'StandaloneScenarioStep') {
@@ -317,17 +324,17 @@ export function campaignStepName(game: Game, step: CampaignStep, scenario?: Scen
       const key = `${prefix}.names.${part}`
       if (te(key)) return t(key)
     }
-    return findScenarioName(scenarioId) || "Unknown Scenario"
+    return findScenarioTitle(scenarioId) || "Unknown Scenario"
   }
 
   if (step.tag === 'ScenarioStep') {
     const scenarioId = step.contents.slice(1)
-    return findScenarioName(scenarioId) || "Unknown Scenario"
+    return findScenarioTitle(scenarioId) || "Unknown Scenario"
   }
 
   if (step.tag === 'ScenarioStepWithOptions') {
     const scenarioId = step.contents[0].slice(1)
-    return findScenarioName(scenarioId) || "Unknown Scenario"
+    return findScenarioTitle(scenarioId) || "Unknown Scenario"
   }
 
   if (step.tag === 'InterludeStep') {

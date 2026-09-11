@@ -54,12 +54,12 @@ const { t } = useI18n()
   font-family: teutonic, sans-serif;
   font-size: 1.1em;
   font-weight: normal;
-  color: rgba(255,255,255,0.75);
+  color: var(--title);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0 0 10px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
 }
 
 .subhead {
@@ -67,7 +67,7 @@ const { t } = useI18n()
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.07em;
-  color: rgba(255,255,255,0.35);
+  color: var(--text-dim);
   margin: 10px 0 6px;
 }
 
@@ -86,7 +86,7 @@ const { t } = useI18n()
     margin: 0;
     padding: 7px 10px;
     border-radius: 5px;
-    background: rgba(255,255,255,0.04);
+    background: rgba(0, 0, 0, 0.04);
     color: var(--title);
     font-size: 0.92rem;
     line-height: 1.4;
@@ -94,7 +94,7 @@ const { t } = useI18n()
 
     &::before {
       content: '–';
-      color: rgba(255,255,255,0.25);
+      color: var(--text-dim);
       flex-shrink: 0;
     }
   }

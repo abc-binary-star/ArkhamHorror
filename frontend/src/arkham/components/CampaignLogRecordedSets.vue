@@ -148,12 +148,12 @@ const setValueKey = (setKey: string, setValue: any, idx: number): string => {
   font-family: teutonic, sans-serif;
   font-size: 1.1em;
   font-weight: normal;
-  color: rgba(255,255,255,0.75);
+  color: var(--title);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0 0 10px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
 }
 
 .log-list {
@@ -171,7 +171,7 @@ const setValueKey = (setKey: string, setValue: any, idx: number): string => {
     margin: 0;
     padding: 7px 10px;
     border-radius: 5px;
-    background: rgba(255,255,255,0.04);
+    background: rgba(0, 0, 0, 0.04);
     color: var(--title);
     font-size: 0.92rem;
     line-height: 1.4;
@@ -179,7 +179,7 @@ const setValueKey = (setKey: string, setValue: any, idx: number): string => {
 
     &::before {
       content: '–';
-      color: rgba(255,255,255,0.25);
+      color: var(--text-dim);
       flex-shrink: 0;
     }
   }
@@ -203,14 +203,14 @@ const setValueKey = (setKey: string, setValue: any, idx: number): string => {
   cursor: pointer;
   user-select: none;
 
-  &:hover { color: rgba(255,255,255,0.95); }
+  &:hover { color: var(--text); }
 }
 
 .chevron {
   width: 1em;
   height: 1em;
   margin-left: auto;
-  color: rgba(255,255,255,0.3);
+  color: var(--text-dim);
   flex-shrink: 0;
   transition: transform 0.2s ease;
 
@@ -232,7 +232,7 @@ const setValueKey = (setKey: string, setValue: any, idx: number): string => {
     margin: 0;
     padding: 6px 10px;
     border-radius: 5px;
-    background: rgba(255,255,255,0.04);
+    background: rgba(0, 0, 0, 0.04);
     color: var(--title);
     font-size: 0.88rem;
   }
@@ -243,7 +243,7 @@ const setValueKey = (setKey: string, setValue: any, idx: number): string => {
   height: 20px;
   object-fit: contain;
   flex-shrink: 0;
-  filter: brightness(0) invert(1) opacity(0.75);
+  filter: brightness(0) opacity(0.7);
 }
 
 .step-name {
@@ -259,7 +259,7 @@ const setValueKey = (setKey: string, setValue: any, idx: number): string => {
   padding: 1px 7px;
   border-radius: 4px;
   background: rgba(74,196,86,0.15);
-  color: #6dd97a;
+  color: var(--spooky-green);
   border: 1px solid rgba(74,196,86,0.25);
   font-size: 0.78rem;
   font-weight: 700;
@@ -268,7 +268,7 @@ const setValueKey = (setKey: string, setValue: any, idx: number): string => {
 
 .delta--negative {
   background: rgba(180,30,30,0.2);
-  color: #e07878;
+  color: var(--delete);
   border-color: rgba(180,30,30,0.35);
 }
 
@@ -281,7 +281,7 @@ const setValueKey = (setKey: string, setValue: any, idx: number): string => {
   padding: 1px 7px;
   border-radius: 4px;
   background: rgba(214,178,92,0.15);
-  color: #d6b25c;
+  color: var(--brass-dim);
   border: 1px solid rgba(214,178,92,0.3);
   font-size: 0.78rem;
   font-weight: 700;

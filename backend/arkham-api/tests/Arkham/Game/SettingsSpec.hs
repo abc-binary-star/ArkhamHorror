@@ -2,7 +2,6 @@ module Arkham.Game.SettingsSpec (spec) where
 
 import Arkham.Game.Settings
 import Data.Aeson (decode, encode)
-import Data.Aeson.Types (Value (String))
 import Test.Hspec
 import Prelude
 
@@ -75,7 +74,7 @@ spec = do
             , random <- flags
             , step <- [0 .. 40]
             , case retainedStepFloor mode checkpoint random step of
-                Just floor -> floor > step
+                Just floorStep -> floorStep > step
                 Nothing -> False
             ]
       violations `shouldBe` []

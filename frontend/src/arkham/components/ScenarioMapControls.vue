@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Move } from '@lucide/vue'
 import { ArrowUturnLeftIcon, LockClosedIcon, LockOpenIcon } from '@heroicons/vue/20/solid'
@@ -20,6 +21,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const collapsed = ref(false)
 </script>
 
 <template>
@@ -27,6 +29,18 @@ const { t } = useI18n()
    plus layout reset once anything has been dragged. Zoom lives on the
    mouse wheel; fullscreen lives in the game bar. -->
 <div class="map-corner-controls">
+  <button
+    type="button"
+    class="zoom-btn"
+    :aria-expanded="!collapsed"
+    :aria-label="t(collapsed ? 'multiplayerTable.expandMapControls' : 'multiplayerTable.collapseMapControls')"
+    v-tooltip="t(collapsed ? 'multiplayerTable.expandMapControls' : 'multiplayerTable.collapseMapControls')"
+    @pointerdown.stop
+    @click.stop="collapsed = !collapsed"
+  >
+    <span aria-hidden="true">{{ collapsed ? '‹' : '›' }}</span>
+  </button>
+  <template v-if="!collapsed">
   <button type="button" class="zoom-btn touch-zoom" :aria-label="t('multiplayerTable.zoomOut')" @click.stop="emit('zoomOut')">−</button>
   <button type="button" class="zoom-btn touch-zoom" :aria-label="t('multiplayerTable.zoomIn')" @click.stop="emit('zoomIn')">+</button>
   <button type="button" class="zoom-btn" :class="{ 'zoom-btn--active': mapMoveMode }" :aria-pressed="mapMoveMode" :aria-label="t('multiplayerTable.moveMap')" v-tooltip="t('multiplayerTable.moveMap')" @click.stop="emit('update:mapMoveMode', !mapMoveMode)">
@@ -52,6 +66,7 @@ const { t } = useI18n()
     <ArrowUturnLeftIcon class="zoom-btn__icon" />
     <span>{{ t('multiplayerTable.resetMapShort') }}</span>
   </button>
+  </template>
 </div>
 </template>
 

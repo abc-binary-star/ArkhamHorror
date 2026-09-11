@@ -50,12 +50,12 @@ defineProps<{
   font-family: teutonic, sans-serif;
   font-size: 1.1em;
   font-weight: normal;
-  color: rgba(255,255,255,0.75);
+  color: var(--title);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0 0 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-bottom: var(--edge-width) solid var(--edge-dim);
 }
 
 table {
@@ -71,13 +71,13 @@ table {
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.06em;
-    color: rgba(255,255,255,0.35);
+    color: var(--text-dim);
     padding: 4px 8px;
   }
 }
 
 .partner td {
-  background: rgba(255,255,255,0.04);
+  background: rgba(0, 0, 0, 0.04);
   border-radius: 5px;
   padding: 8px 10px;
   color: var(--title);

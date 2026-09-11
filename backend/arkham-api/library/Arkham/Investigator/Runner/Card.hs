@@ -894,6 +894,8 @@ handleInvestigatorDrewPlayerCardFrom a@InvestigatorAttrs {..} iid card mDeck msg
   pure a
 
 handleDoInvestigatorDrewPlayerCardFrom a@InvestigatorAttrs {..} iid card mdeck = do
+  -- Generic table foley only; never include the drawn card's identity.
+  sendAudio "card-draw.mp3"
   afterDraw <-
     checkWindows [mkAfter $ Window.DrawCard iid (toCard card) (fromMaybe Deck.NoDeck mdeck)]
   inLimit <- passesLimits iid (toCard card)

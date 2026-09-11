@@ -6,6 +6,7 @@ import { Game } from '@/arkham/types/Game';
 import { handleEmbeddedI18n } from '@/arkham/i18n';
 import { knownTranslationsFor, translateGameLogText } from '@/arkham/gameLogLocalization';
 import { chaosTokenImage } from '@/arkham/types/ChaosToken';
+import { useDbCardStore } from '@/stores/dbCards';
 
 export default defineComponent({
   props: {
@@ -16,7 +17,15 @@ export default defineComponent({
     // Global scope so the pair stays reactive when SettingsForm swaps the
     // active locale at runtime via setLocaleMessage.
     const { locale, messages } = useI18n({ useScope: 'global' })
-    return { activeLocale: locale, activeMessages: messages }
+    const dbCards = useDbCardStore()
+    const localizeCardName = (name: string, cardCode: string): string =>
+      dbCards.getDbCard(cardArt(cardCode))?.name ?? name
+    const localizeInvestigatorName = (name: string, investigatorId: string): string => {
+      const dbCard = dbCards.getDbCard(cardArt(investigatorId))
+      if (!dbCard) return name
+      return dbCard.subname ? `${dbCard.name}: ${dbCard.subname}` : dbCard.name
+    }
+    return { activeLocale: locale, activeMessages: messages, localizeCardName, localizeInvestigatorName }
   },
   render() {
     const msg = handleEmbeddedI18n(this.msg, this.$t)
@@ -34,7 +43,8 @@ export default defineComponent({
         if (found) {
           const [, cardName, cardId] = found
           if (cardName && cardId) {
-            return h('span', { 'data-image-id': cardId }, cardName.replace(/\\"/g, "\""))
+            const display = this.localizeCardName(cardName.replace(/\\"/g, "\""), cardId)
+            return h('span', { 'data-image-id': cardId }, display)
           }
         }
       } else if (/{investigator:"((?:[^"]|\\.)+)":"([^"]+)"}/.test(split)) {
@@ -42,7 +52,8 @@ export default defineComponent({
         if (found) {
           const [, name, investigatorId ] = found
           if (investigatorId) {
-            return name ? h('span', { 'data-image-id': investigatorId, 'class': 'card--sideways' }, name.replace(/\\"/g, "\"")) : split
+            const display = name ? this.localizeInvestigatorName(name.replace(/\\"/g, "\""), investigatorId) : name
+            return display ? h('span', { 'data-image-id': investigatorId, 'class': 'card--sideways' }, display) : split
           }
         }
       } else if (/{enemy:"((?:[^"]|\\.)+)":(.+):"([^"]+)"}/.test(split)) {
@@ -50,7 +61,9 @@ export default defineComponent({
         if (found) {
           const [, name, , cardCode ] = found
           if (cardCode) {
-            return name ? h('span', { 'data-image-id': cardCode }, name.replace(/\\"/g, "\"")) : split
+            if (!name) return split
+            const display = this.localizeCardName(name.replace(/\\"/g, "\""), cardCode)
+            return display ? h('span', { 'data-image-id': cardCode }, display) : split
           }
         }
       } else if (/{location:"((?:[^"]|\\.)+)":(.+):"([^"]+)"}/.test(split)) {
@@ -58,24 +71,24 @@ export default defineComponent({
         if (found) {
           const [, name, locationId, cardCode ] = found
           const location = this.game.locations[locationId]
+          if (!name) return split
+          const display = this.localizeCardName(name.replace(/\\"/g, "\""), location?.cardCode ?? cardCode)
 
           if (location) {
             const actualCardCode = cardArt(location.cardCode, location.revealed ? '' : 'b')
-            return name ? h('span', { 'data-image-id': actualCardCode }, name.replace(/\\"/g, "\"")) : split
+            return h('span', { 'data-image-id': actualCardCode }, display)
           }
 
-          if (cardCode) {
-            return name ? h('span', { 'data-image-id': cardCode }, name.replace(/\\"/g, "\"")) : split
-          }
-
-          return name ? h('span', { 'data-image-id': cardCode }, name.replace(/\\"/g, "\"")) : split
+          return h('span', { 'data-image-id': cardCode }, display)
         }
       } else if (/{location:"((?:[^"]|\\.)+)":(.+)}/.test(split)) {
         const found = split.match(/{location:"((?:[^"]|\\.)+)":(.+)}/)
         if (found) {
           const [, name, locationId ] = found
           if (locationId) {
-            return name ? h('span', { 'data-image-id': locationId }, name.replace(/\\"/g, "\"")) : split
+            if (!name) return split
+            const display = this.localizeCardName(name.replace(/\\"/g, "\""), this.game.locations[locationId]?.cardCode ?? locationId)
+            return display ? h('span', { 'data-image-id': locationId }, display) : split
           }
         }
       } else if (/{token:"([^"]+)"}/.test(split)) {

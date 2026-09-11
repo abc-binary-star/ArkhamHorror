@@ -197,6 +197,10 @@ instance RunMessage SkillTest where
         & (iconValuesL .~ icons)
         & (baseValueL .~ updatedBaseValue)
     Do BeginSkillTestAfterFast -> do
+      case skillTestAction of
+        Just Action.Fight -> sendAudio "attack.mp3"
+        Just Action.Investigate -> sendAudio "investigate.mp3"
+        _ -> pure ()
       pure $ s & (stepL .~ SkillTestFastWindow1)
     ReplaceSkillTestSkill (FromSkillType fsType) (ToSkillType tsType) -> do
       let
