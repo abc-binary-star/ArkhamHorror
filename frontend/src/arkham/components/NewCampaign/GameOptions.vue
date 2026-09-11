@@ -899,6 +899,7 @@ input[type='radio']:focus-visible + label {
 }
 
 .segmented {
+  position: relative;
   display: grid;
   border-radius: 3px;
   overflow: hidden;
