@@ -99,19 +99,6 @@ button {
   }
 }
 
-.pick-supplies-container {
-  background: var(--surface-panel);
-  box-shadow: var(--shadow-3);
-  width: calc(100% - 20px);
-  margin: 0 auto;
-  gap: 10px;
-  p {
-    margin: 0;
-    padding: 0;
-  }
-
-}
-
 .pick-supplies {
   background: var(--surface-panel);
   box-shadow: var(--shadow-3);

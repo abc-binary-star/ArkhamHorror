@@ -477,28 +477,4 @@ h2 {
   text-transform: uppercase;
 }
 
-.claim-seat-link {
-  padding: 4px 11px;
-  background: var(--spooky-green);
-  border: var(--edge-width) solid var(--edge-on-accent);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-2);
-  color: var(--button-1-text) !important;
-  text-decoration: none;
-  font-size: 0.78em;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: var(--font-black);
-  transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease;
-
-  &:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
-  }
-
-  &:active {
-    transform: translate(1px, 1px);
-    box-shadow: none;
-  }
-}
 </style>

@@ -351,20 +351,6 @@ watch(choices, (newChoices) => {
   position: relative;
 }
 
-.discard--can-use{
-  &::before {
-    content: '';
-    position: absolute;
-    border-radius: 6px;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;      
-    z-index: var(--z-index-1);
-    box-shadow: inset 0 0 0 2px var(--select);
-  }
-}
-
 .deck, .card {
   border-radius: 6px;
   max-width: var(--card-width);

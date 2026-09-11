@@ -1787,10 +1787,6 @@ select {
   font-size: 0.72rem;
 }
 
-.cancel-add {
-  opacity: 0.7;
-}
-
 .step-actions button,
 .add {
   align-self: flex-start;

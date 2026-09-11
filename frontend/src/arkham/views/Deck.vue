@@ -929,30 +929,6 @@ watch(deckRef, (el) => {
   margin: 0 0 0.7rem;
 }
 
-.overlay-row {
-  align-items: end;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-
-  label {
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    font-size: 0.82rem;
-    gap: 0.25rem;
-  }
-
-  select {
-    background: var(--surface-raised, #f4efe4);
-    border: 1px solid color-mix(in srgb, var(--spooky-green) 30%, var(--box-border));
-    border-radius: 4px;
-    color: var(--text);
-    font-size: 0.9rem;
-    padding: 0.35rem;
-  }
-}
-
 .overlay-actions {
   display: flex;
   gap: 0.5rem;

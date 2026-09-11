@@ -1360,10 +1360,6 @@ section {
   68% { filter: brightness(1); }
 }
 
-.status-bar {
-  text-align: center;
-}
-
 button {
   transition: all 0.3s ease-in;
   border: 0;
@@ -1432,10 +1428,6 @@ button:hover {
 }
 
 
-.status-bar:empty {
-  display: none;
-}
-
 .hide {
   opacity: 0;
 }
@@ -1498,13 +1490,6 @@ h2 {
   font-family: "Teutonic";
   letter-spacing: 1px;
   font-size: 1.7em;
-}
-
-.standalone-label {
-  text-transform: uppercase;
-  color: white;
-  background-color: var(--neutral-extra-dark);
-  padding: 10px;
 }
 
 .dropdown {

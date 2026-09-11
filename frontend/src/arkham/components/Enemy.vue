@@ -1023,11 +1023,6 @@ img.card.source-highlight {
   overflow: auto;
 }
 
-.swarm-popover__card-wrap {
-  position: relative;
-  flex: 0 0 auto;
-}
-
 .swarm-popover__card {
   width: calc(var(--card-width, 100px) * 1.1);
   border-radius: 6px;

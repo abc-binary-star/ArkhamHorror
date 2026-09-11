@@ -875,11 +875,6 @@ use {
   pointer-events: stroke;
 }
 
-.fullscreen-button {
-  cursor: pointer;
-  opacity: 0.85;
-  &:hover { opacity: 1; }
-}
 /* optional hover pop */
 /*.route:hover .route-base { stroke-width: 7 }
 .route:hover .route-highlight { stroke-width: 3.6 }*/

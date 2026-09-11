@@ -738,12 +738,6 @@ i.action {
   stroke-width: 2.2;
 }
 
-.turn-info {
-  display: flex;
-  align-self: center;
-  align-items: center;
-}
-
 .investigator--can-interact {
   border: 2px solid var(--select);
   border-radius: 2px;

@@ -951,20 +951,6 @@ const asComparison = computed(
   }
 }
 
-.use-binding {
-  align-self: flex-start;
-  background: none;
-  border: none;
-  color: #9ca3af;
-  cursor: pointer;
-  font-size: 0.7rem;
-  padding: 0;
-
-  &:hover {
-    color: #adf;
-  }
-}
-
 /* The row aligns to the top so a field with a note under it does not drag its
  * neighbours down; the button still has to match the field it clears, which is
  * what it opts back into here. */

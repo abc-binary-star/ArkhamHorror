@@ -367,38 +367,5 @@ defineExpose({
 }
 
 
-.btn-submit {
-  padding: 8px 18px;
-  background: var(--spooky-green);
-  border: var(--edge-width) solid var(--edge-on-accent);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-2);
-  color: var(--button-1-text);
-  cursor: pointer;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 0.9em;
-  font-weight: var(--font-black);
-  transition: transform 80ms ease, box-shadow 80ms ease, filter 120ms ease;
-
-  &:hover:not(:disabled) {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
-  }
-
-  &:active:not(:disabled) {
-    transform: translate(1px, 1px);
-    box-shadow: none;
-  }
-
-  &:disabled {
-    background: var(--button);
-    border-color: var(--edge-faint);
-    box-shadow: var(--shadow-1);
-    color: var(--text-faint);
-    cursor: not-allowed;
-  }
-}
-
 .hidden { display: none; }
 </style>
