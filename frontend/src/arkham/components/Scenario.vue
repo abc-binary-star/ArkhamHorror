@@ -3420,7 +3420,6 @@ async function addChaosToken(face: any) {
 </template>
 
 <style scoped>
-.shelf-total-label { display: inline-flex; align-items: center; font-size: inherit; }
 .shelf-label-icon { width: 13px; height: 13px; margin-right: 4px; vertical-align: -2px; }
 .card {
   border-radius: 5px;
@@ -3796,16 +3795,6 @@ async function addChaosToken(face: any) {
   border-radius: 3px;
 }
 
-.portrait--can-move {
-  cursor: pointer;
-  border: 3px solid var(--select);
-}
-
-.location--can-move-to {
-  border: 3px solid var(--select);
-  cursor: pointer;
-}
-
 .agenda-container,
 .act-container {
   align-self: flex-start;
@@ -3846,40 +3835,6 @@ async function addChaosToken(face: any) {
     opacity: 0.85;
     mix-blend-mode: saturation;
   }
-}
-
-.view-out-of-play-button {
-  text-decoration: none;
-  position: absolute;
-  transform: translate(100%, -50%) rotate(90deg) translate(0%, 50%) translate(0%, 10px);
-  svg {
-    transform: rotate(-90deg);
-  }
-  transform-origin: center left;
-  top: 0px;
-  right: 0px;
-  border: 0;
-  color: white;
-  background: var(--background-mid);
-  font-size: 1.2em;
-  padding: 5px 15px;
-}
-
-.view-removed-from-play-button {
-  text-decoration: none;
-  position: absolute;
-  transform: translate(100%, -50%) rotate(90deg) translate(0%, 50%) translate(0%, 50px);
-  svg {
-    transform: rotate(-90deg);
-  }
-  transform-origin: center left;
-  top: 0px;
-  right: 0px;
-  border: 0;
-  color: white;
-  background: #a5b5bc;
-  font-size: 1.2em;
-  padding: 5px 15px;
 }
 
 .scenario-body > .scenario-cards,
@@ -4371,12 +4326,6 @@ async function addChaosToken(face: any) {
   white-space: nowrap;
 }
 
-.encounter-discard-placeholder {
-  width: var(--card-width);
-  aspect-ratio: var(--card-aspect);
-  visibility: hidden;
-}
-
 .scenario-balance-placeholder {
   flex: 0 1 var(--card-width);
   width: var(--card-width);
@@ -4415,21 +4364,6 @@ async function addChaosToken(face: any) {
   width: var(--card-width);
   aspect-ratio: var(--card-tarot-aspect);
   margin: 0;
-}
-
-.tarot-card-choices {
-  background: v-bind(tarotCardBackground);
-  background-position: center;
-  background-size: contain;
-  position: absolute;
-  z-index: var(--z-index-1000);
-  margin: auto;
-  inset: 0;
-  width: fit-content;
-  height: fit-content;
-  display: flex;
-  gap: 10px;
-  padding: 10px;
 }
 
 .tarot-card-container {
@@ -4833,10 +4767,6 @@ async function addChaosToken(face: any) {
   .scenario-body > .scenario-cards > * {
     position: relative;
     z-index: 1;
-  }
-
-  #player-zone :deep(.hand-size) {
-    display: none;
   }
 
   #player-zone :deep(.player-info),
@@ -5309,17 +5239,6 @@ async function addChaosToken(face: any) {
   }
 
   .table-shelf-header__eyebrow,
-  .table-shelf-header__totals {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 8px;
-    color: rgb(214 186 128 / 0.76);
-    font-size: 0.66rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
   .table-shelf-header h2 {
     margin: 6px 0 2px;
     color: rgb(248 239 211 / 0.98);
@@ -5328,55 +5247,7 @@ async function addChaosToken(face: any) {
     line-height: 1.15;
   }
 
-  .table-shelf-header__subtitle {
-    margin: 0 0 8px;
-    color: rgb(214 220 210 / 0.56);
-    font-size: 0.72rem;
-  }
-
-  .table-shelf-header__focus {
-    display: grid;
-    gap: 1px;
-    margin-bottom: 9px;
-    padding: 7px 9px;
-    border-left: 2px solid rgb(229 194 107 / 0.84);
-    background: rgb(229 194 107 / 0.08);
-  }
-
   .table-shelf-header__focus span,
-  .table-shelf-header__focus small {
-    color: rgb(214 220 210 / 0.62);
-    font-size: 0.66rem;
-  }
-
-  .table-shelf-header__focus strong {
-    color: rgb(248 239 211 / 0.98);
-    font-size: 0.88rem;
-    font-weight: 600;
-  }
-
-  .table-shelf-header__totals {
-    align-items: flex-start;
-    gap: 4px;
-    letter-spacing: 0;
-    text-transform: none;
-  }
-
-  .table-shelf-header__totals span {
-    display: grid;
-    gap: 1px;
-    min-width: 0;
-    color: rgb(214 220 210 / 0.56);
-    font-size: 0.64rem;
-  }
-
-  .table-shelf-header__totals b {
-    color: rgb(244 239 228 / 0.94);
-    font-family: Teutonic, Georgia, serif;
-    font-size: 0.9rem;
-    font-weight: 500;
-  }
-
   /* ---- teammate rail (separate seats only) ---- */
   .scenario-body.scenario-body--multiseat.scenario-body--online > .teammate-rail {
     grid-column: 3;
@@ -6270,24 +6141,6 @@ async function addChaosToken(face: any) {
 .table-summary-title strong { color: #eee5cf; font-family: Arno, Georgia, serif; }
 .table-summary-action { font-size: 0.72rem; color: #d5d7cb; }
 .table-summary-action small { flex: 0 0 auto; color: #bfa976; }
-.table-summary-totals { gap: 10px; color: #cbb47f; font-size: 0.7rem; }
-.scenario-progress {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 5px 12px;
-  width: 100%;
-  padding: 4px 8px;
-  color: #d8d5c8;
-  background: rgb(8 18 18 / 0.58);
-  border: 1px solid rgb(205 175 107 / 0.24);
-  border-radius: 4px;
-  font-size: 0.68rem;
-}
-.scenario-progress__item { display: inline-flex; align-items: baseline; gap: 4px; }
-.scenario-progress__item span { color: #cbb47f; }
-.scenario-progress__item strong { color: #f0e4c2; font-size: 0.82rem; }
-.scenario-progress p { margin: 0 0 0 auto; color: #bfc5bc; }
 .table-shelf-header--navigation {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto;
