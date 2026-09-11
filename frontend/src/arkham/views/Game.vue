@@ -15,7 +15,7 @@ import { useToast } from 'vue-toastification'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import confetti from '@/effects/confetti'
-import { useWebSocket, useResizeObserver, useFullscreen } from '@vueuse/core'
+import { useResizeObserver, useFullscreen } from '@vueuse/core'
 import { MenuItem } from '@headlessui/vue'
 import { Dropdown } from 'floating-vue'
 import {
@@ -57,12 +57,15 @@ import { useCardStore } from '@/stores/cards'
 import { useUserStore } from '@/stores/user'
 import { useEventStore } from '@/arkham/stores/event'
 import { useEventTimer } from '@/arkham/composables/useEventTimer'
+import { useFocusLight } from '@/arkham/composables/useFocusLight'
+import { useGameSocket, useSingleFlight } from '@/arkham/composables/useGameSocket'
+import { useImagePreloader } from '@/arkham/composables/useImagePreloader'
+import { useTurnTitleFlash } from '@/arkham/composables/useTurnTitleFlash'
 import { awaitingOrganizer, type SharedEventState } from '@/arkham/types/EpicEvent'
 import { useMenu } from '@/arkham/composables/menu'
 import useEmitter from '@/arkham/composables/useEmitter'
 import { useDebug } from '@/arkham/debug'
 import { cardImg, imgsrc, isTypingTarget } from '@/arkham/helpers'
-import { cardFaceImages, cardHasDistinctBack } from '@/arkham/cardImages'
 import { handleEmbeddedI18n } from '@/arkham/i18n'
 import { getGameLocalStorageItem, setGameLocalStorageItem } from '@/arkham/localStorage'
 import * as ArkhamGame from '@/arkham/types/Game'
@@ -260,16 +263,15 @@ watch(hasEventBar, (present) => {
   if (!present) epicBarHeight.value = 0
 })
 
-const preloaded = new Set<string>()
-const preloading = new Set<string>()
-let mouseX = 0
-let mouseY = 0
-let focusLightObserver: MutationObserver | null = null
-let focusLightAnimationFrame: number | null = null
-const flashlightX = ref(0)
-const flashlightY = ref(0)
-const focusLightX = ref(-1000)
-const focusLightY = ref(-1000)
+const { preloadImages } = useImagePreloader()
+const {
+  pointer,
+  flashlightX,
+  flashlightY,
+  focusLightX,
+  focusLightY,
+  updateFocusLight,
+} = useFocusLight()
 
 store.fetchCards()
 store.fetchCustomCards(props.gameId)
@@ -716,39 +718,8 @@ function activePlayerBelongsToCurrentPlayer(g: ArkhamGame.Game, currentPlayerId:
   )
 }
 
-// "Your turn" tab-title flash: a player idling in another tab/window gets no
-// audio or toast, so blink the title until they come back. Toast covers the
-// visible case; the sound cue already exists below.
-let turnTitleBase = ''
-let turnTitleFlashInterval: ReturnType<typeof setInterval> | null = null
-
-function stopTurnTitleFlash() {
-  if (turnTitleFlashInterval) {
-    clearInterval(turnTitleFlashInterval)
-    turnTitleFlashInterval = null
-  }
-  if (turnTitleBase) {
-    document.title = turnTitleBase
-    turnTitleBase = ''
-  }
-}
-
-function flashTurnTitle() {
-  if (!document.hidden) return
-  stopTurnTitleFlash()
-  turnTitleBase = document.title
-  let on = true
-  const apply = () => {
-    document.title = (on ? '▶ ' : '') + turnTitleBase
-    on = !on
-  }
-  apply()
-  turnTitleFlashInterval = setInterval(apply, 1200)
-}
-
-function onVisibilityChange() {
-  if (!document.hidden) stopTurnTitleFlash()
-}
+// "Your turn" tab-title flash; the watcher below decides when to start it.
+const { flashTurnTitle } = useTurnTitleFlash()
 
 watch(activePlayerId, (newActivePlayerId, oldActivePlayerId) => {
   if (!newActivePlayerId || !oldActivePlayerId || newActivePlayerId === oldActivePlayerId) return
@@ -902,31 +873,13 @@ const gameCardOnlyDecoder = JsonDecoder.object<GameCardOnly>(
 )
 
 // Socket Handling
-const onError = () => {
+const onDisconnect = () => {
   processing.value = false
   storyAnswerPending.value = false
   if (game.value && oldQuestion.value) {
     setGameQuestion(oldQuestion.value)
   }
   socketError.value = true
-}
-let hasConnectedOnce = false
-
-const onConnected = () => {
-  socketError.value = false
-  processing.value = false
-  // Anything published while the socket was down is gone -- the server drops
-  // updates for rooms with no subscriber rather than buffering them. On a
-  // RECONNECT (not the initial connect, which the page load already fetched
-  // for) pull the current state so we can't sit on a stale board.
-  if (hasConnectedOnce) void resyncGame()
-  hasConnectedOnce = true
-}
-
-const onMessage = (_ws: WebSocket, event: MessageEvent) => {
-  const result = JSON.parse(event.data)
-  handleResult(result)
-  oldQuestion.value = null
 }
 
 let qHead = 0
@@ -941,8 +894,6 @@ const qPop = () => {
   }
   return resultQueue.value[qHead++]
 }
-let decoding = false
-let pendingUpdate: string | null = null
 
 function entitiesMoved(previous: ArkhamGame.Game, current: ArkhamGame.Game) {
   const placementChanged = (
@@ -986,79 +937,69 @@ function applyGameUpdate(updatedGame: ArkhamGame.Game, locked: boolean) {
   }
 }
 
-function scheduleApplyUpdate(payload: string) {
-  if (decoding) {
-    pendingUpdate = payload
-    return
-  }
-  decoding = true
-  ArkhamGame.gameDecoder
-    .decodePromise(payload)
-    .then((updatedGame) => {
-      const locked = uiLock.value
-      // Behind a revelation: refresh the board but keep the question hidden so the
-      // player can't act until they dismiss it. On unlock the queued GameUpdate is
-      // replayed (locked === false) and restores the real question + side effects.
-      applyGameUpdate(updatedGame, locked)
-      updateGameLog(updatedGame.log)
-      preloadImages(updatedGame)
-      if (!locked) {
-        // PlayerTabs owns in-scenario perspective changes so tab routing and
-        // return navigation remain coordinated. Campaign/setup screens do not
-        // mount PlayerTabs, though, so follow another pending question when the
-        // current seat has finished answering. Some sequential group stories
-        // keep an empty Read question parked for every seat, so presence alone
-        // does not mean the current seat still has an answer to give.
-        const questionPlayers = Object.keys(updatedGame.question)
-        const actionableQuestionPlayers = questionPlayers.filter(
-          (pid) => ArkhamGame.choices(updatedGame, pid).length > 0,
-        )
-        const currentPlayer = playerId.value ?? ''
-        const currentQuestion = updatedGame.question[currentPlayer]
-        const currentReadIsWaiting =
-          questionTag(currentQuestion) === 'Read' &&
-          ArkhamGame.choices(updatedGame, currentPlayer).length === 0 &&
-          actionableQuestionPlayers.length > 0
-        const nextQuestionPlayer = !questionPlayers.includes(currentPlayer)
-          ? questionPlayers[0]
-          : currentReadIsWaiting
-            ? actionableQuestionPlayers[0]
-            : null
+async function applyDecodedUpdate(updatedGame: ArkhamGame.Game): Promise<void> {
+  const locked = uiLock.value
+  // Behind a revelation: refresh the board but keep the question hidden so the
+  // player can't act until they dismiss it. On unlock the queued GameUpdate is
+  // replayed (locked === false) and restores the real question + side effects.
+  applyGameUpdate(updatedGame, locked)
+  updateGameLog(updatedGame.log)
+  preloadImages(updatedGame)
+  if (!locked) {
+    // PlayerTabs owns in-scenario perspective changes so tab routing and
+    // return navigation remain coordinated. Campaign/setup screens do not
+    // mount PlayerTabs, though, so follow another pending question when the
+    // current seat has finished answering. Some sequential group stories
+    // keep an empty Read question parked for every seat, so presence alone
+    // does not mean the current seat still has an answer to give.
+    const questionPlayers = Object.keys(updatedGame.question)
+    const actionableQuestionPlayers = questionPlayers.filter(
+      (pid) => ArkhamGame.choices(updatedGame, pid).length > 0,
+    )
+    const currentPlayer = playerId.value ?? ''
+    const currentQuestion = updatedGame.question[currentPlayer]
+    const currentReadIsWaiting =
+      questionTag(currentQuestion) === 'Read' &&
+      ArkhamGame.choices(updatedGame, currentPlayer).length === 0 &&
+      actionableQuestionPlayers.length > 0
+    const nextQuestionPlayer = !questionPlayers.includes(currentPlayer)
+      ? questionPlayers[0]
+      : currentReadIsWaiting
+        ? actionableQuestionPlayers[0]
+        : null
 
-        if (
-          solo.value &&
-          !props.spectate &&
-          nextQuestionPlayer &&
-          !scenarioBoardMounted(updatedGame)
-        ) {
-          playerId.value = nextQuestionPlayer
-        }
-        continueSkipAll()
-      }
+    if (
+      solo.value &&
+      !props.spectate &&
+      nextQuestionPlayer &&
+      !scenarioBoardMounted(updatedGame)
+    ) {
+      playerId.value = nextQuestionPlayer
+    }
+    continueSkipAll()
+  }
+}
+
+async function recoverFromFailedDecode(err: unknown): Promise<void> {
+  // A dropped update used to be an unhandled rejection: the board silently stayed on
+  // the previous state, which looks exactly like "the server ignored me" and invites
+  // the player to submit the same action again (#5256). Re-fetch instead.
+  console.error('Failed to decode game update, refetching', err)
+  await fetchGame(props.gameId, props.spectate)
+    .then(({ game: refetched }) => {
+      applyGameUpdate(refetched, uiLock.value)
+      updateGameLog(refetched.log)
     })
-    .catch(async (err) => {
-      // A dropped update used to be an unhandled rejection: the board silently stayed on
-      // the previous state, which looks exactly like "the server ignored me" and invites
-      // the player to submit the same action again (#5256). Re-fetch instead.
-      console.error('Failed to decode game update, refetching', err)
-      await fetchGame(props.gameId, props.spectate)
-        .then(({ game: refetched }) => {
-          applyGameUpdate(refetched, uiLock.value)
-          updateGameLog(refetched.log)
-        })
-        .catch(() => {
-          socketError.value = true
-        })
-    })
-    .finally(() => {
-      decoding = false
-      if (pendingUpdate) {
-        const p = pendingUpdate
-        pendingUpdate = null
-        scheduleApplyUpdate(p)
-      }
+    .catch(() => {
+      socketError.value = true
     })
 }
+
+const scheduleApplyUpdate = useSingleFlight(
+  (payload: string) => ArkhamGame.gameDecoder.decodePromise(payload),
+  applyDecodedUpdate,
+  recoverFromFailedDecode,
+)
 
 function playAudioFile(fileName: string) {
   if (soundsDisabled.value) return
@@ -1109,11 +1050,22 @@ function skipAllTriggers() {
   sendSkipFor(first.playerId, first.choiceIdx)
 }
 
-const { send, close } = useWebSocket(websocketUrl, {
-  autoReconnect: true,
-  onError,
-  onConnected,
-  onMessage,
+const { send, close } = useGameSocket<ServerResult>({
+  url: websocketUrl,
+  onResult: (result) => {
+    handleResult(result)
+    oldQuestion.value = null
+  },
+  onDisconnect,
+  onConnect: (reconnected) => {
+    socketError.value = false
+    processing.value = false
+    // Anything published while the socket was down is gone -- the server drops
+    // updates for rooms with no subscriber rather than buffering them. On a
+    // RECONNECT (not the initial connect, which the page load already fetched
+    // for) pull the current state so we can't sit on a stale board.
+    if (reconnected) void resyncGame()
+  },
 })
 
 /*
@@ -1621,7 +1573,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
 
   if (event.key === 'e') {
     if (!game.value || !playerId.value) return
-    const elementUnderMouse = document.elementFromPoint(mouseX, mouseY)
+    const elementUnderMouse = document.elementFromPoint(pointer.x, pointer.y)
     if (debug.active && elementUnderMouse) {
       const dataId = elementUnderMouse.getAttribute('data-id')
       if (dataId && game.value.assets[dataId]) {
@@ -1769,71 +1721,6 @@ const continueUI = () => {
   showTheSilenceModal.value = false
   tarotCards.value = []
   uiLock.value = false
-}
-
-function preloadImages(game: ArkhamGame.Game): void {
-  void loadAllImages(game).catch((e: unknown) => {
-    console.error(e)
-  })
-}
-
-async function loadAllImages(game: ArkhamGame.Game): Promise<void> {
-  const cards = Object.values(game.cards)
-  const visibleImages = cards.map((card) => {
-    const { cardCode, isFlipped } = toCardContents(card)
-    return cardImg(`${cardCode.replace(/^c/, '')}${isFlipped ? 'b' : ''}`)
-  })
-
-  // Start visible art immediately; card definitions may still be loading.
-  const visibleLoad = loadImages(visibleImages)
-  const cardDefs = store.loaded ? store.cards : await store.fetchCards()
-
-  if (cardDefs) {
-    const defsByCode = new Map<string, (typeof cardDefs)[number]>()
-    for (const cardDef of cardDefs) {
-      defsByCode.set(cardDef.cardCode.replace(/^c/, ''), cardDef)
-      defsByCode.set(cardDef.art.replace(/^c/, ''), cardDef)
-    }
-
-    const reverseImages = cards.flatMap((card) => {
-      const cardDef = defsByCode.get(toCardContents(card).cardCode.replace(/^c/, ''))
-      if (!cardDef || !cardHasDistinctBack(cardDef)) return []
-
-      const { front, back } = cardFaceImages(cardDef)
-      return back ? [front, back] : [front]
-    })
-    await Promise.all([visibleLoad, loadImages(reverseImages)])
-    return
-  }
-
-  await visibleLoad
-}
-
-async function loadImages(urls: string[]): Promise<void> {
-  const pending = [...new Set(urls)].filter((url) => !preloaded.has(url) && !preloading.has(url))
-  if (pending.length === 0) return
-  pending.forEach((url) => preloading.add(url))
-
-  await Promise.all(
-    pending.map(
-      (url) =>
-        new Promise<void>((resolve) => {
-          const img = new Image()
-          img.onload = () => {
-            preloaded.add(url)
-            preloading.delete(url)
-            resolve()
-          }
-          img.onerror = () => {
-            preloaded.add(url)
-            preloading.delete(url)
-            console.warn(`Could not preload ${url}`)
-            resolve()
-          }
-          img.src = url
-        }),
-    ),
-  )
 }
 
 // Keep a multi-token reveal mounted while its per-token reaction windows advance.
@@ -1998,51 +1885,6 @@ provide(skipAllAvailableKey, skipAllAvailable)
 provide(skipAllInProgressKey, skipAllInProgress)
 provide(showOtherPlayersHandsKey, showOtherPlayersHands)
 
-function updateFocusLight() {
-  const highlighted = [
-    ...document.querySelectorAll<HTMLElement>(
-      '.source-highlight, .ability-target, .card-frame-inner.highlighted, .cards-under-indicator--highlighted',
-    ),
-  ].find((el) => {
-    if (el.closest('.scenario-cards')) return false
-    const rect = el.getBoundingClientRect()
-    return (
-      rect.width > 0 &&
-      rect.height > 0 &&
-      rect.bottom >= 0 &&
-      rect.right >= 0 &&
-      rect.top <= window.innerHeight &&
-      rect.left <= window.innerWidth
-    )
-  })
-
-  if (!highlighted) {
-    focusLightX.value = -1000
-    focusLightY.value = -1000
-    return
-  }
-
-  const rect = highlighted.getBoundingClientRect()
-  focusLightX.value = rect.left + rect.width / 2
-  focusLightY.value = rect.top + rect.height / 2
-}
-
-function scheduleFocusLightUpdate() {
-  if (focusLightAnimationFrame !== null) return
-  focusLightAnimationFrame = requestAnimationFrame(() => {
-    focusLightAnimationFrame = null
-    updateFocusLight()
-  })
-}
-
-const onMove = (event: MouseEvent) => {
-  mouseX = event.clientX
-  mouseY = event.clientY
-  flashlightX.value = event.clientX
-  flashlightY.value = event.clientY
-  scheduleFocusLightUpdate()
-}
-
 // callbacks
 const onPlayabilityResult = (result: any) => {
   if (!debug.active) return
@@ -2055,21 +1897,11 @@ const onPlayabilityResult = (result: any) => {
 emitter.on('playabilityResult', onPlayabilityResult)
 
 onMounted(() => {
-  flashlightX.value = window.innerWidth / 2
-  flashlightY.value = window.innerHeight / 2
   ;(window as any).sendDebug = async (msg: any) => {
     if (game.value) await debug.send(game.value.id, msg)
   }
   ;(window as any).undo = undo
   ;(window as any).debugChoose = choose
-  document.addEventListener('mousemove', onMove, { passive: true })
-  focusLightObserver = new MutationObserver(scheduleFocusLightUpdate)
-  focusLightObserver.observe(document.body, {
-    attributes: true,
-    attributeFilter: ['class'],
-    subtree: true,
-  })
-  scheduleFocusLightUpdate()
   document.addEventListener('keydown', handleKeyPress)
   window.addEventListener('arkham-setting-change', handleSettingChange)
 })
@@ -2077,13 +1909,7 @@ onMounted(() => {
 onBeforeRouteLeave(() => close())
 onUnmounted(() => {
   document.removeEventListener('keydown', handleKeyPress)
-  document.removeEventListener('mousemove', onMove)
-  focusLightObserver?.disconnect()
-  focusLightObserver = null
-  if (focusLightAnimationFrame !== null) cancelAnimationFrame(focusLightAnimationFrame)
   window.removeEventListener('arkham-setting-change', handleSettingChange)
-  document.removeEventListener('visibilitychange', onVisibilityChange)
-  stopTurnTitleFlash()
   if (endTurnKeyArmTimer !== null) clearTimeout(endTurnKeyArmTimer)
   if (chooseDecksPoll !== null) clearTimeout(chooseDecksPoll)
   if (processingTimer !== null) clearTimeout(processingTimer)

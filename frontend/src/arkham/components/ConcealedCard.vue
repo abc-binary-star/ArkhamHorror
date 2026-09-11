@@ -1,14 +1,16 @@
 <script lang="ts" setup>
 
-import { computed, ref, onBeforeUnmount, nextTick } from 'vue'
+import { computed, defineAsyncComponent, ref, onBeforeUnmount, nextTick } from 'vue'
 import * as ArkhamGame from '@/arkham/types/Game'
 import { useDebug } from '@/arkham/debug';
 import { imgsrc } from '@/arkham/helpers';
 import { Game } from '@/arkham/types/Game';
 import { ConcealedCard } from '@/arkham/types/ConcealedCard';
-import DebugConcealedCard from '@/arkham/components/debug/ConcealedCard.vue';
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/types/Message'
+
+// Debug-only editor: opened from the debug menu, never on the play path.
+const DebugConcealedCard = defineAsyncComponent(() => import('@/arkham/components/debug/ConcealedCard.vue'));
 
 const props = defineProps<{
   game: Game

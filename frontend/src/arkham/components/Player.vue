@@ -3,7 +3,7 @@ import { Layers, Hand, Skull } from '@lucide/vue';
 import type { CardContents } from '@/arkham/types/Card';
 import * as CardT from '@/arkham/types/Card';
 import gsap from 'gsap';
-import { computed, inject, ref, ComputedRef, reactive, watch, onMounted, onBeforeUnmount } from 'vue';
+import { computed, defineAsyncComponent, inject, ref, ComputedRef, reactive, watch, onMounted, onBeforeUnmount } from 'vue';
 import { useDebug } from '@/arkham/debug';
 import { Game } from '@/arkham/types/Game';
 import { toCardContents } from '@/arkham/types/Card';
@@ -20,7 +20,6 @@ import Skill from '@/arkham/components/Skill.vue';
 import HandCard from '@/arkham/components/HandCard.vue';
 import CardRow from '@/arkham/components/CardRow.vue';
 import CardsUnderIndicator from '@/arkham/components/CardsUnderIndicator.vue';
-import CustomCardPicker from '@/arkham/components/debug/CustomCardPicker.vue';
 import Investigator from '@/arkham/components/Investigator.vue';
 import ChoiceModal from '@/arkham/components/ChoiceModal.vue';
 import { TarotCard, tarotCardImage } from '@/arkham/types/TarotCard';
@@ -45,6 +44,9 @@ import {
   showOtherPlayersHandsKey,
   soloKey,
 } from '@/arkham/injectionKeys';
+
+// Debug-only picker: opened from the debug menu, never on the play path.
+const CustomCardPicker = defineAsyncComponent(() => import('@/arkham/components/debug/CustomCardPicker.vue'));
 const { t } = useI18n();
 
 interface RefWrapper<T> {

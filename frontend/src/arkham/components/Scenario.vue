@@ -43,11 +43,7 @@ import { type Target } from '@/arkham/types/Target'
 import { Message, AbilityMessage, AbilityLabel } from '@/arkham/types/Message'
 import { MessageType } from '@/arkham/types/Message'
 import { waitForImagesToLoad, imgsrc, groupBy } from '@/arkham/helpers'
-import {
-  gameLocalStorageKey,
-  getGameLocalStorageItem,
-  setGameLocalStorageItem,
-} from '@/arkham/localStorage'
+import { gameLocalStorageKey, getGameLocalStorageItem } from '@/arkham/localStorage'
 import { cardArt, cardImage as cardImage, investigatorPortrait } from '@/arkham/cardImages'
 import { useMenu } from '@/arkham/composables/menu'
 import { useSettings } from '@/stores/settings'
@@ -86,6 +82,7 @@ import Location from '@/arkham/components/Location.vue'
 import TreacheryView from '@/arkham/components/Treachery.vue'
 import { useGameChoices } from '@/arkham/composables/useGameChoices'
 import { isMinimizedSkillTestKey, soloKey } from '@/arkham/injectionKeys'
+import { useMapViewport } from '@/arkham/composables/useMapViewport'
 import { setLocationOffset, resetLocationOffsets, updateGameRaw } from '@/arkham/api'
 import { useDebug, scenarioHasDebugOptions } from '@/arkham/debug'
 import { storeToRefs } from 'pinia'
@@ -245,32 +242,20 @@ const enableCosmicEmissaryAnimation = ref(
     ? getGameLocalStorageItem(props.game.id, 'disableCosmicEmissaryAnimation') !== 'true'
     : getGameLocalStorageItem(props.game.id, 'enableCosmicEmissaryAnimation') !== 'false',
 )
-const locationsZoom = ref(
-  parseFloat(getGameLocalStorageItem(props.game.id, 'locationsZoom') ?? '1'),
-)
-const doubleZoomActive = ref(false)
-const doubleZoomPrevValue = ref(1)
-const doubleZoomPrevScroll = { left: 0, top: 0 }
-const DOUBLE_ZOOM_LEVEL = 3
-watch(locationsZoom, async (value) => {
-  setGameLocalStorageItem(props.game.id, 'locationsZoom', String(value))
-  await updateScrollMargins()
+const {
+  zoom,
+  onWheel: onMapWheel,
+  toggleZoom,
+  updateScrollMargins,
+  doubleZoomActive,
+} = useMapViewport({
+  gameId: () => props.game.id,
+  scroller: scrollerRef,
+  grid: locationMap,
+  investigatorLocationId: () =>
+    Object.values(props.game.investigators).find((i) => i.playerId === props.playerId)?.location ??
+    null,
 })
-
-function zoomStep(value: number): number {
-  const center = 1.5 // peak step around the middle of the normal range
-  const sigma = 1.0 // controls how quickly the step tapers off
-  const max = 0.15
-  const min = 0.01
-  return Math.max(min, max * Math.exp(-Math.pow(value - center, 2) / (2 * sigma * sigma)))
-}
-
-function onMapWheel(event: WheelEvent) {
-  const delta = event.deltaY < 0 ? zoomStep(locationsZoom.value) : -zoomStep(locationsZoom.value)
-  locationsZoom.value = parseFloat(
-    Math.min(6, Math.max(0.25, locationsZoom.value + delta)).toFixed(3),
-  )
-}
 
 const locationsUnlocked = ref(false)
 const locationsFullscreen = ref(false)
@@ -321,9 +306,9 @@ function updateCellDimensions() {
     const cell = document.querySelector('.location-cell') as HTMLElement | null
     if (!cell) return
     const rect = cell.getBoundingClientRect()
-    const zoom = locationsZoom.value || 1
+    const scale = zoom.value || 1
     if (rect.width > 0 && rect.height > 0) {
-      cellDimensions.value = { w: rect.width / zoom, h: rect.height / zoom }
+      cellDimensions.value = { w: rect.width / scale, h: rect.height / scale }
     }
   })
 }
@@ -518,9 +503,9 @@ function onLocationPointerDown(event: PointerEvent, location: { id: string }) {
 
 function onWindowPointerMove(event: PointerEvent) {
   if (!dragInternal || dragInternal.pointerId !== event.pointerId) return
-  const zoom = locationsZoom.value || 1
-  const screenDx = (event.clientX - dragInternal.startX) / zoom
-  const screenDy = (event.clientY - dragInternal.startY) / zoom
+  const scale = zoom.value || 1
+  const screenDx = (event.clientX - dragInternal.startX) / scale
+  const screenDy = (event.clientY - dragInternal.startY) / scale
   if (
     !dragInternal.moved &&
     Math.hypot(event.clientX - dragInternal.startX, event.clientY - dragInternal.startY) >
@@ -641,7 +626,7 @@ async function resetLocationsLayout() {
       requestCosmicEmissaryCompact(true)
     }
     mapTranslation.value = { x: 0, y: 0 }
-    locationsZoom.value = 1
+    zoom.value = 1
     doubleZoomActive.value = false
     await nextTick()
     await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
@@ -655,7 +640,7 @@ async function resetLocationsLayout() {
     if (!rects.length) return
     const width = Math.max(...rects.map(r => r.right)) - Math.min(...rects.map(r => r.left))
     const height = Math.max(...rects.map(r => r.bottom)) - Math.min(...rects.map(r => r.top))
-    locationsZoom.value = Math.max(0.1, Math.min(1, (scroller.clientWidth - 96) / width, (scroller.clientHeight - 96) / height))
+    zoom.value = Math.max(0.1, Math.min(1, (scroller.clientWidth - 96) / width, (scroller.clientHeight - 96) / height))
     await nextTick()
     await new Promise<void>(resolve => requestAnimationFrame(() => resolve()))
     rects = cardBounds()
@@ -1335,29 +1320,14 @@ const locationStyles = computed(() => {
     'grid-template-areas': gridAreas.value ?? '',
     gridAutoColumns: 'max-content',
     gridAutoRows: 'max-content',
-    transform: `scale(${locationsZoom.value})`,
-    transformOrigin: locationsZoom.value >= 1 ? '0 0' : 'center center',
+    transform: `scale(${zoom.value})`,
+    transformOrigin: zoom.value >= 1 ? '0 0' : 'center center',
     paddingLeft: `${pad.left + mobileEdgePadding}px`,
     paddingRight: `${pad.right + mobileEdgePadding}px`,
     paddingTop: `${pad.top}px`,
     paddingBottom: `${pad.bottom}px`,
   }
 })
-
-async function updateScrollMargins() {
-  await nextTick()
-  const grid = (locationMap.value as any)?.$el ?? (locationMap.value as HTMLElement | null)
-  if (!grid) return
-  const z = locationsZoom.value
-  // offsetWidth/Height exclude margins, so we always read the natural grid size directly.
-  if (z >= 1) {
-    grid.style.marginRight = `${grid.offsetWidth * (z - 1)}px`
-    grid.style.marginBottom = `${grid.offsetHeight * (z - 1)}px`
-  } else {
-    grid.style.marginRight = ''
-    grid.style.marginBottom = ''
-  }
-}
 
 const scenarioDeckStyles = computed(() => {
   const { decksLayout } = props.scenario
@@ -1691,7 +1661,7 @@ const currentPlayerLocationIds = computed(
 )
 watch(locations, updateScrollMargins, { flush: 'post' })
 watch(layoutPadding, updateScrollMargins, { flush: 'post' })
-watch([locations, rotationSteps, locationsZoom], updateCellDimensions, { flush: 'post' })
+watch([locations, rotationSteps, zoom], updateCellDimensions, { flush: 'post' })
 const cosmicEmissaryLayoutSignature = computed(() => {
   if (props.scenario.id !== 'c10651') return ''
   return [
@@ -1700,7 +1670,7 @@ const cosmicEmissaryLayoutSignature = computed(() => {
   ].join('::')
 })
 watch(
-  [cosmicEmissaryLayoutSignature, rotationSteps, locationsZoom],
+  [cosmicEmissaryLayoutSignature, rotationSteps, zoom],
   () => nextTick(requestCosmicEmissaryCompact),
   { flush: 'post' },
 )
@@ -1710,7 +1680,7 @@ watch(
     pendingOffsets,
     locationGridOffsets,
     rotationSteps,
-    locationsZoom,
+    zoom,
     locations,
     cellDimensions,
   ],
@@ -1730,7 +1700,7 @@ const choices = useGameChoices(
   () => props.playerId,
 )
 watch(
-  [choices, locations, locationsZoom],
+  [choices, locations, zoom],
   () => nextTick(scheduleHiddenLocationActionEdgesUpdate),
   { flush: 'post' },
 )
@@ -2162,75 +2132,6 @@ function beforeLeave(e: Element) {
   el.style.top = `${el.offsetTop - parseFloat(marginTop)}px`
   el.style.width = width
   el.style.height = height
-}
-
-async function toggleZoom(e: MouseEvent) {
-  const scroller = scrollerRef.value
-  const gridEl = (locationMap.value as any)?.$el ?? (locationMap.value as HTMLElement | null)
-  if (!scroller || !gridEl) return
-
-  if (doubleZoomActive.value) {
-    doubleZoomActive.value = false
-    locationsZoom.value = doubleZoomPrevValue.value
-    await updateScrollMargins()
-    scroller.scrollLeft = doubleZoomPrevScroll.left
-    scroller.scrollTop = doubleZoomPrevScroll.top
-    return
-  }
-
-  // Find what to focus on: the clicked location, or the investigator's location
-  const target = e.target as HTMLElement
-  let focusEl: HTMLElement | null = target.closest('[data-id]')
-  if (!focusEl) {
-    const investigator = Object.values(props.game.investigators).find(
-      (i) => i.playerId === props.playerId,
-    )
-    if (investigator?.location) {
-      focusEl = document.querySelector<HTMLElement>(`[data-id="${investigator.location}"]`)
-    }
-  }
-  if (!focusEl) return
-
-  const currentZ = locationsZoom.value
-  const scrollerRect = scroller.getBoundingClientRect()
-  const gridRect = gridEl.getBoundingClientRect()
-  const focusRect = focusEl.getBoundingClientRect()
-
-  // Compute the grid's layout position in scroller content space. This is invariant across zoom
-  // levels since flex sizes items by their natural dimensions. We must account for transform-origin:
-  //   z >= 1  → origin 0 0: visual top-left === layout top-left, so read directly.
-  //   z <  1  → origin center: visual top-left is shifted inward; subtract the shift to get layout.
-  const gridW = gridEl.offsetWidth
-  const gridH = gridEl.offsetHeight
-  const gridLayoutLeft =
-    currentZ >= 1
-      ? gridRect.left - scrollerRect.left + scroller.scrollLeft
-      : gridRect.left - scrollerRect.left + scroller.scrollLeft - (gridW * (1 - currentZ)) / 2
-  const gridLayoutTop =
-    currentZ >= 1
-      ? gridRect.top - scrollerRect.top + scroller.scrollTop
-      : gridRect.top - scrollerRect.top + scroller.scrollTop - (gridH * (1 - currentZ)) / 2
-
-  // Natural (unscaled) center of focus within the grid.
-  // Visual delta from the grid's visual top-left = natural offset × scale, for any transform-origin.
-  const natX = (focusRect.left + focusRect.width / 2 - gridRect.left) / currentZ
-  const natY = (focusRect.top + focusRect.height / 2 - gridRect.top) / currentZ
-
-  // Save current state
-  doubleZoomPrevValue.value = currentZ
-  doubleZoomPrevScroll.left = scroller.scrollLeft
-  doubleZoomPrevScroll.top = scroller.scrollTop
-
-  // Apply new zoom and wait for margins to update
-  doubleZoomActive.value = true
-  locationsZoom.value = DOUBLE_ZOOM_LEVEL
-  await updateScrollMargins()
-
-  // At new zoom (origin 0 0), focus sits at gridLayoutLeft + natX * newZ in content space.
-  // gridLayoutLeft is invariant (flex uses natural dimensions), so it's the same before and after.
-  // Use clientWidth/Height (viewport area, excludes scrollbars) for accurate centering.
-  scroller.scrollLeft = gridLayoutLeft + natX * DOUBLE_ZOOM_LEVEL - scroller.clientWidth / 2
-  scroller.scrollTop = gridLayoutTop + natY * DOUBLE_ZOOM_LEVEL - scroller.clientHeight / 2
 }
 
 const unusedCanInteract = (u: string) =>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, watch, ref } from 'vue'
+import { computed, defineAsyncComponent, watch, ref } from 'vue'
 import { Dropdown } from 'floating-vue'
 import useHighlighter from '@/arkham/composables/useHighlighter'
 import { useDebug } from '@/arkham/debug'
@@ -19,7 +19,6 @@ import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Messa
 import type { AbilityType } from '@/arkham/types/Ability'
 import { MessageType } from '@/arkham/types/Message'
 import ScarletKey from '@/arkham/components/ScarletKey.vue'
-import DebugAsset from '@/arkham/components/debug/Asset.vue'
 import KeyToken from '@/arkham/components/Key.vue'
 import Investigator from '@/arkham/components/Investigator.vue'
 import Event from '@/arkham/components/Event.vue'
@@ -38,6 +37,9 @@ import { useSettings } from '@/stores/settings'
 import { isManifestedSpiritAsset } from '@/arkham/spiritVisuals'
 import { useDbCardStore } from '@/stores/dbCards'
 import { useCardStore } from '@/stores/cards'
+
+// Debug-only editor: opened from the debug menu, never on the play path.
+const DebugAsset = defineAsyncComponent(() => import('@/arkham/components/debug/Asset.vue'))
 
 const props = withDefaults(
   defineProps<{

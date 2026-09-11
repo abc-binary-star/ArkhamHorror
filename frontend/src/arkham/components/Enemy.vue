@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { Dropdown } from 'floating-vue'
 import { BugAntIcon } from '@heroicons/vue/20/solid'
 import { useI18n } from 'vue-i18n'
@@ -19,7 +19,6 @@ import { useCardFlip } from '@/arkham/composables/useCardFlip'
 import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/types/Message'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import MissingCardBadge from '@/arkham/components/MissingCardBadge.vue'
-import DebugEnemy from '@/arkham/components/debug/Enemy.vue'
 import PoolItem from '@/arkham/components/PoolItem.vue'
 import TokenPool from '@/arkham/components/TokenPool.vue'
 import KeyToken from '@/arkham/components/Key.vue'
@@ -35,6 +34,9 @@ import { Source } from '@/arkham/types/Source'
 import { isManifestedSpiritEnemy } from '@/arkham/spiritVisuals'
 import { type Card as ArkhamCard, toCardContents } from '@/arkham/types/Card'
 import { isUnvaluedCalculation } from '@/arkham/types/Calculation'
+
+// Debug-only editor: opened from the debug menu, never on the play path.
+const DebugEnemy = defineAsyncComponent(() => import('@/arkham/components/debug/Enemy.vue'))
 
 const props = withDefaults(
   defineProps<{

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
-import { onBeforeUnmount, ComputedRef, ref, computed, watch, nextTick } from 'vue'
+import { onBeforeUnmount, ComputedRef, defineAsyncComponent, ref, computed, watch, nextTick } from 'vue'
 import { useDebug } from '@/arkham/debug'
 import { Game } from '@/arkham/types/Game'
 import { imgsrc } from '@/arkham/helpers'
@@ -9,7 +9,6 @@ import { keyToId } from '@/arkham/types/Key'
 import { useGameChoices } from '@/arkham/composables/useGameChoices'
 import { useGameIndexes } from '@/arkham/composables/useGameIndexes'
 import { useCardFlip } from '@/arkham/composables/useCardFlip'
-import DebugLocation from '@/arkham/components/debug/Location.vue'
 import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/types/Message'
 import { actionsToList } from '@/arkham/types/Action'
 import ConcealedCard from '@/arkham/components/ConcealedCard.vue'
@@ -36,6 +35,9 @@ import { IsMobile } from '@/arkham/isMobile'
 import { useDbCardStore } from '@/stores/dbCards'
 import { useSettings } from '@/stores/settings'
 import { isCthulhuBoardEnemy } from '@/arkham/components/TheDrownedCity/cthulhuBoard'
+
+// Debug-only editor: opened from the debug menu, never on the play path.
+const DebugLocation = defineAsyncComponent(() => import('@/arkham/components/debug/Location.vue'))
 
 export interface Props {
   game: Game

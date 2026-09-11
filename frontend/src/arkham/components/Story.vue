@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, defineAsyncComponent, ref } from 'vue'
 import { Game } from '@/arkham/types/Game'
 import * as ArkhamGame from '@/arkham/types/Game'
 import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/types/Message'
@@ -8,10 +8,12 @@ import { cardImage } from '@/arkham/cardImages'
 import { useCardFlip } from '@/arkham/composables/useCardFlip'
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import Token from '@/arkham/components/Token.vue'
-import DebugStory from '@/arkham/components/debug/Story.vue'
 import * as ArkhamStory from '@/arkham/types/Story'
 import TokenPool from '@/arkham/components/TokenPool.vue';
 import { TokenType } from '@/arkham/types/Token';
+
+// Debug-only editor: opened from the debug menu, never on the play path.
+const DebugStory = defineAsyncComponent(() => import('@/arkham/components/debug/Story.vue'))
 
 export interface Props {
   game: Game
