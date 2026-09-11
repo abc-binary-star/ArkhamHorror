@@ -10,5 +10,20 @@ import create from '@/locales/zh/gameBoard/create.json'
 import ultimatumsAndBoons from '@/locales/zh/gameBoard/ultimatumsAndBoons.json'
 import historyPanel from '@/locales/zh/gameBoard/history_panel.json'
 import achievements from '@/locales/zh/gameBoard/achievements.json'
+import multiplayerTable from '@/locales/zh/gameBoard/multiplayer_table.json'
 
-export default {...base, phase, skillTest, gameBar, historyPanel, investigator, scenario, card, upgrade, create, ultimatumsAndBoons, achievements}
+export default {
+  ...base,
+  phase,
+  skillTest,
+  gameBar,
+  historyPanel,
+  investigator,
+  scenario,
+  card,
+  upgrade,
+  create,
+  ultimatumsAndBoons,
+  achievements,
+  multiplayerTable,
+}

@@ -765,8 +765,8 @@ watch(deckRef, (el) => {
   }
 }
 
-.deck-section--hunch .deck-section-title { color: var(--willpower-light); }
-.deck-section--side .deck-section-title { color: var(--intellect-light); }
+.deck-section--hunch .deck-section-title { color: var(--willpower); }
+.deck-section--side .deck-section-title { color: var(--intellect); }
 
 /* ── Deck header ─────────────────────────────────────────── */
 
@@ -778,7 +778,10 @@ watch(deckRef, (el) => {
   row-gap: 0;
   padding: var(--deck-pad) 0 0; /* no horizontal padding — children handle their own spacing */
   color: var(--text);
-  background: var(--box-background);
+  background:
+    linear-gradient(90deg, rgba(244, 239, 228, 0.98) 0%, rgba(244, 239, 228, 0.94) 58%, rgba(244, 239, 228, 0.78) 100%),
+    url('/assets/veiled-harbour/48-调查员档案工作台-v1.png') right top / 260px auto no-repeat,
+    var(--box-background);
   border-left: 4px solid transparent;
   box-shadow: var(--shadow-3);
   position: sticky;
@@ -790,6 +793,7 @@ watch(deckRef, (el) => {
     --deck-pad: 12px;
     position: static;
     padding: 10px 0 0;
+    background: var(--box-background);
   }
 
   &.guardian { border-left-color: var(--guardian-dark); }

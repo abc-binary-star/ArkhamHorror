@@ -28,6 +28,7 @@
     "@fortawesome/vue-fontawesome": "^3.1.2",
     "@headlessui/vue": "^1.7.23",
     "@heroicons/vue": "^2.2.0",
+    "@lucide/vue": "^1.44.0",
     "@vueuse/components": "^13.9.0",
     "@vueuse/core": "^13.9.0",
     "axios": "^1.12.2",

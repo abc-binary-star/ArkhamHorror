@@ -689,7 +689,7 @@ const title = computed(() => {
   color: var(--text);
   background:
     linear-gradient(rgba(233, 225, 210, 0.86), rgba(233, 225, 210, 0.86)),
-    url('/assets/veiled-harbour/14-选择弹窗纸面.avif') center / cover no-repeat;
+    url('/assets/veiled-harbour/47-剧情检定烛影纸面-v1.png') center / cover no-repeat;
   padding: 10px;
   border-radius: 10px;
   border: 1px solid color-mix(in srgb, var(--brass) 54%, var(--border-panel));

@@ -19,6 +19,9 @@ const isSupportPage = computed(() => route.query.support !== undefined)
           <h1>{{ t('nav.about') }}</h1>
           <p class="about-hero-note">ARKHAM HORROR · COMMUNITY ARCHIVE</p>
         </div>
+        <figure class="about-hero-still" aria-hidden="true">
+          <img src="/assets/veiled-harbour/45-罗盘档案静物-v1.png" alt="" />
+        </figure>
         <div class="about-hero-index" aria-hidden="true">FILE<br /><strong>04—17</strong></div>
       </header>
 
@@ -113,9 +116,27 @@ const isSupportPage = computed(() => route.query.support !== undefined)
 
 .about-hero {
   display: grid;
-  grid-template-columns: 88px 1fr auto;
+  grid-template-columns: 88px minmax(0, 1fr) minmax(112px, 160px) auto;
   align-items: center;
   gap: 20px;
+}
+
+.about-hero-still {
+  margin: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--brass) 45%, transparent);
+  box-shadow: 0 8px 18px rgba(25, 31, 30, 0.18);
+  transform: rotate(1.5deg);
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: saturate(0.82) contrast(0.96);
+  }
 }
 
 .about-hero-seal {
@@ -342,6 +363,10 @@ h2 {
   .about-hero {
     grid-template-columns: 58px 1fr;
     gap: 14px;
+  }
+
+  .about-hero-still {
+    display: none;
   }
 
   .about-hero-seal {

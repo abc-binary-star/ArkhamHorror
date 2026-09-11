@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { ArrowLeft, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight } from '@lucide/vue'
 import {
   computed,
   markRaw,
@@ -18,11 +19,7 @@ import { useWebSocket, useResizeObserver, useFullscreen } from '@vueuse/core'
 import { MenuItem } from '@headlessui/vue'
 import {
   AdjustmentsHorizontalIcon,
-  ArrowLeftIcon,
   ArrowPathIcon,
-  ArrowsPointingInIcon,
-  ArrowsPointingOutIcon,
-  ArrowsRightLeftIcon,
   ArrowUturnLeftIcon,
   BackwardIcon,
   BeakerIcon,
@@ -35,8 +32,6 @@ import {
   ExclamationTriangleIcon,
   FlagIcon,
   RectangleStackIcon,
-  SpeakerWaveIcon,
-  SpeakerXMarkIcon,
   XMarkIcon,
 } from '@heroicons/vue/20/solid'
 import { LottieAnimation } from 'lottie-web-vue'
@@ -2383,7 +2378,7 @@ onUnmounted(() => {
       <div class="game-bar-item game-bar-item--leave">
         <div>
           <button @click="leaveGame" v-tooltip="$t('gameBar.leaveGame')">
-            <ArrowLeftIcon aria-hidden="true" />
+            <ArrowLeft aria-hidden="true" />
             <span>{{ $t('gameBar.leaveGame') }}</span>
           </button>
         </div>
@@ -2395,18 +2390,19 @@ onUnmounted(() => {
             v-tooltip="$t('gameBar.sounds')"
             :aria-pressed="!soundsDisabled"
           >
-            <SpeakerWaveIcon v-if="!soundsDisabled" aria-hidden="true" />
-            <SpeakerXMarkIcon v-else aria-hidden="true" />
+            <Volume2 v-if="!soundsDisabled" aria-hidden="true" />
+            <VolumeX v-else aria-hidden="true" />
             <span class="sounds-label">{{ $t('gameBar.sounds') }}</span>
           </button>
         </div>
       </div>
       <div class="game-bar-tools game-bar-tools--primary">
         <button type="button" :class="{ active: showTools }" @click="showTools = !showTools">
-          <AdjustmentsHorizontalIcon aria-hidden="true" />
+          <SlidersHorizontal aria-hidden="true" />
           <span>{{ showTools ? $t('gameBar.closeTools') : $t('gameBar.tabletopTools') }}</span>
         </button>
       </div>
+      <div id="table-navigation-summary"></div>
       <div class="right">
         <button
           v-if="fullscreenSupported"
@@ -2415,12 +2411,12 @@ onUnmounted(() => {
           v-tooltip="$t('gameBar.fullscreen')"
           @click="toggleFullscreen"
         >
-          <ArrowsPointingInIcon v-if="isFullscreen" aria-hidden="true" />
-          <ArrowsPointingOutIcon v-else aria-hidden="true" />
+          <Minimize v-if="isFullscreen" aria-hidden="true" />
+          <Maximize v-else aria-hidden="true" />
           <span>{{ $t('gameBar.fullscreen') }}</span>
         </button>
         <button v-if="isActualScenarioView" class="sidebar-toggle-button" @click="toggleSidebar">
-          <ArrowsRightLeftIcon aria-hidden="true" /> {{ $t('gameBar.toggleSidebar') }}
+          <PanelRight aria-hidden="true" /> {{ $t('gameBar.toggleSidebar') }}
         </button>
         <NarrationMenu />
       </div>
@@ -2791,7 +2787,7 @@ onUnmounted(() => {
     border-radius: 4px;
     background-color: var(--box-background);
     border: 1px solid var(--title);
-    color: white;
+    color: var(--text);
     line-height: 1;
   }
 
@@ -2813,7 +2809,7 @@ onUnmounted(() => {
   border-radius: 4px;
   background-color: var(--box-background);
   border: 1px solid var(--title);
-  color: white;
+  color: var(--text);
   line-height: 1;
 }
 
@@ -2897,7 +2893,7 @@ onUnmounted(() => {
       rgba(20, 33, 34, 0.06) 26%,
       rgba(12, 20, 21, 0.35)
     ),
-    var(--deep-sea, #26373a) url('/assets/veiled-harbour/02-牌桌材质.avif') center / cover no-repeat;
+    var(--deep-sea, #26373a) url('/assets/veiled-harbour/49-牌桌边缘潮痕海图-v1.png') center / cover no-repeat;
   background-attachment: fixed;
   border-top: 1px solid rgba(208, 180, 123, 0.35);
   animation: table-enter 280ms ease-out both;
@@ -4083,7 +4079,7 @@ header {
   border: none;
   border-top: 1px solid var(--box-border);
   background: var(--button-2);
-  color: var(--text);
+  color: var(--button-2-text);
   font-family: Teutonic, serif;
   font-size: 14px;
   letter-spacing: 0.08em;
@@ -4553,6 +4549,18 @@ dialog {
   .game-tools-drawer {
     top: 0;
     width: min(360px, calc(100vw - 16px));
+  }
+}
+</style>
+
+<style scoped>
+#table-navigation-summary { display: none; }
+@media (min-width: 1200px) {
+  .game-bar > #table-navigation-summary:has(> *) {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+    margin-inline: 12px;
   }
 }
 </style>

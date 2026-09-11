@@ -1214,10 +1214,10 @@ defineExpose({ loadCard, reset, buildCustomCard, cardType: computed(() => form.c
 }
 
 .custom-card-modal {
-  background: #1a1a2e;
-  border: 1px solid var(--button-highlight);
+  background: var(--surface-panel);
+  border: 1px solid var(--box-border);
   border-radius: 8px;
-  color: #eee;
+  color: var(--text);
   padding: 1.25rem 1.5rem 1.5rem;
   width: min(900px, 94vw);
   max-height: 92vh;
@@ -1227,26 +1227,26 @@ defineExpose({ loadCard, reset, buildCustomCard, cardType: computed(() => form.c
 .custom-card-tabs {
   display: flex;
   gap: 0.25rem;
-  border-bottom: 1px solid #374151;
+  border-bottom: 1px solid var(--box-border);
   margin-bottom: 1rem;
 
   button {
     background: none;
     border: none;
     border-bottom: 2px solid transparent;
-    color: #9ca3af;
+    color: var(--text-dim);
     cursor: pointer;
     font-size: 0.95rem;
     padding: 0.5rem 0.9rem;
 
     &.on {
-      border-bottom-color: var(--button-highlight);
-      color: #adf;
+      border-bottom-color: var(--spooky-green);
+      color: var(--spooky-green);
     }
   }
 
   .count {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--panel-inset);
     border-radius: 999px;
     font-size: 0.75rem;
     margin-left: 0.25rem;
@@ -1297,7 +1297,7 @@ defineExpose({ loadCard, reset, buildCustomCard, cardType: computed(() => form.c
   img {
     width: 100%;
     border-radius: 8px;
-    background: #111827;
+    background: var(--panel-inset);
     display: block;
   }
 
@@ -1307,9 +1307,10 @@ defineExpose({ loadCard, reset, buildCustomCard, cardType: computed(() => form.c
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(17, 24, 39, 0.85);
-    border: 2px dashed var(--button-highlight);
+    background: color-mix(in srgb, var(--surface-panel) 88%, transparent);
+    border: 2px dashed var(--brass);
     border-radius: 8px;
+    color: var(--text);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.12s ease;
@@ -1363,10 +1364,10 @@ label {
 input,
 select,
 textarea {
-  background: #111827;
-  border: 1px solid #4b5563;
+  background: var(--input-background);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 4px;
-  color: #eee;
+  color: var(--text);
   padding: 0.4rem;
   font-family: inherit;
   width: 100%;
@@ -1377,7 +1378,7 @@ textarea {
 select {
   -webkit-appearance: none;
   appearance: none;
-  background: #111827 var(--select-caret) no-repeat right 0.6rem center;
+  background: var(--input-background) var(--select-caret) no-repeat right 0.6rem center;
   background-size: var(--select-caret-size);
   padding: 0.4rem 1.6rem 0.4rem 0.5rem;
 }
@@ -1400,16 +1401,16 @@ select {
   gap: 0.4rem;
 
   button {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid #4b5563;
+    background: var(--surface-raised);
+    border: var(--edge-width) solid var(--edge-dim);
     border-radius: 6px;
-    color: #eee;
+    color: var(--text);
     cursor: pointer;
     padding: 0.6rem;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.12);
-      border-color: var(--button-highlight);
+      background: var(--button-highlight);
+      border-color: var(--brass);
     }
   }
 }
@@ -1433,23 +1434,23 @@ select {
 }
 
 .art-empty {
-  background: #111827;
+  background: var(--panel-inset);
   border-radius: 8px;
   width: 100%;
 }
 
 .owner-pill {
   align-self: flex-start;
-  background: rgba(170, 221, 255, 0.12);
-  border: 1px solid #adf;
+  background: color-mix(in srgb, var(--teal) 12%, transparent);
+  border: 1px solid var(--teal);
   border-radius: 999px;
-  color: #adf;
+  color: var(--teal);
   font-size: 0.8rem;
   padding: 0.2rem 0.7rem;
   text-decoration: none;
 
   &:hover {
-    background: rgba(170, 221, 255, 0.22);
+    background: color-mix(in srgb, var(--teal) 22%, transparent);
   }
 }
 
@@ -1469,13 +1470,13 @@ select {
   }
 
   .custom {
-    color: #fc9;
-    border-bottom: 1px dotted #fc9;
+    color: var(--brass-dim);
+    border-bottom: 1px dotted var(--brass-dim);
   }
 }
 
 fieldset {
-  border: 1px solid #374151;
+  border: 1px solid var(--box-border);
   border-radius: 6px;
   padding: 0.6rem;
   display: flex;
@@ -1515,7 +1516,8 @@ fieldset {
   }
 
   align-items: center;
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--surface-raised);
+  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 6px;
   display: flex;
   gap: 0.3rem;
@@ -1524,7 +1526,7 @@ fieldset {
   button {
     background: none;
     border: none;
-    color: #eee;
+    color: var(--text);
     cursor: pointer;
     font-size: 1rem;
     line-height: 1;
@@ -1559,22 +1561,22 @@ fieldset {
 }
 
 .chip {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid transparent;
+  background: var(--surface-raised);
+  border: 1px solid var(--edge-dim);
   border-radius: 999px;
-  color: #eee;
+  color: var(--text);
   cursor: pointer;
   font-size: 0.78rem;
   padding: 0.25rem 0.6rem;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--button-highlight);
   }
 
   &.on {
-    background: var(--button-highlight);
-    border-color: var(--button-highlight);
-    color: #10131f;
+    background: var(--spooky-green);
+    border-color: var(--spooky-green);
+    color: var(--text-on-dark);
   }
 }
 
@@ -1604,7 +1606,7 @@ fieldset {
   img {
     width: 100%;
     border-radius: 6px;
-    background: #111827;
+    background: var(--panel-inset);
   }
 
   small {
@@ -1616,11 +1618,11 @@ fieldset {
   }
 
   &:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--surface-raised);
   }
 
   &.on {
-    border-color: var(--button-highlight);
+    border-color: var(--brass);
   }
 }
 
@@ -1677,10 +1679,10 @@ details summary {
   margin-top: 1rem;
 
   button {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid var(--button-highlight);
+    background: var(--button);
+    border: var(--edge-width) solid var(--edge-dim);
     border-radius: 4px;
-    color: #eee;
+    color: var(--button-text);
     cursor: pointer;
     padding: 0.5rem 0.8rem;
 
@@ -1690,7 +1692,7 @@ details summary {
     }
 
     &.secondary {
-      border-color: #4b5563;
+      border-color: var(--edge-dim);
       margin-left: auto;
     }
   }
@@ -1699,7 +1701,7 @@ details summary {
 .link {
   background: none;
   border: none;
-  color: #adf;
+  color: var(--teal);
   cursor: pointer;
   font-size: 0.8rem;
   padding: 0;
@@ -1711,14 +1713,14 @@ details summary {
 }
 
 .editing-banner {
-  background: rgba(170, 221, 255, 0.1);
-  border-left: 3px solid #adf;
+  background: color-mix(in srgb, var(--teal) 10%, transparent);
+  border-left: 3px solid var(--teal);
   font-size: 0.85rem;
   margin: 0 0 0.75rem;
   padding: 0.5rem 0.7rem;
 }
 
 .custom-card-error {
-  color: #f88;
+  color: var(--delete);
 }
 </style>

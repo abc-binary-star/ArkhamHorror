@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { BookOpen, Users, Zap, Skull, Search, Layers } from '@lucide/vue'
+import { useMediaQuery } from '@vueuse/core'
 import UpgradeDeck from '@/arkham/components/UpgradeDeck.vue'
 import {
   EyeIcon,
@@ -22,8 +24,11 @@ import {
   ComputedRef,
   reactive,
   provide,
+  inject,
 } from 'vue'
+import type { Ref } from 'vue'
 import { type Game } from '@/arkham/types/Game'
+import type { Investigator as InvestigatorState } from '@/arkham/types/Investigator'
 import { type Scenario, usesHardExpertReference } from '@/arkham/types/Scenario'
 import { type Story as StoryAttrs } from '@/arkham/types/Story'
 import { type Enemy } from '@/arkham/types/Enemy'
@@ -44,7 +49,7 @@ import {
   getGameLocalStorageItem,
   setGameLocalStorageItem,
 } from '@/arkham/localStorage'
-import { cardImage as cardCodeImage } from '@/arkham/cardImages'
+import { cardImage as cardCodeImage, investigatorPortrait } from '@/arkham/cardImages'
 import { fullName } from '@/arkham/types/Name'
 import { useMenu } from '@/arkham/composables/menu'
 import { useSettings } from '@/stores/settings'
@@ -56,6 +61,7 @@ import Draggable from '@/components/Draggable.vue'
 import ChaosBag from '@/arkham/components/ChaosBag.vue'
 import Agenda from '@/arkham/components/Agenda.vue'
 import Investigator from '@/arkham/components/Investigator.vue'
+import AssetView from '@/arkham/components/Asset.vue'
 import EnemyView from '@/arkham/components/Enemy.vue'
 import CardRow from '@/arkham/components/CardRow.vue'
 import KeyToken from '@/arkham/components/Key.vue'
@@ -1329,10 +1335,92 @@ const scenarioDeckStyles = computed(() => {
     'grid-row-gap': '10px',
   }
 })
+const soloMode = inject<Ref<boolean>>('solo', ref(false))
 const players = computed(() => props.game.investigators)
 const playerOrder = computed(() => props.game.playerOrder)
-const seatsTiled = computed(() => playerOrder.value.length > 1)
-const seatsGrid = computed(() => playerOrder.value.length > 2)
+const multiSeatBoard = computed(() => playerOrder.value.length > 1)
+const encounterPilesHost = ref<HTMLElement | null>(null)
+const desktopTable = useMediaQuery('(min-width: 1200px)')
+const navigationSummaryHost = ref<HTMLElement | null>(null)
+onMounted(() => {
+  navigationSummaryHost.value = document.getElementById('table-navigation-summary')
+})
+const summaryInNavigation = computed(() => desktopTable.value && !!navigationSummaryHost.value)
+const scenarioAccessoriesOpen = ref(false)
+// Solo multi-control keeps every investigator in one user's hands, so the seat
+// tabs alone are enough to move between them. Separate seats are other people's
+// investigators: they only ever expose public information.
+const onlineMultiSeat = computed(() => multiSeatBoard.value && !soloMode.value)
+const activeInvestigator = computed(
+  () => props.game.investigators[props.game.activeInvestigatorId] ?? null,
+)
+const orderedInvestigators = computed(() =>
+  playerOrder.value
+    .map((investigatorId) => players.value[investigatorId])
+    .filter((investigator): investigator is InvestigatorState => Boolean(investigator)),
+)
+const investigatorToken = (investigator: InvestigatorState, token: keyof typeof TokenType) =>
+  investigator.tokens[token] ?? 0
+const investigatorLocation = (investigator: InvestigatorState) =>
+  props.game.locations[investigator.location]?.label ?? t('multiplayerTable.locationUnknown')
+const investigatorAssets = (investigator: InvestigatorState) =>
+  investigator.assets.map((assetId) => props.game.assets[assetId]).filter(Boolean)
+const investigatorEnemies = (investigator: InvestigatorState) =>
+  investigator.engagedEnemies.map((enemyId) => props.game.enemies[enemyId]).filter(Boolean)
+// The threat area also holds the treacheries attached to the investigator, which
+// is what usually tells a teammate whether someone needs help.
+const investigatorTreacheries = (investigator: InvestigatorState) =>
+  investigator.treacheries.map((id) => props.game.treacheries[id]).filter(Boolean)
+const teammateThreatCount = (investigator: InvestigatorState) =>
+  investigatorEnemies(investigator).length + investigator.treacheries.length
+// Who is acting is the turn order; who still owes an answer is the engine's own
+// question map. A seat can be the latter without being the former, and a seat
+// that has left the table is neither.
+function teammateState(
+  investigator: InvestigatorState,
+): 'acting' | 'waiting' | 'eliminated' | null {
+  if (investigator.eliminated) return 'eliminated'
+  if (investigator.playerId in props.game.question) return 'waiting'
+  if (investigator.id === props.game.activeInvestigatorId) return 'acting'
+  return null
+}
+function teammateStateLabel(state: ReturnType<typeof teammateState>) {
+  if (state === 'acting') return t('multiplayerTable.turnMarker')
+  if (state === 'waiting') return t('waitingOn.short')
+  if (state === 'eliminated') return t('partnerStatus.eliminated')
+  return ''
+}
+const teammates = computed(() =>
+  onlineMultiSeat.value
+    ? orderedInvestigators.value.filter((investigator) => investigator.playerId !== props.playerId)
+    : [],
+)
+const myInvestigator = computed(
+  () =>
+    orderedInvestigators.value.find((investigator) => investigator.playerId === props.playerId) ??
+    null,
+)
+// The workbench label names whoever's panel is on screen. Solo keeps routing
+// between seats, so fall back to the investigator the table is acting as.
+const workbenchInvestigator = computed(() => myInvestigator.value ?? activeInvestigator.value)
+// Separate seats are other people's investigators, so the workbench must stay on
+// ours. A viewer without a seat here (a spectator) keeps following the table.
+const pinWorkbench = computed(() => onlineMultiSeat.value && myInvestigator.value !== null)
+const focusedTeammateId = ref<string | null>(null)
+const focusedTeammate = computed(
+  () => teammates.value.find((investigator) => investigator.id === focusedTeammateId.value) ?? null,
+)
+function toggleTeammate(investigatorId: string) {
+  focusedTeammateId.value = focusedTeammateId.value === investigatorId ? null : investigatorId
+}
+watch(teammates, (list) => {
+  if (
+    focusedTeammateId.value &&
+    !list.some((investigator) => investigator.id === focusedTeammateId.value)
+  ) {
+    focusedTeammateId.value = null
+  }
+})
 const discards = computed<Card[]>(() =>
   props.scenario.discard.map((c) => ({ tag: 'EncounterCard', contents: c })),
 )
@@ -2175,8 +2263,9 @@ async function addChaosToken(face: any) {
       :class="{
         'split-view': splitView,
         'scenario-body--notifier-overlays': showScenarioNotifierBar,
-        'seats-multi': seatsTiled,
-        'seats-grid': seatsGrid,
+        'scenario-body--multiseat': multiSeatBoard,
+        'scenario-body--online': onlineMultiSeat,
+        'scenario-body--teammate-open': focusedTeammate !== null,
       }"
     >
       <Draggable v-if="showOutOfPlay || forcedShowOutOfPlay">
@@ -2344,6 +2433,207 @@ async function addChaosToken(face: any) {
         class="scenario-cards"
         :class="{ 'scenario-cards--has-badges': showScenarioNotifierBar }"
       >
+        <Teleport v-if="multiSeatBoard" :to="navigationSummaryHost || 'body'" :disabled="!summaryInNavigation">
+          <section class="table-shelf-header" :class="{ 'table-shelf-header--navigation': summaryInNavigation }">
+            <div class="table-summary-title" :title="[scenario.name.title, scenario.name.subtitle].filter(Boolean).join(' · ')">
+              <BookOpen class="shelf-label-icon" aria-hidden="true" />
+              <strong>{{ scenario.name.title }}</strong>
+              <span v-if="scenario.name.subtitle">{{ scenario.name.subtitle }}</span>
+            </div>
+            <div v-if="activeInvestigator" class="table-summary-action" :title="fullName(activeInvestigator.name)">
+              <Zap class="shelf-label-icon" aria-hidden="true" />
+              <span class="table-summary-investigator">{{ fullName(activeInvestigator.name) }}</span>
+              <small>{{ $t('multiplayerTable.actionsRemaining', { count: activeInvestigator.remainingActions }) }}</small>
+            </div>
+            <div class="table-summary-totals">
+              <span :title="$t('multiplayerTable.players', { count: playerOrder.length })"><Users class="shelf-label-icon" aria-hidden="true" />{{ playerOrder.length }}</span>
+              <span :title="$t('multiplayerTable.doom')"><Skull class="shelf-label-icon" aria-hidden="true" />{{ game.totalDoom }}</span>
+              <span :title="$t('multiplayerTable.clues')"><Search class="shelf-label-icon" aria-hidden="true" />{{ game.totalClues }}</span>
+              <span :title="$t('multiplayerTable.encounterDeck')"><Layers class="shelf-label-icon" aria-hidden="true" />{{ game.encounterDeckSize }}</span>
+            </div>
+            <button
+              v-if="summaryInNavigation"
+              type="button"
+              class="table-shelf-header__accessories"
+              :class="{ active: scenarioAccessoriesOpen }"
+              :title="$t('multiplayerTable.scenarioAccessories')"
+              :aria-label="$t('multiplayerTable.scenarioAccessories')"
+              :aria-expanded="scenarioAccessoriesOpen"
+              @click="scenarioAccessoriesOpen = !scenarioAccessoriesOpen"
+            >
+              <Layers aria-hidden="true" />
+            </button>
+          </section>
+        </Teleport>
+        <Teleport :to="encounterPilesHost || 'body'" :disabled="!desktopTable || !multiSeatBoard || !encounterPilesHost">
+        <div class="scenario-encounter-decks">
+          <span class="encounter-piles-label"><Layers class="shelf-label-icon" aria-hidden="true" />{{ $t('multiplayerTable.encounterDeck') }}</span>
+          <div v-if="topOfEncounterDiscard" class="discard" style="grid-area: encounterDiscard">
+            <div class="discard-card">
+              <img :src="topOfEncounterDiscard" class="card" />
+              <span class="deck-size">{{ discards.length }}</span>
+            </div>
+
+            <div v-if="discards.length > 0" class="buttons">
+              <CardsUnderIndicator
+                v-if="discards.length > 0"
+                v-model:shown="encounterDiscardPopoverShown"
+                class="view-discard-button"
+                :cards="discards"
+                :game="game"
+                :playerId="playerId"
+                :label="t('scenario.discards')"
+                :isDiscards="true"
+                :highlighted="encounterDiscardCardsAction"
+                :fullWidth="true"
+                @choose="choose"
+              />
+              <template v-if="debug.active">
+                <button @click="debug.send(game.id, { tag: 'ShuffleEncounterDiscardBackIn' })">
+                  {{ $t('scenarioComponent.shuffleBackIn') }}
+                </button>
+              </template>
+            </div>
+          </div>
+          <div
+            v-else-if="props.scenario.hasEncounterDeck && !hideEncounterDeck"
+            class="encounter-discard-placeholder"
+            style="grid-area: encounterDiscard"
+            aria-hidden="true"
+          ></div>
+
+          <EncounterDeck
+            :game="game"
+            :playerId="playerId"
+            @choose="choose"
+            style="grid-area: encounterDeck"
+            v-if="props.scenario.hasEncounterDeck && !hideEncounterDeck"
+          />
+
+          <div v-if="topOfSpectralDiscard" class="discard" style="grid-area: spectralDiscard">
+            <div class="discard-card">
+              <img :src="topOfSpectralDiscard" class="card" />
+              <span class="deck-size">{{ spectralDiscards.length }}</span>
+            </div>
+
+            <div v-if="spectralDiscards.length > 0" class="buttons">
+              <CardsUnderIndicator
+                v-model:shown="spectralDiscardPopoverShown"
+                class="view-discard-button"
+                :cards="spectralDiscards"
+                :game="game"
+                :playerId="playerId"
+                :label="t('scenario.discards')"
+                :isDiscards="true"
+                :fullWidth="true"
+                @choose="choose"
+              />
+              <template v-if="debug.active">
+                <button
+                  @click="
+                    debug.send(game.id, {
+                      tag: 'ShuffleEncounterDiscardBackInByKey',
+                      contents: 'SpectralEncounterDeck',
+                    })
+                  "
+                >
+                  {{ $t('scenarioComponent.shuffleBackIn') }}
+                </button>
+              </template>
+            </div>
+          </div>
+
+          <EncounterDeck
+            v-if="spectralEncounterDeck"
+            :spectral="spectralEncounterDeck.length"
+            :game="game"
+            :playerId="playerId"
+            @choose="choose"
+            style="grid-area: spectralDeck"
+          />
+        </div>
+
+        </Teleport>
+        <div class="scenario-decks" :style="scenarioDeckStyles">
+          <section class="scenario-seat scenario-seat--agenda" :style="{ '--seat-card-count': Math.max(1, Object.keys(game.agendas).length) }">
+            <header class="scenario-seat__heading"><Skull aria-hidden="true" /><span>{{ $t('multiplayerTable.agendaArea') }}</span><i aria-hidden="true">◇</i></header>
+            <div class="scenario-seat__cards">
+          <TransitionGroup
+            v-if="Object.values(game.agendas).length > 0"
+            name="deck-advance"
+            :duration="{ enter: 0, leave: 420 }"
+          >
+            <Agenda
+              v-for="(agenda, key) in game.agendas"
+              :key="key"
+              :agenda="agenda"
+              :hideStackControl="desktopTable && multiSeatBoard"
+              :data-area-label="$t('multiplayerTable.agendaArea')"
+              :cardsUnder="cardsUnderAgenda"
+              :cardsNextTo="cardsNextToAgenda"
+              :remainingStack="scenario.agendaStack[agenda.deckId] || []"
+              :completedStack="scenario.completedAgendaStack[agenda.deckId] || []"
+              :game="game"
+              :playerId="playerId"
+              :style="{ 'grid-area': `agenda${agenda.deckId}`, 'justify-self': 'center' }"
+              @choose="choose"
+              @show="doShowCards"
+            />
+          </TransitionGroup>
+          <div v-else-if="agendaGroupedTreacheries.length > 0" class="treacheries">
+            <div
+              v-for="([cCode, treacheries], idx) in agendaGroupedTreacheries"
+              :key="cCode"
+              class="treachery-group"
+              :style="{
+                zIndex: `calc(var(--z-index-10) * ${agendaGroupedTreacheries.length - idx})`,
+              }"
+            >
+              <div v-for="treacheryId in treacheries" class="treachery-card" :key="treacheryId">
+                <TreacheryView
+                  :treachery="game.treacheries[treacheryId]"
+                  :game="game"
+                  :playerId="playerId"
+                  @choose="$emit('choose', $event)"
+                  :overlay-delay="310"
+                />
+              </div>
+            </div>
+          </div>
+
+            </div>
+          </section>
+          <section class="scenario-seat scenario-seat--act" :style="{ '--seat-card-count': Math.max(1, Object.keys(game.acts).length) }">
+            <header class="scenario-seat__heading"><BookOpen aria-hidden="true" /><span>{{ $t('multiplayerTable.actArea') }}</span><i aria-hidden="true">◇</i></header>
+            <div class="scenario-seat__cards">
+          <TransitionGroup name="deck-advance" :duration="{ enter: 0, leave: 420 }">
+            <Act
+              v-for="(act, key) in game.acts"
+              :key="key"
+              :act="act"
+              :hideStackControl="desktopTable && multiSeatBoard"
+              :data-area-label="$t('multiplayerTable.actArea')"
+              :cardsUnder="cardsUnderAct"
+              :cardsNextTo="cardsNextToAct"
+              :remainingStack="scenario.actStack[act.deckId] || []"
+              :completedStack="scenario.completedActStack[act.deckId] || []"
+              :game="game"
+              :playerId="playerId"
+              :style="{ 'grid-area': `act${act.deckId}`, 'justify-self': 'center' }"
+              @choose="choose"
+              @show="doShowCards"
+            />
+          </TransitionGroup>
+            </div>
+          </section>
+        </div>
+
+        <div
+          class="scenario-accessories"
+          :class="{ 'is-open': scenarioAccessoriesOpen || !desktopTable || !multiSeatBoard }"
+        >
+          <div class="scenario-accessories__content">
+
         <div
           v-if="
             anyInTheShadowLocations ||
@@ -2456,151 +2746,8 @@ async function addChaosToken(face: any) {
           @choose="choose"
           :playerId="playerId"
         />
-        <div class="scenario-encounter-decks">
-          <div v-if="topOfEncounterDiscard" class="discard" style="grid-area: encounterDiscard">
-            <div class="discard-card">
-              <img :src="topOfEncounterDiscard" class="card" />
-              <span class="deck-size">{{ discards.length }}</span>
-            </div>
 
-            <div v-if="discards.length > 0" class="buttons">
-              <CardsUnderIndicator
-                v-if="discards.length > 0"
-                v-model:shown="encounterDiscardPopoverShown"
-                class="view-discard-button"
-                :cards="discards"
-                :game="game"
-                :playerId="playerId"
-                :label="t('scenario.discards')"
-                :isDiscards="true"
-                :highlighted="encounterDiscardCardsAction"
-                :fullWidth="true"
-                @choose="choose"
-              />
-              <template v-if="debug.active">
-                <button @click="debug.send(game.id, { tag: 'ShuffleEncounterDiscardBackIn' })">
-                  {{ $t('scenarioComponent.shuffleBackIn') }}
-                </button>
-              </template>
-            </div>
-          </div>
-          <div
-            v-else-if="props.scenario.hasEncounterDeck && !hideEncounterDeck"
-            class="encounter-discard-placeholder"
-            style="grid-area: encounterDiscard"
-            aria-hidden="true"
-          ></div>
 
-          <EncounterDeck
-            :game="game"
-            :playerId="playerId"
-            @choose="choose"
-            style="grid-area: encounterDeck"
-            v-if="props.scenario.hasEncounterDeck && !hideEncounterDeck"
-          />
-
-          <div v-if="topOfSpectralDiscard" class="discard" style="grid-area: spectralDiscard">
-            <div class="discard-card">
-              <img :src="topOfSpectralDiscard" class="card" />
-              <span class="deck-size">{{ spectralDiscards.length }}</span>
-            </div>
-
-            <div v-if="spectralDiscards.length > 0" class="buttons">
-              <CardsUnderIndicator
-                v-model:shown="spectralDiscardPopoverShown"
-                class="view-discard-button"
-                :cards="spectralDiscards"
-                :game="game"
-                :playerId="playerId"
-                :label="t('scenario.discards')"
-                :isDiscards="true"
-                :fullWidth="true"
-                @choose="choose"
-              />
-              <template v-if="debug.active">
-                <button
-                  @click="
-                    debug.send(game.id, {
-                      tag: 'ShuffleEncounterDiscardBackInByKey',
-                      contents: 'SpectralEncounterDeck',
-                    })
-                  "
-                >
-                  {{ $t('scenarioComponent.shuffleBackIn') }}
-                </button>
-              </template>
-            </div>
-          </div>
-
-          <EncounterDeck
-            v-if="spectralEncounterDeck"
-            :spectral="spectralEncounterDeck.length"
-            :game="game"
-            :playerId="playerId"
-            @choose="choose"
-            style="grid-area: spectralDeck"
-          />
-        </div>
-
-        <div class="scenario-decks" :style="scenarioDeckStyles">
-          <TransitionGroup
-            v-if="Object.values(game.agendas).length > 0"
-            name="deck-advance"
-            :duration="{ enter: 0, leave: 420 }"
-          >
-            <Agenda
-              v-for="(agenda, key) in game.agendas"
-              :key="key"
-              :agenda="agenda"
-              :cardsUnder="cardsUnderAgenda"
-              :cardsNextTo="cardsNextToAgenda"
-              :remainingStack="scenario.agendaStack[agenda.deckId] || []"
-              :completedStack="scenario.completedAgendaStack[agenda.deckId] || []"
-              :game="game"
-              :playerId="playerId"
-              :style="{ 'grid-area': `agenda${agenda.deckId}`, 'justify-self': 'center' }"
-              @choose="choose"
-              @show="doShowCards"
-            />
-          </TransitionGroup>
-          <div v-else-if="agendaGroupedTreacheries.length > 0" class="treacheries">
-            <div
-              v-for="([cCode, treacheries], idx) in agendaGroupedTreacheries"
-              :key="cCode"
-              class="treachery-group"
-              :style="{
-                zIndex: `calc(var(--z-index-10) * ${agendaGroupedTreacheries.length - idx})`,
-              }"
-            >
-              <div v-for="treacheryId in treacheries" class="treachery-card" :key="treacheryId">
-                <TreacheryView
-                  :treachery="game.treacheries[treacheryId]"
-                  :game="game"
-                  :playerId="playerId"
-                  @choose="$emit('choose', $event)"
-                  :overlay-delay="310"
-                />
-              </div>
-            </div>
-          </div>
-
-          <TransitionGroup name="deck-advance" :duration="{ enter: 0, leave: 420 }">
-            <Act
-              v-for="(act, key) in game.acts"
-              :key="key"
-              :act="act"
-              :cardsUnder="cardsUnderAct"
-              :cardsNextTo="cardsNextToAct"
-              :remainingStack="scenario.actStack[act.deckId] || []"
-              :completedStack="scenario.completedActStack[act.deckId] || []"
-              :game="game"
-              :playerId="playerId"
-              :style="{ 'grid-area': `act${act.deckId}`, 'justify-self': 'center' }"
-              @choose="choose"
-              @show="doShowCards"
-            />
-          </TransitionGroup>
-        </div>
 
         <EnemyView
           v-for="enemy in pursuit"
@@ -2873,7 +3020,189 @@ async function addChaosToken(face: any) {
           class="scenario-balance-placeholder"
           aria-hidden="true"
         ></div>
+
+          </div>
+        </div>
       </div>
+
+      <aside
+        v-if="onlineMultiSeat"
+        class="teammate-rail"
+        :aria-label="$t('multiplayerTable.roster')"
+      >
+        <header class="teammate-rail__header">
+          <span>{{ $t('multiplayerTable.roster') }}</span>
+          <small>{{ $t('multiplayerTable.publicView') }}</small>
+        </header>
+        <section v-if="focusedTeammate" class="teammate-detail">
+          <div class="teammate-detail__top">
+            <img class="teammate-detail__card" :src="cardCodeImage(focusedTeammate.art)" alt="" />
+            <div class="teammate-detail__identity">
+              <strong>{{ fullName(focusedTeammate.name) }}</strong>
+              <small>{{ investigatorLocation(focusedTeammate) }}</small>
+              <em
+                v-if="teammateState(focusedTeammate)"
+                class="teammate-detail__state"
+                :class="`teammate-detail__state--${teammateState(focusedTeammate)}`"
+              >
+                {{ teammateStateLabel(teammateState(focusedTeammate)) }}
+              </em>
+              <small>{{
+                $t('multiplayerTable.actionsRemaining', {
+                  count: focusedTeammate.remainingActions,
+                })
+              }}</small>
+              <button
+                type="button"
+                class="teammate-detail__close"
+                @click="toggleTeammate(focusedTeammate.id)"
+              >
+                {{ $t('close') }}
+              </button>
+            </div>
+          </div>
+          <dl class="teammate-detail__stats">
+            <div>
+              <dt>{{ $t('multiplayerTable.health') }}</dt>
+              <dd>
+                {{
+                  focusedTeammate.health - investigatorToken(focusedTeammate, TokenType.Damage)
+                }}/{{ focusedTeammate.health }}
+              </dd>
+            </div>
+            <div>
+              <dt>{{ $t('multiplayerTable.sanity') }}</dt>
+              <dd>
+                {{
+                  focusedTeammate.sanity - investigatorToken(focusedTeammate, TokenType.Horror)
+                }}/{{ focusedTeammate.sanity }}
+              </dd>
+            </div>
+            <div>
+              <dt>{{ $t('multiplayerTable.resources') }}</dt>
+              <dd>{{ investigatorToken(focusedTeammate, TokenType.Resource) }}</dd>
+            </div>
+            <div>
+              <dt>{{ $t('multiplayerTable.cluesShort') }}</dt>
+              <dd>{{ investigatorToken(focusedTeammate, TokenType.Clue) }}</dd>
+            </div>
+            <div>
+              <dt>{{ $t('multiplayerTable.willpower') }}</dt>
+              <dd>{{ focusedTeammate.willpower }}</dd>
+            </div>
+            <div>
+              <dt>{{ $t('multiplayerTable.intellect') }}</dt>
+              <dd>{{ focusedTeammate.intellect }}</dd>
+            </div>
+            <div>
+              <dt>{{ $t('multiplayerTable.combat') }}</dt>
+              <dd>{{ focusedTeammate.combat }}</dd>
+            </div>
+            <div>
+              <dt>{{ $t('multiplayerTable.agility') }}</dt>
+              <dd>{{ focusedTeammate.agility }}</dd>
+            </div>
+          </dl>
+          <div
+            v-if="investigatorAssets(focusedTeammate).length > 0"
+            class="teammate-detail__cards"
+            :aria-label="$t('multiplayerTable.inPlay')"
+          >
+            <AssetView
+              v-for="asset in investigatorAssets(focusedTeammate)"
+              :key="asset.id"
+              :asset="asset"
+              :game="game"
+              :playerId="focusedTeammate.playerId"
+              readonly
+            />
+          </div>
+          <div
+            v-if="teammateThreatCount(focusedTeammate) > 0"
+            class="teammate-detail__cards teammate-detail__cards--threat"
+            :aria-label="$t('multiplayerTable.threatArea')"
+          >
+            <EnemyView
+              v-for="enemy in investigatorEnemies(focusedTeammate)"
+              :key="enemy.id"
+              :enemy="enemy"
+              :game="game"
+              :playerId="focusedTeammate.playerId"
+              readonly
+            />
+            <TreacheryView
+              v-for="treachery in investigatorTreacheries(focusedTeammate)"
+              :key="treachery.id"
+              :treachery="treachery"
+              :game="game"
+              :playerId="focusedTeammate.playerId"
+              readonly
+            />
+          </div>
+        </section>
+        <button
+          v-for="investigator in teammates"
+          v-show="investigator.id !== focusedTeammateId"
+          :key="investigator.id"
+          type="button"
+          class="teammate-card"
+          :class="{
+            'teammate-card--active': investigator.id === activeInvestigator?.id,
+            [`teammate-card--${investigator.class.toLowerCase()}`]: true,
+          }"
+          @click="toggleTeammate(investigator.id)"
+        >
+          <img
+            class="teammate-card__portrait"
+            :src="investigatorPortrait(game, investigator.id)"
+            alt=""
+          />
+          <span class="teammate-card__name">
+            {{ fullName(investigator.name) }}
+            <em
+              v-if="teammateState(investigator)"
+              :class="`teammate-card__state teammate-card__state--${teammateState(investigator)}`"
+              >{{ teammateStateLabel(teammateState(investigator)) }}</em
+            >
+          </span>
+          <span class="teammate-card__location">{{ investigatorLocation(investigator) }}</span>
+          <span class="teammate-card__stats">
+            <span
+              ><b
+                >{{ investigator.health - investigatorToken(investigator, TokenType.Damage) }}/{{
+                  investigator.health
+                }}</b
+              ><i>{{ $t('multiplayerTable.health') }}</i></span
+            >
+            <span
+              ><b
+                >{{ investigator.sanity - investigatorToken(investigator, TokenType.Horror) }}/{{
+                  investigator.sanity
+                }}</b
+              ><i>{{ $t('multiplayerTable.sanity') }}</i></span
+            >
+            <span
+              ><b>{{ investigatorToken(investigator, TokenType.Resource) }}</b
+              ><i>{{ $t('multiplayerTable.resources') }}</i></span
+            >
+            <span
+              ><b>{{ investigatorToken(investigator, TokenType.Clue) }}</b
+              ><i>{{ $t('multiplayerTable.cluesShort') }}</i></span
+            >
+          </span>
+          <span v-if="investigatorAssets(investigator).length > 0" class="teammate-card__assets">
+            <img
+              v-for="asset in investigatorAssets(investigator).slice(0, 3)"
+              :key="asset.id"
+              :src="cardCodeImage(asset.cardCode)"
+              alt=""
+            />
+            <em v-if="investigatorAssets(investigator).length > 3"
+              >+{{ investigatorAssets(investigator).length - 3 }}</em
+            >
+          </span>
+        </button>
+      </aside>
 
       <RainOverlay :enabled="showRain" :options="rainOptions">
         <div
@@ -3092,6 +3421,41 @@ async function addChaosToken(face: any) {
       </RainOverlay>
 
       <div id="player-zone" :class="{ 'player-zone--fullscreen': locationsFullscreen }">
+        <div ref="encounterPilesHost" class="workbench-encounter-piles"></div>
+        <p v-if="onlineMultiSeat && workbenchInvestigator" class="workbench-label">
+          <span class="workbench-label__title">
+            {{ $t('multiplayerTable.myArea') }} ·
+            <strong>{{ fullName(workbenchInvestigator.name) }}</strong>
+          </span>
+          <span class="workbench-label__stats">
+            <span>
+              <i>{{ $t('multiplayerTable.health') }}</i>
+              <b
+                >{{
+                  workbenchInvestigator.health -
+                  investigatorToken(workbenchInvestigator, TokenType.Damage)
+                }}/{{ workbenchInvestigator.health }}</b
+              >
+            </span>
+            <span>
+              <i>{{ $t('multiplayerTable.sanity') }}</i>
+              <b
+                >{{
+                  workbenchInvestigator.sanity -
+                  investigatorToken(workbenchInvestigator, TokenType.Horror)
+                }}/{{ workbenchInvestigator.sanity }}</b
+              >
+            </span>
+            <span>
+              <i>{{ $t('multiplayerTable.resources') }}</i>
+              <b>{{ investigatorToken(workbenchInvestigator, TokenType.Resource) }}</b>
+            </span>
+            <span>
+              <i>{{ $t('multiplayerTable.cluesShort') }}</i>
+              <b>{{ investigatorToken(workbenchInvestigator, TokenType.Clue) }}</b>
+            </span>
+          </span>
+        </p>
         <PlayerTabs
           :game="game"
           :playerId="playerId"
@@ -3099,6 +3463,7 @@ async function addChaosToken(face: any) {
           :playerOrder="playerOrder"
           :activePlayerId="activePlayerId"
           :tarotCards="props.scenario.tarotCards"
+          :pinnedPlayerId="pinWorkbench ? playerId : undefined"
           @choose="choose"
         >
           <div id="totals">
@@ -3314,6 +3679,8 @@ async function addChaosToken(face: any) {
 </template>
 
 <style scoped>
+.shelf-total-label { display: inline-flex; align-items: center; font-size: inherit; }
+.shelf-label-icon { width: 13px; height: 13px; margin-right: 4px; vertical-align: -2px; }
 .card {
   border-radius: 5px;
   width: var(--card-width);
@@ -4574,7 +4941,7 @@ async function addChaosToken(face: any) {
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 4px;
   background: var(--button);
-  color: white;
+  color: var(--text);
   cursor: pointer;
   font-size: 0.7rem;
   font-weight: 700;
@@ -4595,7 +4962,7 @@ async function addChaosToken(face: any) {
 .zoom-btn {
   background: none;
   border: none;
-  color: var(--title);
+  color: var(--text-on-dark);
   font-size: 18px;
   width: 22px;
   height: 22px;
@@ -4612,8 +4979,8 @@ async function addChaosToken(face: any) {
   flex-shrink: 0;
 
   &:hover {
-    background: var(--background-mid);
-    color: var(--spooky-green);
+    background: rgb(244 239 228 / 0.08);
+    color: #fff1cc;
   }
 
   &:active {
@@ -4809,7 +5176,9 @@ async function addChaosToken(face: any) {
   .scenario > .phases .phase.active-phase {
     background: linear-gradient(180deg, rgb(205 175 107 / 0.3), rgb(205 175 107 / 0.12));
     color: rgb(248 239 211 / 0.98);
-    box-shadow: inset 0 -2px 0 rgb(229 194 107 / 0.82), inset 0 0 16px rgb(229 194 107 / 0.08);
+    box-shadow:
+      inset 0 -2px 0 rgb(229 194 107 / 0.82),
+      inset 0 0 16px rgb(229 194 107 / 0.08);
     text-shadow: 0 1px 8px rgb(229 194 107 / 0.34);
   }
 
@@ -4907,7 +5276,9 @@ async function addChaosToken(face: any) {
       radial-gradient(circle at 50% 8%, rgb(205 175 107 / 0.08), transparent 34%),
       linear-gradient(180deg, rgb(16 31 32 / 0.97), rgb(10 23 23 / 0.96)),
       url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.avif') center / cover no-repeat;
-    box-shadow: inset 0 0 30px rgb(4 14 15 / 0.34), -4px 0 16px rgb(4 12 12 / 0.2);
+    box-shadow:
+      inset 0 0 30px rgb(4 14 15 / 0.34),
+      -4px 0 16px rgb(4 12 12 / 0.2);
   }
 
   .scenario-body > .scenario-cards::before {
@@ -5313,107 +5684,1371 @@ async function addChaosToken(face: any) {
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Multiplayer tabletop, desktop only (min-width: 1200px)
+
+   The shared board keeps the top of the table: the investigation map takes the
+   remaining width and the scenario shelf becomes a compact right-hand column.
+   When the seats belong to different people, a second rail carries only what is
+   public about the other investigators. The investigator being looked at then
+   owns a full-width workbench, so character, cards in play and hand read as one
+   surface instead of three narrow columns.
+   --------------------------------------------------------------------------- */
 @media (min-width: 1200px) {
-  /* This is a 1-4 investigator game: with more than one investigator the rail
-     widens and every seat panel goes on the table at once, two per row. */
-  .scenario-body.seats-multi {
-    grid-template-columns: min(580px, 40vw) minmax(0, 1fr) 280px;
+  .scenario-body.scenario-body--multiseat {
+    grid-template-columns: minmax(0, 1fr) clamp(232px, 19vw, 300px);
+    /* The workbench is sized by its own contents. A fixed height squeezed the
+       in-play and hand rows (both clip with overflow: hidden), which cut the
+       bottom off every card; the map above simply takes what is left. */
+    grid-template-rows: minmax(0, 1fr) auto;
+    column-gap: 0;
+    row-gap: 0;
+    padding-top: 38px;
   }
 
-  .scenario-body.seats-multi #player-zone :deep(.player-info) {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: max-content;
-    grid-auto-rows: minmax(max-content, 1fr);
-    align-content: start;
-    gap: 6px;
-    padding: 4px;
+  .scenario-body.scenario-body--multiseat.scenario-body--online {
+    grid-template-columns:
+      minmax(0, 1fr)
+      clamp(200px, 15vw, 236px)
+      clamp(232px, 18vw, 288px);
+  }
+
+  /* An opened teammate needs room for a character card and its stats. */
+  .scenario-body.scenario-body--multiseat.scenario-body--online.scenario-body--teammate-open {
+    grid-template-columns:
+      minmax(0, 1fr)
+      clamp(184px, 13vw, 216px)
+      clamp(320px, 26vw, 392px);
+  }
+
+  .scenario-body.scenario-body--multiseat > .location-cards-container,
+  .scenario-body.scenario-body--multiseat > .rain-host {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  /* ---- scenario shelf ---- */
+  .scenario-body.scenario-body--multiseat > .scenario-cards {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: stretch;
+    min-height: 0;
+    max-height: none !important;
+    padding: 12px 10px 14px;
     overflow-x: hidden;
     overflow-y: auto;
+    align-items: stretch;
+    gap: 10px;
+    border-left: 1px solid rgb(205 175 107 / 0.38);
+    background:
+      radial-gradient(circle at 50% 8%, rgb(229 194 107 / 0.09), transparent 34%),
+      linear-gradient(180deg, rgb(16 31 32 / 0.97), rgb(9 22 22 / 0.98)),
+      url('/assets/veiled-harbour/41-多人牌桌底场-v1.avif') center / cover no-repeat;
+    box-shadow:
+      inset 1px 0 0 rgb(244 239 228 / 0.05),
+      -5px 0 18px rgb(4 12 12 / 0.2);
   }
 
-  /* Three or four seats need two panel rows; keep them at content height and
-     scroll the panel grid instead of squeezing every seat. */
-  .scenario-body.seats-multi.seats-grid #player-zone :deep(.player-info) {
-    grid-auto-rows: max-content;
+  .scenario-body.scenario-body--multiseat > .scenario-cards .scenario-encounter-decks {
+    gap: 6px;
   }
 
-  /* The seat strip collapses from a full-height vertical rail into one compact
-     row of chips above the panels. */
-  .scenario-body.seats-multi #player-zone :deep(.tabs-row) {
-    grid-column: 1 / -1;
-    align-items: center;
-    min-height: 0;
+  .table-shelf-header {
+    position: relative;
+    /* isolation keeps the watermark's z-index: -1 inside the header; otherwise
+       it sinks beneath the opaque .scenario-cards background and disappears */
+    isolation: isolate;
+    flex: 0 0 auto;
+    padding: 0 2px 10px;
+    border-bottom: 1px solid rgb(205 175 107 / 0.32);
   }
 
-  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) {
-    flex: 0 1 auto;
+  .table-shelf-header::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 10px;
+    right: 2px;
+    width: 84px;
+    height: 84px;
+    background: url('/assets/veiled-harbour/50-潮汐罗盘印记-v1.png') center / contain no-repeat;
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  .table-shelf-header__eyebrow,
+  .table-shelf-header__totals {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    color: rgb(214 186 128 / 0.76);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .table-shelf-header h2 {
+    margin: 6px 0 2px;
+    color: rgb(248 239 211 / 0.98);
+    font-family: Arno, 'Source Han Serif', serif;
+    font-size: 1.14rem;
+    line-height: 1.15;
+  }
+
+  .table-shelf-header__subtitle {
+    margin: 0 0 8px;
+    color: rgb(214 220 210 / 0.56);
+    font-size: 0.72rem;
+  }
+
+  .table-shelf-header__focus {
+    display: grid;
+    gap: 1px;
+    margin-bottom: 9px;
+    padding: 7px 9px;
+    border-left: 2px solid rgb(229 194 107 / 0.84);
+    background: rgb(229 194 107 / 0.08);
+  }
+
+  .table-shelf-header__focus span,
+  .table-shelf-header__focus small {
+    color: rgb(214 220 210 / 0.62);
+    font-size: 0.66rem;
+  }
+
+  .table-shelf-header__focus strong {
+    color: rgb(248 239 211 / 0.98);
+    font-size: 0.88rem;
+    font-weight: 600;
+  }
+
+  .table-shelf-header__totals {
+    align-items: flex-start;
+    gap: 4px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .table-shelf-header__totals span {
+    display: grid;
+    gap: 1px;
     min-width: 0;
-    flex-direction: row;
-    flex-wrap: wrap;
+    color: rgb(214 220 210 / 0.56);
+    font-size: 0.64rem;
+  }
+
+  .table-shelf-header__totals b {
+    color: rgb(244 239 228 / 0.94);
+    font-family: Teutonic, Georgia, serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  /* ---- teammate rail (separate seats only) ---- */
+  .scenario-body.scenario-body--multiseat.scenario-body--online > .teammate-rail {
+    grid-column: 3;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+    padding: 12px 10px 14px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-left: 1px solid rgb(205 175 107 / 0.3);
+    background:
+      radial-gradient(circle at 50% 10%, rgb(229 194 107 / 0.07), transparent 32%),
+      linear-gradient(180deg, rgb(15 29 30 / 0.97), rgb(9 22 22 / 0.98)),
+      url('/assets/veiled-harbour/41-多人牌桌底场-v1.avif') center / cover no-repeat;
+    box-shadow:
+      inset 1px 0 0 rgb(244 239 228 / 0.04),
+      -5px 0 18px rgb(4 12 12 / 0.2);
+  }
+
+  .teammate-rail__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    color: rgb(214 186 128 / 0.78);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+  }
+
+  .teammate-rail__header small {
+    color: rgb(214 220 210 / 0.44);
+    font-size: 0.6rem;
+    letter-spacing: 0;
+  }
+
+  .teammate-card {
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr);
+    grid-template-areas:
+      'portrait name'
+      'portrait location'
+      'stats stats'
+      'assets assets';
+    align-items: center;
+    gap: 2px 8px;
+    flex: 0 0 auto;
+    width: 100%;
+    padding: 8px 9px 9px;
+    border: 1px solid rgb(205 175 107 / 0.2);
+    border-left: 3px solid rgb(124 168 147 / 0.7);
+    border-radius: 4px;
+    background: linear-gradient(135deg, rgb(30 54 48 / 0.72), rgb(12 27 26 / 0.84));
+    color: rgb(244 239 228 / 0.92);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .teammate-card:hover {
+    border-left-color: rgb(229 194 107 / 0.9);
+  }
+
+  .teammate-card:focus-visible {
+    outline: 2px solid rgb(229 194 107 / 0.9);
+    outline-offset: 2px;
+  }
+
+  .teammate-card--active {
+    border-color: rgb(229 194 107 / 0.5);
+    background: linear-gradient(135deg, rgb(59 61 43 / 0.86), rgb(18 32 29 / 0.88));
+  }
+
+  .teammate-card--guardian {
+    border-left-color: rgb(196 104 98 / 0.85);
+  }
+
+  .teammate-card--seeker {
+    border-left-color: rgb(119 177 196 / 0.88);
+  }
+
+  .teammate-card--rogue {
+    border-left-color: rgb(150 128 196 / 0.88);
+  }
+
+  .teammate-card--mystic {
+    border-left-color: rgb(160 118 168 / 0.88);
+  }
+
+  .teammate-card--survivor {
+    border-left-color: rgb(150 168 118 / 0.88);
+  }
+
+  .teammate-card__portrait {
+    grid-area: portrait;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgb(205 175 107 / 0.36);
+    border-radius: 3px;
+    object-fit: cover;
+    object-position: 50% 12%;
+  }
+
+  .teammate-card__name {
+    grid-area: name;
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .teammate-card__name em {
+    flex: 0 0 auto;
+    padding: 1px 5px;
+    border-radius: 999px;
+    background: rgb(229 194 107 / 0.18);
+    color: rgb(244 226 176 / 0.96);
+    font-size: 0.58rem;
+    font-style: normal;
+    letter-spacing: 0.04em;
+  }
+
+  .teammate-card__location {
+    grid-area: location;
+    overflow: hidden;
+    color: rgb(214 220 210 / 0.56);
+    font-size: 0.64rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .teammate-card__stats {
+    grid-area: stats;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2px 6px;
+    margin-top: 6px;
+    padding-top: 5px;
+    border-top: 1px solid rgb(205 175 107 / 0.16);
+  }
+
+  .teammate-card__stats span {
+    display: grid;
+    min-width: 0;
+  }
+
+  .teammate-card__stats b {
+    color: rgb(248 239 211 / 0.94);
+    font-family: Teutonic, Georgia, serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+  }
+
+  .teammate-card__stats i {
+    overflow: hidden;
+    color: rgb(214 220 210 / 0.5);
+    font-size: 0.58rem;
+    font-style: normal;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .teammate-card__assets {
+    grid-area: assets;
+    display: flex;
     align-items: center;
     gap: 3px;
-    padding: 0;
-    overflow: visible;
+    margin-top: 6px;
   }
 
-  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li {
-    margin-right: 0;
+  .teammate-card__assets img {
+    width: 26px;
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgb(4 12 12 / 0.5);
+  }
+
+  .teammate-card__assets em {
+    color: rgb(214 220 210 / 0.6);
+    font-size: 0.62rem;
+    font-style: normal;
+  }
+
+  /* Public detail for one teammate: no hand, no control buttons. */
+  .teammate-detail {
+    display: grid;
+    gap: 10px;
+    flex: 0 0 auto;
+    padding: 10px;
+    border: 1px solid rgb(205 175 107 / 0.34);
+    border-radius: 5px;
+    background: linear-gradient(180deg, rgb(22 42 40 / 0.86), rgb(10 23 22 / 0.9));
+  }
+
+  .teammate-detail__top {
+    display: grid;
+    grid-template-columns: minmax(0, 132px) minmax(0, 1fr);
+    align-items: start;
+    gap: 10px;
+  }
+
+  /* The public detail shows the printed character card, not a thumbnail. */
+  .teammate-detail__card {
+    width: 100%;
     border-radius: 4px;
-    line-height: 1;
+    box-shadow: 0 2px 8px rgb(4 12 12 / 0.5);
   }
 
-  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li span {
-    padding: 2px 7px;
-    font-size: 0.8rem;
+  .teammate-detail__identity {
+    display: grid;
+    align-content: start;
+    gap: 3px;
+    min-width: 0;
   }
 
-  /* The global `button { min-height: 42px }` would turn every seat chip into a
-     42px slab and wrap the strip onto several rows. */
-  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li .switch-investigators,
-  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li .waiting-indicator {
+  .teammate-detail__identity strong {
+    overflow: hidden;
+    color: rgb(248 239 211 / 0.98);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .teammate-detail__identity small {
+    color: rgb(214 220 210 / 0.6);
+    font-size: 0.66rem;
+  }
+
+  .teammate-detail__identity em {
+    justify-self: start;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: rgb(229 194 107 / 0.18);
+    color: rgb(244 226 176 / 0.96);
+    font-size: 0.6rem;
+    font-style: normal;
+  }
+
+  /* The state reads from its own wording first; the tint only reinforces it. */
+  .teammate-detail__identity em.teammate-detail__state--waiting,
+  .teammate-card__name em.teammate-card__state--waiting {
+    background: rgb(166 80 69 / 0.26);
+    color: rgb(246 214 198 / 0.98);
+  }
+
+  .teammate-detail__identity em.teammate-detail__state--eliminated,
+  .teammate-card__name em.teammate-card__state--eliminated {
+    background: rgb(214 220 210 / 0.14);
+    color: rgb(214 220 210 / 0.6);
+  }
+
+  .teammate-detail__close {
+    justify-self: start;
     min-height: 0;
-    height: auto;
-    align-self: stretch;
-    padding: 2px 6px;
+    margin-top: 2px;
+    padding: 3px 8px;
+    border: 1px solid rgb(205 175 107 / 0.3);
+    border-radius: 3px;
+    background: rgb(9 23 22 / 0.7);
+    color: rgb(214 220 210 / 0.8);
+    font-size: 0.64rem;
+    cursor: pointer;
   }
 
-  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li .switch-investigators svg,
-  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li .waiting-indicator svg {
+  .teammate-detail__stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px 8px;
+    margin: 0;
+    padding-top: 9px;
+    border-top: 1px solid rgb(205 175 107 / 0.18);
+  }
+
+  .teammate-detail__stats div {
+    display: grid;
+    min-width: 0;
+  }
+
+  .teammate-detail__stats dt {
+    color: rgb(214 220 210 / 0.5);
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .teammate-detail__stats dd {
+    margin: 0;
+    color: rgb(248 239 211 / 0.96);
+    font-family: Teutonic, Georgia, serif;
+    font-size: 0.92rem;
+  }
+
+  .teammate-detail__cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding-top: 9px;
+    border-top: 1px solid rgb(205 175 107 / 0.18);
+    --card-width: 66px;
+  }
+
+  .teammate-detail__cards--threat {
+    border-top-color: rgb(196 104 98 / 0.42);
+  }
+
+  /* ---- workbench: my character, cards in play, hand and deck seat ---- */
+  .scenario-body.scenario-body--multiseat > #player-zone {
+    position: relative;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    flex-direction: column;
+    width: auto;
+    height: auto;
+    max-height: none;
+    min-height: 0;
+    overflow: hidden;
+    border-top: 1px solid rgb(205 175 107 / 0.58);
+    border-right: 0;
+    --identity-width: clamp(264px, 22vw, 352px);
+    --pile-width: clamp(82px, 6.2vw, 108px);
+    --card-width: min(82px, calc((100cqw - var(--identity-width) - 3 * var(--pile-width) - 92px) / 10 - 5px));
+    container-type: inline-size;
+    background:
+      linear-gradient(180deg, rgb(18 37 34 / 0.3), rgb(8 19 19 / 0.66)),
+      url('/assets/veiled-harbour/T02-调查员皮革桌垫.avif') center / cover no-repeat;
+    box-shadow:
+      0 -8px 22px rgb(4 12 12 / 0.3),
+      inset 0 1px 0 rgb(244 239 228 / 0.06);
+  }
+
+  .workbench-label {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 5px 14px 4px 54px;
+    border-bottom: 1px solid rgb(205 175 107 / 0.28);
+    background: rgb(9 23 22 / 0.6);
+    color: rgb(214 186 128 / 0.76);
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .workbench-label::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 17px;
+    background: url('/assets/veiled-harbour/51-按钮端帽压饰-v1.png') left center / contain no-repeat;
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .workbench-label__title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .workbench-label strong {
+    color: rgb(248 239 211 / 0.96);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .workbench-label__stats {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 16px;
+  }
+
+  .workbench-label__stats span {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+  }
+
+  .workbench-label__stats i {
+    color: rgb(214 220 210 / 0.5);
+    font-size: 0.6rem;
+    font-style: normal;
+    letter-spacing: 0.06em;
+  }
+
+  .workbench-label__stats b {
+    color: rgb(248 239 211 / 0.96);
+    font-family: Teutonic, Georgia, serif;
+    font-size: 0.86rem;
+    font-weight: 500;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-info) {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  /* ---- seat strip: who is being looked at, and who is acting ---- */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.tabs-row) {
+    flex: 0 0 30px;
+    min-height: 30px;
+    align-items: stretch;
+    gap: 6px;
+    padding: 0 12px;
+    border-bottom: 1px solid rgb(205 175 107 / 0.3);
+    background: rgb(9 23 22 / 0.62);
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(ul.tabs__header) {
+    flex: 1 1 auto;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 4px;
+    min-width: 0;
+    padding: 4px 0 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(ul.tabs__header > li) {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: stretch;
+    margin: 0;
+    border: 1px solid rgb(205 175 107 / 0.24);
+    border-bottom: 0;
+    border-radius: 4px 4px 0 0;
+    background: linear-gradient(180deg, rgb(30 47 48 / 0.5), rgb(13 26 26 / 0.7));
+    opacity: 0.72;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(ul.tabs__header > li span) {
+    padding: 5px 10px;
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(ul.tabs__header > li.tab--selected) {
+    opacity: 1;
+    border-color: rgb(229 194 107 / 0.72);
+    box-shadow:
+      inset 0 -2px 0 rgb(229 194 107 / 0.9),
+      0 -2px 10px rgb(229 194 107 / 0.12);
+  }
+
+  /* The action marker is a shape and a label, never colour alone. */
+  .scenario-body.scenario-body--multiseat
+    > #player-zone
+    :deep(ul.tabs__header > li.tab--active-player::before) {
+    align-self: center;
+    margin: 0 0 0 7px;
+    font-size: 0.62rem;
+    opacity: 0.9;
+  }
+
+  .scenario-body.scenario-body--multiseat
+    > #player-zone
+    :deep(ul.tabs__header > li .switch-investigators),
+  .scenario-body.scenario-body--multiseat
+    > #player-zone
+    :deep(ul.tabs__header > li .waiting-indicator) {
+    align-self: stretch;
+    height: auto;
+    min-height: 0;
+    padding: 2px 7px;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(ul.tabs__header > li svg) {
     width: 11px;
     height: 11px;
   }
 
-  .scenario-body.seats-multi #player-zone :deep(ul.tabs__header) > li.tab--lead-player::after {
+  .scenario-body.scenario-body--multiseat
+    > #player-zone
+    :deep(ul.tabs__header > li.tab--lead-player::after) {
     display: none;
   }
 
-  /* `v-show` leaves an inline display:none on every unselected seat, so
-     !important is the only way to put all of them on the table at once. */
-  .scenario-body.seats-multi #player-zone :deep(.tab) {
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.tabs-row > #totals) {
+    flex: 0 0 auto;
+    margin-left: auto;
+  }
+
+  /* Only the seat being looked at puts its workbench on the table. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.tab) {
+    display: none !important;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.tab.tab--active) {
     display: flex !important;
+    flex: 1 1 auto;
     flex-direction: column;
     min-width: 0;
     min-height: 0;
-    border: 1px solid rgb(205 175 107 / 0.42);
-    border-radius: 6px;
-    background: rgb(10 23 22 / 0.45);
     overflow: hidden;
   }
 
-  .scenario-body.seats-multi #player-zone :deep(.tab--active) {
-    border-color: color-mix(in srgb, var(--select) 62%, transparent);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--select) 28%, transparent);
-  }
-
-  /* The hand belongs to the seat you act as; the other seats keep their
-     investigator, slots and play area. */
-  .scenario-body.seats-multi #player-zone :deep(.tab:not(.tab--active) .hand-area) {
+  /* Separate seats are other people's investigators: their panel is never the
+     workbench, only their public summary in the rail. */
+  .scenario-body.scenario-body--multiseat.scenario-body--online
+    > #player-zone
+    :deep(ul.tabs__header) {
     display: none;
   }
 
-  .scenario-body.seats-multi #player-zone :deep(.tab:not(.tab--active) .in-play) {
+  /* ---- the workbench grid itself ---- */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-cards) {
+    display: grid;
+    grid-template-columns: var(--identity-width) minmax(0, 1fr) var(--pile-width) var(--pile-width) var(--pile-width);
+    /* Every row is content-sized so a card is never taller than its row. */
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      'identity in-play deck discard encounter'
+      'identity hand deck discard encounter';
+    align-content: start;
+    column-gap: 14px;
+    row-gap: 4px;
     flex: 1 1 auto;
+    width: 100%;
+    min-height: 0;
+    padding: 8px 12px;
+    overflow: hidden;
+  }
+
+  /* The wrappers only group the panels; the grid places the panels themselves.
+     Hoisting the character card and the action band apart is what lets the
+     buttons leave the character column and join one band of their own. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-and-deck),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-container),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-area) {
+    display: contents;
+  }
+
+  /* The character card anchors the panel: it keeps its printed proportion and
+     takes the identity column's full width instead of a thumbnail. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-card) {
+    display: flex;
+    flex-direction: column;
+    grid-area: identity;
+    width: 100%;
+    gap: 4px;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-card > .stats) {
+    align-self: flex-start;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-image) {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  /* Fill the identity column: as large as the two rows allow, keeping the
+     printed proportion so the card text stays readable. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-image > .card) {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow:
+      0 4px 16px rgb(0 0 0 / 0.45),
+      0 0 0 1px rgb(205 175 107 / 0.5);
+  }
+
+  /* Health, sanity, resources and clues ride on the character card's foot. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.resources) {
+    grid-area: identity;
+    align-self: end;
+    justify-self: start;
+    --pool-token-width: 27px;
+    font-size: 0.7rem;
+    z-index: var(--z-index-10);
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    margin: 0 0 14px 8px;
+    padding: 2px;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* One action band for the whole panel: the acting investigator's action
+     pips read first, then the legal abilities and the end-turn button. */
+  .scenario-body.scenario-body--multiseat
+    > #player-zone
+    :deep(.player-area > div:not(.player-card)) {
+    display: contents;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-buttons),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.button-group) {
+    display: contents;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.action-container) {
+    grid-area: identity;
+    align-self: start;
+    justify-self: end;
+    z-index: 10;
+    margin: 2px 6px 0 0;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    max-width: calc(100% - 144px);
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    filter: drop-shadow(0 1px 3px #000);
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-controls) {
+    position: absolute;
+    top: 0;
+    right: 96px;
+    z-index: 11;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: calc(100% - 480px);
+    min-height: 30px;
+    overflow-x: auto;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-controls button) {
+    white-space: nowrap;
+    min-height: 30px;
+    padding: 3px 5px;
+    font-size: 0.76rem;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-controls button:not(:disabled):hover) {
+    color: #f5d48b;
+    background: rgb(205 175 107 / 0.08);
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hunch-deck) {
+    grid-area: identity;
+    justify-self: end;
+    align-self: end;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row) {
+    position: relative;
+    padding-top: 24px;
+    grid-area: in-play;
+    min-width: 0;
+    min-height: 0;
+    /* An earlier 1200px rule pins this strip to 90px, which crops the asset
+       cards and the slot boxes to about three quarters of a card. */
+    max-height: none;
+    overflow: hidden;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play) {
+    min-height: 0;
+    /* The base rule caps this strip at 300px and scrolls it; here the row is
+       already content-sized, so a cap would only crop tall cards again. */
+    max-height: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    align-items: flex-start;
+    padding: 4px 2px;
+    border-radius: 0;
+    background: transparent;
+  }
+
+  /* Empty slots keep the shape of a real asset: a 28px marker read as a
+     different kind of object next to the cards it stands for. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.equip-slots) {
+    grid-template-rows: auto;
+    grid-auto-flow: column;
+    gap: 4px;
+    align-content: start;
+    margin-left: 8px;
+    padding-left: 8px;
+    border-left: 1px solid rgb(205 175 107 / 0.2);
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.equip-slots .slot) {
+    --slot-width: var(--card-width);
+    border-radius: 5px;
+    border-color: rgb(205 175 107 / 0.28);
+    background: rgb(9 23 22 / 0.42);
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area) {
+    grid-area: hand;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area__header) {
+    flex: 0 0 18px;
+    padding: 0 2px;
+    font-size: 0.72rem;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area > section.hand) {
+    flex: 1 1 auto;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    padding: 2px 0 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    align-items: flex-start;
+  }
+
+  /* Deck and discard become the narrow seat at the end of the hand row. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.deck-container) {
+    grid-area: deck;
+    --card-width: var(--pile-width);
+    align-self: start;
+    justify-self: stretch;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard) {
+    grid-area: discard;
+    --card-width: var(--pile-width);
+    align-self: start;
+    justify-self: stretch;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.deck-container .deck),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard .card) {
+    width: 100%;
+    height: auto;
+  }
+
+  /* The workbench must measure exactly as tall as its rows. While these boxes
+     could grow, the auto workbench row resolved taller than the cards and the
+     leftover collected as a dead band under the action tray. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-info),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.tab.tab--active),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-cards) {
+    flex-grow: 0;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.play-area-label) {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: absolute;
+    top: 0;
+    left: 2px;
+    color: rgb(214 186 128 / 0.85);
+    font-size: 0.72rem;
+    line-height: 22px;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.pile-label) {
+    display: block;
+    margin-bottom: 6px;
+    color: rgb(214 186 128 / 0.85);
+    font-size: 0.72rem;
+    text-align: center;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard-empty) {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 5 / 7;
+    border: 1px dashed rgb(205 175 107 / 0.4);
+    border-radius: 6px;
+    color: rgb(214 186 128 / 0.45);
+    background: rgb(4 14 14 / 0.24);
+    font:
+      1.5rem Georgia,
+      serif;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-controls button:disabled) {
+    opacity: 0.45;
+    background: transparent;
+    color: rgb(224 219 200 / 0.75);
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.play-area-label svg),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.pile-label svg) {
+    width: 13px;
+    height: 13px;
+    margin-right: 4px;
+    vertical-align: -2px;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard-empty),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area__header),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(ul.tabs__header > li),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(ul.tabs__header > li.tab--selected) {
+    border-color: transparent;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(ul.tabs__header > li.tab--selected) {
+    color: #f5d48b;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.resources .poolItem::before) {
+    display: none;
+  }
+
+  .scenario-body.scenario-body--multiseat > .scenario-cards::before {
+    border: 0;
+  }
+  .scenario-body.scenario-body--multiseat .table-shelf-header__focus {
+    border: 0;
+    background: transparent;
+    padding-left: 0;
+  }
+}
+.table-summary-title,
+.table-summary-action,
+.table-summary-totals,
+.table-summary-totals > span {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 5px;
+}
+.table-summary-title strong,
+.table-summary-title > span,
+.table-summary-investigator {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.table-summary-title strong { color: #eee5cf; font-family: Arno, Georgia, serif; }
+.table-summary-action { font-size: 0.72rem; color: #d5d7cb; }
+.table-summary-action small { flex: 0 0 auto; color: #bfa976; }
+.table-summary-totals { gap: 10px; color: #cbb47f; font-size: 0.7rem; }
+.table-shelf-header--navigation {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-rows: auto auto;
+  column-gap: 14px;
+  row-gap: 1px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  line-height: 1.2;
+}
+.table-shelf-header--navigation::after { display: none; }
+.table-shelf-header--navigation .table-summary-title { grid-column: 1; font-size: 0.88rem; }
+.table-shelf-header--navigation .table-summary-action { grid-column: 1; }
+.table-shelf-header--navigation .table-summary-totals { grid-column: 2; grid-row: 1 / 3; }
+.table-shelf-header__accessories {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  align-self: center;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  box-shadow: none;
+  color: rgb(244 239 228 / 0.78);
+  cursor: pointer;
+}
+.table-shelf-header__accessories svg { width: 15px; height: 15px; }
+.table-shelf-header__accessories:hover { background: rgb(244 239 228 / 0.08); color: #fff1cc; }
+.table-shelf-header__accessories.active { background: rgb(244 239 228 / 0.1); color: #fff1cc; }
+@media (min-width: 1200px) {
+  .scenario-body.scenario-body--multiseat > .scenario-cards {
+    container-type: inline-size;
+    gap: 14px;
+    padding-top: 12px;
+  }
+  /* Give each landscape card a full shelf row, including its stack controls. */
+  .scenario-body.scenario-body--multiseat > .scenario-cards > .scenario-decks {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    order: -2;
+    width: 100%;
+    --card-width: calc((100cqw - 8px) / 1.4);
+  }
+  .scenario-body.scenario-body--multiseat > .scenario-cards > .scenario-encounter-decks {
+    order: -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: center;
+    align-items: start;
+    gap: 12px;
+    --card-width: clamp(76px, calc((100cqw - 32px) / 2), 104px);
+  }
+  .scenario-body.scenario-body--multiseat .scenario-encounter-decks > .discard {
+    height: auto;
+  }
+}
+.encounter-piles-label { display: none; }
+.workbench-encounter-piles:empty { display: none; }
+@media (min-width: 1200px) {
+  .scenario-body.scenario-body--multiseat > #player-zone > .workbench-encounter-piles {
+    position: absolute;
+    top: 38px;
+    right: 12px;
+    width: var(--pile-width);
+    max-height: calc(100% - 46px);
+    overflow-y: auto;
+    z-index: 10;
+    --card-width: var(--pile-width);
+  }
+  .scenario-body.scenario-body--multiseat #player-zone .scenario-encounter-decks {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin: 0;
+  }
+  #player-zone .encounter-piles-label {
+    display: block;
+    order: -3;
+    font-size: 0.72rem;
+    color: rgb(214 186 128 / 0.85);
+    text-align: center;
+    white-space: nowrap;
+  }
+  #player-zone .scenario-encounter-decks :deep(.encounter-deck) { order: -2; }
+  #player-zone .scenario-encounter-decks .encounter-discard-placeholder { display: none; }
+  #player-zone .scenario-encounter-decks > .discard { height: auto; }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area) {
+    border-left: 1px dashed rgb(205 175 107 / 0.42);
+    padding-left: 12px;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row) {
+    margin-left: -12px;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area) {
+    margin-left: -12px;
+    width: calc(100% + 12px);
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.deck-container) {
+    border-left: 1px dashed rgb(205 175 107 / 0.42);
+    margin-left: -8px;
+    padding-left: 8px;
+    width: calc(100% + 8px);
+    align-self: stretch;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.agenda-container),
+  .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.act-container) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.agenda-container::before),
+  .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.act-container::before) {
+    content: '◇  ' attr(data-area-label);
+    color: rgb(214 186 128 / 0.9);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.act-container) {
+    border-top: 1px dashed rgb(205 175 107 / 0.42);
+    padding-top: 14px;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-decks :deep(.agenda-main),
+  .scenario-body.scenario-body--multiseat .scenario-decks :deep(.agenda-card),
+  .scenario-body.scenario-body--multiseat .scenario-decks :deep(.act-row),
+  .scenario-body.scenario-body--multiseat .scenario-decks :deep(.act-row > .card-container) {
+    width: 100%;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-decks :deep(.agenda-card > .card--sideways),
+  .scenario-body.scenario-body--multiseat .scenario-decks :deep(.act-row > .card-container > .card--sideways) {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+  }
+}
+@media (min-width: 1200px) {
+  .scenario-body.scenario-body--multiseat {
+    --table-brass: #c5ad78;
+    --table-rule: rgb(185 157 98 / 0.36);
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone {
+    border-top-color: rgb(192 161 94 / 0.5);
+    background:
+      radial-gradient(ellipse at 8% 75%, rgb(141 112 51 / 0.065), transparent 30%),
+      linear-gradient(180deg, rgb(18 32 28 / 0.4), rgb(6 18 17 / 0.72)),
+      url('/assets/veiled-harbour/T02-调查员皮革桌垫.avif') center / cover no-repeat;
+    box-shadow: 0 -3px 14px rgb(0 8 7 / 0.3), inset 0 1px rgb(244 225 175 / 0.06);
+  }
+  .scenario-body.scenario-body--multiseat > .scenario-cards {
+    background:
+      radial-gradient(ellipse at 50% 0%, rgb(174 139 68 / 0.075), transparent 45%),
+      linear-gradient(180deg, rgb(16 29 26 / 0.96), rgb(6 20 18 / 0.97)),
+      url('/assets/veiled-harbour/41-多人牌桌底场-v1.avif') center / cover no-repeat;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(185 157 98 / 0.34) transparent;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.deck-container),
+  .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.act-container) {
+    border-color: var(--table-rule);
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.play-area-label),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area__header),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.pile-label),
+  .scenario-body.scenario-body--multiseat #player-zone .encounter-piles-label,
+  .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.agenda-container::before),
+  .scenario-body.scenario-body--multiseat .scenario-decks > :deep(.act-container::before) {
+    color: var(--table-brass);
+    font-family: Arno, 'Source Han Serif', Georgia, serif;
+    letter-spacing: 0.075em;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.65);
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.play-area-label) {
+    left: 12px;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.equip-slots .slot) {
+    border: 1px solid rgb(179 153 96 / 0.35);
+    border-radius: 4px;
+    background: linear-gradient(145deg, rgb(29 43 34 / 0.32), rgb(4 15 13 / 0.32));
+    box-shadow: inset 0 0 0 2px rgb(4 13 10 / 0.28);
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.equip-slots .slot img) {
+    opacity: 0.72;
+    filter: sepia(0.5) saturate(0.65) invert(0.72);
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.discard-empty) {
+    border: 1px dashed var(--table-rule);
+    border-radius: 4px;
+    background: rgb(3 13 11 / 0.16);
+    color: rgb(197 173 120 / 0.42);
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(section.hand),
+  .scenario-body.scenario-body--multiseat > #player-zone > .workbench-encounter-piles {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(185 157 98 / 0.34) transparent;
+  }
+  .scenario-body.scenario-body--multiseat.scenario-body--online > #player-zone > .workbench-encounter-piles {
+    top: 64px;
+    max-height: calc(100% - 72px);
+  }
+}
+.scenario-seat,
+.scenario-seat__cards,
+.scenario-accessories,
+.scenario-accessories__content { display: contents; }
+.scenario-seat__heading { display: none; }
+@media (min-width: 1200px) {
+  .scenario-body.scenario-body--multiseat > .scenario-cards {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    gap: 0;
+    overflow: visible;
+    border: 0;
+    background: none;
+    box-shadow: none;
+    container-type: normal;
+  }
+  .scenario-body.scenario-body--multiseat > .scenario-cards::before { display: none; }
+  .scenario-body.scenario-body--multiseat > .scenario-cards > .scenario-decks {
+    display: grid !important;
+    grid-template-areas: none !important;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    flex: 1 1 0;
+    min-height: 0;
+    gap: 0;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-seat {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+    container-type: size;
+    padding: 0;
+    border: 1px solid rgb(184 154 91 / 0.32);
+    background:
+      radial-gradient(ellipse at 50% 0, rgb(160 125 55 / 0.1), transparent 65%),
+      linear-gradient(150deg, rgb(22 37 31 / 0.92), rgb(7 21 18 / 0.95));
+    box-shadow: 0 3px 10px rgb(0 7 5 / 0.25);
+  }
+  .scenario-body.scenario-body--multiseat .scenario-seat__heading {
+    display: flex;
+    align-items: center;
+    flex: 0 0 18px;
+    gap: 5px;
+    padding: 0 5px;
+    color: #c5ad78;
+    font: 0.72rem Arno, Georgia, serif;
+    letter-spacing: 0.12em;
+  }
+  .scenario-seat__heading svg { width: 11px; height: 11px; }
+  .scenario-seat__heading i { margin-left: auto; font-style: normal; opacity: 0.6; }
+  .scenario-body.scenario-body--multiseat .scenario-seat__cards {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 4px;
+    flex: 1 1 0;
+    min-height: 0;
+    overflow: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(185 157 98 / 0.32) transparent;
+    --card-width: max(24px, min(calc((100cqw - 4px * (var(--seat-card-count) - 1)) / var(--seat-card-count) / var(--card-sideways-aspect)), calc(100cqh - 18px)));
+  }
+  .scenario-body.scenario-body--multiseat .scenario-seat__cards > :deep(.agenda-container),
+  .scenario-body.scenario-body--multiseat .scenario-seat__cards > :deep(.act-container) {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto;
+    width: calc(var(--card-width) * var(--card-sideways-aspect));
+    max-width: 100%;
+    padding: 0;
+    border: 0;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-seat__cards :deep(.act-row > .card-container) {
+    height: auto;
+  }
+  /* The card is flush with the frame, so its own rounding would only open notches at the corners. */
+  .scenario-body.scenario-body--multiseat .scenario-seat__cards :deep(.card),
+  .scenario-body.scenario-body--multiseat .scenario-seat__cards :deep(.card-container),
+  .scenario-body.scenario-body--multiseat .scenario-seat__cards :deep(.agenda-card) {
+    border-radius: 0;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-accessories {
+    position: relative;
+    display: block;
+    flex: 0 0 auto;
+    height: 0;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-accessories:not(.is-open) > .scenario-accessories__content {
+    display: none;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-accessories.is-open > .scenario-accessories__content {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    z-index: 110;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: min(460px, 70vw);
+    max-height: 60vh;
+    overflow: auto;
+    padding: 14px;
+    background: #10231e;
+    border: 1px solid rgb(185 157 98 / 0.5);
+    box-shadow: 0 8px 30px rgb(0 0 0 / 0.5);
+    --card-width: 92px;
   }
 }
 </style>

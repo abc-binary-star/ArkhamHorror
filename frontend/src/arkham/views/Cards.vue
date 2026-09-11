@@ -1009,7 +1009,7 @@ const stepCard = (delta: number) => {
     justify-content: center;
     width: 24px;
     height: 24px;
-    color: #fff;
+    color: var(--text);
     font-size: 18px;
     font-weight: 800;
     letter-spacing: 0;
@@ -1210,7 +1210,7 @@ const stepCard = (delta: number) => {
   .count {
     flex-shrink: 0;
     font-size: 0.72rem;
-    color: var(--button);
+    color: var(--text-faint);
     white-space: nowrap;
   }
 }

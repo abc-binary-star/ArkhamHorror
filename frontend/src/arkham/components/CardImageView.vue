@@ -363,7 +363,7 @@ const cardName = (card: Arkham.CardDef) => {
 }
 
 .attachments-title--spirit {
-  color: #b8d7ff;
+  color: var(--guardian-dark);
 }
 
 .attachment-grid {

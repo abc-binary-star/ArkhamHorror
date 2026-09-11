@@ -324,6 +324,9 @@ input[type='radio']:focus-visible + label {
   gap: 6px;
   margin-bottom: 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(90deg, rgba(20, 33, 34, 0.92), rgba(20, 33, 34, 0.68)),
+    url('/assets/veiled-harbour/43-潮汐之门章节封面-v1.png') right center / min(28vw, 360px) auto no-repeat;
 }
 
 .chapter-select label {

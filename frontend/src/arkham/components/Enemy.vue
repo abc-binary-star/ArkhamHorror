@@ -10,11 +10,15 @@ import { keyToId } from '@/arkham/types/Key'
 import { TokenType } from '@/arkham/types/Token'
 import { imgsrc } from '@/arkham/helpers'
 import { cardArt, cardImage, sourceCardCode } from '@/arkham/cardImages'
-import { useGameChoices, useStickyChoicesSource, useGameChoicesTooltip } from '@/arkham/composables/useGameChoices'
+import {
+  useGameChoices,
+  useStickyChoicesSource,
+  useGameChoicesTooltip,
+} from '@/arkham/composables/useGameChoices'
 import { useCardFlip } from '@/arkham/composables/useCardFlip'
 import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/types/Message'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
-import MissingCardBadge from '@/arkham/components/MissingCardBadge.vue';
+import MissingCardBadge from '@/arkham/components/MissingCardBadge.vue'
 import DebugEnemy from '@/arkham/components/debug/Enemy.vue'
 import PoolItem from '@/arkham/components/PoolItem.vue'
 import TokenPool from '@/arkham/components/TokenPool.vue'
@@ -25,26 +29,30 @@ import Event from '@/arkham/components/Event.vue'
 import Skill from '@/arkham/components/Skill.vue'
 import SealedChaosTokens from '@/arkham/components/SealedChaosTokens.vue'
 import Story from '@/arkham/components/Story.vue'
-import ScarletKey from '@/arkham/components/ScarletKey.vue';
+import ScarletKey from '@/arkham/components/ScarletKey.vue'
 import * as Arkham from '@/arkham/types/Enemy'
 import { Source } from '@/arkham/types/Source'
-import { isManifestedSpiritEnemy } from '@/arkham/spiritVisuals';
-import { type Card as ArkhamCard, toCardContents } from '@/arkham/types/Card';
+import { isManifestedSpiritEnemy } from '@/arkham/spiritVisuals'
+import { type Card as ArkhamCard, toCardContents } from '@/arkham/types/Card'
 import { isUnvaluedCalculation } from '@/arkham/types/Calculation'
 
-const props = withDefaults(defineProps<{
-  game: Game
-  enemy: Arkham.Enemy
-  playerId: string
-  atLocation?: boolean
-  attached?: boolean
-  sourceHighlighted?: boolean
-}>(), { atLocation: false, attached: false, sourceHighlighted: false })
+const props = withDefaults(
+  defineProps<{
+    game: Game
+    enemy: Arkham.Enemy
+    playerId: string
+    atLocation?: boolean
+    attached?: boolean
+    sourceHighlighted?: boolean
+    // Another player's public card: keeps the printed state, drops the controls
+    readonly?: boolean
+  }>(),
+  { atLocation: false, attached: false, sourceHighlighted: false, readonly: false },
+)
 
 const emits = defineEmits<{
   choose: [value: number]
 }>()
-
 
 const frame = ref(null)
 const debugging = ref(false)
@@ -77,21 +85,38 @@ const { displayedImage, flipping } = useCardFlip(faceImage)
 
 const id = computed(() => props.enemy.id)
 
-const choicesSource = useStickyChoicesSource(() => props.game, () => props.playerId)
+const choicesSource = useStickyChoicesSource(
+  () => props.game,
+  () => props.playerId,
+)
 const isHighlighted = computed(() => {
+  if (props.readonly) return false
   if (props.sourceHighlighted) return true
   const source = choicesSource.value
   return source !== null && 'contents' in source && source.contents === props.enemy.id
 })
-const isAttacking = computed(() => props.game.enemyAttackTargets.some((e) => e.enemy === props.enemy.id))
+const isAttacking = computed(() =>
+  props.game.enemyAttackTargets.some((e) => e.enemy === props.enemy.id),
+)
 const { t } = useI18n()
-const choicesTooltip = useGameChoicesTooltip(() => props.game, () => props.playerId)
+const choicesTooltip = useGameChoicesTooltip(
+  () => props.game,
+  () => props.playerId,
+)
 const sourceTooltip = computed<string | false>(() => {
   const raw = isHighlighted.value ? choicesTooltip.value : null
-  return raw ? handleEmbeddedI18n(raw, t as (key: string, params: { [key: string]: any }) => string) : false
+  return raw
+    ? handleEmbeddedI18n(raw, t as (key: string, params: { [key: string]: any }) => string)
+    : false
 })
 
-const choices = useGameChoices(() => props.game, () => props.playerId)
+const gameChoices = useGameChoices(
+  () => props.game,
+  () => props.playerId,
+)
+// Every affordance on this card is derived from these choices, so emptying them
+// is enough to render the enemy as public information.
+const choices = computed<readonly Message[]>(() => (props.readonly ? [] : gameChoices.value))
 
 function isCardActionForId(c: Message, enemyId: string): boolean {
   return c.tag === MessageType.TARGET_LABEL && c.target.contents === enemyId
@@ -104,21 +129,29 @@ function isCardAction(c: Message): boolean {
 const cardAction = computed(() => choices.value.findIndex(isCardAction))
 const canInteract = computed(() => abilities.value.length > 0 || cardAction.value !== -1)
 
-const inVoid = computed(() => props.enemy.placement.tag === 'OutOfPlay' && props.enemy.placement.contents === 'VoidZone')
-const global = computed(() => props.enemy.placement.tag === 'OtherPlacement' && props.enemy.placement.contents === 'Global')
+const inVoid = computed(
+  () => props.enemy.placement.tag === 'OutOfPlay' && props.enemy.placement.contents === 'VoidZone',
+)
+const global = computed(
+  () =>
+    props.enemy.placement.tag === 'OtherPlacement' && props.enemy.placement.contents === 'Global',
+)
 
 const swarmEnemies = computed(() =>
-  Object.values(props.game.enemies).filter((e) => e.placement.tag === 'AsSwarm' && e.placement.swarmHost === props.enemy.id)
+  Object.values(props.game.enemies).filter(
+    (e) => e.placement.tag === 'AsSwarm' && e.placement.swarmHost === props.enemy.id,
+  ),
 )
 
 const swarmCards = computed<ArkhamCard[]>(() =>
-  swarmEnemies.value.flatMap((e) => e.placement.tag === 'AsSwarm' ? [e.placement.swarmCard] : [])
+  swarmEnemies.value.flatMap((e) => (e.placement.tag === 'AsSwarm' ? [e.placement.swarmCard] : [])),
 )
 
 const swarmCardsShown = ref(false)
 const swarmTooltip = computed(() => `Swarm cards (${swarmCards.value.length}) — click to view`)
 const swarmBackImage = imgsrc('backs/back_player.jpg')
-const swarmEnemyDamage = (enemy: typeof props.enemy) => (enemy.tokens[TokenType.Damage] || 0) + enemy.assignedDamage
+const swarmEnemyDamage = (enemy: typeof props.enemy) =>
+  (enemy.tokens[TokenType.Damage] || 0) + enemy.assignedDamage
 
 const isSwarm = computed(() => props.enemy.placement.tag === 'AsSwarm')
 
@@ -153,7 +186,7 @@ function isAbilityForId(v: Message, enemyId: string): v is AbilityLabel {
   const { source } = v.ability
 
   if (source.sourceTag === 'ProxySource') {
-    if ("contents" in source.source) {
+    if ('contents' in source.source) {
       return source.source.contents === enemyId
     }
   } else if (source.tag === 'EnemySource') {
@@ -172,24 +205,34 @@ function isChoiceForEnemyId(v: Message, enemyId: string): boolean {
 }
 
 const swarmHasAvailableActions = computed(() =>
-  swarmEnemies.value.some((enemy) => choices.value.some((choice) => isChoiceForEnemyId(choice, enemy.id)))
+  swarmEnemies.value.some((enemy) =>
+    choices.value.some((choice) => isChoiceForEnemyId(choice, enemy.id)),
+  ),
 )
 
-const swarmIsOnlyChoiceSource = computed(() =>
-  swarmHasAvailableActions.value
-    && choices.value.length > 0
-    && choices.value.every((choice) => swarmEnemies.value.some((enemy) => isChoiceForEnemyId(choice, enemy.id)))
+const swarmIsOnlyChoiceSource = computed(
+  () =>
+    swarmHasAvailableActions.value &&
+    choices.value.length > 0 &&
+    choices.value.every((choice) =>
+      swarmEnemies.value.some((enemy) => isChoiceForEnemyId(choice, enemy.id)),
+    ),
 )
 
-watch(swarmIsOnlyChoiceSource, (isOnlySource) => {
-  if (isOnlySource) swarmCardsShown.value = true
-}, { immediate: true })
+watch(
+  swarmIsOnlyChoiceSource,
+  (isOnlySource) => {
+    if (isOnlySource) swarmCardsShown.value = true
+  },
+  { immediate: true },
+)
 
 const abilities = computed<AbilityMessage[]>(() => {
-  return choices.value
-    .reduce<AbilityMessage[]>((acc, v, i) =>
-      isAbility(v) ? [...acc, { contents: v, displayAsAction: false, index: i}] : acc
-    , [])
+  return choices.value.reduce<AbilityMessage[]>(
+    (acc, v, i) =>
+      isAbility(v) ? [...acc, { contents: v, displayAsAction: false, index: i }] : acc,
+    [],
+  )
 })
 
 const hasObjective = computed(() =>
@@ -204,27 +247,36 @@ const keys = computed(() => props.enemy.keys)
 
 const debug = useDebug()
 
-const enemyDamage = computed(() => (props.enemy.tokens[TokenType.Damage] || 0) + props.enemy.assignedDamage)
+const enemyDamage = computed(
+  () => (props.enemy.tokens[TokenType.Damage] || 0) + props.enemy.assignedDamage,
+)
 const enemyTokens = computed(() => {
   const { Damage, ...rest } = props.enemy.tokens
   return rest
 })
 const omnipotent = computed(() => {
-  const {modifiers} = props.enemy
+  const { modifiers } = props.enemy
 
-  return modifiers.some(modifier =>
-    modifier.type.tag === "OtherModifier" && modifier.type.contents === "Omnipotent"
+  return modifiers.some(
+    (modifier) => modifier.type.tag === 'OtherModifier' && modifier.type.contents === 'Omnipotent',
   )
 })
 
 const important = computed(() => {
-  const {modifiers} = props.enemy
-  return modifiers.some((m) => m.type.tag === "UIModifier" && typeof m.type.contents === 'object' && m.type.contents.tag === "ImportantToScenario") ?? false
+  const { modifiers } = props.enemy
+  return (
+    modifiers.some(
+      (m) =>
+        m.type.tag === 'UIModifier' &&
+        typeof m.type.contents === 'object' &&
+        m.type.contents.tag === 'ImportantToScenario',
+    ) ?? false
+  )
 })
 
 const oversized = computed(() => {
-  const {modifiers} = props.enemy
-  return modifiers.some((m) => m.type.tag === "UIModifier" && m.type.contents === "Oversized")
+  const { modifiers } = props.enemy
+  return modifiers.some((m) => m.type.tag === 'UIModifier' && m.type.contents === 'Oversized')
 })
 
 const uiRotation = computed(() => {
@@ -233,7 +285,8 @@ const uiRotation = computed(() => {
     return t.tag === 'UIModifier' && typeof t.contents === 'object' && t.contents.tag === 'Rotated'
   })
 
-  if (!modifier || modifier.type.tag !== 'UIModifier' || typeof modifier.type.contents !== 'object') return 0
+  if (!modifier || modifier.type.tag !== 'UIModifier' || typeof modifier.type.contents !== 'object')
+    return 0
   if (modifier.type.contents.tag !== 'Rotated') return 0
   return modifier.type.contents.contents
 })
@@ -241,7 +294,7 @@ const uiRotation = computed(() => {
 function sourceIsSelf(source: Source): boolean {
   if (source.sourceTag === 'ProxySource') return sourceIsSelf(source.source)
   if (source.tag === 'AbilitySource') {
-    const [inner] = (source.contents as unknown) as [Source, number]
+    const [inner] = source.contents as unknown as [Source, number]
     return sourceIsSelf(inner)
   }
   if (source.tag === 'EnemySource') return source.contents === id.value
@@ -250,12 +303,14 @@ function sourceIsSelf(source: Source): boolean {
 
 const cannotBeDamagedModifier = computed(() => {
   const modifiers = props.enemy.modifiers ?? []
-  return modifiers.find(
-    (m) =>
-      (m.type.tag === "CannotBeDamaged"
-        || (m.type.tag === "OtherModifier" && m.type.contents === "CannotBeDamaged"))
-      && !sourceIsSelf(m.source)
-  ) ?? null
+  return (
+    modifiers.find(
+      (m) =>
+        (m.type.tag === 'CannotBeDamaged' ||
+          (m.type.tag === 'OtherModifier' && m.type.contents === 'CannotBeDamaged')) &&
+        !sourceIsSelf(m.source),
+    ) ?? null
+  )
 })
 
 const isCannotBeDamaged = computed(() => cannotBeDamagedModifier.value !== null)
@@ -263,8 +318,10 @@ const isCannotBeDamaged = computed(() => cannotBeDamagedModifier.value !== null)
 /* An enemy that cannot be damaged, or that has no health at all (Cthulhu (Ancient
  * Evil) prints a dash), has no damage pool worth showing. Still show it if damage
  * has somehow landed, so nothing is ever silently hidden. */
-const showDamage = computed(() =>
-  enemyDamage.value > 0 || (!isCannotBeDamaged.value && !isUnvaluedCalculation(props.enemy.health))
+const showDamage = computed(
+  () =>
+    enemyDamage.value > 0 ||
+    (!isCannotBeDamaged.value && !isUnvaluedCalculation(props.enemy.health)),
 )
 
 const cannotBeDamagedCardCode = computed<string | null>(() => {
@@ -275,38 +332,41 @@ const cannotBeDamagedCardCode = computed<string | null>(() => {
 })
 
 const health = computed(() => {
-  return props.enemy.health?.tag == "Fixed" ? props.enemy.health.contents : null
+  return props.enemy.health?.tag == 'Fixed' ? props.enemy.health.contents : null
 })
 
 const evade = computed(() => {
-  return props.enemy.evade?.tag == "Fixed" ? props.enemy.evade.contents : null
+  return props.enemy.evade?.tag == 'Fixed' ? props.enemy.evade.contents : null
 })
 
 const fight = computed(() => {
-  return props.enemy.fight?.tag == "Fixed" ? props.enemy.fight.contents : null
+  return props.enemy.fight?.tag == 'Fixed' ? props.enemy.fight.contents : null
 })
 
 const gainedVictory = computed(() => {
-  const {modifiers} = props.enemy
+  const { modifiers } = props.enemy
 
-  return modifiers.reduce((acc, modifier) =>
-    acc + (modifier.type.tag === "GainVictory" ? modifier.type.contents : 0)
-  , 0)
+  return modifiers.reduce(
+    (acc, modifier) => acc + (modifier.type.tag === 'GainVictory' ? modifier.type.contents : 0),
+    0,
+  )
 })
 
 function mapMaybe<T, U>(arr: T[], fn: (item: T) => U | null | undefined): U[] {
   return arr.reduce((acc: U[], item: T) => {
-    const result = fn(item);
+    const result = fn(item)
     if (result !== null && result !== undefined) {
-      acc.push(result);
+      acc.push(result)
     }
-    return acc;
-  }, []);
+    return acc
+  }, [])
 }
 
 const addedKeywords = computed(() => {
-  const {modifiers} = props.enemy
-  return mapMaybe(modifiers, modifier => modifier.type.tag === "AddKeyword" ? modifier.type.contents : null).join(". ")
+  const { modifiers } = props.enemy
+  return mapMaybe(modifiers, (modifier) =>
+    modifier.type.tag === 'AddKeyword' ? modifier.type.contents : null,
+  ).join('. ')
 })
 
 const choose = (index: number) => emits('choose', index)
@@ -314,7 +374,8 @@ const choose = (index: number) => emits('choose', index)
 const showAbilities = ref<boolean>(false)
 
 async function clicked() {
-  if(cardAction.value !== -1) {
+  if (props.readonly) return
+  if (cardAction.value !== -1) {
     emits('choose', cardAction.value)
     showAbilities.value = false
   } else if (abilities.value.length === 1) {
@@ -337,10 +398,12 @@ function startDrag(event: DragEvent, enemy: Arkham.Enemy) {
   dragging.value = true
   if (event.dataTransfer) {
     event.dataTransfer.effectAllowed = 'move'
-    event.dataTransfer.setData('text/plain', JSON.stringify({ "tag": "EnemyTarget", "contents": enemy.id }))
+    event.dataTransfer.setData(
+      'text/plain',
+      JSON.stringify({ tag: 'EnemyTarget', contents: enemy.id }),
+    )
   }
 }
-
 
 const dragover = (e: DragEvent) => {
   e.preventDefault()
@@ -355,24 +418,36 @@ function onDrop(event: DragEvent) {
     const data = event.dataTransfer.getData('text/plain')
     if (data) {
       const json = JSON.parse(data)
-      if (json.tag === "KeyTarget") {
-        debug.send(props.game.id, {tag: 'PlaceKey', contents: [{tag: 'EnemyTarget', contents: id.value}, json.contents]})
+      if (json.tag === 'KeyTarget') {
+        debug.send(props.game.id, {
+          tag: 'PlaceKey',
+          contents: [{ tag: 'EnemyTarget', contents: id.value }, json.contents],
+        })
       }
     }
   }
 }
-
 </script>
 
 <template>
-  <div class="enemy--outer" :class="{showAbilities, oversized}">
+  <div class="enemy--outer" :class="{ showAbilities, oversized }">
     <div class="enemy">
-      <Story v-if="enemyStory && !flipping" :story="enemyStory" :game="game" :playerId="playerId" @choose="choose"/>
+      <Story
+        v-if="enemyStory && !flipping"
+        :story="enemyStory"
+        :game="game"
+        :playerId="playerId"
+        @choose="choose"
+      />
       <template v-else>
         <div class="card-frame" ref="frame">
           <div
             class="card-wrapper"
-            :class="{ exhausted: isExhausted, 'enemy--objective': hasObjective, 'objective-ring': hasObjective }"
+            :class="{
+              exhausted: isExhausted,
+              'enemy--objective': hasObjective,
+              'objective-ring': hasObjective,
+            }"
             :style="{ '--ui-rotation': `${uiRotation}deg` }"
           >
             <MissingCardBadge :card-code="enemy.cardCode" />
@@ -380,13 +455,26 @@ function onDrop(event: DragEvent) {
             <span class="important" v-if="important">
               <font-awesome-icon :icon="['fa', 'circle-exclamation']" />
             </span>
-            <span v-if="isCannotBeDamaged" class="cannot-be-damaged-badge" :data-image-id="cannotBeDamagedCardCode">
+            <span
+              v-if="isCannotBeDamaged"
+              class="cannot-be-damaged-badge"
+              :data-image-id="cannotBeDamagedCardCode"
+            >
               <font-awesome-icon icon="shield-heart" />
             </span>
-            <img v-if="isTrueForm" :src="displayedImage"
+            <img
+              v-if="isTrueForm"
+              :src="displayedImage"
               class="card enemy"
               v-tooltip="sourceTooltip"
-              :class="{ dragging, 'enemy--can-interact': canInteract && !hasObjective, 'enemy--can-interact-cursor': canInteract, attached, 'source-highlight': isHighlighted || isAttacking, 'card--flipping': flipping }"
+              :class="{
+                dragging,
+                'enemy--can-interact': canInteract && !hasObjective,
+                'enemy--can-interact-cursor': canInteract,
+                attached,
+                'source-highlight': isHighlighted || isAttacking,
+                'card--flipping': flipping,
+              }"
               :data-id="id"
               :data-card-code="enemy.cardCode"
               :data-game-id="game.id"
@@ -402,13 +490,20 @@ function onDrop(event: DragEvent) {
               :data-swarm="isSwarm"
               @click="clicked"
             />
-            <img v-else
-              :draggable="debug.active"
+            <img
+              v-else
+              :draggable="!readonly && debug.active"
               @dragstart="startDrag($event, enemy)"
               :src="isSwarm ? imgsrc('backs/back_player.jpg') : displayedImage"
               class="card enemy"
               v-tooltip="sourceTooltip"
-              :class="{ 'enemy--can-interact': canInteract && !hasObjective, 'enemy--can-interact-cursor': canInteract, attached, 'source-highlight': isHighlighted || isAttacking, 'card--flipping': flipping }"
+              :class="{
+                'enemy--can-interact': canInteract && !hasObjective,
+                'enemy--can-interact-cursor': canInteract,
+                attached,
+                'source-highlight': isHighlighted || isAttacking,
+                'card--flipping': flipping,
+              }"
               :data-id="id"
               :data-card-code="enemy.cardCode"
               :data-game-id="game.id"
@@ -425,11 +520,26 @@ function onDrop(event: DragEvent) {
 
           <div class="pool">
             <div class="keys" v-if="keys.length > 0">
-              <KeyToken v-for="k in keys" :key="keyToId(k)" :keyToken="k" :game="game" :playerId="playerId" @choose="choose" />
+              <KeyToken
+                v-for="k in keys"
+                :key="keyToId(k)"
+                :keyToken="k"
+                :game="game"
+                :playerId="playerId"
+                @choose="choose"
+              />
             </div>
-            <PoolItem v-if="!omnipotent && !attached && showDamage" type="health" :amount="enemyDamage" />
+            <PoolItem
+              v-if="!omnipotent && !attached && showDamage"
+              type="health"
+              :amount="enemyDamage"
+            />
             <TokenPool :tokens="enemyTokens" />
-            <PoolItem v-if="enemy.cardsUnderneath.length > 0" type="card" :amount="enemy.cardsUnderneath.length" />
+            <PoolItem
+              v-if="enemy.cardsUnderneath.length > 0"
+              type="card"
+              :amount="enemy.cardsUnderneath.length"
+            />
             <SealedChaosTokens
               :tokens="enemy.sealedChaosTokens"
               :game="game"
@@ -442,13 +552,12 @@ function onDrop(event: DragEvent) {
             :frame="frame"
             v-model="showAbilities"
             :abilities="abilities"
-            :position="atLocation ? 'right' : (inVoid || global) ? 'left' : 'top'"
+            :position="atLocation ? 'right' : inVoid || global ? 'left' : 'top'"
             :game="game"
             :host-has-swarm="swarmEnemies.length > 0"
             @choose="chooseAbility"
-            />
+          />
         </div>
-
       </template>
       <!-- Keys come first: they are pulled up over whatever precedes them (see
            the negative margin below), so they must overlap the enemy card
@@ -463,7 +572,12 @@ function onDrop(event: DragEvent) {
         :attached="true"
         :style="{ 'z-index': enemy.scarletKeys.length - idx }"
       />
-      <img v-for="card in referenceCards" :src="cardImage(card)" :key="card" class="attached card" />
+      <img
+        v-for="card in referenceCards"
+        :src="cardImage(card)"
+        :key="card"
+        class="attached card"
+      />
       <Treachery
         v-for="treacheryId in enemy.treacheries"
         :key="treacheryId"
@@ -530,7 +644,9 @@ function onDrop(event: DragEvent) {
       >
         <img class="swarm-card-stack__back" :src="swarmBackImage" />
         <BugAntIcon class="swarm-card-stack__icon" aria-hidden="true" />
-        <span v-if="swarmEnemyDamage(swarmEnemy) > 0" class="swarm-card-stack__damage">{{ swarmEnemyDamage(swarmEnemy) }}</span>
+        <span v-if="swarmEnemyDamage(swarmEnemy) > 0" class="swarm-card-stack__damage">{{
+          swarmEnemyDamage(swarmEnemy)
+        }}</span>
       </span>
     </div>
 
@@ -555,25 +671,31 @@ function onDrop(event: DragEvent) {
         </button>
 
         <template #popper>
-        <div class="swarm-popover">
-          <div class="swarm-popover__header">Swarm Cards ({{ swarmCards.length }})</div>
-          <div class="swarm-popover__cards">
-            <Enemy
-              v-for="swarmEnemy in swarmEnemies"
-              :key="swarmEnemy.id"
-              :enemy="swarmEnemy"
-              :game="game"
-              :playerId="playerId"
-              :atLocation="false"
-              class="swarm-popover__enemy"
-              @choose="$emit('choose', $event)"
-            />
+          <div class="swarm-popover">
+            <div class="swarm-popover__header">Swarm Cards ({{ swarmCards.length }})</div>
+            <div class="swarm-popover__cards">
+              <Enemy
+                v-for="swarmEnemy in swarmEnemies"
+                :key="swarmEnemy.id"
+                :enemy="swarmEnemy"
+                :game="game"
+                :playerId="playerId"
+                :atLocation="false"
+                class="swarm-popover__enemy"
+                @choose="$emit('choose', $event)"
+              />
+            </div>
           </div>
-        </div>
         </template>
       </Dropdown>
     </div>
-    <DebugEnemy v-if="debugging" :game="game" :enemy="enemy" :playerId="playerId" @close="debugging = false" />
+    <DebugEnemy
+      v-if="debugging"
+      :game="game"
+      :enemy="enemy"
+      :playerId="playerId"
+      @close="debugging = false"
+    />
   </div>
 </template>
 
@@ -604,7 +726,10 @@ function onDrop(event: DragEvent) {
 }
 
 img.card.source-highlight {
-  box-shadow: 0 0 0 2px var(--important), 0 0 6px 1px var(--important), var(--card-shadow);
+  box-shadow:
+    0 0 0 2px var(--important),
+    0 0 6px 1px var(--important),
+    var(--card-shadow);
 }
 
 .enemy {
@@ -676,9 +801,7 @@ img.card.source-highlight {
   z-index: var(--z-index-3);
   font-size: 0.9em;
   color: rgba(180, 230, 255, 0.95);
-  filter:
-    drop-shadow(0 0 1px rgba(0, 0, 0, 0.9))
-    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.9)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))
     drop-shadow(0 0 5px rgba(130, 200, 255, 0.7));
   pointer-events: none;
 }
@@ -703,12 +826,12 @@ img.card.source-highlight {
   border-radius: 10px;
   display: grid;
   gap: 5px;
-  bottom:100%;
+  bottom: 100%;
   left: 0;
   z-index: var(--z-index-20000000000);
 
   &.right {
-    bottom:50%;
+    bottom: 50%;
     left: 100%;
     transform: translateY(50%) translateZ(0);
     z-index: var(--z-index-20000000000);
@@ -716,7 +839,7 @@ img.card.source-highlight {
   }
 
   &.left {
-    bottom:0%;
+    bottom: 0%;
     right: 100%;
     left: unset;
     transform: unset;
@@ -759,7 +882,9 @@ img.card.source-highlight {
   width: var(--swarm-card-width);
   height: calc(var(--swarm-card-width) / var(--card-aspect));
   border-radius: 6px;
-  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.22), 2px 1px 4px rgba(0, 0, 0, 0.45);
+  box-shadow:
+    1px 0 0 rgba(255, 255, 255, 0.22),
+    2px 1px 4px rgba(0, 0, 0, 0.45);
   transform: translateX(calc(var(--swarm-card-width) * var(--swarm-peek) * var(--swarm-index)));
   z-index: calc(var(--swarm-count-for-width, 1) - var(--swarm-index));
 }
@@ -825,7 +950,10 @@ img.card.source-highlight {
   cursor: pointer;
   backdrop-filter: blur(4px);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
 }
 
 .swarm-indicator:hover {
@@ -837,7 +965,9 @@ img.card.source-highlight {
 .swarm-indicator--highlighted {
   border-color: color-mix(in srgb, var(--select) 65%, black);
   background: color-mix(in srgb, var(--select) 55%, black);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--select) 45%, transparent), 0 2px 8px rgba(0, 0, 0, 0.35);
+  box-shadow:
+    0 0 8px color-mix(in srgb, var(--select) 45%, transparent),
+    0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 .swarm-indicator--highlighted:hover {
@@ -905,7 +1035,7 @@ img.card.source-highlight {
 .attached.card {
   object-fit: cover;
   object-position: left bottom;
-  height: calc(var(--card-width)*0.6);
+  height: calc(var(--card-width) * 0.6);
 }
 
 .important {
@@ -937,9 +1067,7 @@ img.card.source-highlight {
   color: #e05252;
   font-size: 22px;
   line-height: 1;
-  filter:
-    drop-shadow(0 0 1px #000)
-    drop-shadow(0 0 2px #000)
+  filter: drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000)
     drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
   cursor: default;
   z-index: var(--z-index-7);

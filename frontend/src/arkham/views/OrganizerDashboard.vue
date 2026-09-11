@@ -528,7 +528,7 @@ onUnmounted(() => {
   width: min(1100px, 92vw);
   margin: 0 auto;
   padding: 8px 0 40px;
-  color: #fff;
+  color: var(--text);
 }
 
 .dash-header {
@@ -873,7 +873,7 @@ h2 {
 .ctrl {
   padding: 8px 14px;
   border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: var(--edge-width) solid var(--edge-dim);
   cursor: pointer;
   text-transform: uppercase;
   font-size: 0.78em;
@@ -884,13 +884,13 @@ h2 {
 
 .ghost-btn,
 .open-link {
-  background: rgba(255, 255, 255, 0.06);
-  color: #fff;
+  background: var(--surface-raised);
+  color: var(--text);
 }
 
 .ghost-btn:hover,
 .open-link:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: var(--button-highlight);
 }
 
 .join-btn,

@@ -1,49 +1,59 @@
 <script lang="ts" setup>
-import { computed, watch, ref } from 'vue';
-import { Dropdown } from 'floating-vue';
-import useHighlighter from '@/arkham/composables/useHighlighter';
-import { useDebug } from '@/arkham/debug';
-import { TokenType } from '@/arkham/types/Token';
-import { imgsrc } from '@/arkham/helpers';
-import { cardArt, cardImage } from '@/arkham/cardImages';
-import { cardImage as cardToImage, asCardCode, toCardContents, type Card as ArkhamCard } from '@/arkham/types/Card';
+import { computed, watch, ref } from 'vue'
+import { Dropdown } from 'floating-vue'
+import useHighlighter from '@/arkham/composables/useHighlighter'
+import { useDebug } from '@/arkham/debug'
+import { TokenType } from '@/arkham/types/Token'
+import { imgsrc } from '@/arkham/helpers'
+import { cardArt, cardImage } from '@/arkham/cardImages'
+import {
+  cardImage as cardToImage,
+  asCardCode,
+  toCardContents,
+  type Card as ArkhamCard,
+} from '@/arkham/types/Card'
 import { keyToId } from '@/arkham/types/Key'
-import type { Game } from '@/arkham/types/Game';
-import { useGameChoices } from '@/arkham/composables/useGameChoices';
-import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Message';
-import type { AbilityType } from '@/arkham/types/Ability';
-import { MessageType } from '@/arkham/types/Message';
-import ScarletKey from '@/arkham/components/ScarletKey.vue';
-import DebugAsset from '@/arkham/components/debug/Asset.vue';
-import KeyToken from '@/arkham/components/Key.vue';
-import Investigator from '@/arkham/components/Investigator.vue';
-import Event from '@/arkham/components/Event.vue';
-import Enemy from '@/arkham/components/Enemy.vue';
-import Treachery from '@/arkham/components/Treachery.vue';
-import TokenPool, { type TokenPoolItem } from '@/arkham/components/TokenPool.vue';
-import CardsUnderIndicator from '@/arkham/components/CardsUnderIndicator.vue';
+import type { Game } from '@/arkham/types/Game'
+import { useGameChoices } from '@/arkham/composables/useGameChoices'
+import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Message'
+import type { AbilityType } from '@/arkham/types/Ability'
+import { MessageType } from '@/arkham/types/Message'
+import ScarletKey from '@/arkham/components/ScarletKey.vue'
+import DebugAsset from '@/arkham/components/debug/Asset.vue'
+import KeyToken from '@/arkham/components/Key.vue'
+import Investigator from '@/arkham/components/Investigator.vue'
+import Event from '@/arkham/components/Event.vue'
+import Enemy from '@/arkham/components/Enemy.vue'
+import Treachery from '@/arkham/components/Treachery.vue'
+import TokenPool, { type TokenPoolItem } from '@/arkham/components/TokenPool.vue'
+import CardsUnderIndicator from '@/arkham/components/CardsUnderIndicator.vue'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import CardConfig from '@/arkham/components/CardConfig.vue'
-import MissingCardBadge from '@/arkham/components/MissingCardBadge.vue';
-import Story from '@/arkham/components/Story.vue';
-import { useCardFlip } from '@/arkham/composables/useCardFlip';
-import SealedChaosTokens from '@/arkham/components/SealedChaosTokens.vue';
-import * as Arkham from '@/arkham/types/Asset';
-import { useSettings } from '@/stores/settings';
-import { isManifestedSpiritAsset } from '@/arkham/spiritVisuals';
+import MissingCardBadge from '@/arkham/components/MissingCardBadge.vue'
+import Story from '@/arkham/components/Story.vue'
+import { useCardFlip } from '@/arkham/composables/useCardFlip'
+import SealedChaosTokens from '@/arkham/components/SealedChaosTokens.vue'
+import * as Arkham from '@/arkham/types/Asset'
+import { useSettings } from '@/stores/settings'
+import { isManifestedSpiritAsset } from '@/arkham/spiritVisuals'
 import { useDbCardStore } from '@/stores/dbCards'
 import { useCardStore } from '@/stores/cards'
 
-const props = withDefaults(defineProps<{
-  game: Game
-  asset: Arkham.Asset
-  playerId: string
-  atLocation?: boolean
-  // Played, but held out of play until a slot frees up
-  pending?: boolean
-  // A target label on this asset means discarding it to free that slot
-  discardToMakeRoom?: boolean
-}>(), { atLocation: false, pending: false, discardToMakeRoom: false })
+const props = withDefaults(
+  defineProps<{
+    game: Game
+    asset: Arkham.Asset
+    playerId: string
+    atLocation?: boolean
+    // Played, but held out of play until a slot frees up
+    pending?: boolean
+    // A target label on this asset means discarding it to free that slot
+    discardToMakeRoom?: boolean
+    // Another player's public card: keeps the printed state, drops the controls
+    readonly?: boolean
+  }>(),
+  { atLocation: false, pending: false, discardToMakeRoom: false, readonly: false },
+)
 
 const debugging = ref(false)
 const frame = ref(null)
@@ -58,7 +68,9 @@ const exhausted = computed(() => props.asset.exhausted)
 const jammed = computed(() => props.asset.rifleStatus === 'Jammed')
 const highlighter = useHighlighter()
 const isHighlighted = computed(() => highlighter.highlighted.value === props.asset.id)
-const isAttackTarget = computed(() => props.game.enemyAttackTargets.some((e) => e.target.contents === props.asset.id))
+const isAttackTarget = computed(() =>
+  props.game.enemyAttackTargets.some((e) => e.target.contents === props.asset.id),
+)
 
 const uiRotation = computed<number>(() => {
   const mods = props.asset.modifiers ?? []
@@ -79,15 +91,17 @@ const cardCode = computed(() => props.asset.cardCode)
 // whether it is sharing the corner.
 const cardStore = useCardStore()
 const hasCardOptions = computed(
-  () => (cardStore.cards.find((def) => def.cardCode === cardCode.value)?.options?.length ?? 0) > 0
+  () => (cardStore.cards.find((def) => def.cardCode === cardCode.value)?.options?.length ?? 0) > 0,
 )
 const isTheBeyond = computed(() => cardCode.value === 'c90052')
-const investigators = computed(() => Object.values(props.game.investigators).filter((i) => {
-  if (i.placement.tag === 'InVehicle') return i.placement.contents === id.value
-  if (i.placement.tag === 'AttachedToAsset') return i.placement.contents[0] === id.value
+const investigators = computed(() =>
+  Object.values(props.game.investigators).filter((i) => {
+    if (i.placement.tag === 'InVehicle') return i.placement.contents === id.value
+    if (i.placement.tag === 'AttachedToAsset') return i.placement.contents[0] === id.value
 
-  return false
-}))
+    return false
+  }),
+)
 const marketPopoverShown = ref(false)
 const knownMarketDeck = computed(() => props.asset.knownMarketDeck ?? [])
 const marketDeckCardImage = (card: ArkhamCard) => imgsrc(cardToImage(card))
@@ -104,7 +118,8 @@ const spiritDeckTopImage = computed(() =>
     : imgsrc('backs/back_player.jpg'),
 )
 const marketDeckCardCode = (card: ArkhamCard) => asCardCode(card).replace(/^c/, '')
-const marketDeckCardImageId = (card: ArkhamCard) => toCardContents(card).art ?? marketDeckCardCode(card)
+const marketDeckCardImageId = (card: ArkhamCard) =>
+  toCardContents(card).art ?? marketDeckCardCode(card)
 const marketDeckCardName = (card: ArkhamCard) => {
   const contents = toCardContents(card)
   const dbCard = dbCardStore.getDbCard(contents.art ?? marketDeckCardCode(card))
@@ -130,15 +145,11 @@ const marketDeckSlots = computed(() => {
 // which is exactly the cards the database carries a "<code>b" entry for. Assets
 // flipped to *hide* them (Sophie, the Hemlock allies) have no such entry, so they
 // keep the generic player back and cannot leak what they are.
-const hasBackArt = computed(() =>
-  dbCardStore.getDbCard(`${cardArt(cardCode.value)}b`) !== null
-)
+const hasBackArt = computed(() => dbCardStore.getDbCard(`${cardArt(cardCode.value)}b`) !== null)
 
 const image = computed(() => {
   if (props.asset.flipped) {
-    return hasBackArt.value
-      ? cardImage(cardCode.value, 'b')
-      : imgsrc(`backs/back_player.jpg`)
+    return hasBackArt.value ? cardImage(cardCode.value, 'b') : imgsrc(`backs/back_player.jpg`)
   }
   const mutated = props.asset.mutated ? `_${props.asset.mutated}` : ''
   return cardImage(cardCode.value, mutated)
@@ -149,27 +160,44 @@ const dataImage = computed(() => {
   if (props.asset.flipped && hasBackArt.value) return `${cardArt(cardCode.value)}b`
   return cardCode.value.replace(/^c/, '') + mutated
 })
-const choices = useGameChoices(() => props.game, () => props.playerId)
+const gameChoices = useGameChoices(
+  () => props.game,
+  () => props.playerId,
+)
+// Every affordance on this card (highlight, discard mark, health/sanity pools,
+// abilities menu) is derived from these choices, so emptying them is enough to
+// render the card as public information.
+const choices = computed<readonly Message[]>(() => (props.readonly ? [] : gameChoices.value))
 
 function isCardAction(c: Message): boolean {
   if (c.tag === MessageType.TARGET_LABEL) {
-    return c.target.contents === id.value || c.target.contents === props.asset.cardId
-      || `c${id.value}` === c.target.contents
-
+    return (
+      c.target.contents === id.value ||
+      c.target.contents === props.asset.cardId ||
+      `c${id.value}` === c.target.contents
+    )
   }
 
   return false
 }
 
 function canAdjustHealth(c: Message): boolean {
-  if (c.tag === MessageType.COMPONENT_LABEL && c.component.tag === "AssetComponent" && c.component.tokenType === "DamageToken") {
+  if (
+    c.tag === MessageType.COMPONENT_LABEL &&
+    c.component.tag === 'AssetComponent' &&
+    c.component.tokenType === 'DamageToken'
+  ) {
     return c.component.assetId === id.value
   }
   return false
 }
 
 function canAdjustSanity(c: Message): boolean {
-  if (c.tag === MessageType.COMPONENT_LABEL && c.component.tag === "AssetComponent" && c.component.tokenType === "HorrorToken") {
+  if (
+    c.tag === MessageType.COMPONENT_LABEL &&
+    c.component.tag === 'AssetComponent' &&
+    c.component.tokenType === 'HorrorToken'
+  ) {
     return c.component.assetId === id.value
   }
   return false
@@ -192,7 +220,10 @@ function isAbility(v: Message): v is AbilityLabel {
     return true
   }
 
-  if ((v.tag === MessageType.EVADE_LABEL || v.tag === MessageType.EVADE_LABEL_WITH_SKILL) && v.enemyId === id.value) {
+  if (
+    (v.tag === MessageType.EVADE_LABEL || v.tag === MessageType.EVADE_LABEL_WITH_SKILL) &&
+    v.enemyId === id.value
+  ) {
     return true
   }
 
@@ -200,13 +231,13 @@ function isAbility(v: Message): v is AbilityLabel {
     return false
   }
 
-  const { source } = v.ability;
+  const { source } = v.ability
 
   if (source.sourceTag === 'ProxySource') {
     if (source.source.tag === 'CardCodeSource') {
       return 'contents' in source.originalSource && source.originalSource.contents === id.value
     }
-    if ("contents" in source.source) {
+    if ('contents' in source.source) {
       return source.source.contents === id.value
     }
   } else if (source.tag === 'AssetSource') {
@@ -217,15 +248,13 @@ function isAbility(v: Message): v is AbilityLabel {
 }
 
 const abilities = computed(() => {
-  return choices
-    .value
-    .reduce<AbilityMessage[]>((acc, v, i) => {
-      if (isAbility(v)) {
-        return [...acc, { contents: v, displayAsAction: false, index: i }];
-      }
+  return choices.value.reduce<AbilityMessage[]>((acc, v, i) => {
+    if (isAbility(v)) {
+      return [...acc, { contents: v, displayAsAction: false, index: i }]
+    }
 
-      return acc;
-    }, []);
+    return acc
+  }, [])
 })
 
 const cardsUnderneath = computed(() => props.asset.cardsUnderneath)
@@ -240,21 +269,35 @@ const assetTokens = computed(() => {
   const { Damage, Horror, ...rest } = props.asset.tokens
   return rest
 })
-const damage = computed(() => (props.asset.tokens[TokenType.Damage] || 0) + props.asset.assignedHealthDamage - props.asset.assignedHealthHeal)
-const horror = computed(() => (props.asset.tokens[TokenType.Horror] || 0) + props.asset.assignedSanityDamage - props.asset.assignedSanityHeal)
+const damage = computed(
+  () =>
+    (props.asset.tokens[TokenType.Damage] || 0) +
+    props.asset.assignedHealthDamage -
+    props.asset.assignedHealthHeal,
+)
+const horror = computed(
+  () =>
+    (props.asset.tokens[TokenType.Horror] || 0) +
+    props.asset.assignedSanityDamage -
+    props.asset.assignedSanityHeal,
+)
 const forcedTokenItems = computed<TokenPoolItem[]>(() => [
   {
     key: 'health',
     type: 'health',
     amount: damage.value || 0,
-    force: !isSpirit.value && (cardCode.value == 'c07189' || (props.asset.health !== null || (damage.value || 0) > 0)),
+    force:
+      !isSpirit.value &&
+      (cardCode.value == 'c07189' || props.asset.health !== null || (damage.value || 0) > 0),
     class: { 'health--can-interact': healthAction.value !== -1 },
   },
   {
     key: 'sanity',
     type: 'sanity',
     amount: horror.value || 0,
-    force: !isSpirit.value && (cardCode.value == 'c07189' || (props.asset.sanity !== null || (horror.value || 0) > 0)),
+    force:
+      !isSpirit.value &&
+      (cardCode.value == 'c07189' || props.asset.sanity !== null || (horror.value || 0) > 0),
     class: { 'sanity--can-interact': sanityAction.value !== -1 },
   },
 ])
@@ -265,15 +308,16 @@ function chooseTokenPoolItem(key: string) {
 }
 
 const hasPool = computed(() => {
-  const {
-    sanity,
-    health,
-    tokens,
-    sealedChaosTokens,
-    keys,
-  } = props.asset;
+  const { sanity, health, tokens, sealedChaosTokens, keys } = props.asset
 
-  return cardCode.value == 'c07189' || (Object.values(tokens).some((v) => (v ?? 0) > 0) || sealedChaosTokens.length > 0 || keys.length > 0 || sanity || health)
+  return (
+    cardCode.value == 'c07189' ||
+    Object.values(tokens).some((v) => (v ?? 0) > 0) ||
+    sealedChaosTokens.length > 0 ||
+    keys.length > 0 ||
+    sanity ||
+    health
+  )
 })
 
 const choose = (idx: number) => emits('choose', idx)
@@ -281,7 +325,8 @@ const choose = (idx: number) => emits('choose', idx)
 const showAbilities = ref<boolean>(false)
 
 async function clicked() {
-  if(cardAction.value !== -1) {
+  if (props.readonly) return
+  if (cardAction.value !== -1) {
     emits('choose', cardAction.value)
   } else if (abilities.value.length === 1) {
     // Unambiguous single ability: fire it directly instead of making the
@@ -301,12 +346,15 @@ watch(abilities, (abilities) => {
   // ability is forced we must show
   let isForced = (type: AbilityType) => {
     switch (type.tag) {
-      case "ForcedAbility": return true
-      case "DelayedAbility": return isForced(type.abilityType)
-      default: return false
+      case 'ForcedAbility':
+        return true
+      case 'DelayedAbility':
+        return isForced(type.abilityType)
+      default:
+        return false
     }
   }
-  if (abilities.some(a => "ability" in a.contents && isForced(a.contents.ability.type))) {
+  if (abilities.some((a) => 'ability' in a.contents && isForced(a.contents.ability.type))) {
     showAbilities.value = true
   }
 
@@ -317,9 +365,10 @@ watch(abilities, (abilities) => {
 
 const assetStory = computed(() => {
   const { stories } = props.game
-  return Object.values(stories).find((s) =>
-    s.otherSide?.contents === props.asset.id ||
-    (s.placement.tag === "AttachedToAsset" && s.placement.contents[0] === props.asset.id)
+  return Object.values(stories).find(
+    (s) =>
+      s.otherSide?.contents === props.asset.id ||
+      (s.placement.tag === 'AttachedToAsset' && s.placement.contents[0] === props.asset.id),
   )
 })
 
@@ -340,26 +389,32 @@ const { displayedImage, flipping } = useCardFlip(faceImage)
 const canTuck = computed(() => settings.hideInertCards && props.asset.permanent)
 
 function startDrag(event: DragEvent) {
+  if (props.readonly) return
   dragging.value = true
   if (event.dataTransfer) {
     event.dataTransfer.effectAllowed = 'copyMove'
-    event.dataTransfer.setData('text/plain', JSON.stringify({ "tag": "AssetTarget", "contents": props.asset.id }))
+    event.dataTransfer.setData(
+      'text/plain',
+      JSON.stringify({ tag: 'AssetTarget', contents: props.asset.id }),
+    )
   }
 }
 </script>
 
 <template>
   <div class="asset--outer">
-    <Story v-if="assetStory && !flipping" :story="assetStory" :game="game" :playerId="playerId" @choose="choose"/>
+    <Story
+      v-if="assetStory && !flipping"
+      :story="assetStory"
+      :game="game"
+      :playerId="playerId"
+      @choose="choose"
+    />
     <div v-else class="asset" :data-index="asset.cardId">
       <div class="card-frame" ref="frame">
         <div v-if="asset.marketDeck" class="market-deck">
-          <img
-            class="deck card no-overlay"
-            :src="imgsrc('backs/back_player.jpg')"
-            width="150px"
-          />
-          <span class="deck-size">{{asset.marketDeck.length}}</span>
+          <img class="deck card no-overlay" :src="imgsrc('backs/back_player.jpg')" width="150px" />
+          <span class="deck-size">{{ asset.marketDeck.length }}</span>
           <Dropdown
             placement="right"
             :distance="12"
@@ -382,7 +437,11 @@ function startDrag(event: DragEvent) {
               <div class="market-popover no-card-overlay">
                 <div class="market-popover__header">Underworld Market</div>
                 <div class="market-popover__slots">
-                  <div v-for="slot in marketDeckSlots" :key="slot.position" class="market-popover__slot">
+                  <div
+                    v-for="slot in marketDeckSlots"
+                    :key="slot.position"
+                    class="market-popover__slot"
+                  >
                     <span class="market-popover__number">{{ slot.position }}</span>
                     <template v-if="slot.card">
                       <img
@@ -390,7 +449,9 @@ function startDrag(event: DragEvent) {
                         :src="marketDeckCardImage(slot.card)"
                         :data-image-id="marketDeckCardImageId(slot.card)"
                       />
-                      <span class="market-popover__card-name">{{ marketDeckCardName(slot.card) }}</span>
+                      <span class="market-popover__card-name">{{
+                        marketDeckCardName(slot.card)
+                      }}</span>
                     </template>
                     <span v-else class="market-popover__unknown">-------</span>
                   </div>
@@ -406,9 +467,12 @@ function startDrag(event: DragEvent) {
             :src="spiritDeckTopImage"
             width="150px"
           />
-          <span class="deck-size">{{asset.spiritDeck.length}}</span>
+          <span class="deck-size">{{ asset.spiritDeck.length }}</span>
         </div>
-        <div class="card-wrapper" :class="{ 'asset--can-interact': canInteract, 'asset--pending': pending }">
+        <div
+          class="card-wrapper"
+          :class="{ 'asset--can-interact': canInteract, 'asset--pending': pending }"
+        >
           <MissingCardBadge :card-code="cardCode" />
           <font-awesome-icon v-if="isSpirit" :icon="['fas', 'ghost']" class="spirit-icon" />
           <span
@@ -425,17 +489,28 @@ function startDrag(event: DragEvent) {
             :data-is-spirit="isSpirit || undefined"
             :src="displayedImage"
             class="card"
-            :class="{ exhausted, 'ability-target': isHighlighted || isAttackTarget, 'card--flipping': flipping }"
+            :class="{
+              exhausted,
+              'ability-target': isHighlighted || isAttackTarget,
+              'card--flipping': flipping,
+            }"
             :style="{ '--ui-rotation': `${uiRotation}deg` }"
             :data-rotation="uiRotation || undefined"
-            :draggable="debug.active || canTuck"
+            :draggable="!readonly && (debug.active || canTuck)"
             @dragstart="startDrag"
             @click="clicked"
             :data-customizations="JSON.stringify(asset.customizations)"
             :data-chained="asset.chained || undefined"
           />
           <span v-if="showDiscardMark" class="discard-mark" aria-hidden="true" @click="clicked">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.9"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="M12 3v10" />
               <path d="M8 9.5 12 13.5 16 9.5" />
               <path d="M3.5 15v3.5a2 2 0 0 0 2 2h13a2 2 0 0 0 2-2V15" />
@@ -450,15 +525,26 @@ function startDrag(event: DragEvent) {
                 :portrait="true"
                 :investigator="investigator"
                 @choose="$emit('choose', $event)"
-                />
+              />
             </div>
           </div>
         </div>
         <div v-if="hasPool" class="pool">
           <div class="keys" v-if="keys.length > 0">
-            <KeyToken v-for="k in keys" :key="keyToId(k)" :keyToken="k" :game="game" :playerId="playerId" @choose="choose" />
+            <KeyToken
+              v-for="k in keys"
+              :key="keyToId(k)"
+              :keyToken="k"
+              :game="game"
+              :playerId="playerId"
+              @choose="choose"
+            />
           </div>
-          <TokenPool :tokens="assetTokens" :extra-items="forcedTokenItems" @choose="chooseTokenPoolItem" />
+          <TokenPool
+            :tokens="assetTokens"
+            :extra-items="forcedTokenItems"
+            @choose="chooseTokenPoolItem"
+          />
           <SealedChaosTokens
             :tokens="asset.sealedChaosTokens"
             :game="game"
@@ -516,7 +602,10 @@ function startDrag(event: DragEvent) {
         <button @click="debugging = true">{{ $t('enemy.debug') }}</button>
       </template>
       <template v-if="isTheBeyond">
-        <div v-if="(asset.assets?.length ?? 0) > 0 || (asset.enemies?.length ?? 0) > 0" class="spirit-manifest-row">
+        <div
+          v-if="(asset.assets?.length ?? 0) > 0 || (asset.enemies?.length ?? 0) > 0"
+          class="spirit-manifest-row"
+        >
           <Asset
             v-for="assetId in asset.assets"
             :asset="game.assets[assetId]"
@@ -554,7 +643,14 @@ function startDrag(event: DragEvent) {
         />
       </template>
     </div>
-    <DebugAsset v-if="debugging" :game="game" :asset="asset" :playerId="playerId" @close="debugging = false" @choose="$emit('choose', $event)"/>
+    <DebugAsset
+      v-if="debugging"
+      :game="game"
+      :asset="asset"
+      :playerId="playerId"
+      @close="debugging = false"
+      @choose="$emit('choose', $event)"
+    />
   </div>
 </template>
 
@@ -583,22 +679,28 @@ function startDrag(event: DragEvent) {
 .asset--can-interact {
   img {
     border: 2px solid var(--select);
-    cursor:pointer;
+    cursor: pointer;
   }
 }
 
 .asset--pending {
   img.card {
-    box-shadow: 0 0 0 2px var(--seeker), 0 0 10px rgba(239, 163, 69, 0.35);
+    box-shadow:
+      0 0 0 2px var(--seeker),
+      0 0 10px rgba(239, 163, 69, 0.35);
     filter: grayscale(0.55) brightness(0.72);
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     inset: 0;
     border-radius: 5px;
-    background: repeating-linear-gradient(135deg, rgba(239, 163, 69, 0.16) 0 6px, transparent 6px 12px);
+    background: repeating-linear-gradient(
+      135deg,
+      rgba(239, 163, 69, 0.16) 0 6px,
+      transparent 6px 12px
+    );
     pointer-events: none;
   }
 }
@@ -608,7 +710,7 @@ function startDrag(event: DragEvent) {
   padding: 2px 3px;
   border-radius: 2px;
   background: var(--seeker);
-  color: var(--seeker-text);
+  color: var(--text);
   font-size: 8px;
   font-weight: 700;
   line-height: 1.2;
@@ -634,7 +736,9 @@ function startDrag(event: DragEvent) {
   color: #f4dbf4;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
   cursor: pointer;
-  transition: background 120ms ease, transform 120ms ease;
+  transition:
+    background 120ms ease,
+    transform 120ms ease;
 
   svg {
     width: 62%;
@@ -667,7 +771,7 @@ function startDrag(event: DragEvent) {
   pointer-events: none;
 }
 
-.button{
+.button {
   margin-top: 2px;
   border: 0;
   color: #fff;
@@ -703,7 +807,10 @@ img.card {
 }
 
 img.card.ability-target {
-  box-shadow: 0 0 0 2px var(--highlight), 0 0 6px 1px var(--highlight), var(--card-shadow);
+  box-shadow:
+    0 0 0 2px var(--highlight),
+    0 0 6px 1px var(--highlight),
+    var(--card-shadow);
 }
 
 .deck-size {
@@ -856,9 +963,7 @@ img.card.ability-target {
   z-index: var(--z-index-3);
   font-size: 0.9em;
   color: rgba(180, 230, 255, 0.95);
-  filter:
-    drop-shadow(0 0 1px rgba(0, 0, 0, 0.9))
-    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.9)) drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))
     drop-shadow(0 0 5px rgba(130, 200, 255, 0.7));
   pointer-events: none;
 }

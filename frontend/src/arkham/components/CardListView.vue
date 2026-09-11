@@ -415,12 +415,15 @@ a {
   span[class$="-icon"] { font-size: 1.1em; }
 }
 
-.guardian-sym  { color: var(--guardian); }
-.seeker-sym    { color: var(--seeker); }
-.rogue-sym     { color: var(--rogue); }
-.mystic-sym    { color: var(--mystic); }
-.survivor-sym  { color: var(--survivor); }
-.neutral-sym   { color: var(--neutral); }
+/* Class names sit on the light card table, so they take the darker half of each
+   class colour: the bright `--guardian`/`--neutral` hues are tuned for dark
+   plates and read as near-invisible here. */
+.guardian-sym  { color: var(--guardian-dark); }
+.seeker-sym    { color: var(--seeker-dark); }
+.rogue-sym     { color: var(--rogue-dark); }
+.mystic-sym    { color: var(--mystic-dark); }
+.survivor-sym  { color: var(--survivor-dark); }
+.neutral-sym   { color: var(--neutral-dark); }
 
 @media (max-width: 768px) {
   .class-text { display: none; }

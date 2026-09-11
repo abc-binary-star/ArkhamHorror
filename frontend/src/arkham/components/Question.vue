@@ -1441,7 +1441,9 @@ button:hover {
 
 .modal {
   transition: opacity 0.3s linear;
-  background: url('/assets/veiled-harbour/C02-象牙档案纸微纹理.avif') center / 256px 256px repeat;
+  background:
+    linear-gradient(rgba(233, 225, 210, 0.78), rgba(233, 225, 210, 0.78)),
+    url('/assets/veiled-harbour/47-剧情检定烛影纸面-v1.png') center / cover no-repeat;
   border-radius: 8px;
   box-shadow: var(--shadow-2);
 }

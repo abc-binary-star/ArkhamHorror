@@ -53,7 +53,7 @@ ensure_pg() {
   if port_up $PG_PORT; then
     return 0
   fi
-  echo "… postgres :$PG_PORT 未运行，尝试启动（$PG_DATA）"
+  echo "… postgres :$PG_PORT 未运行，尝试启动（${PG_DATA}）"
   LC_ALL=C "${PG_BIN}/pg_ctl" -D "$PG_DATA" -l "$PG_LOG" start >/dev/null 2>&1
   for _ in $(seq 1 10); do port_up $PG_PORT && break; sleep 1; done
   if port_up $PG_PORT; then

@@ -153,8 +153,8 @@ const { groups, label, isOn, valueOf, valuesOf, valueLabel, inputId, set } =
 }
 
 .card-options-input::placeholder {
-  color: var(--background-light);
-  opacity: 0.7;
+  color: var(--text-faint);
+  opacity: 1;
 }
 
 .card-options-input:focus {
@@ -237,7 +237,7 @@ const { groups, label, isOn, valueOf, valuesOf, valueLabel, inputId, set } =
   padding: 0;
   border: 0;
   background: none;
-  color: var(--background-light);
+  color: var(--text-dim);
   font: inherit;
   font-size: 11px;
   text-transform: uppercase;

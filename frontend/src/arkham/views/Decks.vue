@@ -164,8 +164,8 @@ async function sync(deck: Arkham.Deck) {
   box-sizing: border-box;
   padding: 28px 0 72px;
   background:
-    linear-gradient(rgba(233, 225, 210, 0.78), rgba(233, 225, 210, 0.78)),
-    url('/assets/veiled-harbour/09-牌组工作台纸面.avif') center / cover no-repeat;
+    linear-gradient(rgba(233, 225, 210, 0.84), rgba(233, 225, 210, 0.84)),
+    url('/assets/veiled-harbour/44-午夜档案馆工作台-v1.png') center / cover no-repeat;
   border: 1px solid color-mix(in srgb, var(--brass) 30%, transparent);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-2);

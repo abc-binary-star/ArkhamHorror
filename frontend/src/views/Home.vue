@@ -516,7 +516,7 @@ header.main-header {
   align-items: stretch;
   margin: 0 0 30px;
   border-radius: 8px;
-  background: #bfc0b8 url('/assets/veiled-harbour/01-诡镇奇谈主视觉.avif') center / cover no-repeat;
+  background: #bfc0b8 url('/assets/veiled-harbour/42-旧港雾潮主视觉-v1.png') center / cover no-repeat;
   box-shadow:
     inset 0 0 70px rgba(18, 30, 31, 0.32),
     0 18px 40px rgba(34, 40, 38, 0.22),
@@ -718,7 +718,7 @@ header.main-header {
   .home-hero {
     min-height: 430px;
     margin-bottom: 24px;
-    background-image: linear-gradient(180deg, rgba(248, 244, 234, 0.22), rgba(29, 42, 43, 0.22)), url('/assets/veiled-harbour/15-移动端诡镇奇谈竖版.avif');
+    background-image: linear-gradient(180deg, rgba(248, 244, 234, 0.22), rgba(29, 42, 43, 0.22)), url('/assets/veiled-harbour/46-移动端旧港巷道-v1.png');
     background-position: center;
     background-size: cover;
   }

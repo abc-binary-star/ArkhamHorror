@@ -29,6 +29,7 @@ const props = defineProps<{
   remainingStack: Card[]
   completedStack: Card[]
   playerId: string
+  hideStackControl?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -282,6 +283,7 @@ const wards = computed(() => props.agenda.tokens[TokenType.Ward])
 <template>
   <div class="agenda-container">
     <StackIndicator
+      v-if="!hideStackControl"
       label="Agenda"
       :current="currentAgendaPosition"
       :total="totalAgendas"

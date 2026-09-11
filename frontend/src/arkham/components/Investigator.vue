@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { CircleCheck, SkipForward } from '@lucide/vue'
 import { useSettings } from '@/stores/settings';
 import { storeToRefs } from 'pinia';
 import { onUnmounted, onMounted, computed, inject, ref, watch } from 'vue'
@@ -583,6 +584,7 @@ const spadeInjury = computed(() => {
                 </svg>
               </span>
             </span>
+            <div class="investigator-controls">
             <template v-if="debug.active">
               <button
                 @click.exact="debug.send(game.id, {tag: 'GainActions', contents: [id, {tag: 'TestSource', contents: []}, 1]})"
@@ -598,11 +600,11 @@ const spadeInjury = computed(() => {
               />
             <button
             class="end-turn-button"
-            :class="{ active: endTurnAction !== -1 && investigator.remainingActions === 0 }"
+            :class="{ active: endTurnAction !== -1 && investigator.remainingActions === 0, armed: endTurnArmed }"
             :disabled="endTurnAction == -1"
             :data-game-actionable="endTurnAction !== -1 || undefined"
-            @click="$emit('choose', endTurnAction)"
-            >{{ isMobile ? $t('investigator.endTurnShort') : $t('investigator.endTurn') }}</button>
+            @click="endTurn"
+            ><CircleCheck class="table-action-icon" aria-hidden="true" />{{ endTurnLabel }}</button>
 
             <button
               v-if="devoured && devoured.length > 0"
@@ -615,7 +617,7 @@ const spadeInjury = computed(() => {
                 :data-game-actionable="canSkipTriggers && !skipAllInProgress || undefined"
                 @click="skipTriggers"
                 class="skip-triggers-button"
-              >{{ isMobile ? t('skip') : $t('investigator.skipTriggers') }}</button>
+              ><SkipForward class="table-action-icon" aria-hidden="true" />{{ isMobile ? t('skip') : $t('investigator.skipTriggers') }}</button>
               <button
                 v-if="showSkipAll"
                 @click="skipAllTriggers && skipAllTriggers()"
@@ -633,6 +635,7 @@ const spadeInjury = computed(() => {
             <Modifiers v-if="investigator.modifiers && showModifiers" :game="game" :modifiers="investigator.modifiers" @close="showModifiers = false" />
 
             <button v-if="cardsUnderneath.length > 0" class="view-discard-button" @click="showCardsUnderneath">{{cardsUnderneathLabel}}</button>
+            </div>
           </div>
           <Draw
             v-if="isMobile"
@@ -674,6 +677,8 @@ const spadeInjury = computed(() => {
 </template>
 
 <style scoped>
+.investigator-controls { display: contents; }
+.table-action-icon { width: 14px; height: 14px; margin-right: 5px; vertical-align: -2px; }
 i.action {
   font-family: 'Arkham';
   font-style: normal;
@@ -1087,77 +1092,84 @@ i.action {
 }
 
 .skip-triggers-button {
-  transition: all 0.2s ease-in;
-  border: var(--plaque-border);
-  border-radius: var(--control-radius);
-  background: var(--plaque-plate);
-  color: var(--plaque-ink);
-  text-shadow: var(--plaque-text-shadow);
-  box-shadow: var(--plaque-shadow);
+  transition: background 0.15s ease, color 0.15s ease;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: rgb(214 220 210 / 0.82);
+  text-shadow: 0 1px 2px rgb(4 12 12 / 0.6);
 
   &[disabled] {
-    border: var(--plaque-border-disabled);
-    background: var(--plaque-plate-disabled);
-    color: var(--plaque-ink-disabled);
+    background: transparent;
+    color: rgb(205 207 196 / 0.35);
   }
 
   &:not([disabled]):hover {
-    border: var(--plaque-border-hover);
+    background: rgb(244 239 228 / 0.08);
     color: #fff;
-    filter: brightness(1.14);
   }
 }
 
 .end-turn-button {
-  min-height: 40px;
-  border-radius: 4px;
-  background:
-    linear-gradient(180deg, rgb(205 175 107 / 0.22), rgb(71 54 29 / 0.4)),
-    url('/assets/veiled-harbour/36-行动按钮四态铭牌组-v2.avif') 0 center / 400% 100% no-repeat;
-  color: rgb(249 241 218 / 0.98);
+  min-height: 34px;
+  padding-inline: 16px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: rgb(233 214 165 / 0.92);
   font-family: Teutonic, Georgia, serif;
-  letter-spacing: 0.05em;
-  text-shadow: 0 1px 2px rgb(4 12 12 / 0.72);
-  box-shadow:
-    inset 0 1px 0 rgb(244 239 228 / 0.12),
-    0 2px 6px rgb(4 12 12 / 0.28);
+  font-size: 0.92rem;
+  letter-spacing: 0.14em;
+  text-shadow: 0 1px 2px rgb(4 12 12 / 0.6);
+  transition: background 0.15s ease, color 0.15s ease;
 
-  &:not(:disabled):hover,
-  &.active {
-    background-position: 33.333% center;
-    border-color: rgb(229 194 107 / 0.96);
+  &:not(:disabled):hover {
+    background: rgb(229 194 107 / 0.14);
     color: #fff;
   }
 
   &:not(:disabled):active {
-    background-position: 66.666% center;
+    background: rgb(229 194 107 / 0.24);
+  }
+
+  &.active {
+    border: 0;
+    border-radius: 6px;
+    background: rgb(229 194 107 / 0.16);
+    color: #fff;
+  }
+
+  &.armed {
+    background: rgb(196 104 98 / 0.22);
+    color: #fff;
   }
 
   &:disabled {
-    background-position: 100% center;
-    color: rgb(205 207 196 / 0.72);
+    background: transparent;
+    color: rgb(205 207 196 / 0.35);
   }
 }
 
 .skip-triggers-group--paired .skip-triggers-button {
-  border-radius: 2px 0 0 2px;
+  border-radius: 6px 0 0 6px;
 }
 
 .skip-all-triggers-button {
-  transition: all 0.2s ease-in;
-  background-color: var(--select);
-  color: white;
+  transition: background 0.15s ease, color 0.15s ease;
+  background: transparent;
+  color: rgb(214 220 210 / 0.82);
   border: 0;
-  border-left: 1px solid rgba(0, 0, 0, 0.25);
-  border-radius: 0 2px 2px 0;
-  padding-inline: 6px;
+  border-left: 1px solid rgb(244 239 228 / 0.16);
+  border-radius: 0 6px 6px 0;
+  padding-inline: 8px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
 
   &:hover {
-    background-color: var(--select-dark);
+    background: rgb(244 239 228 / 0.08);
+    color: #fff;
   }
 }
 

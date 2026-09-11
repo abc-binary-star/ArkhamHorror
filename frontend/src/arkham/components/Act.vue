@@ -34,6 +34,7 @@ const props = defineProps<{
   remainingStack: Card[]
   completedStack: Card[]
   playerId: string
+  hideStackControl?: boolean
 }>()
 
 const emits = defineEmits<{
@@ -465,6 +466,7 @@ const chooseFromStoryCollection = (choice: number) => {
         />
       </div>
       <StackIndicator
+      v-if="!hideStackControl"
         label="Act"
         :current="currentActPosition"
         :total="totalActs"

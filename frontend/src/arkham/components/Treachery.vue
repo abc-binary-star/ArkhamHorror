@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue';
-import MissingCardBadge from '@/arkham/components/MissingCardBadge.vue';
-import { useDebug } from '@/arkham/debug';
-import { cardImage } from '@/arkham/cardImages';
-import type { Game } from '@/arkham/types/Game';
-import * as ArkhamGame from '@/arkham/types/Game';
-import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Message';
-import TokenPool from '@/arkham/components/TokenPool.vue';
+import { computed, ref, watch } from 'vue'
+import MissingCardBadge from '@/arkham/components/MissingCardBadge.vue'
+import { useDebug } from '@/arkham/debug'
+import { cardImage } from '@/arkham/cardImages'
+import type { Game } from '@/arkham/types/Game'
+import * as ArkhamGame from '@/arkham/types/Game'
+import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Message'
+import TokenPool from '@/arkham/components/TokenPool.vue'
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import { IsMobile } from '@/arkham/isMobile'
-import Token from '@/arkham/components/Token.vue';
-import * as Arkham from '@/arkham/types/Treachery';
+import Token from '@/arkham/components/Token.vue'
+import * as Arkham from '@/arkham/types/Treachery'
 
 export interface Props {
   game: Game
@@ -23,6 +23,8 @@ export interface Props {
   mobileHandOpen?: boolean
   /* Can be dragged into the hidden-cards stack beside the play area. */
   tuckable?: boolean
+  /* Another player's public card: keeps the printed state, drops the controls */
+  readonly?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), { attached: false })
@@ -45,17 +47,28 @@ const { isMobile } = IsMobile()
 const cardFrame = ref<HTMLElement | null>(null)
 const showAbilities = ref(false)
 
-watch(() => props.mobileHandOpen, (open) => {
-  if (open === false) showAbilities.value = false
-})
+watch(
+  () => props.mobileHandOpen,
+  (open) => {
+    if (open === false) showAbilities.value = false
+  },
+)
 const image = computed(() => cardImage(props.treachery.cardCode))
 const id = computed(() => props.treachery.id)
-const choices = computed(() => ArkhamGame.choices(props.game, props.playerId))
+// Every affordance on this card is derived from these choices, so emptying them
+// is enough to render the treachery as public information.
+const choices = computed<Message[]>(() =>
+  props.readonly ? [] : ArkhamGame.choices(props.game, props.playerId),
+)
 const isExhausted = computed(() => props.treachery.exhausted)
 
 function canInteract(c: Message): boolean {
-  if (c.tag === "TargetLabel") {
-    return c.target.contents === id.value || `c${id.value}` === c.target.contents || c.target.contents == props.treachery.cardId
+  if (c.tag === 'TargetLabel') {
+    return (
+      c.target.contents === id.value ||
+      `c${id.value}` === c.target.contents ||
+      c.target.contents == props.treachery.cardId
+    )
   }
 
   return false
@@ -66,10 +79,10 @@ function isAbility(v: Message): v is AbilityLabel {
     return false
   }
 
-  const { source } = v.ability;
+  const { source } = v.ability
 
   if (source.sourceTag === 'ProxySource') {
-    if ("contents" in source.source) {
+    if ('contents' in source.source) {
       return source.source.contents === id.value
     }
   } else if (source.tag === 'TreacherySource') {
@@ -80,23 +93,24 @@ function isAbility(v: Message): v is AbilityLabel {
 }
 
 const abilities = computed(() => {
-  return choices
-    .value
-    .reduce<AbilityMessage[]>((acc, v, i) => {
-      if (isAbility(v)) {
-        return [...acc, { contents: v, displayAsAction: false, index: i }];
-      }
+  return choices.value.reduce<AbilityMessage[]>((acc, v, i) => {
+    if (isAbility(v)) {
+      return [...acc, { contents: v, displayAsAction: false, index: i }]
+    }
 
-      return acc;
-    }, []);
+    return acc
+  }, [])
 })
 
 const tokenOverrides = { Damage: { type: 'damage' } }
 const cardAction = computed(() => choices.value.findIndex(canInteract))
-const canUseMobileAbilityMenu = computed(() => isMobile && props.isInHand && abilities.value.length > 0)
+const canUseMobileAbilityMenu = computed(
+  () => isMobile && props.isInHand && abilities.value.length > 0,
+)
 const canHighlight = computed(() => cardAction.value !== -1 || canUseMobileAbilityMenu.value)
 
 function handleCardClick() {
+  if (props.readonly) return
   if (canUseMobileAbilityMenu.value) {
     showAbilities.value = true
     return
@@ -122,7 +136,7 @@ function handleCardClick() {
       :src="image"
       class="card"
       :class="{ 'treachery--can-interact': canHighlight, attached, 'in-hand': isInHand }"
-      :draggable="tuckable || undefined"
+      :draggable="(!readonly && tuckable) || undefined"
       @dragstart="startDrag"
       @click="handleCardClick"
       :data-delay="overlayDelay"
@@ -147,15 +161,30 @@ function handleCardClick() {
     />
     <div class="pool">
       <TokenPool :tokens="treachery.tokens" :overrides="tokenOverrides" />
-      <Token v-for="(sealedToken, index) in treachery.sealedChaosTokens" :key="index" :token="sealedToken" :playerId="playerId" :game="game" @choose="choose" />
+      <Token
+        v-for="(sealedToken, index) in treachery.sealedChaosTokens"
+        :key="index"
+        :token="sealedToken"
+        :playerId="playerId"
+        :game="game"
+        @choose="choose"
+      />
     </div>
 
     <template v-if="debug.active">
-      <button @click="debug.send(game.id, {tag: 'Discard', contents: [null, { tag: 'GameSource' }, { tag: 'TreacheryTarget', contents: id}]})">{{ $t('treachery.discard') }}</button>
+      <button
+        @click="
+          debug.send(game.id, {
+            tag: 'Discard',
+            contents: [null, { tag: 'GameSource' }, { tag: 'TreacheryTarget', contents: id }],
+          })
+        "
+      >
+        {{ $t('treachery.discard') }}
+      </button>
     </template>
   </div>
 </template>
-
 
 <style scoped>
 .card {
@@ -166,7 +195,7 @@ function handleCardClick() {
 
 .treachery--can-interact {
   border: 2px solid var(--select);
-  cursor:pointer;
+  cursor: pointer;
 }
 
 .treachery {
@@ -197,7 +226,6 @@ function handleCardClick() {
     width: var(--card-token-width);
     height: auto;
   }
-
 
   pointer-events: none;
 }

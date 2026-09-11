@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Layers, Archive } from '@lucide/vue'
 import { useDebug } from '@/arkham/debug'
 import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Message'
 import * as ArkhamCard from '@/arkham/types/Card';
@@ -231,6 +232,8 @@ watch(choices, async (newChoices) => {
     @dragover.prevent="dragover($event)"
     @dragenter.prevent
   >
+    <span class="pile-label"><Archive aria-hidden="true" />{{ t('multiplayerTable.discardPile') }} · {{ discards.length }}</span>
+    <div v-if="!topOfDiscard" class="discard-empty" aria-hidden="true">—</div>
     <Card v-if="topOfDiscard" :game="game" :card="topOfDiscard" :playerId="playerId" :allowAbilityButtons="false" :allowInteractions="false" />
     <CardsUnderIndicator
       v-if="discards.length > 0"
@@ -248,6 +251,7 @@ watch(choices, async (newChoices) => {
     <button v-if="debug.active && discards.length > 0" class="view-discard-button" @click="debug.send(game.id, {tag: 'ShuffleDiscardBackIn', contents: investigatorId})">{{ $t('draw.shuffleBackIn') }}</button>
   </div>
   <div class="deck-container">
+    <span class="pile-label"><Layers aria-hidden="true" />{{ t('multiplayerTable.drawPile') }}</span>
     <div
       class="top-of-deck"
       :class="{ 'top-of-deck--drop-target': deckDropIndicator }"
@@ -301,6 +305,7 @@ watch(choices, async (newChoices) => {
 </template>
 
 <style scoped>
+.pile-label, .discard-empty { display: none; }
 
 .discard {
   cursor: pointer;

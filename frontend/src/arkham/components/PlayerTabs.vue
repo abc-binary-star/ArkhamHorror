@@ -23,6 +23,9 @@ export interface Props {
   playerOrder: string[]
   activePlayerId: string
   tarotCards: TarotCard[]
+  /* Seats that belong to other people: the workbench is theirs to see, not ours
+     to switch into, so the pane stops following persisted or automatic routing. */
+  pinnedPlayerId?: string
 }
 
 const props = defineProps<Props>()
@@ -102,7 +105,22 @@ function resetSwitchStack(tab: string, perspective: string) {
   switchStack.value = [{ tab, perspective, reason: 'baseline' }]
 }
 
+// A pinned seat wins over both the persisted selection and every automatic route
+// below, which otherwise move the visible pane to whoever has a live control --
+// stranding the workbench on somebody else's investigator.
+watch(
+  [() => props.pinnedPlayerId, () => props.playerId],
+  ([pinned]) => {
+    if (!pinned || selectedTab.value === pinned) return
+    manualSelectionAtStep = props.game.scenarioSteps
+    selectedTab.value = pinned
+    resetSwitchStack(pinned, props.playerId)
+  },
+  { immediate: true },
+)
+
 function selectTab(i: string) {
+  if (props.pinnedPlayerId && i !== props.pinnedPlayerId) return
   manualSelectionAtStep = props.game.scenarioSteps
   selectedTab.value = i
   resetSwitchStack(i, props.playerId)
@@ -114,6 +132,7 @@ function selectTab(i: string) {
 // focusQuestionPlayers() and the sole-question rule immediately routes back to the
 // active investigator, stranding that seat's abilities out of reach (#5350).
 function selectTabExtended(i: string) {
+  if (props.pinnedPlayerId && i !== props.pinnedPlayerId) return
   manualSelectionAtStep = props.game.scenarioSteps
   selectedTab.value = i
   resetSwitchStack(i, i)
@@ -247,6 +266,8 @@ function frameIsStillNeeded(frame: SwitchFrame, tabs: Set<string>) {
 }
 
 function applyFrame(frame: SwitchFrame) {
+  // Automatic routing must never take the pane off a pinned seat.
+  if (props.pinnedPlayerId) return
   selectedTab.value = frame.tab
   if (solo?.value === true && props.playerId !== frame.perspective && switchInvestigator) {
     pendingPerspective.value = frame.perspective

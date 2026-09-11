@@ -27,7 +27,7 @@ defineProps<{ title: string }>()
   box-sizing: border-box;
   background:
     linear-gradient(90deg, rgb(8 18 19 / 0.72), rgb(8 18 19 / 0.28) 65%, rgb(8 18 19 / 0.5)),
-    url('/assets/veiled-harbour/01-诡镇奇谈主视觉.avif') center / cover no-repeat;
+    url('/assets/veiled-harbour/42-旧港雾潮主视觉-v1.png') center / cover no-repeat;
 }
 
 .auth-card {
@@ -181,7 +181,7 @@ defineProps<{ title: string }>()
     padding: 24px 18px;
     background-image:
       linear-gradient(rgb(8 18 19 / 0.42), rgb(8 18 19 / 0.76)),
-      url('/assets/veiled-harbour/15-移动端诡镇奇谈竖版.avif');
+      url('/assets/veiled-harbour/46-移动端旧港巷道-v1.png');
   }
   .auth-card {
     padding-top: 26px;

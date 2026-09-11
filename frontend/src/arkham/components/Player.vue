@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Layers, Hand } from '@lucide/vue';
 import type { CardContents } from '@/arkham/types/Card';
 import * as CardT from '@/arkham/types/Card';
 import gsap from 'gsap';
@@ -955,6 +956,7 @@ function closeHand() {
   <div class="player-cards">
     <button class="in-play-toggle" @click="playAreaCollapsed = !playAreaCollapsed"></button>
     <div class="in-play-row">
+      <div class="play-area-label"><Layers aria-hidden="true" />{{ $t('multiplayerTable.inPlay') }}</div>
       <transition name="grow">
         <section
           class="in-play"
@@ -1260,7 +1262,7 @@ function closeHand() {
       </div>
       <div v-if="!isMobile" class="hand hand-area">
         <div class="hand-area__header">
-          <span>{{ $t('player.hand') }}</span>
+          <span><Hand class="table-label-icon" aria-hidden="true" />{{ $t('player.hand') }}</span>
           <span>{{ totalHandSize }}/{{ investigator.handSize }}</span>
         </div>
         <transition-group tag="section" class="hand" @enter="onEnter" @leave="onLeave" @before-enter="onBeforeEnter"
@@ -1452,6 +1454,8 @@ function closeHand() {
 </template>
 
 <style scoped>
+.play-area-label { display: none; }
+.table-label-icon { width: 13px; height: 13px; margin-right: 5px; vertical-align: -2px; }
 .player {
   display: flex;
   gap: 5px;

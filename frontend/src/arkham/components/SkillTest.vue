@@ -911,7 +911,7 @@ i.iconSkillAgility {
   }
 
   .step:nth-child(even) {
-    background: color-mix(in srgb, var(--surface-table) 85%, white);
+    background: color-mix(in srgb, var(--surface-table) 88%, black);
     color: var(--text-on-table);
   }
 
