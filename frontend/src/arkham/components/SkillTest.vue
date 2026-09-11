@@ -1148,4 +1148,16 @@ i.iconSkillAgility {
   }
 }
 
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .skill-test { min-width: 0; width: 100%; max-width: 100%; overflow: auto; }
+  .skill-test-contents { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 12px; }
+  .skill-test-contents > * { min-width: 0; max-width: 100%; }
+  .test-status { flex-wrap: wrap; gap: 12px; padding: 0; }
+  .steps { display: flex; overflow-x: auto; flex-wrap: nowrap; }
+  .step { flex: 0 0 auto; min-width: 36px; }
+  .apply-results, .skip-triggers-button { min-height: 44px; white-space: normal; }
+
+}
 </style>

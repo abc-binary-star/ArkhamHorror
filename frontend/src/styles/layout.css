@@ -50,3 +50,9 @@
   flex-direction: row;
   gap: 10px;
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+  .page-content { width: 100%; max-width: 100%; padding: 16px max(16px, env(safe-area-inset-right)) 24px max(16px, env(safe-area-inset-left)); }
+  .row, .buttons { flex-wrap: wrap; }
+  .router-container, .router-container > * { min-width: 0; }
+}

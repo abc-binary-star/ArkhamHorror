@@ -161,6 +161,7 @@ function placeModal({ resetAnchor = false } = {}) {
 }
 
 function drag(e: PointerEvent) {
+  if (window.matchMedia('(max-width: 800px), (max-width: 1199px) and (pointer: coarse)').matches) return
   const target = e.target as HTMLElement | null
   if (!target || target.closest('.minimize-btn')) return
   if (!target.closest('header') || isMinimized.value) return
@@ -661,4 +662,16 @@ function moveUp() {
   }
 }
 
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  /* Override coordinates written by the desktop drag controller. */
+  .draggable, .draggable:not(.minimized):has(p.file) { position: fixed !important; left: max(8px, env(safe-area-inset-left)) !important; top: max(8px, env(safe-area-inset-top)) !important; width: calc(100% - max(8px, env(safe-area-inset-left)) - max(8px, env(safe-area-inset-right))) !important; min-width: 0; max-width: none !important; height: auto !important; max-height: calc(100dvh - 84px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); transform: none !important; overflow: hidden; border-radius: 10px; }
+  .draggable > header { flex: 0 0 auto; min-height: 44px; padding: 6px 8px; touch-action: pan-y; }
+  .draggable .header-title { min-width: 0; overflow-wrap: anywhere; }
+  .draggable .minimize-btn { min-width: 44px; min-height: 44px; }
+  .draggable > .content, .draggable:has(> .content > .settings) > .content, .draggable:has(> .content > .shortcuts-modal) > .content { min-height: 0; max-height: none; overflow: auto; margin: 0; padding: 12px; overscroll-behavior: contain; }
+  .draggable.minimized { top: auto !important; bottom: calc(68px + env(safe-area-inset-bottom)); }
+
+}
 </style>

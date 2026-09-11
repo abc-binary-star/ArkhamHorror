@@ -376,4 +376,17 @@ async function takeSeat() {
   font-size: 0.9em;
   margin: 0;
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .lobby { width: 100%; min-width: 0; padding: 16px 12px max(24px, env(safe-area-inset-bottom)); overflow: auto; }
+  .next-scenario { flex-direction: column; align-items: stretch; gap: 12px; }
+  .next-scenario-info, .scenario-info, .invite-section { min-width: 0; width: 100%; }
+  .invite-link { display: flex; flex-wrap: wrap; gap: 8px; }
+  .invite-link input { width: 100%; min-width: 0; flex: 1 1 180px; font-size: 16px; }
+  .invite-link button, .claim-btn { min-height: 44px; }
+  .investigators { min-width: 0; width: 100%; }
+  .next-step-icon { align-self: center; max-width: 100%; }
+
+}
 </style>

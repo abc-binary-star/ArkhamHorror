@@ -190,4 +190,11 @@ defineProps<{ title: string }>()
     margin-bottom: 22px;
   }
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .auth-stage { min-height: 0; overflow: auto; padding: 16px max(12px, env(safe-area-inset-right)) max(24px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left)); align-items: flex-start; }
+  .auth-card { width: 100%; min-width: 0; max-width: 460px; margin: auto; padding: 24px 16px; }
+
+}
 </style>

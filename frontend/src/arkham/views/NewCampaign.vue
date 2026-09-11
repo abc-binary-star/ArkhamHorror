@@ -828,4 +828,16 @@ header.main-header {
     view-transition-name: main-header-button;
   }
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .new-campaign-content { width: 100%; max-width: 100%; padding: 16px 12px 24px; overflow-x: hidden; }
+  .campaigns, .scenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 145px), 1fr)); gap: 12px; }
+  .campaign, .scenario, .campaign-box, .scenario-box { min-width: 0; max-width: 100%; }
+  .options { display: flex; flex-wrap: wrap; gap: 12px; }
+  .options label { min-width: 0; max-width: 100%; }
+  .wizard-actions { position: sticky; bottom: 0; flex-wrap: wrap; padding: 12px 0 max(12px, env(safe-area-inset-bottom)); background: var(--background); z-index: 2; }
+  .wizard-actions > * { flex: 1 1 130px; min-height: 44px; }
+
+}
 </style>

@@ -15,6 +15,8 @@ const emit = defineEmits<{
   'update:mapMoveMode': [value: boolean]
   toggleLock: []
   reset: []
+  zoomIn: []
+  zoomOut: []
 }>()
 
 const { t } = useI18n()
@@ -25,6 +27,8 @@ const { t } = useI18n()
    plus layout reset once anything has been dragged. Zoom lives on the
    mouse wheel; fullscreen lives in the game bar. -->
 <div class="map-corner-controls">
+  <button type="button" class="zoom-btn touch-zoom" :aria-label="t('multiplayerTable.zoomOut')" @click.stop="emit('zoomOut')">−</button>
+  <button type="button" class="zoom-btn touch-zoom" :aria-label="t('multiplayerTable.zoomIn')" @click.stop="emit('zoomIn')">+</button>
   <button type="button" class="zoom-btn" :class="{ 'zoom-btn--active': mapMoveMode }" :aria-pressed="mapMoveMode" :aria-label="t('multiplayerTable.moveMap')" v-tooltip="t('multiplayerTable.moveMap')" @click.stop="emit('update:mapMoveMode', !mapMoveMode)">
     <Move class="zoom-btn__icon" />
   </button>
@@ -122,4 +126,13 @@ const { t } = useI18n()
   white-space: nowrap;
   font-size: 0.75rem;
 }
+.touch-zoom { display: none; }
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+  .map-corner-controls { top: 8px; right: 8px; max-width: calc(100% - 16px); gap: 2px; padding: 2px; }
+  .map-corner-controls .zoom-btn { min-width: 44px; width: 44px; height: 44px; border-radius: 4px; }
+  .map-corner-controls .touch-zoom { display: flex; }
+  .map-corner-controls .map-reset-button { width: auto; }
+  .zoom-btn__icon { width: 20px; height: 20px; }
+}
+
 </style>

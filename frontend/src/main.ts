@@ -1,3 +1,4 @@
+import { clientLog, clientError, installClientLogging } from '@/utils/clientLog'
 import './styles/index.css'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -19,7 +20,10 @@ import mitt from 'mitt';
 
 library.add(faBan, faLocationDot, faCircleExclamation, faGhost, faSearch, faList, faImage, faAngleDown, faExpeditedssl, faUndo, faTrash, faEye, faCopy, faExternalLink, faRefresh, faBook, faChevronRight, faBars, faTimes, faShieldHeart, faWrench, faPaperclip, faArrowLeft, faArrowUp, faStore, faTriangleExclamation, faShuffle, faTrophy, faGear, faLayerGroup, faDownload, faCheckDouble, faFlask, faPen)
 
+installClientLogging()
+
 async function bootstrap() {
+  clientLog('bootstrap.start')
   const language = localStorage.getItem('language')
   const naviLanguage = preferredLanguage(navigator.language || 'en')
   const currentLanguage = language ?? naviLanguage
@@ -27,6 +31,7 @@ async function bootstrap() {
   if (!language) { localStorage.setItem('language', currentLanguage) }
 
   const loadedMessages: Record<string, any> = {}
+  clientLog('locale.load.start', { locale: currentLocale })
   const fallback = await loadLocaleMessages('en')
   loadedMessages[fallback.locale] = fallback.messages
 
@@ -35,6 +40,7 @@ async function bootstrap() {
     loadedMessages[current.locale] = current.messages
   }
 
+  clientLog('locale.load.complete', { locale: currentLocale })
   const i18n = VueI18n.createI18n({
     locale: currentLocale, // set locale
     fallbackLocale: 'en', // set fallback locale
@@ -71,7 +77,12 @@ async function bootstrap() {
 
   app.config.globalProperties.emitter = emitter
 
+  app.config.errorHandler = (cause, instance, info) => {
+    clientError('vue.error', cause, { component: instance?.$options.name ?? instance?.$options.__name ?? 'anonymous', info })
+  }
+  clientLog('app.mount.start')
   app.mount('#app')
+  clientLog('app.mount.complete')
 
   // A 401 from anywhere means the stored token is dead. Left alone, `whoami`
   // fails, the user store logs out silently, and someone mid-game is dropped on
@@ -79,6 +90,7 @@ async function bootstrap() {
   // settled its first navigation: the beforeEach guard itself calls whoami, and
   // pushing a redirect from inside that would fight the navigation in flight.
   void router.isReady().then(() => {
+    clientLog('router.ready', { route: String(router.currentRoute.value.name ?? '') })
     const toast = createToastInterface(globalEventBus)
     let bouncing = false
 
@@ -105,4 +117,4 @@ async function bootstrap() {
   })
 }
 
-void bootstrap()
+void bootstrap().catch((cause) => clientError('bootstrap.failed', cause))

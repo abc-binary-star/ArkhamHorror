@@ -94,4 +94,11 @@ onUnmounted(() => document.removeEventListener('keydown', onKeyDown))
     }
   }
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .campaign-log-view { min-width: 0; width: 100%; overflow: auto; padding: 12px; }
+  .back-button { display: inline-flex; align-items: center; min-height: 44px; }
+
+}
 </style>

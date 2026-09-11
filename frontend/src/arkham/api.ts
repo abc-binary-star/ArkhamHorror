@@ -1,3 +1,4 @@
+import { clientLog, clientError } from '@/utils/clientLog'
 import api from '@/api';
 import { Game, GameDetailsEntry, UndoMode, gameDecoder, gameDetailsEntryDecoder } from '@/arkham/types/Game';
 import { ArkhamDbDecklist, Deck, deckDecoder } from '@/arkham/types/Deck';
@@ -35,19 +36,31 @@ interface FetchReplay {
 }
 
 export const fetchJoinGame = async (gameId: string): Promise<Game> => {
-  const { data } = await api.get(`arkham/games/${gameId}/join`)
+  const { data } = await api.get(`arkham/games/${gameId}/join`, { timeout: 30000 })
   return gameDecoder.decodePromise(data);
 }
 
-export const fetchGame = async (gameId: string, spectate = false): Promise<FetchData> => {
+export const fetchGame = async (gameId: string, spectate = false, signal?: AbortSignal): Promise<FetchData> => {
+  const started = performance.now()
+  clientLog('game.http.start', { spectate })
+  try {
   const { data } = await api.get(`arkham/games/${gameId}${spectate ? '/spectate' : ''}`, {
+    timeout: 30000,
+    signal,
     // Game GETs are also used to recover from missed websocket transitions.
     // A cache hit here can leave setup on an already-answered question.
     params: { _: Date.now() },
   })
+  clientLog('game.http.complete', { elapsedMs: Math.round(performance.now() - started) })
   const { playerId, game, multiplayerMode, eventId } = data
+  clientLog('game.decode.start')
   const gameData = await gameDecoder.decodePromise(game)
+  clientLog('game.decode.complete', { elapsedMs: Math.round(performance.now() - started) })
   return { playerId, game: gameData, multiplayerMode, eventId: eventId ?? null }
+  } catch (cause) {
+    clientError('game.fetch.error', cause, { elapsedMs: Math.round(performance.now() - started), aborted: signal?.aborted ?? false })
+    throw cause
+  }
 }
 
 /* The "did anything happen?" probe: a single Int column, no game JSON, no lock.

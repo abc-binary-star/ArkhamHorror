@@ -1040,4 +1040,16 @@ button.skip {
 
 
 
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .panel { display: flex; flex-direction: column; min-width: 0; width: 100%; max-width: 100%; padding: 16px 12px; }
+  .content, .question-pane { min-width: 0; max-width: 100%; }
+  .input-row, .step-buttons, .buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+  .input-row input { min-width: 0; width: 100%; flex: 1 1 180px; }
+  .step, .input-row button { flex: 1 1 140px; min-height: 44px; white-space: normal; }
+  .step-arrow { display: none; }
+  .portrait { max-width: 160px; align-self: center; }
+
+}
 </style>

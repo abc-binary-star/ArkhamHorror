@@ -1354,4 +1354,16 @@ i.diamond {
     content: "♦️";
   }
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .player-card { display: flex; flex-direction: column; align-items: stretch; width: min(100%, 320px); max-width: 100%; gap: 10px; }
+  .player-card .investigator-image { width: min(100%, 240px); align-self: center; }
+  .player-card .investigator-image > .card { display: block; width: 100%; height: auto; min-width: 0; }
+  .player-card :deep(.card) { max-width: 100%; height: auto; }
+  .player-buttons, .button-group, .investigator-controls { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
+  .player-buttons button { min-height: 44px; min-width: 44px; white-space: normal; font-size: 14px; }
+  .end-turn-button, .skip-triggers-button { flex: 1 1 auto; }
+
+}
 </style>

@@ -1,0 +1,6 @@
+/* Teleported overlays need unlayered mobile bounds, like component styles. */
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+  .v-popper__popper .v-popper__inner { max-width: calc(100vw - 24px); max-height: calc(100dvh - 100px); overflow: auto; overflow-wrap: anywhere; }
+  .v-popper__popper button { min-height: 44px; white-space: normal; }
+  .Vue-Toastification__container { padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right)); }
+}

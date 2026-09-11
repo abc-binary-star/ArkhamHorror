@@ -58,9 +58,10 @@ export interface Props {
   investigator: ArkhamInvestigator.Investigator
   playerId: string
   tarotCards: TarotCard[]
+  mobileHandActive?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), { mobileHandActive: true })
 const solo = inject(soloKey)
 const showOtherPlayersHands = inject(showOtherPlayersHandsKey)
 
@@ -918,55 +919,13 @@ function debugAddSlot(slotType: DebugSlotType) {
 
 const playAreaCollapsed = ref(false)
 
-const handCardHeight = Math.min(7 * window.innerWidth / 50 + 114, 340);
-const handCardExposedHeight_MIN = `${-(handCardHeight - 50)}`;
-const handCardExposedHeight_MAX = `0`;
-const handAreaMarginBottom = ref(handCardExposedHeight_MIN);
-const handAreaPointerEvents = ref('none');
-
-onMounted(() => {
-  if (isMobile) {
-    document.addEventListener('click',toggleHandAreaMarginBottom)
-    const isMinimized_SkillTest = inject(isMinimizedSkillTestKey, ref(false))
-    watch([() => props.game.skillTest, isMinimized_SkillTest], ([newSkillTest,isMinimized]) => {
-      if (newSkillTest && !isMinimized) {
-        handAreaMarginBottom.value = handCardExposedHeight_MAX;
-        handAreaPointerEvents.value = 'auto';
-        document.removeEventListener('click', toggleHandAreaMarginBottom)
-      } else {
-        handAreaMarginBottom.value = handCardExposedHeight_MIN;
-        handAreaPointerEvents.value = 'none';
-        document.removeEventListener('click', toggleHandAreaMarginBottom)
-        document.addEventListener('click', toggleHandAreaMarginBottom)
-      }
-    });
-  }
-});
-
-onBeforeUnmount(() => {
-  if (isMobile) {
-    document.removeEventListener('click', toggleHandAreaMarginBottom)
-  }
-});
-
-function toggleHandAreaMarginBottom(event: Event) {
-  const target = event.target as HTMLElement
-  if (target.classList.contains('hand-area-IsMobile')) {
-    handAreaMarginBottom.value = handCardExposedHeight_MAX;
-    handAreaPointerEvents.value = 'auto'
-  }
-  else if (target.closest('.in-hand, .abilities')) {
-    return
-  } else {
-    handAreaMarginBottom.value = handCardExposedHeight_MIN;
-    handAreaPointerEvents.value = 'none'
-  }
-}
-
-function closeHand() {
-  handAreaMarginBottom.value = handCardExposedHeight_MIN;
-  handAreaPointerEvents.value = 'none';
-}
+const mobileHandOpen = ref(false)
+const handAreaPointerEvents = computed(() => mobileHandOpen.value ? 'auto' : 'none')
+const minimizedSkillTest = inject(isMinimizedSkillTestKey, ref(false))
+watch([() => props.game.skillTest, minimizedSkillTest, isMobile], ([skillTest, minimized, mobile]) => {
+  mobileHandOpen.value = Boolean(mobile && skillTest && !minimized)
+}, { immediate: true })
+function closeHand() { mobileHandOpen.value = false }
 
 </script>
 
@@ -1291,7 +1250,6 @@ function closeHand() {
           @hideCards="hideCards"
         />
         <Draw
-          v-if="!isMobile"
           :game="game"
           :playerId="playerId"
           :investigator="investigator"
@@ -1387,12 +1345,14 @@ function closeHand() {
     <!-- The action tray is fixed to the same bottom edge on narrow viewports,
          so the sheet has to clear it — otherwise the collapsed strip sits on
          top of the tray and swallows its buttons. -->
+    <Teleport to="body" v-if="isMobile && mobileHandActive">
     <div
-      v-if="isMobile"
       class="hand hand-area-IsMobile"
-      :style="{ bottom: `calc(${handAreaMarginBottom}px + var(--game-bar-height, 0px) + env(safe-area-inset-bottom, 0px))` }"
-      @click="toggleHandAreaMarginBottom"
+      :class="{ 'mobile-hand-open': mobileHandOpen }"
     >
+      <button type="button" class="mobile-hand-handle" :aria-expanded="mobileHandOpen" @click.stop="mobileHandOpen = !mobileHandOpen">
+        <Hand aria-hidden="true" />{{ $t('player.hand') }} <span>{{ mobileHandOpen ? '⌄' : '⌃' }}</span>
+      </button>
       <button
         v-if="debug.active"
         v-show="handAreaPointerEvents === 'auto'"
@@ -1482,6 +1442,7 @@ function closeHand() {
         </template>
       </transition-group>
     </div>
+    </Teleport>
     <CardRow
       v-if="showCards.ref.length > 0"
       :game="game"
@@ -2221,5 +2182,32 @@ function closeHand() {
 
 .debug-add-card-status {
   opacity: 0.8;
+}
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+  .player-cards { --card-width: 110px; --card-height: 154px; display: flex; flex-direction: column; min-width: 0; overflow: visible; }
+  .player-cards .player { order: -1; display: flex; flex-direction: column; min-width: 0; }
+  .player-cards .investigator-and-deck { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; }
+  .player-cards .in-play-row { display: flex; flex-direction: column; width: 100%; min-width: 0; gap: 12px; }
+  .player-cards .player-card-zone { width: 100%; min-width: 0; }
+  .player-cards .in-play { display: flex; flex-wrap: nowrap; max-width: 100%; overflow-x: auto; gap: 10px; padding: 8px 4px 16px; }
+  .player-cards .in-play > * { flex-shrink: 0; }
+  .player-cards .in-play.in-play--collapsed { display: none; }
+  .player-cards .equip-slots { flex-wrap: wrap; }
+  .hand.hand-area-IsMobile { height: min(320px, 55dvh); bottom: calc(var(--game-bar-height, 56px) + env(safe-area-inset-bottom)); transform: translateY(calc(100% - 44px)); transition: transform 180ms ease; z-index: 40; padding: 0 8px 8px; overflow: hidden; background-color: #182d28; }
+  .hand.hand-area-IsMobile.mobile-hand-open { transform: translateY(0); }
+  .mobile-hand-handle { display: flex; flex: 0 0 44px; align-items: center; justify-content: center; gap: 8px; width: 100%; color: #efdfb9; background: #203731; border: 0; }
+  .mobile-hand-handle svg { width: 20px; height: 20px; }
+  .hand-area-IsMobile > .hand { display: flex; flex-wrap: nowrap; align-items: flex-start; min-height: 0; overflow: auto; gap: 12px; padding: 8px 4px 16px; }
+  .hand-area-IsMobile > .hand > * { flex-shrink: 0; margin: 0; }
+  .hand-area-IsMobile :deep(.card) { width: min(155px, 29dvh); min-width: min(155px, 29dvh); }
+  .hand-close-button { display: none; }
+}
+
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  /* Teleport keeps the selected hand available from every table panel. */
+  .hand.hand-area-IsMobile { --game-bar-height: 60px; --card-width: 140px; --card-height: 196px; left: env(safe-area-inset-left); right: env(safe-area-inset-right); }
+
 }
 </style>

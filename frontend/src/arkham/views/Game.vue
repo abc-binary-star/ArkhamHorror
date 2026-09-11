@@ -1,10 +1,12 @@
 <script lang="ts" setup>
-import { ArrowLeft, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight } from '@lucide/vue'
+import { clientLog, clientError } from '@/utils/clientLog'
+import { ArrowLeft, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight } from '@lucide/vue'
 import {
   computed,
   markRaw,
   nextTick,
   onMounted,
+  onErrorCaptured,
   onUnmounted,
   provide,
   ref,
@@ -56,6 +58,7 @@ import * as Api from '@/arkham/api'
 import { useCardStore } from '@/stores/cards'
 import { useUserStore } from '@/stores/user'
 import { useEventStore } from '@/arkham/stores/event'
+import { useBgm } from '@/arkham/composables/useBgm'
 import { useEventTimer } from '@/arkham/composables/useEventTimer'
 import { useFocusLight } from '@/arkham/composables/useFocusLight'
 import { useGameSocket, useSingleFlight } from '@/arkham/composables/useGameSocket'
@@ -550,6 +553,7 @@ const choices = computed(() => {
   return choicesByPlayer.value.get(playerId.value) ?? []
 })
 const gameOver = computed(() => game.value?.gameState.tag === 'IsOver')
+const { bgmDisabled, toggleBgm } = useBgm(() => game.value, () => gameOver.value)
 const questionPlayerId = computed(() => {
   const currentGame = game.value
   if (!currentGame) return playerId.value
@@ -813,17 +817,40 @@ const websocketUrl = computed(() => {
 })
 
 const loadError = ref(false)
+let loadController: AbortController | null = null
 
+// A failed child setup/render must not leave the previous loading frame on screen.
+onErrorCaptured((cause, instance, info) => {
+  clientError('game.render.error', cause, { component: instance?.$options.name ?? instance?.$options.__name ?? 'anonymous', info, ready: ready.value })
+  loadError.value = true
+  return false
+})
+onUnmounted(() => {
+  clientLog('game.unmount')
+  loadController?.abort()
+  loadController = null
+})
+
+let loadSequence = 0
 const loadGame = async () => {
+  const request = ++loadSequence
+  const started = performance.now()
+  clientLog('game.load.start', { request, spectate: props.spectate, superseding: Boolean(loadController) })
+  loadController?.abort()
+  const controller = new AbortController()
+  loadController = controller
   loadError.value = false
+  ready.value = false
   try {
     const {
       game: newGame,
       playerId: newPlayerId,
       multiplayerMode,
       eventId,
-    } = await fetchGame(props.gameId, props.spectate)
+    } = await fetchGame(props.gameId, props.spectate, controller.signal)
+    if (controller.signal.aborted || loadController !== controller) return
 
+    clientLog('game.load.decoded', { request, elapsedMs: Math.round(performance.now() - started), hasPlayer: Boolean(newPlayerId), mode: multiplayerMode, state: newGame.gameState.tag })
     preloadImages(newGame)
     ;(window as Window & { g?: ArkhamGame.Game }).g = newGame
     game.value = newGame
@@ -834,8 +861,16 @@ const loadGame = async () => {
     updateGameLog(newGame.log)
     playerId.value = newPlayerId
     ready.value = true
-  } catch {
+    clientLog('game.load.ready', { request })
+    await nextTick()
+    clientLog('game.render.flushed', { request, ready: ready.value, error: loadError.value })
+  } catch (cause) {
+    if (controller.signal.aborted || loadController !== controller) return
+    clientError('game.load.error', cause, { request, elapsedMs: Math.round(performance.now() - started) })
     loadError.value = true
+  } finally {
+    clientLog('game.load.end', { request, aborted: controller.signal.aborted, elapsedMs: Math.round(performance.now() - started) })
+    if (loadController === controller) loadController = null
   }
 }
 
@@ -2212,6 +2247,19 @@ onUnmounted(() => {
           >
             <Volume2 v-if="!soundsDisabled" aria-hidden="true" />
             <VolumeX v-else aria-hidden="true" />
+          </button>
+        </div>
+      </div>
+      <div class="game-bar-item game-bar-item--music">
+        <div>
+          <button
+            @click="toggleBgm"
+            :class="{ 'is-off': bgmDisabled }"
+            v-tooltip="$t('gameBar.music')"
+            :aria-label="$t('gameBar.music')"
+            :aria-pressed="!bgmDisabled"
+          >
+            <Music aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -3776,6 +3824,10 @@ header {
   color: var(--title);
 }
 
+.game-bar-item--music button.is-off {
+  opacity: 0.45;
+}
+
 .game-bar-undo {
   display: flex;
   align-items: center;
@@ -4496,5 +4548,20 @@ dialog {
 
 .v-popper--theme-game-bar-undo .v-popper__arrow-container {
   display: none;
+}
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .tabletop-shell { --game-bar-height: 60px; width: 100%; min-height: 0; background-attachment: scroll; }
+  .tabletop-shell::before, .tabletop-shell::after { animation: none; }
+  .game-main { min-height: 0; overflow: hidden; }
+  .game-bar { padding-inline: max(8px, env(safe-area-inset-left)) max(8px, env(safe-area-inset-right)); gap: 4px; }
+  .game-bar button, .game-bar a { min-width: 44px; min-height: 44px; }
+  .game-tools-drawer { width: min(420px, 100%); max-width: 100%; max-height: calc(100dvh - var(--nav-height, 56px) - var(--game-bar-height) - env(safe-area-inset-bottom)); overflow-y: auto; }
+  .sidebar { position: fixed; inset: var(--nav-height, 56px) 0 calc(var(--game-bar-height) + env(safe-area-inset-bottom)) auto; width: min(380px, 100%); max-width: 100%; overflow: auto; }
+  .socketWarning { max-width: calc(100vw - 24px); overflow-wrap: anywhere; }
+  .the-silence-modal { min-width: 0; width: min(94vw, 600px); max-height: 85dvh; overflow: auto; }
+  .revelation-container { max-width: 100vw; max-height: 85dvh; overflow: auto; }
+
 }
 </style>

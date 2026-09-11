@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { clientLog } from '@/utils/clientLog'
 import { BookOpen, Zap, Skull, Layers, Archive } from '@lucide/vue'
 import { useMediaQuery } from '@vueuse/core'
 import UpgradeDeck from '@/arkham/components/UpgradeDeck.vue'
@@ -668,6 +669,9 @@ function requestCosmicEmissaryCompact(force = false) {
 }
 
 const { isMobile } = IsMobile()
+onMounted(() => clientLog('scenario.mount', { mobile: isMobile.value }))
+onBeforeUnmount(() => clientLog('scenario.unmount'))
+watch(isMobile, (mobile) => clientLog('scenario.viewport', { mobile, width: window.innerWidth, height: window.innerHeight }))
 
 function updateCosmicEmissaryAnimationSetting(value: string | null) {
   enableCosmicEmissaryAnimation.value = value !== 'false'
@@ -1345,7 +1349,8 @@ const desktopTable = useMediaQuery('(min-width: 1200px)')
 // The single-seat desktop layout is retired: from 1200px up every game uses the
 // tabletop arrangement, whatever the seat count. `multiSeatBoard` stays for the
 // things that genuinely need more than one seat (the teammate rail).
-const desktopTabletop = computed(() => desktopTable.value || multiSeatBoard.value)
+const desktopTabletop = computed(() => desktopTable.value || (multiSeatBoard.value && !isMobile.value))
+const mobilePanel = ref<'map' | 'player' | 'scenario' | 'team'>('map')
 const navigationSummaryHost = ref<HTMLElement | null>(null)
 onMounted(() => {
   navigationSummaryHost.value = document.getElementById('table-navigation-summary')
@@ -2153,7 +2158,7 @@ const victoryDisplay = computed(() => props.scenario.victoryDisplay)
 const isMinimized_SkillTest = ref(false)
 provide(isMinimizedSkillTestKey, isMinimized_SkillTest)
 function minimize_SkillTest(isMinimized: boolean) {
-  if (isMobile) {
+  if (isMobile.value) {
     isMinimized_SkillTest.value = isMinimized
   }
 }
@@ -2209,7 +2214,16 @@ async function addChaosToken(face: any) {
       @update="update"
     />
   </div>
-  <div v-else-if="!gameOver" id="scenario" class="scenario" :data-scenario="scenario.id">
+  <div v-else-if="!gameOver" id="scenario" class="scenario" :data-scenario="scenario.id" :data-mobile-panel="mobilePanel">
+    <nav v-if="isMobile" class="mobile-table-nav" :aria-label="$t('multiplayerTable.mobileNavigation')">
+      <button v-for="panel in (['map', 'player', 'scenario', 'team'] as const)" v-show="panel !== 'team' || onlineMultiSeat" :key="panel" type="button" :aria-pressed="mobilePanel === panel" @click="mobilePanel = panel">
+        {{ $t(`multiplayerTable.${{ map: 'mobileMap', player: 'mobilePlayer', scenario: 'mobileScenario', team: 'mobileTeam' }[panel]}`) }}
+      </button>
+    </nav>
+    <div v-if="isMobile && activeInvestigator" class="mobile-turn-summary" aria-live="polite">
+      <Zap aria-hidden="true" /><strong>{{ displayInvestigatorName(activeInvestigator) }}</strong>
+      <span>{{ $t('multiplayerTable.actionsRemaining', { count: activeInvestigator.remainingActions }) }}</span>
+    </div>
     <div
       class="scenario-body"
       :class="{
@@ -3142,6 +3156,8 @@ async function addChaosToken(face: any) {
             v-model:map-move-mode="mapMoveMode"
             :locations-unlocked="locationsUnlocked"
             :map-resetting="mapResetting"
+            @zoom-in="zoom = Math.min(6, zoom + 0.15)"
+            @zoom-out="zoom = Math.max(0.25, zoom - 0.15)"
             @toggle-lock="toggleLocationsUnlocked"
             @reset="resetLocationsLayout"
           />
@@ -6896,4 +6912,56 @@ async function addChaosToken(face: any) {
 .location-cards-scroller:active { cursor: grabbing; }
 .location-cards-scroller--moving :deep(*) { cursor: grab !important; }
 .location-cards-scroller--moving:active :deep(*) { cursor: grabbing !important; }
+
+.mobile-table-nav, .mobile-turn-summary { display: none; }
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+  .scenario { flex-direction: column; min-height: 0; overflow: hidden; }
+  .mobile-table-nav { display: flex; flex: 0 0 auto; gap: 4px; padding: 6px max(8px, env(safe-area-inset-right)) 6px max(8px, env(safe-area-inset-left)); background: #142b29; border-bottom: 1px solid #78633d; }
+  .mobile-table-nav button { flex: 1; min-width: 0; min-height: 44px; padding: 8px 4px; color: #ddd3b9; background: transparent; border: 1px solid transparent; border-radius: 5px; font-size: 14px; }
+  .mobile-table-nav button[aria-pressed="true"] { background: #33453b; color: #fff0c6; border-color: #b69c60; }
+  .mobile-turn-summary { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; padding: 5px 12px; color: #e5d6af; background: #172925; font-size: 12px; }
+  .mobile-turn-summary svg { width: 14px; height: 14px; flex: 0 0 auto; }
+  .mobile-turn-summary strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mobile-turn-summary span { margin-left: auto; flex-shrink: 0; }
+  .scenario .scenario-body { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow: hidden; }
+  .scenario .scenario-body > .rain-host { flex: 1; min-height: 0; width: 100%; }
+  .scenario .location-cards-container { height: 100%; min-height: 0; }
+  .scenario .location-cards-scroller { padding: 66px 24px 24px; min-height: 0; }
+  .scenario[data-mobile-panel="map"] .scenario-body > :is(.scenario-cards, .teammate-rail, #player-zone),
+  .scenario:not([data-mobile-panel="map"]) .scenario-body > .rain-host,
+  .scenario:not([data-mobile-panel="scenario"]) .scenario-body > .scenario-cards,
+  .scenario:not([data-mobile-panel="team"]) .scenario-body > .teammate-rail,
+  .scenario:not([data-mobile-panel="player"]) .scenario-body > #player-zone { display: none; }
+  .scenario .scenario-body > #player-zone { flex: 1; min-height: 0; width: 100%; overflow: auto; padding: 10px 10px 64px; }
+  .scenario .scenario-body > .scenario-cards { --card-width: 120px; --card-height: 168px; flex: 1; min-height: 0; display: flex; flex-wrap: wrap; align-content: flex-start; align-items: flex-start; justify-content: flex-start; gap: 16px; overflow: auto; padding: 16px 12px 24px; z-index: 1; }
+  .scenario .scenario-cards .scenario-decks { display: flex; flex-wrap: wrap; width: 100%; justify-content: flex-start; gap: 16px; }
+  .scenario .scenario-cards :is(.scenario-seat__cards, .scenario-encounter-decks) { display: flex; flex-wrap: wrap; gap: 12px; }
+  .scenario .scenario-cards :is(.scenario-guide, .scenario-accessories) { width: 100%; margin: 0; max-height: none; }
+  .scenario .scenario-cards .scenario-badges { position: static; display: flex; flex-wrap: wrap; width: 100%; }
+  .scenario .scenario-cards .scenario-balance-placeholder { display: none; }
+  .workbench-label { display: flex; flex-direction: column; gap: 8px; margin: 0 0 12px; padding: 10px; color: #eedbb1; border-bottom: 1px solid #78633d; }
+  .workbench-label__stats { display: flex; flex-wrap: wrap; gap: 12px; font-size: 13px; }
+  .workbench-label__stats span { display: flex; gap: 4px; }
+  .workbench-label__stats i { font-style: normal; }
+  .teammate-rail { flex: 1; min-height: 0; overflow: auto; padding: 12px; color: #eadcbb; }
+  .teammate-rail__header { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+  .teammate-card { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 6px 12px; width: 100%; padding: 12px; margin-bottom: 8px; color: #eadcbb; text-align: left; background: #203731; border: 1px solid #6c644a; border-radius: 8px; }
+  .teammate-card--active { border-color: #ddbd73; box-shadow: inset 3px 0 #ddbd73; }
+  .teammate-card__portrait { grid-row: span 4; width: 52px; height: 64px; object-fit: cover; border-radius: 4px; }
+  .teammate-card__name, .teammate-card__stats { display: flex; flex-wrap: wrap; gap: 6px 12px; }
+  .teammate-card__stats span { display: inline-flex; gap: 4px; }
+  .teammate-card__location, .teammate-card__stats { font-size: 13px; }
+  .teammate-card__assets { grid-column: 2; display: flex; gap: 6px; }
+  .teammate-card__assets img { width: 40px; }
+  .teammate-detail { padding: 12px; margin-bottom: 12px; background: #203731; border: 1px solid #ac9258; border-radius: 8px; }
+  .teammate-detail__top { display: flex; align-items: flex-start; gap: 12px; }
+  .teammate-detail__card { width: 100px; max-width: 35%; }
+  .teammate-detail__identity { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+  .teammate-detail__close { min-height: 44px; }
+  .teammate-detail__stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .teammate-detail__stats dd { margin: 4px 0; }
+  .teammate-detail__cards { --card-width: 110px; --card-height: 154px; display: flex; overflow-x: auto; gap: 10px; padding: 8px 0; }
+  .teammate-detail__cards > * { flex-shrink: 0; }
+}
+
 </style>

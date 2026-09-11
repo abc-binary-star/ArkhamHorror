@@ -651,6 +651,7 @@ watch(
         :playerId="playerId"
         :investigator="investigator"
         :tarotCards="tarotCardsFor(investigator.id)"
+        :mobileHandActive="selectedTab === investigator.playerId"
         @choose="$emit('choose', $event)"
       />
     </Tab>
@@ -670,6 +671,7 @@ watch(
         :playerId="playerId"
         :investigator="investigator"
         :tarotCards="tarotCardsFor(investigator.id)"
+        :mobileHandActive="selectedTab === investigator.playerId"
         @choose="$emit('choose', $event)"
       />
     </Tab>
@@ -990,5 +992,14 @@ ul.tabs__header > li.inactive {
 
 .glow-effect {
   box-shadow: inset 0 -10px 20px -10px rgba(0, 255, 0, 0.7); /* Inset shadow for glow effect */
+}
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .player-info { min-width: 0; width: 100%; height: auto; overflow: visible; }
+  .tabs-row { flex-wrap: wrap; align-items: center; gap: 8px; }
+  .tabs__header { display: flex; flex-wrap: nowrap; flex: 1 1 100%; width: 100%; overflow-x: auto; margin: 0; padding: 0 0 6px; }
+  .tabs__header li { flex: 0 0 auto; min-height: 44px; padding: 10px 12px; font-size: 14px; }
+
 }
 </style>

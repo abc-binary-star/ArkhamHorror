@@ -241,4 +241,13 @@ async function sync(deck: ArkhamDeck.Deck) {
   gap: 8px;
 }
 
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .page-content { width: 100%; max-width: 100%; padding: 16px 12px; }
+  .decks-header, .toolbar { flex-wrap: wrap; gap: 12px; }
+  .deck-grid { grid-template-columns: minmax(0, 1fr); }
+  .new-deck-panel { min-width: 0; padding: 12px; }
+
+}
 </style>

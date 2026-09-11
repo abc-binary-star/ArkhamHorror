@@ -11,6 +11,7 @@ import { handleEmbeddedI18n } from '@/arkham/i18n';
 import { QuestionType } from '@/arkham/types/Question';
 import Draggable from '@/components/Draggable.vue';
 import Question from '@/arkham/components/Question.vue';
+import { IsMobile } from '@/arkham/isMobile';
 import { processingKey } from '@/arkham/injectionKeys';
 
 export interface Props {
@@ -45,6 +46,20 @@ const cthulhuDeckCardCodes = new Set([
   '11715',
 ])
 const investigator = computed(() => Object.values(props.game.investigators).find(i => i.playerId === props.playerId))
+const { isMobile } = IsMobile()
+// TargetLabel choices are normally acted on in the hand. Keep them visible in
+// the mobile choice window too, including setup before a player panel exists.
+const handChoices = computed(() => {
+  const hand = investigator.value?.hand ?? []
+  return choices.value.flatMap((choice, index) => {
+    if (choice.tag !== 'TargetLabel') return []
+    const card = hand.find((card) => toCardContents(card).id === choice.target.contents)
+    if (!card) return []
+    const contents = toCardContents(card)
+    return [{ index, id: contents.id, code: contents.cardCode, image: cardImage(`${contents.cardCode}${contents.isFlipped ? 'b' : ''}`) }]
+  })
+})
+
 const searchedCards = computed(() => {
   const playerCards = Object.entries(investigator.value?.foundCards ?? [])
 
@@ -329,6 +344,11 @@ const title = computed(() => {
     <template #handle><h1 v-html="label(title)"></h1></template>
     <div class="choice-modal-wrapper" :class="{ 'choice-modal-wrapper--processing': isProcessing }">
       <p class="body" v-if="body" v-html="label(body)"></p>
+      <section v-if="isMobile && handChoices.length" class="mobile-hand-choices" :aria-label="t('player.hand')">
+        <button v-for="card in handChoices" :key="card.id" type="button" :disabled="isProcessing" :aria-label="`${t('player.hand')} ${card.code}`" @click="choose(card.index)">
+          <img :src="card.image" :alt="card.code" />
+        </button>
+      </section>
       <Question v-if="question" :game="game" :playerId="playerId" @choose="choose" />
     </div>
   </Draggable>
@@ -727,5 +747,21 @@ const title = computed(() => {
   background: none;
   color: var(--text);
   font-size: 1.05em;
+}
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .choice-modal-wrapper { min-width: 0; width: 100%; max-width: 100%; }
+  .choice-modal-wrapper .body { font-size: 16px; line-height: 1.65; }
+
+}
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .mobile-hand-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .mobile-hand-choices button { display: block; width: 100%; min-width: 0; padding: 3px; border: 2px solid var(--select, #b69c60); border-radius: 8px; background: transparent; }
+  .mobile-hand-choices img { display: block; width: 100%; height: auto; border-radius: 5px; }
+  .mobile-hand-choices button:disabled { opacity: 0.6; }
+
 }
 </style>

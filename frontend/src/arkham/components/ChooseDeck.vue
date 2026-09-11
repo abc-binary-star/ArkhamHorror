@@ -1198,4 +1198,21 @@ const needsReply = computed(() => {
   letter-spacing: 0.06em;
   padding: 4px 0;
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .container { width: 100%; padding: 16px 12px; overflow: auto; }
+  .investigators, .portraits, .investigator-row, .deck-main { width: 100%; min-width: 0; max-width: 100%; }
+  .investigator-row { flex-direction: column; align-items: stretch; gap: 12px; }
+  .portrait { align-self: center; }
+  .deck-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .deck-tabs button { flex: 1 1 130px; min-height: 44px; white-space: normal; }
+  .deck-list { max-height: none; }
+  .deck-item { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; }
+  .deck-item-info { min-width: 0; flex: 1 1 150px; }
+  .deck-item-name { white-space: normal; overflow-wrap: anywhere; }
+  .deck-item-use { min-height: 44px; }
+  .load-deck-layout { display: flex; flex-direction: column; min-width: 0; }
+
+}
 </style>

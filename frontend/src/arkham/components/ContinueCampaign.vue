@@ -910,4 +910,18 @@ button {
   gap: 8px;
   margin-top: 10px;
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .continue-campaign { width: 100%; max-width: 640px; min-width: 0; margin: 0 auto; padding: 20px 12px; box-sizing: border-box; gap: 16px; }
+  .continue-campaign > * { min-width: 0; flex-shrink: 0; }
+  .next-scenario { align-items: stretch; padding: 16px; width: 100%; box-sizing: border-box; }
+  .next-scenario-info, .scenario-info { width: 100%; min-width: 0; }
+  .next-scenario .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .next-scenario .actions button { flex: 1 1 140px; min-height: 44px; white-space: normal; }
+  #investigators { width: 100%; min-width: 0; box-sizing: border-box; padding: 10px; }
+  .roster-btn { min-height: 44px; white-space: normal; }
+  .side-story-option { flex-wrap: wrap; }
+
+}
 </style>

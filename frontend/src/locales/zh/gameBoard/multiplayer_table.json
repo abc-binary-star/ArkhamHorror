@@ -61,5 +61,12 @@
   "turnLightsOff": "关灯",
   "lockLocations": "锁定地点",
   "unlockLocations": "解锁地点",
-  "resetLocationPositions": "重置地点位置"
+  "resetLocationPositions": "重置地点位置",
+  "mobileNavigation": "牌桌分区",
+  "mobileMap": "地图",
+  "mobilePlayer": "我的区域",
+  "mobileScenario": "剧本",
+  "mobileTeam": "队友",
+  "zoomIn": "放大地图",
+  "zoomOut": "缩小地图"
 }

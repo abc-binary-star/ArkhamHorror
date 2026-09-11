@@ -61,5 +61,12 @@
   "turnLightsOff": "Turn lights off",
   "lockLocations": "Lock locations",
   "unlockLocations": "Unlock locations",
-  "resetLocationPositions": "Reset location positions"
+  "resetLocationPositions": "Reset location positions",
+  "mobileNavigation": "Table areas",
+  "mobileMap": "Map",
+  "mobilePlayer": "My area",
+  "mobileScenario": "Scenario",
+  "mobileTeam": "Team",
+  "zoomIn": "Zoom in",
+  "zoomOut": "Zoom out"
 }

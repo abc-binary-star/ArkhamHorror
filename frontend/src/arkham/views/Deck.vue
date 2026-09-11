@@ -1073,4 +1073,16 @@ watch(deckRef, (el) => {
   &:hover { color: var(--text); }
   &.action-btn--delete:hover { color: #ff6666; }
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .container, .results { width: 100%; min-width: 0; padding: 12px; }
+  header.deck, .deck--actions, .deck-main, .deck-edit-bar, .overlay-bar { flex-wrap: wrap; gap: 12px; }
+  .deck--details, .deck-title, .deck-edit-field { min-width: 0; width: 100%; }
+  .deck-title { white-space: normal; overflow-wrap: anywhere; }
+  .deck-sections { display: flex; flex-direction: column; }
+  .deck-section { min-width: 0; max-width: 100%; overflow-x: auto; }
+  .action-btn { min-width: 44px; min-height: 44px; }
+
+}
 </style>

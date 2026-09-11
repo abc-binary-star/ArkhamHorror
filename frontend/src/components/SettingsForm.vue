@@ -266,4 +266,13 @@ input[type="radio"] {
   font-size: 1.2em;
   text-transform: uppercase;
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .page-content { width: 100%; max-width: 100%; padding: 16px 12px 24px; }
+  .row { flex-wrap: wrap; }
+  .radio-label { display: flex; align-items: center; min-height: 44px; }
+  .box { min-width: 0; padding: 16px; }
+
+}
 </style>

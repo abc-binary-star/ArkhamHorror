@@ -8,6 +8,7 @@ body {
   padding: 0;
   color: var(--text);
   min-height: 100vh;
+  min-height: 100dvh;
   /* Warm archive ground. Night atmosphere belongs to artwork and chrome,
      not to every pixel behind the content. */
   background-color: var(--background);
@@ -31,6 +32,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -255,4 +257,12 @@ footer {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
   }
+}
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+  body { font-size: 16px; background-attachment: scroll; }
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea { font-size: 16px; max-width: 100%; }
+  button, a, input, select, textarea { touch-action: manipulation; }
+  button, select, input:not([type="checkbox"]):not([type="radio"]) { min-height: 44px; }
+  h1, h2, h3, p { overflow-wrap: anywhere; }
 }

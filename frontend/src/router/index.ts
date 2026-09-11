@@ -1,3 +1,4 @@
+import { clientLog, clientError } from '@/utils/clientLog'
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import baseRoutes from '@/routes';
@@ -15,8 +16,11 @@ const router = createRouter({
 
 
 router.beforeEach(async (to, _from, next) => {
+  clientLog('route.start', { from: String(_from.name ?? ''), to: String(to.name ?? '') })
   const store = useUserStore()
+  clientLog('route.session.start')
   await store.loadUserFromStorage()
+  clientLog('route.session.complete', { hasToken: localStorage.getItem('arkham-token') !== null })
 
   if (to.matched.some((record) => record.meta && record.meta.requiresAuth)) {
     if (localStorage.getItem('arkham-token') === null) {
@@ -45,5 +49,10 @@ router.beforeEach(async (to, _from, next) => {
     next();
   }
 });
+
+router.afterEach((to, from, failure) => {
+  clientLog('route.complete', { from: String(from.name ?? ''), to: String(to.name ?? ''), failed: Boolean(failure) })
+})
+router.onError((cause) => clientError('route.error', cause))
 
 export default router

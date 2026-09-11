@@ -25,6 +25,7 @@
 </template>
 
 <script lang="ts" setup>
+import { clientLog } from '@/utils/clientLog'
 import { ModalsContainer } from 'vue-final-modal'
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
@@ -46,9 +47,13 @@ function syncDocumentLang(value: string) {
 watch(locale, syncDocumentLang, { immediate: true })
 
 onMounted(async () => {
+  clientLog('app.settings.start')
   await settingsStore.init()
+  clientLog('app.settings.complete')
   avifSupported.value = await checkAvifSupport();
+  clientLog('app.avif', { supported: avifSupported.value })
   await checkImageExists()
+  clientLog('app.images.complete')
 })
 const avifSupported = ref(true);
 const checkAvifSupport = (): Promise<boolean> => {

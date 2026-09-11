@@ -440,4 +440,11 @@ i.iconSkillAgility:before {
     }
   }
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .question-choices { display: flex; flex-direction: column; gap: 8px; min-width: 0; width: 100%; }
+  .question-choices > button { min-height: 44px; width: 100%; padding: 12px; white-space: normal; text-align: left; overflow-wrap: anywhere; font-size: 15px; line-height: 1.5; }
+
+}
 </style>

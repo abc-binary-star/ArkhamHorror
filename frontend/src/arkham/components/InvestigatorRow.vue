@@ -390,4 +390,17 @@ const deck = computed(() => {
     grid-template-columns: repeat(auto-fill, minmax(min(200px, calc(33.333% - 8px)), 1fr));
   }
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .investigator { width: 100%; min-width: 0; box-sizing: border-box; }
+  .basic-top { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 10px; padding: 12px 10px; }
+  .portrait-wrap { width: 48px; height: 48px; }
+  .name { min-width: 0; font-size: 18px; line-height: 1.4; white-space: normal; overflow-wrap: anywhere; letter-spacing: 0; }
+  .expand-btn { min-width: 44px; min-height: 44px; }
+  .basic-bottom { gap: 8px; padding: 10px; }
+  .stat-chip { padding: 8px; font-size: 13px; }
+  .expanded-details { min-width: 0; padding: 12px; }
+
+}
 </style>

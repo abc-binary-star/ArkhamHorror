@@ -302,4 +302,16 @@ dd {
 .mystic-sym    { color: var(--mystic); }
 .survivor-sym  { color: var(--survivor); }
 .neutral-sym   { color: var(--neutral); }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .backdrop { padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); overflow: auto; }
+  .details { min-width: 0; width: 100%; max-width: 100%; max-height: calc(100dvh - 32px); overflow: auto; padding: 12px; }
+  .controls { position: sticky; top: 0; z-index: 1; }
+  .controls button { min-width: 44px; min-height: 44px; }
+  .faces { flex-wrap: wrap; justify-content: center; }
+  .face { width: min(280px, 80vw); max-width: 100%; }
+  .info { min-width: 0; overflow-wrap: anywhere; }
+
+}
 </style>

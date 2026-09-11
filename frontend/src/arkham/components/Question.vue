@@ -2254,4 +2254,17 @@ h2 {
     width: 100%;
   }
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .choices, .choices-wrapper, .question-label, .intro-text, .intro-text-body { min-width: 0; max-width: 100%; }
+  .story-with-card { flex-direction: column; align-items: center; }
+  .intro-text-body { padding: 16px; font-size: 16px; line-height: 1.65; }
+  .modal-contents { min-width: 0; max-width: 100%; padding: 12px; overflow: auto; }
+  .group-cards, .cardLabels, .portraits, .tarotLabels { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .cardLabels > .card, .searched-card { width: min(140px, 38vw); min-width: 0; }
+  .amount-choice { flex-wrap: wrap; gap: 8px; }
+  .amount-input { min-height: 44px; font-size: 16px; }
+
+}
 </style>

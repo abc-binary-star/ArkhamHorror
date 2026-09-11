@@ -263,4 +263,14 @@ h2 {
   border-radius: 10px;
   text-transform: uppercase;
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .game { width: 100%; min-width: 0; flex-wrap: wrap; padding: 12px; gap: 10px; }
+  .game-details, .scenario-details, .game-subdetails { min-width: 0; flex: 1 1 180px; }
+  .game-title, .title { white-space: normal; overflow-wrap: anywhere; }
+  .investigators, .other-investigators { flex-wrap: wrap; gap: 6px; }
+  .game-delete { min-width: 44px; min-height: 44px; }
+
+}
 </style>

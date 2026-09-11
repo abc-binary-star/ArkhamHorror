@@ -1,9 +1,14 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
+import { onMounted, onUnmounted, watch } from 'vue'
+import { clientLog } from '@/utils/clientLog'
 
-defineProps<{ error?: boolean }>()
+const props = defineProps<{ error?: boolean }>()
 const emit = defineEmits<{ retry: [] }>()
 const router = useRouter()
+onMounted(() => clientLog('loading.mount', { error: Boolean(props.error), route: String(router.currentRoute.value.name ?? '') }))
+onUnmounted(() => clientLog('loading.unmount'))
+watch(() => props.error, (error) => clientLog('loading.state', { error: Boolean(error) }))
 </script>
 
 <template>

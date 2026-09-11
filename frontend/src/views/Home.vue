@@ -730,4 +730,17 @@ header.main-header {
   .archive-heading .header-actions { width: 100%; justify-content: flex-start; }
   .archive-side-column { grid-template-columns: 1fr; }
 }
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .home.page-content { width: 100%; max-width: 100%; padding: 12px; }
+  .archive-layout { grid-template-columns: minmax(0, 1fr); }
+  .archive-main-column, .archive-side-column { min-width: 0; }
+  .archive-heading, .panel-header { flex-wrap: wrap; gap: 12px; }
+  .hero-actions, .header-actions, .panel-actions { flex-wrap: wrap; gap: 8px; }
+  .hero-actions > *, .header-actions > * { min-height: 44px; }
+  .home-hero-content { padding: 24px 16px; }
+  .home-hero h1 { font-size: clamp(28px, 7vw, 42px); }
+
+}
 </style>

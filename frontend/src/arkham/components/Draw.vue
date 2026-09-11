@@ -469,4 +469,14 @@ watch(choices, (newChoices) => {
   white-space: nowrap;
 }
 
+
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+
+  .piles { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px; }
+  .piles .deck-container { margin: 0; }
+  .piles .deck, .piles .card, .piles .discard :deep(.card) { width: 90px; max-width: 90px; min-width: 0; }
+  .piles button { min-height: 44px; white-space: normal; }
+  .piles .pile-label { display: block; margin-bottom: 6px; font-size: 13px; }
+
+}
 </style>
