@@ -296,6 +296,14 @@ h2.title {
   overscroll-behavior: contain;
 }
 
+/* Tooltips are labels, not controls. floating-vue pins the popper position and
+   does not follow container scroll, so a lingering box can end up painted over
+   an unrelated row/button; with the default pointer-events it then eats the
+   hover and clicks aimed at what is visibly underneath it. */
+.v-popper--theme-tooltip {
+  pointer-events: none;
+}
+
 /* Shared entry point for player and encounter discard piles. */
 button.discard-view-control {
   display: flex !important;

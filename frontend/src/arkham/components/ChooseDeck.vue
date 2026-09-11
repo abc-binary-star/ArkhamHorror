@@ -802,6 +802,9 @@ const needsReply = computed(() => {
 
   button {
     height: 36px;
+    /* Same global-button-chrome conflict as the icon buttons below: without
+       this the tabs render 42px tall instead of 36. */
+    min-height: 0;
     border-radius: 6px;
     border: none;
     background: transparent;
@@ -952,6 +955,12 @@ const needsReply = computed(() => {
   flex-shrink: 0;
   width: 34px;
   height: 34px;
+  /* The global button chrome (base.css) sets min-height + padding on every
+     button; here it would outvote the 24/34px box, squeeze the icon svg to a
+     degenerate 0px viewport, and its overflow-visible path then hit-tests far
+     outside the button, stealing hovers/clicks from neighbouring rows. */
+  min-height: 0;
+  padding: 0;
   border-radius: 5px;
   color: white;
   cursor: pointer;
