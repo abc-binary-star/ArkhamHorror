@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { CircleCheck, SkipForward } from '@lucide/vue'
+import { CircleCheck, SkipForward, Layers, Coins, Search } from '@lucide/vue'
 import { useSettings } from '@/stores/settings';
 import { storeToRefs } from 'pinia';
 import { onUnmounted, onMounted, computed, inject, ref, watch } from 'vue'
@@ -24,14 +24,17 @@ import useEmitter from '@/arkham/composables/useEmitter';
 import useHighlighter from '@/arkham/composables/useHighlighter';
 import Resources from '@/arkham/components/Resources.vue';
 import Draw from '@/arkham/components/Draw.vue';
+import InvestigatorUndo from '@/arkham/components/InvestigatorUndo.vue';
 import { IsMobile } from '@/arkham/isMobile';
 import {
+  undoControlsKey,
   skipAllAvailableKey,
   skipAllInProgressKey,
   skipAllTriggersKey,
   soloKey,
 } from '@/arkham/injectionKeys';
 const { t } = useI18n();
+const undoControls = inject(undoControlsKey);
 
 export interface Props {
   choices: readonly Message[]
@@ -107,6 +110,45 @@ const investigatorAction = computed(() => {
 })
 
 const choices = computed(() => props.choices)
+
+// Keep spent actions as invisible slots so the shortcuts stay beside the
+// full action row instead of sliding right each time an action is used.
+const actionSlotCount = ref(3)
+watch(
+  () => [props.investigator.id, props.investigator.remainingActions + props.investigator.additionalActions.length] as const,
+  ([investigatorId, count], previous) => {
+    actionSlotCount.value = Math.max(previous?.[0] === investigatorId ? actionSlotCount.value : 3, count)
+  },
+  { immediate: true },
+)
+const spentActionSlots = computed(() => Math.max(0,
+  actionSlotCount.value - props.investigator.remainingActions - props.investigator.additionalActions.length,
+))
+
+const basicActions = computed(() => {
+  const canAct = props.playerId === props.investigator.playerId
+  const draw = props.choices.findIndex(c => c.tag === 'ComponentLabel'
+    && c.component.tag === 'InvestigatorDeckComponent'
+    && c.component.investigatorId === id.value)
+  const resource = props.choices.findIndex(c => c.tag === 'ComponentLabel'
+    && c.component.tag === 'InvestigatorComponent'
+    && c.component.tokenType === 'ResourceToken'
+    && c.component.investigatorId === id.value)
+  const investigate = props.choices.findIndex(c => c.tag === 'AbilityLabel'
+    && c.ability.source.sourceTag !== 'ProxySource'
+    && c.ability.source.tag === 'LocationSource'
+    && c.ability.source.contents === props.investigator.location
+    && c.ability.index === 103)
+  return [
+    { key: 'draw', icon: Layers, index: canAct ? draw : -1 },
+    { key: 'resource', icon: Coins, index: canAct ? resource : -1 },
+    { key: 'investigate', icon: Search, index: canAct ? investigate : -1 },
+  ]
+})
+
+function chooseBasicAction(index: number) {
+  if (index >= 0) choose(index)
+}
 
 function isAbility(v: Message): v is AbilityLabel {
   if (v.tag !== MessageType.ABILITY_LABEL) {
@@ -529,11 +571,51 @@ const spadeInjury = computed(() => {
   <div v-else class="player-container">
     <div class="player-area">
       <div class="player-card">
+        <div class="investigator-header" :class="{ 'investigator-header--mobile': isMobile }">
         <div class="stats">
           <div class="willpower willpower-icon">{{willpower}}</div>
           <div class="intellect intellect-icon">{{intellect}}</div>
           <div class="combat combat-icon">{{combat}}</div>
           <div class="agility agility-icon">{{agility}}</div>
+        </div>
+              <span v-if="!isMobile" class="basic-actions">
+                <button
+                  v-for="basicAction in basicActions"
+                  :key="basicAction.key"
+                  type="button"
+                  class="basic-action"
+                  v-tooltip="t(`investigator.basicActions.${basicAction.key}`)"
+                  :aria-label="t(`investigator.basicActions.${basicAction.key}`)"
+                  :disabled="basicAction.index === -1"
+                  :data-game-actionable="basicAction.index !== -1 || undefined"
+                  @click.stop="chooseBasicAction(basicAction.index)"
+                ><component :is="basicAction.icon" aria-hidden="true" /></button>
+              </span>
+            <span v-if="!isMobile" class="action-container">
+              <i class="spade" v-if="spadeInjury"></i>
+              <i class="heart" v-if="heartInjury"></i>
+              <i class="diamond" v-if="diamondInjury"></i>
+              <i class="club" v-if="clubInjury"></i>
+              <i class="action" v-for="n in investigator.remainingActions" :key="n"></i>
+              <template v-for="action in investigator.additionalActions" :key="action">
+                <button @click="useEffectAction(action)" v-if="action.tag === 'EffectAction'" v-tooltip="action.contents[0]" :class="[{ activeButton: isActiveEffectAction(action)}, `${investigatorClass.toLowerCase()}ActionButton`]">
+                  <i class="action"></i>
+                </button>
+                <i v-else class="action" :class="`${investigatorClass.toLowerCase()}Action`"></i>
+              </template>
+              <i v-for="n in spentActionSlots" :key="`spent-${n}`" class="action action--spent-slot" aria-hidden="true"></i>
+              <span
+                v-if="isTakingImmediateAction"
+                class="no-free-abilities"
+                v-tooltip="{ content: $t('investigator.freeAbilitiesUnavailable'), html: true }"
+              >
+                <span class="fast-icon"></span>
+                <svg class="no-sign" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="5" y1="5" x2="19" y2="19" />
+                </svg>
+              </span>
+            </span>
         </div>
         <div class="investigator-image">
           <img
@@ -565,30 +647,6 @@ const spadeInjury = computed(() => {
       <div>
         <div class="player-buttons">
           <div class="button-group" :class="{ 'button-group--skip-all-pending': isCurrentPlayersInvestigator && skipAllInProgress }">
-            <span v-if="!isMobile" class="action-container">
-              <i class="spade" v-if="spadeInjury"></i>
-              <i class="heart" v-if="heartInjury"></i>
-              <i class="diamond" v-if="diamondInjury"></i>
-              <i class="club" v-if="clubInjury"></i>
-              <i class="action" v-for="n in investigator.remainingActions" :key="n"></i>
-              <template v-for="action in investigator.additionalActions" :key="action">
-                <button @click="useEffectAction(action)" v-if="action.tag === 'EffectAction'" v-tooltip="action.contents[0]" :class="[{ activeButton: isActiveEffectAction(action)}, `${investigatorClass.toLowerCase()}ActionButton`]">
-                  <i class="action"></i>
-                </button>
-                <i v-else class="action" :class="`${investigatorClass.toLowerCase()}Action`"></i>
-              </template>
-              <span
-                v-if="isTakingImmediateAction"
-                class="no-free-abilities"
-                v-tooltip="{ content: $t('investigator.freeAbilitiesUnavailable'), html: true }"
-              >
-                <span class="fast-icon"></span>
-                <svg class="no-sign" viewBox="0 0 24 24" aria-hidden="true">
-                  <circle cx="12" cy="12" r="10" />
-                  <line x1="5" y1="5" x2="19" y2="19" />
-                </svg>
-              </span>
-            </span>
             <div class="investigator-controls">
             <template v-if="debug.active">
               <button
@@ -603,6 +661,7 @@ const spadeInjury = computed(() => {
               :game="game"
               @click="$emit('choose', ability.index)"
               />
+            <InvestigatorUndo v-if="undoControls" />
             <button
             class="end-turn-button"
             :class="{ active: endTurnAction !== -1 && investigator.remainingActions <= 0, armed: endTurnArmed }"
@@ -684,6 +743,67 @@ const spadeInjury = computed(() => {
 <style scoped>
 .investigator-controls { display: contents; }
 .table-action-icon { width: 14px; height: 14px; margin-right: 5px; vertical-align: -2px; }
+.investigator-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 0 0 auto;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+.investigator-header--mobile { display: contents; }
+.investigator-header > .stats { flex: 0 0 auto; }
+.investigator-header > .action-container {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+.investigator-header > .action-container button {
+  box-sizing: border-box;
+  min-height: 0;
+  height: 24px;
+  padding: 0 3px;
+  line-height: 1;
+}
+.basic-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  margin-right: 6px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.basic-actions .basic-action {
+  box-sizing: border-box;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  min-width: 0;
+  min-height: 0;
+  height: 24px;
+  padding: 3px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  box-shadow: none;
+  color: #fff;
+  cursor: pointer;
+}
+.basic-actions .basic-action:disabled { color: #fff; opacity: 0.65; cursor: default; }
+.basic-actions .basic-action:hover:not(:disabled) { color: #fff; background: var(--surface-raised); }
+.basic-actions .basic-action:focus-visible { outline: 2px solid var(--select); outline-offset: 1px; }
+.basic-action svg { width: 18px; height: 18px; }
+.action--spent-slot { visibility: hidden; pointer-events: none; }
 i.action {
   font-family: 'Arkham';
   font-style: normal;
@@ -1103,12 +1223,12 @@ i.action {
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: rgb(214 220 210 / 0.82);
+  color: #fff4dc;
   text-shadow: 0 1px 2px rgb(4 12 12 / 0.6);
 
   &[disabled] {
     background: transparent;
-    color: rgb(205 207 196 / 0.35);
+    color: #e5ddcd;
   }
 
   &:not([disabled]):hover {
@@ -1123,7 +1243,7 @@ i.action {
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: rgb(233 214 165 / 0.92);
+  color: #fff4dc;
   font-family: Teutonic, Georgia, serif;
   font-size: 0.92rem;
   letter-spacing: 0.14em;
@@ -1164,7 +1284,7 @@ i.action {
 
   &:disabled {
     background: transparent;
-    color: rgb(205 207 196 / 0.35);
+    color: #e5ddcd;
   }
 }
 
@@ -1175,7 +1295,7 @@ i.action {
 .skip-all-triggers-button {
   transition: background 0.15s ease, color 0.15s ease;
   background: transparent;
-  color: rgb(214 220 210 / 0.82);
+  color: #fff4dc;
   border: 0;
   border-left: 1px solid rgb(244 239 228 / 0.16);
   border-radius: 0 6px 6px 0;

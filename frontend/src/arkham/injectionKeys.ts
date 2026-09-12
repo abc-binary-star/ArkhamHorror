@@ -33,3 +33,18 @@ export const chooseAmountsKey: InjectionKey<
 export const scenarioSpecificAnswerKey: InjectionKey<
   (key: string, value: unknown) => Promise<void>
 > = Symbol('scenarioSpecificAnswer')
+
+export const undoControlsKey: InjectionKey<{
+  canUndoAction: Readonly<Ref<boolean>>
+  canUndoTurn: Readonly<Ref<boolean>>
+  canUndoPhase: Readonly<Ref<boolean>>
+  canUndoRound: Readonly<Ref<boolean>>
+  canUndoScenario: Readonly<Ref<boolean>>
+  undoChordArmed: Readonly<Ref<boolean>>
+  confirmingUndoScenario: Ref<boolean>
+  undo: () => Promise<void>
+  undoActionStart: () => Promise<void>
+  undoTurnStart: () => Promise<void>
+  undoPhaseStart: () => Promise<void>
+  undoRoundStart: () => Promise<void>
+}> = Symbol('undoControls')

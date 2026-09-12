@@ -1,4 +1,5 @@
 {
+  "basicActions": { "draw": "抽牌", "resource": "获得资源", "investigate": "调查" },
   "discards": "玩家弃牌堆",
   "endTurn": "结束回合",
   "endTurnShort": "结束",

@@ -1,4 +1,5 @@
 {
+  "basicActions": { "draw": "Draw a card", "resource": "Gain a resource", "investigate": "Investigate" },
     "discards": "Discards",
     "endTurn": "End turn",
     "endTurnShort": "End",
