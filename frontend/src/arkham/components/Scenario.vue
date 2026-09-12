@@ -4821,14 +4821,15 @@ async function addChaosToken(face: any) {
     grid-column: 2;
     grid-row: 1;
   }
-  /* The shelf's column is a hair wider than the agenda/act frames, and that
-     sliver of table showed between the frames and the map. The plate crops its
-     own margin on all four sides, so its brass line sits on the element's edge:
-     widening the box leftward brings that edge onto the frame's right edge, the
-     same way the other three sides meet their neighbours. The column keeps its
-     width, so the cards are untouched. */
+  /* The shelf's column is wider than the agenda/act frames by exactly its own
+     horizontal padding (10px, see .scenario-cards), and that sliver of table
+     showed between the frames and the map. The plate crops its own margin, so
+     its brass line sits on the element's edge: widening the box leftward brings
+     that edge onto the frame's right edge, the same way the other three sides
+     meet their neighbours. This must equal that padding — any less and the
+     sliver reappears, any more and the map starts eating the frames. */
   .scenario-body.scenario-body--multiseat > .location-cards-container {
-    margin-left: -3px;
+    margin-left: -10px;
   }
 
   /* ---- scenario shelf ---- */
