@@ -535,6 +535,8 @@
     "editListFailed": "Could not fetch that list — is the link valid and the deck public?",
     "editSaved": "Deck updated",
     "editSaveFailed": "Could not save the deck"
+    "lastPlayed": "Last played {date}",
+    "neverPlayed": "Never played"
   },
   "deckList": {
     "newDeck": "New Deck",
@@ -804,7 +806,8 @@
   "deckToolbar": {
     "searchDecks": "Search decks…",
     "sortName": "Sort: Name",
-    "sortClass": "Sort: Class"
+    "sortClass": "Sort: Class",
+    "sortRecent": "Sort: Recently Used"
   },
   "claimSeat": {
     "unableToLoad": "Unable to load game details.",

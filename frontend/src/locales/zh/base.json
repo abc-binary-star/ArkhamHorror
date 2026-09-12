@@ -512,6 +512,8 @@
     "editListFailed": "拉取卡表失败——链接是否有效、卡组是否已公开？",
     "editSaved": "牌组已更新",
     "editSaveFailed": "保存失败"
+    "lastPlayed": "上次游玩 {date}",
+    "neverPlayed": "从未游玩"
   },
   "deckList": {
     "newDeck": "新牌组",
@@ -817,7 +819,8 @@
   "deckToolbar": {
     "searchDecks": "搜索牌组…",
     "sortName": "排序: 名称",
-    "sortClass": "排序: 职阶"
+    "sortClass": "排序: 职阶",
+    "sortRecent": "排序: 最近使用"
   },
   "newDeck": {
     "save": "保存",

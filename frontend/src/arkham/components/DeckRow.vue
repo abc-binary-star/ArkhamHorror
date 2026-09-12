@@ -48,6 +48,13 @@ const tabooList = computed(() => {
   const list = ArkhamDeck.deckPlayList(props.deck)
   return list.taboo_id ? displayTabooId(list.taboo_id) : null
 })
+
+// Makes the "recently used" sort legible: the row says what it is being ordered by.
+const lastPlayed = computed(() => {
+  if (!props.deck.lastUsedAt) return null
+  const d = new Date(props.deck.lastUsedAt)
+  return isNaN(d.getTime()) ? null : d.toLocaleDateString()
+})
 </script>
 
 <template>
@@ -66,7 +73,12 @@ const tabooList = computed(() => {
           </span>
           <span class="deck-name">{{ deck.name }}</span>
         </div>
-        <span v-if="tabooList" class="taboo-badge"><font-awesome-icon icon="book" /> Taboo: {{ tabooList }}</span>
+        <div class="deck-badges">
+          <span v-if="tabooList" class="taboo-badge"><font-awesome-icon icon="book" /> Taboo: {{ tabooList }}</span>
+          <span class="last-played">
+            {{ lastPlayed ? $t('deck.lastPlayed', { date: lastPlayed }) : $t('deck.neverPlayed') }}
+          </span>
+        </div>
       </div>
       <div class="deck-actions" @click.stop>
         <a class="action-btn" :href="builderEditUrl()" target="_blank" rel="noreferrer noopener" :title="$t('deck.editInBuilder')">
@@ -175,6 +187,21 @@ const tabooList = computed(() => {
   border: 1px solid color-mix(in srgb, var(--brass) 46%, transparent);
   border-radius: 4px;
   letter-spacing: 0.02em;
+}
+
+.deck-badges {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.last-played {
+  font-size: 0.75em;
+  font-weight: 600;
+  color: #8a93a8;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 
 .deck-actions {

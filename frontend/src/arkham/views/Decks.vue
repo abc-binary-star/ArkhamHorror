@@ -27,7 +27,7 @@ const deleteId = ref<string | null>(null)
 const toast = useToast()
 const showNewDeck = ref(false)
 const searchText = ref('')
-const sortBy = ref<'name' | 'class'>('name')
+const sortBy = ref<Arkham.DeckSort>('name')
 const filterClasses = ref<InvestigatorClass[]>([])
 
 const CLASS_ORDER: Record<string, number> = {
@@ -83,7 +83,7 @@ onUnmounted(() => {
 })
 
 const decks = computed(() => {
-  let result = allDecks.value.filter((deck) => {
+  const result = allDecks.value.filter((deck) => {
     const matchesClass = filterClasses.value.length === 0 ||
       filterClasses.value.some((k) => ArkhamDeck.deckClass(deck)[k])
     const matchesSearch = !searchText.value ||
@@ -91,18 +91,7 @@ const decks = computed(() => {
     return matchesClass && matchesSearch
   })
 
-  if (sortBy.value === 'name') {
-    result = [...result].sort((a, b) => a.name.localeCompare(b.name))
-  } else if (sortBy.value === 'class') {
-    result = [...result].sort((a, b) => {
-      const classObj = (d: ArkhamDeck.Deck) => ArkhamDeck.deckClass(d)
-      const ca = allClasses.find(k => classObj(a)[k]) ?? 'neutral'
-      const cb = allClasses.find(k => classObj(b)[k]) ?? 'neutral'
-      return (CLASS_ORDER[ca] ?? 5) - (CLASS_ORDER[cb] ?? 5)
-    })
-  }
-
-  return result
+  return Arkham.sortDecks(result, sortBy.value)
 })
 
 async function sync(deck: ArkhamDeck.Deck) {
