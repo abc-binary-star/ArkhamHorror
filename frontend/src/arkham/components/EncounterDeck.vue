@@ -334,7 +334,8 @@ async function debugAddCardToDeck(card: CardDef) {
   width: var(--card-width);
 }
 .can-interact {
-  border: 3px solid var(--select);
+  border: 2px solid var(--ability-ready-edge);
+  box-shadow: var(--ability-ready-shadow);
   cursor: pointer;
 }
 

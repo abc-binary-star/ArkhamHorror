@@ -12,7 +12,32 @@
 **/*.dump-hi
 **/*.hie
 **/dist-newstyle
-**/public/img
 backend/foo
 backend/tags
 backend/hls.log
+
+# Build products, local tools and design originals never enter the build context.
+**/dist
+frontend/harness
+/design-assets
+/docs
+/offline/_deps
+/offline/_dist
+# Downloaded CDN mirrors. Small checked-in UI images remain available offline
+# and for application URLs that deliberately do not use the CDN.
+frontend/public/img/arkham/cards
+frontend/public/img/arkham/es
+frontend/public/img/arkham/fr
+frontend/public/img/arkham/ita
+frontend/public/img/arkham/ko
+frontend/public/img/arkham/zh
+frontend/public/img/arkham/boxes
+frontend/public/img/arkham/portraits
+frontend/public/img/arkham/tarot
+frontend/public/img/arkham/encounter-sets
+frontend/public/img/arkham/mini-cards
+frontend/public/img/arkham/sets
+frontend/public/img/arkham/customizations
+frontend/public/img/arkham/seals
+frontend/public/img/arkham/playing-cards
+frontend/public/img/arkham/homebrew

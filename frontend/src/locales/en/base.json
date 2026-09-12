@@ -1,4 +1,14 @@
 {
+  "triggeredEffect": {
+    "title": "An effect can trigger",
+    "description": "The current event has opened a response window. Choose an effect below to resolve it; the game is waiting for your choice.",
+    "inspect": "View table",
+    "restore": "Return to pending effects",
+    "card": "Card offering this effect",
+    "skip": "Skip this response window",
+    "play": "Play this card",
+    "hint": "Viewing the table does not skip this window. You can skip only when the game offers that option; mandatory effects must be resolved."
+  },
   "showCardText": "Show text",
   "hideCardText": "Hide text",
   "window": {"minimize": "Minimize window", "restore": "Restore window"},
@@ -508,11 +518,6 @@
   },
   "location": {
     "under": "Under ({count})",
-    "current": "Current location",
-    "investigatorCount": "{count} investigator(s)",
-    "clues": "{count} clue(s)",
-    "shroud": "Shroud {count}",
-    "exhausted": "Exhausted",
     "blocked": "Blocked",
     "darkTraitRemoved": "Dark trait removed"
   },

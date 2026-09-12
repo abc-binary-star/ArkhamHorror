@@ -437,7 +437,14 @@ const wards = computed(() => props.agenda.tokens[TokenType.Ward])
 }
 
 .agenda--can-progress {
-  border: 3px solid var(--select);
+  border: 3px solid var(--ability-ready-edge);
+  box-shadow: var(--ability-ready-shadow);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+
+  &:is(:hover, :focus-visible) {
+    border-color: var(--ability-ready-edge-hover);
+    box-shadow: var(--ability-ready-hover-shadow);
+  }
   border-radius: 8px;
   cursor: pointer;
 }

@@ -245,8 +245,8 @@ function main() {
   const localeRoot = path.join(source, 'translations', options.sourceLocale)
   if (!fs.existsSync(localeRoot)) throw new Error(`Translation locale not found: ${localeRoot}`)
 
-  const englishFile = path.join(root, 'public', 'cards_en.json')
-  const outputFile = path.join(root, 'public', `cards_${options.outputLang}.json`)
+  const englishFile = path.join(root, 'card-data', 'cards_en.json')
+  const outputFile = path.join(root, 'card-data', `cards_${options.outputLang}.json`)
   const englishCards = JSON.parse(fs.readFileSync(englishFile, 'utf8'))
   const metadata = loadMetadata(localeRoot)
   const overrides = loadOverrides(root, options.sourceLocale)

@@ -17,26 +17,11 @@ FRONTEND_DIR="${PROJECT_ROOT}/frontend"
 FRONTEND_OUTPUT="${DEPS_DIR}/frontend"        # Unified output location: offline/_deps/frontend/
 FRONTEND_BUILT_MARKER="${DEPS_DIR}/stamp_frontend_built"
 
-# ── Compute a hash of frontend source contents (to decide whether a rebuild is needed) ─
-# Includes: all files under src/ + package-lock.json + the index.html template
-# Excludes: node_modules/ (only dependency declarations matter, not installed files)
-# macOS ships `shasum` but not `sha256sum`; pick whichever is available.
-if has_cmd sha256sum; then
-    _hash_cmd() { sha256sum "$@"; }
-else
-    _hash_cmd() { shasum -a 256 "$@"; }
-fi
-
+# Include build rules, source data and local images so cached offline output
+# cannot survive a resource move or mirror refresh. Hash functions cannot be
+# invoked through xargs as external programs; use Node's portable filesystem API.
 compute_frontend_hash() {
-    (
-        cd "$FRONTEND_DIR"
-        # Use find | sort to keep a stable order, then hash each file
-        find src -type f | sort | xargs _hash_cmd 2>/dev/null
-        # A package-lock.json change means dependency declarations may have changed
-        _hash_cmd package-lock.json 2>/dev/null || true
-        # Rebuild when the index.html template changes as well
-        _hash_cmd index.html 2>/dev/null || true
-    ) | _hash_cmd | cut -d' ' -f1
+    node "${FRONTEND_DIR}/scripts/frontend-hash.cjs"
 }
 
 # ── Build frontend ────────────────────────────────────────────────────────────
@@ -98,9 +83,7 @@ build_frontend() {
         info "node_modules → ${NM_REAL} (symlink created)"
     fi
 
-    # Register cleanup on exit: remove the symlink and restore helpers.ts
-    _HELPERS_TS="${FRONTEND_DIR}/src/arkham/helpers.ts"
-    _HELPERS_BAK="${FRONTEND_DIR}/src/arkham/helpers.ts.bak_$$"
+    # Register cleanup on exit: remove the dependency symlink
     cleanup_nm_symlink() {
         if [ -L "$NM_LINK" ]; then
             rm -f "$NM_LINK"
@@ -108,7 +91,6 @@ build_frontend() {
             warn "The original node_modules/ was moved to ${NM_REAL} and will not be restored automatically"
             fi
         fi
-        [ -f "$_HELPERS_BAK" ] && mv -f "$_HELPERS_BAK" "$_HELPERS_TS" 2>/dev/null || true
     }
     trap cleanup_nm_symlink EXIT
 
@@ -137,40 +119,14 @@ build_frontend() {
         done
     fi
 
-    # ── Temporary patch: helpers.ts hard-codes a CDN URL in production ───────
-    # The offline package needs relative paths; prefer VITE_ASSET_HOST first and fall back to the CDN when unset
-    cp "$_HELPERS_TS" "$_HELPERS_BAK"
-    substep "Patching helpers.ts: use VITE_ASSET_HOST in production (fall back to the CDN if unset)"
-    sed -i.bak "s|export const baseUrl = import.meta.env.PROD ? \"https://assets.arkhamhorror.app\" : ''|export const baseUrl = import.meta.env.PROD ? (import.meta.env.VITE_ASSET_HOST ?? \"https://assets.arkhamhorror.app\") : ''|" "$_HELPERS_TS" && rm -f "${_HELPERS_TS}.bak"
-
-    # 2. Build and output to offline/_dist/frontend/
-    substep "npm run build (output to ${FRONTEND_OUTPUT}) ..."
-
-    # Set VITE_ASSET_HOST="" so both images use relative paths during the frontend build
+    # The offline profile explicitly includes local image mirrors and homebrew
+    # art. Compression follows this output directory through the Vite plugin.
     export VITE_ASSET_HOST=""
-
     ensure_dir "$FRONTEND_OUTPUT"
-
-    # Try to write directly to the target directory through Vite CLI --outDir
-    info "Running: npm run build -- --outDir ${FRONTEND_OUTPUT}"
-    if npm run build -- --outDir "${FRONTEND_OUTPUT}" 2>&1 | while IFS= read -r line; do
+    info "Running: npm run build -- --mode offline --outDir ${FRONTEND_OUTPUT} --emptyOutDir"
+    npm run build -- --mode offline --outDir "${FRONTEND_OUTPUT}" --emptyOutDir 2>&1 | while IFS= read -r line; do
         echo "    $line"
-    done; then
-        info "  ✓ Wrote output directly to ${FRONTEND_OUTPUT}"
-    else
-        # Fallback: build in place, then copy
-        warn "  --outDir did not take effect; building in place and copying instead ..."
-        info "Running: npm run build"
-        npm run build 2>&1 | while IFS= read -r line; do
-            echo "    $line"
-        done
-        if [ -d "dist" ]; then
-            cp -r dist/* "${FRONTEND_OUTPUT}/"
-            info "  ✓ Copied to ${FRONTEND_OUTPUT}"
-        else
-            die "  ✗ Frontend build failed: dist/ directory does not exist"
-        fi
-    fi
+    done
 
     popd > /dev/null
 

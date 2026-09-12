@@ -187,6 +187,63 @@ h2.title {
   animation: glow 3s linear infinite;
 }
 
+/* ── Ready-to-interact breath ────────────────────────────────────────────────
+   Every ready card, enemy, deck and act shares the ghost-fire material from
+   tokens.css (--ability-ready-*). This one animation oscillates the shared
+   shadow tokens so the flame slowly breathes and stays findable among tightly
+   packed neighbours; per-component hover rules keep only the border-colour
+   change, which stays live because only box-shadow is animated here. The bare
+   `.can-interact` drop targets (empty slots, tarot picks) are deliberately not
+   listed — they keep the magenta --select language of ordinary selection. */
+.card--can-interact,
+.enemy--can-interact,
+.event--can-interact,
+.investigator--can-interact,
+.investigator--can-interact--portrait,
+.treachery--can-interact,
+.skill--can-interact,
+.asset--can-interact,
+.agenda--can-progress,
+.act--can-progress,
+.act--can-interact,
+.location--can-interact,
+.location-frame--ready,
+.encounter-deck .can-interact,
+.scenario-deck-area .can-interact {
+  animation: ability-ready-breathe 2.8s ease-in-out infinite;
+}
+
+@keyframes ability-ready-breathe {
+  0%,
+  100% {
+    box-shadow: var(--ability-ready-shadow);
+  }
+
+  50% {
+    box-shadow: var(--ability-ready-hover-shadow);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card--can-interact,
+  .enemy--can-interact,
+  .event--can-interact,
+  .investigator--can-interact,
+  .investigator--can-interact--portrait,
+  .treachery--can-interact,
+  .skill--can-interact,
+  .asset--can-interact,
+  .agenda--can-progress,
+  .act--can-progress,
+  .act--can-interact,
+  .location--can-interact,
+  .location-frame--ready,
+  .encounter-deck .can-interact,
+  .scenario-deck-area .can-interact {
+    animation: none;
+  }
+}
+
 /* On-card token pools (damage/horror/clue/doom shown on assets, enemies,
    locations, ...). Centralizes size + count font on a single knob so they
    scale together; overrides the scattered per-component token sizes. */

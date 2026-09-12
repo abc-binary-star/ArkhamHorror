@@ -281,7 +281,8 @@ const deckLabel = computed(() => {
 }
 
 .can-interact {
-  border: 3px solid var(--select);
+  border: 2px solid var(--ability-ready-edge);
+  box-shadow: var(--ability-ready-shadow);
   cursor: pointer;
 }
 

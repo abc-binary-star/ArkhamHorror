@@ -136,7 +136,7 @@ test('the checked-in zh-cn overrides only touch translated fields', () => {
   assert.ok(overrides.size > 0)
 
   const english = new Map(
-    JSON.parse(fs.readFileSync(path.join(frontendRoot, 'public', 'cards_en.json'), 'utf8')).map(
+    JSON.parse(fs.readFileSync(path.join(frontendRoot, 'card-data', 'cards_en.json'), 'utf8')).map(
       (card) => [card.code, card],
     ),
   )

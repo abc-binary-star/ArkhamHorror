@@ -605,7 +605,7 @@ const spadeInjury = computed(() => {
               />
             <button
             class="end-turn-button"
-            :class="{ active: endTurnAction !== -1 && investigator.remainingActions === 0, armed: endTurnArmed }"
+            :class="{ active: endTurnAction !== -1 && investigator.remainingActions <= 0, armed: endTurnArmed }"
             :disabled="endTurnAction == -1"
             :data-game-actionable="endTurnAction !== -1 || undefined"
             @click="endTurn"
@@ -738,8 +738,16 @@ i.action {
   stroke-width: 2.2;
 }
 
-.investigator--can-interact {
-  border: 2px solid var(--select);
+.investigator--can-interact,
+.investigator--can-interact--portrait {
+  border: 2px solid var(--ability-ready-edge);
+  box-shadow: var(--ability-ready-shadow);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+
+  &:is(:hover, :focus-visible) {
+    border-color: var(--ability-ready-edge-hover);
+    box-shadow: var(--ability-ready-hover-shadow);
+  }
   border-radius: 2px;
   cursor: pointer;
 }
@@ -747,7 +755,7 @@ i.action {
 
 .investigator--can-interact--portrait {
   cursor: pointer;
-  border: 3px solid var(--select);
+  border-width: 3px;
 }
 
 .card {
@@ -1131,11 +1139,22 @@ i.action {
     background: rgb(229 194 107 / 0.24);
   }
 
-  &.active {
-    border: 0;
-    border-radius: 6px;
-    background: rgb(229 194 107 / 0.16);
-    color: #fff;
+  &.active:not(:disabled) {
+    background: linear-gradient(135deg, #654b77, #302439 60%, #57412b);
+    color: #fff0c9;
+    box-shadow:
+      inset 0 0 0 1px #e4c78b,
+      inset 0 0 0 3px rgb(24 17 30 / 70%),
+      0 0 0 1px #302333,
+      0 0 12px rgb(195 143 229 / 50%);
+    text-shadow: 0 0 8px rgb(236 206 143 / 40%);
+
+    &:is(:hover, :focus-visible) {
+      background: linear-gradient(135deg, #80608f, #45314e 60%, #715535);
+      color: #fff;
+      outline: 2px solid #f0d49a;
+      outline-offset: 2px;
+    }
   }
 
   &.armed {

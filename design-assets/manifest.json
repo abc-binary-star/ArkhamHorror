@@ -1,0 +1,350 @@
+[
+  {
+    "original": "frontend/public/assets/veiled-harbour/01-诡镇奇谈主视觉.avif",
+    "archive": "design-assets/veiled-harbour/01-诡镇奇谈主视觉.avif",
+    "bytes": 136254,
+    "sha256": "ec3c843b6e9157a90c765220b01ae81e692160e8be06a2cd16e27623d92e1848"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/01-诡镇奇谈主视觉.png",
+    "archive": "design-assets/veiled-harbour/01-诡镇奇谈主视觉.png",
+    "bytes": 2339564,
+    "sha256": "ed657648b1d653006b0f636a85dd2b69a6a5d3430fdcc42468799fd4c490fb89"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/02-牌桌材质.png",
+    "archive": "design-assets/veiled-harbour/02-牌桌材质.png",
+    "bytes": 3845620,
+    "sha256": "2ef348f9b5fae7ff1eae522b7728606a36fce58c4ec5314eb5d1939085382372"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/05-状态印章.svg",
+    "archive": "design-assets/veiled-harbour/05-状态印章.svg",
+    "bytes": 1248,
+    "sha256": "cd94de07c19639e81ba9937c6937fb48ef8e2177d0f2e714d2c230e8109dd749"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/07-章节封面-潮汐之门.png",
+    "archive": "design-assets/veiled-harbour/07-章节封面-潮汐之门.png",
+    "bytes": 2563219,
+    "sha256": "d643dfe314145009b830af5ae75133069de3bf0e512d54fbc72df2e85acbeaa8"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/08-调查员档案-海图师.png",
+    "archive": "design-assets/veiled-harbour/08-调查员档案-海图师.png",
+    "bytes": 2371123,
+    "sha256": "df974e2749ed471423152e1e9ffa937c501385e9bb2be89d9d94bb17074ba870"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/09-牌组工作台纸面.avif",
+    "archive": "design-assets/veiled-harbour/09-牌组工作台纸面.avif",
+    "bytes": 165643,
+    "sha256": "ce79e1e6ed45649dd1ab6fac9a66027284fe944a054b54a1c4d62b9eebd55fc9"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/09-牌组工作台纸面.png",
+    "archive": "design-assets/veiled-harbour/09-牌组工作台纸面.png",
+    "bytes": 2926182,
+    "sha256": "bf19a7ee90393c6551e293f9dfeb6bd16e54acc56c38764284493de8d5bec2ef"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/10-行动纸面背景.png",
+    "archive": "design-assets/veiled-harbour/10-行动纸面背景.png",
+    "bytes": 2594959,
+    "sha256": "c8fbdcdf93ed1567c8c2dab03df4640a7c8e3ccb532b915036223ba2b492c592"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/11-混沌袋仪式纹章.png",
+    "archive": "design-assets/veiled-harbour/11-混沌袋仪式纹章.png",
+    "bytes": 2573755,
+    "sha256": "7a0216634715a22130eb6b39c02a4e30b759a2d3a29e326dd180b69ba93003ea"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/12-深海航图叠层.png",
+    "archive": "design-assets/veiled-harbour/12-深海航图叠层.png",
+    "bytes": 3021592,
+    "sha256": "203303849459fdcc4365a002d3f3fe299e9c3e38f6965bf08fd8f6f5587319b5"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/13-卡槽纸面.png",
+    "archive": "design-assets/veiled-harbour/13-卡槽纸面.png",
+    "bytes": 2827835,
+    "sha256": "7d9e851f47062564933aaf681eb9aa154783ca4b8bd1c3117905338163b8c25b"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/14-选择弹窗纸面.avif",
+    "archive": "design-assets/veiled-harbour/14-选择弹窗纸面.avif",
+    "bytes": 168506,
+    "sha256": "a834463f94dfacaea45eb441027cd3fd6e4ebfca22cc34a44c5b7e84967bea59"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/14-选择弹窗纸面.png",
+    "archive": "design-assets/veiled-harbour/14-选择弹窗纸面.png",
+    "bytes": 2749234,
+    "sha256": "92f9dfef3f7fd0f563705f7ca6758c09396f8d3d3d6b1f17aef46679c3ba05c4"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/15-移动端诡镇奇谈竖版.avif",
+    "archive": "design-assets/veiled-harbour/15-移动端诡镇奇谈竖版.avif",
+    "bytes": 142320,
+    "sha256": "f69157a513ea42c4eb2dbcabd78402409797b30981c439c0f83877488f76bb3e"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/15-移动端诡镇奇谈竖版.png",
+    "archive": "design-assets/veiled-harbour/15-移动端诡镇奇谈竖版.png",
+    "bytes": 2465874,
+    "sha256": "d5a7ead4c63eccacd3cd4ebae5463a25e1cea00a02d54e3e416e625976b74ae8"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/16-卡牌背面纹章.png",
+    "archive": "design-assets/veiled-harbour/16-卡牌背面纹章.png",
+    "bytes": 3110924,
+    "sha256": "12f8a70f15296f161d896de8ec6da5f026cf796a5aa4bbc4c6b499c27fc976f6"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/17-调查日志纸卷.png",
+    "archive": "design-assets/veiled-harbour/17-调查日志纸卷.png",
+    "bytes": 3076510,
+    "sha256": "7a1f4fbfa322583e72d1e4c5c2ce12b95e566a231c83ba932caf5d3a37da51fe"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/18-调查员状态卡.png",
+    "archive": "design-assets/veiled-harbour/18-调查员状态卡.png",
+    "bytes": 3151662,
+    "sha256": "3903ea4b43259a1219d3f1eddfdfea8dac990a319416fae0cc6bd709364e150a"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/19-行动条底板.png",
+    "archive": "design-assets/veiled-harbour/19-行动条底板.png",
+    "bytes": 2374936,
+    "sha256": "5b2e3d23030a26696fc0fa00394d448533e437038ac8b6e3319b9910db602b96"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/20-危险等待印章.png",
+    "archive": "design-assets/veiled-harbour/20-危险等待印章.png",
+    "bytes": 2960216,
+    "sha256": "7812b0ed15f9395ca7dd1d62328e959fd97ae73d1a1725953bf147c3d8b227bf"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/21-故事抉择内框.png",
+    "archive": "design-assets/veiled-harbour/21-故事抉择内框.png",
+    "bytes": 2725376,
+    "sha256": "9b5c69b463cc1f4a756adaf44bf2cd005b2f0253a6844c2639491a2f9c5f96a8"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/22-卡牌交互状态带.png",
+    "archive": "design-assets/veiled-harbour/22-卡牌交互状态带.png",
+    "bytes": 1502597,
+    "sha256": "4ac72babec5bdb2f4a4591620196ebc4516f8dde9e3038a27b8aec95ca5554f1"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/23-移动端牌桌竖版.png",
+    "archive": "design-assets/veiled-harbour/23-移动端牌桌竖版.png",
+    "bytes": 2619614,
+    "sha256": "dc4dfbe4178fe88624f6a494da3f6e6b52666b79fb878ab0864d24056cfa9e76"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/24-空档案纸牌.png",
+    "archive": "design-assets/veiled-harbour/24-空档案纸牌.png",
+    "bytes": 2731582,
+    "sha256": "475d96b7a55ce9dc697987308f3ea243a217a001756cda37ffb54fb2f063b5a0"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/25-行动按钮铭牌.png",
+    "archive": "design-assets/veiled-harbour/25-行动按钮铭牌.png",
+    "bytes": 1020547,
+    "sha256": "3b6f6698ed14d10c20cafbaa1f529f9dfb5823b6dbd46c811dfd99705f65ebd2"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/26-牌桌行动托盘.png",
+    "archive": "design-assets/veiled-harbour/26-牌桌行动托盘.png",
+    "bytes": 935807,
+    "sha256": "2202876532a952c649c26e3246cddefbde96d8f815ba284aa65874e9972856ad"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/27-侧栏档案抽屉.png",
+    "archive": "design-assets/veiled-harbour/27-侧栏档案抽屉.png",
+    "bytes": 2203303,
+    "sha256": "13989c943284258de4b9d7e0e995df8e3cfa0cd328a2689dc5d44dbd3de5f8a7"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/28-调查员资源徽章组.png",
+    "archive": "design-assets/veiled-harbour/28-调查员资源徽章组.png",
+    "bytes": 2009039,
+    "sha256": "8ba4eae7a1f350c14b5890371645e7cb109c8c5ca4e35a6d52a98c7f775b7419"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/29-故事抉择内框-v2.avif",
+    "archive": "design-assets/veiled-harbour/29-故事抉择内框-v2.avif",
+    "bytes": 122217,
+    "sha256": "bdfb51d8f3d4212bb821e402f84fd888ed38859282f3763d77f14d20489a9970"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/29-故事抉择内框-v2.png",
+    "archive": "design-assets/veiled-harbour/29-故事抉择内框-v2.png",
+    "bytes": 2605054,
+    "sha256": "922d1668978354446d8a1a8ab5a6a25c7e648345de9450ba942fb8adecdc7cdd"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/29-档案页底图.png",
+    "archive": "design-assets/veiled-harbour/29-档案页底图.png",
+    "bytes": 2465666,
+    "sha256": "eb2e35d3b8517cac78d0ff747ec74d4aaf31d3bb63b6dc7741ee90118347b1d2"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/30-行动按钮铭牌-v2.png",
+    "archive": "design-assets/veiled-harbour/30-行动按钮铭牌-v2.png",
+    "bytes": 2062535,
+    "sha256": "7e26fb085d8da73f402fdad03584af0236e148cc8a32de4e5064795c9d7d0399"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/31-牌桌行动托盘-v2.png",
+    "archive": "design-assets/veiled-harbour/31-牌桌行动托盘-v2.png",
+    "bytes": 2901594,
+    "sha256": "c16b24c2e9c0720b9aa70a8283bf15c9c18db759d25234c79f4d36e81c8ec039"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/32-侧栏档案抽屉-v2.png",
+    "archive": "design-assets/veiled-harbour/32-侧栏档案抽屉-v2.png",
+    "bytes": 2775462,
+    "sha256": "89549e445bfc0f2500fa4aa49901778551257560708eda86822e101beaea0d5b"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/33-卡牌交互状态带-v2.png",
+    "archive": "design-assets/veiled-harbour/33-卡牌交互状态带-v2.png",
+    "bytes": 922649,
+    "sha256": "5d8d5060d15b4e29805bd0eadeaeee79a4b617c69890fd564778cfbcca31642c"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/34-案件状态印章组-v2.png",
+    "archive": "design-assets/veiled-harbour/34-案件状态印章组-v2.png",
+    "bytes": 1513115,
+    "sha256": "f6e853ab564139f3db96114c9124ac4a9cccf94169327fe6dd350da53dcab036"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/35-底部行动托盘-v2.png",
+    "archive": "design-assets/veiled-harbour/35-底部行动托盘-v2.png",
+    "bytes": 2053271,
+    "sha256": "1ba31d1b8da61afddda39216534587923bfcede455a8890d8aa172ae1c9c653c"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/36-行动按钮四态铭牌组-v2.avif",
+    "archive": "design-assets/veiled-harbour/36-行动按钮四态铭牌组-v2.avif",
+    "bytes": 52686,
+    "sha256": "3b1041890491283eb75afc0124ed104d553e094f7ccb33d4649155d16548a5ac"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/37-卡牌黄铜选中框-v2.png",
+    "archive": "design-assets/veiled-harbour/37-卡牌黄铜选中框-v2.png",
+    "bytes": 474568,
+    "sha256": "c45bd964f337ae52e3d75aa76aaaf6ea36f4218ac25e9cf8c9213ed84dc086e7"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/38-调查揭示暗幕-v2.png",
+    "archive": "design-assets/veiled-harbour/38-调查揭示暗幕-v2.png",
+    "bytes": 1340384,
+    "sha256": "dcd83d18a1e6624505954b5965ae1f24f5c3ccc78b24f43bd06434076c8677ce"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/39-顶部导航漆面底板-v1.png",
+    "archive": "design-assets/veiled-harbour/39-顶部导航漆面底板-v1.png",
+    "bytes": 1983425,
+    "sha256": "77d4d44825c342e75db4fc05cd043ebe65b56d90855bae5b0f0a56f23124001e"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/40-导航黄铜索引压印-v1.png",
+    "archive": "design-assets/veiled-harbour/40-导航黄铜索引压印-v1.png",
+    "bytes": 332437,
+    "sha256": "f8b639a7d8581b2ec34cb3482b83e1a1269ef0f274ccace69cdf4aaab6e66879"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/41-多人牌桌底场-v1.png",
+    "archive": "design-assets/veiled-harbour/41-多人牌桌底场-v1.png",
+    "bytes": 2630173,
+    "sha256": "b5d4a1818c1f5d863efd73dc863298b3509ed3e196f46ae739dbeb22a86c0fba"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/C01-墨绿漆面微纹理.jpg",
+    "archive": "design-assets/veiled-harbour/C01-墨绿漆面微纹理.jpg",
+    "bytes": 42442,
+    "sha256": "a190e1ce2501901ca8f695f96dfcda295ab631b01dda749535e83fe8dc5ed6b8"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/C02-象牙档案纸微纹理.jpg",
+    "archive": "design-assets/veiled-harbour/C02-象牙档案纸微纹理.jpg",
+    "bytes": 44072,
+    "sha256": "8a09d2f3ce8db43f629ddfa76420fac3c7f453883f28a8321e6c66a97032ed16"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/C03-深绿布面书脊.jpg",
+    "archive": "design-assets/veiled-harbour/C03-深绿布面书脊.jpg",
+    "bytes": 20440,
+    "sha256": "8bd5b7a4da1b0d8bb311e75fdd2838f8c74166c81b54988d801b16c5c063165c"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/C06-界面工具图标-完成.svg",
+    "archive": "design-assets/veiled-harbour/C06-界面工具图标-完成.svg",
+    "bytes": 189,
+    "sha256": "98f43c353747bc5df452d273a6956fc5f1a6d28d12b2c6127fb1145d46d6e6fd"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/C06-界面工具图标-展开.svg",
+    "archive": "design-assets/veiled-harbour/C06-界面工具图标-展开.svg",
+    "bytes": 251,
+    "sha256": "ea10936c9b9f1ecbd1e8e4199aedfe1c9ca0fd567bb47bdc5edb8a64454d2201"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/C06-界面工具图标-更多.svg",
+    "archive": "design-assets/veiled-harbour/C06-界面工具图标-更多.svg",
+    "bytes": 222,
+    "sha256": "8d1facafd80ffca44358a0d4634141133443ba58a79881f70c232d66af506ae5"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/C06-界面工具图标-继续.svg",
+    "archive": "design-assets/veiled-harbour/C06-界面工具图标-继续.svg",
+    "bytes": 196,
+    "sha256": "be9af0b8fdac85675b5c10a98bde30d65a98f54b0bfd56f13cd41b4fa78d285d"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/C06-界面工具图标-警告.svg",
+    "archive": "design-assets/veiled-harbour/C06-界面工具图标-警告.svg",
+    "bytes": 259,
+    "sha256": "5282e7ef32fcb945e6807766f6c8d92a77590e769302fa7c0564b11813caa900"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/T01-调查地图底场.png",
+    "archive": "design-assets/veiled-harbour/T01-调查地图底场.png",
+    "bytes": 2758560,
+    "sha256": "dcfc5de5ff13bf281bb46476fbe7099755bd99f623d709c013daae6c0eccfd5d"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/T02-调查员皮革桌垫.png",
+    "archive": "design-assets/veiled-harbour/T02-调查员皮革桌垫.png",
+    "bytes": 2885370,
+    "sha256": "1ba1fe88472a013299ac696a4add4b76e6a2d7696314d0fdff7a282e8f68cecd"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/T03-日志书页.avif",
+    "archive": "design-assets/veiled-harbour/T03-日志书页.avif",
+    "bytes": 89674,
+    "sha256": "50c3bb3e88999dbf7f0c3e86bd0a39e2f305986d896d526c41bc383accf19cd1"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/T03-日志书页.png",
+    "archive": "design-assets/veiled-harbour/T03-日志书页.png",
+    "bytes": 2408014,
+    "sha256": "ffec97a95b6cd16861361337e7ef0b76f849b879fc4d4d3a5a67c81254b78134"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/T04-地点地图底板-v2.png",
+    "archive": "design-assets/veiled-harbour/T04-地点地图底板-v2.png",
+    "bytes": 3208378,
+    "sha256": "0c248fc0148a8dd7e2a398b3eaa384f47b64ccbd9774425b1ca8911c42fc9f86"
+  },
+  {
+    "original": "frontend/public/assets/veiled-harbour/T05-底部行动托盘纹理-v1.png",
+    "archive": "design-assets/veiled-harbour/T05-底部行动托盘纹理-v1.png",
+    "bytes": 2699122,
+    "sha256": "69336f5487a27eb7fc19ce8923703faa0bcb044491b1214cf34c78a988639904"
+  }
+]

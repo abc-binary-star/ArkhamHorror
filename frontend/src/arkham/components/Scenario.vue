@@ -83,6 +83,7 @@ import { useGameChoices } from '@/arkham/composables/useGameChoices'
 import { isMinimizedSkillTestKey, soloKey } from '@/arkham/injectionKeys'
 import { useMapViewport } from '@/arkham/composables/useMapViewport'
 import ScenarioPhases from '@/arkham/components/ScenarioPhases.vue'
+import PhaseInterlude from '@/arkham/components/PhaseInterlude.vue'
 import ScenarioMapControls from '@/arkham/components/ScenarioMapControls.vue'
 import { setLocationOffset, resetLocationOffsets, updateGameRaw } from '@/arkham/api'
 import { useDebug, scenarioHasDebugOptions } from '@/arkham/debug'
@@ -3026,6 +3027,7 @@ async function addChaosToken(face: any) {
       </div>
     </div>
     <ScenarioPhases :phase="phase" :phase-step="phaseStep" />
+    <PhaseInterlude :key="game.id" :phase="phase" />
   </div>
 
   <Teleport to="body">
@@ -5543,6 +5545,17 @@ async function addChaosToken(face: any) {
     max-width: calc(100% - 144px);
     flex-wrap: nowrap;
     overflow-x: auto;
+    /* No `filter` on this strip: any non-none filter makes it a containing
+       block, and the quick-action tooltips are absolute-positioned poppers
+       parented to `body`. floating-ui resolves their offsetParent against this
+       strip, then writes those coordinates relative to `body` — the popper lands
+       hundreds of px off, spills past the viewport, and turns every click into a
+       drag on the scroll area it just created. The shadow lives on the children
+       instead, where it cannot reparent the popper. */
+    text-shadow: 0 1px 3px #000;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.action-container svg) {
     filter: drop-shadow(0 1px 3px #000);
   }
 
@@ -5567,13 +5580,18 @@ async function addChaosToken(face: any) {
     min-height: 30px;
     padding: 3px 5px;
     font-size: 0.76rem;
+  }
+
+  /* Keep the investigator's end-turn reminder and confirmation styling.
+     The compact toolbar reset must only flatten ordinary buttons. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-controls button:not(.end-turn-button.active):not(.end-turn-button.armed)) {
     border: 0;
     border-radius: 0;
     background: transparent;
     box-shadow: none;
   }
 
-  .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-controls button:not(:disabled):hover) {
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-controls button:not(:disabled):not(.end-turn-button.active):not(.end-turn-button.armed):hover) {
     color: #f5d48b;
     background: rgb(205 175 107 / 0.08);
   }

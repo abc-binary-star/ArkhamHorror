@@ -718,7 +718,14 @@ function onDrop(event: DragEvent) {
 }
 
 .enemy--can-interact {
-  border: 2px solid var(--select);
+  border: 2px solid var(--ability-ready-edge);
+  box-shadow: var(--ability-ready-shadow);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+
+  &:is(:hover, :focus-visible) {
+    border-color: var(--ability-ready-edge-hover);
+    box-shadow: var(--ability-ready-hover-shadow);
+  }
   border-radius: 5px;
   cursor: pointer;
 }

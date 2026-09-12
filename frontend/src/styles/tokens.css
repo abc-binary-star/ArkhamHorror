@@ -110,6 +110,32 @@
   --select-dark-20: #76498f;
   --select-dark-30: #5b356d;
 
+  /* Ready-to-interact cards and decks burn like ghost-fire: a candlelight-gold
+     rim held between two ink-green hairlines, a warm ember on the inner edge
+     and a pale green eldritch aura outside, so a ready element stays findable
+     in a tightly packed row. Hover fans the flame; components.css breathes
+     between the two shadows instead of every component restating them. */
+  --ability-ready-edge: #ecd9a0;
+  --ability-ready-edge-hover: #fdf3cf;
+  --ability-ready-shadow:
+    0 0 0 1px #0d1a15,
+    0 0 0 3px #c3a763,
+    0 0 0 4px #12241c,
+    inset 0 0 5px 1px rgb(255 240 200 / 22%),
+    0 0 7px 4px rgb(236 217 160 / 40%),
+    0 0 18px 8px rgb(114 197 152 / 24%),
+    0 0 34px 12px rgb(64 148 108 / 15%),
+    var(--card-shadow);
+  --ability-ready-hover-shadow:
+    0 0 0 1px #0d1a15,
+    0 0 0 3px #e0c47c,
+    0 0 0 4px #1a3128,
+    inset 0 0 6px 2px rgb(255 244 214 / 30%),
+    0 0 9px 5px rgb(244 226 170 / 55%),
+    0 0 22px 10px rgb(130 210 165 / 34%),
+    0 0 40px 14px rgb(74 158 118 / 20%),
+    var(--card-shadow);
+
   /* The dropdown marker. Drawn here rather than left to the browser so that a
      native select and a custom picker button show the same shape: the browser's
      own is a chevron on some platforms and a triangle on others. */

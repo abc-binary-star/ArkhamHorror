@@ -976,7 +976,7 @@ function closeHand() { mobileHandOpen.value = false }
             />
 
             <div
-              v-for="slot in Math.max(0, 2 - spawningEnemies.length - engagedEnemies.length)"
+              v-for="slot in Math.max(0, 2 - threatCount)"
               :key="`empty-enemy-slot-${slot}`"
               class="threat-enemy-slot"
               aria-hidden="true"

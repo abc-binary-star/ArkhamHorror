@@ -13,7 +13,6 @@ spec = do
       withProp @"deck" (Deck cards) self
       self `moveTo` location
       self `putCardIntoPlay` Events.crypticResearch4
-      click "choose self"
       assert $ Events.crypticResearch4 `isInDiscardOf` self
       self.hand `shouldMatchListM` map PlayerCard cards
 

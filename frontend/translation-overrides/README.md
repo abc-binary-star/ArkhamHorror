@@ -2,7 +2,7 @@
 
 Corrections applied on top of the upstream translations in
 [`Kamalisk/arkhamdb-json-data`](https://github.com/Kamalisk/arkhamdb-json-data) when generating
-`public/cards_<lang>.json`.
+`card-data/cards_<lang>.json`.
 
 `scripts/import-card-translations.cjs` loads `<source-locale>.json` from this directory and
 applies it **after** the upstream merge, so a bad upstream entry no longer comes back the next
@@ -46,7 +46,7 @@ entry here and re-import.
 ### `fr.json`
 
 Two upstream pack files disagree, which made `--source-locale fr` throw and left
-`public/cards_fr.json` frozen at June 2025 with none of the 2026 core set:
+`card-data/cards_fr.json` frozen at June 2025 with none of the 2026 core set:
 
 - `06168` and `06189` are duplicated between `translations/fr/pack/tcu/tsh_encounter.json` and
   `tde/tsh_encounter.json`. The `tcu/` copies are untranslated English; the `tde/` copies are the

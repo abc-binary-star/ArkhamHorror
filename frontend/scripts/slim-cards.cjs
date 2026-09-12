@@ -1,4 +1,4 @@
-// Reads frontend/public/cards_*.json (the full ArkhamDB exports) and writes
+// Reads frontend/card-data/cards_*.json (the full ArkhamDB exports) and writes
 // trimmed copies to frontend/public/cards/cards_*.json containing only the
 // fields the frontend actually consumes (see ArkhamDBCard in
 // src/stores/dbCards.ts). Each output is also pre-compressed to .gz (served by
@@ -44,16 +44,17 @@ const KEEP_FIELDS = [
 ]
 
 const publicDir = path.join(__dirname, '..', 'public')
+const sourceDir = path.join(__dirname, '..', 'card-data')
 const outDir = path.join(publicDir, 'cards')
 
 if (!fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true })
 
 const sources = fs
-  .readdirSync(publicDir)
+  .readdirSync(sourceDir)
   .filter(isCardDataFilename)
 
 if (sources.length === 0) {
-  console.error('No cards_*.json source files found in', publicDir)
+  console.error('No cards_*.json source files found in', sourceDir)
   process.exit(1)
 }
 
@@ -63,7 +64,7 @@ let totalGz = 0
 let totalBr = 0
 
 for (const file of sources) {
-  const src = path.join(publicDir, file)
+  const src = path.join(sourceDir, file)
   const raw = fs.readFileSync(src, 'utf8').trim()
   if (!raw) {
     console.log(`${file}: empty source, skipping`)

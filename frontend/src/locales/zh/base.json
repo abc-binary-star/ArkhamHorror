@@ -1,4 +1,14 @@
 {
+  "triggeredEffect": {
+    "title": "有待处理的触发效果",
+    "description": "当前事件触发了响应时机。请选择下方要发动或结算的效果，游戏正在等待你的选择。",
+    "inspect": "查看牌桌",
+    "restore": "返回待处理效果",
+    "card": "提供此效果的卡牌",
+    "skip": "跳过本次响应",
+    "play": "打出这张牌",
+    "hint": "查看牌桌不会跳过响应。只有规则允许时才会显示跳过按钮；强制效果必须结算。"
+  },
   "showCardText": "显示说明",
   "hideCardText": "收起说明",
   "window": {"minimize": "收起窗口", "restore": "展开窗口"},
@@ -522,11 +532,6 @@
   },
   "location": {
     "under": "在({count})下方",
-    "current": "当前位置",
-    "investigatorCount": "{count}位调查员",
-    "clues": "{count}个线索",
-    "shroud": "遮蔽 {count}",
-    "exhausted": "已耗竭",
     "blocked": "已封锁",
     "darkTraitRemoved": "已移除黑暗特性"
   },

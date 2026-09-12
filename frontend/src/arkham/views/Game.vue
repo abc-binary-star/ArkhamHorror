@@ -492,7 +492,7 @@ const { isFullscreen, isSupported: fullscreenSupported, enter: enterFullscreen, 
 // space and slides out of view until the pointer reaches the top edge. While the
 // bar's own surfaces are open (tools drawer, settings, shortcuts, undo popper)
 // the bar has to stay reachable, so it stays put.
-const TOOLBAR_REVEAL_ZONE_PX = 8
+const TOOLBAR_REVEAL_ZONE_PX = 30
 const TOOLBAR_HIDE_ZONE_PX = 60
 
 const { autoHideToolbarInFullscreen } = storeToRefs(useSettings())

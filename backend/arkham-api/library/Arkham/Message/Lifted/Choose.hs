@@ -453,7 +453,9 @@ chooseTargetM
   -> [target]
   -> (target -> QueueT Message m ())
   -> m ()
-chooseTargetM iid ts action = chooseOneM iid $ unterminated $ for_ ts \t -> targeting t (action t)
+chooseTargetM iid ts action = case ts of
+  [t] -> pushAll =<< capture (action t)
+  _ -> chooseOneM iid $ unterminated $ for_ ts \t -> targeting t (action t)
 
 chooseHandleTargetM
   :: (ReverseQueue m, Targetable target, Sourceable source)
@@ -469,7 +471,7 @@ chooseThisM
   -> target
   -> QueueT Message m ()
   -> m ()
-chooseThisM iid t action = chooseOneM iid $ unterminated $ targeting t action
+chooseThisM _ _ action = pushAll =<< capture action
 
 chooseOrRunTargetM
   :: (ReverseQueue m, Targetable target)

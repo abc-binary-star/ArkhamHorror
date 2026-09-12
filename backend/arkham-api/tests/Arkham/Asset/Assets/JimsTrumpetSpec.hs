@@ -17,7 +17,6 @@ spec = describe "Jim's Trumpet" $ do
       sid <- getRandom
       runSkillTest sid self #intellect 0
       useReaction
-      click "choose self"
       self.horror `shouldReturn` 0
 
     it "on an investigator at your location" $ gameTest $ \self -> do

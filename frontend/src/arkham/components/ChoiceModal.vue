@@ -11,6 +11,7 @@ import { handleEmbeddedI18n } from '@/arkham/i18n';
 import { QuestionType } from '@/arkham/types/Question';
 import Draggable from '@/components/Draggable.vue';
 import Question from '@/arkham/components/Question.vue';
+import TriggeredEffectModal from '@/arkham/components/TriggeredEffectModal.vue';
 import { IsMobile } from '@/arkham/isMobile';
 import { processingKey } from '@/arkham/injectionKeys';
 
@@ -29,6 +30,18 @@ const isProcessing = computed(() => processing?.value ?? false)
 async function choose(idx: number) {
   emit('choose', idx)
 }
+
+// The decoder preserves WindowChooseOne as isWindow. Never infer a response
+// window from purple highlights: ordinary action/fast windows use those too.
+const isTriggeredWindow = computed(() => {
+  let question = props.game.question[props.playerId]
+  while (question) {
+    if (question.tag === QuestionType.CHOOSE_ONE) return question.isWindow === true && question.choices.length > 0
+    if (!question.question) return false
+    question = question.question
+  }
+  return false
+})
 
 const inSkillTest = computed(() => props.game.skillTest !== null)
 const choices = computed(() => ArkhamGame.choices(props.game, props.playerId))
@@ -296,8 +309,14 @@ const title = computed(() => {
 </script>
 
 <template>
+  <TriggeredEffectModal
+    v-if="isTriggeredWindow"
+    :game="game"
+    :player-id="playerId"
+    @choose="choose"
+  />
   <div
-    v-if="requiresModal && cthulhuDeckChoice"
+    v-else-if="requiresModal && cthulhuDeckChoice"
     class="cthulhu-enact no-card-overlay"
     :class="{ 'cthulhu-enact--processing': isProcessing }"
   >

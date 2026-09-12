@@ -468,14 +468,6 @@ const investigators = computed(() => {
     .map((i) => props.game.investigators[i])
     .filter((i) => i.placement.tag === 'AtLocation')
 })
-const locationDisplayName = computed(() => {
-  if (!props.location.revealed) return ''
-  return dbCards.getDbCard(cardArt(props.location.cardCode))?.name ?? props.location.label
-})
-const currentInvestigatorAtLocation = computed(() =>
-  investigators.value.some((investigator) => investigator.playerId === props.playerId),
-)
-
 const floodLevel = computed(() => {
   if (!props.location.floodLevel) return
   switch (props.location.floodLevel) {
@@ -613,17 +605,6 @@ const hasAnyLocationVehicleAssets = computed(() =>
         />
       </div>
       <div class="location-column">
-        <div v-if="locationDisplayName" class="location-summary" :aria-label="locationDisplayName">
-          <strong class="location-summary__name">{{ locationDisplayName }}</strong>
-          <span class="location-summary__status">
-            <span v-if="currentInvestigatorAtLocation">{{ $t('location.current') }}</span>
-            <span v-if="investigators.length > 0">{{ $t('location.investigatorCount', { count: investigators.length }) }}</span>
-            <span v-if="clues && clues > 0">{{ $t('location.clues', { count: clues }) }}</span>
-            <span v-if="props.location.shroud !== null">{{ $t('location.shroud', { count: props.location.shroud }) }}</span>
-            <span v-if="isExhausted">{{ $t('location.exhausted') }}</span>
-            <span v-if="blocked">{{ $t('location.blocked') }}</span>
-          </span>
-        </div>
         <div
           class="card-frame"
           :class="{
@@ -666,6 +647,7 @@ const hasAnyLocationVehicleAssets = computed(() =>
               highlighted,
               blocked,
               'blocked--selectable': blocked && canInteract && !hasObjective,
+              'location-frame--ready': canInteract && !hasObjective && !locationStory,
               exhausted: isExhausted,
               'card--flipping': flipping && !locationStory,
             }"
@@ -885,7 +867,7 @@ const hasAnyLocationVehicleAssets = computed(() =>
 
 <style scoped>
 .location--can-interact {
-  border: 2px solid var(--select);
+  border: 2px solid var(--ability-ready-edge);
   cursor: pointer;
 }
 
@@ -940,41 +922,6 @@ const hasAnyLocationVehicleAssets = computed(() =>
   position: relative;
   grid-area: location;
   width: min(calc(10vw + 20px), 60px);
-}
-
-.location-summary {
-  position: absolute;
-  top: calc(100% + 3px);
-  left: 50%;
-  z-index: var(--z-index-2);
-  width: max-content;
-  max-width: 155px;
-  padding: 3px 5px;
-  transform: translateX(-50%);
-  color: #e9e4d4;
-  background: rgb(7 17 17 / 0.9);
-  border: 1px solid rgb(205 175 107 / 0.45);
-  border-radius: 3px;
-  box-shadow: 0 2px 5px rgb(0 0 0 / 0.35);
-  font-size: 0.64rem;
-  line-height: 1.15;
-  text-align: center;
-  pointer-events: none;
-}
-
-.location-summary__name {
-  display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.location-summary__status {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 2px 5px;
-  color: #cbb47f;
 }
 
 .location-pool {
@@ -1216,11 +1163,23 @@ const hasAnyLocationVehicleAssets = computed(() =>
     --ui-rotation: 0deg;
     overflow: hidden;
     position: relative;
-    transition: transform 0.2s;
+    transition: transform 0.2s, box-shadow 180ms ease;
     transform: rotate(var(--ui-rotation));
     line-height: 0;
     box-sizing: border-box;
     box-shadow: var(--card-shadow);
+
+    /* Put the halo on the clipping frame so flood/art layers stay contained
+       while the gold edge remains visible, including selectable blocked tiles. */
+    &.location-frame--ready {
+      border-radius: 3px;
+      box-shadow: var(--ability-ready-shadow);
+
+      &:is(:hover, :focus-within) {
+        box-shadow: var(--ability-ready-hover-shadow);
+      }
+    }
+
     &:deep(.card) {
       width: calc(var(--card-width) + 4px);
       min-width: calc(var(--card-width) + 4px);
@@ -1248,7 +1207,7 @@ const hasAnyLocationVehicleAssets = computed(() =>
       position: absolute;
       inset: 0;
       box-sizing: border-box;
-      border: 2px solid var(--select);
+      border: 2px solid var(--ability-ready-edge);
       border-radius: 3px;
       pointer-events: none;
       z-index: var(--z-index-1);

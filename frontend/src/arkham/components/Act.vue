@@ -649,7 +649,14 @@ const chooseFromStoryCollection = (choice: number) => {
 }
 
 .act--can-progress {
-  border: 2px solid var(--select);
+  border: 2px solid var(--ability-ready-edge);
+  box-shadow: var(--ability-ready-shadow);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+
+  &:is(:hover, :focus-visible) {
+    border-color: var(--ability-ready-edge-hover);
+    box-shadow: var(--ability-ready-hover-shadow);
+  }
   border-radius: 8px;
   cursor: pointer;
 }
@@ -680,7 +687,14 @@ const chooseFromStoryCollection = (choice: number) => {
 
 .card-container:not(.act--objective) {
   .act--can-interact {
-    border: 2px solid var(--select);
+    border: 2px solid var(--ability-ready-edge);
+    box-shadow: var(--ability-ready-shadow);
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+
+    &:is(:hover, :focus-visible) {
+      border-color: var(--ability-ready-edge-hover);
+      box-shadow: var(--ability-ready-hover-shadow);
+    }
     cursor: pointer;
   }
 }
