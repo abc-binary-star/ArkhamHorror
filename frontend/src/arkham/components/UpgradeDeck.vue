@@ -13,7 +13,9 @@ import XpBreakdown from '@/arkham/components/XpBreakdown.vue';
 import type { XpBreakdownStep } from '@/arkham/types/Xp';
 import Question from '@/arkham/components/Question.vue';
 import { isUsableDecklist, loadUpgradeDeckFromJsonText } from '@/arkham/upgradeDeckUpload';
+import { deckTotalXp, investigatorEarnedXp } from '@/arkham/deckXp';
 import { randomId } from '@/arkham/randomId';
+import { useDbCardStore } from '@/stores/dbCards';
 import { deckRestrictionError, normalizeCardCode } from '@/arkham/deckRestrictions';
 import { useI18n } from 'vue-i18n';
 import { soloKey } from '@/arkham/injectionKeys';
@@ -119,11 +121,31 @@ const investigator = computed(() => {
 })
 const investigatorId = computed(() => !solo && deckInvestigator.value ? `c${deckInvestigator.value}` : investigator.value?.id)
 const originalInvestigatorId = computed(() => upgradeQuestionInvestigatorId.value ?? investigator.value?.id)
-const xp = computed(() => {
-  const inv = investigator.value
-  if (!inv) return undefined
-  return inv.xp - inv.spentXp
+const dbCardStore = useDbCardStore()
+const xpForCode = (code: string) => dbCardStore.getDbCard(code.replace(/^c/, ''))?.xp
+
+// The engine's xp/spentXp pair cannot express an upgrade budget (an upgrade
+// application snapshots spentXp to everything available, even a zero-cost
+// one), so the budget is the investigator's TOTAL earned XP compared against
+// the deck's TOTAL XP value — no leftover bookkeeping needed.
+const earnedXp = computed(() =>
+  investigatorEarnedXp(originalInvestigatorId.value ?? '', props.game.campaign?.xpBreakdown ?? []),
+)
+const xp = computed(() => earnedXp.value)
+
+function deckTotal(slots?: Record<string, number> | null): number {
+  return deckTotalXp(slots, xpForCode)
+}
+
+const localDeckCosts = computed(() => {
+  const costs = new Map<string, number>()
+  for (const candidate of localDeckCandidates.value) {
+    costs.set(candidate.id, deckTotal(candidate.list?.slots))
+  }
+  return costs
 })
+
+const upgradeCost = computed(() => deckTotal(deckList.value?.slots))
 const skipping = ref(false)
 
 const killedInvestigators = computed(() => {
@@ -224,10 +246,15 @@ const localDecks = ref<Deck[]>([])
 const localDecksLoaded = ref(false)
 const selectedLocalDeckId = ref<string | null>(null)
 
-const localDeckCandidates = computed(() => localDecks.value
-  .filter(localDeckMatchesInvestigator)
-  .sort((a, b) => localDeckScore(b) - localDeckScore(a) || a.name.localeCompare(b.name))
-)
+const localDeckCandidates = computed(() => {
+  const matching = localDecks.value.filter(localDeckMatchesInvestigator)
+  // Once a campaign branch exists for this game, it is the only deck edits and
+  // applies may touch — offering untagged originals or other campaigns' decks
+  // is how a save forks the campaign deck onto the wrong copy.
+  const branches = matching.filter(isCurrentCampaignDeck)
+  const pool = branches.length > 0 ? branches : matching
+  return pool.sort((a, b) => localDeckScore(b) - localDeckScore(a) || a.name.localeCompare(b.name))
+})
 
 const selectedLocalDeck = computed(() =>
   localDeckCandidates.value.find((candidate) => candidate.id === selectedLocalDeckId.value) ?? null
@@ -369,7 +396,10 @@ async function applySelectedLocalDeck() {
   }
 }
 
-onMounted(loadLocalDecks)
+onMounted(() => {
+  void dbCardStore.initDbCards()
+  void loadLocalDecks()
+})
 
 const error = computed(() => {
   if(deckInvestigator.value) {
@@ -766,6 +796,17 @@ async function upgrade(force = false) {
     pendingNoChangeUpgrade.value = true
     return
   }
+  // Budget rule: the deck's TOTAL XP value must not exceed the investigator's
+  // TOTAL earned XP — leveled replacements are priced at full XP, which equals
+  // their cumulative diff cost, so the comparison needs no leftover tracking.
+  if (canUpgradeOriginalInvestigator.value) {
+    const earned = earnedXp.value
+    if (upgradeCost.value > earned) {
+      fetching.value = false
+      submitError.value = t('upgrade.xpShortfall', { required: upgradeCost.value, available: earned })
+      return
+    }
+  }
   if ((deckUrl.value || deckList.value) && originalInvestigatorId.value) {
     submitError.value = null
     loadError.value = null
@@ -834,7 +875,7 @@ const tabooList = function (investigator: Investigator) {
 </script>
 
 <template>
-  <div id="upgrade-deck">
+  <div id="upgrade-deck" class="scroll-container">
     <button
       v-if="!waiting && question && question.tag === 'ChooseUpgradeDeck' && investigatorId == originalInvestigatorId"
       class="screen-back"
@@ -890,10 +931,11 @@ const tabooList = function (investigator: Investigator) {
             <template v-else-if="question">
               <template v-if="canUpgradeOriginalInvestigator && localDeckCandidates.length > 0">
                 <p class="info">{{ $t('upgrade.localDeckContent') }}</p>
+                <p class="info">{{ $t('upgrade.xpBudget', { earned: earnedXp }) }}</p>
                 <div class="local-deck-row">
                   <select v-model="selectedLocalDeckId">
                     <option v-for="localDeck in localDeckCandidates" :key="localDeck.id" :value="localDeck.id">
-                      {{ localDeck.name }}
+                      {{ localDeck.name }} · {{ $t('upgrade.xpCost', { xp: localDeckCosts.get(localDeck.id) ?? 0 }) }}
                     </option>
                   </select>
                   <button class="secondary" @click.prevent="editSelectedLocalDeck">
@@ -972,20 +1014,17 @@ const tabooList = function (investigator: Investigator) {
 </template>
 
 <style scoped>
+/* Scrolling is owned by .tabletop-shell via :has(.scroll-container) — this
+   element only marks itself so the shell opts in (same as ContinueCampaign). */
 #upgrade-deck {
-  overflow: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
-  color: var(--title);
+  color: var(--text-on-dark);
   font-size: 1em;
   padding: 32px 24px 48px;
   gap: 24px;
-}
-
-h2 {
-  color: var(--title);
 }
 
 .screen-back {
@@ -1002,11 +1041,14 @@ h2 {
 .title {
   width: min(1100px, 92vw);
   text-align: left;
+  /* Global h2.title uses dark ink; this heading sits on the dark tabletop. */
+  color: var(--text-on-dark);
 }
 
 .panel {
   border-radius: 12px;
   background: var(--box-background);
+  color: var(--ink);
   padding: 20px 24px;
   display: flex;
   flex-direction: row;
@@ -1021,7 +1063,7 @@ h2 {
   text-align: center;
   padding: 32px 24px;
   font-style: italic;
-  color: #ccc;
+  color: var(--text-dim);
 }
 
 @media (max-width: 800px) and (orientation: portrait) {
@@ -1059,7 +1101,7 @@ h2 {
 }
 
 .info {
-  color: #d8d8d8;
+  color: var(--text-dim);
   font-size: 0.95em;
   line-height: 1.55;
   text-align: left;
@@ -1123,7 +1165,7 @@ input[type=url] {
   border-radius: var(--radius-md);
   padding: 0 12px;
   color: var(--text);
-  background: var(--background-dark);
+  background: var(--input-background);
   font-size: 0.95em;
 }
 
@@ -1163,7 +1205,7 @@ input[type=url] {
   }
   .input-row input {
     border-radius: 6px;
-    border-right: 1px solid rgba(255, 255, 255, 0.12);
+    border-right: 1px solid var(--edge-dim);
   }
   .input-row button {
     width: 100%;
@@ -1202,6 +1244,7 @@ input[type=url] {
   padding: 0 10px;
   background: var(--panel-inset);
   border-right: var(--edge-width) solid var(--edge-dim);
+  color: var(--ink);
   font-size: 0.95em;
   font-weight: 700;
   letter-spacing: 0;
@@ -1227,7 +1270,7 @@ input[type=url] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #888;
+  color: var(--text-faint);
   font-size: 1.05em;
   flex-shrink: 0;
   user-select: none;
@@ -1293,7 +1336,7 @@ button.skip {
   font-size: 0.72em;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #888;
+  color: var(--text-faint);
   margin: 2px 0;
 }
 
@@ -1301,7 +1344,7 @@ button.skip {
 .separator::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid var(--edge-faint);
 }
 
 .separator:not(:empty)::before {
@@ -1344,7 +1387,7 @@ button.skip {
   margin: 0;
   border: 0;
   background: transparent;
-  color: #888;
+  color: var(--text-dim);
   font-size: 1em;
   width: auto;
 
@@ -1371,15 +1414,15 @@ button.skip {
   display: flex;
   margin-top: 8px;
   padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--edge-faint);
 }
 
 .killed-prompt {
   padding: 12px 16px;
   background-color: rgba(160, 0, 0, 0.18);
-  border: 1px solid rgba(220, 60, 60, 0.25);
+  border: 1px solid rgba(160, 0, 0, 0.35);
   border-radius: 8px;
-  color: #f0c0c0;
+  color: #7a1c1c;
   font-size: 0.95em;
   line-height: 1.5;
 }
@@ -1387,15 +1430,15 @@ button.skip {
 .error {
   padding: 10px 14px;
   background: rgba(160, 0, 0, 0.2);
-  border: 1px solid rgba(220, 60, 60, 0.3);
+  border: 1px solid rgba(160, 0, 0, 0.35);
   border-radius: 6px;
-  color: #f0c0c0;
+  color: #7a1c1c;
   font-size: 0.88em;
 }
 
 .taboo-list {
   font-size: 0.9em;
-  color: #aaa;
+  color: var(--text-dim);
 }
 
 .breakdowns {

@@ -71,7 +71,9 @@ import { handleEmbeddedI18n } from '@/arkham/i18n'
 import { getGameLocalStorageItem, setGameLocalStorageItem } from '@/arkham/localStorage'
 import * as ArkhamGame from '@/arkham/types/Game'
 import { deckMetaValue, type ArkhamDbDecklist, type Deck } from '@/arkham/types/Deck'
+import { deckTotalXp, investigatorEarnedXp } from '@/arkham/deckXp'
 import { subscribeToDeckSaves } from '@/arkham/deckSaveNotifications'
+import { useDbCardStore } from '@/stores/dbCards'
 import {
   choicesByPlayerKey,
   choicesSourceByPlayerKey,
@@ -2097,6 +2099,17 @@ async function applySavedCampaignDeck(deckId: string) {
         candidate.playerId === playerId.value,
     )
     if (!target) return
+
+    // Budget rule: total earned XP must cover the deck's TOTAL XP value
+    // (same comparison the upgrade window enforces).
+    const dbCardStore = useDbCardStore()
+    await dbCardStore.initDbCards()
+    const required = deckTotalXp(deck.list.slots, (code) => dbCardStore.getDbCard(code)?.xp)
+    const earned = investigatorEarnedXp(target.id ?? '', game.value.campaign?.xpBreakdown ?? [])
+    if (required > earned) {
+      toast.error(t('upgrade.xpShortfall', { required, available: earned }))
+      return
+    }
 
     await Api.upgradeDeck(props.gameId, target.id, undefined, savedDeckList(deck))
   } catch (error) {
