@@ -19,6 +19,7 @@ import Arkham.Classes.GameLogger
 import Arkham.Classes.Query
 import Arkham.Classes.RunMessage
 import Arkham.Custom.Overlay (DeckOverlay (..))
+import Arkham.Decklist (isCarryoverDecklist)
 import {-# SOURCE #-} Arkham.GameEnv
 import Arkham.GameT
 import Arkham.Helpers
@@ -240,7 +241,24 @@ defaultCampaignRunner msg a = case msg of
                         mDecklist
                   )
           else pure []
-      let randomWeaknesses = baseRandomWeaknesses <> extraWeakness
+      -- A deck carried over from a completed campaign still takes the standard
+      -- one random basic weakness at campaign start; the weakness already in
+      -- the carried deck is just a normal card now.
+      carryoverWeakness <-
+        if maybe False isCarryoverDecklist mDecklist
+          then
+            (: [])
+              <$> ( genCard
+                      =<< getRandomBasicWeaknessExcluding
+                        ( basicWeaknessCodes (unDeck deck')
+                            <> basicWeaknessCodes (baseRandomWeaknesses <> extraWeakness)
+                        )
+                        investigatorClass
+                        playerCount
+                        mDecklist
+                  )
+          else pure []
+      let randomWeaknesses = baseRandomWeaknesses <> extraWeakness <> carryoverWeakness
       morrigan <- hasBoon BoonOfTheMorrigan
       morriganSwaps <-
         if morrigan
