@@ -649,16 +649,53 @@ const chooseFromStoryCollection = (choice: number) => {
 }
 
 .act--can-progress {
-  border: 2px solid var(--ability-ready-edge);
-  box-shadow: var(--ability-ready-shadow);
-  transition: border-color 180ms ease, box-shadow 180ms ease;
+  border: 2px solid var(--act-advance-edge);
+  box-shadow: var(--act-advance-shadow);
+  filter: brightness(1.14) saturate(1.12);
+  transition: border-color 180ms ease, filter 180ms ease;
 
   &:is(:hover, :focus-visible) {
-    border-color: var(--ability-ready-edge-hover);
-    box-shadow: var(--ability-ready-hover-shadow);
+    border-color: var(--act-advance-edge-hover);
+    filter: brightness(1.24) saturate(1.16);
   }
   border-radius: 8px;
   cursor: pointer;
+}
+
+/* The desktop shelf's card area clips the outer glow, so the investigation
+   daylight also lives on the card itself: warm light pooling from the top
+   edge over the brightened artwork. */
+.card-container:has(.act--can-progress)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgb(255 243 196 / 0.38),
+    rgb(255 232 160 / 0.16) 42%,
+    transparent 68%
+  );
+  animation: act-advance-light 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes act-advance-light {
+  0%,
+  100% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-container:has(.act--can-progress)::after {
+    animation: none;
+  }
 }
 
 .button {

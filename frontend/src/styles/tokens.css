@@ -136,6 +136,50 @@
     0 0 40px 14px rgb(74 158 118 / 20%),
     var(--card-shadow);
 
+  /* Advance-ready stages leave the shared ghost-fire behind: an act whose clues
+     are enough glows like lamplight (bright, warm), an agenda whose doom is
+     enough sinks into eldritch darkness with a sickly green rim. The desktop
+     shelf clips everything past the card's own box (the seat's card area is the
+     scroll container that trims the corner badges), so the weight of both sits
+     in border colour + artwork filter + an in-card overlay (Act.vue /
+     Agenda.vue); these shadows only dress the classic unclipped view. */
+  --act-advance-edge: #f7cf6b;
+  --act-advance-edge-hover: #fff3c4;
+  --act-advance-shadow:
+    0 0 0 1px #241a05,
+    0 0 0 3px #f7cf6b,
+    0 0 0 4px #ffe9ad,
+    0 0 12px 5px rgb(255 224 130 / 70%),
+    0 0 30px 12px rgb(255 210 100 / 45%),
+    0 0 52px 20px rgb(255 200 80 / 25%),
+    var(--card-shadow);
+  --act-advance-hover-shadow:
+    0 0 0 1px #241a05,
+    0 0 0 3px #ffde85,
+    0 0 0 4px #fff3c4,
+    0 0 14px 6px rgb(255 232 150 / 85%),
+    0 0 36px 14px rgb(255 216 110 / 55%),
+    0 0 60px 22px rgb(255 205 90 / 32%),
+    var(--card-shadow);
+  --agenda-advance-edge: #143024;
+  --agenda-advance-edge-hover: #2c5c44;
+  --agenda-advance-shadow:
+    0 0 0 1px #000,
+    0 0 0 3px #143024,
+    0 0 0 4px #050d0a,
+    0 0 12px 5px rgb(2 8 6 / 80%),
+    0 0 26px 10px rgb(74 158 118 / 28%),
+    0 0 46px 18px rgb(10 24 18 / 50%),
+    var(--card-shadow);
+  --agenda-advance-hover-shadow:
+    0 0 0 1px #000,
+    0 0 0 3px #1d4534,
+    0 0 0 4px #07130e,
+    0 0 14px 6px rgb(2 8 6 / 90%),
+    0 0 30px 12px rgb(90 180 138 / 40%),
+    0 0 54px 20px rgb(14 32 24 / 55%),
+    var(--card-shadow);
+
   /* The dropdown marker. Drawn here rather than left to the browser so that a
      native select and a custom picker button show the same shape: the browser's
      own is a chevron on some platforms and a triangle on others. */

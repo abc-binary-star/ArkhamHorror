@@ -990,7 +990,10 @@ function entitiesMoved(previous: ArkhamGame.Game, current: ArkhamGame.Game) {
 }
 
 function applyGameUpdate(updatedGame: ArkhamGame.Game, locked: boolean) {
-  const nextGame = locked ? { ...updatedGame, question: {} } : updatedGame
+  // skillTest drives the skill-check dialog too: hide it behind a revelation
+  // so the reveal is dismissed before the check opens (the queued GameUpdate
+  // restores it on unlock).
+  const nextGame = locked ? { ...updatedGame, question: {}, skillTest: null } : updatedGame
   const previousGame = game.value
   const apply = async () => {
     game.value = nextGame

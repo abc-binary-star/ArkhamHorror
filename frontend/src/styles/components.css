@@ -203,9 +203,6 @@ h2.title {
 .treachery--can-interact,
 .skill--can-interact,
 .asset--can-interact,
-.agenda--can-progress,
-.act--can-progress,
-.act--can-interact,
 .location--can-interact,
 .location-frame--ready,
 .encounter-deck .can-interact,
@@ -221,6 +218,41 @@ h2.title {
 
   50% {
     box-shadow: var(--ability-ready-hover-shadow);
+  }
+}
+
+/* Advance-ready stages run their own climate instead of the shared breath:
+   the act shines like a lamp (faster, brighter), the agenda pulses with dread.
+   In the desktop shelf the outer glow is clipped by the seat's card area, so
+   the visible weight there is carried by border + filter + overlay inside
+   Act.vue / Agenda.vue; these shadows dress the classic unclipped view. */
+.act--can-progress {
+  animation: act-advance-shine 2.4s ease-in-out infinite;
+}
+
+.agenda--can-progress {
+  animation: agenda-advance-dread 3.6s ease-in-out infinite;
+}
+
+@keyframes act-advance-shine {
+  0%,
+  100% {
+    box-shadow: var(--act-advance-shadow);
+  }
+
+  50% {
+    box-shadow: var(--act-advance-hover-shadow);
+  }
+}
+
+@keyframes agenda-advance-dread {
+  0%,
+  100% {
+    box-shadow: var(--agenda-advance-shadow);
+  }
+
+  50% {
+    box-shadow: var(--agenda-advance-hover-shadow);
   }
 }
 

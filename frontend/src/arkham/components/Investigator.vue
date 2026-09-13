@@ -146,6 +146,9 @@ const basicActions = computed(() => {
   ]
 })
 
+const hasActionsRemaining = computed(() =>
+  props.investigator.remainingActions > 0 || props.investigator.additionalActions.length > 0)
+
 function chooseBasicAction(index: number) {
   if (index >= 0) choose(index)
 }
@@ -584,6 +587,7 @@ const spadeInjury = computed(() => {
                   :key="basicAction.key"
                   type="button"
                   class="basic-action"
+                  :class="{ 'basic-action--ready': hasActionsRemaining && basicAction.index !== -1 }"
                   v-tooltip="t(`investigator.basicActions.${basicAction.key}`)"
                   :aria-label="t(`investigator.basicActions.${basicAction.key}`)"
                   :disabled="basicAction.index === -1"
@@ -802,6 +806,8 @@ const spadeInjury = computed(() => {
 .basic-actions .basic-action:disabled { color: #fff; opacity: 0.65; cursor: default; }
 .basic-actions .basic-action:hover:not(:disabled) { color: #fff; background: var(--surface-raised); }
 .basic-actions .basic-action:focus-visible { outline: 2px solid var(--select); outline-offset: 1px; }
+.basic-actions .basic-action--ready { color: var(--ability-ready-edge); background: rgb(236 217 160 / 0.14); }
+.basic-actions .basic-action--ready:hover:not(:disabled) { color: var(--ability-ready-edge-hover); background: rgb(236 217 160 / 0.26); }
 .basic-action svg { width: 18px; height: 18px; }
 .action--spent-slot { visibility: hidden; pointer-events: none; }
 i.action {

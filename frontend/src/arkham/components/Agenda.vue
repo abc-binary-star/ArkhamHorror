@@ -437,16 +437,50 @@ const wards = computed(() => props.agenda.tokens[TokenType.Ward])
 }
 
 .agenda--can-progress {
-  border: 3px solid var(--ability-ready-edge);
-  box-shadow: var(--ability-ready-shadow);
-  transition: border-color 180ms ease, box-shadow 180ms ease;
+  border: 3px solid var(--agenda-advance-edge);
+  box-shadow: var(--agenda-advance-shadow);
+  filter: brightness(0.62) saturate(0.72);
+  transition: border-color 180ms ease, filter 180ms ease;
 
   &:is(:hover, :focus-visible) {
-    border-color: var(--ability-ready-edge-hover);
-    box-shadow: var(--ability-ready-hover-shadow);
+    border-color: var(--agenda-advance-edge-hover);
+    filter: brightness(0.72) saturate(0.8);
   }
   border-radius: 8px;
   cursor: pointer;
+}
+
+/* The desktop shelf's card area clips the outer glow, so the doom dread also
+   lives on the card itself: a dark veil sinking over the dimmed artwork, with
+   the doom token (z-index above this veil) still lit on top. */
+.agenda-card:has(.agenda--can-progress)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-index-100);
+  border-radius: 6px;
+  background:
+    radial-gradient(ellipse at 50% 45%, transparent 38%, rgb(1 6 4 / 0.5) 100%),
+    linear-gradient(180deg, rgb(4 12 9 / 0.4), rgb(8 22 17 / 0.22));
+  animation: agenda-advance-dusk 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes agenda-advance-dusk {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agenda-card:has(.agenda--can-progress)::after {
+    animation: none;
+  }
 }
 
 .pool {

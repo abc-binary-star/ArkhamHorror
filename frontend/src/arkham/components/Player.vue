@@ -156,9 +156,21 @@ const threatTreacheries = computed(() =>
   props.investigator.treacheries.map(id => props.game.treacheries[id]).filter(Boolean)
 )
 
-const visibleAssets = computed(() =>
-  tuckInertCards.value ? assets.value.filter(a => !isCardHidden(a)) : assets.value
-)
+// Weakness assets whose revelation places them in the threat area (e.g. the
+// Necronomicon) are assets by type but belong with the treacheries and enemies.
+const threatAreaAssets = computed(() => {
+  const xs = assets.value.filter(
+    a => a.placement.tag === 'InThreatArea' && a.placement.contents === investigatorId.value,
+  )
+  return tuckInertCards.value ? xs.filter(a => !isCardHidden(a)) : xs
+})
+
+const visibleAssets = computed(() => {
+  const playAreaAssets = assets.value.filter(
+    a => !(a.placement.tag === 'InThreatArea' && a.placement.contents === investigatorId.value),
+  )
+  return tuckInertCards.value ? playAreaAssets.filter(a => !isCardHidden(a)) : playAreaAssets
+})
 
 // Played with every matching slot full: the engine holds the asset Unplaced
 // while it asks which one to discard. It is not in `investigator.assets`, so it
@@ -340,13 +352,15 @@ const facedownThreatCardImage = (cardId: string) => {
 
 const threatCount = computed(() =>
   spawningEnemies.value.length + stories.value.length + engagedEnemies.value.length
-    + visibleTreacheries.value.length + facedownThreatCards.value.length
+    + visibleTreacheries.value.length + threatAreaAssets.value.length
+    + facedownThreatCards.value.length
 )
 const threatAreaCollapsed = ref(false)
 watch(
   () => [investigatorId.value, ...spawningEnemies.value.map(e => e.id),
     ...engagedEnemies.value.map(e => e.id), ...stories.value.map(s => s.id),
-    ...visibleTreacheries.value.map(t => t.id), ...facedownThreatCards.value.map(c => c.id)],
+    ...visibleTreacheries.value.map(t => t.id), ...threatAreaAssets.value.map(a => a.id),
+    ...facedownThreatCards.value.map(c => c.id)],
   (current, previous) => {
     if (current[0] !== previous?.[0] || current.some(id => !previous?.includes(id))) {
       threatAreaCollapsed.value = false
@@ -992,6 +1006,16 @@ function closeHand() { mobileHandOpen.value = false }
               :data-index="treachery.cardId"
               :playerId="playerId"
               :tuckable="tuckInertCards && tuckableCardCodes.has(treachery.cardCode)"
+              @choose="$emit('choose', $event)"
+            />
+
+            <Asset
+              v-for="asset in threatAreaAssets"
+              :key="asset.id"
+              :asset="asset"
+              :game="game"
+              :data-index="asset.cardId"
+              :playerId="playerId"
               @choose="$emit('choose', $event)"
             />
 
