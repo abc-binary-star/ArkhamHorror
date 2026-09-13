@@ -7,7 +7,6 @@
   "fixedResolution": "固定分辨率 · 16:10",
   "fixedResolutionHint": "1472 × 920 · 等比缩放，切换后重新载入牌桌",
   "fixedResolutionFailed": "固定牌桌加载未完成，请关闭固定模式后重试。",
-  "exitFixedResolution": "关闭固定模式",
   "closeTools": "关闭工具",
   "leaveGame": "退出牌局",
   "fullscreen": "全屏",

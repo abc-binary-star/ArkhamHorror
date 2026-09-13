@@ -137,9 +137,6 @@ onBeforeUnmount(() => {
       <div v-if="!frameReady" class="fixed-tabletop-status" role="status">
         {{ frameFailed ? $t('gameBar.fixedResolutionFailed') : $t('loadState.loading') }}
       </div>
-      <button type="button" class="fixed-tabletop-exit" @click="fixed = false">
-        {{ $t('gameBar.exitFixedResolution') }}
-      </button>
     </template>
     <Game v-else v-bind="props" />
   </div>
@@ -159,18 +156,17 @@ onBeforeUnmount(() => {
   position: absolute;
   inset: 0;
 }
-.fixed-tabletop-exit, .fixed-tabletop-status {
+.fixed-tabletop-status {
   position: absolute;
   z-index: 2;
+  top: 48px;
+  left: 12px;
   color: #ead8ad;
   background: #142421;
   border: 1px solid #807452;
   border-radius: 5px;
   padding: 8px 12px;
 }
-.fixed-tabletop-status { top: 48px; left: 12px; }
-.fixed-tabletop-exit { top: 8px; right: 12px; cursor: pointer; }
-.fixed-tabletop-exit:focus-visible { outline: 2px solid #ead8ad; outline-offset: 2px; }
 
 .fixed-tabletop-host {
   position: relative;
@@ -184,21 +180,13 @@ onBeforeUnmount(() => {
   min-height: 0;
   overflow: hidden;
   isolation: isolate;
+  /* The surround is the ornate multiplayer table field (41): the frame should
+     read as a mat lying on the same decorated table, not as a dark well around
+     it — only a light vignette sits on top for depth, no black wash. */
   background:
-    radial-gradient(ellipse at center, transparent 40%, rgb(1 7 7 / 0.88)),
-    linear-gradient(rgb(5 18 17 / 0.82), rgb(3 12 12 / 0.9)),
+    radial-gradient(ellipse at center, transparent 52%, rgb(1 7 7 / 0.5)),
     url('/assets/veiled-harbour/41-多人牌桌底场-v1.avif') center / cover,
-    #071311;
-}
-.fixed-tabletop-host::before {
-  content: '';
-  position: absolute;
-  inset: 12px;
-  border: 1px solid rgb(172 145 87 / 0.2);
-  outline: 1px solid rgb(172 145 87 / 0.08);
-  outline-offset: 5px;
-  pointer-events: none;
-  z-index: -1;
+    #0c1d1a;
 }
 .fixed-tabletop-frame {
   position: relative;
