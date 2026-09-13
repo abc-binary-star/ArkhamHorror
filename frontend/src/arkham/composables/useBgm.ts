@@ -34,11 +34,16 @@ const TRACKS: Record<string, string> = {
   'c51047': '/audio/bgm/where-doom-awaits.mp3',
   'c02311': '/audio/bgm/lost-in-time-space.mp3',
   'c51053': '/audio/bgm/lost-in-time-space.mp3',
+  // Brethren of Ash
+  'c12105': '/audio/bgm/spreading-flames.mp3',
+  'c12133': '/audio/bgm/smoke-and-mirrors.mp3',
+  'c12168': '/audio/bgm/queen-of-ash.mp3',
 }
 
 const CAMPAIGN_THEMES: Record<string, string> = {
   '01': '/audio/bgm/notz-theme.mp3',
   '02': '/audio/bgm/dunwich-theme.mp3',
+  '12': '/audio/bgm/brethren-of-ash-theme.mp3',
 }
 
 const BGM_VOLUME = 0.35
