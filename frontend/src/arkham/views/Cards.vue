@@ -112,6 +112,11 @@ const activeChapter = ref<number>(route.query.chapter ? parseInt(route.query.cha
 const flipAll = ref(false)
 provide(cardFlipAllKey, flipAll)
 
+/* Each printing as it was printed: the Core Set's own art under Core, the
+ * revised art under Revised Core. The art preference in settings is about what
+ * you play with, and says nothing about what a set contains. */
+provide('cardIgnoreArtVariants', true)
+
 const onKeydown = (event: KeyboardEvent) => {
   if (event.key !== 'f' && event.key !== 'F') return
   if (event.metaKey || event.ctrlKey || event.altKey) return
@@ -133,7 +138,7 @@ const cardPoolMode = computed<CardPoolMode>(() => {
 const store = useDbCardStore()
 
 const CACHE_KEY_PREFIX = 'arkham_cards_cache_'
-const CACHE_VERSION = 'v3'
+const CACHE_VERSION = 'v5'
 const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutes
 
 let cachedAllCards: ArkhamCardDef.CardDef[] | null = null
@@ -149,6 +154,46 @@ const sortCards = (cards: ArkhamCardDef.CardDef[]) => [...cards].sort((a, b) => 
 const setlessEncounterCards = new Set(['13119'])
 
 const isCampaignCard = (card: ArkhamCardDef.CardDef) => card.encounterSet != null || setlessEncounterCards.has(card.art)
+
+/* The Revised Core Set reprints the original's encounter cards under numbers
+ * 500 higher. The engine defines each of them once, under the original number,
+ * so the browser makes the revised printing out of them -- otherwise the
+ * revised set's campaign half reads as 79 cards that were never implemented.
+ *
+ * Only the number moves. Which picture each one shows is settled where every
+ * other art is (`reprintedArt`): the few that were redrawn have art of their
+ * own, and the rest are the original's. */
+const REVISED_CORE_OFFSET = 500
+
+const revisedCoreArt = (art: string) =>
+  art.replace(/^\d+/, (digits) => String(parseInt(digits) + REVISED_CORE_OFFSET).padStart(5, '0'))
+
+const revisedCoreCode = (code: string) => `c${revisedCoreArt(code.replace(/^c/, ''))}`
+
+const coreSet = (sets as { code: string; min: number; max: number }[]).find((s) => s.code === 'core')
+
+const revisedCorePrintings = (cards: ArkhamCardDef.CardDef[]): ArkhamCardDef.CardDef[] => {
+  if (!coreSet) return []
+
+  return cards
+    .filter((card) => {
+      if (!isCampaignCard(card)) return false
+      const number = parseInt(card.art)
+      return number >= coreSet.min && number <= coreSet.max
+    })
+    .map((card) => ({
+      ...card,
+      cardCode: revisedCoreCode(card.cardCode),
+      art: revisedCoreArt(card.art),
+      otherSide: card.otherSide ? revisedCoreCode(card.otherSide) : card.otherSide,
+      meta: { ...card.meta, revisedFrom: card.art },
+    }))
+}
+
+/* ArkhamDB never numbered these reprints, so one looks itself up under the
+ * number it was made from -- otherwise it would carry no encounter set to
+ * filter by and no translated name. */
+const dbArt = (card: ArkhamCardDef.CardDef): string => card.meta?.revisedFrom ?? card.art
 
 const cardInPool = (card: ArkhamCardDef.CardDef, cardPool: CardPoolMode) => {
   if (cardPool === 'both') return true
@@ -194,16 +239,17 @@ const fetchData = async () => {
     return
   }
 
-  // Awaited at the top level, so a rejection here leaves the whole view blank
-  // with nothing to click. The official pool is required; homebrew is not --
-  // that endpoint 404s against backends that do not serve it.
   try {
     const [officialCards, homebrewCards] = await Promise.all([
       fetchCards('both'),
       dev ? fetchHomebrewCards().catch(() => []) : Promise.resolve([]),
       cardData,
     ])
-    const sorted = sortCards([...officialCards, ...homebrewCards])
+    const sorted = sortCards([
+      ...officialCards,
+      ...revisedCorePrintings(officialCards),
+      ...homebrewCards,
+    ])
     setCachedCards(sorted)
     allCards.value = sorted
     loadError.value = false
@@ -233,12 +279,14 @@ interface CardSet {
   code: string
   cycle: number
   encounterDuplicates?: number
+  // A homebrew campaign's cards, or a set from your own card library, rather
+  // than a printed set.
   homebrew?: boolean
   // Show every card code in [min, max] in image view, greying out the ones the
   // engine hasn't implemented yet. For sets still being built out.
   previewUnimplemented?: boolean
   // Unused code numbers within [min, max] that don't correspond to a real card,
-  // so they aren't counted toward the set total.
+  // so no placeholder is drawn for them.
   missing?: string[]
 }
 
@@ -330,7 +378,7 @@ watch(() => activeChapter.value, (newChapter) => {
 // makes the page switch to the selected language once it lands.
 const localizedCards = (cards: ArkhamCardDef.CardDef[]) =>
   usesLocalizedCardData()
-    ? cards.map((card) => localizeCardDef(card, store.getDbCard(card.art)))
+    ? cards.map((card) => localizeCardDef(card, store.getDbCard(dbArt(card))))
     : cards
 
 const localizedSetNames = computed(() => {
@@ -363,7 +411,7 @@ const cardSearchIndex = computed(() => {
 
   for (const card of allCards.value ?? []) {
     const set = findCardSetByArt(card.art)
-    const match: ArkhamDBCard | null = store.getDbCard(card.art)
+    const match: ArkhamDBCard | null = store.getDbCard(dbArt(card))
 
     index.set(card.cardCode, {
       set,
@@ -433,6 +481,7 @@ const setCountText = (set: CardSet) => {
 
   return ` (${implementedCount}/${total})`
 }
+
 
 const filteredCardsIgnoringPool = computed(() => {
   if (!allCards.value) return []
@@ -1202,12 +1251,10 @@ const stepCard = (delta: number) => {
 
     a,
     .set-icon,
-    .set-icon-font,
-    .count {
+    .set-icon-font {
       color: var(--spooky-green);
     }
   }
-
   .count {
     flex-shrink: 0;
     font-size: 0.72rem;
