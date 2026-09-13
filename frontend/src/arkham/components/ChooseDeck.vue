@@ -39,7 +39,7 @@ const deckType = ref<DeckType>("UseExistingDeck")
 
 const searchText = ref('')
 const filterClasses = ref<InvestigatorClass[]>([])
-const sortBy = ref<Arkham.DeckSort>('name')
+const sortBy = ref<ArkhamDeck.DeckSort>('name')
 const validOnly = ref(false)
 
 function deckPortraitCode(deck: ArkhamDeck.Deck): string {
@@ -70,7 +70,7 @@ const filteredDecks = computed(() => {
     return matchesClass && matchesSearch && matchesValidity
   })
 
-  return Arkham.sortDecks(result, sortBy.value)
+  return ArkhamDeck.sortDecks(result, sortBy.value)
 })
 
 const props = defineProps<{

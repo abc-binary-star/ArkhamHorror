@@ -534,7 +534,7 @@
     "editListLoaded": "List loaded — save to apply it",
     "editListFailed": "Could not fetch that list — is the link valid and the deck public?",
     "editSaved": "Deck updated",
-    "editSaveFailed": "Could not save the deck"
+    "editSaveFailed": "Could not save the deck",
     "lastPlayed": "Last played {date}",
     "neverPlayed": "Never played"
   },

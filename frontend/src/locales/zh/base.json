@@ -511,7 +511,7 @@
     "editListLoaded": "卡表已载入，点保存生效",
     "editListFailed": "拉取卡表失败——链接是否有效、卡组是否已公开？",
     "editSaved": "牌组已更新",
-    "editSaveFailed": "保存失败"
+    "editSaveFailed": "保存失败",
     "lastPlayed": "上次游玩 {date}",
     "neverPlayed": "从未游玩"
   },

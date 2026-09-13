@@ -27,13 +27,8 @@ const deleteId = ref<string | null>(null)
 const toast = useToast()
 const showNewDeck = ref(false)
 const searchText = ref('')
-const sortBy = ref<Arkham.DeckSort>('name')
+const sortBy = ref<ArkhamDeck.DeckSort>('name')
 const filterClasses = ref<InvestigatorClass[]>([])
-
-const CLASS_ORDER: Record<string, number> = {
-  guardian: 0, seeker: 1, rogue: 2, mystic: 3, survivor: 4, neutral: 5
-}
-const allClasses: InvestigatorClass[] = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"]
 
 async function addDeck(d: ArkhamDeck.Deck) {
   allDecks.value.push(d)
@@ -91,7 +86,7 @@ const decks = computed(() => {
     return matchesClass && matchesSearch
   })
 
-  return Arkham.sortDecks(result, sortBy.value)
+  return ArkhamDeck.sortDecks(result, sortBy.value)
 })
 
 async function sync(deck: ArkhamDeck.Deck) {
