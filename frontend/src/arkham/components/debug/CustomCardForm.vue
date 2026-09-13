@@ -4,7 +4,7 @@
  * It owns its own state and exposes `loadCard`, `reset` and `buildCustomCard`,
  * so the page can drive it for both new cards and edits without threading the
  * whole form through props. */
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import * as Api from '@/arkham/api'
 import {
   PLAYER_CARD_TYPES,
@@ -127,7 +127,6 @@ const blankForm = () => ({
   actions: [] as string[],
   // grouping, so a set of cards made together can be found together
   cardNumber: '',
-  setName: '',
   // investigator
   elderSign: '1',
   elderSignRevealSteps: [] as any[],
@@ -163,6 +162,17 @@ const form = reactive(blankForm())
 const dragging = ref<string | null>(null)
 const uploading = ref<string | null>(null)
 const error = ref<string | null>(null)
+/* Display the processed local blob immediately after a drop. In development,
+ * Vite can briefly return/cache a 404 for a newly written public image; using
+ * the uploaded URL directly then leaves a broken image until a refresh. */
+const artPreviews = reactive<Record<string, string>>({})
+
+function clearArtPreviews() {
+  for (const url of Object.values(artPreviews)) URL.revokeObjectURL(url)
+  for (const slot of Object.keys(artPreviews)) delete artPreviews[slot]
+}
+
+onUnmounted(clearArtPreviews)
 
 /* An investigator carries four images; everything else just its face. The extra
  * ones ride in meta so the card model stays one def plus one piece of art. */
@@ -304,6 +314,7 @@ const signatureOwner = computed(() => {
 })
 
 const addingSignature = ref(false)
+
 
 /* A library card carries the code the server sent, which `ToJSON CardCode`
  * prefixes with a `c`; `_signatures` holds the bare code. Comparing the two
@@ -469,7 +480,6 @@ function buildDef(cardCode: string): Record<string, any> {
   }
 
   if (form.cardNumber.trim()) def.meta.number = form.cardNumber.trim()
-  if (form.setName.trim()) def.meta.set = form.setName.trim()
 
   if (isInvestigator.value) {
     if (num(form.elderSign) !== null) def.meta._elderSign = num(form.elderSign)
@@ -500,13 +510,17 @@ function buildDef(cardCode: string): Record<string, any> {
     if (form.revelationSteps.length) def.meta._onRevelation = form.revelationSteps
   }
 
-  if (form.additionalCost) def.additionalCost = form.additionalCost
-  if (form.deckRestrictions.length) def.deckRestrictions = form.deckRestrictions
-  // Stored as [count, cardCode] pairs, which is how cdBondedWith decodes.
-  const bonded = form.bonded
-    .filter((b) => b.cardCode.trim())
-    .map((b) => [num(b.count) ?? 1, stripCardCodePrefix(b.cardCode.trim())])
-  if (bonded.length) def.bondedWith = bonded
+  // Gated the same way the fieldset is, so switching a half-filled card over to
+  // an investigator does not leave these behind where nothing can see them.
+  if (!isInvestigator.value) {
+    if (form.additionalCost) def.additionalCost = form.additionalCost
+    if (form.deckRestrictions.length) def.deckRestrictions = form.deckRestrictions
+    // Stored as [count, cardCode] pairs, which is how cdBondedWith decodes.
+    const bonded = form.bonded
+      .filter((b) => b.cardCode.trim())
+      .map((b) => [num(b.count) ?? 1, stripCardCodePrefix(b.cardCode.trim())])
+    if (bonded.length) def.bondedWith = bonded
+  }
 
   if (form.onPlaySteps.length) def.meta._onPlay = form.onPlaySteps
   if (form.abilities.length) def.meta._abilities = form.abilities
@@ -574,10 +588,19 @@ async function takeImage(slot: string, file: File | undefined) {
   if (!file || !file.type.startsWith('image/')) return
   error.value = null
   uploading.value = slot
+  let preview: string | null = null
+  const previousPreview = artPreviews[slot]
   try {
-    form.artUploaded[slot] = await Api.uploadCustomCardArt(await readImage(file))
+    const image = await readImage(file)
+    preview = URL.createObjectURL(image)
+    artPreviews[slot] = preview
+    form.artUploaded[slot] = await Api.uploadCustomCardArt(image)
     form.artUrls[slot] = ''
+    if (previousPreview) URL.revokeObjectURL(previousPreview)
   } catch (e: any) {
+    if (preview) URL.revokeObjectURL(preview)
+    if (previousPreview) artPreviews[slot] = previousPreview
+    else delete artPreviews[slot]
     console.error(e)
     error.value = e?.response?.data?.message ?? e?.message ?? 'Could not upload that image.'
   } finally {
@@ -595,6 +618,8 @@ async function onFile(slot: string, event: Event) {
 }
 
 function clearArt(slot: string) {
+  if (artPreviews[slot]) URL.revokeObjectURL(artPreviews[slot])
+  delete artPreviews[slot]
   form.artUploaded[slot] = null
   form.artUrls[slot] = ''
 }
@@ -603,7 +628,7 @@ function clearArt(slot: string) {
  * the def so an empty slot still reads as what it is. A slot that names a
  * printed card is shown as that card's image, so what you get is what you see. */
 const slotPreview = (slot: string) => {
-  const value = artFor(slot)
+  const value = artPreviews[slot] || artFor(slot)
   if (!value) return slot === 'art' ? renderCardPlaceholder(previewDef.value as any) : null
   const reference = cardArtReference(value)
   if (!reference) return value
@@ -633,6 +658,7 @@ const isPerPlayer = (v: any) => v?.tag === 'PerPlayer'
 
 async function loadCard(card: CustomCard) {
   await loadTraits()
+  clearArtPreviews()
   const def: Record<string, any> = card.def as any
   const meta = def.meta ?? {}
 
@@ -681,8 +707,8 @@ async function loadCard(card: CustomCard) {
   form.investigatorSanity = meta.sanity === undefined ? '7' : String(meta.sanity)
   form.signatures = (meta._signatures ?? []).map(stripCardCodePrefix)
   form.cardNumber = meta.number ?? ''
-  form.setName = meta.set ?? ''
-  form.elderSign = meta._elderSign === undefined ? '1' : String(meta._elderSign)
+  // Blank when the card has none, so no Elder sign tab is offered for it.
+  form.elderSign = meta._elderSign === undefined ? '' : String(meta._elderSign)
   form.elderSignRevealSteps = meta._elderSignRevealSteps ?? []
   form.elderSignSteps = meta._elderSignSteps ?? []
   form.elderSignSuccessSteps = meta._elderSignSuccessSteps ?? []
@@ -720,6 +746,7 @@ async function loadCard(card: CustomCard) {
 }
 
 function reset() {
+  clearArtPreviews()
   Object.assign(form, blankForm())
   loadedCode.value = null
   error.value = null
@@ -865,10 +892,6 @@ defineExpose({ loadCard, reset, buildCustomCard, cardType: computed(() => form.c
               Card number
               <input v-model="form.cardNumber" type="text" placeholder="1" @keydown.stop />
             </label>
-            <label>
-              Set
-              <input v-model="form.setName" type="text" placeholder="My Expansion" @keydown.stop />
-            </label>
           </div>
 
           <label>
@@ -954,55 +977,17 @@ defineExpose({ loadCard, reset, buildCustomCard, cardType: computed(() => form.c
           </fieldset>
 
           <fieldset v-if="isInvestigator">
-            <legend>Elder sign</legend>
-            <label>
-              Modifier
-              <input v-model="form.elderSign" type="number" @keydown.stop />
-            </label>
-            <p class="hint">
-              What happens the moment it is drawn, before anything can react to the reveal — where
-              a flag this card's own abilities read has to be set:
-            </p>
-            <StepsEditor
-              :queryKinds="QUERY_KINDS"
-              :bindings="cardBindings(form.cardType)"
-              :path="'elderSignReveal'"
-              :modelValue="form.elderSignRevealSteps"
-              @update:modelValue="form.elderSignRevealSteps = $event"
-            />
-            <p class="hint">What it does when it resolves, beyond the modifier:</p>
-            <StepsEditor
-              :queryKinds="QUERY_KINDS"
-              :bindings="cardBindings(form.cardType)"
-              :path="'elderSign'"
-              :modelValue="form.elderSignSteps"
-              @update:modelValue="form.elderSignSteps = $event"
-            />
-            <p class="hint">
-              And what it does only if you then succeed — success is not known when the token
-              resolves, so these run when the test is passed:
-            </p>
-            <StepsEditor
-              :queryKinds="QUERY_KINDS"
-              :bindings="cardBindings(form.cardType)"
-              :path="'elderSignSuccess'"
-              :modelValue="form.elderSignSuccessSteps"
-              @update:modelValue="form.elderSignSuccessSteps = $event"
-            />
-          </fieldset>
-
-          <fieldset v-if="isInvestigator">
             <legend>Signature cards</legend>
             <p v-if="!signatureChoices.length" class="hint">
               Build the cards first and they will be listed here to pick from.
             </p>
             <template v-else>
               <div class="chips">
-                <span v-for="code in form.signatures" :key="code" class="chip on">
+                <span v-for="code in form.signatures" :key="code" class="chip card-chip">
                   {{ signatureCard(code)?.def.name.title ?? code }}
                   <button type="button" class="chip-remove" @click="removeSignature(code)">×</button>
                 </span>
-                <button type="button" class="chip" @click="addingSignature = !addingSignature">+</button>
+                <button type="button" class="chip add-chip" @click="addingSignature = !addingSignature">+</button>
               </div>
               <select
                 v-if="addingSignature"
@@ -1100,38 +1085,8 @@ defineExpose({ loadCard, reset, buildCustomCard, cardType: computed(() => form.c
             </div>
           </fieldset>
 
-          <fieldset v-if="canHaveRevelation">
-            <legend>Revelation</legend>
-            <BoolField
-              v-if="!revelationImplied"
-              label="Resolves as it is drawn"
-              v-model="form.revelation"
-            />
-            <p v-else class="hint">
-              {{ isTreachery ? 'A treachery' : 'A weakness asset or event' }} resolves as soon as
-              it is drawn, so it always has a revelation.
-            </p>
-            <template v-if="hasRevelation">
-              <label v-if="hasRevelationPlacement">
-                Where it ends up
-                <select v-model="revelationPlacement">
-                  <option v-for="p in REVELATION_PLACEMENTS" :key="p.value" :value="p.value">
-                    {{ p.label }}
-                  </option>
-                </select>
-              </label>
-              <p class="hint">What it does when it is revealed:</p>
-              <StepsEditor
-                :queryKinds="QUERY_KINDS"
-                :bindings="cardBindings(form.cardType)"
-              :path="'revelation'"
-              :modelValue="form.revelationSteps"
-                @update:modelValue="form.revelationSteps = $event"
-              />
-            </template>
-          </fieldset>
-
-          <fieldset>
+          <!-- An investigator is never played, so none of this applies to one. -->
+          <fieldset v-if="!isInvestigator">
             <legend>Playing it</legend>
             <p class="hint">
               What the card makes you do beyond paying its cost, checked and taken as part of
@@ -1180,10 +1135,40 @@ defineExpose({ loadCard, reset, buildCustomCard, cardType: computed(() => form.c
           <fieldset>
             <legend>Abilities</legend>
             <AbilityEditor
+              section="abilities"
               :cardType="form.cardType"
+              :canRevelation="canHaveRevelation"
+              :revelationImplied="revelationImplied"
+              :hasRevelationPlacement="hasRevelationPlacement"
+              :revelationPlacements="REVELATION_PLACEMENTS"
+              :isInvestigator="isInvestigator"
               v-model:abilities="form.abilities"
               v-model:handlers="form.handlers"
               v-model:modifiers="form.modifiers"
+              v-model:revelation="form.revelation"
+              v-model:revelationPlacement="revelationPlacement"
+              v-model:revelationSteps="form.revelationSteps"
+              v-model:elderSign="form.elderSign"
+              v-model:elderSignRevealSteps="form.elderSignRevealSteps"
+              v-model:elderSignSteps="form.elderSignSteps"
+              v-model:elderSignSuccessSteps="form.elderSignSuccessSteps"
+            />
+          </fieldset>
+
+          <!-- A listener is the card reacting to an engine message, not an
+               ability, so it gets a box of its own. -->
+          <fieldset>
+            <legend>Listens for</legend>
+            <p class="hint">
+              Engine messages this card reacts to directly, for effects that no ability window
+              covers.
+            </p>
+            <AbilityEditor
+              section="listeners"
+              :cardType="form.cardType"
+              :abilities="form.abilities"
+              :modifiers="form.modifiers"
+              v-model:handlers="form.handlers"
             />
           </fieldset>
 
@@ -1203,6 +1188,57 @@ defineExpose({ loadCard, reset, buildCustomCard, cardType: computed(() => form.c
 </template>
 
 <style scoped lang="scss">
+.custom-card-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-index-max);
+}
+
+.custom-card-modal {
+  background: var(--surface-panel);
+  border: 1px solid var(--box-border);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 1.25rem 1.5rem 1.5rem;
+  width: min(900px, 94vw);
+  max-height: 92vh;
+  overflow: auto;
+}
+
+.custom-card-tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--box-border);
+  margin-bottom: 1rem;
+
+  button {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-dim);
+    cursor: pointer;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.9rem;
+
+    &.on {
+      border-bottom-color: var(--spooky-green);
+      color: var(--spooky-green);
+    }
+  }
+
+  .count {
+    background: var(--panel-inset);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    margin-left: 0.25rem;
+    padding: 0.05rem 0.4rem;
+  }
+}
+
 .custom-card-body {
   display: flex;
   gap: 1.25rem;
@@ -1258,8 +1294,8 @@ defineExpose({ loadCard, reset, buildCustomCard, cardType: computed(() => form.c
     justify-content: center;
     background: color-mix(in srgb, var(--surface-panel) 88%, transparent);
     border: 2px dashed var(--brass);
-    border-radius: 8px;
     color: var(--text);
+    border-radius: 8px;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.12s ease;
@@ -1388,18 +1424,20 @@ select {
   width: 100%;
 }
 
+/* A card this one is resolved against, so it wears the same green a known card
+   code does in CardCodeField. */
 .owner-pill {
   align-self: flex-start;
-  background: color-mix(in srgb, var(--teal) 12%, transparent);
-  border: 1px solid var(--teal);
+  background: rgba(190, 242, 100, 0.12);
+  border: 1px solid #bef264;
   border-radius: 999px;
-  color: var(--teal);
+  color: #bef264;
   font-size: 0.8rem;
   padding: 0.2rem 0.7rem;
   text-decoration: none;
 
   &:hover {
-    background: color-mix(in srgb, var(--teal) 22%, transparent);
+    background: rgba(190, 242, 100, 0.22);
   }
 }
 
@@ -1466,7 +1504,6 @@ fieldset {
 
   align-items: center;
   background: var(--surface-raised);
-  border: var(--edge-width) solid var(--edge-dim);
   border-radius: 6px;
   display: flex;
   gap: 0.3rem;
@@ -1511,7 +1548,7 @@ fieldset {
 
 .chip {
   background: var(--surface-raised);
-  border: 1px solid var(--edge-dim);
+  border: 1px solid transparent;
   border-radius: 999px;
   color: var(--text);
   cursor: pointer;
@@ -1519,14 +1556,55 @@ fieldset {
   padding: 0.25rem 0.6rem;
 
   &:hover {
-    background: var(--button-highlight);
+    background: var(--panel-inset);
   }
 
   &.on {
-    background: var(--spooky-green);
-    border-color: var(--spooky-green);
-    color: var(--text-on-dark);
+    background: var(--button-highlight);
+    border-color: var(--button-highlight);
+    color: #10131f;
   }
+}
+
+/* A chip that names an actual card, as against a chip that toggles a trait or a
+   keyword. Same green as a known card code in CardCodeField, so "we found this
+   card" looks the same wherever it is said. */
+.card-chip {
+  background: rgba(190, 242, 100, 0.12);
+  border-color: #bef264;
+  color: #bef264;
+
+  &:hover {
+    background: rgba(190, 242, 100, 0.22);
+  }
+}
+
+/* Opens the picker; it is not a card itself, so it stays the form's plain grey. */
+.add-chip {
+  background: var(--surface-raised);
+  border-color: var(--edge-dim);
+  color: var(--text-dim);
+  line-height: 1;
+  padding: 0.25rem 0.55rem;
+
+  &:hover {
+    background: var(--button-highlight);
+    border-color: var(--edge-faint);
+    color: var(--text);
+  }
+}
+
+.custom-card-library {
+  min-height: 200px;
+}
+
+.library-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.75rem;
+  max-height: 60vh;
+  overflow: auto;
+  padding: 0.25rem;
 }
 
 .library-card {
@@ -1558,7 +1636,47 @@ fieldset {
   }
 
   &.on {
-    border-color: var(--brass);
+    border-color: var(--button-highlight);
+  }
+}
+
+.library-edit {
+  position: absolute;
+  top: 0.35rem;
+  left: 0.35rem;
+  background: rgba(0, 0, 0, 0.65);
+  border: none;
+  border-radius: 50%;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.8rem;
+  height: 1.4rem;
+  line-height: 1;
+  opacity: 0;
+  width: 1.4rem;
+
+  .library-card:hover & {
+    opacity: 1;
+  }
+}
+
+.library-forget {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  background: rgba(0, 0, 0, 0.65);
+  border: none;
+  border-radius: 50%;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.9rem;
+  height: 1.4rem;
+  line-height: 1;
+  opacity: 0;
+  width: 1.4rem;
+
+  .library-card:hover & {
+    opacity: 1;
   }
 }
 
@@ -1566,6 +1684,32 @@ details summary {
   cursor: pointer;
   font-size: 0.85rem;
   opacity: 0.85;
+}
+
+.custom-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+
+  button {
+    background: var(--surface-raised);
+    border: 1px solid var(--button-highlight);
+    border-radius: 4px;
+    color: var(--text);
+    cursor: pointer;
+    padding: 0.5rem 0.8rem;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    &.secondary {
+      border-color: var(--edge-dim);
+      margin-left: auto;
+    }
+  }
 }
 
 .link {
@@ -1578,7 +1722,19 @@ details summary {
   text-align: left;
 }
 
+.custom-card-status {
+  opacity: 0.8;
+}
+
+.editing-banner {
+  background: color-mix(in srgb, var(--teal) 10%, transparent);
+  border-left: 3px solid var(--teal);
+  font-size: 0.85rem;
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.7rem;
+}
+
 .custom-card-error {
-  color: var(--delete);
+  color: #f88;
 }
 </style>
