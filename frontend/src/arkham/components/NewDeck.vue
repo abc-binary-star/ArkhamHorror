@@ -7,6 +7,9 @@ import { fetchInvestigators, newDeck, validateDeck } from '@/arkham/api'
 import ArkhamDbDeck from '@/arkham/components/ArkhamDbDeck.vue';
 import { ArkhamDbDecklist } from '@/arkham/types/Deck';
 import { useCardStore } from '@/stores/cards'
+import { normalizeArkhamBuildDeckCodes } from '@/arkham/arkhamBuildImport'
+import { libraryCard, loadLibrary } from '@/arkham/customCardLibrary'
+import { arkhamBuildCustomCardCode } from '@/arkham/customCards'
 
 const { t } = useI18n()
 
@@ -58,6 +61,9 @@ function validationErrorsFromResponse(err: unknown): string[] {
     const key = normalizeCode(code)
     const hit = cardByCode.value.get(key)
     if (hit) return hit.xp ? `${hit.name.title} (${hit.xp})` : hit.name.title
+    const custom =
+      libraryCard(`c${key}`) ?? libraryCard(`c${arkhamBuildCustomCardCode(key)}`)
+    if (custom) return `${custom.def.name.title} (custom)`
     return `Unknown card: ${code}`
   })
 }
@@ -112,7 +118,7 @@ function loadDeckFromFile(e: Event) {
     const reader = new FileReader()
     reader.onloadend = (e1: ProgressEvent<FileReader>) => {
       if(!e1?.target?.result) return
-      let data = JSON.parse(e1.target.result.toString())
+      let data = normalizeArkhamBuildDeckCodes(JSON.parse(e1.target.result.toString()))
       deckList.value = data
       investigator.value = null
       investigatorError.value = null
@@ -185,6 +191,9 @@ async function runValidations() {
     await validateDeck(deckList.value)
     valid.value = true
   } catch (err: unknown) {
+    // The custom library is what names a custom card in the error list, and
+    // this page never needed it before now.
+    await loadLibrary()
     errors.value = validationErrorsFromResponse(err)
   }
 }
@@ -219,6 +228,7 @@ async function createDeck() {
     deck.value = null
     emit('newDeck', created)
   } catch (err: unknown) {
+    await loadLibrary()
     errors.value = validationErrorsFromResponse(err)
   } finally {
     saving.value = false
