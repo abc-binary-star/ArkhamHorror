@@ -62,7 +62,7 @@ import Arkham.Helpers.Source
 import Arkham.Helpers.Window
 import Arkham.History
 import Arkham.I18n
-import Arkham.Investigator.Types (Field (..))
+import Arkham.Investigator.Types (Field (..), Investigator)
 import Arkham.Keyword (_Swarming)
 import Arkham.Keyword qualified as Keyword
 import Arkham.Matcher (
@@ -1621,7 +1621,7 @@ instance RunMessage EnemyAttrs where
           -- Emit at resolution, after cancellation windows, rather than when
           -- the attack is merely proposed (or once for a massive attack group).
           when (allowAttack && not details.cancelled) do
-            investigator <- getInvestigator iid
+            investigator <- getAttrs @Investigator iid
             let attackTitle = case attackType details of
                   AttackOfOpportunity -> "attackNotice.opportunity"
                   RetaliateAttack -> "attackNotice.retaliate"

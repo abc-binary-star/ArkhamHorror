@@ -16,13 +16,13 @@ forestPassage = location ForestPassage Cards.forestPassage 2 (Static 1)
 instance HasAbilities ForestPassage where
   getAbilities (ForestPassage a) =
     extendRevealed1 a
-      $ restricted a 1 (Here <> exists (LocationWithTitle "Moonlit Forest" <> #unrevealed))
+      $ restricted a 1 (Here <> exists (LocationWithTitle "Moonlit Forest" <> UnrevealedLocation))
       $ FastAbility (PlaceClueOnLocationCost (PerPlayer 1))
 
 instance RunMessage ForestPassage where
   runMessage msg l@(ForestPassage attrs) = runQueueT $ case msg of
     UseThisAbility iid (isSource attrs -> True) 1 -> do
-      forests <- select $ LocationWithTitle "Moonlit Forest" <> #unrevealed
+      forests <- select $ LocationWithTitle "Moonlit Forest" <> UnrevealedLocation
       chooseTargetM iid forests $ lookAtRevealed iid (attrs.ability 1)
       pure l
     _ -> ForestPassage <$> liftRunMessage msg attrs

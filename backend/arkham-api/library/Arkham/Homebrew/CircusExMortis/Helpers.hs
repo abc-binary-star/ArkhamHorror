@@ -8,10 +8,9 @@ import Arkham.Classes.Query
 import Arkham.Direction (Direction (..))
 import Arkham.Enemy.Types (Field (EnemyPlacement))
 import Arkham.Helpers.Campaign (getCompletedSteps, getMaybeCampaignStoryCard, getOwner)
-import Arkham.Helpers.CustomChaosBag
 import Arkham.Helpers.FlavorText (chaosTokenImg, cols, compose, img, p, setTitle, tokenReveal)
 import Arkham.Helpers.Modifiers (ModifierType (..))
-import Arkham.Helpers.Scenario (scenarioField, setScenarioMeta)
+import Arkham.Helpers.Scenario (getScenarioMetaKeyDefault, scenarioField, setScenarioMeta)
 import Arkham.Homebrew.CircusExMortis.CardDefs.Acts qualified as Acts
 import Arkham.Homebrew.CircusExMortis.CardDefs.Assets qualified as Assets
 import Arkham.Homebrew.CircusExMortis.CardDefs.Locations qualified as Locations
@@ -31,7 +30,6 @@ import Arkham.Projection
 import Arkham.Scenario.Types (Field (ScenarioMeta))
 import Arkham.Source
 import Arkham.Target
-import Arkham.TokenBag
 import Data.Aeson.KeyMap qualified as KeyMap
 
 campaignI18n :: (HasI18n => a) -> a
@@ -225,21 +223,21 @@ curseOfTheRougarouId = "81001"
 {- | The fury bag (guide p11) is a second bag of tokens that are explicitly NOT
 chaos tokens: it is never drawn from during a skill test and has no
 'HasChaosTokenValue'. 'ChaosTokenFace' is reused purely as the tagged union of
-faces the bag can hold. It is the scenario's named "fury" custom chaos bag,
-so every card that says "reveal a fury token" shares its state and debug override.
+faces the bag can hold. The bag lives in scenario meta so every card that says
+"reveal a fury token" reads the same list.
 -}
-furyBagKey :: Text
-furyBagKey = "fury"
+furyBagKey :: Key
+furyBagKey = "furyBag"
 
 -- | The bag the scenario is set up with; agenda flips add ☾ tokens on top.
 initialFuryBag :: [ChaosTokenFace]
 initialFuryBag = [Skull, Cultist, Tablet, ElderThing]
 
-getFuryBag :: HasGame m => m CustomChaosBag
-getFuryBag = getCustomChaosBag furyBagKey
+getFuryBag :: HasGame m => m [ChaosTokenFace]
+getFuryBag = getScenarioMetaKeyDefault furyBagKey initialFuryBag
 
-setFuryBag :: ReverseQueue m => CustomChaosBag -> m ()
-setFuryBag = setCustomChaosBag furyBagKey
+setFuryBag :: ReverseQueue m => [ChaosTokenFace] -> m ()
+setFuryBag = setScenarioMetaKey furyBagKey
 
 {- | Write one key of the scenario's meta object, leaving the rest alone.
 'setScenarioMeta' replaces the whole value, and the engine has no per-key
@@ -256,7 +254,7 @@ setScenarioMetaKey k v = do
 
 -- | Setup the scenario-owned Fury bag with skull, cultist, tablet, and elder thing.
 initFuryBag :: ReverseQueue m => m ()
-initFuryBag = initCustomChaosBag furyBagKey initialFuryBag
+initFuryBag = setFuryBag initialFuryBag
 
 {- | "Add a ☾ token to the fury bag" (Restless Night, Midnight Snacking). The
 bag only ever grows, so this is the one place its contents change.
@@ -264,8 +262,7 @@ bag only ever grows, so this is the one place its contents change.
 addFuryToken :: ReverseQueue m => ChaosTokenFace -> m ()
 addFuryToken face = do
   bag <- getFuryBag
-  tokenId <- getRandom
-  setFuryBag bag {bagTokens = BagToken tokenId face : bag.tokens}
+  setFuryBag (face : bag)
 
 {- | The direction vocabulary shared by The Dark Young Stir... and Act 1's back.
 It is a fixed mapping onto the four Camp locations flanking Ringmaster's
@@ -322,25 +319,19 @@ furyDirectionLocations direction =
       [furyDirectionPos direction, furyDirectionOutwardPos direction]
 
 {- | Draw @n@ pending tokens without replacement; a ☾ costs nothing but adds two
-more pending draws (The Dark Young Stir's recursion). Every drawn token is
-returned once the instruction resolves; only a consumed debug override changes
-the persisted state.
+more pending draws (The Dark Young Stir's recursion). The stored bag stays
+unchanged because all drawn tokens return after resolution.
 -}
 
--- The temporary set-aside pile prevents repeats during Moon recursion.
-drawFuryBagTokens
-  :: MonadRandom m => CustomChaosBag -> Int -> m ([ChaosTokenFace], CustomChaosBag)
-drawFuryBagTokens bag n
-  | n <= 0 = pure ([], bag)
-  | otherwise = do
-      (drawn, bag') <- drawBagToken (.face) bag
-      case drawn of
-        Nothing -> pure ([], bag')
-        Just token -> do
-          let face = token.face
-          let pending = if face == MoonToken then n + 1 else n - 1
-          (faces, finalBag) <- drawFuryBagTokens (setAsideBagToken bag') pending
-          pure (face : faces, finalBag)
+drawFuryTokens :: MonadRandom m => [ChaosTokenFace] -> Int -> m [ChaosTokenFace]
+drawFuryTokens pool n
+  | n <= 0 = pure []
+  | otherwise = case nonEmpty pool of
+      Nothing -> pure []
+      Just candidates -> do
+        face <- sample candidates
+        let pending = if face == MoonToken then n + 1 else n - 1
+        (face :) <$> drawFuryTokens (deleteFirst face pool) pending
 
 {- | "Reveal a fury token", resolved through The Dark Young Stir...: every
 Towering Dark Young in play immediately attacks each investigator at the
@@ -349,8 +340,7 @@ location the drawn token names. A ☾ reveals two more tokens instead.
 revealFuryToken :: (ReverseQueue m, Sourceable source) => source -> m ()
 revealFuryToken source = do
   bag <- getFuryBag
-  (faces, drawnBag) <- drawFuryBagTokens bag 1
-  setFuryBag $ returnSetAsideTokens drawnBag
+  faces <- drawFuryTokens bag 1
   for_ faces \face -> scenarioI18n "harmsWay" $ scope "furyReveal" do
     case furyDirection face of
       Nothing -> storyWithContinue $ tokenReveal do
@@ -388,23 +378,19 @@ revealFuryToken source = do
             _ -> pure ()
 
 {- | Act 1's back reads the same direction table for a different purpose: a ☾ is
-ignored and another token drawn (no recursion), and nothing attacks. Persist the
-consumed debug override here too, even though all drawn tokens return to the bag.
+ignored and another token drawn (no recursion), and nothing attacks.
 -}
 drawFuryTokenForDirection :: ReverseQueue m => (ChaosTokenFace -> m ()) -> m (Maybe FuryDirection)
 drawFuryTokenForDirection onReveal = go =<< getFuryBag
  where
-  go bag = do
-    (drawn, bag') <- drawBagToken (.face) bag
-    case drawn of
-      Nothing -> setFuryBag (returnSetAsideTokens bag') $> Nothing
-      Just token -> do
-        onReveal token.face
-        case furyDirection token.face of
-          Just direction -> do
-            setFuryBag $ returnSetAsideTokens $ returnBagToken bag'
-            pure $ Just direction
-          Nothing -> go $ setAsideBagToken bag'
+  go pool = case nonEmpty pool of
+    Nothing -> pure Nothing
+    Just candidates -> do
+      face <- sample candidates
+      onReveal face
+      case furyDirection face of
+        Just direction -> pure $ Just direction
+        Nothing -> go $ deleteFirst face pool
 
 -- * The Primrose Path
 
