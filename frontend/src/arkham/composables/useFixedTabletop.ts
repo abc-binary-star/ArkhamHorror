@@ -3,6 +3,7 @@ import { useStorage } from '@vueuse/core'
 export const TABLETOP_WIDTH = 1472
 export const TABLETOP_HEIGHT = 920
 export const TABLETOP_MESSAGE = 'arkham-tabletop-navigation'
+export const TABLETOP_DISMISS = 'arkham-tabletop-dismiss'
 
 // Only a frame created by our host may render the inner game. A URL parameter
 // alone must not enable this, otherwise opening a copied link could recurse.

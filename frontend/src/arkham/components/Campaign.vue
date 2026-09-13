@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import type { Game } from '@/arkham/types/Game';
 import type { Campaign } from '@/arkham/types/Campaign';
 import StoryQuestion from '@/arkham/components/StoryQuestion.vue';
@@ -167,15 +167,60 @@ const inScenarioStep = computed(() => {
 // of the Morrígan's weakness swap asked between deck loads). It must render
 // through the same question branches as an active game, or the screen is blank.
 const hasQuestion = computed(() => Object.keys(props.game.question).length > 0)
+
+// The deck screen is state-driven (a pending ChooseDeck/ChooseJoinDeck ask), so
+// "back to the interlude" cannot be a route push: remember the dismissal locally
+// and reveal the interlude over it until the ask itself goes away or the seat
+// switch changes who is answering.
+const deckScreenDismissed = ref(false)
+watch(chooseDeck, (v) => { if (!v) deckScreenDismissed.value = false })
+watch(() => props.playerId, () => { deckScreenDismissed.value = false })
+
+// The continuation ask itself is not a reliable marker: seating a new
+// investigator replaces the question map with the join's deck ask, while the
+// campaign step stays parked on the interlude. Derive "there is an interlude to
+// return to" from the step alone.
+const campaignStepContents = computed(() => {
+  const step = props.game.campaign?.step
+  if (!step) return null
+  if (step.tag === 'ContinueCampaignStep') return step.contents
+  if (step.tag === 'StandaloneScenarioStep' && step.contents[1]?.tag === 'ContinueCampaignStep') {
+    return step.contents[1].contents
+  }
+  return null
+})
+
+const deckBackInterlude = computed(
+  () => deckScreenDismissed.value && campaignStepContents.value !== null
+)
 </script>
 
 <template>
   <div v-if="upgradeDeck" id="game" class="game">
     <UpgradeDeck :game="game" :playerId="playerId" @choose="choose" @update="update" />
   </div>
-  <div v-else-if="chooseDeck" id="game" class="game">
+  <div v-else-if="chooseDeck && !deckScreenDismissed" id="game" class="game">
     <h2 v-if="questionLabel" class="title question-label">{{ questionLabel }}</h2>
-    <ChooseDeck :game="game" :playerId="playerId" @choose="choose" />
+    <ChooseDeck
+      :game="game"
+      :playerId="playerId"
+      :can-back="campaignStepContents !== null"
+      @choose="choose"
+      @back="deckScreenDismissed = true"
+    />
+  </div>
+  <div v-else-if="deckBackInterlude" id="game" class="game">
+    <button class="screen-back" @click="deckScreenDismissed = false">→ {{ $t('campaign.toDeckSelection') }}</button>
+    <ContinueCampaign
+      :game="game"
+      :campaign="campaign"
+      :scenario="game.scenario ?? undefined"
+      :playerId="playerId"
+      :canUpgradeDecks="campaignStepContents.canUpgradeDecks"
+      :step="scenarioContinuationStep || campaignStepContents.nextStep"
+      :chooseSideStory="campaignStepContents.chooseSideStory"
+      :canChooseSideStory="campaignStepContents.canChooseSideStory"
+    />
   </div>
   <div v-else-if="continueCampaign" id="game" class="game">
     <ContinueCampaign
@@ -227,6 +272,17 @@ const hasQuestion = computed(() => Object.keys(props.game.question).length > 0)
 </template>
 
 <style scoped>
+.screen-back {
+  margin: 16px 0 0 16px;
+  background: var(--button-2);
+  color: var(--button-2-text);
+}
+
+.screen-back:hover {
+  background: var(--button-2-highlight);
+  cursor: pointer;
+}
+
 .card {
   box-shadow: 0 3px 6px rgba(0,0,0,0.23), 0 3px 6px rgba(0,0,0,0.53);
   border-radius: 6px;

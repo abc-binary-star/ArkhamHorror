@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import { displayTabooList } from '@/arkham/taboo';
 import { portraitImage } from '@/arkham/cardImages'
-import { ref, computed, inject, onUnmounted } from 'vue';
-import { fetchGame, fetchGameStep, upgradeDeck } from '@/arkham/api';
+import { ref, computed, inject, onMounted, onUnmounted, watch } from 'vue';
+import { fetchDeck, fetchDecks, fetchGame, fetchGameStep, newDeck, upgradeDeck } from '@/arkham/api';
 import { localizeArkhamDBBaseUrl, processArkhamBuildDeck } from '@/arkham/helpers';
-import { ArkhamDbDecklist } from '@/arkham/types/Deck';
+import { ArkhamDbDecklist, Deck, deckMetaValue } from '@/arkham/types/Deck';
 import { Game } from '@/arkham/types/Game';
 import { Investigator } from '@/arkham/types/Investigator';
 import { baseKey } from '@/arkham/types/Log';
@@ -13,6 +13,7 @@ import XpBreakdown from '@/arkham/components/XpBreakdown.vue';
 import type { XpBreakdownStep } from '@/arkham/types/Xp';
 import Question from '@/arkham/components/Question.vue';
 import { isUsableDecklist, loadUpgradeDeckFromJsonText } from '@/arkham/upgradeDeckUpload';
+import { randomId } from '@/arkham/randomId';
 import { deckRestrictionError, normalizeCardCode } from '@/arkham/deckRestrictions';
 import { useI18n } from 'vue-i18n';
 import { soloKey } from '@/arkham/injectionKeys';
@@ -25,7 +26,28 @@ export interface Props {
 
 const { t } = useI18n()
 
-const question = computed(() => props.game.question[props.playerId])
+function isChooseUpgradeDeckQuestion(q: unknown): boolean {
+  if (!q || typeof q !== 'object') return false
+  const question = q as { tag?: string; question?: unknown }
+  if (question.tag === 'ChooseUpgradeDeck') return true
+  return isChooseUpgradeDeckQuestion(question.question)
+}
+
+// Upgrade questions are keyed by playerId in some modes and investigator id in
+// others; resolve the entry that belongs to this seat before falling back.
+const upgradeQuestionEntry = computed(() => {
+  const entries = Object.entries(props.game.question).filter(([, q]) => isChooseUpgradeDeckQuestion(q))
+  const ownEntry = entries.find(([questionId]) => questionId === props.playerId)
+    ?? entries.find(([investigatorId]) => props.game.investigators[investigatorId]?.playerId === props.playerId)
+  return ownEntry ?? (solo.value ? entries[0] : undefined) ?? null
+})
+
+const upgradeQuestionInvestigatorId = computed(() => {
+  const questionId = upgradeQuestionEntry.value?.[0]
+  return questionId && props.game.investigators[questionId] ? questionId : null
+})
+
+const question = computed(() => upgradeQuestionEntry.value?.[1] ?? props.game.question[props.playerId])
 const questionLabel = computed(() => {
   if (question.value)
     return question.value.tag === 'QuestionLabel' ? question.value.label : null
@@ -36,6 +58,7 @@ const fetching = ref(false)
 // which is client-side deck validation. A failed upgrade changes nothing server-side, so
 // the player must be told rather than left looking at an unchanged screen (#5256).
 const submitError = ref<string | null>(null)
+const loadError = ref<string | null>(null)
 const props = defineProps<Props>()
 const emit = defineEmits<{ choose: [value: number]; update: [game: Game] }>()
 const choose = (idx: number) => emit('choose', idx)
@@ -95,7 +118,7 @@ const investigator = computed(() => {
   })
 })
 const investigatorId = computed(() => !solo && deckInvestigator.value ? `c${deckInvestigator.value}` : investigator.value?.id)
-const originalInvestigatorId = computed(() => investigator.value?.id)
+const originalInvestigatorId = computed(() => upgradeQuestionInvestigatorId.value ?? investigator.value?.id)
 const xp = computed(() => {
   const inv = investigator.value
   if (!inv) return undefined
@@ -114,6 +137,239 @@ const killedInvestigators = computed(() => {
   }
   return [...toInvestigators('KilledInvestigators'), ...toInvestigators('DrivenInsaneInvestigators')]
 })
+
+function investigatorCode(code: string | undefined | null) {
+  return (code ?? '').replace(/^c/, '')
+}
+
+const targetInvestigatorCode = computed(() =>
+  investigatorCode(investigator.value?.cardCode || originalInvestigatorId.value || investigator.value?.id)
+)
+
+const canUpgradeOriginalInvestigator = computed(() =>
+  Boolean(question.value && originalInvestigatorId.value && !killedInvestigators.value.includes(originalInvestigatorId.value))
+)
+
+const arkhamBuildShareRegex = /https:\/\/arkham\.build\/(?:deck\/view|share(?:\/view)?)\/([^/?]+)/
+const arkhamBuildDecklistRegex = /https:\/\/arkham\.build\/decklist(?:\/view)?\/([^/?]+)/
+
+function openDeckInNewTab(url: string) {
+  window.open(url, '_blank', 'noopener')
+}
+
+function openBuildTab() {
+  // Open synchronously from the click handler so browsers do not block the tab
+  // while the campaign deck branch is created asynchronously.
+  const tab = window.open('about:blank', '_blank')
+  if (tab) tab.opener = null
+  return tab
+}
+
+function arkhamDbApiUrl(value: string) {
+  const arkhamDbRegex = /https:\/\/(?:[a-zA-Z0-9-]+\.)?arkhamdb\.com\/(deck(list)?)(\/view)?\/([^/?]+)/
+  const matches = value.match(arkhamDbRegex)
+  return matches ? `${localizeArkhamDBBaseUrl()}/api/public/${matches[1]}/${matches[4]}` : null
+}
+
+function appBasePath() {
+  return import.meta.env.BASE_URL.replace(/\/$/, '')
+}
+
+function localDeckViewUrl(deckId: string) {
+  return `${window.location.origin}${appBasePath()}/build/deck/view/${deckId}?upgrade_xp=${xp.value ?? 0}`
+}
+
+function localDeckEditUrl(deckId: string) {
+  return `${window.location.origin}${appBasePath()}/build/deck/edit/${deckId}?upgrade_xp=${xp.value ?? 0}`
+}
+
+function localDeckIdFromUrl(value: string) {
+  try {
+    const parsed = new URL(value, window.location.origin)
+    const match = parsed.pathname.match(/\/build\/deck\/(?:view|edit)\/([^/]+)/)
+    return match?.[1] ?? null
+  } catch {
+    return null
+  }
+}
+
+const localDeckIdFromCurrentUrl = computed(() => {
+  if (!currentDeckUrl.value) return null
+  return localDeckIdFromUrl(currentDeckUrl.value)
+})
+
+function localDeckMatchesInvestigator(candidate: Deck) {
+  const target = targetInvestigatorCode.value
+  if (!target) return false
+  const status = deckMetaValue(candidate, 'arkham_horror_campaign_status')
+  const deckGameId = deckMetaValue(candidate, 'arkham_horror_campaign_game_id')
+  if (status === 'active' && deckGameId && deckGameId !== props.game.id) return false
+  return investigatorCode(candidate.list.investigator_code) === target
+}
+
+function isCurrentCampaignDeck(candidate: Deck) {
+  return deckMetaValue(candidate, 'arkham_horror_campaign_status') === 'active' &&
+    deckMetaValue(candidate, 'arkham_horror_campaign_game_id') === props.game.id &&
+    deckMetaValue(candidate, 'arkham_horror_campaign_investigator') === investigatorCode(originalInvestigatorId.value)
+}
+
+function localDeckScore(candidate: Deck) {
+  if (isCurrentCampaignDeck(candidate)) return 100
+  if (localDeckIdFromCurrentUrl.value === candidate.id) return 90
+  if (deckMetaValue(candidate, 'arkham_horror_campaign_status') === 'active') return 10
+  return 0
+}
+
+const localDecks = ref<Deck[]>([])
+const localDecksLoaded = ref(false)
+const selectedLocalDeckId = ref<string | null>(null)
+
+const localDeckCandidates = computed(() => localDecks.value
+  .filter(localDeckMatchesInvestigator)
+  .sort((a, b) => localDeckScore(b) - localDeckScore(a) || a.name.localeCompare(b.name))
+)
+
+const selectedLocalDeck = computed(() =>
+  localDeckCandidates.value.find((candidate) => candidate.id === selectedLocalDeckId.value) ?? null
+)
+
+watch(localDeckCandidates, (candidates) => {
+  if (!candidates.some((candidate) => candidate.id === selectedLocalDeckId.value)) {
+    selectedLocalDeckId.value = candidates[0]?.id ?? null
+  }
+}, { immediate: true })
+
+async function loadLocalDecks() {
+  try {
+    localDecks.value = await fetchDecks()
+  } catch {
+    localDecks.value = []
+  } finally {
+    localDecksLoaded.value = true
+  }
+}
+
+function campaignDeckName(name: string) {
+  const suffix = `（${props.game.name}）`
+  return name.endsWith(suffix) ? name : `${name}${suffix}`
+}
+
+function campaignDeckMeta(candidate: Deck) {
+  let meta: Record<string, unknown> = {}
+  try {
+    meta = JSON.parse(candidate.list.meta || '{}')
+  } catch {
+    meta = {}
+  }
+
+  return JSON.stringify({
+    ...meta,
+    arkham_horror_campaign_status: 'active',
+    arkham_horror_campaign_game_id: props.game.id,
+    arkham_horror_campaign_investigator: investigatorCode(originalInvestigatorId.value),
+    arkham_horror_campaign_label: props.game.name,
+  })
+}
+
+let campaignBranchPromise: Promise<Deck> | null = null
+
+async function createCampaignBranch(source: Deck) {
+  await loadLocalDecks()
+  const existing = localDecks.value.find(isCurrentCampaignDeck)
+  if (existing) return existing
+
+  const freshSource = localDecks.value.find((candidate) => candidate.id === source.id) ?? source
+  if (isCurrentCampaignDeck(freshSource)) return freshSource
+
+  const deckId = randomId()
+  const name = campaignDeckName(freshSource.name)
+  const created = await newDeck(deckId, name, null, {
+    id: deckId,
+    url: null,
+    name,
+    investigator_code: freshSource.list.investigator_code,
+    investigator_name: freshSource.investigatorName ?? freshSource.name,
+    slots: freshSource.list.slots,
+    sideSlots: freshSource.list.sideSlots,
+    taboo_id: freshSource.list.taboo_id ?? null,
+    meta: campaignDeckMeta(freshSource),
+  })
+  localDecks.value = [created, ...localDecks.value.filter((candidate) => candidate.id !== created.id)]
+  return created
+}
+
+async function ensureCampaignBranch(source: Deck) {
+  const existing = localDecks.value.find(isCurrentCampaignDeck)
+  if (existing) {
+    selectedLocalDeckId.value = existing.id
+    return existing
+  }
+
+  campaignBranchPromise ??= createCampaignBranch(source)
+  try {
+    const branch = await campaignBranchPromise
+    selectedLocalDeckId.value = branch.id
+    return branch
+  } finally {
+    campaignBranchPromise = null
+  }
+}
+
+function deckToDecklist(localDeck: Deck): ArkhamDbDecklist {
+  return {
+    id: localDeck.id,
+    url: localDeckViewUrl(localDeck.id),
+    name: localDeck.name,
+    investigator_code: localDeck.list.investigator_code,
+    investigator_name: localDeck.investigatorName ?? localDeck.name,
+    slots: localDeck.list.slots,
+    sideSlots: localDeck.list.sideSlots,
+    taboo_id: localDeck.list.taboo_id ?? null,
+    meta: localDeck.list.meta,
+  }
+}
+
+async function editSelectedLocalDeck() {
+  if (!selectedLocalDeck.value) return
+  const tab = openBuildTab()
+  if (!tab) {
+    loadError.value = t('upgrade.localDeckCreateFailed')
+    return
+  }
+  fetching.value = true
+  loadError.value = null
+  try {
+    const branch = await ensureCampaignBranch(selectedLocalDeck.value)
+    tab.location.replace(localDeckEditUrl(branch.id))
+  } catch {
+    tab.close()
+    loadError.value = t('upgrade.localDeckCreateFailed')
+  } finally {
+    fetching.value = false
+  }
+}
+
+async function applySelectedLocalDeck() {
+  if (!selectedLocalDeck.value) return
+  fetching.value = true
+  loadError.value = null
+  try {
+    const localDeck = await ensureCampaignBranch(selectedLocalDeck.value)
+    const upgradedDeckList = deckToDecklist(localDeck)
+    model.value = upgradedDeckList
+    deck.value = upgradedDeckList.url
+    deckUrl.value = upgradedDeckList.url
+    deckList.value = upgradedDeckList
+    deckInvestigator.value = investigatorCode(upgradedDeckList.investigator_code)
+    await upgrade()
+  } catch {
+    loadError.value = t('upgrade.localDeckApplyFailed')
+  } finally {
+    fetching.value = false
+  }
+}
+
+onMounted(loadLocalDecks)
 
 const error = computed(() => {
   if(deckInvestigator.value) {
@@ -166,29 +422,36 @@ const isArkhamBuildDeck = computed(() => {
 })
 
 const deckSource = computed(() => {
+  if (localDeckIdFromCurrentUrl.value) return t('upgrade.localDeckSource')
   return isArkhamDBDeck.value ? 'ArkhamDB' : (isArkhamBuildDeck.value ? 'arkham.build' : null)
 })
 
 function viewDeck() {
   if (currentDeckUrl.value) {
+    const localDeckId = localDeckIdFromUrl(currentDeckUrl.value)
+    if (localDeckId) {
+      openDeckInNewTab(localDeckViewUrl(localDeckId))
+      return
+    }
+
     const arkhamDbApiRegex = /https:\/\/(?:[a-zA-Z0-9-]+\.)?arkhamdb\.com\/api\/public\/deck\/([^/]+)/
     const matches = currentDeckUrl.value.match(arkhamDbApiRegex)
     if (matches) {
-      window.open(`${localizeArkhamDBBaseUrl()}/deck/view/${matches[1]}`)
+      openDeckInNewTab(`${localizeArkhamDBBaseUrl()}/deck/view/${matches[1]}`)
       return
     }
 
     const arkhamDbDecklistRegex = /https:\/\/(?:[a-zA-Z0-9-]+\.)?arkhamdb\.com\/api\/public\/decklist\/([^/]+)/
     const dlmatches = currentDeckUrl.value.match(arkhamDbDecklistRegex)
     if (dlmatches) {
-      window.open(`${localizeArkhamDBBaseUrl()}/decklist/view/${dlmatches[1]}`)
+      openDeckInNewTab(`${localizeArkhamDBBaseUrl()}/decklist/view/${dlmatches[1]}`)
       return
     }
 
     const arkhamBuildApiRegex = /https:\/\/api.arkham\.build\/v1\/public\/share\/([^/]+)/
     const abmatches = currentDeckUrl.value.match(arkhamBuildApiRegex)
     if (abmatches) {
-      window.open(`https://arkham.build/deck/view/${abmatches[1]}?upgrade_xp=${xp.value}`)
+      openDeckInNewTab(`https://arkham.build/deck/view/${abmatches[1]}?upgrade_xp=${xp.value}`)
       return
     }
   }
@@ -277,68 +540,102 @@ async function followUpgradeChain(
 async function syncUpgrade() {
   if(error.value) return
   const startUrl = investigator.value?.deckUrl
-  if (!startUrl) return;
+  if (!startUrl) return
   submitError.value = null
+  loadError.value = null
+
+  const localDeckId = localDeckIdFromUrl(startUrl)
+  if (localDeckId) {
+    fetching.value = true
+    try {
+      const localDeck = await fetchDeck(localDeckId)
+      const content = deckToDecklist(localDeck)
+      model.value = content
+      deckList.value = content
+      deck.value = content.url
+      deckUrl.value = content.url
+      deckInvestigator.value = investigatorCode(content.investigator_code)
+      await upgrade()
+    } catch {
+      loadError.value = t('upgrade.localDeckReadFailed')
+    } finally {
+      fetching.value = false
+    }
+    return
+  }
 
   const isArkhamDb = /https:\/\/(?:[a-zA-Z0-9-]+\.)?arkhamdb\.com\/api\/public\/deck\/([^/]+)/.test(startUrl)
   const isArkhamBuild = /https:\/\/api\.arkham\.build\/v1\/public\/share\/([^/]+)/.test(startUrl)
   if (!isArkhamDb && !isArkhamBuild) return
 
   fetching.value = true
-  const content = await followUpgradeChain(
-    startUrl,
-    isArkhamBuild ? arkhamBuildShareUrl : arkhamDbDeckUrl,
-    isArkhamBuild,
-  )
-
-  if (!content || !content.url) {
-    // followUpgradeChain has already said why; just release the "Fetching..." panel.
+  try {
+    const content = await followUpgradeChain(
+      startUrl,
+      isArkhamBuild ? arkhamBuildShareUrl : arkhamDbDeckUrl,
+      isArkhamBuild,
+    )
+    if (!content?.url) return
+    model.value = content
+    deckList.value = content
+    deck.value = content.url
+    deckUrl.value = content.url
+    deckInvestigator.value = investigatorCode(content.investigator_code)
+    await upgrade()
+  } finally {
     fetching.value = false
-    return
   }
-
-  model.value = content;
-  deckList.value = content;
-  deck.value = content.url;
-  deckUrl.value = content.url;
-  upgrade();
 }
 
-async function loadDeck() {
-  if (!deck.value) return
+async function loadDeck(): Promise<ChainDeck | null> {
+  if (!deck.value) return null
   model.value = null
   deckList.value = null
+  loadError.value = null
   submitError.value = null
 
-  const arkhamDbRegex = /https:\/\/(?:[a-zA-Z0-9-]+\.)?arkhamdb\.com\/(deck(list)?)(\/view)?\/([^/]+)/
-  const arkhamBuildRegex = /https:\/\/arkham\.build\/(?:deck\/view|share)\/([^/?]+)/
-  const arkhamBuildDecklistRegex = /https:\/\/arkham\.build\/decklist(?:\/view)?\/([^/?]+)/
+  const localDeckId = localDeckIdFromUrl(deck.value)
+  if (localDeckId) {
+    try {
+      const localDeck = await fetchDeck(localDeckId)
+      const processed = deckToDecklist(localDeck)
+      model.value = processed
+      deckList.value = processed
+      deckUrl.value = processed.url
+      deckInvestigator.value = investigatorCode(processed.investigator_code)
+      return processed
+    } catch {
+      loadError.value = t('upgrade.localDeckReadFailed')
+      return null
+    }
+  }
 
-  let matches
+  let sourceUrl: string
   let isArkhamBuild = false
-  if ((matches = deck.value.match(arkhamDbRegex))) {
-    deckUrl.value = `${localizeArkhamDBBaseUrl()}/api/public/${matches[1]}/${matches[4]}`
-  } else if ((matches = deck.value.match(arkhamBuildRegex))) {
-    deckUrl.value = `https://api.arkham.build/v1/public/share/${matches[1]}`
+  let matches
+  if ((matches = deck.value.match(arkhamBuildShareRegex)) || (matches = deck.value.match(arkhamBuildDecklistRegex))) {
+    const isDecklist = deck.value.match(arkhamBuildDecklistRegex)
+    sourceUrl = `https://api.arkham.build/v1/public/share/${matches[1]}${isDecklist ? '?type=decklist' : ''}`
     isArkhamBuild = true
-  } else if ((matches = deck.value.match(arkhamBuildDecklistRegex))) {
-    deckUrl.value = `https://api.arkham.build/v1/public/share/${matches[1]}?type=decklist`
-    isArkhamBuild = true
+  } else if ((matches = deck.value.match(/https:\/\/(?:[a-zA-Z0-9-]+\.)?arkhamdb\.com\/(deck(list)?)(\/view)?\/([^/]+)/))) {
+    sourceUrl = `${localizeArkhamDBBaseUrl()}/api/public/${matches[1]}/${matches[4]}`
   } else {
     submitError.value = t('upgrade.unrecognizedUrl')
-    return
+    return null
   }
 
+  deckUrl.value = sourceUrl
   // Reports its own failure via submitError rather than leaving the field looking accepted.
-  const processed = await fetchDeckAt(deckUrl.value, isArkhamBuild)
+  const processed = await fetchDeckAt(sourceUrl, isArkhamBuild)
   if (!processed) {
     deckUrl.value = null
-    return
+    return null
   }
-
   model.value = processed
   deckList.value = processed
-  deckInvestigator.value = processed.investigator_code
+  deckUrl.value = processed.url
+  deckInvestigator.value = investigatorCode(processed.investigator_code)
+  return processed
 }
 
 function pasteDeck(evt: ClipboardEvent) {
@@ -459,6 +756,10 @@ function wouldChangeNothing(): boolean {
 }
 
 async function upgrade(force = false) {
+  if (deck.value && !deckList.value) {
+    const loadedDeck = await loadDeck()
+    if (!loadedDeck) return
+  }
   if(error.value) return
   if (!force && wouldChangeNothing()) {
     fetching.value = false
@@ -466,21 +767,30 @@ async function upgrade(force = false) {
     return
   }
   if ((deckUrl.value || deckList.value) && originalInvestigatorId.value) {
-   submitError.value = null
-   fetching.value = true
-   upgradeDeck(props.game.id, originalInvestigatorId.value, deckUrl.value ?? undefined, deckList.value).then(() => {
+    submitError.value = null
+    loadError.value = null
+    fetching.value = true
+    try {
+      const nextDeckList = deckList.value
+      await upgradeDeck(
+        props.game.id,
+        originalInvestigatorId.value,
+        nextDeckList ? undefined : deckUrl.value ?? undefined,
+        nextDeckList,
+      )
       if(!solo) {
         waitForOtherPlayers()
       }
-    }).catch((e) => {
+      deckUrl.value = null;
+      deck.value = null;
+      deckList.value = null;
+    } catch (e) {
       // A rejected upgrade left the game untouched, so keep the form usable and say why.
       submitError.value = submitErrorMessage(e, t('upgrade.upgradeFailed'))
-    }).finally(() => {
+      waiting.value = false
+    } finally {
       fetching.value = false;
-    });
-    deckUrl.value = null;
-    deck.value = null;
-    deckList.value = null;
+    }
   }
 }
 
@@ -525,10 +835,15 @@ const tabooList = function (investigator: Investigator) {
 
 <template>
   <div id="upgrade-deck">
+    <button
+      v-if="!waiting && question && question.tag === 'ChooseUpgradeDeck' && investigatorId == originalInvestigatorId"
+      class="screen-back"
+      @click.prevent="skip()"
+    >← {{ $t('back') }}</button>
     <h2 class="title">{{ $t('upgrade.title', {xp: xp}) }}</h2>
 
     <div v-if="!waiting" class="panel">
-      <template v-if="question && investigator && question.tag !== 'ChooseUpgradeDeck'">
+      <template v-if="question && investigator && !isChooseUpgradeDeckQuestion(question)">
         <img v-if="investigatorId" class="portrait" :src="portraitImage(investigatorId)" />
         <div v-if="question && playerId == investigator.playerId" class="content question-pane">
           <h3 v-if="questionLabel" class="question-label">{{ questionLabel }}</h3>
@@ -567,12 +882,33 @@ const tabooList = function (investigator: Investigator) {
           <img v-if="investigatorId" class="portrait" :src="portraitImage(investigatorId)" />
           <div class="content">
             <p v-if="error" class="error">{{ error }}</p>
+            <p v-if="loadError" class="error">{{ loadError }}</p>
             <p v-if="submitError" class="error">{{ submitError }}</p>
             <template v-if="fetching">
               <p class="info">{{ $t('upgrade.fetching', {deckSource: deckSource}) }}</p>
             </template>
             <template v-else-if="question">
-              <template v-if="investigatorId == originalInvestigatorId && deckSource">
+              <template v-if="canUpgradeOriginalInvestigator && localDeckCandidates.length > 0">
+                <p class="info">{{ $t('upgrade.localDeckContent') }}</p>
+                <div class="local-deck-row">
+                  <select v-model="selectedLocalDeckId">
+                    <option v-for="localDeck in localDeckCandidates" :key="localDeck.id" :value="localDeck.id">
+                      {{ localDeck.name }}
+                    </option>
+                  </select>
+                  <button class="secondary" @click.prevent="editSelectedLocalDeck">
+                    {{ $t('upgrade.openLocalDeck') }}
+                  </button>
+                  <button class="primary" @click.prevent="applySelectedLocalDeck">
+                    {{ $t('upgrade.applyLocalDeck') }}
+                  </button>
+                </div>
+                <span class="separator">{{ $t('upgrade.OR') }}</span>
+              </template>
+              <p v-else-if="localDecksLoaded && canUpgradeOriginalInvestigator && !deckSource" class="info">
+                {{ $t('upgrade.noLocalDeck') }}
+              </p>
+              <template v-if="canUpgradeOriginalInvestigator && deckSource">
                 <p class="info">{{ $t('upgrade.directlyUpdateContent', {deckSource: deckSource}) }}</p>
                 <div class="step-buttons">
                   <button class="step secondary" @click.prevent="viewDeck">
@@ -650,6 +986,17 @@ const tabooList = function (investigator: Investigator) {
 
 h2 {
   color: var(--title);
+}
+
+.screen-back {
+  align-self: flex-start;
+  background: var(--button-2);
+  color: var(--button-2-text);
+
+  &:hover {
+    background: var(--button-2-highlight);
+    cursor: pointer;
+  }
 }
 
 .title {
@@ -760,6 +1107,28 @@ input[type=url] {
     border-color: var(--spooky-green);
     box-shadow: var(--shadow-2);
   }
+}
+
+.local-deck-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.local-deck-row select {
+  min-width: 0;
+  outline: 0;
+  border: 1px solid var(--edge-dim);
+  border-radius: var(--radius-md);
+  padding: 0 12px;
+  color: var(--text);
+  background: var(--background-dark);
+  font-size: 0.95em;
+}
+
+.local-deck-row button {
+  white-space: nowrap;
 }
 
 .input-row {

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { clientLog, clientError } from '@/utils/clientLog'
-import { isTabletopFrame, tabletopDocument, useFixedTabletop } from '@/arkham/composables/useFixedTabletop'
+import { isTabletopFrame, TABLETOP_DISMISS, tabletopDocument, useFixedTabletop } from '@/arkham/composables/useFixedTabletop'
 import { useGameAudio } from '@/arkham/composables/useGameAudio'
 import { ArrowLeft, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight, Monitor } from '@lucide/vue'
 import {
@@ -19,7 +19,7 @@ import { useToast } from 'vue-toastification'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import confetti from '@/effects/confetti'
-import { useResizeObserver, useFullscreen } from '@vueuse/core'
+import { useEventListener, useResizeObserver, useFullscreen } from '@vueuse/core'
 import { storeToRefs } from 'pinia'
 import { useSettings } from '@/stores/settings'
 import { MenuItem } from '@headlessui/vue'
@@ -70,6 +70,8 @@ import { cardImg, imgsrc, isTypingTarget } from '@/arkham/helpers'
 import { handleEmbeddedI18n } from '@/arkham/i18n'
 import { getGameLocalStorageItem, setGameLocalStorageItem } from '@/arkham/localStorage'
 import * as ArkhamGame from '@/arkham/types/Game'
+import { deckMetaValue, type ArkhamDbDecklist, type Deck } from '@/arkham/types/Deck'
+import { subscribeToDeckSaves } from '@/arkham/deckSaveNotifications'
 import {
   choicesByPlayerKey,
   choicesSourceByPlayerKey,
@@ -94,6 +96,7 @@ import {
   storyAnswerPendingKey,
   switchInvestigatorKey,
   uiLockKey,
+  phaseAnnouncementKey,
 } from '@/arkham/injectionKeys'
 import { Card, asCardCode, cardDecoder, toCardContents } from '@/arkham/types/Card'
 import { customCardDef, isCustomCardCode } from '@/arkham/customCards'
@@ -427,6 +430,9 @@ watch(showOtherPlayersHands, (v) => {
 })
 const tarotCards = ref<TarotCard[]>([])
 const uiLock = ref<boolean>(false)
+// True while a phase interlude banner is on screen (written by PhaseInterlude).
+// Revelation-class overlays arriving during a banner queue behind it.
+const phaseAnnouncement = ref<boolean>(false)
 const showSettings = ref(false)
 const showHistory = ref(false)
 const processing = ref(false)
@@ -519,6 +525,36 @@ function handleToolbarPointerMove(event: PointerEvent) {
 // out of view with nothing left to summon it.
 watch(toolbarAutoHide, (active) => {
   if (!active) toolbarRevealed.value = false
+})
+
+// Popouts opened from the bar (tools drawer, settings, shortcuts) collapse on
+// any press that lands outside them. Floating-vue poppers (undo, indicators)
+// run their own outside-press detection, but in the fixed tabletop the frame
+// cannot see presses on the surrounding table field, so the host replays one
+// (see TABLETOP_DISMISS) and mousedown+click on the document root closes them.
+const POPOUT_KEEP_OPEN_SELECTOR = '.game-tools-drawer, .draggable, .game-bar-tools--primary'
+
+function dismissTabletopPopouts() {
+  showTools.value = false
+  showSettings.value = false
+  showShortcuts.value = false
+}
+
+useEventListener(document, 'pointerdown', (event) => {
+  const target = event.target
+  if (!(target instanceof Element)) return
+  if (target.closest(POPOUT_KEEP_OPEN_SELECTOR)) return
+  dismissTabletopPopouts()
+}, { capture: true })
+
+useEventListener(window, 'message', (event) => {
+  if (!isTabletopFrame()) return
+  if (event.source !== window.parent || event.origin !== window.location.origin) return
+  if (event.data?.type !== TABLETOP_DISMISS) return
+  dismissTabletopPopouts()
+  const root = document.documentElement
+  root.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }))
+  root.dispatchEvent(new MouseEvent('click', { bubbles: true }))
 })
 
 function updateGameLog(nextLog: readonly string[]) {
@@ -1235,7 +1271,7 @@ const handleResult = (result: ServerResult) => {
         if (props.spectate) return
         const targetPlayer = result.contents.slice('theSilence:'.length)
         if (!(solo.value === true || targetPlayer === playerId.value)) return
-        if (uiLock.value) {
+        if (uiLock.value || phaseAnnouncement.value) {
           qPush(result)
           return
         }
@@ -1271,7 +1307,7 @@ const handleResult = (result: ServerResult) => {
       }
     case 'GameTarot':
       if (props.spectate) return
-      if (uiLock.value) {
+      if (uiLock.value || phaseAnnouncement.value) {
         qPush(result)
         return
       }
@@ -1308,7 +1344,7 @@ const handleResult = (result: ServerResult) => {
 
     case 'GameCard':
       if (props.spectate) return
-      if (uiLock.value) {
+      if (uiLock.value || phaseAnnouncement.value) {
         qPush(result)
         return
       }
@@ -1327,7 +1363,7 @@ const handleResult = (result: ServerResult) => {
 
     case 'GameCardOnly':
       if (props.spectate) return
-      if (uiLock.value) {
+      if (uiLock.value || phaseAnnouncement.value) {
         qPush(result)
         return
       }
@@ -1370,15 +1406,24 @@ const handleResult = (result: ServerResult) => {
   }
 }
 
-watch(uiLock, async () => {
+function drainResultQueue() {
   if (uiLock.value) return
-  // drain result queue
   for (;;) {
     const r = qPop()
     if (!r) break
     handleResult(r)
     if (uiLock.value) break
   }
+}
+
+watch(uiLock, () => {
+  if (!uiLock.value) drainResultQueue()
+})
+
+// A revelation that arrived mid-banner was queued; release it once the banner
+// finishes so the phase interlude always plays out before the draw is shown.
+watch(phaseAnnouncement, (active) => {
+  if (!active) drainResultQueue()
 })
 
 const confirmingUndoScenario = ref(false)
@@ -1955,6 +2000,7 @@ provide(
 provide(processingKey, processing)
 provide(storyAnswerPendingKey, storyAnswerPending)
 provide(uiLockKey, uiLock)
+provide(phaseAnnouncementKey, phaseAnnouncement)
 provide(skipAllTriggersKey, skipAllTriggers)
 provide(skipAllAvailableKey, skipAllAvailable)
 provide(skipAllInProgressKey, skipAllInProgress)
@@ -2004,6 +2050,62 @@ const trackWorkbench = async () => {
 useResizeObserver(gameMainRef, measureSidebarBand)
 watch([game, gameMainRef, isActualScenarioView], trackWorkbench, { immediate: true })
 
+let applyingSavedDeck = false
+let stopDeckSaveNotifications: (() => void) | null = null
+
+function normalizedInvestigatorId(value: string) {
+  return value.replace(/^c/, '')
+}
+
+function savedDeckList(deck: Deck): ArkhamDbDecklist {
+  return {
+    id: deck.id,
+    url: `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, '')}/build/deck/view/${deck.id}`,
+    name: deck.name,
+    investigator_code: deck.list.investigator_code,
+    investigator_name: deck.investigatorName ?? deck.name,
+    slots: deck.list.slots,
+    sideSlots: deck.list.sideSlots,
+    taboo_id: deck.list.taboo_id ?? null,
+    meta: deck.list.meta,
+  }
+}
+
+// The embedded arkham.build tab broadcasts a save notification; when it belongs
+// to this game's active campaign branch, apply it as the deck upgrade.
+async function applySavedCampaignDeck(deckId: string) {
+  if (applyingSavedDeck || !game.value || props.spectate) return
+
+  applyingSavedDeck = true
+  try {
+    const deck = await Api.fetchDeck(deckId)
+    const deckGameId = deckMetaValue(deck, 'arkham_horror_campaign_game_id')
+    const deckInvestigatorId = deckMetaValue(deck, 'arkham_horror_campaign_investigator')
+    const deckStatus = deckMetaValue(deck, 'arkham_horror_campaign_status')
+    if (
+      deckStatus !== 'active' ||
+      deckGameId !== props.gameId ||
+      !deckInvestigatorId ||
+      !playerId.value
+    ) {
+      return
+    }
+
+    const target = Object.values(game.value.investigators).find(
+      (candidate) =>
+        normalizedInvestigatorId(candidate.id) === normalizedInvestigatorId(deckInvestigatorId) &&
+        candidate.playerId === playerId.value,
+    )
+    if (!target) return
+
+    await Api.upgradeDeck(props.gameId, target.id, undefined, savedDeckList(deck))
+  } catch (error) {
+    console.warn('Could not apply the saved campaign deck', error)
+  } finally {
+    applyingSavedDeck = false
+  }
+}
+
 onMounted(() => {
   ;(window as any).sendDebug = async (msg: any) => {
     if (game.value) await debug.send(game.value.id, msg)
@@ -2013,6 +2115,9 @@ onMounted(() => {
   document.addEventListener('keydown', handleKeyPress)
   window.addEventListener('pointermove', handleToolbarPointerMove, { passive: true })
   window.addEventListener('arkham-setting-change', handleSettingChange)
+  stopDeckSaveNotifications = subscribeToDeckSaves((notification) => {
+    void applySavedCampaignDeck(notification.deckId)
+  })
 
   // The tabletop is laid out for the whole viewport and starts with the bar
   // auto-hidden, so the seat asks for fullscreen as it opens. Coming from the
@@ -2035,6 +2140,8 @@ onUnmounted(() => {
   if (endTurnKeyArmTimer !== null) clearTimeout(endTurnKeyArmTimer)
   if (chooseDecksPoll !== null) clearTimeout(chooseDecksPoll)
   if (processingTimer !== null) clearTimeout(processingTimer)
+  stopDeckSaveNotifications?.()
+  stopDeckSaveNotifications = null
   delete (window as any).sendDebug
   delete (window as any).undo
   delete (window as any).debugChoose

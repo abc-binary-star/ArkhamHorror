@@ -78,6 +78,7 @@ export type Deck = {
   list: DeckList;
   playList?: DeckList;
   overlay?: DeckOverlay | null;
+  investigatorName?: string | null;
 }
 
 export const deckOverlayDecoder = JsonDecoder.object<DeckOverlay>(
@@ -109,6 +110,20 @@ export const deckDecoder = JsonDecoder.object<Deck>(
     list: deckListDecoder,
     playList: v2Optional(deckListDecoder),
     overlay: v2Optional(JsonDecoder.nullable(deckOverlayDecoder)),
+    investigatorName: v2Optional(JsonDecoder.string()),
   },
   'Deck',
 );
+
+export function deckMetaValue(deck: Deck, key: string): string | null {
+  const meta = deck.list.meta
+  if (!meta) return null
+
+  try {
+    const parsed = JSON.parse(meta)
+    const value = parsed?.[key]
+    return typeof value === 'string' ? value : null
+  } catch (_err) {
+    return null
+  }
+}

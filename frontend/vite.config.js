@@ -93,12 +93,52 @@ const assetMirror = () => {
   return { name: 'cdn-asset-mirror', configureServer: install, configurePreviewServer: install }
 }
 
+// The embedded arkham.build app lives in public/build/. Vite's SPA fallback
+// would swallow deep links like /build/deck/edit/<id> into the game's
+// index.html (browsers send Accept: text/html), so this middleware serves the
+// builder's own dist — file when it exists, builder index.html otherwise —
+// ahead of the internal middlewares.
+const builderApp = () => {
+  const root = path.join(fileURLToPath(new URL('./public/build', import.meta.url)))
+  const types = {
+    '.html': 'text/html; charset=utf-8',
+    '.js': 'text/javascript',
+    '.css': 'text/css',
+    '.json': 'application/json',
+    '.svg': 'image/svg+xml',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.ico': 'image/x-icon',
+    '.woff': 'font/woff',
+    '.woff2': 'font/woff2',
+    '.xml': 'application/xml',
+    '.webmanifest': 'application/manifest+json',
+  }
+  const install = (server) => {
+    server.middlewares.use((req, res, next) => {
+      const url = (req.url || '').split('?')[0]
+      if (url !== '/build' && !url.startsWith('/build/')) return next()
+      const rel = url === '/build' ? '' : decodeURIComponent(url.slice('/build/'.length))
+      let file = path.join(root, rel)
+      if (!file.startsWith(root + path.sep) && file !== root) return next()
+      if (rel === '' || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
+        file = path.join(root, 'index.html')
+      }
+      res.setHeader('Content-Type', types[path.extname(file).toLowerCase()] || 'application/octet-stream')
+      res.setHeader('Cache-Control', path.basename(file) === 'index.html' ? 'no-cache' : 'public, max-age=31536000, immutable')
+      fs.createReadStream(file).pipe(res)
+    })
+  }
+  return { name: 'embedded-builder', configureServer: install, configurePreviewServer: install }
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     homebrewImages(),
     assetMirror(),
+    builderApp(),
   ],
   resolve: {
     alias: {
@@ -121,6 +161,16 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
         ws: false
+      },
+      // The embedded arkham.build app under public/build/ reads its card
+      // database from api.arkham.build; same-origin path keeps its CORS
+      // handling identical to the production nginx deployment.
+      "^/build-api": {
+        target: "https://api.arkham.build",
+        changeOrigin: true,
+        secure: true,
+        ws: false,
+        rewrite: (p) => p.replace(/^\/build-api/, "")
       }
     }
   }

@@ -4,7 +4,7 @@ import { useEventListener, useResizeObserver } from '@vueuse/core'
 import { useRoute, useRouter } from 'vue-router'
 import Game from './Game.vue'
 import {
-  fitTabletop, isTabletopFrame, TABLETOP_HEIGHT, TABLETOP_MESSAGE,
+  fitTabletop, isTabletopFrame, TABLETOP_DISMISS, TABLETOP_HEIGHT, TABLETOP_MESSAGE,
   TABLETOP_WIDTH, useFixedTabletop,
 } from '@/arkham/composables/useFixedTabletop'
 
@@ -102,6 +102,13 @@ useEventListener(window, 'message', (event: MessageEvent) => {
   childPath = path
   if (route.fullPath !== path) void router.push(path)
 })
+
+// The child document never sees presses on the surrounding table field (they
+// land in this document), so forward them so it can dismiss its popouts.
+useEventListener(window, 'pointerdown', () => {
+  if (!framed.value) return
+  frame.value?.contentWindow?.postMessage({ type: TABLETOP_DISMISS }, window.location.origin)
+}, { capture: true, passive: true })
 
 // Keep the global footer out of the logical viewport and the host's fit area.
 watch(() => framed.value || inner, (active) => {

@@ -455,7 +455,32 @@
   "sideStory": {
     "selectSideScenario": "选择要添加的支线剧情",
     "requiresInvestigator": "需要 {name}",
-    "xpAsymmetric": "（{signatureXp} 获得 {name} 点经验，其他每位调查员获得 {otherXp} 点经验）"
+    "xpAsymmetric": "（{name} 获得 {signatureXp} 点经验，其他每位调查员获得 {otherXp} 点经验）",
+    "xp": "（{xp} 点经验）",
+    "requiresParallelContent": "需要拥有平行内容的调查员",
+    "readOrDieDeckRequirement": "黛西·沃克的牌组必须包含至少 4 张非弱点的书本支援卡。",
+    "names": {
+      "70001": "疯狂迷宫",
+      "71001": "仲冬舞会",
+      "72001": "致命片场",
+      "81001": "狼人诅咒",
+      "82001": "恐怖狂欢节",
+      "83001": "永恒沉睡",
+      "83016": "夜之乱臣",
+      "84001": "艾肖希尔酒店谋杀案",
+      "85001": "吞噬万物",
+      "86001": "外神之战",
+      "87001": "时间阴谋",
+      "88001": "时运与愚行",
+      "90004": "死亡阅读",
+      "90011": "破釜沉舟",
+      "90020": "血海深仇",
+      "90032": "循规蹈矩",
+      "90041": "赤潮升涌",
+      "90054": "安魂镇息",
+      "90065": "往昔遗物",
+      "90094": "谢幕"
+    }
   },
   "partners": {
     "expeditionTeam": "探险队",
@@ -578,6 +603,7 @@
     "randomBasicWeaknessPoolTooltip": "调整随机分配此牌组基础弱点时使用的产品范围。"
   },
   "campaign": {
+    "toDeckSelection": "返回选牌",
     "roster": {
       "leave": "离开",
       "leaveTooltip": "离开战役。你的经验和创伤会保留，以便你在剧本之间重新加入。",

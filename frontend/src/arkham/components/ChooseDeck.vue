@@ -89,6 +89,7 @@ const filteredDecks = computed(() => {
 const props = defineProps<{
   game: Game
   playerId: string
+  canBack?: boolean
 }>()
 
 const chooseDeck = inject(chooseDeckKey)
@@ -361,7 +362,7 @@ const overlaySummary = computed(() => {
   return parts.join(', ') || 'none'
 })
 
-const emit = defineEmits(['choose'])
+const emit = defineEmits(['choose', 'back'])
 
 const chooseChoice = (idx: number) => emit('choose', idx)
 
@@ -432,6 +433,7 @@ const needsReply = computed(() => {
 <template>
   <div class="container scroll-container">
     <div class="investigators">
+      <button v-if="canBack" class="screen-back" @click="$emit('back')">← {{ $t('back') }}</button>
       <h2 class="page-title">{{$t('create.chooseYourDeck', players.length)}}</h2>
       <div class="portraits">
         <div class="investigator-row" v-for="player in players" :key="player.id">
@@ -648,6 +650,18 @@ const needsReply = computed(() => {
   font-family: "Source Han Serif", "Arno", serif;
   font-size: 1.8em;
   letter-spacing: 0.04em;
+}
+
+.screen-back {
+  align-self: flex-start;
+  margin-bottom: 12px;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.86);
+
+  &:hover {
+    background: rgba(255,255,255,0.16);
+    cursor: pointer;
+  }
 }
 
 .portraits {

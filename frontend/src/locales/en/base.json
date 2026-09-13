@@ -441,7 +441,32 @@
   "sideStory": {
     "selectSideScenario": "Select a side scenario to add",
     "requiresInvestigator": "Requires {name}",
-    "xpAsymmetric": "({signatureXp} XP for {name}, {otherXp} XP each other investigator)"
+    "xpAsymmetric": "({signatureXp} XP for {name}, {otherXp} XP each other investigator)",
+    "xp": "({xp} XP)",
+    "requiresParallelContent": "Requires investigator with parallel content",
+    "readOrDieDeckRequirement": "Daisy Walker's deck must include at least 4 non-weakness Tome assets.",
+    "names": {
+      "70001": "The Labyrinths of Lunacy",
+      "71001": "The Midwinter Gala",
+      "72001": "Film Fatale",
+      "81001": "Curse of the Rougarou",
+      "82001": "Carnevale of Horrors",
+      "83001": "The Eternal Slumber",
+      "83016": "The Night's Usurper",
+      "84001": "Murder at the Excelsior Hotel",
+      "85001": "The Blob That Ate Everything",
+      "86001": "War of the Outer Gods",
+      "87001": "Machinations Through Time",
+      "88001": "Fortune and Folly",
+      "90004": "Read or Die",
+      "90011": "All or Nothing",
+      "90020": "Bad Blood",
+      "90032": "By the Book",
+      "90041": "Red Tide Rising",
+      "90054": "Laid to Rest",
+      "90065": "Relics of the Past",
+      "90094": "Enthralling Encore"
+    }
   },
   "partners": {
     "expeditionTeam": "Expedition Team",
@@ -564,6 +589,7 @@
     "randomBasicWeaknessPoolTooltip": "Adjust which products are used when randomly assigning this deck's basic weakness."
   },
   "campaign": {
+    "toDeckSelection": "Back to deck selection",
     "roster": {
       "leave": "Leave",
       "leaveTooltip": "Leave the campaign. Their experience and trauma are kept so they can rejoin between scenarios.",

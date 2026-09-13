@@ -8,6 +8,9 @@ export const soloKey: InjectionKey<Ref<boolean>> = Symbol('solo')
 export const spectateKey: InjectionKey<Ref<boolean>> = Symbol('spectate')
 export const processingKey: InjectionKey<Ref<boolean>> = Symbol('processing')
 export const uiLockKey: InjectionKey<Ref<boolean>> = Symbol('uiLock')
+// Written by PhaseInterlude while a phase banner is on screen; Game.vue reads it
+// to hold revelation-class overlays until the banner finishes.
+export const phaseAnnouncementKey: InjectionKey<Ref<boolean>> = Symbol('phaseAnnouncement')
 export const storyAnswerPendingKey: InjectionKey<Ref<boolean>> = Symbol('storyAnswerPending')
 export const showOtherPlayersHandsKey: InjectionKey<Ref<boolean>> = Symbol('showOtherPlayersHands')
 export const skipAllAvailableKey: InjectionKey<Ref<boolean>> = Symbol('skipAllAvailable')

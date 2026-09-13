@@ -205,6 +205,19 @@ const isScenario = computed(() =>  {
   return ["ScenarioStep", "StandaloneScenarioStep", "ScenarioStepWithOptions", "StandaloneScenarioStepWithOptions"].includes(props.step.tag)
 })
 
+const requirementI18n: Record<string, string> = {
+  "Requires investigator with parallel content": 'sideStory.requiresParallelContent',
+  "Daisy Walker's deck must include at least 4 non-weakness Tome assets.": 'sideStory.readOrDieDeckRequirement'
+}
+const sideStoryTitle = (s: { id: string, name: string }): string => {
+  const key = `sideStory.names.${s.id}`
+  return te(key) ? t(key) : s.name
+}
+const deckRequirementText = (requirement: string): string => {
+  const key = requirementI18n[requirement]
+  return key && te(key) ? t(key) : requirement
+}
+
 const standalones = computed(() => {
   if (!props.campaign) return []
   if (!props.canChooseSideStory) return []
@@ -440,17 +453,20 @@ const setIcon = computed(() => {
   <LogIcons />
   <div class="continue-campaign scroll-container">
     <div v-if="chooseSideStory || (addSideStory && standalones.length > 0)" class="side-story-selection">
-      <h2>{{ $t('sideStory.selectSideScenario') }}</h2>
+      <div class="side-story-header">
+        <button v-if="!chooseSideStory" class="screen-back" @click="addSideStory = false">← {{ $t('back') }}</button>
+        <h2>{{ $t('sideStory.selectSideScenario') }}</h2>
+      </div>
       <div v-for="sideStory in standalones" :key="sideStory.id" class="side-story-option">
         <div class="scenario-icon">
           <img :src="imgsrc(`sets/${sideStory.id}.png`)" />
         </div>
         <div class="scenario-info">
-          <h2>{{ sideStory.name }}</h2>
+          <h2>{{ sideStoryTitle(sideStory) }}</h2>
           <h3 v-if="sideStory.requiredInvestigator">{{ $t('sideStory.xpAsymmetric', { signatureXp: sideStory.xp, name: sideStory.requiredInvestigator, otherXp: 1 }) }}</h3>
           <template v-else>
-            <h3>({{ sideStory.xp }} XP)</h3>
-            <h3 v-for="requirement in sideStory.deckRequirements" :key="requirement">{{ requirement }}</h3>
+            <h3>{{ $t('sideStory.xp', { xp: sideStory.xp }) }}</h3>
+            <h3 v-for="requirement in sideStory.deckRequirements" :key="requirement">{{ deckRequirementText(requirement) }}</h3>
           </template>
         </div>
 
@@ -666,11 +682,25 @@ const setIcon = computed(() => {
 }
 
 .side-story-selection {
-  > h2 {
-    color: var(--title);
-    font-family: Arno, 'Source Han Serif', serif;
-    font-size: 1.5em;
-    margin-bottom: 10px;
+  .side-story-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    h2 {
+      color: var(--title);
+      font-family: Arno, 'Source Han Serif', serif;
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+  }
+  .screen-back {
+    background: var(--button-2);
+    color: var(--button-2-text);
+    &:hover {
+      background: var(--button-2-highlight);
+      cursor: pointer;
+    }
   }
   display: flex;
   flex-direction: column;

@@ -3,7 +3,7 @@ import { computed, inject, onBeforeUnmount, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Moon, Eye, Skull, Flame } from '@lucide/vue'
 import type { Phase } from '@/arkham/types/Phase'
-import { uiLockKey } from '@/arkham/injectionKeys'
+import { uiLockKey, phaseAnnouncementKey } from '@/arkham/injectionKeys'
 
 const props = defineProps<{ phase: Phase }>()
 const { t } = useI18n({
@@ -36,7 +36,14 @@ const current = ref<RoundPhase | null>(null)
 const emblem = computed(() => current.value ? emblems[current.value] : null)
 const pending: RoundPhase[] = []
 const uiLock = inject(uiLockKey, ref(false))
+// Mirrored up to Game.vue so revelation-class overlays queue behind the banner
+// instead of popping over it mid-animation.
+const announcementActive = inject(phaseAnnouncementKey, ref(false))
 let timer: ReturnType<typeof setTimeout> | undefined
+
+watch(current, (value) => {
+  announcementActive.value = value !== null
+})
 
 function advance() {
   clearTimeout(timer)
@@ -73,6 +80,7 @@ watch([() => props.phase, uiLock], ([phase, locked], [previous]) => {
 onBeforeUnmount(() => {
   clearTimeout(timer)
   pending.length = 0
+  announcementActive.value = false
 })
 </script>
 
