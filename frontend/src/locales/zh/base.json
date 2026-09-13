@@ -1,4 +1,190 @@
 {
+  "customCardSets": {
+    "title": "自定义卡组",
+    "builder": {
+      "matcher": "匹配器",
+      "capability": "能力",
+      "youExist": "你存在",
+      "investigatorExists": "存在一名调查员",
+      "chooseCapability": "选择一种能力…",
+      "capabilities": {
+        "can": {
+          "search": {
+            "deck": "搜索你的牌库"
+          },
+          "manipulate": {
+            "deck": "操控你的牌库"
+          },
+          "shuffle": {
+            "deck": "洗你的牌库"
+          },
+          "draw": {
+            "cards": "抽牌"
+          },
+          "gain": {
+            "resources": "获得资源",
+            "xp": "获得经验",
+            "clues": "获得线索"
+          },
+          "spend": {
+            "resources": "花费资源",
+            "clues": "花费线索"
+          },
+          "have": {
+            "cards": {
+              "leaveDiscard": "将卡牌移出你的弃牌堆"
+            },
+            "assets": {
+              "ready": "重整支援"
+            }
+          },
+          "affect": {
+            "otherPlayers": "影响其他调查员"
+          },
+          "move": "移动",
+          "deal": {
+            "damage": "造成伤害"
+          },
+          "target": {
+            "encounterDeck": "指定遭遇牌库"
+          },
+          "reveal": {
+            "cards": "展示卡牌"
+          },
+          "heal": {
+            "damage": "治疗伤害",
+            "horror": "治疗恐惧",
+            "any": "治疗伤害或恐惧",
+            "trauma": "治疗创伤"
+          }
+        }
+      }
+    },
+    "newSetName": "新卡组名称",
+    "addSet": "添加卡组",
+    "import": "导入",
+    "importTooltip": "导入从这里导出的卡组，或 arkham.build 的卡池",
+    "experimental": "实验性功能。此功能可能停止工作、破坏进行中的游戏，或随时被移除。",
+    "loading": "加载中…",
+    "emptyTitle": "还没有自定义卡组",
+    "emptyLede": "自定义卡组让你能把引擎尚未实现的卡牌带进游戏。你可以先导入一个现有的自定义卡组，或者创建自己的卡组。",
+    "filterPlaceholder": "按卡组或卡名筛选…",
+    "filterLabel": "筛选卡组与卡牌",
+    "clearFilter": "清除筛选",
+    "orderLabel": "卡组排序",
+    "orderAlphabetical": "A–Z",
+    "orderRecent": "最近",
+    "noMatches": "没有卡组或卡牌匹配“{query}”。",
+    "cardCount": "{n} 张卡",
+    "renameSet": "重命名此卡组",
+    "exportSet": "导出{name}",
+    "deleteSet": "删除此卡组及其卡牌",
+    "noCardMatches": "没有卡牌匹配该筛选条件。",
+    "emptySet": "此卡组还是空的。打开它，开始造一张卡。",
+    "backToSets": "全部卡组",
+    "selectAll": "选中每张卡",
+    "exportSelected": "导出选中的 {count} 张",
+    "clearSelection": "取消选择",
+    "newCard": "新卡牌",
+    "emptySetPanel": "此卡组还是空的。造一张卡，它就会出现在这里。",
+    "exportCard": "导出此卡",
+    "deleteCard": "删除此卡",
+    "hideLibrary": "收起卡库",
+    "showLibrary": "展开卡库",
+    "editingCard": "正在编辑卡牌",
+    "inSet": "于{name}",
+    "saveChanges": "保存修改",
+    "createCard": "创建卡牌",
+    "saveNote": "保存会更新此卡的每一个副本——名称、特质、卡图与能力同时生效。敌人印刷的战斗、生命与躲避值在其入场时即被复制，因此只对保存之后入场的副本生效。",
+    "setCreateFailed": "无法创建该卡组。",
+    "setRenameFailed": "无法重命名该卡组。",
+    "confirmDeleteSet": "删除“{name}”和{what}？",
+    "deleteSetCards": "其中的 {n} 张卡",
+    "deleteSetEmpty": "其他什么都没有——它是空的",
+    "setDeleted": "已删除“{name}”。",
+    "setDeleteFailed": "无法删除该卡组。",
+    "needASet": "请先建一个卡组——卡牌必须属于某个卡组。",
+    "saved": "已保存。",
+    "saveFailed": "无法保存此卡。如果你用过原始 JSON，请检查它。",
+    "confirmDeleteCard": "从卡库中删除“{name}”？",
+    "fileHasNoCards": "该文件里没有卡牌。",
+    "reviewTitle": "导入“{name}”",
+    "reviewReplaceTitle": "替换“{name}”",
+    "reviewFrom": "来自{file}",
+    "reviewAdded": "{n} 张新增",
+    "reviewUpdated": "{n} 张更新",
+    "reviewDropped": "{n} 张移除",
+    "reviewSignatureOrphans": "{n} 张签名卡指定的调查员不在此文件中——限制仍然保留，但那位调查员不会把它带进来。",
+    "reviewRemoves": "“{name}”中有 {n} 张卡不在此文件里，将被删除。",
+    "reviewSubscribed": "“{name}”关注着一个已发布的卡组。导入覆盖后会停止更新。",
+    "reviewShowAll": "显示全部 {count} 张",
+    "reviewShowLess": "收起",
+    "reviewConfirm": "导入",
+    "reviewConfirmReplace": "替换",
+    "reviewCancel": "取消",
+    "types": {
+      "AssetType": "支援",
+      "EventType": "事件",
+      "SkillType": "技能",
+      "PlayerTreacheryType": "弱点（诡计）",
+      "PlayerEnemyType": "弱点（敌人）",
+      "EnemyType": "敌人",
+      "TreacheryType": "诡计",
+      "EncounterAssetType": "支援（遭遇）",
+      "LocationType": "地点",
+      "StoryType": "剧情",
+      "InvestigatorType": "调查员",
+      "ActType": "场景",
+      "AgendaType": "密谋",
+      "ScenarioType": "剧本"
+    },
+    "imported": "已将 {count} 张卡导入“{name}”。{minis}",
+    "minisCut": "已从卡图中裁去 {n} 张调查员立绘。",
+    "importFailed": "无法读取该文件。",
+    "marketplace": "卡组市场",
+    "marketplaceLede": "其他人发布的卡组。导入后会保持关注，你会在他们更新时收到更新，直到你自己动手编辑。",
+    "marketplaceEmpty": "还没有人发布。发布你自己的卡组，它就会出现在这里。",
+    "publishTitle": "发布“{name}”",
+    "publishNote": "更新了什么（可选）",
+    "publishConfirm": "发布",
+    "publishCancel": "取消",
+    "published": "已将“{name}”发布为 v{version}。",
+    "publishFailed": "无法发布该卡组。",
+    "unpublish": "下架",
+    "confirmUnpublish": "下架“{name}”？其他人将无法导入，关注它的副本也会停止更新。",
+    "unpublished": "已下架“{name}”。",
+    "unpublishFailed": "无法下架该卡组。",
+    "subscribedBadge": "已关注 · v{version}",
+    "editingUnsubscribes": "编辑此卡组会停止它的更新。重新导入即可取回已发布的版本。",
+    "updateTo": "更新到 v{version}",
+    "updated": "已将“{name}”更新到 v{version}。",
+    "updateFailed": "无法更新该卡组。",
+    "importToCollection": "导入",
+    "reimport": "再次导入",
+    "imported_": "已将“{name}”导入你的卡组。",
+    "subscribeFailed": "无法导入该卡组。",
+    "byAuthor": "作者：{author}",
+    "versionCount": "v{version} · {count}",
+    "yours": "你的",
+    "marketplaceLoadFailed": "无法加载卡组市场。",
+    "mySets": "我的卡组",
+    "marketplaceFilterPlaceholder": "搜索卡组、卡牌和作者…",
+    "marketplaceOrderLabel": "列表排序",
+    "orderNewest": "最新",
+    "orderLiked": "最多赞",
+    "byThisAuthor": "只看 {author}",
+    "clearAuthor": "显示所有人",
+    "like": "点赞",
+    "unlike": "取消点赞",
+    "likeFailed": "操作未能保存。",
+    "marketplaceNoMatches": "没有列表匹配“{query}”。",
+    "viewSet": "查看全部 {count} 张 →",
+    "backToMarketplace": "卡组市场",
+    "publishedAt": "发布于 {date}",
+    "setNotFound": "该卡组已不在市场中。",
+    "viewAll": "查看全部 {count}",
+    "setFilterPlaceholder": "按名称、类型或特质筛选…"
+  },
   "enemyAttackPrompt": {
     "regular": "暗影迫近 · 选择敌人的攻击顺序",
     "opportunity": "破绽已现 · 选择借机攻击的结算顺序"
