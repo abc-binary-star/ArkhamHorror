@@ -42,7 +42,15 @@ const homebrew = fs.existsSync(homebrewDir)
 
 const tarot = fs.existsSync(tarotDir) ? fs.readdirSync(tarotDir).filter(f => f.endsWith('.jpg')).sort() : [];
 
-const digests = [...files.map(f => `cards/${f}`), ...homebrew, ...tarot.map(f => `tarot/${f}`)];
+const customizationsDir = path.join(__dirname, `../public/img/arkham/${lang}/customizations`);
+const customizations = fs.existsSync(customizationsDir)
+  ? fs.readdirSync(customizationsDir)
+    .filter(f => f.endsWith('.avif') || f.endsWith('.jpg'))
+    .sort()
+    .map(f => `customizations/${f}`)
+  : [];
+
+const digests = [...files.map(f => `cards/${f}`), ...homebrew, ...tarot.map(f => `tarot/${f}`), ...customizations];
 
 fs.writeFileSync(digest, JSON.stringify(digests, null, 2));
 console.log(`Wrote ${digests.length} digests to ${digest}`);
