@@ -27,15 +27,20 @@
 <script lang="ts" setup>
 import { clientLog } from '@/utils/clientLog'
 import { ModalsContainer } from 'vue-final-modal'
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSiteSettingsStore } from '@/stores/site_settings'
-import { checkImageExists } from '@/arkham/helpers'
+import { checkImageExists, fallbackLocalizedCardImage } from '@/arkham/helpers'
 import NavBar from '@/components/NavBar.vue'
 
 const route = useRoute()
 const settingsStore = useSiteSettingsStore()
+
+// Image errors do not bubble. Capture them for locations, acts, agendas and
+// card previews, including cards mounted after the initial page load.
+document.addEventListener('error', fallbackLocalizedCardImage, true)
+onBeforeUnmount(() => document.removeEventListener('error', fallbackLocalizedCardImage, true))
 
 // index.html ships `lang="en"` as the neutral default; the UI locale decides
 // what the document actually is, which CJK line breaking, hyphenation and

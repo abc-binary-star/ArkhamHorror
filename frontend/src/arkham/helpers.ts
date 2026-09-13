@@ -125,7 +125,7 @@ export function imgsrc(src: string, ignoreVariants = false): string {
   )
   const fullPath = `${store.assetHost}/img/arkham/${path}`
 
-  if (isLocalized(src)) {
+  if (isLocalized(path)) {
     const helper = imgHelper.get(language) || defaultHelper
     const exists = helper.digests.has(path)
 
@@ -138,6 +138,36 @@ export function imgsrc(src: string, ignoreVariants = false): string {
   }
 
   return fullPath
+}
+
+// The digest records published translations, not whether the current asset
+// host can serve them. Recover a missing translation on the same printed face
+// and share that result with every view using imgsrc().
+export function fallbackLocalizedCardImage(event: Event): void {
+  const image = event.target
+  if (!(image instanceof HTMLImageElement)) return
+
+  const assetRoot = new URL(`${useSiteSettingsStore().assetHost}/img/arkham/`, window.location.href).href
+  const src = image.currentSrc || image.src
+  for (const helper of imgHelper.values()) {
+    const prefix = `${assetRoot}${helper.root}/`
+    if (!src.startsWith(prefix)) continue
+    const path = src.slice(prefix.length)
+    if (!/^cards\/[^/?#]+\.avif$/.test(path)) continue
+
+    // zh and zh-cn have separate reactive indexes but share the same files.
+    for (const alias of imgHelper.values()) {
+      if (alias.root !== helper.root) continue
+      const available = alias.data.get(path)
+      if (available) available.value = false
+    }
+
+    // Handle this before component error handlers hide a back or try another
+    // front. A failure of the base image still reaches those handlers normally.
+    event.stopImmediatePropagation()
+    image.src = `${assetRoot}${path}`
+    return
+  }
 }
 
 // Homebrew card art (prefixed codes) lives under its campaign folder.
