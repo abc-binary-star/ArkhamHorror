@@ -665,7 +665,7 @@ const spadeInjury = computed(() => {
               :game="game"
               @click="$emit('choose', ability.index)"
               />
-            <InvestigatorUndo v-if="undoControls" />
+            <InvestigatorUndo v-if="undoControls && isCurrentPlayersInvestigator" />
             <button
             class="end-turn-button"
             :class="{ active: endTurnAction !== -1 && investigator.remainingActions <= 0, armed: endTurnArmed }"
@@ -732,7 +732,7 @@ const spadeInjury = computed(() => {
       @choose="$emit('choose', $event)"
     />
 
-    <Draggable v-if="doShowBonded">
+    <Draggable v-if="doShowBonded" atmosphere="support">
       <template #handle><header><h2>{{$t('gameBar.bonded')}}</h2></header></template>
       <div class="card-row-cards">
         <div v-for="card in investigator.bondedCards" :key="cardId(card)" class="card-row-card">

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { imgsrc } from '@/arkham/helpers';
 import { cardImage } from '@/arkham/cardImages';
 import type { Modifier } from '@/arkham/types/Modifier';
@@ -9,7 +9,7 @@ import type { Game } from '@/arkham/types/Game';
 import * as ArkhamGame from '@/arkham/types/Game';
 import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Message';
 import { MessageType } from '@/arkham/types/Message';
-import AbilityButton from '@/arkham/components/AbilityButton.vue'
+import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import TokenPool from '@/arkham/components/TokenPool.vue'
 import { useDebug } from '@/arkham/debug'
 import { useCardStore } from '@/stores/cards'
@@ -94,11 +94,10 @@ const id = computed(() => props.card.tag === 'VengeanceCard' ? props.card.conten
 const isHighlighted = computed(() => props.game.highlightedCards.includes(id.value))
 const choices = computed(() => ArkhamGame.choices(props.game, props.playerId))
 
-function canInteract(c: Message): boolean {
-  if (isAbility(c)) {
-    return true
-  }
+const cardFrame = ref<HTMLElement | null>(null)
+const showAbilities = ref(false)
 
+function canInteract(c: Message): boolean {
   if (c.tag === MessageType.TARGET_LABEL) {
     if (c.target.tag === 'SkillTarget') {
       if (typeof c.target.contents === 'string' && props.game.skills[c.target.contents].cardId == id.value) {
@@ -171,6 +170,16 @@ const abilities = computed<AbilityMessage[]>(() => {
       return acc;
     }, []);
 })
+
+function clicked() {
+  if (cardAction.value !== -1) {
+    emit('choose', cardAction.value)
+  } else if (abilities.value.length === 1) {
+    emit('choose', abilities.value[0].index)
+  } else if (abilities.value.length > 1) {
+    showAbilities.value = !showAbilities.value
+  }
+}
 
 /*
  * A card carries no tokens of its own -- `CardContents.tokens` decodes as a
@@ -254,7 +263,8 @@ function startDrag(event: DragEvent) {
       class="playing-card-overlay"
     />
     <img
-      :class="{'card--can-interact': cardAction !== -1, 'card--highlighted': isHighlighted && cardAction === -1, 'sideways': forceSideways}"
+      ref="cardFrame"
+      :class="{'card--can-interact': cardAction !== -1 || abilities.length > 0, 'card--highlighted': isHighlighted && cardAction === -1, 'sideways': forceSideways}"
       class="card"
       :src="image"
       loading="lazy"
@@ -263,7 +273,7 @@ function startDrag(event: DragEvent) {
       :data-pc="modifiedPlayingCard ? modifiedPlayingCard : null"
       :draggable="debug.active"
       @dragstart="startDrag"
-      @click="emit('choose', cardAction)"
+      @click="clicked"
     />
     <span class="vengeance" v-if="card.tag === 'VengeanceCard'">{{$t('card.vengeance', {value: 1})}}</span>
     <div class="pool" v-if="hasPool">
@@ -276,14 +286,14 @@ function startDrag(event: DragEvent) {
       title="Debug customize"
       @click.stop="debugCustomize"
     ><font-awesome-icon icon="wrench" /></button>
-    <AbilityButton
-      v-for="ability in abilities"
-      :key="ability.index"
-      :ability="ability.contents"
-      :data-image="image"
+    <AbilitiesMenu
+      v-if="abilities.length > 0"
+      v-model="showAbilities"
       :game="game"
-      @click="$emit('choose', ability.index)"
-      />
+      :abilities="abilities"
+      :frame="cardFrame"
+      @choose="emit('choose', $event)"
+    />
   </div>
 </template>
 

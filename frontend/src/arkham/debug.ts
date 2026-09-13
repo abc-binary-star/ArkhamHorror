@@ -1,4 +1,5 @@
-import { reactive } from 'vue'
+import { inject, reactive } from 'vue'
+import { debugControlsAllowedKey } from '@/arkham/injectionKeys'
 import { updateGameRaw } from '@/arkham/api'
 import type { Scenario } from '@/arkham/types/Scenario'
 
@@ -41,5 +42,13 @@ const debug = reactive({
 })
 
 export function useDebug() {
-  return debug
+  const allowed = inject(debugControlsAllowedKey, null)
+  if (!allowed) return debug
+  return {
+    get active() { return allowed.value && debug.active },
+    toggle: () => { if (allowed.value) debug.toggle() },
+    send: async (gameId: string, message: any) => {
+      if (allowed.value) return debug.send(gameId, message)
+    },
+  }
 }

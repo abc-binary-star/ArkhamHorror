@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import AtmosphereLine from './AtmosphereLine.vue'
 import { displayTabooId, displayTabooList } from '@/arkham/taboo';
 import { computed, ref, inject, watch, nextTick } from 'vue'
 import type { Game } from '@/arkham/types/Game';
@@ -435,6 +436,7 @@ const needsReply = computed(() => {
     <div class="investigators">
       <button v-if="canBack" class="screen-back" @click="$emit('back')">← {{ $t('back') }}</button>
       <h2 class="page-title">{{$t('create.chooseYourDeck', players.length)}}</h2>
+      <AtmosphereLine tone="preparation" />
       <div class="portraits">
         <div class="investigator-row" v-for="player in players" :key="player.id">
           <template v-if="player.tag === 'Chosen'">

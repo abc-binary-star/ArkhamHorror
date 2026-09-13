@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import AtmosphereLine from '@/arkham/components/AtmosphereLine.vue'
+import type { AtmosphereTone } from '@/arkham/atmosphere'
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { handleEmbeddedI18n } from '@/arkham/i18n'
@@ -6,6 +8,7 @@ import { handleEmbeddedI18n } from '@/arkham/i18n'
 const { t } = useI18n()
 
 export interface Props {
+  atmosphere?: AtmosphereTone
   prompt: string
   yes: () => void
   no: () => void
@@ -48,6 +51,7 @@ const format = (str: string) => {
       <font-awesome-icon icon="times" />
     </button>
     <p class="prompt-text">{{ format(prompt) }}</p>
+    <AtmosphereLine v-if="atmosphere" :tone="atmosphere" />
     <div class="prompt-actions">
       <button class="btn btn--confirm" @click.prevent="handleYes">{{ t('yes') }}</button>
       <button class="btn btn--cancel" @click.prevent="handleNo">{{ t('no') }}</button>

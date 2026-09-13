@@ -6,7 +6,7 @@ import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/typ
 import { useDebug } from '@/arkham/debug'
 import { cardImage } from '@/arkham/cardImages'
 import { useCardFlip } from '@/arkham/composables/useCardFlip'
-import AbilityButton from '@/arkham/components/AbilityButton.vue'
+import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import Token from '@/arkham/components/Token.vue'
 import * as ArkhamStory from '@/arkham/types/Story'
 import TokenPool from '@/arkham/components/TokenPool.vue';
@@ -115,10 +115,18 @@ const abilities = computed(() => {
 // Story cards generally expose a single story ability. Let the card itself
 // select that unambiguous choice instead of requiring a second click on the
 // ability button. Target-label choices still take precedence.
-const directAction = computed(() => {
-  if (cardAction.value !== -1) return cardAction.value
-  return abilities.value.length === 1 ? abilities.value[0].index : -1
-})
+function clicked() {
+  if (cardAction.value !== -1) {
+    choose(cardAction.value)
+  } else if (abilities.value.length === 1) {
+    choose(abilities.value[0].index)
+  } else if (abilities.value.length > 1) {
+    showAbilities.value = !showAbilities.value
+  }
+}
+
+const cardFrame = ref<HTMLElement | null>(null)
+const showAbilities = ref(false)
 
 const civilians = computed(() => props.story.tokens[TokenType.Civilian])
 const storyTokens = computed(() => {
@@ -135,11 +143,12 @@ const sealedChaosTokens = computed(() => props.story.sealedChaosTokens ?? [])
     <div class="story-card">
       <div class="image-container">
         <img :src="displayedImage"
-          :class="{'story--can-interact': directAction !== -1, 'card--flipping': flipping }"
+          ref="cardFrame"
+          :class="{'story--can-interact': cardAction !== -1 || abilities.length > 0, 'card--flipping': flipping }"
           :data-crossed-off="crossedOff"
           :data-checkmarks="JSON.stringify(checkmarks)"
           class="card story"
-          @click="directAction !== -1 && $emit('choose', directAction)"
+          @click="clicked"
         />
         <div class="pool" v-if="hasPool">
           <TokenPool :tokens="storyTokens" />
@@ -149,14 +158,14 @@ const sealedChaosTokens = computed(() => props.story.sealedChaosTokens ?? [])
         </div>
         <TokenPool :tokens="{ Civilian: civilians }" :overrides="{ Civilian: { class: 'civilians' } }" />
       </div>
-      <AbilityButton
-        v-for="ability in abilities"
-        :key="ability.index"
-        :ability="ability.contents"
-        :data-image="image"
+      <AbilitiesMenu
+        v-if="abilities.length > 0"
+        v-model="showAbilities"
         :game="game"
-        @click="$emit('choose', ability.index)"
-        />
+        :abilities="abilities"
+        :frame="cardFrame"
+        @choose="choose"
+      />
       <button v-if="debug.active && hasBag" @click="debugging = true">
         {{ $t('debug.story.inspectBag') }}
       </button>

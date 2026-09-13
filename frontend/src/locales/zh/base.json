@@ -1,4 +1,8 @@
 {
+  "enemyAttackPrompt": {
+    "regular": "暗影迫近 · 选择敌人的攻击顺序",
+    "opportunity": "破绽已现 · 选择借机攻击的结算顺序"
+  },
   "attackNotice": {
     "regular": {
       "both": "敌人攻击：{name} → {iname}。攻击数值：{damage} 点伤害、{horror} 点恐惧（减免与分配另行结算）。",
@@ -19,13 +23,11 @@
   },
   "triggeredEffect": {
     "title": "有待处理的触发效果",
-    "description": "当前事件触发了响应时机。请选择下方要发动或结算的效果，游戏正在等待你的选择。",
     "inspect": "查看牌桌",
     "restore": "返回待处理效果",
     "card": "提供此效果的卡牌",
     "skip": "跳过本次响应",
-    "play": "打出这张牌",
-    "hint": "查看牌桌不会跳过响应。只有规则允许时才会显示跳过按钮；强制效果必须结算。"
+    "play": "打出这张牌"
   },
   "showCardText": "显示说明",
   "hideCardText": "收起说明",
@@ -307,6 +309,7 @@
     "viewOnArkhamDb": "在 ArkhamDB 查看",
     "syncDeck": "同步牌组",
     "deleteDeck": "删除牌组",
+    "editInBuilder": "在构筑器中编辑",
     "editDeck": "编辑牌组",
     "editHelp": "改牌组名，或把它重新指向另一个 ArkhamDB / arkham.build 链接并把那份卡表拉进来。逐张加卡、减卡请用叠层（Overlay）编辑器。",
     "editNamePlaceholder": "牌组名",
@@ -326,6 +329,7 @@
   },
   "deckList": {
     "newDeck": "新牌组",
+    "createInBuilder": "构筑器新建",
     "saveToDeckList": "保存到牌组列表",
     "saveToDeckListDescription": "保留此牌组以供未来的战役使用"
   },

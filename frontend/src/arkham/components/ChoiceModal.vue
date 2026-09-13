@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { AtmosphereTone } from '@/arkham/atmosphere';
+import AtmosphereLine from './AtmosphereLine.vue';
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch, type CSSProperties } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Game } from '@/arkham/types/Game';
@@ -12,9 +14,10 @@ import { QuestionType } from '@/arkham/types/Question';
 import Draggable from '@/components/Draggable.vue';
 import Question from '@/arkham/components/Question.vue';
 import TriggeredEffectModal from '@/arkham/components/TriggeredEffectModal.vue';
+import EnemyAttackChoiceModal from '@/arkham/components/EnemyAttackChoiceModal.vue';
 import RequiredActionReminder from '@/arkham/components/RequiredActionReminder.vue';
 import { IsMobile } from '@/arkham/isMobile';
-import { processingKey } from '@/arkham/injectionKeys';
+import { processingKey, phaseAnnouncementKey } from '@/arkham/injectionKeys';
 
 export interface Props {
   game: Game
@@ -26,6 +29,7 @@ const props = withDefaults(defineProps<Props>(), { noStory: false })
 const emit = defineEmits(['choose'])
 const { t, te } = useI18n()
 const processing = inject(processingKey)
+const phaseAnnouncement = inject(phaseAnnouncementKey, ref(false))
 const isProcessing = computed(() => processing?.value ?? false)
 
 async function choose(idx: number) {
@@ -45,6 +49,20 @@ const isTriggeredWindow = computed(() => {
 })
 
 const inSkillTest = computed(() => props.game.skillTest !== null)
+// An explicit server label distinguishes incoming attacks from targeting an
+// enemy with a player action. Both otherwise arrive as EnemyTarget choices.
+const enemyAttackPrompt = computed(() => {
+  let question = props.game.question[props.playerId]
+  while (question) {
+    if (question.tag === 'QuestionLabel') {
+      if (question.label === '$enemyAttackPrompt.opportunity') return 'opportunity'
+      if (question.label === '$enemyAttackPrompt.regular') return 'regular'
+    }
+    if (!question.question) break
+    question = question.question
+  }
+  return null
+})
 const choices = computed(() => ArkhamGame.choices(props.game, props.playerId))
 const cthulhuDeckCardCodes = new Set([
   '11705',
@@ -201,6 +219,7 @@ const tokenChoices = computed(() => props.game.scenario?.chaosBag.choice)
 const damageAssignmentTokens = computed(() => ArkhamGame.damageAssignmentTokens(props.game, props.playerId))
 
 const requiresModal = computed(() => {
+  if (phaseAnnouncement.value) return false
   // Nothing inside the modal renders without a question, and undo/step transitions
   // clear the question while focused cards, tokens and search results still hold
   // the old state -- without this the modal stays up completely empty.
@@ -306,17 +325,33 @@ const title = computed(() => {
 
   return t("Choose")
 })
+const choiceAtmosphere = computed<AtmosphereTone>(() => {
+  if (question.value?.tag === QuestionType.READ) return 'story'
+  if (skillTestResults.value) return skillTestResults.value.skillTestResultsSuccess ? 'success' : 'failure'
+  if (paymentAmountsLabel.value || question.value?.tag === 'PayCostQuestion' || question.value?.tag === 'ChooseExchangeAmounts') return 'payment'
+  if (searchedCards.value.length) return 'search'
+  if (props.game.focusedChaosTokens.length || tokenChoices.value) return 'chaos'
+  if (focusedCards.value.length) return 'revelation'
+  return 'choice'
+})
 </script>
 
 <template>
   <RequiredActionReminder
     :game="game"
     :player-id="playerId"
-    :suppressed="isTriggeredWindow"
+    :suppressed="isTriggeredWindow || !!enemyAttackPrompt"
+    @choose="choose"
+  />
+  <EnemyAttackChoiceModal
+    v-if="enemyAttackPrompt && !phaseAnnouncement"
+    :game="game"
+    :player-id="playerId"
+    :opportunity="enemyAttackPrompt === 'opportunity'"
     @choose="choose"
   />
   <TriggeredEffectModal
-    v-if="isTriggeredWindow"
+    v-else-if="isTriggeredWindow && !phaseAnnouncement"
     :game="game"
     :player-id="playerId"
     @choose="choose"
@@ -326,6 +361,7 @@ const title = computed(() => {
     class="cthulhu-enact no-card-overlay"
     :class="{ 'cthulhu-enact--processing': isProcessing }"
   >
+    <AtmosphereLine tone="revelation" class="cthulhu-atmosphere" />
     <span class="cthulhu-space-backdrop" aria-hidden="true"></span>
     <span
       v-if="cthulhuDeckCount"
@@ -368,6 +404,7 @@ const title = computed(() => {
   >
     <template #handle><h1 v-html="label(title)"></h1></template>
     <div class="choice-modal-wrapper" :class="{ 'choice-modal-wrapper--processing': isProcessing }">
+      <AtmosphereLine :tone="choiceAtmosphere" />
       <p class="body" v-if="body" v-html="label(body)"></p>
       <section v-if="isMobile && handChoices.length" class="mobile-hand-choices" :aria-label="t('player.hand')">
         <button v-for="card in handChoices" :key="card.id" type="button" :disabled="isProcessing" :aria-label="`${t('player.hand')} ${card.code}`" @click="choose(card.index)">
@@ -380,6 +417,7 @@ const title = computed(() => {
 </template>
 
 <style scoped>
+.cthulhu-atmosphere { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); width: min(520px, 85vw); z-index: 2; color: #e9dfcb; text-align: center; }
 .cthulhu-enact {
   position: fixed;
   inset: 0;

@@ -21,7 +21,6 @@ import HandCard from '@/arkham/components/HandCard.vue';
 import CardRow from '@/arkham/components/CardRow.vue';
 import CardsUnderIndicator from '@/arkham/components/CardsUnderIndicator.vue';
 import Investigator from '@/arkham/components/Investigator.vue';
-import ChoiceModal from '@/arkham/components/ChoiceModal.vue';
 import { TarotCard, tarotCardImage } from '@/arkham/types/TarotCard';
 import * as ArkhamInvestigator from '@/arkham/types/Investigator'
 import { useI18n } from 'vue-i18n';
@@ -42,6 +41,7 @@ import { getGameLocalStorageItem, setGameLocalStorageItem } from '@/arkham/local
 import {
   isMinimizedSkillTestKey,
   showOtherPlayersHandsKey,
+  spectateKey,
   soloKey,
 } from '@/arkham/injectionKeys';
 
@@ -63,6 +63,7 @@ export interface Props {
 
 const props = withDefaults(defineProps<Props>(), { mobileHandActive: true })
 const solo = inject(soloKey)
+const spectate = inject(spectateKey, ref(false))
 const showOtherPlayersHands = inject(showOtherPlayersHandsKey)
 
 const investigatorId = computed(() => props.investigator.id)
@@ -254,7 +255,7 @@ function showDraggedAsset(event: DragEvent) {
 // would otherwise interrupt; forced abilities still fire. Unlike the stack
 // itself it is real game state (`cardSilenced` in PerCardSettings), because the
 // engine is the one that has to stop offering the ability.
-const controlsInvestigator = computed(() => props.playerId === props.investigator.playerId)
+const controlsInvestigator = computed(() => !spectate.value && props.playerId === props.investigator.playerId)
 
 const perCardSettings = computed(() => props.investigator.settings.perCardSettings ?? {})
 
@@ -1193,13 +1194,6 @@ function closeHand() { mobileHandOpen.value = false }
       </CardsUnderIndicator>
       </div>
     </div>
-
-    <ChoiceModal
-      v-if="playerId === investigator.playerId"
-      :game="game"
-      :playerId="playerId"
-      @choose="$emit('choose', $event)"
-    />
 
     <div
       v-if="debug.active && showDebugAddCard"

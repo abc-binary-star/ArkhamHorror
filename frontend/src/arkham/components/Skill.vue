@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import MissingCardBadge from '@/arkham/components/MissingCardBadge.vue';
 import { Game } from '@/arkham/types/Game';
 import Token from '@/arkham/components/Token.vue';
 import * as ArkhamGame from '@/arkham/types/Game';
 import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/types/Message';
 import { cardImg } from '@/arkham/helpers';
-import AbilityButton from '@/arkham/components/AbilityButton.vue'
+import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import * as ArkhamSkill from '@/arkham/types/Skill'
 
 export interface Props {
@@ -76,29 +76,45 @@ const hasPool = computed(() => {
 })
 
 const choose = (index: number) => emits('choose', index)
+
+const cardFrame = ref<HTMLElement | null>(null)
+const showAbilities = ref(false)
+
+function clicked() {
+  if (cardAction.value !== -1) {
+    choose(cardAction.value)
+  } else if (abilities.value.length === 1) {
+    choose(abilities.value[0].index)
+  } else if (abilities.value.length > 1) {
+    showAbilities.value = !showAbilities.value
+  }
+}
+
 </script>
 
 <template>
   <div class="skill" :class="{ attached }">
     <MissingCardBadge :card-code="cardCode" />
     <img
+      ref="cardFrame"
       :src="image"
-      :class="{ 'skill--can-interact': cardAction !== -1 }"
+      :class="{ 'skill--can-interact': cardAction !== -1 || abilities.length > 0 }"
       class="card skill"
-      @click="choose(cardAction)"
+      @click="clicked"
       :data-customizations="JSON.stringify(skill.customizations)"
     />
     <div v-if="hasPool" class="pool">
       <Token v-for="(sealedToken, index) in skill.sealedChaosTokens" :key="index" :token="sealedToken" :playerId="playerId" :game="game" @choose="choose" />
     </div>
-    <AbilityButton
-      v-for="ability in abilities"
-      :key="ability.index"
-      :ability="ability.contents"
-      :data-image="image"
+
+    <AbilitiesMenu
+      v-if="abilities.length > 0"
+      v-model="showAbilities"
       :game="game"
-      @click="choose(ability.index)"
-      />
+      :abilities="abilities"
+      :frame="cardFrame"
+      @choose="choose"
+    />
   </div>
 </template>
 

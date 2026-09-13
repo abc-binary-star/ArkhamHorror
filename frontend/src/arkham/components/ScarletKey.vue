@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Game } from '@/arkham/types/Game'
 import * as ArkhamGame from '@/arkham/types/Game'
 import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/types/Message'
 import { cardImage } from '@/arkham/cardImages'
-import AbilityButton from '@/arkham/components/AbilityButton.vue'
+import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import * as ArkhamScarletKey from '@/arkham/types/ScarletKey'
 import TokenPool from '@/arkham/components/TokenPool.vue';
 
@@ -30,6 +30,19 @@ const id = computed(() => props.scarletKey.id)
 
 const choices = computed(() => ArkhamGame.choices(props.game, props.playerId))
 const choose = (idx: number) => emit('choose', idx)
+
+const cardFrame = ref<HTMLElement | null>(null)
+const showAbilities = ref(false)
+
+function clicked() {
+  if (cardAction.value !== -1) {
+    choose(cardAction.value)
+  } else if (abilities.value.length === 1) {
+    choose(abilities.value[0].index)
+  } else if (abilities.value.length > 1) {
+    showAbilities.value = !showAbilities.value
+  }
+}
 
 function canInteract(c: Message): boolean {
   if (c.tag === MessageType.TARGET_LABEL && c.target.contents === id.value) {
@@ -83,23 +96,24 @@ const abilities = computed(() => {
     <div class="scarletKey-card">
       <div class="image-container">
         <img :src="image"
-          :class="{'scarletKey--can-interact': cardAction !== -1 }"
+          ref="cardFrame"
+          :class="{'scarletKey--can-interact': cardAction !== -1 || abilities.length > 0 }"
           :data-crossed-off="crossedOff"
           class="card scarletKey"
-          @click="$emit('choose', cardAction)"
+          @click="clicked"
         />
         <div class="pool">
           <TokenPool :tokens="scarletKey.tokens" />
         </div>
       </div>
-      <AbilityButton
-        v-for="ability in abilities"
-        :key="ability.index"
-        :ability="ability.contents"
-        :data-image="image"
+      <AbilitiesMenu
+        v-if="abilities.length > 0"
+        v-model="showAbilities"
         :game="game"
-        @click="$emit('choose', ability.index)"
-        />
+        :abilities="abilities"
+        :frame="cardFrame"
+        @choose="choose"
+      />
     </div>
   </div>
 </template>

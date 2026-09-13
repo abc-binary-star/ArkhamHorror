@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, inject, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, inject, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Moon, Eye, Skull, Flame } from '@lucide/vue'
 import type { Phase } from '@/arkham/types/Phase'
-import { uiLockKey, phaseAnnouncementKey } from '@/arkham/injectionKeys'
+import { announcedPhaseKey } from '@/arkham/injectionKeys'
+import { PHASE_ANNOUNCEMENT_MS } from '@/arkham/composables/usePhaseAnnouncement'
 
-const props = defineProps<{ phase: Phase }>()
 const { t } = useI18n({
   useScope: 'local',
   fallbackLocale: 'en',
@@ -32,56 +32,9 @@ const emblems = {
   EnemyPhase: { icon: Skull, numeral: 'III', accent: '#d39686' },
   UpkeepPhase: { icon: Flame, numeral: 'IV', accent: '#ddc18a' },
 }
-const current = ref<RoundPhase | null>(null)
-const emblem = computed(() => current.value ? emblems[current.value] : null)
-const pending: RoundPhase[] = []
-const uiLock = inject(uiLockKey, ref(false))
-// Mirrored up to Game.vue so revelation-class overlays queue behind the banner
-// instead of popping over it mid-animation.
-const announcementActive = inject(phaseAnnouncementKey, ref(false))
-let timer: ReturnType<typeof setTimeout> | undefined
-
-watch(current, (value) => {
-  announcementActive.value = value !== null
-})
-
-function advance() {
-  clearTimeout(timer)
-  timer = undefined
-  if (uiLock.value) return
-  current.value = pending.shift() ?? null
-  timer = current.value ? setTimeout(advance, 2200) : undefined
-}
-
-// Do not replay an entrance when loading/reconnecting to a game. Queue actual
-// phase changes so rapidly resolved enemy/upkeep phases still get their moment.
-watch([() => props.phase, uiLock], ([phase, locked], [previous]) => {
-  if (phase === 'CampaignPhase') {
-    clearTimeout(timer)
-    timer = undefined
-    pending.length = 0
-    current.value = null
-    return
-  }
-  if (phase !== previous) pending.push(phase)
-  // Board updates can already contain the next phase behind a card reveal.
-  // Keep announcements queued until all locally queued reveals are dismissed.
-  // If a reveal interrupts an entrance, replay that entrance after confirmation.
-  if (locked) {
-    clearTimeout(timer)
-    timer = undefined
-    if (current.value) pending.unshift(current.value)
-    current.value = null
-    return
-  }
-  if (!current.value) advance()
-}, { flush: 'post' })
-
-onBeforeUnmount(() => {
-  clearTimeout(timer)
-  pending.length = 0
-  announcementActive.value = false
-})
+const current = inject(announcedPhaseKey, ref<Phase | null>(null))
+const emblem = computed(() => current.value && current.value !== 'CampaignPhase'
+  ? emblems[current.value as RoundPhase] : null)
 </script>
 
 <template>
@@ -91,7 +44,7 @@ onBeforeUnmount(() => {
         v-if="current && emblem"
         :key="current"
         class="phase-interlude"
-        :style="{ '--phase-accent': emblem.accent }"
+        :style="{ '--phase-accent': emblem.accent, '--phase-duration': `${PHASE_ANNOUNCEMENT_MS}ms` }"
       >
         <div class="phase-interlude__veil" aria-hidden="true" />
         <section class="phase-interlude__panel">
@@ -124,7 +77,8 @@ onBeforeUnmount(() => {
   display: grid;
   place-items: center;
   opacity: 0;
-  animation: phase-revelation 2200ms ease both;
+  animation: phase-revelation var(--phase-duration) ease both;
+  pointer-events: auto;
 }
 
 .phase-interlude__veil {

@@ -2,7 +2,7 @@
 import { clientLog, clientError } from '@/utils/clientLog'
 import { isTabletopFrame, TABLETOP_DISMISS, tabletopDocument, useFixedTabletop } from '@/arkham/composables/useFixedTabletop'
 import { useGameAudio } from '@/arkham/composables/useGameAudio'
-import { ArrowLeft, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight, Monitor } from '@lucide/vue'
+import { ArrowLeft, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight, Monitor, Eye, EyeOff } from '@lucide/vue'
 import {
   computed,
   markRaw,
@@ -59,6 +59,7 @@ import { useEventStore } from '@/arkham/stores/event'
 import { useBgm } from '@/arkham/composables/useBgm'
 import { useEventTimer } from '@/arkham/composables/useEventTimer'
 import { useFocusLight } from '@/arkham/composables/useFocusLight'
+import { usePhaseAnnouncement } from '@/arkham/composables/usePhaseAnnouncement'
 import { useGameSocket, useSingleFlight } from '@/arkham/composables/useGameSocket'
 import { useImagePreloader } from '@/arkham/composables/useImagePreloader'
 import { useTurnTitleFlash } from '@/arkham/composables/useTurnTitleFlash'
@@ -99,6 +100,7 @@ import {
   switchInvestigatorKey,
   uiLockKey,
   phaseAnnouncementKey,
+  announcedPhaseKey,
 } from '@/arkham/injectionKeys'
 import { Card, asCardCode, cardDecoder, toCardContents } from '@/arkham/types/Card'
 import { customCardDef, isCustomCardCode } from '@/arkham/customCards'
@@ -124,6 +126,7 @@ import StandaloneScenario from '@/arkham/components/StandaloneScenario.vue'
 import StoryQuestion from '@/arkham/components/StoryQuestion.vue'
 import AchievementToast from '@/arkham/components/AchievementToast.vue'
 import { clearCurrentNarration, stopNarration } from '@/arkham/narration'
+import AtmosphereLine from '@/arkham/components/AtmosphereLine.vue'
 import Draggable from '@/components/Draggable.vue'
 import Menu from '@/components/Menu.vue'
 import Prompt from '@/components/Prompt.vue'
@@ -432,9 +435,9 @@ watch(showOtherPlayersHands, (v) => {
 })
 const tarotCards = ref<TarotCard[]>([])
 const uiLock = ref<boolean>(false)
-// True while a phase interlude banner is on screen (written by PhaseInterlude).
-// Revelation-class overlays arriving during a banner queue behind it.
-const phaseAnnouncement = ref<boolean>(false)
+const { current: announcedPhase, active: phaseAnnouncement } = usePhaseAnnouncement(
+  () => game.value?.phase, uiLock,
+)
 const showSettings = ref(false)
 const showHistory = ref(false)
 const processing = ref(false)
@@ -597,7 +600,7 @@ const choicesByPlayer = computed(() => {
   if (!currentGame) return new Map<string, readonly Message.Message[]>()
 
   return new Map(
-    Object.keys(currentGame.question).map((pid) => [pid, ArkhamGame.choices(currentGame, pid)]),
+    Object.keys(currentGame.question).map((pid) => [pid, phaseAnnouncement.value ? [] : ArkhamGame.choices(currentGame, pid)]),
   )
 })
 const choicesSourceByPlayer = computed(() => {
@@ -1118,6 +1121,7 @@ const scheduleApplyUpdate = useSingleFlight(
 )
 
 function continueSkipAll() {
+  if (phaseAnnouncement.value || uiLock.value) return
   if (skipAllPending.value.size === 0) return
   if (!game.value) return
   const next = authorizedSkipTriggerEntries(game.value).find((e) =>
@@ -1131,6 +1135,7 @@ function continueSkipAll() {
 }
 
 function sendSkipFor(targetPlayerId: string, choiceIdx: number) {
+  if (phaseAnnouncement.value || uiLock.value) return
   if (!game.value || props.spectate) return
   oldQuestion.value = game.value.question
   const questionVersion = game.value.scenarioSteps
@@ -1240,6 +1245,7 @@ async function resyncGame() {
 // Every path that answers a question goes through here, so there is one place to
 // change if answering ever needs to do more than flip `processing`.
 function sendAnswer(payload: string) {
+  if (phaseAnnouncement.value || uiLock.value) return
   processing.value = true
   send(payload)
 }
@@ -1409,12 +1415,12 @@ const handleResult = (result: ServerResult) => {
 }
 
 function drainResultQueue() {
-  if (uiLock.value) return
+  if (uiLock.value || phaseAnnouncement.value) return
   for (;;) {
     const r = qPop()
     if (!r) break
     handleResult(r)
-    if (uiLock.value) break
+    if (uiLock.value || phaseAnnouncement.value) break
   }
 }
 
@@ -1425,7 +1431,10 @@ watch(uiLock, () => {
 // A revelation that arrived mid-banner was queued; release it once the banner
 // finishes so the phase interlude always plays out before the draw is shown.
 watch(phaseAnnouncement, (active) => {
-  if (!active) drainResultQueue()
+  if (!active) {
+    drainResultQueue()
+    if (!uiLock.value && !phaseAnnouncement.value) continueSkipAll()
+  }
 })
 
 const confirmingUndoScenario = ref(false)
@@ -1872,7 +1881,7 @@ function isStoryQuestion(question: Question | null | undefined): boolean {
 
 // Callbacks
 async function choose(idx: number) {
-  if (processing.value) return
+  if (processing.value || phaseAnnouncement.value || uiLock.value) return
   if (idx !== -1 && game.value && !props.spectate) {
     oldQuestion.value = game.value.question
     const questionVersion = game.value.scenarioSteps
@@ -1898,6 +1907,7 @@ async function choose(idx: number) {
 /* An overlay chosen at deck selection applies to this game only -- it is sent
  * with the answer rather than saved to the deck. */
 async function chooseDeck(deckId: string, overlay: any = null): Promise<void> {
+  if (phaseAnnouncement.value || uiLock.value) return
   if (game.value && !props.spectate) {
     oldQuestion.value = game.value.question
     setGameQuestion({})
@@ -1906,6 +1916,7 @@ async function chooseDeck(deckId: string, overlay: any = null): Promise<void> {
 }
 
 async function chooseDeckList(deckList: object): Promise<void> {
+  if (phaseAnnouncement.value || uiLock.value) return
   if (game.value && !props.spectate) {
     oldQuestion.value = game.value.question
     setGameQuestion({})
@@ -1914,6 +1925,7 @@ async function chooseDeckList(deckList: object): Promise<void> {
 }
 
 async function choosePaymentAmounts(amounts: Record<string, number>): Promise<void> {
+  if (phaseAnnouncement.value || uiLock.value) return
   if (game.value && !props.spectate) {
     oldQuestion.value = game.value.question
     const questionVersion = game.value.scenarioSteps
@@ -1928,6 +1940,7 @@ async function choosePaymentAmounts(amounts: Record<string, number>): Promise<vo
 }
 
 async function scenarioSpecificAnswer(key: string, value: unknown): Promise<void> {
+  if (phaseAnnouncement.value || uiLock.value) return
   if (game.value && !props.spectate) {
     oldQuestion.value = game.value.question
     setGameQuestion({})
@@ -1936,6 +1949,7 @@ async function scenarioSpecificAnswer(key: string, value: unknown): Promise<void
 }
 
 async function chooseAmounts(amounts: Record<string, number>): Promise<void> {
+  if (phaseAnnouncement.value || uiLock.value) return
   if (game.value && !props.spectate) {
     oldQuestion.value = game.value.question
     const questionVersion = game.value.scenarioSteps
@@ -1955,6 +1969,8 @@ async function update(state: ArkhamGame.Game) {
 }
 
 function switchInvestigator(newPlayerId: string) {
+  if (!solo.value || props.spectate) return
+  if (!Object.values(game.value?.investigators ?? {}).some(i => i.playerId === newPlayerId)) return
   playerId.value = newPlayerId
 }
 type ExportType = 'basic' | 'full' | 'scenario'
@@ -1989,7 +2005,10 @@ provide(choicesTooltipByPlayerKey, choicesTooltipByPlayer)
 provide(gameIndexesKey, gameIndexes)
 provide(chooseDeckKey, chooseDeck)
 provide(chooseDeckListKey, chooseDeckList)
-provide(sendKey, send)
+provide(sendKey, message => {
+  if (phaseAnnouncement.value || uiLock.value) return
+  send(message)
+})
 provide(choosePaymentAmountsKey, choosePaymentAmounts)
 provide(chooseAmountsKey, chooseAmounts)
 provide(scenarioSpecificAnswerKey, scenarioSpecificAnswer)
@@ -2003,6 +2022,7 @@ provide(processingKey, processing)
 provide(storyAnswerPendingKey, storyAnswerPending)
 provide(uiLockKey, uiLock)
 provide(phaseAnnouncementKey, phaseAnnouncement)
+provide(announcedPhaseKey, announcedPhase)
 provide(skipAllTriggersKey, skipAllTriggers)
 provide(skipAllAvailableKey, skipAllAvailable)
 provide(skipAllInProgressKey, skipAllInProgress)
@@ -2216,7 +2236,7 @@ onUnmounted(() => {
       :style="{ '--focus-light-x': `${focusLightX}px`, '--focus-light-y': `${focusLightY}px` }"
       aria-hidden="true"
     ></div>
-    <Draggable v-if="showShortcuts">
+    <Draggable v-if="showShortcuts" atmosphere="preparation">
       <div class="shortcuts-modal">
         <div class="shortcuts-header">
           <h2 class="shortcuts-title">{{ $t('gameBar.shortcutsTitle') }}</h2>
@@ -2324,7 +2344,7 @@ onUnmounted(() => {
         <button class="shortcuts-footer" @click="showShortcuts = false">{{ $t('close') }}</button>
       </div>
     </Draggable>
-    <Draggable v-if="filingBug">
+    <Draggable v-if="filingBug" atmosphere="archive">
       <template #handle>
         <header>
           <h2>{{ $t('gameBar.fileABug') }}</h2>
@@ -2370,6 +2390,22 @@ onUnmounted(() => {
         </button>
       </div>
       <div class="game-tools-drawer__body">
+        <button
+          v-if="!solo && game && game.playerOrder.length > 1"
+          type="button"
+          class="game-tools-action fixed-resolution-toggle"
+          role="switch"
+          :aria-checked="showOtherPlayersHands"
+          :aria-label="$t('gameBar.viewSettingShowOtherPlayersHandsTitle')"
+          @click="showOtherPlayersHands = !showOtherPlayersHands"
+        >
+          <Eye v-if="showOtherPlayersHands" aria-hidden="true" />
+          <EyeOff v-else aria-hidden="true" />
+          <span class="fixed-resolution-toggle__label">
+            {{ $t('gameBar.viewSettingShowOtherPlayersHandsTitle') }}
+          </span>
+          <span class="fixed-resolution-toggle__track" aria-hidden="true"><span /></span>
+        </button>
         <button
           type="button"
           class="game-tools-action fixed-resolution-toggle"
@@ -2548,7 +2584,7 @@ onUnmounted(() => {
       :player-id="playerId"
     />
     <template v-else>
-      <Draggable v-if="showSettings">
+      <Draggable v-if="showSettings" atmosphere="preparation">
         <Settings
           :game="game"
           :playerId="playerId"
@@ -2590,6 +2626,7 @@ onUnmounted(() => {
             />
             <div class="the-silence-modal__body">
               <h2 id="the-silence-modal-title">The Silence</h2>
+              <AtmosphereLine tone="horror" />
               <p>
                 If you look at the Cosmic Emissary enemy for more than 15 seconds at a time, you are
                 <strong>driven insane</strong>.
@@ -2609,6 +2646,7 @@ onUnmounted(() => {
         >
           <div class="revelation-container">
             <h2>{{ format(gameCard.title) }}</h2>
+            <AtmosphereLine :tone="gameCard.title.startsWith('$attackNotice.') ? 'enemy' : gameCard.card.tag === 'EncounterCard' ? 'encounter' : 'revelation'" />
             <div class="revelation-card-container">
               <div
                 class="revelation-card"
@@ -2678,6 +2716,7 @@ onUnmounted(() => {
           </div>
         </div>
         <div v-if="tarotCards.length > 0" class="revelation">
+          <AtmosphereLine tone="tarot" />
           <div class="revelation-container">
             <div class="revelation-card-container">
               <div class="tarot-cards">
@@ -2770,6 +2809,7 @@ onUnmounted(() => {
     <Prompt
       v-if="confirmingUndoScenario"
       prompt="$game.areYouSureUndoScenario"
+      atmosphere="choice"
       :yes="undoScenario"
       :no="() => (confirmingUndoScenario = false)"
     />

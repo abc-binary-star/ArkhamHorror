@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, ComputedRef } from 'vue';
+import { computed, ComputedRef, ref } from 'vue';
 import MissingCardBadge from '@/arkham/components/MissingCardBadge.vue';
 import { Game } from '@/arkham/types/Game';
 import { Card } from '@/arkham/types/Card';
@@ -7,7 +7,7 @@ import * as ArkhamGame from '@/arkham/types/Game';
 import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/types/Message';
 import { cardImage } from '@/arkham/cardImages';
 import TokenPool from '@/arkham/components/TokenPool.vue';
-import AbilityButton from '@/arkham/components/AbilityButton.vue'
+import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import Token from '@/arkham/components/Token.vue';
 import * as ArkhamEvent from '@/arkham/types/Event'
 
@@ -90,16 +90,30 @@ const cardsUnderneathLabel = computed(() => `Underneath (${cardsUnderneath.value
 const showCardsUnderneath = (e: Event) => emits('showCards', e, cardsUnderneath, "Cards Underneath", false)
 
 const choose = (index: number) => emits('choose', index)
+
+const cardFrame = ref<HTMLElement | null>(null)
+const showAbilities = ref(false)
+
+function clicked() {
+  if (cardAction.value !== -1) {
+    choose(cardAction.value)
+  } else if (abilities.value.length === 1) {
+    choose(abilities.value[0].index)
+  } else if (abilities.value.length > 1) {
+    showAbilities.value = !showAbilities.value
+  }
+}
 </script>
 
 <template>
   <div class="event" :class="{ attached }">
     <MissingCardBadge :card-code="cardCode" />
     <img
+      ref="cardFrame"
       :src="image"
-      :class="{ 'event--can-interact': cardAction !== -1, exhausted, attached }"
+      :class="{ 'event--can-interact': cardAction !== -1 || abilities.length > 0, exhausted, attached }"
       class="card event"
-      @click="$emit('choose', cardAction)"
+      @click="clicked"
       :data-customizations="JSON.stringify(event.customizations)"
     />
     <div v-if="hasPool" class="pool">
@@ -113,14 +127,15 @@ const choose = (index: number) => emits('choose', index)
         @choose="choose"
       />
     </div>
-    <AbilityButton
-      v-for="ability in abilities"
-      :key="ability.index"
-      :ability="ability.contents"
-      :data-image="image"
+
+    <AbilitiesMenu
+      v-if="abilities.length > 0"
+      v-model="showAbilities"
       :game="game"
-      @click="$emit('choose', ability.index)"
-      />
+      :abilities="abilities"
+      :frame="cardFrame"
+      @choose="choose"
+    />
 
     <button v-if="cardsUnderneath.length > 0" class="view-discard-button" @click="showCardsUnderneath">{{cardsUnderneathLabel}}</button>
   </div>

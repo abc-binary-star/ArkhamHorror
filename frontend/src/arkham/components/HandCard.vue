@@ -6,10 +6,8 @@ import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Messa
 import { MessageType } from '@/arkham/types/Message'
 import { imgsrc } from '@/arkham/helpers'
 import { cardImage } from '@/arkham/cardImages'
-import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import * as ArkhamGame from '@/arkham/types/Game'
-import { IsMobile } from '@/arkham/isMobile'
 import { useDebug } from '@/arkham/debug'
 import { useCardStore } from '@/stores/cards'
 import { showOtherPlayersHandsKey, soloKey } from '@/arkham/injectionKeys'
@@ -30,7 +28,6 @@ onMounted(() => {
   if (!cardStore.loaded) cardStore.fetchCards()
 })
 
-const { isMobile } = IsMobile()
 const cardFrame = ref<HTMLElement | null>(null)
 const showAbilities = ref(false)
 
@@ -117,17 +114,18 @@ const abilities = computed(() => {
 
 const classObject = computed(() => {
   return {
-    'card--can-interact': cardAction.value !== -1 || (isMobile.value && abilities.value.length > 0),
+    'card--can-interact': cardAction.value !== -1 || abilities.value.length > 0,
   }
 })
 
 function handleCardClick() {
-  if (isMobile.value && abilities.value.length > 0) {
-    showAbilities.value = true
-    return
+  if (cardAction.value !== -1) {
+    emit('choose', cardAction.value)
+  } else if (abilities.value.length === 1) {
+    emit('choose', abilities.value[0].index)
+  } else if (abilities.value.length > 1) {
+    showAbilities.value = !showAbilities.value
   }
-
-  emit('choose', cardAction.value)
 }
 
 const emit = defineEmits<{ choose: [value: number] }>()
@@ -301,18 +299,8 @@ function oilPaintEffect(canvas, radius, intensity) {
       <font-awesome-icon icon="wrench" />
     </button>
 
-    <AbilityButton
-      v-if="!isMobile"
-      v-for="ability in abilities"
-      :key="ability.index"
-      :ability="ability.contents"
-      :data-image="image"
-      :game="game"
-      @click="$emit('choose', ability.index)"
-    />
-
     <AbilitiesMenu
-      v-if="isMobile && abilities.length > 0"
+      v-if="abilities.length > 0"
       v-model="showAbilities"
       :game="game"
       :abilities="abilities"

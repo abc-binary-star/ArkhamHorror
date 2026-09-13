@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import AtmosphereLine from './AtmosphereLine.vue'
 import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { OnClickOutside } from '@vueuse/components';
 import CardOptionGroups from '@/arkham/components/CardOptionGroups.vue';
@@ -86,6 +87,7 @@ onUnmounted(() => {
           <h2 class="card-config__title">{{ cardName }}</h2>
         </div>
         <div class="card-config__body">
+          <AtmosphereLine tone="preparation" />
           <CardOptionGroups
             compact
             :groups="groups"

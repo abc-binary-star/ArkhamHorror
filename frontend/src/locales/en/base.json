@@ -1,4 +1,8 @@
 {
+  "enemyAttackPrompt": {
+    "regular": "Shadows gather · Choose enemy attack order",
+    "opportunity": "A moment exposed · Choose attack of opportunity order"
+  },
   "attackNotice": {
     "regular": {
       "both": "Enemy attack: {name} → {iname}. Attack values: {damage} damage, {horror} horror (prevention and assignment resolve separately).",
@@ -19,13 +23,11 @@
   },
   "triggeredEffect": {
     "title": "An effect can trigger",
-    "description": "The current event has opened a response window. Choose an effect below to resolve it; the game is waiting for your choice.",
     "inspect": "View table",
     "restore": "Return to pending effects",
     "card": "Card offering this effect",
     "skip": "Skip this response window",
-    "play": "Play this card",
-    "hint": "Viewing the table does not skip this window. You can skip only when the game offers that option; mandatory effects must be resolved."
+    "play": "Play this card"
   },
   "showCardText": "Show text",
   "hideCardText": "Hide text",
@@ -330,6 +332,7 @@
     "viewOnArkhamDb": "View on ArkhamDB",
     "syncDeck": "Sync deck",
     "deleteDeck": "Delete deck",
+    "editInBuilder": "Edit in the deck builder",
     "editDeck": "Edit deck",
     "editHelp": "Rename the deck, or repoint it at another ArkhamDB / arkham.build link and pull that list in. Use the overlay editor to add or remove individual cards.",
     "editNamePlaceholder": "Deck name",
@@ -349,6 +352,7 @@
   },
   "deckList": {
     "newDeck": "New Deck",
+    "createInBuilder": "Build with builder",
     "saveToDeckList": "Save to Deck List",
     "saveToDeckListDescription": "Keep this deck available for future campaigns"
   },

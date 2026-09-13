@@ -9,7 +9,7 @@ defineEmits<{ close: [] }>()
 </script>
 
 <template>
-  <Draggable>
+  <Draggable atmosphere="forced">
     <template #handle><header><h2>{{ $t('modifiersTitle') }}</h2></header></template>
     <div class="modifiers">
       <View :modifier="modifier" :game="game" v-for="(modifier, idx) in modifiers" :key="idx" />

@@ -59,6 +59,8 @@ async function deleteDeckEvent() {
 const loaded = ref(false)
 const loadError = ref(false)
 
+const builderCreateUrl = `${window.location.origin}${import.meta.env.BASE_URL.replace(/\/$/, '')}/build/deck/create`
+
 const loadDecks = () => {
   loadError.value = false
   fetchDecks()
@@ -115,6 +117,10 @@ async function sync(deck: ArkhamDeck.Deck) {
     <div id="decks">
       <header class="decks-header">
         <h2>{{ $t('decks') }}</h2>
+        <a class="builder-new-btn" :href="builderCreateUrl" target="_blank" rel="noreferrer noopener">
+          <font-awesome-icon icon="pen" />
+          {{ $t('deckList.createInBuilder') }}
+        </a>
         <PrimaryButton :label="showNewDeck ? t('cancel') : t('deckList.newDeck')" :danger="showNewDeck" @click="showNewDeck = !showNewDeck" />
       </header>
 
@@ -200,6 +206,34 @@ async function sync(deck: ArkhamDeck.Deck) {
   @media (max-width: 768px) {
     flex-wrap: wrap;
     gap: 8px;
+  }
+}
+
+.builder-new-btn {
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--control-radius);
+  background-color: color-mix(in srgb, var(--brass) 18%, var(--surface-panel));
+  color: var(--title);
+  font-size: 0.95em;
+  font-weight: var(--font-black);
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  box-shadow: var(--shadow-1);
+  cursor: pointer;
+  transition: filter 120ms ease, transform 80ms ease;
+
+  &:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 768px) {
+    padding: 8px 14px;
+    font-size: 0.82em;
   }
 }
 

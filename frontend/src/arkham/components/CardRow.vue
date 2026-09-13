@@ -70,7 +70,7 @@ function startDrag(event: DragEvent, card: (CardContents | CardT.Card)) {
 </script>
 
 <template>
-  <Draggable>
+  <Draggable :atmosphere="isDiscards ? 'archive' : 'search'">
     <template #handle>
       <h2>{{title}}</h2>
     </template>

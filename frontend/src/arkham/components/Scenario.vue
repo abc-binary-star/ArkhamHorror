@@ -80,7 +80,7 @@ import Asset from '@/arkham/components/Asset.vue'
 import Location from '@/arkham/components/Location.vue'
 import TreacheryView from '@/arkham/components/Treachery.vue'
 import { useGameChoices } from '@/arkham/composables/useGameChoices'
-import { isMinimizedSkillTestKey, soloKey } from '@/arkham/injectionKeys'
+import { isMinimizedSkillTestKey, soloKey, phaseAnnouncementKey } from '@/arkham/injectionKeys'
 import { useMapViewport } from '@/arkham/composables/useMapViewport'
 import ScenarioPhases from '@/arkham/components/ScenarioPhases.vue'
 import PhaseInterlude from '@/arkham/components/PhaseInterlude.vue'
@@ -1135,10 +1135,8 @@ const playerOrder = computed(() => props.game.playerOrder)
 const multiSeatBoard = computed(() => playerOrder.value.length > 1)
 const encounterPilesHost = ref<HTMLElement | null>(null)
 const desktopTable = useMediaQuery('(min-width: 1200px)')
-// The single-seat desktop layout is retired: from 1200px up every game uses the
-// tabletop arrangement, whatever the seat count. `multiSeatBoard` stays for the
-// things that genuinely need more than one seat (the teammate rail).
-const desktopTabletop = computed(() => desktopTable.value || (multiSeatBoard.value && !isMobile.value))
+// Every desktop seat count uses the same tabletop.
+const desktopTabletop = computed(() => desktopTable.value || !isMobile.value)
 const mobilePanel = ref<'map' | 'player' | 'scenario' | 'team'>('map')
 const navigationSummaryHost = ref<HTMLElement | null>(null)
 onMounted(() => {
@@ -1146,9 +1144,7 @@ onMounted(() => {
 })
 const summaryInNavigation = computed(() => desktopTable.value && !!navigationSummaryHost.value)
 const scenarioAccessoriesOpen = ref(false)
-// Solo multi-control keeps every investigator in one user's hands, so the seat
-// tabs alone are enough to move between them. Separate seats are other people's
-// investigators: they only ever expose public information.
+// The compact teammate overview remains available on mobile; desktop uses seat tabs.
 const onlineMultiSeat = computed(() => multiSeatBoard.value && !soloMode.value)
 const activeInvestigator = computed(
   () => props.game.investigators[props.game.activeInvestigatorId] ?? null,
@@ -1213,17 +1209,6 @@ const teammates = computed(() =>
     ? orderedInvestigators.value.filter((investigator) => investigator.playerId !== props.playerId)
     : [],
 )
-const myInvestigator = computed(
-  () =>
-    orderedInvestigators.value.find((investigator) => investigator.playerId === props.playerId) ??
-    null,
-)
-// The workbench label names whoever's panel is on screen. Solo keeps routing
-// between seats, so fall back to the investigator the table is acting as.
-const workbenchInvestigator = computed(() => myInvestigator.value ?? activeInvestigator.value)
-// Separate seats are other people's investigators, so the workbench must stay on
-// ours. A viewer without a seat here (a spectator) keeps following the table.
-const pinWorkbench = computed(() => onlineMultiSeat.value && myInvestigator.value !== null)
 const focusedTeammateId = ref<string | null>(null)
 const focusedTeammate = computed(
   () => teammates.value.find((investigator) => investigator.id === focusedTeammateId.value) ?? null,
@@ -1756,6 +1741,7 @@ const tarotCardAbility = (card: TarotCard) => {
 
 const victoryDisplay = computed(() => props.scenario.victoryDisplay)
 
+const phaseAnnouncement = inject(phaseAnnouncementKey, ref(false))
 const isMinimized_SkillTest = ref(false)
 provide(isMinimizedSkillTestKey, isMinimized_SkillTest)
 function minimize_SkillTest(isMinimized: boolean) {
@@ -1831,11 +1817,11 @@ async function addChaosToken(face: any) {
         'split-view': splitView,
         'scenario-body--notifier-overlays': showScenarioNotifierBar,
         'scenario-body--multiseat': desktopTabletop,
-        'scenario-body--online': onlineMultiSeat,
+        'scenario-body--online': onlineMultiSeat && isMobile,
         'scenario-body--teammate-open': focusedTeammate !== null,
       }"
     >
-      <Draggable v-if="showOutOfPlay || forcedShowOutOfPlay">
+      <Draggable v-if="showOutOfPlay || forcedShowOutOfPlay" atmosphere="archive">
         <template #handle
           ><header>
             <h2>{{ $t('gameBar.outOfPlay') }}</h2>
@@ -1863,7 +1849,7 @@ async function addChaosToken(face: any) {
           {{ $t('close') }}
         </button>
       </Draggable>
-      <Draggable v-if="showChaosBag">
+      <Draggable v-if="showChaosBag" atmosphere="chaos">
         <template #handle
           ><header>
             <h2>
@@ -2490,7 +2476,7 @@ async function addChaosToken(face: any) {
           </div>
         </div>
         <SkillTest
-          v-if="game.skillTest"
+          v-if="game.skillTest && !phaseAnnouncement"
           :game="game"
           :chaosBag="scenario.chaosBag"
           :skillTest="game.skillTest"
@@ -2577,7 +2563,7 @@ async function addChaosToken(face: any) {
       </div>
 
       <aside
-        v-if="onlineMultiSeat"
+        v-if="onlineMultiSeat && isMobile"
         class="teammate-rail"
         :aria-label="$t('multiplayerTable.roster')"
       >
@@ -2961,40 +2947,6 @@ async function addChaosToken(face: any) {
 
       <div id="player-zone" :class="{ 'player-zone--fullscreen': locationsFullscreen }">
         <div ref="encounterPilesHost" class="workbench-encounter-piles"></div>
-        <p v-if="onlineMultiSeat && workbenchInvestigator" class="workbench-label">
-          <span class="workbench-label__title">
-            {{ $t('multiplayerTable.myArea') }} ·
-            <strong>{{ displayInvestigatorName(workbenchInvestigator) }}</strong>
-          </span>
-          <span class="workbench-label__stats">
-            <span>
-              <i>{{ $t('multiplayerTable.health') }}</i>
-              <b
-                >{{
-                  workbenchInvestigator.health -
-                  investigatorToken(workbenchInvestigator, TokenType.Damage)
-                }}/{{ workbenchInvestigator.health }}</b
-              >
-            </span>
-            <span>
-              <i>{{ $t('multiplayerTable.sanity') }}</i>
-              <b
-                >{{
-                  workbenchInvestigator.sanity -
-                  investigatorToken(workbenchInvestigator, TokenType.Horror)
-                }}/{{ workbenchInvestigator.sanity }}</b
-              >
-            </span>
-            <span>
-              <i>{{ $t('multiplayerTable.resources') }}</i>
-              <b>{{ investigatorToken(workbenchInvestigator, TokenType.Resource) }}</b>
-            </span>
-            <span>
-              <i>{{ $t('multiplayerTable.cluesShort') }}</i>
-              <b>{{ investigatorToken(workbenchInvestigator, TokenType.Clue) }}</b>
-            </span>
-          </span>
-        </p>
         <PlayerTabs
           :game="game"
           :playerId="playerId"
@@ -3002,7 +2954,6 @@ async function addChaosToken(face: any) {
           :playerOrder="playerOrder"
           :activePlayerId="activePlayerId"
           :tarotCards="props.scenario.tarotCards"
-          :pinnedPlayerId="pinWorkbench ? playerId : undefined"
           @choose="choose"
         >
           <div id="totals">
@@ -3029,7 +2980,7 @@ async function addChaosToken(face: any) {
       </div>
     </div>
     <ScenarioPhases :phase="phase" :phase-step="phaseStep" />
-    <PhaseInterlude :key="game.id" :phase="phase" />
+    <PhaseInterlude :key="game.id" />
   </div>
 
   <Teleport to="body">

@@ -7,9 +7,7 @@ import type { Game } from '@/arkham/types/Game'
 import * as ArkhamGame from '@/arkham/types/Game'
 import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Message'
 import TokenPool from '@/arkham/components/TokenPool.vue'
-import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
-import { IsMobile } from '@/arkham/isMobile'
 import Token from '@/arkham/components/Token.vue'
 import * as ArkhamTreachery from '@/arkham/types/Treachery'
 
@@ -43,7 +41,6 @@ function startDrag(event: DragEvent) {
 const choose = (idx: number) => emits('choose', idx)
 
 const debug = useDebug()
-const { isMobile } = IsMobile()
 const cardFrame = ref<HTMLElement | null>(null)
 const showAbilities = ref(false)
 
@@ -104,33 +101,22 @@ const abilities = computed(() => {
 
 const tokenOverrides = { Damage: { type: 'damage' } }
 const cardAction = computed(() => choices.value.findIndex(canInteract))
-const canUseMobileAbilityMenu = computed(
-  () => isMobile && props.isInHand && abilities.value.length > 0,
-)
-const canHighlight = computed(() => cardAction.value !== -1 || canUseMobileAbilityMenu.value)
+const canHighlight = computed(() => cardAction.value !== -1 || abilities.value.length > 0)
 
 function handleCardClick() {
   if (props.readonly) return
-  if (canUseMobileAbilityMenu.value) {
-    showAbilities.value = true
-    return
+  if (cardAction.value !== -1) {
+    emits('choose', cardAction.value)
+  } else if (abilities.value.length === 1) {
+    emits('choose', abilities.value[0].index)
+  } else if (abilities.value.length > 1) {
+    showAbilities.value = !showAbilities.value
   }
-
-  emits('choose', cardAction.value)
 }
 </script>
 <template>
   <div class="treachery" :class="{ attached, exhausted: isExhausted }">
     <MissingCardBadge :card-code="treachery.cardCode" />
-    <AbilityButton
-      v-if="isInHand && !canUseMobileAbilityMenu"
-      v-for="ability in abilities"
-      :key="ability.index"
-      :ability="ability.contents"
-      :data-image="image"
-      :game="game"
-      @click="$emit('choose', ability.index)"
-    />
     <img
       ref="cardFrame"
       :src="image"
@@ -141,17 +127,8 @@ function handleCardClick() {
       @click="handleCardClick"
       :data-delay="overlayDelay"
     />
-    <AbilityButton
-      v-if="!isInHand"
-      v-for="ability in abilities"
-      :key="ability.index"
-      :ability="ability.contents"
-      :data-image="image"
-      :game="game"
-      @click="$emit('choose', ability.index)"
-    />
     <AbilitiesMenu
-      v-if="canUseMobileAbilityMenu"
+      v-if="abilities.length > 0"
       v-model="showAbilities"
       :game="game"
       :abilities="abilities"

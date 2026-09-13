@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, inject, provide, ref } from 'vue';
+import { debugControlsAllowedKey, soloKey, spectateKey } from '@/arkham/injectionKeys';
 
 const props = defineProps<{
   title: string
@@ -10,6 +11,12 @@ const props = defineProps<{
   investigatorId: string
   playerId: string
 }>()
+
+const solo = inject(soloKey, ref(false))
+const spectate = inject(spectateKey, ref(false))
+provide(debugControlsAllowedKey, computed(
+  () => !spectate.value && (solo.value || props.playerId === props.index),
+))
 
 const isActive = computed(() => props.selectedTab == props.index)
 </script>

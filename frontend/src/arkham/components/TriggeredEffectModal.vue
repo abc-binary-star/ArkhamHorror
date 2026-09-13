@@ -9,6 +9,8 @@ import { formatContent } from '@/arkham/helpers'
 import { handleEmbeddedI18n } from '@/arkham/i18n'
 import { cardImage, sourceCardCode } from '@/arkham/cardImages'
 import { processingKey } from '@/arkham/injectionKeys'
+import AtmosphereLine from './AtmosphereLine.vue'
+import { triggerAtmosphere } from '@/arkham/atmosphere'
 import AbilityButton from './AbilityButton.vue'
 import QuestionChoices from './QuestionChoices.vue'
 
@@ -16,7 +18,6 @@ const props = defineProps<{ game: Game; playerId: string }>()
 const emit = defineEmits<{ choose: [index: number] }>()
 const { t } = useI18n()
 const titleId = useId()
-const descriptionId = useId()
 const dialog = ref<HTMLDialogElement | null>(null)
 const collapsed = ref(false)
 const submitted = ref(false)
@@ -119,12 +120,11 @@ onBeforeUnmount(() => dialog.value?.close())
     <button v-if="collapsed" class="trigger-reminder" type="button" @click="open">
       {{ t('triggeredEffect.restore') }}
     </button>
-    <dialog ref="dialog" class="trigger-dialog" :class="{ 'trigger-dialog--compact': compactLayout }" :aria-labelledby="titleId" :aria-describedby="descriptionId" @cancel.prevent="collapse">
+    <dialog ref="dialog" class="trigger-dialog" :class="{ 'trigger-dialog--compact': compactLayout }" :aria-labelledby="titleId" @cancel.prevent="collapse">
       <header>
         <h2 :id="titleId">{{ t('triggeredEffect.title') }}</h2>
         <button type="button" class="collapse" @click="collapse">{{ t('triggeredEffect.inspect') }}</button>
       </header>
-      <p :id="descriptionId" class="description">{{ t('triggeredEffect.description') }}</p>
       <p v-if="contextHtml" class="context" v-html="contextHtml"></p>
       <fieldset :disabled="busy" :aria-busy="busy">
         <template v-for="(group, groupIndex) in groupedEntries" :key="groupIndex">
@@ -140,6 +140,11 @@ onBeforeUnmount(() => dialog.value?.close())
             <img v-if="group.image" :src="group.image" :alt="t('triggeredEffect.card')" />
             <div class="entry-actions">
               <template v-for="entry in group.entries" :key="entry.index">
+                <AtmosphereLine
+                  v-if="entry.choice.tag === 'AbilityLabel'"
+                  :tone="triggerAtmosphere(entry.choice.ability.source, entry.choice.ability.type)"
+                />
+                <AtmosphereLine v-else-if="entry.choice.tag !== 'SkipTriggersButton'" tone="choice" />
                 <AbilityButton
                   v-if="entry.choice.tag === 'AbilityLabel'"
                   :game="game"
@@ -156,7 +161,6 @@ onBeforeUnmount(() => dialog.value?.close())
           </div>
         </template>
       </fieldset>
-      <p class="hint">{{ t('triggeredEffect.hint') }}</p>
     </dialog>
   </Teleport>
 </template>
@@ -188,7 +192,6 @@ onBeforeUnmount(() => dialog.value?.close())
 header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 h2 { margin: 0; font-size: 1.1rem; font-weight: 500; letter-spacing: .04em; color: #dcc6ef; }
 p { line-height: 1.6; }
-.description { margin: 10px 0 18px; font-size: .85rem; font-weight: 400; color: #bbb4bd; }
 .context { padding: 10px 12px; border-left: 2px solid #a58cba80; background: #ffffff05; font-size: .9rem; }
 fieldset { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 14px; min-width: 0; }
 fieldset:disabled { opacity: .65; pointer-events: none; }
@@ -246,7 +249,6 @@ fieldset:disabled { opacity: .65; pointer-events: none; }
 .skip:hover, .collapse:hover { background: #ffffff08; border-color: #a58cba90; }
 button:focus-visible, .entry-actions :deep(button:focus-visible) { outline: 2px solid #e2c2ff; outline-offset: 3px; }
 .collapse { flex-shrink: 0; }
-.hint { margin: 12px 0 0; color: #9f9b96; font-size: .75rem; font-weight: 400; text-align: center; }
 .trigger-reminder { position: fixed; bottom: calc(84px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 1100; padding: 10px 18px; border: 1px solid #a58cba; border-radius: 8px; background: #342d3c; color: #eee5d2; box-shadow: 0 4px 24px #0008; cursor: pointer; }
 @media (max-width: 600px) {
   .trigger-dialog { padding: 16px; }

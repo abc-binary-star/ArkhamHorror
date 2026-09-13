@@ -1,4 +1,5 @@
 import type { InjectionKey, Ref } from 'vue'
+import type { Phase } from '@/arkham/types/Phase'
 import type { ArkhamDbDecklist } from '@/arkham/types/Deck'
 
 // Symbols shared by Game.vue's providers and the components below it; a key whose
@@ -6,11 +7,13 @@ import type { ArkhamDbDecklist } from '@/arkham/types/Deck'
 
 export const soloKey: InjectionKey<Ref<boolean>> = Symbol('solo')
 export const spectateKey: InjectionKey<Ref<boolean>> = Symbol('spectate')
+// A viewed teammate's subtree may expose cards, but never raw debug mutations.
+export const debugControlsAllowedKey: InjectionKey<Ref<boolean>> = Symbol('debugControlsAllowed')
 export const processingKey: InjectionKey<Ref<boolean>> = Symbol('processing')
 export const uiLockKey: InjectionKey<Ref<boolean>> = Symbol('uiLock')
-// Written by PhaseInterlude while a phase banner is on screen; Game.vue reads it
-// to hold revelation-class overlays until the banner finishes.
-export const phaseAnnouncementKey: InjectionKey<Ref<boolean>> = Symbol('phaseAnnouncement')
+// Owned by Game.vue; all presentation and answer paths share this barrier.
+export const announcedPhaseKey: InjectionKey<Readonly<Ref<Phase | null>>> = Symbol('announcedPhase')
+export const phaseAnnouncementKey: InjectionKey<Readonly<Ref<boolean>>> = Symbol('phaseAnnouncement')
 export const storyAnswerPendingKey: InjectionKey<Ref<boolean>> = Symbol('storyAnswerPending')
 export const showOtherPlayersHandsKey: InjectionKey<Ref<boolean>> = Symbol('showOtherPlayersHands')
 export const skipAllAvailableKey: InjectionKey<Ref<boolean>> = Symbol('skipAllAvailable')

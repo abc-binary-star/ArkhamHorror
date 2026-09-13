@@ -4,6 +4,7 @@ import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch } fr
 import type { Game } from '@/arkham/types/Game'
 import Tab from '@/arkham/components/Tab.vue'
 import Player from '@/arkham/components/Player.vue'
+import ChoiceModal from '@/arkham/components/ChoiceModal.vue'
 import { ArrowPathIcon } from '@heroicons/vue/20/solid'
 import * as ArkhamGame from '@/arkham/types/Game'
 import type { Investigator } from '@/arkham/types/Investigator'
@@ -30,9 +31,6 @@ export interface Props {
   playerOrder: string[]
   activePlayerId: string
   tarotCards: TarotCard[]
-  /* Seats that belong to other people: the workbench is theirs to see, not ours
-     to switch into, so the pane stops following persisted or automatic routing. */
-  pinnedPlayerId?: string
 }
 
 const props = defineProps<Props>()
@@ -47,6 +45,7 @@ const spectate = inject(spectateKey, ref(false))
 const processing = inject(processingKey, ref(false))
 const uiLock = inject(uiLockKey, ref(false))
 const switchInvestigator = inject(switchInvestigatorKey)
+// Hand visibility inherits the table setting; choices still use the local playerId.
 const hasChoices = (iid: string) => ArkhamGame.choices(props.game, iid).length > 0
 const isWaiting = (investigator: Investigator) =>
   props.playerOrder.length > 1 && investigator.playerId in props.game.question
@@ -74,6 +73,7 @@ const actionContext = computed(() => {
   const viewed = viewedInvestigator.value
   const acting = actingInvestigator.value
   if (!viewed) return ''
+  if (!solo?.value && viewed.playerId !== props.playerId) return t('multiplayerTable.viewOnly')
   if (acting && viewed.playerId !== acting.playerId) {
     return hasChoices(viewed.playerId) ? t('multiplayerTable.pendingChoice') : t('multiplayerTable.viewOnly')
   }
@@ -133,22 +133,20 @@ function resetSwitchStack(tab: string, perspective: string) {
   switchStack.value = [{ tab, perspective, reason: 'baseline' }]
 }
 
-// A pinned seat wins over both the persisted selection and every automatic route
-// below, which otherwise move the visible pane to whoever has a live control --
-// stranding the workbench on somebody else's investigator.
+// Ignore stale saved seats after setup, replacement, or a roster change.
 watch(
-  [() => props.pinnedPlayerId, () => props.playerId],
-  ([pinned]) => {
-    if (!pinned || selectedTab.value === pinned) return
-    manualSelectionAtStep = props.game.scenarioSteps
-    selectedTab.value = pinned
-    resetSwitchStack(pinned, props.playerId)
+  () => [props.playerOrder, props.players, selectedTab.value] as const,
+  () => {
+    const seats = props.playerOrder.map(iid => props.players[iid]?.playerId).filter(Boolean)
+    if (!seats.length || seats.includes(selectedTab.value)) return
+    const fallback = seats.includes(props.playerId) ? props.playerId : seats[0]
+    selectedTab.value = fallback
+    resetSwitchStack(fallback, props.playerId)
   },
   { immediate: true },
 )
 
 function selectTab(i: string) {
-  if (props.pinnedPlayerId && i !== props.pinnedPlayerId) return
   manualSelectionAtStep = props.game.scenarioSteps
   selectedTab.value = i
   resetSwitchStack(i, props.playerId)
@@ -160,7 +158,6 @@ function selectTab(i: string) {
 // focusQuestionPlayers() and the sole-question rule immediately routes back to the
 // active investigator, stranding that seat's abilities out of reach (#5350).
 function selectTabExtended(i: string) {
-  if (props.pinnedPlayerId && i !== props.pinnedPlayerId) return
   manualSelectionAtStep = props.game.scenarioSteps
   selectedTab.value = i
   resetSwitchStack(i, i)
@@ -294,8 +291,8 @@ function frameIsStillNeeded(frame: SwitchFrame, tabs: Set<string>) {
 }
 
 function applyFrame(frame: SwitchFrame) {
-  // Automatic routing must never take the pane off a pinned seat.
-  if (props.pinnedPlayerId) return
+  // Online browsing never changes the answering identity or follows other seats.
+  if (!solo?.value) return
   selectedTab.value = frame.tab
   if (solo?.value === true && props.playerId !== frame.perspective && switchInvestigator) {
     pendingPerspective.value = frame.perspective
@@ -403,7 +400,7 @@ function automaticSwitchIsStable(candidate: string) {
 
 function inspectActions() {
   if (pendingPerspective.value === props.playerId) pendingPerspective.value = null
-  if (spectate.value || processing.value || uiLock.value || pendingPerspective.value !== null) {
+  if (!solo?.value || spectate.value || processing.value || uiLock.value || pendingPerspective.value !== null) {
     automaticSwitchCandidate = null
     return
   }
@@ -577,6 +574,11 @@ watch(
         <li
           v-for="investigator in investigators"
           :key="investigator.name.title"
+          role="button"
+          tabindex="0"
+          :aria-pressed="selectedTab === investigator.playerId"
+          @keydown.enter.self.prevent="selectTab(investigator.playerId)"
+          @keydown.space.self.prevent="selectTab(investigator.playerId)"
           @click="selectTab(investigator.playerId)"
           :class="tabClass(investigator)"
         >
@@ -607,6 +609,11 @@ watch(
         <li
           v-for="investigator in inactiveInvestigators"
           :key="investigator.name.title"
+          role="button"
+          tabindex="0"
+          :aria-pressed="selectedTab === investigator.playerId"
+          @keydown.enter.self.prevent="selectTab(investigator.playerId)"
+          @keydown.space.self.prevent="selectTab(investigator.playerId)"
           @click="selectTab(investigator.playerId)"
           class="inactive"
           :class="tabClass(investigator)"
@@ -635,6 +642,14 @@ watch(
       </ul>
       <slot />
     </div>
+    <div v-if="!solo && viewedInvestigator && selectedTab !== playerId" class="viewing-seat-status">
+      <span>{{ getInvestigatorName(viewedInvestigator.name.title) }} · {{ actionContext }}</span>
+      <button v-if="Object.values(players).some(i => i.playerId === playerId)" type="button" @click="selectTab(playerId)">
+        {{ $t('multiplayerTable.myArea') }}<span v-if="hasChoices(playerId)"> · {{ $t('multiplayerTable.pendingChoice') }}</span>
+      </button>
+    </div>
+    <!-- Own prompts stay visible while inspecting another investigator's cards. -->
+    <ChoiceModal :game="game" :playerId="playerId" @choose="$emit('choose', $event)" />
     <Tab
       v-for="investigator in investigators"
       :key="investigator.id"
@@ -679,6 +694,28 @@ watch(
 </template>
 
 <style scoped>
+.viewing-seat-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 3px 8px;
+  color: #eee5cf;
+  font-size: 0.75rem;
+}
+.viewing-seat-status button {
+  cursor: pointer;
+  border: 1px solid #ad9565;
+  border-radius: 3px;
+  background: #203731;
+  color: #eee5cf;
+  padding: 3px 8px;
+}
+ul.tabs__header > li:focus-visible {
+  outline: 2px solid #e0c487;
+  outline-offset: 2px;
+}
+
 .tabs-row {
   display: flex;
   align-items: flex-end;

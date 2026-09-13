@@ -2431,7 +2431,16 @@ runGameMessage msg g = case msg of
         player <- case allAttacked of
           [iid] -> getPlayer iid
           _ -> getPlayer (gameLeadInvestigatorId g)
-        push $ chooseOneAtATime player $ map toUI as
+        -- This is an incoming-attack ordering choice, not an ordinary enemy
+        -- target (fight/evade/etc.). Preserve that distinction for the client.
+        let opportunityOnly = all (\case
+              EnemyAttack details -> details.kind == AttackOfOpportunity
+              _ -> False) as
+        let attackPrompt =
+              if opportunityOnly
+                then "$enemyAttackPrompt.opportunity"
+                else "$enemyAttackPrompt.regular"
+        push $ Ask player $ QuestionLabel attackPrompt Nothing $ ChooseOneAtATime $ map toUI as
         pure
           $ g
           & entitiesL
