@@ -9,6 +9,7 @@ import {
   onUnmounted,
 } from 'vue'
 import { cardImg, formatContent, imgsrc, toCamelCase } from '@/arkham/helpers'
+import { originalArt } from '@/arkham/artVariants'
 import { BugAntIcon } from '@heroicons/vue/20/solid'
 import { useDebug } from '@/arkham/debug'
 import { useI18n } from 'vue-i18n'
@@ -342,8 +343,8 @@ const overlayCardCode = computed<string | null>(() => {
   // like an official card code to the fallback matcher below.
   if (!image || image.includes('/homebrew/')) return null
 
-  const match = image.match(/\/cards\/c?(\d+)b?\.(?:avif|jpg|jpeg|png|webp)(?:\?.*)?$/i)
-  return match?.[1] ?? null
+  const match = image.match(/\/cards\/c?(\d+b?)\.(?:avif|jpg|jpeg|png|webp)(?:\?.*)?$/i)
+  return match ? originalArt(match[1]).replace(/b$/, '') : null
 })
 /* Card-def errata covers a whole card, but some errata only applies to one face —
  * and the overlay resolves both faces to the same card def. A `data-errata`
@@ -578,7 +579,7 @@ const isSpirit = computed<boolean>(() => {
 const cardCode = computed<string | null>(() => {
   if (!card.value) return null
   const m = card.value.match(/cards\/(\d+)(_.*)?\.avif$/)
-  return m ? m[1] : null
+  return m ? originalArt(m[1]) : null
 })
 
 const {

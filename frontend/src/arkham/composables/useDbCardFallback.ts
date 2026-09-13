@@ -2,6 +2,7 @@ import { ref, computed, watchEffect } from 'vue'
 import { imgsrc } from '@/arkham/helpers'
 import { useDbCardStore, ArkhamDBCard } from '@/stores/dbCards'
 import { homebrewTokenMap } from '@/arkham/homebrewAssets'
+import { originalArt } from '@/arkham/artVariants'
 import type { ComputedRef } from 'vue'
 
 export function useDbCardFallback(card: ComputedRef<string | null>) {
@@ -125,7 +126,7 @@ export function useDbCardFallback(card: ComputedRef<string | null>) {
     if (!src) return
     const m = src.match(/(\d+b?)(_.*)?\.avif$/)
     if (!m) return
-    const code = m[1]
+    const code = originalArt(m[1])
     const tabooSuffix = m[2]
     const language = localStorage.getItem('language') || 'en'
     if (imgsrc(`cards/${m[0]}`).includes(language)) return
