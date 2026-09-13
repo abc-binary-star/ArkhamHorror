@@ -466,12 +466,6 @@ runGameMessage msg g = case msg of
               { investigatorTaboo = dl.taboo
               , investigatorCardPool = dl.cardPool
               , investigatorMutated = tabooMutated' dl.taboo (coerce iid')
-              -- A deck carried over from a completed campaign keeps the trauma
-              -- its investigator accumulated there.
-              , investigatorPhysicalTrauma =
-                  fromMaybe (investigatorPhysicalTrauma ia) (carried_physical_trauma decklist)
-              , investigatorMentalTrauma =
-                  fromMaybe (investigatorMentalTrauma ia) (carried_mental_trauma decklist)
               , investigatorSettings =
                   let settings = ia.settings
                    in settings

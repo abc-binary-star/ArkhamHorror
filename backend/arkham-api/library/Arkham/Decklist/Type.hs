@@ -18,8 +18,6 @@ data ArkhamDBDecklist = ArkhamDBDecklist
   , url :: Maybe Text
   , decklist_id :: Maybe Text
   , decklist_name :: Maybe Text
-  , carried_physical_trauma :: Maybe Int
-  , carried_mental_trauma :: Maybe Int
   }
   deriving stock (Generic, Show, Ord, Eq, Data)
 
@@ -35,15 +33,7 @@ instance ToJSON ArkhamDBDecklist where
       , "url" .= url
       , "id" .= decklist_id
       , "name" .= decklist_name
-      , "carried_physical_trauma" .= carried_physical_trauma
-      , "carried_mental_trauma" .= carried_mental_trauma
       ]
-
--- | A deck carried over from a completed campaign: trauma rides on the
--- decklist, and the campaign-start weakness draw still happens on top of the
--- weakness already sitting in the deck.
-isCarryoverDecklist :: ArkhamDBDecklist -> Bool
-isCarryoverDecklist dl = isJust (carried_physical_trauma dl) || isJust (carried_mental_trauma dl)
 
 data ArkhamDBDecklistMeta = ArkhamDBDecklistMeta
   { alternate_front :: Maybe InvestigatorId
@@ -79,8 +69,6 @@ instance FromJSON ArkhamDBDecklist where
     url <- o .:? "url"
     decklist_id <- o .:? "id" >>= traverse parseDecklistId
     decklist_name <- o .:? "name"
-    carried_physical_trauma <- o .:? "carried_physical_trauma"
-    carried_mental_trauma <- o .:? "carried_mental_trauma"
     pure $ ArkhamDBDecklist {..}
    where
     parseDecklistId = \case
