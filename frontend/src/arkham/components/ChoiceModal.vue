@@ -12,6 +12,7 @@ import { QuestionType } from '@/arkham/types/Question';
 import Draggable from '@/components/Draggable.vue';
 import Question from '@/arkham/components/Question.vue';
 import TriggeredEffectModal from '@/arkham/components/TriggeredEffectModal.vue';
+import RequiredActionReminder from '@/arkham/components/RequiredActionReminder.vue';
 import { IsMobile } from '@/arkham/isMobile';
 import { processingKey } from '@/arkham/injectionKeys';
 
@@ -206,8 +207,7 @@ const requiresModal = computed(() => {
   if (!question.value) {
     return false
   }
-  // Damage/horror assignment is done by clicking cards; show the pending tokens
-  // on the investigator instead of popping the choice modal.
+  // The reminder explains assignment first, then lets the player click cards.
   if (damageAssignmentTokens.value) {
     return false
   }
@@ -309,6 +309,12 @@ const title = computed(() => {
 </script>
 
 <template>
+  <RequiredActionReminder
+    :game="game"
+    :player-id="playerId"
+    :suppressed="isTriggeredWindow"
+    @choose="choose"
+  />
   <TriggeredEffectModal
     v-if="isTriggeredWindow"
     :game="game"

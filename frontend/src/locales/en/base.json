@@ -1,4 +1,22 @@
 {
+  "attackNotice": {
+    "regular": {
+      "both": "Enemy attack: {name} → {iname}. Attack values: {damage} damage, {horror} horror (prevention and assignment resolve separately).",
+      "either": "Enemy attack: {name} → {iname}. Choose {damage} damage or {horror} horror (prevention and assignment resolve separately)."
+    },
+    "opportunity": {
+      "both": "Attack of opportunity: {name} → {iname}. Attack values: {damage} damage, {horror} horror (prevention and assignment resolve separately).",
+      "either": "Attack of opportunity: {name} → {iname}. Choose {damage} damage or {horror} horror (prevention and assignment resolve separately)."
+    },
+    "retaliate": {
+      "both": "Retaliate attack: {name} → {iname}. Attack values: {damage} damage, {horror} horror (prevention and assignment resolve separately).",
+      "either": "Retaliate attack: {name} → {iname}. Choose {damage} damage or {horror} horror (prevention and assignment resolve separately)."
+    },
+    "alert": {
+      "both": "Alert attack: {name} → {iname}. Attack values: {damage} damage, {horror} horror (prevention and assignment resolve separately).",
+      "either": "Alert attack: {name} → {iname}. Choose {damage} damage or {horror} horror (prevention and assignment resolve separately)."
+    }
+  },
   "triggeredEffect": {
     "title": "An effect can trigger",
     "description": "The current event has opened a response window. Choose an effect below to resolve it; the game is waiting for your choice.",

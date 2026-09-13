@@ -1,4 +1,22 @@
 {
+  "attackNotice": {
+    "regular": {
+      "both": "敌人攻击：{name} → {iname}。攻击数值：{damage} 点伤害、{horror} 点恐惧（减免与分配另行结算）。",
+      "either": "敌人攻击：{name} → {iname}。需要选择承受 {damage} 点伤害或 {horror} 点恐惧（减免与分配另行结算）。"
+    },
+    "opportunity": {
+      "both": "借机攻击：{name} → {iname}。攻击数值：{damage} 点伤害、{horror} 点恐惧（减免与分配另行结算）。",
+      "either": "借机攻击：{name} → {iname}。需要选择承受 {damage} 点伤害或 {horror} 点恐惧（减免与分配另行结算）。"
+    },
+    "retaliate": {
+      "both": "反击：{name} → {iname}。攻击数值：{damage} 点伤害、{horror} 点恐惧（减免与分配另行结算）。",
+      "either": "反击：{name} → {iname}。需要选择承受 {damage} 点伤害或 {horror} 点恐惧（减免与分配另行结算）。"
+    },
+    "alert": {
+      "both": "警戒攻击：{name} → {iname}。攻击数值：{damage} 点伤害、{horror} 点恐惧（减免与分配另行结算）。",
+      "either": "警戒攻击：{name} → {iname}。需要选择承受 {damage} 点伤害或 {horror} 点恐惧（减免与分配另行结算）。"
+    }
+  },
   "triggeredEffect": {
     "title": "有待处理的触发效果",
     "description": "当前事件触发了响应时机。请选择下方要发动或结算的效果，游戏正在等待你的选择。",

@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, inject, onBeforeUnmount, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Moon, Eye, Skull, Flame } from '@lucide/vue'
 import type { Phase } from '@/arkham/types/Phase'
+import { uiLockKey } from '@/arkham/injectionKeys'
 
 const props = defineProps<{ phase: Phase }>()
 const { t } = useI18n({
@@ -34,17 +35,20 @@ const emblems = {
 const current = ref<RoundPhase | null>(null)
 const emblem = computed(() => current.value ? emblems[current.value] : null)
 const pending: RoundPhase[] = []
+const uiLock = inject(uiLockKey, ref(false))
 let timer: ReturnType<typeof setTimeout> | undefined
 
 function advance() {
+  clearTimeout(timer)
+  timer = undefined
+  if (uiLock.value) return
   current.value = pending.shift() ?? null
   timer = current.value ? setTimeout(advance, 2200) : undefined
 }
 
 // Do not replay an entrance when loading/reconnecting to a game. Queue actual
 // phase changes so rapidly resolved enemy/upkeep phases still get their moment.
-watch(() => props.phase, (phase, previous) => {
-  if (phase === previous) return
+watch([() => props.phase, uiLock], ([phase, locked], [previous]) => {
   if (phase === 'CampaignPhase') {
     clearTimeout(timer)
     timer = undefined
@@ -52,9 +56,19 @@ watch(() => props.phase, (phase, previous) => {
     current.value = null
     return
   }
-  pending.push(phase)
+  if (phase !== previous) pending.push(phase)
+  // Board updates can already contain the next phase behind a card reveal.
+  // Keep announcements queued until all locally queued reveals are dismissed.
+  // If a reveal interrupts an entrance, replay that entrance after confirmation.
+  if (locked) {
+    clearTimeout(timer)
+    timer = undefined
+    if (current.value) pending.unshift(current.value)
+    current.value = null
+    return
+  }
   if (!current.value) advance()
-})
+}, { flush: 'post' })
 
 onBeforeUnmount(() => {
   clearTimeout(timer)

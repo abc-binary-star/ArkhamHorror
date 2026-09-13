@@ -1,3 +1,4 @@
+import { isTabletopFrame, TABLETOP_MESSAGE } from '@/arkham/composables/useFixedTabletop'
 import { clientLog, clientError } from '@/utils/clientLog'
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { useUserStore } from '@/stores/user'
@@ -51,6 +52,9 @@ router.beforeEach(async (to, _from, next) => {
 });
 
 router.afterEach((to, from, failure) => {
+  if (!failure && isTabletopFrame()) {
+    window.parent.postMessage({ type: TABLETOP_MESSAGE, path: to.fullPath }, window.location.origin)
+  }
   clientLog('route.complete', { from: String(from.name ?? ''), to: String(to.name ?? ''), failed: Boolean(failure) })
 })
 router.onError((cause) => clientError('route.error', cause))

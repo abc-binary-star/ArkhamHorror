@@ -1480,10 +1480,6 @@ function closeHand() { mobileHandOpen.value = false }
   padding-right: 8px;
   border-right: 1px solid rgb(170 104 87 / 0.4);
 }
-.threat-zone--occupied:not(.threat-zone--collapsed) {
-  flex: 0 1 180px;
-  max-width: 25%;
-}
 .threat-area-label {
   width: 100%;
   padding: 0 4px;

@@ -1,7 +1,8 @@
 <script lang="ts" setup>
 import { clientLog, clientError } from '@/utils/clientLog'
+import { isTabletopFrame, tabletopDocument, useFixedTabletop } from '@/arkham/composables/useFixedTabletop'
 import { useGameAudio } from '@/arkham/composables/useGameAudio'
-import { ArrowLeft, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight } from '@lucide/vue'
+import { ArrowLeft, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight, Monitor } from '@lucide/vue'
 import {
   computed,
   markRaw,
@@ -156,6 +157,9 @@ export interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), { spectate: false })
+
+const fixedResolution = useFixedTabletop()
+const fixedTabletopFrame = isTabletopFrame()
 
 const debug = useDebug()
 const emitter = useEmitter()
@@ -481,7 +485,7 @@ function leaveGame() {
   void router.push({ name: 'Home' })
 }
 
-const { isFullscreen, isSupported: fullscreenSupported, enter: enterFullscreen, toggle: toggleFullscreen } = useFullscreen()
+const { isFullscreen, isSupported: fullscreenSupported, enter: enterFullscreen, toggle: toggleFullscreen } = useFullscreen(undefined, { document: tabletopDocument() })
 
 // Fullscreen + the "hide the toolbar" preference: the action bar stops reserving
 // space and slides out of view until the pointer reaches the top edge. While the
@@ -897,6 +901,9 @@ const loadGame = async () => {
     clientLog('game.load.ready', { request })
     await nextTick()
     clientLog('game.render.flushed', { request, ready: ready.value, error: loadError.value })
+    if (fixedTabletopFrame && !loadError.value) {
+      window.parent.postMessage({ type: 'arkham-tabletop-ready' }, window.location.origin)
+    }
   } catch (cause) {
     if (controller.signal.aborted || loadController !== controller) return
     clientError('game.load.error', cause, { request, elapsedMs: Math.round(performance.now() - started) })
@@ -2048,7 +2055,7 @@ onUnmounted(() => {
   <LoadState v-else-if="!ready" />
   <div
     class="tabletop-shell"
-    :class="{ 'tabletop-shell--toolbar-hidden': toolbarHidden }"
+    :class="{ 'tabletop-shell--toolbar-hidden': toolbarHidden, 'tabletop-shell--fixed': fixedTabletopFrame }"
     v-else-if="ready && game && playerId"
     :style="{ '--epic-bar-height': epicBarHeight + 'px' }"
   >
@@ -2240,6 +2247,21 @@ onUnmounted(() => {
         </button>
       </div>
       <div class="game-tools-drawer__body">
+        <button
+          type="button"
+          class="game-tools-action fixed-resolution-toggle"
+          role="switch"
+          :aria-checked="fixedResolution"
+          :aria-label="$t('gameBar.fixedResolution')"
+          @click="fixedResolution = !fixedResolution"
+        >
+          <Monitor aria-hidden="true" />
+          <span class="fixed-resolution-toggle__label">
+            {{ $t('gameBar.fixedResolution') }}
+            <small>{{ $t('gameBar.fixedResolutionHint') }}</small>
+          </span>
+          <span class="fixed-resolution-toggle__track" aria-hidden="true"><span /></span>
+        </button>
         <button type="button" class="game-tools-action" @click="showLog = !showLog; showTools = false">
           <DocumentTextIcon aria-hidden="true" />
           {{ showLog ? $t('gameBar.closeLog') : $t('gameBar.viewLog') }}
@@ -4501,5 +4523,49 @@ dialog {
   .the-silence-modal { min-width: 0; width: min(94vw, 600px); max-height: 85dvh; overflow: auto; }
   .revelation-container { max-width: 100vw; max-height: 85dvh; overflow: auto; }
 
+}
+</style>
+
+<style scoped>
+/* A fixed board always keeps the same content rectangle, even while the tray
+   is revealed or the outer document leaves fullscreen. */
+.tabletop-shell.tabletop-shell--fixed .game-main {
+  padding-top: 0;
+}
+.fixed-resolution-toggle__label { flex: 1; text-align: left; }
+.fixed-resolution-toggle__label small {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: normal;
+  color: #c0b79f;
+}
+.fixed-resolution-toggle__track {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 32px;
+  height: 18px;
+  padding: 2px;
+  border: 1px solid #807452;
+  border-radius: 12px;
+  background: #142421;
+}
+.fixed-resolution-toggle__track > span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #a49c84;
+}
+.fixed-resolution-toggle[aria-checked="true"] .fixed-resolution-toggle__track {
+  background: #51634a;
+  border-color: #c5ad78;
+}
+.fixed-resolution-toggle[aria-checked="true"] .fixed-resolution-toggle__track > span {
+  transform: translateX(14px);
+  background: #ead8ad;
+}
+.fixed-resolution-toggle:focus-visible {
+  outline: 2px solid #c5ad78;
+  outline-offset: 2px;
 }
 </style>

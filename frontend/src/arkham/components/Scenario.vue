@@ -6270,9 +6270,8 @@ async function addChaosToken(face: any) {
   min-height: 24px;
 }
 @media (min-width: 1200px) {
-  .scenario-body.scenario-body--multiseat > #player-zone :deep(.player-cards:has(.threat-zone--occupied:not(.threat-zone--collapsed))) {
-    --threat-column-width: min(180px, 12cqw);
-  }
+  /* Keep the same single-card column when threats arrive; occupancy must not
+     widen the workbench track and squeeze the adjacent asset/hand area. */
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row) {
     display: contents;
   }

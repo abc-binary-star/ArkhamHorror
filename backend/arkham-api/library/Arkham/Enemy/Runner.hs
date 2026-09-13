@@ -1616,6 +1616,24 @@ instance RunMessage EnemyAttrs where
       case attackTarget details of
         SingleAttackTarget (InvestigatorTarget iid) -> do
           player <- getPlayer iid
+          -- Use the existing card-reveal queue so the client waits for this
+          -- acknowledgement before exposing the damage-assignment question.
+          -- Emit at resolution, after cancellation windows, rather than when
+          -- the attack is merely proposed (or once for a massive attack group).
+          when (allowAttack && not details.cancelled) do
+            investigator <- getInvestigator iid
+            let attackTitle = case attackType details of
+                  AttackOfOpportunity -> "attackNotice.opportunity"
+                  RetaliateAttack -> "attackNotice.retaliate"
+                  AlertAttack -> "attackNotice.alert"
+                  _ -> "attackNotice.regular"
+            withI18n $ cardNameVar a $ investigatorNameVar investigator
+              $ numberVar "damage" healthDamage $ numberVar "horror" sanityDamage do
+                let titleKey = attackTitle <>
+                      if AttackDealsEitherDamageOrHorror `elem` (modifiers <> mods)
+                        then ".either"
+                        else ".both"
+                sendEnemyOnly player (ikey' titleKey) (toJSON $ toCard a)
           let
             attackMessage =
               if AttackDealsEitherDamageOrHorror `elem` (modifiers <> mods)

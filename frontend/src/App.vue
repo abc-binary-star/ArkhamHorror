@@ -85,6 +85,7 @@ const checkAvifSupport = (): Promise<boolean> => {
 /* Fullscreen is for the board: this strip would otherwise hold a row at the
    bottom of the map. #app is a flex column, so removing it gives that row to
    the view. */
+:global(html.fixed-tabletop-page .app-footer),
 html:fullscreen .app-footer,
 html:-webkit-full-screen .app-footer {
   display: none;
