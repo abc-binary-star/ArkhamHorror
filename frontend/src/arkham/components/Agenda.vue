@@ -30,6 +30,7 @@ const props = defineProps<{
   completedStack: Card[]
   playerId: string
   hideStackControl?: boolean
+  abilitiesBar?: string | null
 }>()
 
 const emit = defineEmits<{
@@ -328,15 +329,19 @@ const wards = computed(() => props.agenda.tokens[TokenType.Ward])
         :key="idx"
         :src="imgsrc(cardImagePath(card))"
       />
-      <AbilityButton
-        v-for="ability in abilities"
-        :key="ability.index"
-        :ability="ability.contents"
-        :data-image="image"
-        :game="game"
-        class="sideways"
-        @click="$emit('choose', ability.index)"
+      <!-- The desktop shelf's seat box clips the card column, so in tabletop mode
+           the abilities teleport into the seat's heading bar instead. -->
+      <Teleport defer :to="abilitiesBar ?? 'body'" :disabled="!abilitiesBar">
+        <AbilityButton
+          v-for="ability in abilities"
+          :key="ability.index"
+          :ability="ability.contents"
+          :data-image="image"
+          :game="game"
+          class="seat-heading-ability"
+          @click="$emit('choose', ability.index)"
         />
+      </Teleport>
       <Enemy
         v-for="enemyId in attachedEnemies"
         :enemy="game.enemies[enemyId]"

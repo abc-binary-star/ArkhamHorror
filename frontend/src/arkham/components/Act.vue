@@ -5,6 +5,7 @@ import { useCardStore } from '@/stores/cards'
 import { type Game } from '@/arkham/types/Game'
 import { type Card, cardImagePath, asCardCode, toCardContents } from '@/arkham/types/Card'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
+import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import { useDebug } from '@/arkham/debug'
 import PoolItem from '@/arkham/components/PoolItem.vue'
 import KeyToken from '@/arkham/components/Key.vue'
@@ -35,6 +36,7 @@ const props = defineProps<{
   completedStack: Card[]
   playerId: string
   hideStackControl?: boolean
+  abilitiesBar?: string | null
 }>()
 
 const emits = defineEmits<{
@@ -484,6 +486,18 @@ const chooseFromStoryCollection = (choice: number) => {
       position="bottom"
       @choose="chooseAbility"
     />
+    <!-- Same bar as the agenda: tabletop shelf clips the card column, so the
+         abilities also live in the seat's heading bar. -->
+    <Teleport v-if="abilitiesBar" defer :to="abilitiesBar">
+      <AbilityButton
+        v-for="ability in abilities"
+        :key="ability.index"
+        :ability="ability.contents"
+        :game="game"
+        class="seat-heading-ability"
+        @click="chooseAbility(ability.index)"
+      />
+    </Teleport>
     <CardsUnderIndicator
       v-if="cardsUnder.length > 0"
       :cards="visibleCardsUnder"

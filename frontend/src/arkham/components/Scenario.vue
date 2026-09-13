@@ -2094,7 +2094,7 @@ async function addChaosToken(face: any) {
         </Teleport>
         <div class="scenario-decks" :style="scenarioDeckStyles">
           <section class="scenario-seat scenario-seat--agenda" :style="{ '--seat-card-count': Math.max(1, Object.keys(game.agendas).length) }">
-            <header class="scenario-seat__heading"><Skull aria-hidden="true" /><span>{{ $t('multiplayerTable.agendaArea') }}</span><i aria-hidden="true">◇</i></header>
+            <header class="scenario-seat__heading"><Skull aria-hidden="true" /><span>{{ $t('multiplayerTable.agendaArea') }}</span><div id="agenda-seat-abilities" class="scenario-seat__abilities"></div><i aria-hidden="true">◇</i></header>
             <div class="scenario-seat__cards">
           <TransitionGroup
             v-if="Object.values(game.agendas).length > 0"
@@ -2106,6 +2106,7 @@ async function addChaosToken(face: any) {
               :key="key"
               :agenda="agenda"
               :hideStackControl="desktopTabletop"
+              :abilitiesBar="desktopTable ? '#agenda-seat-abilities' : null"
               :data-area-label="$t('multiplayerTable.agendaArea')"
               :cardsUnder="cardsUnderAgenda"
               :cardsNextTo="cardsNextToAgenda"
@@ -2142,7 +2143,7 @@ async function addChaosToken(face: any) {
             </div>
           </section>
           <section class="scenario-seat scenario-seat--act" :style="{ '--seat-card-count': Math.max(1, Object.keys(game.acts).length) }">
-            <header class="scenario-seat__heading"><BookOpen aria-hidden="true" /><span>{{ $t('multiplayerTable.actArea') }}</span><i aria-hidden="true">◇</i></header>
+            <header class="scenario-seat__heading"><BookOpen aria-hidden="true" /><span>{{ $t('multiplayerTable.actArea') }}</span><div id="act-seat-abilities" class="scenario-seat__abilities"></div><i aria-hidden="true">◇</i></header>
             <div class="scenario-seat__cards">
             <!-- The spendable clue total reads off the act frame's corner, the
                  way the agenda frame already carries doom. It lives inside the
@@ -2161,6 +2162,7 @@ async function addChaosToken(face: any) {
               :key="key"
               :act="act"
               :hideStackControl="desktopTabletop"
+              :abilitiesBar="desktopTable ? '#act-seat-abilities' : null"
               :data-area-label="$t('multiplayerTable.actArea')"
               :cardsUnder="cardsUnderAct"
               :cardsNextTo="cardsNextToAct"
@@ -6190,7 +6192,25 @@ async function addChaosToken(face: any) {
     letter-spacing: 0.12em;
   }
   .scenario-seat__heading svg { width: 11px; height: 11px; }
-  .scenario-seat__heading i { margin-left: auto; font-style: normal; opacity: 0.6; }
+  .scenario-seat__heading i { font-style: normal; opacity: 0.6; }
+  /* Card abilities (Agenda/Act teleport their buttons here in tabletop mode):
+     right-aligned in the heading bar, before the ◇ ornament. */
+  .scenario-seat__abilities {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    min-width: 0;
+  }
+  .scenario-seat__heading :deep(.seat-heading-ability) {
+    width: auto;
+    min-width: 0;
+    min-height: 0;
+    height: 16px;
+    margin-top: 0;
+    font-size: 0.66rem;
+    border-radius: 4px;
+  }
   .scenario-body.scenario-body--multiseat .scenario-seat__cards {
     display: flex;
     justify-content: center;
