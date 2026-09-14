@@ -477,7 +477,7 @@ const classObject = computed(() => {
 .button{
   border: var(--edge-width) solid color-mix(in srgb, var(--edge-on-accent) 70%, transparent);
   margin-top: 2px;
-  color: var(--button-text);
+  color: var(--text-on-dark);
   cursor: pointer;
   border-radius: var(--control-radius);
   background: var(--button);
