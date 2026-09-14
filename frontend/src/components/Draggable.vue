@@ -416,7 +416,7 @@ function moveUp() {
       margin: 0;
       border-radius: 0 0 16px 16px;
       background: var(--background);
-      overflow: hidden;
+      overflow: auto;
       height: auto;
     }
   }
@@ -571,8 +571,12 @@ function moveUp() {
   }
 
   .content {
+    flex: 1 1 auto;
+    min-height: 0;
+    min-width: 0;
     height: 100%;
     overflow: auto;
+    overscroll-behavior: contain;
     border-radius: 0 0 16px 16px;
     display: flex;
     flex-direction: column;

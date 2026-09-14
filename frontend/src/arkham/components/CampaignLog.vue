@@ -1114,10 +1114,15 @@ watch(
 /* ── Page ────────────────────────────────────────────────── */
 
 .content {
-  flex: 1;
+  flex: 1 1 0;
+  height: 100%;
   min-height: 0;
+  min-width: 0;
   width: 100%;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
   padding-bottom: 60px;
   box-sizing: border-box;
 }
@@ -1245,6 +1250,8 @@ watch(
 /* ── Campaign log ────────────────────────────────────────── */
 
 .log-column {
+  /* Keep the document's full height inside the bounded scroll viewport. */
+  flex: 0 0 auto;
   width: 80%;
   margin-inline: auto;
   margin-block: 28px;

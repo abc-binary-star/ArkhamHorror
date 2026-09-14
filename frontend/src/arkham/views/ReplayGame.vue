@@ -153,8 +153,10 @@ onUnmounted(() => clearInterval(interval.value))
 .action { border: 5px solid var(--select); border-radius: 15px; }
 
 .game {
-  width: 100vw;
-  height: calc(100vh - var(--nav-height));
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
   display: flex;
 }
 
