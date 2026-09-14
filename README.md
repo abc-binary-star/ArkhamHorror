@@ -1,3 +1,5 @@
+> 前端设计与资源复用：[视觉交接说明](docs/frontend-visual-handoff.md)。完整卡面由接收方提供，音乐／音效不随当前版本交付。
+
 # Arkham Horror LCG
 
 ![Screenshot](./docs/img/screenshot.png)

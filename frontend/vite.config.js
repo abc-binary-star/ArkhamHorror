@@ -34,7 +34,7 @@ const homebrewImages = () => ({
 // homebrewImages plugin above.
 const CDN_ASSET_HOST = 'https://assets.arkhamhorror.app'
 const assetMirror = () => {
-  const install = (server) => {
+  const install = (server, preview = false) => {
     const cacheDir = path.join(server.config.root, 'node_modules', '.cache', 'arkham-assets')
     const inflight = new Map()
     const types = {
@@ -73,6 +73,13 @@ const assetMirror = () => {
       if (!url.startsWith('/img/arkham/') || url.startsWith('/img/arkham/homebrew/')) return next()
       const rel = decodeURIComponent(url.slice('/img/arkham/'.length))
       if (!rel || rel.includes('..')) return next()
+      // Serve checked-in UI images (and explicitly downloaded mirrors) before
+      // consulting the CDN. Preview reads from the configured build output.
+      const publicRoot = preview
+        ? path.resolve(server.config.root, server.config.build.outDir)
+        : path.resolve(server.config.root, server.config.publicDir)
+      const localFile = path.join(publicRoot, 'img', 'arkham', rel)
+      if (fs.existsSync(localFile) && fs.statSync(localFile).isFile()) return next()
       const file = path.join(cacheDir, rel)
       if (!file.startsWith(cacheDir + path.sep)) return next()
       try {
@@ -90,7 +97,7 @@ const assetMirror = () => {
       fs.createReadStream(file).pipe(res)
     })
   }
-  return { name: 'cdn-asset-mirror', configureServer: install, configurePreviewServer: install }
+  return { name: 'cdn-asset-mirror', configureServer: server => install(server), configurePreviewServer: server => install(server, true) }
 }
 
 // The embedded arkham.build app lives in public/build/. Vite's SPA fallback

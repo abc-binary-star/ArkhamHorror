@@ -116,3 +116,11 @@ docs/homebrew/
 docs/design/**/*.png
 docs/design/**/*.jpg
 docs/design/**/*.svg
+
+# Optional local audio is not part of the frontend visual handoff.
+*.mp3
+*.wav
+*.ogg
+*.m4a
+*.flac
+*.aac

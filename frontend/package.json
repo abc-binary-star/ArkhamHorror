@@ -4,8 +4,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node ./scripts/slim-cards.cjs",
     "dev": "vite dev",
+    "preserve": "node ./scripts/slim-cards.cjs",
     "serve": "vite serve",
+    "assets:check": "node ./scripts/check-visual-assets.cjs",
     "prebuild": "node ./scripts/slim-cards.cjs",
     "build": "vite build",
     "postbuild": "node ./scripts/precompress.cjs",

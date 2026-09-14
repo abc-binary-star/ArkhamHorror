@@ -1,3 +1,4 @@
+import runtimeImages from '../../scripts/runtime-images.json'
 import { useSiteSettingsStore } from '@/stores/site_settings'
 import { useSettings } from '@/stores/settings'
 import { reprintedArt, variantArt } from '@/arkham/artVariants'
@@ -18,6 +19,8 @@ interface ImageHelper {
   data: Map<string, Ref<boolean>>
   loaded: Ref<boolean>
 }
+
+const bundledImages = new Set(runtimeImages)
 
 const batchSize: number = 1000
 const defaultHelper: ImageHelper = { root: '', digests: new Set(), data: new Map(), loaded: ref(true) }
@@ -126,6 +129,9 @@ export function imgsrc(src: string, ignoreVariants = false): string {
   const path = src.replace(/^\//, '').replace(/^cards\/(.+)\.avif$/, (_, art: string) =>
     `cards/${reprintedArt(ignoreVariants ? art : variantArt(art, useSettings().useVariants))}.avif`
   )
+  // Core UI art ships with the frontend; only the large card/image library
+  // depends on the configured CDN. Match exact paths to preserve localization.
+  if (bundledImages.has(`img/arkham/${path}`)) return `/img/arkham/${path}`
   const fullPath = `${store.assetHost}/img/arkham/${path}`
 
   if (isLocalized(path)) {
