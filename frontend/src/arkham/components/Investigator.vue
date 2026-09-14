@@ -642,7 +642,7 @@ const spadeInjury = computed(() => {
           <div class="combat combat-icon">{{combat}}</div>
           <div class="agility agility-icon">{{agility}}</div>
         </div>
-              <span v-if="!isMobile" class="basic-actions">
+              <span v-if="!isMobile" class="basic-actions" :style="{ '--basic-action-color': `var(--${investigatorClass.toLowerCase()}, #b8b8b8)` }">
                 <button
                   v-for="basicAction in basicActions"
                   :key="basicAction.key"
@@ -907,8 +907,14 @@ const spadeInjury = computed(() => {
 .basic-actions .basic-action:disabled { color: #fff; opacity: 0.65; cursor: default; }
 .basic-actions .basic-action:hover:not(:disabled) { color: #fff; background: var(--surface-raised); }
 .basic-actions .basic-action:focus-visible { outline: 2px solid var(--select); outline-offset: 1px; }
-.basic-actions .basic-action--ready { color: var(--ability-ready-edge); background: rgb(236 217 160 / 0.14); }
-.basic-actions .basic-action--ready:hover:not(:disabled) { color: var(--ability-ready-edge-hover); background: rgb(236 217 160 / 0.26); }
+.basic-actions .basic-action--ready {
+  color: var(--basic-action-color);
+  background: color-mix(in srgb, var(--basic-action-color) 14%, transparent);
+}
+.basic-actions .basic-action--ready:hover:not(:disabled) {
+  color: color-mix(in srgb, var(--basic-action-color) 80%, white);
+  background: color-mix(in srgb, var(--basic-action-color) 26%, transparent);
+}
 .basic-action svg { width: 18px; height: 18px; }
 .action--spent-slot { visibility: hidden; pointer-events: none; }
 i.action {
