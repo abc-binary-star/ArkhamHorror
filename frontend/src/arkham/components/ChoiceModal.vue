@@ -13,6 +13,7 @@ import { handleEmbeddedI18n } from '@/arkham/i18n';
 import { QuestionType } from '@/arkham/types/Question';
 import Draggable from '@/components/Draggable.vue';
 import Question from '@/arkham/components/Question.vue';
+import { isInlineSkillTestFastWindow } from '@/arkham/skillTestFastWindow'
 import TriggeredEffectModal from '@/arkham/components/TriggeredEffectModal.vue';
 import EnemyAttackChoiceModal from '@/arkham/components/EnemyAttackChoiceModal.vue';
 import RequiredActionReminder from '@/arkham/components/RequiredActionReminder.vue';
@@ -350,6 +351,7 @@ const choiceAtmosphere = computed<AtmosphereTone>(() => {
     :opportunity="enemyAttackPrompt === 'opportunity'"
     @choose="choose"
   />
+  <template v-else-if="isInlineSkillTestFastWindow(game, playerId)" />
   <TriggeredEffectModal
     v-else-if="isTriggeredWindow && !phaseAnnouncement"
     :game="game"

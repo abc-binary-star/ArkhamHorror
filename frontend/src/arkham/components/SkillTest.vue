@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import SkillTestFastActions from '@/arkham/components/SkillTestFastActions.vue'
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import Question from '@/arkham/components/Question.vue';
 import { useDebug } from '@/arkham/debug'
@@ -405,6 +406,7 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
           />
         </div>
       </div>
+      <SkillTestFastActions :game="game" :player-id="playerId" @choose="choose" />
       <ChaosBagView
         :game="game"
         :chaosBag="chaosBag"

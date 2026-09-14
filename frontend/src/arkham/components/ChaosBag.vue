@@ -135,12 +135,9 @@ const choose = (idx: number) => emit('choose', idx)
     />
     <div class="chaos-bag-contents">
       <Token v-for="revealedToken in revealedChaosTokens" :key="revealedToken.id" :token="revealedToken" :playerId="playerId" :game="game" @choose="choose" />
-      <img
-        v-if="tokenAction !== -1"
-        class="token token--can-draw"
-        :src="imgsrc('chaos-tokens/ct-blank.png')"
-        @click="choose(tokenAction)"
-      />
+      <button v-if="tokenAction !== -1" type="button" class="finish-committing" @click="choose(tokenAction)">
+        {{ t('cardOption.testFast.finishCommit') }}
+      </button>
       <ChaosBagChoice v-if="chaosBag.choice && 'step' in chaosBag.choice && !game.skillTestResults" :choice="chaosBag.choice.step" :game="game" :playerId="playerId" @choose="choose" />
     </div>
 
@@ -219,6 +216,7 @@ const choose = (idx: number) => emit('choose', idx)
 </template>
 
 <style scoped>
+.finish-committing { padding: 10px 16px; border-radius: 6px; cursor: pointer; }
 .token--can-draw {
   border: min(5px, 1vw) solid var(--select);
   border-radius: 500px;

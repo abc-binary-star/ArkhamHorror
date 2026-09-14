@@ -1,5 +1,13 @@
 {
   "cardOption": {
+    "testFast": {
+    "title": "检定快速能力",
+    "beforeDraw": "揭示前可继续使用可用的快速能力，调整检定数值。",
+    "beforeCommit": "可先使用快速能力，再投入卡牌。",
+    "reveal": "揭示混沌标记",
+    "commit": "进入投入阶段",
+    "finishCommit": "完成投入"
+},
     "prompt": {
     "title": "卡牌提示频率",
     "shared": "相同卡牌代码共享设置；仅影响可选提示，不影响强制效果。",

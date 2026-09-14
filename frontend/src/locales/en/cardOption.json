@@ -1,5 +1,13 @@
 {
   "cardOption": {
+    "testFast": {
+    "title": "Skill test fast abilities",
+    "beforeDraw": "Use available fast abilities to make final adjustments before revealing.",
+    "beforeCommit": "Use fast abilities before committing cards.",
+    "reveal": "Reveal chaos token",
+    "commit": "Commit cards",
+    "finishCommit": "Finish committing"
+},
     "prompt": {
     "title": "Card prompts",
     "shared": "Copies with the same card code share this setting. Forced effects are unaffected.",
