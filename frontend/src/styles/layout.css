@@ -56,3 +56,12 @@
   .row, .buttons { flex-wrap: wrap; }
   .router-container, .router-container > * { min-width: 0; }
 }
+
+/* Ordinary pages can overflow even when their root has no scrolling layout.
+   The tabletop keeps its own viewport and scrolling regions. */
+.router-container--scrollable {
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.router-container--scrollable > * { min-width: 0; }
+.page-container { min-height: 0; overscroll-behavior: contain; }

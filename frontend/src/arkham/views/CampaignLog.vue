@@ -46,12 +46,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKeyDown))
     <LoadState v-if="loadError && game === null" error @retry="refreshGame" />
     <LoadState v-else-if="!loaded" />
     <CampaignLog v-else-if="game !== null" :game="game" :cards="cards" :player-id="game.activePlayerId" @refresh="refreshGame">
-      <template #header-leading>
-        <router-link :to="{ name: 'Game', params: { gameId }}" class="back-button">
-          <font-awesome-icon icon="arrow-left" class="back-icon" />
-          <span>{{ $t('back') }}</span>
-        </router-link>
-      </template>
+
     </CampaignLog>
   </div>
 </template>
