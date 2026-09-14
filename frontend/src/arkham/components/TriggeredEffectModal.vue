@@ -12,6 +12,7 @@ import { processingKey } from '@/arkham/injectionKeys'
 import AtmosphereLine from './AtmosphereLine.vue'
 import { triggerAtmosphere } from '@/arkham/atmosphere'
 import AbilityButton from './AbilityButton.vue'
+import CardPromptSettings from './CardPromptSettings.vue'
 import QuestionChoices from './QuestionChoices.vue'
 
 const props = defineProps<{ game: Game; playerId: string }>()
@@ -49,10 +50,12 @@ function effectCardCode(source: Source): string | null {
   }
   return sourceCardCode(source, props.game)
 }
+const promptInvestigator = computed(() => Object.values(props.game.investigators).find(i => i.playerId === props.playerId))
 const entries = computed(() => {
-  const investigator = Object.values(props.game.investigators).find(i => i.playerId === props.playerId)
+  const investigator = promptInvestigator.value
   return choices(props.game, props.playerId).map((choice, index) => {
     let code: string | null = null
+    let promptCode: string | null = null
     if (choice.tag === 'AbilityLabel') code = effectCardCode(choice.ability.source)
     if (choice.tag === 'TargetLabel' && choice.target.tag === 'CardIdTarget') {
       // Resolve only already-visible zones, never inspect another player's hand.
@@ -64,10 +67,11 @@ const entries = computed(() => {
       ] : []
       const contents = visibleCards.find(c => c.id === choice.target.contents)
       if (contents) {
+        promptCode = contents.cardCode
         code = `${contents.cardCode}${contents.isFlipped ? 'b' : ''}`
       }
     }
-    return { choice, index, image: code ? cardImage(code) : null }
+    return { choice, index, promptCode: promptCode ?? code, image: code ? cardImage(code) : null }
   })
 })
 // Merge adjacent entries that resolve to the same card image so several
@@ -139,6 +143,13 @@ onBeforeUnmount(() => dialog.value?.close())
           <div v-else class="trigger-entry" :class="{ 'trigger-entry--card': group.image }">
             <img v-if="group.image" :src="group.image" :alt="t('triggeredEffect.card')" />
             <div class="entry-actions">
+              <CardPromptSettings
+                v-if="promptInvestigator && group.entries[0].promptCode && entries.some(entry => entry.choice.tag === 'SkipTriggersButton')"
+                :game="game"
+                :player-id="playerId"
+                :investigator-id="promptInvestigator.id"
+                :card-code="group.entries[0].promptCode"
+              />
               <template v-for="entry in group.entries" :key="entry.index">
                 <AtmosphereLine
                   v-if="entry.choice.tag === 'AbilityLabel'"

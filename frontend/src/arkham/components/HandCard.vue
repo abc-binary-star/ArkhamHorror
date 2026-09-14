@@ -6,6 +6,7 @@ import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Messa
 import { MessageType } from '@/arkham/types/Message'
 import { imgsrc } from '@/arkham/helpers'
 import { cardImage } from '@/arkham/cardImages'
+import CardPromptSettings from '@/arkham/components/CardPromptSettings.vue'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import * as ArkhamGame from '@/arkham/types/Game'
 import { useDebug } from '@/arkham/debug'
@@ -299,6 +300,14 @@ function oilPaintEffect(canvas, radius, intensity) {
       <font-awesome-icon icon="wrench" />
     </button>
 
+    <CardPromptSettings
+      v-if="investigatorId && investigatorId === ownerId"
+      class="hand-prompt-settings"
+      :game="game"
+      :player-id="playerId"
+      :investigator-id="investigatorId"
+      :card-code="cardContents.cardCode"
+    />
     <AbilitiesMenu
       v-if="abilities.length > 0"
       v-model="showAbilities"
@@ -316,6 +325,12 @@ function oilPaintEffect(canvas, radius, intensity) {
 </template>
 
 <style scoped>
+.hand-prompt-settings { position: absolute; left: 0; right: 0; top: 0; z-index: 4; opacity: 0; }
+.card-container:hover .hand-prompt-settings,
+.card-container:focus-within .hand-prompt-settings,
+.hand-prompt-settings.configured { opacity: 1; }
+@media (hover: none) { .hand-prompt-settings { opacity: 1; } }
+
 .card {
   width: var(--card-width);
   min-width: var(--card-width);

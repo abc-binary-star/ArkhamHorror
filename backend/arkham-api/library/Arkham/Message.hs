@@ -533,6 +533,7 @@ data Message
     window triggers. Set from the hidden-cards stack.
     -}
     SetCardSilenced InvestigatorId CardCode Bool
+  | SetCardPromptMode InvestigatorId CardCode Text
   | SetAsIfRuling AsIfRuling
   | SetUltimatumsAndBoonsEnabled Bool
   | -- | Ultimatum of The Scream: ban this ally for the rest of the campaign

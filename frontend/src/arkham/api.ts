@@ -556,3 +556,6 @@ export const buildWebsocketUrl = (path: string, token?: string | null): string =
 
 export const eventWebsocketUrl = (eventId: string, token: string | null): string =>
   buildWebsocketUrl(`/api/v1/arkham/events/${eventId}`, token)
+
+export const setCardPromptMode = (gameId: string, investigatorId: string, cardCode: string, mode: string): Promise<void> =>
+  updateGameRaw(gameId, { tag: 'SetCardPromptMode', contents: [investigatorId, cardCode, mode] })
