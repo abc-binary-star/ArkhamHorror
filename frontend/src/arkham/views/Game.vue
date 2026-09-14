@@ -2,7 +2,7 @@
 import { clientLog, clientError } from '@/utils/clientLog'
 import { isTabletopFrame, TABLETOP_DISMISS, tabletopDocument, useFixedTabletop } from '@/arkham/composables/useFixedTabletop'
 import { useGameAudio } from '@/arkham/composables/useGameAudio'
-import { ArrowLeft, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight, Monitor, Eye, EyeOff } from '@lucide/vue'
+import { ArrowLeft, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight, Monitor, Eye, EyeOff, BookOpen } from '@lucide/vue'
 import {
   computed,
   markRaw,
@@ -2421,10 +2421,6 @@ onUnmounted(() => {
           </span>
           <span class="fixed-resolution-toggle__track" aria-hidden="true"><span /></span>
         </button>
-        <button type="button" class="game-tools-action" @click="showLog = !showLog; showTools = false">
-          <DocumentTextIcon aria-hidden="true" />
-          {{ showLog ? $t('gameBar.closeLog') : $t('gameBar.viewLog') }}
-        </button>
         <Menu>
           <EyeIcon aria-hidden="true" />
           {{ $t('gameBar.view') }}
@@ -2537,6 +2533,15 @@ onUnmounted(() => {
       <div id="table-navigation-summary"></div>
       <div class="right">
         <button
+          type="button"
+          :aria-pressed="showLog"
+          v-tooltip="showLog ? $t('gameBar.closeLog') : $t('gameBar.viewLog')"
+          :aria-label="showLog ? $t('gameBar.closeLog') : $t('gameBar.viewLog')"
+          @click="showLog = !showLog; showTools = false"
+        >
+          <BookOpen aria-hidden="true" />
+        </button>
+        <button
           v-if="fullscreenSupported"
           type="button"
           :aria-pressed="isFullscreen"
@@ -2593,7 +2598,8 @@ onUnmounted(() => {
           :closeSettings="() => (showSettings = false)"
         />
       </Draggable>
-      <CampaignLog v-if="showLog && game !== null" :game="game" :cards="cards" :playerId="playerId" on-dark>
+      <div v-if="showLog && game !== null" class="campaign-log-panel">
+      <CampaignLog :game="game" :cards="cards" :playerId="playerId" on-dark>
         <template #header-leading>
           <button class="back-button" @click="showLog = false">
             <font-awesome-icon icon="arrow-left" class="back-icon" />
@@ -2601,6 +2607,7 @@ onUnmounted(() => {
           </button>
         </template>
       </CampaignLog>
+      </div>
       <div
         v-else
         ref="gameMainRef"
@@ -2889,6 +2896,16 @@ onUnmounted(() => {
   border-radius: var(--radius-lg);
   box-shadow: inset 0 0 0 1px rgb(200 173 120 / 0.22);
 }
+
+  .campaign-log-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    height: 0;
+    min-height: 0;
+    min-width: 0;
+    overflow: hidden;
+  }
 
   .tabletop-shell {
   --game-bar-height: 56px;
