@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { X } from '@lucide/vue'
 import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { type Game } from '@/arkham/types/Game'
 import { useDebug } from '@/arkham/debug'
@@ -221,6 +222,7 @@ onBeforeUnmount(() => {
   <div class="settings">
     <div class="settings-header" :style="headerStyle">
       <h2 class="settings-title">{{$t('gameBar.viewSettingTitle', {investigator: investigator?.name.title ?? ''})}}</h2>
+      <button type="button" class="settings-close" :aria-label="$t('cardDetails.close')" @click="closeSettings"><X aria-hidden="true" /></button>
     </div>
 
     <div class="settings-body">
@@ -427,7 +429,13 @@ onBeforeUnmount(() => {
   color: var(--text);
 }
 
+.settings-close { flex: 0 0 auto; padding: 6px; color: var(--text); background: transparent; border: 0; cursor: pointer; }
+.settings-close svg { width: 20px; height: 20px; }
 .settings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   flex-shrink: 0;
   padding: 8px 16px;
   background: var(--class-color, var(--background-dark));
