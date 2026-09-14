@@ -82,6 +82,7 @@ import TreacheryView from '@/arkham/components/Treachery.vue'
 import { useGameChoices } from '@/arkham/composables/useGameChoices'
 import { isMinimizedSkillTestKey, soloKey, phaseAnnouncementKey } from '@/arkham/injectionKeys'
 import { useMapViewport } from '@/arkham/composables/useMapViewport'
+import { useHorizontalDragScroll } from '@/arkham/composables/useHorizontalDragScroll'
 import ScenarioPhases from '@/arkham/components/ScenarioPhases.vue'
 import PhaseInterlude from '@/arkham/components/PhaseInterlude.vue'
 import ScenarioMapControls from '@/arkham/components/ScenarioMapControls.vue'
@@ -1139,9 +1140,52 @@ const desktopTable = useMediaQuery('(min-width: 1200px)')
 const desktopTabletop = computed(() => desktopTable.value || !isMobile.value)
 const mobilePanel = ref<'map' | 'player' | 'scenario' | 'team'>('map')
 const navigationSummaryHost = ref<HTMLElement | null>(null)
+const playerZone = ref<HTMLElement | null>(null)
+const { onWheel, onPointerDown, onPointerMove, onPointerUp } = useHorizontalDragScroll()
+// The workbench rows belong to Player, so the handlers are delegated from the
+// zone: the rows that need them are the ones whose bar is hidden.
+const SCROLL_ROWS = '.in-play, .hand-area > section.hand'
+let dragRow: HTMLElement | null = null
+let scrollRowsBound: HTMLElement | null = null
+function attachHorizontalDragScroll() {
+  const zone = playerZone.value
+  if (!zone || scrollRowsBound === zone) return
+  scrollRowsBound = zone
+  zone.addEventListener('wheel', (event) => {
+    const row = (event.target as HTMLElement | null)?.closest(SCROLL_ROWS)
+    if (!row || !zone.contains(row)) return
+    onWheel(row as HTMLElement, event)
+  })
+  zone.addEventListener('pointerdown', (event) => {
+    const row = (event.target as HTMLElement | null)?.closest(SCROLL_ROWS)
+    dragRow = row instanceof HTMLElement && zone.contains(row) ? row : null
+    if (!dragRow) return
+    onPointerDown(dragRow, event)
+  })
+  zone.addEventListener('pointermove', (event) => {
+    // Once the drag passes the threshold the composable captures the pointer on
+    // the row, so the event retargets there and `closest` still finds it; the
+    // pointerdown row is the fallback for moves below the threshold.
+    const row = ((event.target as HTMLElement | null)?.closest(SCROLL_ROWS) ?? dragRow) as HTMLElement | null
+    if (!row) return
+    onPointerMove(row, event)
+  })
+  zone.addEventListener('pointerup', () => {
+    onPointerUp()
+    dragRow = null
+  })
+  zone.addEventListener('pointercancel', () => {
+    onPointerUp()
+    dragRow = null
+  })
+}
 onMounted(() => {
   navigationSummaryHost.value = document.getElementById('table-navigation-summary')
+  attachHorizontalDragScroll()
 })
+// The zone is rendered by an async child that swaps between the mobile panel
+// and the workbench, so the node can be replaced after mount.
+onUpdated(attachHorizontalDragScroll)
 const summaryInNavigation = computed(() => desktopTable.value && !!navigationSummaryHost.value)
 const scenarioAccessoriesOpen = ref(false)
 const scenarioShelf = ref<HTMLElement | null>(null)
@@ -3022,7 +3066,7 @@ async function addChaosToken(face: any) {
         </div>
       </RainOverlay>
 
-      <div id="player-zone" :class="{ 'player-zone--fullscreen': locationsFullscreen }">
+      <div id="player-zone" ref="playerZone" :class="{ 'player-zone--fullscreen': locationsFullscreen }">
         <div ref="encounterPilesHost" class="workbench-encounter-piles"></div>
         <PlayerTabs
           :game="game"
@@ -5384,18 +5428,33 @@ async function addChaosToken(face: any) {
     flex: 1 1 auto;
     flex-direction: row;
     flex-wrap: nowrap;
-    align-items: stretch;
+    align-items: center;
     gap: 4px;
     min-width: 0;
-    padding: 4px 0 0;
+    /* No top inset: the strip's own 30px row is the shared axis, and the 4px
+       that used to sit here pushed the labels below the accessories button and
+       the team totals, which both centre on that axis. */
+    padding: 0;
     overflow-x: auto;
     overflow-y: hidden;
+    /* The strip stays scrollable — the wheel, trackpad and click-drag all work
+       on it — but the bar itself is never drawn: it would sit on the seats'
+       baseline and read as part of the chrome. */
+    scrollbar-width: none;
+  }
+
+  .scenario-body.scenario-body--multiseat
+    > #player-zone
+    :deep(ul.tabs__header::-webkit-scrollbar) {
+    height: 0;
+    width: 0;
+    background: transparent;
   }
 
   .scenario-body.scenario-body--multiseat > #player-zone :deep(ul.tabs__header > li) {
     display: flex;
     flex: 0 0 auto;
-    align-items: stretch;
+    align-items: center;
     margin: 0;
     border: 1px solid rgb(205 175 107 / 0.24);
     border-bottom: 0;
@@ -5423,8 +5482,8 @@ async function addChaosToken(face: any) {
     > #player-zone
     :deep(ul.tabs__header > li.tab--active-player::before) {
     align-self: center;
-    margin: 0 0 0 7px;
-    font-size: 0.62rem;
+    margin: 0 0 0 -10px;
+    font-size: 0.78rem;
     opacity: 0.9;
   }
 
@@ -5434,8 +5493,11 @@ async function addChaosToken(face: any) {
   .scenario-body.scenario-body--multiseat
     > #player-zone
     :deep(ul.tabs__header > li .waiting-indicator) {
+    /* The `li` centres its children on the strip's axis instead of stretching
+       them, so this cap sets its own height: the label's 5px padding plus its
+       line box, which is what it used to inherit from the stretched row. */
     align-self: stretch;
-    height: auto;
+    height: 26px;
     min-height: 0;
     padding: 2px 7px;
   }
@@ -5588,13 +5650,19 @@ async function addChaosToken(face: any) {
     align-self: start;
     justify-self: end;
     z-index: 10;
+    /* The strip is tuned against `.basic-actions`' 24px button boxes, so it
+       takes that height itself: the pips are `line-height: 1` glyph boxes whose
+       metrics sit high in a taller box, which floated the arrow centre above
+       the button centre. Matching the box height and centring within it makes
+       the two rows share one axis. */
+    height: 24px;
     margin: 2px 6px 0 0;
     display: flex;
     align-items: center;
     gap: 3px;
     max-width: calc(100% - 144px);
     flex-wrap: nowrap;
-    overflow-x: auto;
+    overflow: hidden;
     /* No `filter` on this strip: any non-none filter makes it a containing
        block, and the quick-action tooltips are absolute-positioned poppers
        parented to `body`. floating-ui resolves their offsetParent against this
@@ -5612,6 +5680,11 @@ async function addChaosToken(face: any) {
   /* The band's trailing edge is the screen's own: the strip no longer carries
      the doom/clue readouts to its right, so the end-turn and skip-triggers
      buttons close on the right edge. */
+  /* The visible end-turn/skip controls are promoted into the action band above
+     and the originals are hidden, not removed, so their box stays in flow (the
+     promoted buttons keep their measured width). Hidden boxes still count as
+     scrollable overflow, so this strip must clip: with `overflow-x: auto` the
+     max-width below left a bare horizontal scrollbar under the action band. */
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-controls) {
     position: absolute;
     top: 0;
@@ -5622,7 +5695,7 @@ async function addChaosToken(face: any) {
     gap: 12px;
     max-width: calc(100% - 480px);
     min-height: 30px;
-    overflow-x: auto;
+    overflow: hidden;
   }
 
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.investigator-controls button) {
@@ -5675,6 +5748,24 @@ async function addChaosToken(face: any) {
     padding: 4px 2px;
     border-radius: 0;
     background: transparent;
+    /* Keeps the row's box constant and its edge clean: the bar itself is never
+       drawn, so a seat holding more equipment than fits no longer grows a strip
+       that re-measures the workbench on every switch. Wheel, trackpad and
+       click-drag still scroll it. */
+    scrollbar-width: none;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone
+    :deep(.in-play::-webkit-scrollbar),
+  .scenario-body.scenario-body--multiseat > #player-zone
+    :deep(.hand-area > section.hand::-webkit-scrollbar) {
+    height: 0;
+    width: 0;
+    background: transparent;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area > section.hand) {
+    scrollbar-width: none;
   }
 
   /* Empty slots keep the shape of a real asset: a 28px marker read as a
@@ -6103,6 +6194,16 @@ async function addChaosToken(face: any) {
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.play-area-label) {
     left: 12px;
   }
+  /* The rows scroll by dragging the surface now that no bar is drawn, so the
+     cursor advertises it; the class is set while a drag is in flight. */
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area > section.hand) {
+    cursor: grab;
+  }
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play.drag-scrolling),
+  .scenario-body.scenario-body--multiseat > #player-zone :deep(.hand-area > section.hand.drag-scrolling) {
+    cursor: grabbing;
+  }
   /* One seal for every empty slot on the table. The dashed rule says "nothing
      here yet" — the same on the piles, the asset slots and the threat area —
      and the brass corner pieces, lit by a deep-sea wash, are the dressing a
@@ -6129,10 +6230,21 @@ async function addChaosToken(face: any) {
     opacity: 0.72;
     filter: sepia(0.5) saturate(0.65) invert(0.72);
   }
+  /* These rows scroll sideways and never draw a bar: the equipment strip grows
+     one as soon as a seat holds more cards than fit, and that bar took a strip
+     off the row's height, re-measuring the workbench on every seat switch. The
+     rows stay scrollable by wheel, trackpad and click-drag. */
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play),
   .scenario-body.scenario-body--multiseat > #player-zone :deep(section.hand) {
-    scrollbar-width: thin;
-    scrollbar-color: rgb(185 157 98 / 0.34) transparent;
+    scrollbar-width: none;
+  }
+
+  .scenario-body.scenario-body--multiseat > #player-zone
+    :deep(.in-play::-webkit-scrollbar),
+  .scenario-body.scenario-body--multiseat
+    > #player-zone
+    :deep(section.hand::-webkit-scrollbar) {
+    display: none;
   }
   /* The online workbench carries its own seat label above the tabs, so the pile
      shelf starts 26px lower and the encounter rail follows it down. */
