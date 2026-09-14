@@ -289,6 +289,66 @@ const investigatorPortraitImage = computed(() => {
   return portraitImage(props.investigator.cardCode, suffix)
 })
 
+// Investigator cards are double-sided (lore on the back). Flipping is
+// client-side only: click flips when the card has no pending action (an
+// actionable click must still activate), right-click always flips. The back
+// art is probed lazily so a missing 'b' image never breaks the front.
+const flipped = ref(false)
+const backReady = ref(false)
+const backFailed = ref(false)
+
+const investigatorBackImage = computed(() => {
+  if (props.investigator.form.tag === "YithianForm" || props.investigator.form.tag === "HomunculusForm" || props.investigator.form.tag === "ShatteredForm") {
+    return undefined
+  }
+
+  if (props.investigator.form.tag === "TransfiguredForm") {
+    return cardImage(props.investigator.form.contents, 'b')
+  }
+
+  const mutated = props.investigator.mutated ? `_${props.investigator.mutated}` : ''
+  const classVariant = ['c03006', 'c90087'].includes(props.investigator.cardCode) && props.investigator.meta !== 'Neutral' ? (props.investigator.meta ? `_${props.investigator.meta}` : '') : ''
+  return cardImage(props.investigator.art, `${classVariant}${mutated}b`)
+})
+
+watch(() => [props.investigator.id, investigatorBackImage.value] as const, () => {
+  flipped.value = false
+  backReady.value = false
+  backFailed.value = false
+})
+
+function toggleFlip() {
+  if (flipped.value) {
+    flipped.value = false
+    return
+  }
+  const back = investigatorBackImage.value
+  if (!back || backFailed.value) return
+  if (backReady.value) {
+    flipped.value = true
+    return
+  }
+  const probe = new Image()
+  probe.onload = () => {
+    if (investigatorBackImage.value !== back) return
+    backReady.value = true
+    flipped.value = true
+  }
+  probe.onerror = () => {
+    if (investigatorBackImage.value !== back) return
+    backFailed.value = true
+  }
+  probe.src = back
+}
+
+function onCardClick() {
+  if (investigatorAction.value !== -1) {
+    clicked()
+    return
+  }
+  toggleFlip()
+}
+
 const miniCardDevoured = computed(() => {
   const devouredMiniCards = props.game.scenario?.meta?.devouredMiniCards
   return Array.isArray(devouredMiniCards) && devouredMiniCards.includes(id.value)
@@ -622,15 +682,28 @@ const spadeInjury = computed(() => {
             </span>
         </div>
         <div class="investigator-image">
-          <img
-            :class="{ 'investigator--can-interact': investigatorAction !== -1, 'ability-target': isHighlighted || isAttackTarget }"
-            class="card card--sideways"
-            :src="image"
-            @click="clicked"
+          <div
+            class="card-flip"
+            :class="{ 'card-flip--flipped': flipped }"
             @drop="onDrop($event)"
             @dragover.prevent="dragover($event)"
             @dragenter.prevent
-          />
+            @contextmenu.prevent="toggleFlip"
+          >
+            <img
+              :class="{ 'investigator--can-interact': investigatorAction !== -1, 'ability-target': isHighlighted || isAttackTarget }"
+              class="card card--sideways"
+              :src="image"
+              @click="onCardClick"
+            />
+            <img
+              v-if="backReady"
+              class="card card--sideways card-flip__back"
+              :class="{ 'investigator--can-interact': investigatorAction !== -1, 'ability-target': isHighlighted || isAttackTarget }"
+              :src="investigatorBackImage"
+              @click="onCardClick"
+            />
+          </div>
           <span v-if="isBlanked" class="blanked-badge" :data-image-id="blankedCardCode"><font-awesome-icon icon="ban" /></span>
           <PendingDamageTokens
             v-if="!portrait"
@@ -1335,7 +1408,7 @@ i.action {
   align-self: stretch;
   min-width: 0;
 
-  > .card {
+  .card-flip > .card {
     display: block;
     width: 100%;
     min-width: 0;
@@ -1346,12 +1419,36 @@ i.action {
   @media (max-width: 800px) and (orientation: portrait) {
     width: auto;
 
-    > .card {
+    .card-flip > .card {
       width: auto;
       min-width: 0;
       height: calc(var(--card-width) * 3);
     }
   }
+}
+
+.card-flip {
+  position: relative;
+  perspective: 1000px;
+}
+
+.card-flip > .card {
+  backface-visibility: hidden;
+  transition: transform 450ms ease, box-shadow 120ms ease;
+}
+
+.card-flip__back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+}
+
+.card-flip--flipped > .card:not(.card-flip__back) {
+  transform: rotateY(180deg);
+}
+
+.card-flip--flipped > .card-flip__back {
+  transform: rotateY(360deg);
 }
 
 .blanked-badge {
@@ -1498,7 +1595,7 @@ i.diamond {
 
   .player-card { display: flex; flex-direction: column; align-items: stretch; width: min(100%, 320px); max-width: 100%; gap: 10px; }
   .player-card .investigator-image { width: min(100%, 240px); align-self: center; }
-  .player-card .investigator-image > .card { display: block; width: 100%; height: auto; min-width: 0; }
+  .player-card .investigator-image .card-flip > .card { display: block; width: 100%; height: auto; min-width: 0; }
   .player-card :deep(.card) { max-width: 100%; height: auto; }
   .player-buttons, .button-group, .investigator-controls { display: flex; flex-wrap: wrap; gap: 8px; width: 100%; }
   .player-buttons button { min-height: 44px; min-width: 44px; white-space: normal; font-size: 14px; }
