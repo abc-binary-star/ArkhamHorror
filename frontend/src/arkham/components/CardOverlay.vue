@@ -915,7 +915,6 @@ const {
         <p v-html="dbCardCustomizationText"></p>
       </div>
     </div>
-    </div>
 
     <div v-if="playabilityData && debug.active" class="playability-panel">
       <ul class="playability-checks">

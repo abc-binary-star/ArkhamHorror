@@ -55,7 +55,7 @@ const { t } = useI18n({ useScope: 'local', fallbackLocale: 'en', messages: {
 </script>
 <template><p class="atmosphere-line" :data-tone="tone">{{ t(tone) }}</p></template>
 <style scoped>
-.atmosphere-line { margin: 10px 0 14px; max-width: 60ch; font-family: 'Songti SC', 'Noto Serif SC', Georgia, serif; font-size: .85rem; font-weight: 400; line-height: 1.8; letter-spacing: .035em; color: inherit; opacity: .78; text-wrap: pretty; }
+.atmosphere-line { margin: 10px 0 14px; max-width: max(60ch, 38em); font-family: 'Songti SC', 'Noto Serif SC', Georgia, serif; font-size: .85rem; font-weight: 400; line-height: 1.8; letter-spacing: .035em; color: inherit; opacity: .78; text-wrap: pretty; }
 .atmosphere-line[data-tone='support'], .atmosphere-line[data-tone='resolve'] { border-left: 2px solid #a9bd8580; padding-left: 10px; }
 .atmosphere-line[data-tone='enemyForced'], .atmosphere-line[data-tone='treachery'], .atmosphere-line[data-tone='horror'] { border-left: 2px solid #a58cba80; padding-left: 10px; }
 </style>
