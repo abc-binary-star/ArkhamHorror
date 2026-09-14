@@ -19,6 +19,7 @@ import CardsUnderIndicator from '@/arkham/components/CardsUnderIndicator.vue'
 import * as ArkhamGame from '@/arkham/types/Game'
 import { AbilityLabel, AbilityMessage, type Message } from '@/arkham/types/Message'
 import { MessageType } from '@/arkham/types/Message'
+import type { Ability } from '@/arkham/types/Ability'
 import { keyToId } from '@/arkham/types/Key'
 import { cardImg, imgsrc } from '@/arkham/helpers'
 import { resolvedSideArt } from '@/arkham/cardImages'
@@ -35,6 +36,7 @@ const props = defineProps<{
   remainingStack: Card[]
   completedStack: Card[]
   playerId: string
+  showClueBadge?: boolean
   hideStackControl?: boolean
   abilitiesBar?: string | null
 }>()
@@ -102,7 +104,35 @@ function isCardAction(c: Message): boolean {
 
 const interactAction = computed(() => choices.value.findIndex(isCardAction))
 
+// An act's "spend clues to advance" shows up in choices as an Objective ability
+// whose inner cost is clue-shaped; the engine only offers it once timing and
+// payment (team-wide for group clue costs) already pass, so its presence is the
+// advance-ready signal.
+const canProgress = computed(
+  () =>
+    interactAction.value !== -1 ||
+    abilities.value.some(
+      ({ contents }) => 'ability' in contents && isClueAdvancement(contents.ability),
+    ),
+)
+
 const canInteract = computed(() => abilities.value.length > 0 || interactAction.value !== -1)
+
+function isClueAdvancement(ability: Ability): boolean {
+  const { tag, abilityType } = ability.type as unknown as {
+    tag?: string
+    abilityType?: { cost?: unknown }
+  }
+  return tag === 'Objective' && isClueCost(abilityType?.cost)
+}
+
+function isClueCost(cost: unknown): boolean {
+  if (!cost || typeof cost !== 'object') return false
+  const { tag, contents } = cost as { tag?: unknown; contents?: unknown }
+  if (typeof tag !== 'string') return false
+  if (tag.includes('ClueCost')) return true
+  return tag === 'Costs' && Array.isArray(contents) && contents.some(isClueCost)
+}
 
 function isAbility(v: Message): v is AbilityLabel {
   if (v.tag !== MessageType.ABILITY_LABEL) {
@@ -454,7 +484,7 @@ const chooseFromStoryCollection = (choice: number) => {
       >
         <img
           :class="{
-            'act--can-progress': interactAction !== -1,
+            'act--can-progress': canProgress,
             'act--can-interact': canInteract,
             'card--sideways': !isVertical,
             'card--flipping': flipping,
@@ -465,6 +495,13 @@ const chooseFromStoryCollection = (choice: number) => {
           @load="updateOrientation"
           :src="displayedImage"
           ref="frame"
+        />
+        <PoolItem
+          v-if="showClueBadge"
+          class="act-clue-badge"
+          type="clue"
+          :amount="clues"
+          :tooltip="$t('multiplayerTable.actClues')"
         />
       </div>
       <StackIndicator
@@ -602,7 +639,7 @@ const chooseFromStoryCollection = (choice: number) => {
     />
 
     <div class="pool">
-      <PoolItem v-if="clues > 0" type="clue" :amount="clues" />
+      <PoolItem v-if="!showClueBadge && clues > 0" type="clue" :amount="clues" />
       <span v-if="sharedContribution > 0" class="shared-clue-pool" :title="$t('event.sharedClues')">
         <PoolItem type="clue" :amount="sharedContribution" />
       </span>
@@ -633,6 +670,15 @@ const chooseFromStoryCollection = (choice: number) => {
   border-radius: 6px;
   height: var(--card-width);
   width: fit-content;
+}
+
+.act-clue-badge {
+  position: absolute;
+  top: 4px;
+  left: 2px;
+  z-index: 2;
+  --pool-token-width: 26px;
+  pointer-events: none;
 }
 
 .act--objective {

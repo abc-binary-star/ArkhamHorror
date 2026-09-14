@@ -25,6 +25,7 @@ import useHighlighter from '@/arkham/composables/useHighlighter';
 import Resources from '@/arkham/components/Resources.vue';
 import Draw from '@/arkham/components/Draw.vue';
 import InvestigatorUndo from '@/arkham/components/InvestigatorUndo.vue';
+import PoolItem from '@/arkham/components/PoolItem.vue';
 import { IsMobile } from '@/arkham/isMobile';
 import {
   undoControlsKey,
@@ -738,6 +739,20 @@ const spadeInjury = computed(() => {
               :game="game"
               @click="$emit('choose', ability.index)"
               />
+            <div class="team-token-totals">
+              <PoolItem
+                type="clue"
+                :amount="game.totalClues"
+                :tooltip="$t('multiplayerTable.teamClues')"
+                :aria-label="`${$t('multiplayerTable.teamClues')}: ${game.totalClues}`"
+              />
+              <PoolItem
+                type="doom"
+                :amount="game.totalDoom"
+                :tooltip="$t('multiplayerTable.totalDoom')"
+                :aria-label="`${$t('multiplayerTable.totalDoom')}: ${game.totalDoom}`"
+              />
+            </div>
             <InvestigatorUndo v-if="undoControls && isCurrentPlayersInvestigator" />
             <button
             class="end-turn-button"
@@ -819,6 +834,19 @@ const spadeInjury = computed(() => {
 
 <style scoped>
 .investigator-controls { display: contents; }
+.team-token-totals {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  align-self: center;
+  gap: 12px;
+  margin-inline: 5px 8px;
+  --pool-token-width: 24px;
+}
+.team-token-totals :deep(.poolItem) {
+  flex: 0 0 auto;
+  line-height: 1;
+}
 .table-action-icon { width: 14px; height: 14px; margin-right: 5px; vertical-align: -2px; }
 .investigator-header {
   display: flex;

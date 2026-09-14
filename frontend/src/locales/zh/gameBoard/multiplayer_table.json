@@ -1,4 +1,7 @@
 {
+  "actClues": "场景卡上的线索",
+  "teamClues": "团队持有总线索",
+  "totalDoom": "场上总密谋",
   "expandMapControls": "展开地图工具栏",
   "collapseMapControls": "收起地图工具栏",
   "resetMapShort": "复位",
@@ -36,7 +39,7 @@
   "encounterDrawPile": "公共遭遇抽牌堆",
   "agendaArea": "密谋",
   "actArea": "场景",
-  "scenarioAccessories": "剧本附件与工具",
+  "scenarioAccessories": "冒险附件",
   "acting": "当前行动",
   "viewing": "当前查看",
   "pendingChoice": "等待选择",

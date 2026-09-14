@@ -570,6 +570,7 @@ watch(
 <template>
   <div ref="playerInfo" class="player-info">
     <div class="tabs-row">
+      <slot name="before-tabs" />
       <ul class="tabs__header">
         <li
           v-for="investigator in investigators"

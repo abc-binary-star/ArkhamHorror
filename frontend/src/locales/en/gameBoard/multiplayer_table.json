@@ -1,4 +1,7 @@
 {
+  "actClues": "Clues on this act",
+  "teamClues": "Total team clues",
+  "totalDoom": "Total doom in play",
   "expandMapControls": "Expand map controls",
   "collapseMapControls": "Collapse map controls",
   "resetMapShort": "Reset",
@@ -36,7 +39,7 @@
   "encounterDrawPile": "Public encounter draw pile",
   "agendaArea": "Agenda",
   "actArea": "Act",
-  "scenarioAccessories": "Scenario accessories & tools",
+  "scenarioAccessories": "Adventure accessories",
   "acting": "Acting",
   "viewing": "Viewing",
   "pendingChoice": "Waiting for a choice",

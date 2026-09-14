@@ -1144,6 +1144,80 @@ onMounted(() => {
 })
 const summaryInNavigation = computed(() => desktopTable.value && !!navigationSummaryHost.value)
 const scenarioAccessoriesOpen = ref(false)
+const scenarioShelf = ref<HTMLElement | null>(null)
+const agendaSeat = ref<HTMLElement | null>(null)
+const actSeat = ref<HTMLElement | null>(null)
+const accessoryContents = ref<HTMLElement | null>(null)
+const accessoryHeading = ref<HTMLElement | null>(null)
+const accessoryBounds = ref<Record<string, string>>({ visibility: 'hidden' })
+let accessoryResizeObserver: ResizeObserver | undefined
+let accessoryLayoutFrame = 0
+
+function updateAccessoryBounds() {
+  accessoryLayoutFrame = 0
+  if (!desktopTable.value || !scenarioAccessoriesOpen.value) return
+  const shelf = scenarioShelf.value
+  const act = actSeat.value
+  const agenda = agendaSeat.value
+  const contents = accessoryContents.value
+  if (!shelf || !act || !agenda || !contents) return
+
+  const shelfRect = shelf.getBoundingClientRect()
+  const actRect = act.getBoundingClientRect()
+  const agendaRect = agenda.getBoundingClientRect()
+  if (!shelf.offsetWidth || !shelf.offsetHeight || !shelfRect.width || !shelfRect.height) return
+  // Convert viewport measurements back into the shelf's logical coordinates,
+  // including when the fixed tabletop is scaled.
+  const scaleX = shelfRect.width / shelf.offsetWidth
+  const scaleY = shelfRect.height / shelf.offsetHeight
+  const compactWidth = actRect.width / scaleX
+  // Measure both modes at the compact width so expanding cannot cause a
+  // wrap/unwrap loop that repeatedly changes the selected height.
+  contents.style.width = `${Math.max(0, compactWidth - 2)}px`
+  const headingHeight = accessoryHeading.value?.offsetHeight ?? 0
+  const expanded = contents.scrollHeight + headingHeight + 2 > actRect.height / scaleY
+  const left = expanded ? Math.min(actRect.left, agendaRect.left) : actRect.left
+  const top = expanded ? Math.min(actRect.top, agendaRect.top) : actRect.top
+  const right = expanded ? Math.max(actRect.right, agendaRect.right) : actRect.right
+  const bottom = expanded ? Math.max(actRect.bottom, agendaRect.bottom) : actRect.bottom
+  const bounds = {
+    left: `${(left - shelfRect.left) / scaleX - shelf.clientLeft + shelf.scrollLeft}px`,
+    top: `${(top - shelfRect.top) / scaleY - shelf.clientTop + shelf.scrollTop}px`,
+    width: `${(right - left) / scaleX}px`,
+    height: `${(bottom - top) / scaleY}px`,
+    visibility: 'visible',
+  }
+  if (Object.entries(bounds).some(([key, value]) => accessoryBounds.value[key] !== value)) {
+    accessoryBounds.value = bounds
+  }
+}
+
+function scheduleAccessoryLayout() {
+  if (!accessoryLayoutFrame) accessoryLayoutFrame = requestAnimationFrame(updateAccessoryBounds)
+}
+
+watch([scenarioAccessoriesOpen, desktopTable], async () => {
+  if (!scenarioAccessoriesOpen.value || !desktopTable.value) {
+    accessoryBounds.value = { visibility: 'hidden' }
+    accessoryContents.value?.style.removeProperty('width')
+    return
+  }
+  await nextTick()
+  scheduleAccessoryLayout()
+})
+onMounted(() => {
+  accessoryResizeObserver = new ResizeObserver(scheduleAccessoryLayout)
+  for (const element of [scenarioShelf.value, actSeat.value, agendaSeat.value, accessoryContents.value, accessoryHeading.value]) {
+    if (element) accessoryResizeObserver.observe(element)
+  }
+  window.addEventListener('resize', scheduleAccessoryLayout)
+})
+onUpdated(scheduleAccessoryLayout)
+onBeforeUnmount(() => {
+  accessoryResizeObserver?.disconnect()
+  window.removeEventListener('resize', scheduleAccessoryLayout)
+  cancelAnimationFrame(accessoryLayoutFrame)
+})
 // The compact teammate overview remains available on mobile; desktop uses seat tabs.
 const onlineMultiSeat = computed(() => multiSeatBoard.value && !soloMode.value)
 const activeInvestigator = computed(
@@ -1989,6 +2063,7 @@ async function addChaosToken(face: any) {
         @close="hideCards"
       />
       <div
+        ref="scenarioShelf"
         class="scenario-cards"
         :class="{ 'scenario-cards--has-badges': showScenarioNotifierBar }"
       >
@@ -2004,18 +2079,6 @@ async function addChaosToken(face: any) {
               <span class="table-summary-investigator">{{ displayInvestigatorName(activeInvestigator) }}</span>
               <small>{{ $t('multiplayerTable.actionsRemaining', { count: activeInvestigator.remainingActions }) }}</small>
             </div>
-            <button
-              v-if="summaryInNavigation"
-              type="button"
-              class="table-shelf-header__accessories"
-              :class="{ active: scenarioAccessoriesOpen }"
-              :title="$t('multiplayerTable.scenarioAccessories')"
-              :aria-label="$t('multiplayerTable.scenarioAccessories')"
-              :aria-expanded="scenarioAccessoriesOpen"
-              @click="scenarioAccessoriesOpen = !scenarioAccessoriesOpen"
-            >
-              <Layers aria-hidden="true" />
-            </button>
           </section>
         </Teleport>
         <Teleport :to="encounterPilesHost || 'body'" :disabled="!desktopTabletop || !encounterPilesHost">
@@ -2085,7 +2148,7 @@ async function addChaosToken(face: any) {
 
         </Teleport>
         <div class="scenario-decks" :style="scenarioDeckStyles">
-          <section class="scenario-seat scenario-seat--agenda" :style="{ '--seat-card-count': Math.max(1, Object.keys(game.agendas).length) }">
+          <section ref="agendaSeat" class="scenario-seat scenario-seat--agenda" :style="{ '--seat-card-count': Math.max(1, Object.keys(game.agendas).length) }">
             <header class="scenario-seat__heading"><Skull aria-hidden="true" /><span>{{ $t('multiplayerTable.agendaArea') }}</span><div id="agenda-seat-abilities" class="scenario-seat__abilities"></div><i aria-hidden="true">◇</i></header>
             <div class="scenario-seat__cards">
           <TransitionGroup
@@ -2134,25 +2197,15 @@ async function addChaosToken(face: any) {
 
             </div>
           </section>
-          <section class="scenario-seat scenario-seat--act" :style="{ '--seat-card-count': Math.max(1, Object.keys(game.acts).length) }">
+          <section ref="actSeat" class="scenario-seat scenario-seat--act" :style="{ '--seat-card-count': Math.max(1, Object.keys(game.acts).length) }">
             <header class="scenario-seat__heading"><BookOpen aria-hidden="true" /><span>{{ $t('multiplayerTable.actArea') }}</span><div id="act-seat-abilities" class="scenario-seat__abilities"></div><i aria-hidden="true">◇</i></header>
             <div class="scenario-seat__cards">
-            <!-- The spendable clue total reads off the act frame's corner, the
-                 way the agenda frame already carries doom. It lives inside the
-                 card area so that area's own clipping trims the badge's ring at
-                 the card's edge, exactly as it does on the agenda. -->
-            <PoolItem
-              v-if="desktopTable"
-              class="act-clue-total"
-              type="clue"
-              :amount="game.totalClues"
-              tooltip="Total Spendable Clues"
-            />
           <TransitionGroup name="deck-advance" :duration="{ enter: 0, leave: 420 }">
             <Act
               v-for="(act, key) in game.acts"
               :key="key"
               :act="act"
+              :showClueBadge="desktopTable"
               :hideStackControl="desktopTabletop"
               :abilitiesBar="desktopTable ? '#act-seat-abilities' : null"
               :data-area-label="$t('multiplayerTable.actArea')"
@@ -2172,10 +2225,17 @@ async function addChaosToken(face: any) {
         </div>
 
         <div
+          id="scenario-accessories"
           class="scenario-accessories"
+          :style="desktopTable ? accessoryBounds : undefined"
+          role="region"
+          :aria-label="$t('multiplayerTable.scenarioAccessories')"
+          @keydown.esc.stop="scenarioAccessoriesOpen = false"
+          @wheel.stop
           :class="{ 'is-open': scenarioAccessoriesOpen || !desktopTabletop }"
         >
-          <div class="scenario-accessories__content">
+          <h2 ref="accessoryHeading" class="scenario-accessories__title">{{ $t('multiplayerTable.scenarioAccessories') }}</h2>
+          <div ref="accessoryContents" class="scenario-accessories__content">
 
         <div
           v-if="
@@ -2973,13 +3033,23 @@ async function addChaosToken(face: any) {
           :tarotCards="props.scenario.tarotCards"
           @choose="choose"
         >
+          <template #before-tabs>
+            <button
+              v-if="desktopTable"
+              type="button"
+              class="adventure-accessories-toggle"
+              :class="{ active: scenarioAccessoriesOpen }"
+              :title="$t('multiplayerTable.scenarioAccessories')"
+              :aria-label="$t('multiplayerTable.scenarioAccessories')"
+              :aria-expanded="scenarioAccessoriesOpen"
+              aria-controls="scenario-accessories"
+              @click.stop="scenarioAccessoriesOpen = !scenarioAccessoriesOpen"
+            >
+              <Layers aria-hidden="true" />
+            </button>
+          </template>
           <div id="totals">
-            <!-- The tabletop reads doom off the agenda frame and the clue total
-                 off the act frame, so the strip only keeps chaos-token pools. -->
-            <template v-if="!desktopTable">
-              <PoolItem type="doom" :amount="game.totalDoom" tooltip="Total Doom" />
-              <PoolItem type="clue" :amount="game.totalClues" tooltip="Total Spendable Clues" />
-            </template>
+            <!-- Team clue and doom totals are in the investigator controls. -->
             <PoolItem v-if="blessTokens > 0" type="chaos-tokens/ct-bless" :amount="blessTokens" />
             <PoolItem v-if="curseTokens > 0" type="chaos-tokens/ct-curse" :amount="curseTokens" />
             <PoolItem v-if="frostTokens > 0" type="chaos-tokens/ct-frost" :amount="frostTokens" />
@@ -5808,11 +5878,9 @@ async function addChaosToken(face: any) {
 .table-shelf-header--navigation .table-summary-title { grid-column: 1; font-size: 0.88rem; }
 .table-shelf-header--navigation .table-summary-action { grid-column: 1; }
 .table-shelf-header--navigation .table-summary-totals { grid-column: 2; grid-row: 1 / 3; }
-.table-shelf-header__accessories {
-  grid-column: 3;
-  grid-row: 1 / 3;
+.adventure-accessories-toggle {
+  flex: 0 0 30px;
   align-self: center;
-  justify-self: end;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -5826,9 +5894,9 @@ async function addChaosToken(face: any) {
   color: rgb(244 239 228 / 0.78);
   cursor: pointer;
 }
-.table-shelf-header__accessories svg { width: 15px; height: 15px; }
-.table-shelf-header__accessories:hover { background: rgb(244 239 228 / 0.08); color: #fff1cc; }
-.table-shelf-header__accessories.active { background: rgb(244 239 228 / 0.1); color: #fff1cc; }
+.adventure-accessories-toggle svg { width: 15px; height: 15px; }
+.adventure-accessories-toggle:hover { background: rgb(244 239 228 / 0.08); color: #fff1cc; }
+.adventure-accessories-toggle.active { background: rgb(244 239 228 / 0.1); color: #fff1cc; }
 @media (min-width: 1200px) {
   .scenario-body.scenario-body--multiseat > .scenario-cards {
     container-type: inline-size;
@@ -6076,6 +6144,7 @@ async function addChaosToken(face: any) {
 .scenario-seat__cards,
 .scenario-accessories,
 .scenario-accessories__content { display: contents; }
+.scenario-accessories__title { display: none; }
 .scenario-seat__heading { display: none; }
 @media (min-width: 1200px) {
   .scenario-body.scenario-body--multiseat > .scenario-cards {
@@ -6136,27 +6205,6 @@ async function addChaosToken(face: any) {
   }
   .scenario-body.scenario-body--multiseat .scenario-seat--act {
     align-self: end;
-  }
-  /* The clue total sits on the act frame's top-left corner, mirroring the doom
-     token on the agenda frame. 2px/1px are the small inset the agenda's own disc
-     ends up with: its art leaves a rim inside its box (clue.png does not) and it
-     is centred inside the agenda frame's 2em-tall pool. Its containing block is
-     the card area, whose overflow does the same edge trim the agenda's badge
-     gets -- the badge's ring spills 5px, so left to itself it would paint across
-     the frame's edges. */
-  .scenario-body.scenario-body--multiseat .scenario-seat--act .act-clue-total {
-    position: absolute;
-    top: 4px;
-    left: 2px;
-    z-index: 2;
-    /* The two token assets are not drawn alike: clue.png's disc runs to the
-       edges of its square, doom.png's is inset to ~92% of it. At the shared
-       --pool-token-width the clue disc therefore read a size larger, so this
-       badge's box carries the same 92% to land on the doom disc's diameter. */
-    --pool-token-width: 26px;
-    /* The frame is the click target that advances the act; the readout must not
-       eat its corner. */
-    pointer-events: none;
   }
   .scenario-body.scenario-body--multiseat .scenario-seat__heading {
     display: flex;
@@ -6231,31 +6279,72 @@ async function addChaosToken(face: any) {
     border-radius: 0;
   }
   .scenario-body.scenario-body--multiseat .scenario-accessories {
-    position: relative;
-    display: block;
-    flex: 0 0 auto;
-    height: 0;
-  }
-  .scenario-body.scenario-body--multiseat .scenario-accessories:not(.is-open) > .scenario-accessories__content {
-    display: none;
-  }
-  .scenario-body.scenario-body--multiseat .scenario-accessories.is-open > .scenario-accessories__content {
     position: absolute;
-    left: 0;
-    bottom: 0;
     z-index: 110;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    width: min(460px, 70vw);
-    max-height: 60vh;
-    overflow: auto;
-    padding: 14px;
+    display: none;
+    box-sizing: border-box;
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     background: #10231e;
     border: 1px solid rgb(185 157 98 / 0.5);
-    box-shadow: 0 8px 30px rgb(0 0 0 / 0.5);
+    scrollbar-width: thin;
+    scrollbar-color: rgb(185 157 98 / 0.6) #10231e;
     --card-width: 92px;
   }
+  .scenario-body.scenario-body--multiseat .scenario-accessories.is-open {
+    display: block;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-accessories__title {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    height: 34px;
+    margin: 0;
+    padding: 0 14px;
+    border-bottom: 1px solid rgb(205 175 107 / 0.32);
+    background: #10231e;
+    text-align: center;
+    text-indent: 0.04em;
+    color: var(--text-on-dark, #f4efe4);
+    font-family: Teutonic, Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-accessories > .scenario-accessories__content {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 10px;
+    box-sizing: border-box;
+    max-width: 100%;
+    height: auto;
+    padding: 14px;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-accessories__content > * {
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+  /* This invisible spacer balanced the old horizontal tray. In the drawer it
+     creates an empty row and incorrectly triggers the two-seat height. */
+  .scenario-body.scenario-body--multiseat .scenario-accessories .scenario-balance-placeholder {
+    display: none;
+  }
+  .scenario-body.scenario-body--multiseat .scenario-accessories .scenario-guide {
+    flex: 0 0 auto;
+    width: fit-content;
+    margin: 0;
+  }
+
 }
 /* Each workbench card zone owns its heading and horizontal card scroll. */
 .scenario-body.scenario-body--multiseat > #player-zone :deep(.in-play-row) {
