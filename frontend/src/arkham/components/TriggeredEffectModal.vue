@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
+import { computed, inject, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Game } from '@/arkham/types/Game'
 import { choices, choicesTooltip } from '@/arkham/types/Game'
@@ -18,7 +18,6 @@ import QuestionChoices from './QuestionChoices.vue'
 const props = defineProps<{ game: Game; playerId: string }>()
 const emit = defineEmits<{ choose: [index: number] }>()
 const { t } = useI18n()
-const titleId = useId()
 const dialog = ref<HTMLDialogElement | null>(null)
 const collapsed = ref(false)
 const submitted = ref(false)
@@ -124,11 +123,7 @@ onBeforeUnmount(() => dialog.value?.close())
     <button v-if="collapsed" class="trigger-reminder" type="button" @click="open">
       {{ t('triggeredEffect.restore') }}
     </button>
-    <dialog ref="dialog" class="trigger-dialog" :class="{ 'trigger-dialog--compact': compactLayout }" :aria-labelledby="titleId" @cancel.prevent="collapse">
-      <header>
-        <h2 :id="titleId">{{ t('triggeredEffect.title') }}</h2>
-        <button type="button" class="collapse" @click="collapse">{{ t('triggeredEffect.inspect') }}</button>
-      </header>
+    <dialog ref="dialog" class="trigger-dialog" :class="{ 'trigger-dialog--compact': compactLayout }" @cancel.prevent="collapse">
       <p v-if="contextHtml" class="context" v-html="contextHtml"></p>
       <fieldset :disabled="busy" :aria-busy="busy">
         <template v-for="(group, groupIndex) in groupedEntries" :key="groupIndex">
@@ -156,18 +151,24 @@ onBeforeUnmount(() => dialog.value?.close())
                   :tone="triggerAtmosphere(entry.choice.ability.source, entry.choice.ability.type)"
                 />
                 <AtmosphereLine v-else-if="entry.choice.tag !== 'SkipTriggersButton'" tone="choice" />
-                <AbilityButton
-                  v-if="entry.choice.tag === 'AbilityLabel'"
-                  :game="game"
-                  :ability="entry.choice"
-                  tooltip-is-button-text
-                  @click="choose(entry.index)"
-                />
-                <button v-else-if="entry.choice.tag === 'TargetLabel' && entry.image" type="button" @click="choose(entry.index)">
-                  {{ t('triggeredEffect.play') }}
-                </button>
-                <QuestionChoices v-else :game="game" :choices="[[entry.choice, entry.index]]" @choose="choose" />
               </template>
+              <div class="action-row">
+                <template v-for="entry in group.entries" :key="entry.index">
+                  <AbilityButton
+                    v-if="entry.choice.tag === 'AbilityLabel'"
+                    :game="game"
+                    :ability="entry.choice"
+                    :label-override="t('triggeredEffect.forced')"
+                    tooltip-is-button-text
+                    @click="choose(entry.index)"
+                  />
+                  <button v-else-if="entry.choice.tag === 'TargetLabel' && entry.image" type="button" @click="choose(entry.index)">
+                    {{ t('triggeredEffect.play') }}
+                  </button>
+                  <QuestionChoices v-else :game="game" :choices="[[entry.choice, entry.index]]" @choose="choose" />
+                </template>
+                <button type="button" class="collapse" @click="collapse">{{ t('triggeredEffect.inspect') }}</button>
+              </div>
             </div>
           </div>
         </template>
@@ -197,11 +198,8 @@ onBeforeUnmount(() => dialog.value?.close())
 .trigger-dialog--compact { width: min(360px, calc(100vw - 32px)); padding: 16px; }
 /* A full-width skip row otherwise keeps unused auto-fit columns occupied. */
 .trigger-dialog--compact fieldset { grid-template-columns: minmax(0, 1fr); }
-.trigger-dialog--compact header { flex-wrap: wrap; gap: 8px; }
-.trigger-dialog--compact h2 { font-size: 1rem; }
-.trigger-dialog--compact .collapse { margin-left: auto; padding: 6px 10px; }
-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-h2 { margin: 0; font-size: 1.1rem; font-weight: 500; letter-spacing: .04em; color: #dcc6ef; }
+/* One entry needs no inner frame; the dialog already draws the only box. */
+.trigger-dialog--compact .trigger-entry { padding: 0; border: 0; background: transparent; }
 p { line-height: 1.6; }
 .context { padding: 10px 12px; border-left: 2px solid #a58cba80; background: #ffffff05; font-size: .9rem; }
 fieldset { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 14px; min-width: 0; }
@@ -222,6 +220,8 @@ fieldset:disabled { opacity: .65; pointer-events: none; }
 }
 .trigger-entry img { display: block; width: min(100%, 210px); height: auto; max-height: 294px; object-fit: contain; margin: auto; border-radius: 7px; box-shadow: 0 5px 16px #0006; }
 .entry-actions { display: flex; flex-direction: column; gap: 8px; min-width: 0; margin-top: auto; }
+/* Button + 查看牌桌 share one line. */
+.action-row { display: flex; align-items: stretch; justify-content: center; gap: 8px; min-width: 0; }
 .entry-actions :deep(button) {
   width: 100%;
   min-width: 0;
@@ -244,6 +244,9 @@ fieldset:disabled { opacity: .65; pointer-events: none; }
 .entry-actions :deep(button:hover:not(:disabled)) { border-color: #cbb0dd; filter: brightness(1.12); }
 .entry-actions :deep(.button-label) { flex: 0 1 auto; padding: 0; white-space: normal; }
 .entry-actions :deep(button::before) { flex: 0 0 auto; padding: 0; margin: 0; }
+/* Override the width:100% / white-space rules above for buttons sharing the row. */
+.action-row :deep(button) { flex: 0 1 auto; width: auto; min-width: 0; }
+.action-row :deep(.button-label) { min-width: 0; white-space: nowrap; }
 .skip-row { grid-column: 1 / -1; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid #a58cba25; }
 .skip, .collapse {
   cursor: pointer;
@@ -259,12 +262,9 @@ fieldset:disabled { opacity: .65; pointer-events: none; }
 .skip { min-width: 160px; }
 .skip:hover, .collapse:hover { background: #ffffff08; border-color: #a58cba90; }
 button:focus-visible, .entry-actions :deep(button:focus-visible) { outline: 2px solid #e2c2ff; outline-offset: 3px; }
-.collapse { flex-shrink: 0; }
 .trigger-reminder { position: fixed; bottom: calc(84px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 1100; padding: 10px 18px; border: 1px solid #a58cba; border-radius: 8px; background: #342d3c; color: #eee5d2; box-shadow: 0 4px 24px #0008; cursor: pointer; }
 @media (max-width: 600px) {
   .trigger-dialog { padding: 16px; }
-  header { align-items: flex-start; gap: 8px; }
-  h2 { font-size: 1rem; }
   .trigger-entry img { max-height: 32dvh; }
 }
 </style>

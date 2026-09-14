@@ -20,7 +20,8 @@ const props = withDefaults(defineProps<{
  tooltipIsButtonText?: boolean
  showMove?: boolean
  hostHasSwarm?: boolean
-}>(), { tooltipIsButtonText: false, showMove: true, hostHasSwarm: false })
+ labelOverride?: string
+}>(), { tooltipIsButtonText: false, showMove: true, hostHasSwarm: false, labelOverride: undefined })
 
 const ability = computed<Ability | null>(() => "ability" in props.ability ? props.ability.ability : null)
 
@@ -185,6 +186,10 @@ const maybeFormat = function(body: string) {
 }
 
 const abilityLabel = computed(() => {
+  if (props.labelOverride) {
+    return props.labelOverride
+  }
+
   // don't use isButtonText
   if (isButtonText.value && tooltip.value) {
     return tooltip.value.content
