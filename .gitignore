@@ -124,3 +124,6 @@ docs/design/**/*.svg
 *.m4a
 *.flac
 *.aac
+
+# LLVM profile output from instrumented builds; regenerated on every run.
+*.profraw
