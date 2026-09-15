@@ -466,7 +466,7 @@ chooseHandleTargetM
 chooseHandleTargetM iid source ts = chooseTargetM iid ts $ handleTarget iid source
 
 chooseThisM
-  :: (ReverseQueue m, Targetable target)
+  :: ReverseQueue m
   => InvestigatorId
   -> target
   -> QueueT Message m ()

@@ -16,7 +16,6 @@ import Arkham.Card.CustomCard (CustomCard (..))
 import Data.Aeson.Types (parseMaybe)
 import Data.Text qualified as T
 import Data.Time.Clock
-import Database.Persist qualified as DB
 import Import hiding ((==.))
 import Import qualified as P
 import Json hiding (Success)
