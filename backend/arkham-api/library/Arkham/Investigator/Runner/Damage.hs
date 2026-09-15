@@ -90,6 +90,7 @@ import Arkham.Helpers.Location (
   isDiscoveringLastClue,
   withLocationOf,
  )
+import Arkham.Helpers.GameLog (investigatorRef, logI18n)
 import Arkham.Helpers.Log (hasCampaignOption)
 import Arkham.Helpers.Modifiers
 import Arkham.Helpers.Playable (getIsPlayable, getIsPlayableWithResources, getPlayableCards)
@@ -117,7 +118,7 @@ import Arkham.Helpers.Window (
  )
 import Arkham.Helpers.Window qualified as Helpers
 import Arkham.History
-import Arkham.I18n (cardNameVar, countVar, ikey', withI18n)
+import Arkham.I18n (cardNameVar, countVar, ikey', numberVar, withI18n)
 import Arkham.Investigate.Types
 import {-# SOURCE #-} Arkham.Investigator
 import Arkham.Investigator.Types qualified as Attrs
@@ -209,6 +210,12 @@ removeInvestigatorTokens token n a = case token of
   _ -> pure $ a & tokensL %~ subtractTokens token n
 
 handleInvestigatorIsDefeated a@InvestigatorAttrs {..} source iid = do
+  -- Every route into a defeat ends here, and a defeat is recorded once: a
+  -- card effect that defeats an already-defeated investigator is not news.
+  unless (investigatorDefeated || investigatorResigned)
+    $ logI18n
+    $ investigatorRef a
+    $ ikey' "gameLog.investigatorDefeated"
   isLead <- (== Just iid) <$> getRecordedLead
   modifiedHealth <- field InvestigatorHealth (toId a)
   modifiedSanity <- field InvestigatorSanity (toId a)
@@ -1056,6 +1063,10 @@ assignDamageDivided a@InvestigatorAttrs {..} iid source strategy matcher health 
   pure a
 
 handleDrivenInsane a@InvestigatorAttrs {..} iid = do
+  unless investigatorDefeated
+    $ logI18n
+    $ investigatorRef a
+    $ ikey' "gameLog.investigatorInsane"
   pure $ a & mentalTraumaL .~ investigatorSanity & drivenInsaneL .~ True & defeatedL .~ True
 
 handleCheckDefeated a@InvestigatorAttrs {..} source = do
@@ -1091,6 +1102,19 @@ handleCheckDefeated a@InvestigatorAttrs {..} source = do
 handleAssignDamage a@InvestigatorAttrs {..} target = do
   when (investigatorAssignedHealthDamage > 0) $ sendAudio "damage.mp3"
   when (investigatorAssignedSanityDamage > 0) $ sendAudio "horror.mp3"
+  -- This is where assigned damage and horror land on the investigator. Points
+  -- soaked by assets were never assigned to them, so these are the amounts the
+  -- player actually took.
+  when (investigatorAssignedHealthDamage > 0)
+    $ logI18n
+    $ investigatorRef a
+    $ numberVar "damage" investigatorAssignedHealthDamage
+    $ ikey' "gameLog.investigatorTakesDamage"
+  when (investigatorAssignedSanityDamage > 0)
+    $ logI18n
+    $ investigatorRef a
+    $ numberVar "horror" investigatorAssignedSanityDamage
+    $ ikey' "gameLog.investigatorTakesHorror"
   push $ AssignedDamage target investigatorAssignedHealthDamage investigatorAssignedSanityDamage
   pure
     $ a
@@ -1146,6 +1170,17 @@ handleDoApplyHealing a@InvestigatorAttrs {..} source = do
   let trueHealth = min health (a.healthDamage + a.assignedHealthDamage)
   -- horror healed was already applied so we ignore it here
   let trueSanity = min sanity (a.sanityDamage + a.assignedSanityDamage)
+
+  when (trueHealth > 0)
+    $ logI18n
+    $ investigatorRef a
+    $ numberVar "damage" trueHealth
+    $ ikey' "gameLog.investigatorHealsDamage"
+  when (trueSanity > 0)
+    $ logI18n
+    $ investigatorRef a
+    $ numberVar "horror" trueSanity
+    $ ikey' "gameLog.investigatorHealsHorror"
 
   a' <-
     if trueHealth > 0
@@ -1319,6 +1354,13 @@ handleHealHorrorDirectly a@InvestigatorAttrs {..} iid source amount = do
 
   pushWhen (overHealSanity > 0) $ ExcessHealHorror a.id source overHealSanity
 
+  let logHealed = min amount (a.sanityDamage + a.assignedSanityDamage)
+  when (logHealed > 0)
+    $ logI18n
+    $ investigatorRef a
+    $ numberVar "horror" logHealed
+    $ ikey' "gameLog.investigatorHealsHorror"
+
   a' <-
     if amount > 0 then removeInvestigatorTokens #horror amount a else pure a
   pure
@@ -1333,6 +1375,13 @@ handleHealDamageDirectly a@InvestigatorAttrs {..} iid source amount = do
     else do
       let overHealDamage = max 0 (amount - a.healthDamage - a.assignedHealthDamage)
       pushWhen (overHealDamage > 0) $ ExcessHealDamage a.id source overHealDamage
+
+      let logHealed = min amount (a.healthDamage + a.assignedHealthDamage)
+      when (logHealed > 0)
+        $ logI18n
+        $ investigatorRef a
+        $ numberVar "damage" logHealed
+        $ ikey' "gameLog.investigatorHealsDamage"
 
       removeInvestigatorTokens #damage amount a
 
@@ -1358,6 +1407,16 @@ handleInvestigatorKilled a@InvestigatorAttrs {..} source iid = do
   pure $ a & defeatedL .~ True & endedTurnL .~ True & killedL .~ True
 
 handleSufferTrauma a@InvestigatorAttrs {..} iid physical mental = do
+  when (physical > 0)
+    $ logI18n
+    $ investigatorRef a
+    $ numberVar "count" physical
+    $ ikey' "gameLog.suffersPhysicalTrauma"
+  when (mental > 0)
+    $ logI18n
+    $ investigatorRef a
+    $ numberVar "count" mental
+    $ ikey' "gameLog.suffersMentalTrauma"
   push $ CheckTrauma iid
   pure $ a & physicalTraumaL +~ physical & mentalTraumaL +~ mental
 

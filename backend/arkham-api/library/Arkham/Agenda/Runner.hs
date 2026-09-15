@@ -15,20 +15,32 @@ import Arkham.Target as X
 
 import Arkham.ChaosToken
 import Arkham.Classes
+import Arkham.Classes.HasGame (HasGame)
 import Arkham.Helpers.ChaosToken
 import Arkham.Helpers.Doom
+import Arkham.Helpers.GameLog (cardRef, logI18n)
 import Arkham.Helpers.GameValue
 import Arkham.Helpers.Modifiers
 import Arkham.Helpers.Query
 import Arkham.Helpers.Window
+import Arkham.I18n (ikey')
 import Arkham.Matcher hiding (PlaceUnderneath)
 import Arkham.Prelude
+import Arkham.Projection (field)
 import Arkham.Tarot
 import Arkham.Window qualified as Window
 import Control.Lens (non)
 
 advanceAgendaDeck :: AgendaAttrs -> Message
 advanceAgendaDeck attrs = AdvanceAgendaDeck (agendaDeckId attrs) (toSource attrs)
+
+{- | Record an agenda advancing. The flip is the story moving on, and the card
+reference lets the client show which agenda resolved.
+-}
+logAgendaAdvance :: (HasGame m, HasGameLogger m) => AgendaAttrs -> m ()
+logAgendaAdvance a = do
+  card <- field AgendaCard (toId a)
+  logI18n $ cardRef card $ ikey' "gameLog.agendaAdvances"
 
 instance RunMessage AgendaAttrs where
   runMessage msg a@AgendaAttrs {..} = case msg of
@@ -57,6 +69,7 @@ instance RunMessage AgendaAttrs where
     RemoveDoom _ (AgendaTarget aid) n | aid == agendaId -> do
       pure $ a & doomL %~ max 0 . subtract n
     AdvanceAgendaBy aid advanceMethod | aid == agendaId && agendaSide agendaSequence == A -> do
+      logAgendaAdvance a
       lead <- getLeadPlayer
       push $ chooseOne lead [targetLabel agendaId [AdvanceAgendaBy agendaId advanceMethod]]
       pure
@@ -64,6 +77,7 @@ instance RunMessage AgendaAttrs where
         & (sequenceL .~ Sequence (unAgendaStep $ agendaStep agendaSequence) B)
         & (flippedL .~ True)
     AdvanceAgendaBy aid advanceMethod | aid == agendaId && agendaSide agendaSequence == C -> do
+      logAgendaAdvance a
       lead <- getLeadPlayer
       push $ chooseOne lead [targetLabel agendaId [AdvanceAgendaBy agendaId advanceMethod]]
       pure

@@ -89,7 +89,7 @@ import Arkham.Helpers.Location (
   isDiscoveringLastClue,
   withLocationOf,
  )
-import Arkham.Helpers.Log (hasCampaignOption)
+import Arkham.Helpers.GameLog (cardCodeRef, investigatorRef, logI18n)
 import Arkham.Helpers.Modifiers
 import Arkham.Helpers.Playable (getIsPlayable, getIsPlayableWithResources, getPlayableCards)
 import Arkham.Helpers.Ref (sourceToCard)
@@ -116,7 +116,7 @@ import Arkham.Helpers.Window (
  )
 import Arkham.Helpers.Window qualified as Helpers
 import Arkham.History
-import Arkham.I18n (countVar, ikey', withI18n)
+import Arkham.I18n (countVar, ikey', numberVar, withVar, withI18n)
 import Arkham.Investigate.Types
 import {-# SOURCE #-} Arkham.Investigator
 import Arkham.Investigator.Runner.Damage
@@ -226,6 +226,11 @@ handleDoSpendResources a@InvestigatorAttrs {..} iid n = do
   pure $ a & tokensL %~ subtractTokens Resource n
 
 handleLoseResources a@InvestigatorAttrs {..} iid source n msg = do
+  when (n > 0)
+    $ logI18n
+    $ investigatorRef a
+    $ numberVar "count" n
+    $ ikey' "gameLog.losesResources"
   beforeWindowMsg <- checkWindows [mkWhen (Window.LostResources iid source n)]
   afterWindowMsg <- checkWindows [mkAfter (Window.LostResources iid source n)]
   pushAll [beforeWindowMsg, Do msg, afterWindowMsg]
@@ -623,7 +628,32 @@ handleUseAbility a@InvestigatorAttrs {..} ab msg = do
   push $ Do msg
   pure a
 
+{- | The log key for an ability the game triggers on the player's behalf.
+
+Action and fast abilities are left out on purpose: the player chose to spend
+something on them, and what they did is already in the log through their
+effects. A reaction or forced ability has no such trace, so it gets a line of
+its own.
+-}
+triggeredAbilityKey :: AbilityType -> Maybe Text
+triggeredAbilityKey = \case
+  ReactionAbility {} -> Just "abilityReaction"
+  ForcedAbility {} -> Just "abilityForced"
+  ForcedAbilityWithCost {} -> Just "abilityForced"
+  ForcedWhen _ inner -> triggeredAbilityKey inner
+  DelayedAbility inner -> triggeredAbilityKey inner
+  Objective inner -> triggeredAbilityKey inner
+  _ -> Nothing
+
 handleDoUseAbility a@InvestigatorAttrs {..} iid ability windows = do
+  -- Reactions and forced abilities fire without the player spending anything on
+  -- them, so the log records the trigger; action and fast abilities are already
+  -- visible through the action lines and their effects.
+  for_ (triggeredAbilityKey ability.abilityType) \kind ->
+    logI18n
+      $ investigatorRef a
+      $ withVar "card" (String $ cardCodeRef ability.abilityCardCode)
+      $ ikey' ("gameLog." <> kind)
   activeInvestigator <- selectOne ActiveInvestigator
   mods <- filter (\m -> m.kind == MayIgnoreLocationEffectsAndKeywords) <$> getFullModifiers iid
   -- mayIgnoreLocationEffectsAndKeywords <- hasModifier iid MayIgnoreLocationEffectsAndKeywords

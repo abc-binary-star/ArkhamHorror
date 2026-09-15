@@ -66,6 +66,7 @@ import Arkham.Helpers.Discover
 import Arkham.Helpers.Enemy (expandCompositeEnemies, getInteractAsOneOf)
 import Arkham.Helpers.Game (withAlteredGame)
 import Arkham.Helpers.Location (getCanMoveTo, isDiscoveringLastClue, withLocationOf)
+import Arkham.Helpers.GameLog (investigatorRef, logI18n)
 import Arkham.Helpers.Log (hasCampaignOption)
 import Arkham.Helpers.Modifiers
 import Arkham.Helpers.Playable (
@@ -94,7 +95,7 @@ import Arkham.Helpers.Window (
  )
 import Arkham.Helpers.Window qualified as Helpers
 import Arkham.History
-import Arkham.I18n (cardNameVar, countVar, ikey', keyVar, withI18n)
+import Arkham.I18n (cardNameVar, countVar, ikey', keyVar, numberVar, withI18n)
 import Arkham.Investigate.Types
 import {-# SOURCE #-} Arkham.Investigator
 import Arkham.Investigator.Runner.Action
@@ -144,6 +145,7 @@ import Arkham.Projection
 import Arkham.ScenarioLogKey
 import Arkham.Search hiding (drawnCardsL, foundCardsL)
 import Arkham.SkillTest
+import Arkham.SkillTest.Step
 import Arkham.Slot
 import Arkham.Timing qualified as Timing
 import Arkham.Token
@@ -444,7 +446,26 @@ runWindow attrs windows allActions allPlayableCards = do
           for actions' $ \ability@Ability {..} ->
             (ability,) <$> filterM (\w -> windowMatches iid abilitySource w abilityWindow) windows
         skippable <- getAllAbilitiesSkippable attrs windows
-        unless (null playableCards && null actionsWithMatchingWindows) do
+        -- A window containing only resource-paid test boosts need not stop both
+        -- before and after committing. Offer these together in the second fast
+        -- window, before any token is requested. Mixed windows still allow early
+        -- spending, since other cards may care about resources or commit timing.
+        skillTest <- getSkillTest
+        let
+          isResourceBoost ab = isJust ab.wantsSkillTest && case abilityType ab of
+            FastAbility (ResourceCost _) -> True
+            _ -> False
+          deferResourceBoosts =
+            skippable
+              && maybe False (\st -> st.step == SkillTestFastWindow2) skillTest
+              && notNull windows
+              && all (\w -> case windowType w of
+                Window.FastPlayerWindow -> True
+                _ -> False) windows
+              && null playableCards
+              && notNull actionsWithMatchingWindows
+              && all (isResourceBoost . fst) actionsWithMatchingWindows
+        unless (deferResourceBoosts || (null playableCards && null actionsWithMatchingWindows)) do
           push
             $ asWindowChoose windows
             $ chooseOne player
@@ -857,6 +878,9 @@ runInvestigatorMessage msg a@InvestigatorAttrs {..} = runQueueT $ case msg of
     -- resigned; otherwise the window is skipped for that investigator and
     -- forced abilities on cards they control (e.g. Relics of the Past artifacts)
     -- never get a chance to trigger.
+    logI18n
+      $ investigatorRef a
+      $ ikey' "gameLog.investigatorResigns"
     Lifted.checkWhen $ Window.InvestigatorResigned iid
     pushAll $ resolve (Msg.InvestigatorResigned iid)
     pure $ a & endedTurnL .~ True
@@ -1467,8 +1491,13 @@ runInvestigatorMessage msg a@InvestigatorAttrs {..} = runQueueT $ case msg of
                  ]
               <> wrapWindows [locationWindowsAfter]
               <> d.discoverThen
-            -- send $ format a <> " discovered " <> pluralize clueCount "clue"
-            send $ format a <> " discovered clue(s)"
+            -- The count is the point: "2 clues" tells the reader what the
+            -- investigation actually bought them.
+            when (clueCount > 0)
+              $ logI18n
+              $ investigatorRef a
+              $ numberVar "count" clueCount
+              $ ikey' "gameLog.investigatorDiscoversClues"
 
         -- Investigating and automatically discovering a clue are two separate exposure triggers.
         -- The investigation one is offered up front at ST.7 (see 'withExposeInsteadOfInvestigating'
@@ -2164,6 +2193,10 @@ runInvestigatorMessage msg a@InvestigatorAttrs {..} = runQueueT $ case msg of
         when (n + additional > 0) do
           afterWindowMsg <- checkWindows [mkAfter (Window.GainsResources iid source (n + additional))]
           push afterWindowMsg
+          logI18n
+            $ investigatorRef a
+            $ numberVar "count" (n + additional)
+            $ ikey' "gameLog.investigatorGainsResources"
         liftRunMessage (PlaceTokens source (toTarget a) #resource (n + additional)) a
       else pure a
   PlaceTokens source (isTarget a -> True) token n -> do

@@ -44,7 +44,9 @@ import Arkham.Helpers.Modifiers
 import Arkham.Helpers.Source (getSourceController)
 import Arkham.Helpers.Window (checkAfter, checkWindows, frame)
 import Arkham.History
-import Arkham.Investigator.Types (Field (..))
+import Arkham.Helpers.GameLog (cardCodeRef, investigatorRef, logI18n)
+import Arkham.I18n (ikey', withVar)
+import Arkham.Investigator.Types (Field (..), Investigator)
 import Arkham.Keyword qualified as Keyword
 import Arkham.Location.Base (directionsL, labelL, positionL, tokensL, withoutCluesL)
 import Arkham.Location.Grid
@@ -115,6 +117,13 @@ instance RunMessage EnemyLocationAttrs where
       pure a
     -- Fight system routes AttackEnemy via coerced EnemyId.
     AttackEnemy eid choose | eid == asEnemyId a -> do
+      -- An attack on a concealed card never reaches the enemy runner, so the
+      -- log for it lives here. The card itself is the only reference we have.
+      logAttacker <- getAttrs @Investigator choose.investigator
+      logI18n
+        $ investigatorRef logAttacker
+        $ withVar "enemy" (String $ cardCodeRef a.cardCode)
+        $ ikey' "gameLog.fightsEnemy"
       Fight.resolveAttack (asEnemyId a) a.fight choose
       pure a
     UseCardAbility iid (isSource a -> True) AbilityEvade _ _ -> do

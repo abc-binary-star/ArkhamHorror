@@ -18,12 +18,15 @@ import Arkham.Game.Utils (maybeLocation)
 import Arkham.Helpers.ChaosToken (getModifiedChaosTokenFaces)
 import Arkham.Helpers.Cost (getCanAffordCost)
 import Arkham.Helpers.Enemy (ignoredKeywordWindowsForEnemy)
+import Arkham.Helpers.GameLog (investigatorRef, logI18n, skillLogKey)
 import Arkham.Helpers.Message
 import Arkham.Helpers.Modifiers (ModifierType (..), getModifiers, skillTestModifier)
 import Arkham.Helpers.Query (getActiveInvestigatorId, getLeadPlayer)
 import Arkham.Helpers.Ref (sourceToMaybeCard, targetToMaybeCard)
 import Arkham.Helpers.Window (checkAfter, checkCancel, checkWhen, checkWindows, windows)
 import Arkham.Id
+import Arkham.I18n (ikey', numberVar)
+import Arkham.Investigator.Types (Investigator)
 import Arkham.Keyword qualified as Keyword
 import Arkham.Matcher hiding (IgnoreChaosToken, RevealChaosToken)
 import Arkham.Message qualified as Msg
@@ -973,6 +976,36 @@ instance RunMessage SkillTest where
           SucceededBy b m -> SucceededBy b (max 0 (m + n))
           FailedBy b m -> FailedBy b (max 0 (m + n))
         modifySkillTestResult r _ = r
+
+        -- Tests that name no single skill (a combined test, a resource test, a
+        -- card's own base-value test) fall back to their own key so the line
+        -- still reads as a sentence.
+        outcomeKey = case skillTestType of
+          SkillSkillTest st -> skillLogKey st
+          AndSkillTest {} -> "multi"
+          ResourceSkillTest -> "resource"
+          BaseValueSkillTest {} -> "baseValue"
+
+        -- Recorded here, where success or failure is determined, rather than
+        -- when the test is finally torn down: the line then sits above the
+        -- test's own effects (clues discovered, cards drawn) instead of below
+        -- them. The numbers come from the same helpers the result panel uses.
+        logOutcome outcome = do
+          logInvestigator <- getAttrs @Investigator skillTestInvestigator
+          value <- totalModifiedSkillValue s
+          difficulty <- getModifiedSkillTestDifficulty s
+          logI18n
+            $ investigatorRef logInvestigator
+            $ numberVar "value" value
+            $ numberVar "difficulty" difficulty
+            $ ikey' ("gameLog." <> outcome <> "." <> outcomeKey)
+
+      -- A test that ended before any token was revealed stays Unrun and is not
+      -- an outcome worth recording.
+      case modifiedSkillTestResult of
+        SucceededBy {} -> logOutcome "testSucceeded"
+        FailedBy {} -> logOutcome "testFailed"
+        Unrun -> pure ()
 
       tokenSubscribers <- concatForM skillTestRevealedChaosTokens \token -> do
         faces <- getModifiedChaosTokenFaces [token]

@@ -11,10 +11,12 @@ import Arkham.Act.Helpers as X
 import Arkham.Act.Sequence as X
 import Arkham.Act.Types as X
 import Arkham.Calculation as X
+import Arkham.Card (toCard)
 import Arkham.Cost as X
 import Arkham.GameValue as X
 import Arkham.Helpers.Act as X
 import Arkham.Helpers.Effect as X
+import Arkham.Helpers.GameLog (cardRef, logI18n)
 import Arkham.Helpers.Message as X hiding (
   Discarded,
   EnemyEvaded,
@@ -23,6 +25,7 @@ import Arkham.Helpers.Message as X hiding (
   RevealChaosToken,
  )
 import Arkham.Helpers.SkillTest as X
+import Arkham.I18n (ikey')
 import Arkham.Id as X
 import Arkham.SkillTest.Base as X (SkillTestDifficulty (..))
 import Arkham.Source as X
@@ -79,6 +82,9 @@ instance RunMessage ActAttrs where
   runMessage msg a@ActAttrs {..} = case msg of
     AdvanceAct aid _ advanceMode | aid == actId && onFrontSide a -> do
       pushAll =<< advanceActSideA a advanceMode
+      -- The act flipping to its back side is the story moving on; record it
+      -- once, with the card so the client can show which act resolved.
+      logI18n $ cardRef (toCard a) $ ikey' "gameLog.actAdvances"
       pure $ a & flippedL .~ True & sequenceL .~ Sequence (unActStep $ actStep actSequence) (backSide a)
     InvestigatorResigned _ -> do
       investigatorIds <- select UneliminatedInvestigator

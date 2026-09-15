@@ -64,6 +64,7 @@ import Arkham.Helpers.Criteria
 import Arkham.Helpers.Customization
 import Arkham.Helpers.Enemy (getModifiedKeywords, spawnAt)
 import Arkham.Helpers.Investigator hiding (findCard, investigator)
+import Arkham.Helpers.GameLog (investigatorRef, logI18n)
 import Arkham.Helpers.Log (hasCampaignOption)
 import Arkham.Helpers.Message hiding (
   InvestigatorDamage,
@@ -2561,7 +2562,7 @@ runGameMessage msg g = case msg of
                           pure $ if ok then Just opt else Nothing
                   let blocked = any (\opt -> opt.kind == BlockingOptionKind) opts'
                   pid <- getPlayer st.investigator
-                  push $ Ask pid $ ChooseOne $ opts & eachWithRest & mapMaybe \(opt, rest) -> do
+                  push $ Ask pid $ QuestionLabel "$label.chooseSkillTestResultOrder" Nothing $ ChooseOne $ opts & eachWithRest & mapMaybe \(opt, rest) -> do
                     guard $ elem opt opts'
                     guard $ not blocked || opt.kind /= OriginalOptionKind
                     guard $ opt.kind /= PreOriginalOptionKind || any (\o -> o.kind == OriginalOptionKind) rest
@@ -3599,6 +3600,12 @@ runGameMessage msg g = case msg of
           $ cardResolutionModifier card GameSource card (AddKeyword Keyword.Peril)
         whenDraw <-
           checkWindows [mkWhen (Window.DrawCard iid (toCard card) $ fromMaybe Deck.EncounterDeck mdeck)]
+        -- Every encounter card that reaches an investigator's hands passes
+        -- through here, whichever path drew it.
+        logI18n
+          $ investigatorRef investigator
+          $ withVar "card" (String $ format $ toCard card)
+          $ ikey' "gameLog.investigatorDrawsEncounterCard"
         let uiRevelation = getPlayer iid >>= (`sendRevelation` (toJSON $ toCard card))
         case toCardType card of
           EnemyType -> do

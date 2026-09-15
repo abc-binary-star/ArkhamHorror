@@ -424,6 +424,12 @@ instance RunMessage EnemyAttrs where
             whenM (enemyId <=~> IncludeOmnipotent (EnemyCanSpawnIn $ IncludeEmptySpace $ LocationWithId lid)) do
               Lifted.checkWhen (Window.EnemySpawns enemyId (AtLocation lid))
             do_ msg
+          logEnemyRef <- enemyRef enemyId
+          logLocationRef <- locationRef lid
+          logI18n
+            $ withVar "enemy" (String logEnemyRef)
+            $ withVar "location" (String logLocationRef)
+            $ ikey' "gameLog.enemySpawns"
           pure $ a' & placementL .~ AtLocation lid
     Do (EnemySpawn originalDetails) | originalDetails.enemy == enemyId && not enemyDefeated -> do
       let details = fromMaybe originalDetails enemySpawnDetails
@@ -902,7 +908,14 @@ instance RunMessage EnemyAttrs where
       let cancelledIntoShadows = enemyPlacement == InTheShadows && isNothing enemyMovement
       if current == Just lid || leftPlayMidMove || supersededMidMove || cancelledIntoShadows
         then pure a
-        else pure $ a & placementL .~ AtLocation lid
+        else do
+          logEnemyRef <- enemyRef enemyId
+          logLocationRef <- locationRef lid
+          logI18n
+            $ withVar "enemy" (String logEnemyRef)
+            $ withVar "location" (String logLocationRef)
+            $ ikey' "gameLog.enemyMovesTo"
+          pure $ a & placementL .~ AtLocation lid
     After (EndTurn _) | not enemyDefeated -> a <$ push (EnemyCheckEngagement $ toId a)
     BeginRoundWindow | not enemyDefeated -> a <$ push (EnemyCheckEngagement $ toId a)
     EnemyCheckEngagement eid | eid == enemyId && not (isSwarm a) && not enemyDelayEngagement -> do
@@ -1257,6 +1270,16 @@ instance RunMessage EnemyAttrs where
       let source = choose.source
       let sid = choose.skillTest
 
+      -- The attack itself, before any of its results. Every attack lands here
+      -- -- the basic action, a weapon and an event card alike -- which is why
+      -- the log lives here rather than where an action is declared.
+      logAttacker <- getAttrs @Investigator iid
+      logEnemyRef <- enemyRef enemyId
+      logI18n
+        $ investigatorRef logAttacker
+        $ withVar "enemy" (String logEnemyRef)
+        $ ikey' "gameLog.fightsEnemy"
+
       -- The after-window is built here but not checked until the whole attack
       -- has resolved. Pin the tick so a card that enters play in between -- an
       -- enemy spawned by an act the attack advanced, say -- can't react to an
@@ -1426,6 +1449,13 @@ instance RunMessage EnemyAttrs where
           push afterWindow
           pure $ a & exhaustedL .~ True
     TryEvadeEnemy sid iid eid source mTarget skillType | eid == enemyId -> do
+      -- The attempt itself: a failed evade leaves no other trace in the log.
+      logEvader <- getAttrs @Investigator iid
+      logEnemyRef <- enemyRef eid
+      logI18n
+        $ investigatorRef logEvader
+        $ withVar "enemy" (String logEnemyRef)
+        $ ikey' "gameLog.triesToEvadeEnemy"
       mEnemyEvade' <- field EnemyEvade eid
       case mEnemyEvade' of
         Just _ ->
@@ -1462,7 +1492,14 @@ instance RunMessage EnemyAttrs where
       -- Fire the SuccessfulEvadeEnemy windows around EnemyEvaded (When -> exhaust
       -- -> After) so "after you evade" reactions see the enemy already exhausted
       -- and disengaged (e.g. Right Under Their Noses vs Terror of the Stars).
-      when (null alternateSuccess) $ Evade.pushSuccessfulEvade iid source enemyId n
+      when (null alternateSuccess) do
+        logEvader <- getAttrs @Investigator iid
+        logEnemyRef <- enemyRef enemyId
+        logI18n
+          $ investigatorRef logEvader
+          $ withVar "enemy" (String logEnemyRef)
+          $ ikey' "gameLog.investigatorEvades"
+        Evade.pushSuccessfulEvade iid source enemyId n
       pure a
     When (FailedSkillTest iid (Just Action.Evade) _source (Initiator target) _ n) | isActionTarget a target -> do
       pushM $ checkWindows [mkWhen $ Window.FailEvadeEnemy iid enemyId n]
@@ -1621,19 +1658,28 @@ instance RunMessage EnemyAttrs where
           -- Emit at resolution, after cancellation windows, rather than when
           -- the attack is merely proposed (or once for a massive attack group).
           when (allowAttack && not details.cancelled) do
-            investigator <- getAttrs @Investigator iid
+            attackNoticeInvestigator <- getAttrs @Investigator iid
             let attackTitle = case attackType details of
                   AttackOfOpportunity -> "attackNotice.opportunity"
                   RetaliateAttack -> "attackNotice.retaliate"
                   AlertAttack -> "attackNotice.alert"
                   _ -> "attackNotice.regular"
-            withI18n $ cardNameVar a $ investigatorNameVar investigator
+            withI18n $ cardNameVar a $ investigatorNameVar attackNoticeInvestigator
               $ numberVar "damage" healthDamage $ numberVar "horror" sanityDamage do
                 let titleKey = attackTitle <>
                       if AttackDealsEitherDamageOrHorror `elem` (modifiers <> mods)
                         then ".either"
                         else ".both"
                 sendEnemyOnly player (ikey' titleKey) (toJSON $ toCard a)
+            -- The attack is resolved by now (cancellation windows are past), so
+            -- this line records damage that will actually be assigned.
+            logEnemyRef <- enemyRef enemyId
+            logI18n
+              $ investigatorRef attackNoticeInvestigator
+              $ withVar "enemy" (String logEnemyRef)
+              $ numberVar "damage" healthDamage
+              $ numberVar "horror" sanityDamage
+              $ ikey' "gameLog.enemyAttacks"
           let
             attackMessage =
               if AttackDealsEitherDamageOrHorror `elem` (modifiers <> mods)
@@ -1729,10 +1775,22 @@ instance RunMessage EnemyAttrs where
         pushAll $ afterAttacksWindow : attackAfter updatedDetails
       pure a
     HealDamage (EnemyTarget eid) source n | eid == enemyId -> do
+      logHealEnemyRef <- enemyRef eid
+      when (n > 0)
+        $ logI18n
+        $ withVar "enemy" (String logHealEnemyRef)
+        $ numberVar "count" n
+        $ ikey' "gameLog.enemyHealsDamage"
       result <- liftRunMessage (RemoveTokens source (toTarget a) #damage n) a
       Heal.pushHealedAfter DamageType (toTarget a) source n
       pure result
     HealAllDamage (EnemyTarget eid) source | eid == enemyId -> do
+      when (enemyDamage a > 0) do
+        logHealEnemyRef <- enemyRef eid
+        logI18n
+          $ withVar "enemy" (String logHealEnemyRef)
+          $ numberVar "count" (enemyDamage a)
+          $ ikey' "gameLog.enemyHealsDamage"
       Heal.pushHealedAfter DamageType (toTarget a) source (enemyDamage a)
       pure $ a & tokensL %~ removeAllTokens Token.Damage & defeatedL .~ False
     Msg.DealDamage (EnemyTarget eid) damageAssignment | eid == enemyId -> do
@@ -1767,6 +1825,23 @@ instance RunMessage EnemyAttrs where
             if damageAssignment.delayed
               then pure damageAssignment.amount
               else getModifiedDamageAmount a damageAssignment
+          -- The damage that actually lands, credited to the investigator whose
+          -- ability or card dealt it when there is one (scenario effects have
+          -- no controller).
+          logEnemyRef <- enemyRef eid
+          mLogAttacker <- getSourceController source
+          for_ mLogAttacker \logAttacker -> do
+            logAttackingInvestigator <- getAttrs @Investigator logAttacker
+            logI18n
+              $ investigatorRef logAttackingInvestigator
+              $ withVar "enemy" (String logEnemyRef)
+              $ numberVar "count" amount'
+              $ ikey' "gameLog.enemyTakesDamageFrom"
+          when (isNothing mLogAttacker)
+            $ logI18n
+            $ withVar "enemy" (String logEnemyRef)
+            $ numberVar "count" amount'
+            $ ikey' "gameLog.enemyTakesDamage"
           let
             damageAssignment' = damageAssignment {damageAssignmentAmount = amount'}
             -- Both halves are real damage and must count toward defeat, so
@@ -1923,6 +1998,10 @@ instance RunMessage EnemyAttrs where
       defeatedBy <- Defeat.classifyDefeat source (enemyDamage a) <$> fieldMayJoin EnemyHealth (toId a)
       miid <- getSourceController source
       mloc <- field EnemyLocation a.id
+      logEnemyRef <- enemyRef eid
+      logI18n
+        $ withVar "enemy" (String logEnemyRef)
+        $ ikey' "gameLog.enemyDefeated"
 
       lift $ withQueue_ $ mapMaybe (filterOutEnemyMessages eid)
 
@@ -2138,6 +2217,15 @@ instance RunMessage EnemyAttrs where
       -- the Dark on a Shadow-spawned Hunting Horror) resolves by moving it to
       -- that investigator's location instead of being dropped entirely.
       massive <- eid <=~> MassiveEnemy
+      -- An enemy already in this investigator's threat area is not engaging
+      -- them again; a re-engagement would just be noise in the log.
+      unless (enemyPlacement == InThreatArea iid) do
+        logEngager <- getAttrs @Investigator iid
+        logEnemyRef <- enemyRef eid
+        logI18n
+          $ investigatorRef logEngager
+          $ withVar "enemy" (String logEnemyRef)
+          $ ikey' "gameLog.investigatorEngagesEnemy"
       let
         placement =
           if massive
@@ -2333,6 +2421,12 @@ instance RunMessage EnemyAttrs where
           then do
             pushM $ checkAfter $ Window.EnemyDisengaged iid enemyId
             lid <- disengageLocation iid
+            dislogEngager <- getAttrs @Investigator iid
+            logEnemyRef <- enemyRef enemyId
+            logI18n
+              $ investigatorRef dislogEngager
+              $ withVar "enemy" (String logEnemyRef)
+              $ ikey' "gameLog.investigatorDisengages"
             pure $ a & placementL .~ AtLocation lid
           else pure a
       AsSwarm eid' _ -> do

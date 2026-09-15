@@ -89,6 +89,7 @@ import Arkham.Helpers.Location (
   isDiscoveringLastClue,
   withLocationOf,
  )
+import Arkham.Helpers.GameLog (investigatorRef, locationRef, logI18n)
 import Arkham.Helpers.Log (hasCampaignOption)
 import Arkham.Helpers.Modifiers
 import Arkham.Helpers.Playable (getIsPlayable, getIsPlayableWithResources, getPlayableCards)
@@ -115,7 +116,7 @@ import Arkham.Helpers.Window (
  )
 import Arkham.Helpers.Window qualified as Helpers
 import Arkham.History
-import Arkham.I18n (countVar, ikey', withI18n)
+import Arkham.I18n (countVar, ikey', withVar, withI18n)
 import Arkham.Investigate.Types
 import {-# SOURCE #-} Arkham.Investigator
 import Arkham.Investigator.Runner.Damage
@@ -579,6 +580,15 @@ handleDoWhenWillEnterLocation a@InvestigatorAttrs {..} iid lid = do
   let prevLoc = case investigatorPlacement of
         AtLocation l -> Just l
         _ -> Nothing
+  -- This is the single place an investigator's location is rewritten, so the
+  -- log records every arrival once -- including the ones a card effect or a
+  -- scenario placed them at.
+  when (prevLoc /= Just lid) do
+    logLocationRef <- locationRef lid
+    logI18n
+      $ investigatorRef a
+      $ withVar "location" (String logLocationRef)
+      $ ikey' "gameLog.investigatorMovesTo"
   pure $ a & placementL .~ AtLocation lid & previousLocationL .~ prevLoc
 
 handleSwapPlaces a@InvestigatorAttrs {..} aTarget newLocation = do

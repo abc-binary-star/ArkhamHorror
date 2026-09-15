@@ -89,6 +89,7 @@ import Arkham.Helpers.Location (
   isDiscoveringLastClue,
   withLocationOf,
  )
+import Arkham.Helpers.GameLog (cardRef, investigatorRef, logI18n)
 import Arkham.Helpers.Log (hasCampaignOption)
 import Arkham.Helpers.Modifiers
 import Arkham.Helpers.Playable (getIsPlayable, getIsPlayableWithResources, getPlayableCards)
@@ -116,7 +117,7 @@ import Arkham.Helpers.Window (
  )
 import Arkham.Helpers.Window qualified as Helpers
 import Arkham.History
-import Arkham.I18n (countVar, ikey', withI18n)
+import Arkham.I18n (countVar, ikey', numberVar, withI18n)
 import Arkham.Investigate.Types
 import {-# SOURCE #-} Arkham.Investigator
 import Arkham.Investigator.Runner.Damage
@@ -346,6 +347,10 @@ handleDoDiscardCard a@InvestigatorAttrs {..} iid cardId = do
   case find ((== cardId) . toCardId) investigatorHand of
     Just card -> case card of
       PlayerCard pc -> do
+        logI18n
+          $ investigatorRef a
+          $ cardRef card
+          $ ikey' "gameLog.discardsCard"
         let
           updateHandDiscard handDiscard =
             handDiscard
@@ -786,6 +791,11 @@ handleDoDrawCardsV2 a@InvestigatorAttrs {..} iid cardDraw = do
                       ]
                )
             <> [CheckHandSize iid | checkHandSize]
+          when (notNull allDrawn)
+            $ logI18n
+            $ investigatorRef a
+            $ numberVar "count" (length allDrawn)
+            $ ikey' "gameLog.investigatorDrawsCards"
           pure
             $ a
             & (handL %~ (<> map PlayerCard (filter (`cardMatch` NotCard CardWithRevelation) allDrawn)))
