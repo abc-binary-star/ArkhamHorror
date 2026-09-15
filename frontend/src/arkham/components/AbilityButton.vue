@@ -10,18 +10,17 @@ import type { Action } from '@/arkham/types/Action';
 import { actionsToList } from '@/arkham/types/Action';
 import { MessageType } from '@/arkham/types/Message';
 import { replaceIcons, formatContent } from '@/arkham/helpers';
-import { handleI18n } from '@/arkham/i18n';
+import { handleI18n, parseInput } from '@/arkham/i18n';
 import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 const props = withDefaults(defineProps<{
  game: Game
  ability: AbilityLabel | FightLabel | FightLabelWithSkill | EvadeLabel | EvadeLabelWithSkill | EngageLabel
  tooltipIsButtonText?: boolean
  showMove?: boolean
  hostHasSwarm?: boolean
- labelOverride?: string
-}>(), { tooltipIsButtonText: false, showMove: true, hostHasSwarm: false, labelOverride: undefined })
+}>(), { tooltipIsButtonText: false, showMove: true, hostHasSwarm: false })
 
 const ability = computed<Ability | null>(() => "ability" in props.ability ? props.ability.ability : null)
 
@@ -42,6 +41,16 @@ const tooltip = computed(() => {
   }
 
   return null
+})
+
+// Only explicitly authored short labels replace effect text. Keep the full
+// tooltip, and never infer a label from the ability's type or truncate its cost.
+const shortTooltip = computed(() => {
+  const body = ability.value?.tooltip
+  if (!body?.startsWith('$')) return null
+  const { key, params } = parseInput(body)
+  const shortKey = `${key}Short`
+  return te(shortKey) ? formatContent(t(shortKey, params)) : null
 })
 
 const modifiers = computed(() => {
@@ -186,13 +195,9 @@ const maybeFormat = function(body: string) {
 }
 
 const abilityLabel = computed(() => {
-  if (props.labelOverride) {
-    return props.labelOverride
-  }
-
   // don't use isButtonText
   if (isButtonText.value && tooltip.value) {
-    return tooltip.value.content
+    return shortTooltip.value ?? tooltip.value.content
   }
 
   if (props.ability.tag === MessageType.ABILITY_LABEL) {
@@ -463,7 +468,7 @@ const classObject = computed(() => {
     :class="classObject"
     @click="$emit('choose', ability)"
     v-bind="attributes"
-    v-tooltip="!isButtonText && tooltip"
+    v-tooltip="(!isButtonText || shortTooltip) && tooltip"
   >
     <span
       v-if="showSwarmHostWarning"

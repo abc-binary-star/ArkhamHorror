@@ -26,6 +26,8 @@ import Resources from '@/arkham/components/Resources.vue';
 import Draw from '@/arkham/components/Draw.vue';
 import InvestigatorUndo from '@/arkham/components/InvestigatorUndo.vue';
 import PoolItem from '@/arkham/components/PoolItem.vue';
+import { chaosTokenImage } from '@/arkham/types/ChaosToken';
+import { homebrewTotalsTokens } from '@/arkham/homebrewData';
 import { IsMobile } from '@/arkham/isMobile';
 import {
   undoControlsKey,
@@ -68,6 +70,27 @@ const { isMobile } = IsMobile();
 const doShowBonded = computed(() => {
   return showBonded.value && props.playerId == props.investigator.playerId
 })
+
+// Extra chaos-bag faces read as team totals next to the clue/doom pair. Sealing
+// takes a token out of the bag, so only bagged tokens are counted here.
+const bagTokenCount = (face: string) =>
+  (props.game.scenario?.chaosBag.chaosTokens ?? []).filter((t) => t.face === face).length
+
+const blessTokens = computed(() => bagTokenCount('BlessToken'))
+const curseTokens = computed(() => bagTokenCount('CurseToken'))
+const frostTokens = computed(() => bagTokenCount('FrostToken'))
+const bloodTokens = computed(() => bagTokenCount('BloodToken'))
+
+const homebrewTotals = computed(() =>
+  homebrewTotalsTokens
+    .map((cfg) => ({
+      face: cfg.face,
+      tooltip: cfg.tooltip,
+      image: chaosTokenImage(cfg.face),
+      count: bagTokenCount(cfg.face),
+    }))
+    .filter((t) => t.count > 0),
+)
 
 watch(() => props.playerId, () => {
   if (!props.portrait) {
@@ -740,6 +763,18 @@ const spadeInjury = computed(() => {
               @click="$emit('choose', ability.index)"
               />
             <div class="team-token-totals">
+              <PoolItem v-if="blessTokens > 0" type="chaos-tokens/ct-bless" :amount="blessTokens" :tooltip="$t('multiplayerTable.blessTokens')" />
+              <PoolItem v-if="curseTokens > 0" type="chaos-tokens/ct-curse" :amount="curseTokens" :tooltip="$t('multiplayerTable.curseTokens')" />
+              <PoolItem v-if="frostTokens > 0" type="chaos-tokens/ct-frost" :amount="frostTokens" :tooltip="$t('multiplayerTable.frostTokens')" />
+              <PoolItem v-if="bloodTokens > 0" type="chaos-tokens/ct-blood" :amount="bloodTokens" :tooltip="$t('multiplayerTable.bloodTokens')" />
+              <PoolItem
+                v-for="t in homebrewTotals"
+                :key="t.face"
+                type="custom-token"
+                :image="t.image"
+                :amount="t.count"
+                :tooltip="t.tooltip"
+              />
               <PoolItem
                 type="clue"
                 :amount="game.totalClues"

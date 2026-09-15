@@ -64,8 +64,6 @@ import RainOverlay from '@/arkham/components/RainOverlay.vue'
 import { useScenarioRain } from '@/arkham/composables/useScenarioRain'
 import { useAtlachNachaLegs } from '@/arkham/composables/useAtlachNachaLegs'
 import PoolItem from '@/arkham/components/PoolItem.vue'
-import { chaosTokenImage } from '@/arkham/types/ChaosToken'
-import { homebrewTotalsTokens } from '@/arkham/homebrewData'
 import scenarioMetadata from '@/arkham/data/scenarios'
 import EncounterDeck from '@/arkham/components/EncounterDeck.vue'
 import VictoryDisplay from '@/arkham/components/VictoryDisplay.vue'
@@ -622,8 +620,11 @@ function proxyClippedLocationClick(event: MouseEvent) {
 
   if (!cell) return
 
+  // The location card's own frame: that is where its click handler lives, and
+  // the first `.card-frame` in the cell is a vehicle asset's when one is parked
+  // at the location, which would swallow the proxied click.
   const clickTarget =
-    cell.querySelector<HTMLElement>('.card-frame') ??
+    cell.querySelector<HTMLElement>('.location-column > .card-frame') ??
     cell.querySelector<HTMLElement>('.location') ??
     cell
   event.preventDefault()
@@ -1874,35 +1875,6 @@ function minimize_SkillTest(isMinimized: boolean) {
   }
 }
 
-const blessTokens = computed(
-  () => props.scenario.chaosBag.chaosTokens.filter((t) => t.face === 'BlessToken').length,
-)
-const curseTokens = computed(
-  () => props.scenario.chaosBag.chaosTokens.filter((t) => t.face === 'CurseToken').length,
-)
-const frostTokens = computed(
-  () => props.scenario.chaosBag.chaosTokens.filter((t) => t.face === 'FrostToken').length,
-)
-const bloodTokens = computed(
-  () => props.scenario.chaosBag.chaosTokens.filter((t) => t.face === 'BloodToken').length,
-)
-
-// Custom campaign tokens (e.g. the Circus Ex Mortis moon) that opt into the
-// totals bar via their campaign's homebrew tokens.json. Counted out of the
-// chaos bag only, like the bless/curse/frost/blood totals above: sealing takes
-// a token out of the bag, and sealed tokens show on the card they sit on.
-const homebrewTotals = computed(() => {
-  const all = props.scenario.chaosBag.chaosTokens
-  return homebrewTotalsTokens
-    .map((cfg) => ({
-      face: cfg.face,
-      tooltip: cfg.tooltip,
-      image: chaosTokenImage(cfg.face),
-      count: all.filter((t) => t.face === cfg.face).length,
-    }))
-    .filter((t) => t.count > 0)
-})
-
 async function removeChaosToken(face: any) {
   debug.send(props.game.id, {
     tag: 'ChaosBagMessage',
@@ -3092,21 +3064,6 @@ async function addChaosToken(face: any) {
               <Layers aria-hidden="true" />
             </button>
           </template>
-          <div id="totals">
-            <!-- Team clue and doom totals are in the investigator controls. -->
-            <PoolItem v-if="blessTokens > 0" type="chaos-tokens/ct-bless" :amount="blessTokens" />
-            <PoolItem v-if="curseTokens > 0" type="chaos-tokens/ct-curse" :amount="curseTokens" />
-            <PoolItem v-if="frostTokens > 0" type="chaos-tokens/ct-frost" :amount="frostTokens" />
-            <PoolItem v-if="bloodTokens > 0" type="chaos-tokens/ct-blood" :amount="bloodTokens" />
-            <PoolItem
-              v-for="t in homebrewTotals"
-              :key="t.face"
-              type="custom-token"
-              :image="t.image"
-              :amount="t.count"
-              :tooltip="t.tooltip"
-            />
-          </div>
         </PlayerTabs>
       </div>
     </div>
@@ -4003,7 +3960,9 @@ async function addChaosToken(face: any) {
     z-index: var(--z-index-10);
   }
 
-  .deck-advance-leave-active :deep(.agenda-card > img.card--agenda),
+  /* Whatever card the seat is showing, live or one of the resolved ones it is
+     being used to read, leaves the table the same way. */
+  .deck-advance-leave-active :deep(.agenda-card > img.card),
   .deck-advance-leave-active :deep(.act-row > .card-container > img.card) {
     will-change: transform, opacity;
     transition:
@@ -4011,7 +3970,7 @@ async function addChaosToken(face: any) {
       opacity 320ms ease-in;
   }
 
-  .deck-advance-leave-to :deep(.agenda-card > img.card--agenda),
+  .deck-advance-leave-to :deep(.agenda-card > img.card),
   .deck-advance-leave-to :deep(.act-row > .card-container > img.card) {
     opacity: 0;
     transform: translate3d(0, -32px, 0) scale(1.035);
@@ -4660,18 +4619,6 @@ async function addChaosToken(face: any) {
   padding-inline: 6px;
   color: rgb(244 239 228 / 0.92);
   text-transform: uppercase;
-}
-
-/* Doom/clue counters sit inline at the end of the investigator-tab row; they
-   no longer own a bordered strip of the player zone. */
-#totals {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 2px;
-  margin: 0 6px 0 auto;
-  padding: 2px 4px;
-  align-self: center;
 }
 
 .tri-button {
@@ -5511,11 +5458,6 @@ async function addChaosToken(face: any) {
     > #player-zone
     :deep(ul.tabs__header > li.tab--lead-player::after) {
     display: none;
-  }
-
-  .scenario-body.scenario-body--multiseat > #player-zone :deep(.tabs-row > #totals) {
-    flex: 0 0 auto;
-    margin-left: auto;
   }
 
   /* Only the seat being looked at puts its workbench on the table. */
@@ -6702,6 +6644,14 @@ async function addChaosToken(face: any) {
   border-color: #f0d998;
   outline-color: #d1b476;
   background: #dbc18a;
+}
+/* The plate is the map node's mount, but `:deep(.card-frame)` also reaches the
+   frames of the enemies standing on a location. There it is a second, portrait
+   frame around the card -- and because the plate does not rotate with an
+   exhausted enemy, half of it stayed behind as a beige ghost beside the card. */
+.location-cards-container :deep(.location-container .enemy--outer .card-frame)::before,
+.location-cards-container :deep(.location-container .enemy--outer .card-frame)::after {
+  content: none;
 }
 .location-cards-container :deep(.card-frame-inner) {
   border-radius: 3px;

@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import SkillTestFastActions from '@/arkham/components/SkillTestFastActions.vue'
+import { isInlineSkillTestFastWindow } from '@/arkham/skillTestFastWindow'
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import Question from '@/arkham/components/Question.vue';
 import { useDebug } from '@/arkham/debug'
@@ -111,6 +112,7 @@ const modifiers = computed(() =>
     filter(shouldRender), ...yourModifiers.value, ...(props.skillTest.modifiers ?? []).filter(shouldRenderSkillTestModifier)]) 
 const committedCards = computed(() => props.skillTest.committedCards)
 const choices = computed(() => ArkhamGame.choices(props.game, props.playerId))
+const inlineFastWindow = computed(() => isInlineSkillTestFastWindow(props.game, props.playerId))
 const skipTriggersAction = computed(() => choices.value.findIndex((c) => c.tag === MessageType.SKIP_TRIGGERS_BUTTON))
 
 const investigatorPortrait = computed(() => {
@@ -546,11 +548,11 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
 
       <div v-if="skillTestResults" class="skill-test-results-break"></div>
       <button
-        v-if="skipTriggersAction !== -1"
+        v-if="skipTriggersAction !== -1 && !inlineFastWindow"
         @click="$emit('choose', skipTriggersAction)"
         class="skip-triggers-button"
       >{{ $t('investigator.skipTriggers') }}</button>
-      <Question :game="game" :playerId="playerId" @choose="choose" :isSkillTest="true" />
+      <Question v-if="!inlineFastWindow" :game="game" :playerId="playerId" @choose="choose" :isSkillTest="true" />
       <button
         class="apply-results"
         v-if="applyResultsAction !== -1"
@@ -705,6 +707,16 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
 .skill-test-results-break {
   flex-basis: 100%;
   height: 0;
+}
+
+.skip-triggers-button {
+  display: block;
+  width: fit-content;
+  min-width: 7em;
+  max-width: calc(100% - 24px);
+  margin: 10px auto;
+  padding: 10px 20px;
+  border-radius: var(--control-radius);
 }
 
 .apply-results {

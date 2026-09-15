@@ -12,7 +12,6 @@ import { processingKey } from '@/arkham/injectionKeys'
 import AtmosphereLine from './AtmosphereLine.vue'
 import { triggerAtmosphere } from '@/arkham/atmosphere'
 import AbilityButton from './AbilityButton.vue'
-import CardPromptSettings from './CardPromptSettings.vue'
 import QuestionChoices from './QuestionChoices.vue'
 
 const props = defineProps<{ game: Game; playerId: string }>()
@@ -54,7 +53,6 @@ const entries = computed(() => {
   const investigator = promptInvestigator.value
   return choices(props.game, props.playerId).map((choice, index) => {
     let code: string | null = null
-    let promptCode: string | null = null
     if (choice.tag === 'AbilityLabel') code = effectCardCode(choice.ability.source)
     if (choice.tag === 'TargetLabel' && choice.target.tag === 'CardIdTarget') {
       // Resolve only already-visible zones, never inspect another player's hand.
@@ -66,11 +64,10 @@ const entries = computed(() => {
       ] : []
       const contents = visibleCards.find(c => c.id === choice.target.contents)
       if (contents) {
-        promptCode = contents.cardCode
         code = `${contents.cardCode}${contents.isFlipped ? 'b' : ''}`
       }
     }
-    return { choice, index, promptCode: promptCode ?? code, image: code ? cardImage(code) : null }
+    return { choice, index, image: code ? cardImage(code) : null }
   })
 })
 // Merge adjacent entries that resolve to the same card image so several
@@ -138,13 +135,6 @@ onBeforeUnmount(() => dialog.value?.close())
           <div v-else class="trigger-entry" :class="{ 'trigger-entry--card': group.image }">
             <img v-if="group.image" :src="group.image" :alt="t('triggeredEffect.card')" />
             <div class="entry-actions">
-              <CardPromptSettings
-                v-if="promptInvestigator && group.entries[0].promptCode && entries.some(entry => entry.choice.tag === 'SkipTriggersButton')"
-                :game="game"
-                :player-id="playerId"
-                :investigator-id="promptInvestigator.id"
-                :card-code="group.entries[0].promptCode"
-              />
               <template v-for="entry in group.entries" :key="entry.index">
                 <AtmosphereLine
                   v-if="entry.choice.tag === 'AbilityLabel'"
@@ -158,7 +148,6 @@ onBeforeUnmount(() => dialog.value?.close())
                     v-if="entry.choice.tag === 'AbilityLabel'"
                     :game="game"
                     :ability="entry.choice"
-                    :label-override="t('triggeredEffect.forced')"
                     tooltip-is-button-text
                     @click="choose(entry.index)"
                   />
@@ -221,7 +210,7 @@ fieldset:disabled { opacity: .65; pointer-events: none; }
 .trigger-entry img { display: block; width: min(100%, 210px); height: auto; max-height: 294px; object-fit: contain; margin: auto; border-radius: 7px; box-shadow: 0 5px 16px #0006; }
 .entry-actions { display: flex; flex-direction: column; gap: 8px; min-width: 0; margin-top: auto; }
 /* Button + 查看牌桌 share one line. */
-.action-row { display: flex; align-items: stretch; justify-content: center; gap: 8px; min-width: 0; }
+.action-row { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 8px; min-width: 0; }
 .entry-actions :deep(button) {
   width: 100%;
   min-width: 0;
@@ -245,8 +234,9 @@ fieldset:disabled { opacity: .65; pointer-events: none; }
 .entry-actions :deep(.button-label) { flex: 0 1 auto; padding: 0; white-space: normal; }
 .entry-actions :deep(button::before) { flex: 0 0 auto; padding: 0; margin: 0; }
 /* Override the width:100% / white-space rules above for buttons sharing the row. */
-.action-row :deep(button) { flex: 0 1 auto; width: auto; min-width: 0; }
-.action-row :deep(.button-label) { min-width: 0; white-space: nowrap; }
+.action-row :deep(button) { flex: 0 1 auto; width: auto; min-width: 0; max-width: 100%; }
+.action-row :deep(.button-label) { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.action-row .collapse { flex-shrink: 0; white-space: nowrap; }
 .skip-row { grid-column: 1 / -1; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid #a58cba25; }
 .skip, .collapse {
   cursor: pointer;

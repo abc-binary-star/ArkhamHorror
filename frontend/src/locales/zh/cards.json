@@ -1350,11 +1350,15 @@
       "fastExhaustAgency2": "{'{'}fast{'}'}横置特工支援并对其造成1点恐惧：发现你所在地点的1个线索"
     },
     "arcaneStudies": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}intellect{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}intellect{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
     },
     "arcaneStudies2": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}intellect{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}intellect{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
     },
     "beguile": {
@@ -1375,9 +1379,13 @@
       "exhaustForDamage": "横置蝴蝶对剑，以造成+1伤害"
     },
     "combatTraining1": {
+      "spendForCombatShort": "1资源 → +1{'{'}combat{'}'}",
       "spendForCombat": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}",
+      "spendForAgilityShort": "1资源 → +1{'{'}agility{'}'}",
       "spendForAgility": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}combat{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}"
     },
     "cosmicFlame": {
@@ -1400,11 +1408,15 @@
       "twoConnections": "{'{'}reaction{'}'}在你打出诱敌时，提升其费用2点：“\"你所在地点\"”变为“\"与你所在地点之间连接次数不超过2的地点\"”"
     },
     "digDeep": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
     },
     "digDeep2": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
     },
     "doppelganger1": {
@@ -1431,22 +1443,30 @@
       "fastSpend1Resource2": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}战斗{'}'}"
     },
     "hardKnocks": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}combat{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}"
     },
     "hardKnocks2": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}combat{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}"
     },
     "hatchet1": {
       "takeControlOfHatchet": "控制飞斧"
     },
     "higherEducation": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}intellect{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}intellect{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
     },
     "higherEducation3": {
+      "fastSpend1ResourceShort": "1资源 → +2{'{'}intellect{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+2{'{'}intellect{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +2{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+2{'{'}willpower{'}'}"
     },
     "holySpear5": {
@@ -1456,11 +1476,15 @@
       "actionYouGet2": "{'{'}action{'}'}: _攻击_. 你 get +2 {'{'}willpower{'}'}并造成+1伤害。在你发动本能力时，你可以释放一个封印在圣矛上的{'{'}bless{'}'}标记"
     },
     "hyperawareness": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}intellect{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}intellect{'}'}"
     },
     "hyperawareness2": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}intellect{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}intellect{'}'}"
     },
     "joeyTheRatVigil3": {
@@ -1497,9 +1521,13 @@
       "fastIfYou2": "{'{'}fast{'}'}如果你没有资源，横置拉布兰奇夫人：获得1资源"
     },
     "moxie1": {
+      "spendForWillpowerShort": "1资源 → +1{'{'}willpower{'}'}",
       "spendForWillpower": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}",
+      "spendForAgilityShort": "1资源 → +1{'{'}agility{'}'}",
       "spendForAgility": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
     },
     "oldCompass": {
@@ -1514,18 +1542,24 @@
       "youNockAnotherArrow": "你搭上另一只箭"
     },
     "physicalTraining": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}combat{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
     },
     "physicalTraining2": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}combat{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
     },
     "pitchfork": {
       "takeControlOfPitchfork": "控制草叉"
     },
     "plucky1": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}intellect{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}intellect{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
     },
     "protectingTheAnirniq2": {
@@ -1551,17 +1585,25 @@
       "search": "查找你的绑定卡牌，找出诡异疯长，并将其加入你的手牌"
     },
     "scientificTheory1": {
+      "spendForIntellectShort": "1资源 → +1{'{'}intellect{'}'}",
       "spendForIntellect": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}intellect{'}'}",
+      "spendForCombatShort": "1资源 → +1{'{'}combat{'}'}",
       "spendForCombat": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}",
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}combat{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}intellect{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}intellect{'}'}"
     },
     "scrapper": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}combat{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}"
     },
     "scrapper3": {
+      "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2Short": "1资源 → +1{'{'}combat{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}"
     },
     "secondSight": {

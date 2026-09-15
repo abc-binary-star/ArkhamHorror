@@ -18,8 +18,11 @@ import Event from '@/arkham/components/Event.vue';
 import Enemy from '@/arkham/components/Enemy.vue';
 import Story from '@/arkham/components/Story.vue';
 import StackIndicator from '@/arkham/components/StackIndicator.vue';
+import StackHistoryCard from '@/arkham/components/StackHistoryCard.vue';
+import StackPips from '@/arkham/components/StackPips.vue';
 import * as ArkhamAgenda from '@/arkham/types/Agenda'
 import { useCardFlip } from '@/arkham/composables/useCardFlip';
+import { useHistoryDrag } from '@/arkham/composables/useHistoryDrag';
 
 const props = defineProps<{
   agenda: ArkhamAgenda.Agenda
@@ -232,6 +235,55 @@ const groupedAgendaStack = computed<StackIndicatorGroup[]>(() => {
 const totalAgendas = computed(() => groupedAgendaStack.value.length)
 const currentAgendaPosition = computed(() => groupedAgendaStack.value.findIndex((group) => group.state === 'current') + 1 || props.agenda.sequence.step)
 
+const pipStates = computed(() => groupedAgendaStack.value.map((group) => group.state))
+
+// Tabletop seats hide StackIndicator — in the seat's column layout the pip strip
+// would stack above the card and blow the seat's measured height. The history
+// rides on the card's own box there instead: a strip over the card's left edge
+// picks which agenda the seat shows, and a resolved one turns over on click.
+const viewedGroup = ref<number | null>(null)
+
+const viewed = computed(() => {
+  const index = viewedGroup.value
+  if (index === null) return null
+
+  const group = groupedAgendaStack.value[index]
+  // A card still in the deck is not a page of the history: it stays unviewable.
+  return group && group.state !== 'remaining' ? group : null
+})
+
+function selectGroup(index: number) {
+  const group = groupedAgendaStack.value[index]
+  if (!group || group.state === 'remaining') return
+
+  // The group holding the live agenda *is* the live card, so it selects back to
+  // the seat's own card rather than to a row of resolved ones.
+  viewedGroup.value = group.state === 'current' ? null : index
+}
+
+function stepSelection(direction: 1 | -1) {
+  const groups = groupedAgendaStack.value
+  const from = viewedGroup.value ?? groups.findIndex((group) => group.state === 'current')
+  if (from === -1) return
+
+  for (let i = from + direction; i >= 0 && i < groups.length; i += direction) {
+    if (groups[i].state !== 'remaining') {
+      selectGroup(i)
+      return
+    }
+  }
+}
+
+// The dots are a small target: dragging the card itself pages the same history.
+const { onPointerDown, onPointerMove, onPointerUp } = useHistoryDrag(
+  () => Boolean(props.hideStackControl),
+  stepSelection,
+)
+
+// A new agenda on the table moves every seat measurement under it: come back to
+// the live card instead of leaving the seat parked on a resolved one.
+watch(() => [props.agenda.id, props.completedStack.length], () => { viewedGroup.value = null })
+
 const nextToTreacheries = computed(() => Object.values(props.game.treacheries).
   filter((t) => t.placement.tag === "NextToAgenda").
   map((t) => t.id))
@@ -294,34 +346,58 @@ const wards = computed(() => props.agenda.tokens[TokenType.Ward])
       :groups="groupedAgendaStack"
     />
     <div class="agenda-main">
-      <div class="agenda-card">
-        <img
-        :class="{ 'agenda--can-progress': interactAction !== -1, 'card--sideways': !isVertical, 'card--flipping': flipping, 'card--flipping-diagonal': flippingDiagonally }"
-          class="card card--agenda"
-          @click="$emit('choose', interactAction)"
-          @load="updateOrientation"
-          :src="displayedImage"
-          :data-errata="backErrata ?? undefined"
+      <div
+        class="agenda-card"
+        @pointerdown="onPointerDown"
+        @pointermove="onPointerMove"
+        @pointerup="onPointerUp"
+        @pointercancel="onPointerUp"
+        @dragstart.prevent
+      >
+        <StackHistoryCard
+          v-for="(image, i) in viewed ? viewed.images : []"
+          :key="`${viewedGroup}-${i}`"
+          :src="image.src"
+          :back="image.back"
+          :passed="image.passed"
+          :current="image.current"
         />
-        <div class="pool" v-if="!agenda.flipped">
-          <template v-if="debug.active">
-            <button @click="debug.send(game.id, {tag: 'TokenMessage', contents: {tag: 'RemoveTokens_', contents: [{'tag': 'GameSource'}, {'tag': 'AgendaTarget', 'contents': id}, 'Doom', 1]}})">-</button>
-          </template>
-
-          <PoolItem
-            type="doom"
-            :amount="agenda.doom"
+        <template v-if="viewed === null">
+          <img
+            :class="{ 'agenda--can-progress': interactAction !== -1, 'card--sideways': !isVertical, 'card--flipping': flipping, 'card--flipping-diagonal': flippingDiagonally }"
+            class="card card--agenda"
+            @click="$emit('choose', interactAction)"
+            @load="updateOrientation"
+            :src="displayedImage"
+            :data-errata="backErrata ?? undefined"
           />
-          <PoolItem class="eclipse" v-if="eclipses" type="resource" :amount="eclipses" />
-          <PoolItem class="ward" v-if="wards" type="resource" :amount="wards" />
+          <div class="pool" v-if="!agenda.flipped">
+            <template v-if="debug.active">
+              <button @click="debug.send(game.id, {tag: 'TokenMessage', contents: {tag: 'RemoveTokens_', contents: [{'tag': 'GameSource'}, {'tag': 'AgendaTarget', 'contents': id}, 'Doom', 1]}})">-</button>
+            </template>
 
-          <template v-if="debug.active">
-            <button
-              @click.exact="debug.send(game.id, {tag: 'TokenMessage', contents: {tag: 'PlaceTokens_', contents: [{'tag': 'GameSource'}, {'tag': 'AgendaTarget', 'contents': id}, 'Doom', 1]}})"
-              @click.shift="debug.send(game.id, {tag: 'TokenMessage', contents: {tag: 'PlaceTokens_', contents: [{'tag': 'GameSource'}, {'tag': 'AgendaTarget', 'contents': id}, 'Doom', 5]}})"
-            >+</button>
-          </template>
-        </div>
+            <PoolItem
+              type="doom"
+              :amount="agenda.doom"
+            />
+            <PoolItem class="eclipse" v-if="eclipses" type="resource" :amount="eclipses" />
+            <PoolItem class="ward" v-if="wards" type="resource" :amount="wards" />
+
+            <template v-if="debug.active">
+              <button
+                @click.exact="debug.send(game.id, {tag: 'TokenMessage', contents: {tag: 'PlaceTokens_', contents: [{'tag': 'GameSource'}, {'tag': 'AgendaTarget', 'contents': id}, 'Doom', 1]}})"
+                @click.shift="debug.send(game.id, {tag: 'TokenMessage', contents: {tag: 'PlaceTokens_', contents: [{'tag': 'GameSource'}, {'tag': 'AgendaTarget', 'contents': id}, 'Doom', 5]}})"
+              >+</button>
+            </template>
+          </div>
+        </template>
+        <StackPips
+          v-if="hideStackControl"
+          :label="$t('multiplayerTable.agendaArea')"
+          :pips="pipStates"
+          :selected="viewedGroup"
+          @select="selectGroup"
+        />
       </div>
       <img
         v-for="(card, idx) in cardsNextTo"
@@ -579,4 +655,14 @@ const wards = computed(() => props.agenda.tokens[TokenType.Ward])
   aspect-ratio: var(--card-sideways-aspect);
 }
 
+/* Tabletop seats hide StackIndicator, so the pips ride on the card's own box:
+   the seat measures its card to fill its own width, so a column beside the card
+   would resize the card and the seat with it. */
+.agenda-card > .stack-pips {
+  position: absolute;
+  left: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: var(--z-index-200);
+}
 </style>

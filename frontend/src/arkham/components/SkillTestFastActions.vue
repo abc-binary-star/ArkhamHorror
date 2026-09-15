@@ -21,6 +21,8 @@ const entries = computed(() => choices(props.game, props.playerId).map((choice, 
   code: choice.tag === 'AbilityLabel' ? sourceCardCode(choice.ability.source, props.game) : null,
 })))
 const beforeDraw = computed(() => props.game.skillTest?.step === 'SkillTestFastWindow2')
+const abilityEntries = computed(() => entries.value.filter(entry => entry.choice.tag === 'AbilityLabel'))
+const continueIndex = computed(() => entries.value.find(entry => entry.choice.tag === 'SkipTriggersButton')?.index)
 watch(() => JSON.stringify(props.game.question[props.playerId]), () => { submitted.value = false })
 watch(processing, value => { if (!value) submitted.value = false })
 function choose(index: number) {
@@ -34,16 +36,16 @@ function choose(index: number) {
   <section v-if="visible" class="skill-test-fast-actions" :aria-label="t('cardOption.testFast.title')">
     <p>{{ t(beforeDraw ? 'cardOption.testFast.beforeDraw' : 'cardOption.testFast.beforeCommit') }}</p>
     <fieldset :disabled="busy">
-      <div v-for="entry in entries" :key="entry.index" class="fast-action-row">
+      <div v-for="entry in abilityEntries" :key="entry.index" class="fast-action-row">
         <template v-if="entry.choice.tag === 'AbilityLabel'">
           <AbilityButton :game="game" :ability="entry.choice" tooltip-is-button-text @click="choose(entry.index)" />
           <CardPromptSettings v-if="entry.code && game.skillTest" :game="game" :player-id="playerId"
             :investigator-id="game.skillTest.investigator" :card-code="entry.code" />
         </template>
-        <button v-else-if="entry.choice.tag === 'SkipTriggersButton'" type="button" class="continue-test" @click="choose(entry.index)">
-          {{ t(beforeDraw ? 'cardOption.testFast.reveal' : 'cardOption.testFast.commit') }}
-        </button>
       </div>
+      <button v-if="continueIndex !== undefined" type="button" class="continue-test" @click="choose(continueIndex)">
+        {{ t(beforeDraw ? 'cardOption.testFast.reveal' : 'cardOption.testFast.commit') }}
+      </button>
     </fieldset>
   </section>
 </template>

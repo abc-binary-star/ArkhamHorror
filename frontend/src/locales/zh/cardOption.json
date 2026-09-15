@@ -2,7 +2,7 @@
   "cardOption": {
     "testFast": {
     "title": "检定快速能力",
-    "beforeDraw": "揭示前可继续使用可用的快速能力，调整检定数值。",
+    "beforeDraw": "可连续使用快速能力加值；完成后点击揭示混沌标记。",
     "beforeCommit": "可先使用快速能力，再投入卡牌。",
     "reveal": "揭示混沌标记",
     "commit": "进入投入阶段",
@@ -11,10 +11,10 @@
     "prompt": {
     "title": "卡牌提示频率",
     "shared": "相同卡牌代码共享设置；仅影响可选提示，不影响强制效果。",
-    "normal": "正常提示",
-    "ownTurn": "仅自己回合提示",
-    "untilNextTurn": "暂停至下个自己回合",
-    "off": "关闭自动提示",
+    "normal": "正常",
+    "ownTurn": "仅自己回合",
+    "untilNextTurn": "暂停至下回合",
+    "off": "关闭",
     "error": "保存失败，请重试"
 },
     "title": "卡牌选项",

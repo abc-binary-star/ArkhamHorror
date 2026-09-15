@@ -55,7 +55,23 @@ const { t } = useI18n({ useScope: 'local', fallbackLocale: 'en', messages: {
 </script>
 <template><p class="atmosphere-line" :data-tone="tone">{{ t(tone) }}</p></template>
 <style scoped>
-.atmosphere-line { margin: 10px 0 14px; max-width: max(60ch, 38em); font-family: 'Songti SC', 'Noto Serif SC', Georgia, serif; font-size: .85rem; font-weight: 400; line-height: 1.8; letter-spacing: .035em; color: inherit; opacity: .78; text-wrap: pretty; }
-.atmosphere-line[data-tone='support'], .atmosphere-line[data-tone='resolve'] { border-left: 2px solid #a9bd8580; padding-left: 10px; }
-.atmosphere-line[data-tone='enemyForced'], .atmosphere-line[data-tone='treachery'], .atmosphere-line[data-tone='horror'] { border-left: 2px solid #a58cba80; padding-left: 10px; }
+.atmosphere-line {
+  box-sizing: border-box;
+  margin: 10px 0 14px;
+  max-width: max(60ch, 38em);
+  padding: 12px 14px;
+  border: 1px solid #59635b;
+  border-left: 3px solid #b9a77e;
+  border-radius: 6px;
+  background: #202c29;
+  color: #f0e5cf;
+  font-family: 'Songti SC', 'Noto Serif SC', Georgia, serif;
+  font-size: .85rem;
+  font-weight: 500;
+  line-height: 1.8;
+  letter-spacing: .035em;
+  text-wrap: pretty;
+}
+.atmosphere-line[data-tone='support'], .atmosphere-line[data-tone='resolve'] { border-left-color: #b1c88e; }
+.atmosphere-line[data-tone='enemyForced'], .atmosphere-line[data-tone='treachery'], .atmosphere-line[data-tone='horror'] { border-left-color: #b9a1d0; }
 </style>

@@ -5,7 +5,7 @@
   "endTurnShort": "结束",
   "confirmEndTurn": "确认结束回合（剩 {n} 个行动）",
   "confirmEndTurnShort": "结束？({n})",
-  "skipTriggers": "跳过触发能力",
+  "skipTriggers": "跳过响应",
   "skipAllTriggers": "跳过所有调查员的触发能力",
   "devouredCards": "吞噬({count})",
   "underneathCards": "在卡牌下方({count})",

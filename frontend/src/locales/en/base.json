@@ -210,11 +210,10 @@
   "triggeredEffect": {
     "title": "An effect can trigger",
     "inspect": "View table",
-    "forced": "Force trigger",
     "restore": "Return to pending effects",
     "card": "Card offering this effect",
-    "skip": "Skip this response window",
-    "play": "Play this card"
+    "skip": "Skip response",
+    "play": "Play"
   },
   "showCardText": "Show text",
   "hideCardText": "Hide text",

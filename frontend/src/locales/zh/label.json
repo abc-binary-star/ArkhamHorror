@@ -5,6 +5,7 @@
   "addToHandSimple": "加入手牌",
   "anyInvestigatorTests": "任意调查员检定{'{'}{skill}{'}'}({count})",
   "applyResults": "应用结果",
+  "chooseSkillTestResultOrder": "选择先结算的效果。其余符合条件的效果仍会继续结算；只剩一项时自动执行。",
   "assets": "支援",
   "attacksYou": "{name}攻击你",
   "automaticallyEvade": "自动躲避{name}",

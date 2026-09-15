@@ -33,6 +33,7 @@ import {
   DocumentTextIcon,
   EyeIcon,
   ExclamationTriangleIcon,
+  FlagIcon,
   XMarkIcon,
 } from '@heroicons/vue/20/solid'
 import { LottieAnimation } from 'lottie-web-vue'

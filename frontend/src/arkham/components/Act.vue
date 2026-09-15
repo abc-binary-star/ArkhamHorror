@@ -15,6 +15,8 @@ import Asset from '@/arkham/components/Asset.vue'
 import ScarletKey from '@/arkham/components/ScarletKey.vue'
 import Story from '@/arkham/components/Story.vue'
 import StackIndicator from '@/arkham/components/StackIndicator.vue'
+import StackHistoryCard from '@/arkham/components/StackHistoryCard.vue'
+import StackPips from '@/arkham/components/StackPips.vue'
 import CardsUnderIndicator from '@/arkham/components/CardsUnderIndicator.vue'
 import * as ArkhamGame from '@/arkham/types/Game'
 import { AbilityLabel, AbilityMessage, type Message } from '@/arkham/types/Message'
@@ -27,6 +29,7 @@ import * as ArkhamAct from '@/arkham/types/Act'
 import { useEventStore } from '@/arkham/stores/event'
 import { actContribution, actSpend } from '@/arkham/types/EpicEvent'
 import { useCardFlip } from '@/arkham/composables/useCardFlip'
+import { useHistoryDrag } from '@/arkham/composables/useHistoryDrag'
 
 const props = defineProps<{
   act: ArkhamAct.Act
@@ -311,6 +314,55 @@ const currentActPosition = computed(
     props.act.sequence.number,
 )
 
+const pipStates = computed(() => groupedActStack.value.map((group) => group.state))
+
+// Tabletop seats hide StackIndicator — in the seat's column layout the pip strip
+// would stack above the card and blow the seat's measured height. The history
+// rides on the card's own box there instead: a strip over the card's left edge
+// picks which act the seat shows, and a resolved one turns over on click.
+const viewedGroup = ref<number | null>(null)
+
+const viewed = computed(() => {
+  const index = viewedGroup.value
+  if (index === null) return null
+
+  const group = groupedActStack.value[index]
+  // A card still in the deck is not a page of the history: it stays unviewable.
+  return group && group.state !== 'remaining' ? group : null
+})
+
+function selectGroup(index: number) {
+  const group = groupedActStack.value[index]
+  if (!group || group.state === 'remaining') return
+
+  // The group holding the live act *is* the live card, so it selects back to the
+  // seat's own card rather than to a row of resolved ones.
+  viewedGroup.value = group.state === 'current' ? null : index
+}
+
+function stepSelection(direction: 1 | -1) {
+  const groups = groupedActStack.value
+  const from = viewedGroup.value ?? groups.findIndex((group) => group.state === 'current')
+  if (from === -1) return
+
+  for (let i = from + direction; i >= 0 && i < groups.length; i += direction) {
+    if (groups[i].state !== 'remaining') {
+      selectGroup(i)
+      return
+    }
+  }
+}
+
+// The dots are a small target: dragging the card itself pages the same history.
+const { onPointerDown, onPointerMove, onPointerUp } = useHistoryDrag(
+  () => Boolean(props.hideStackControl),
+  stepSelection,
+)
+
+// A new act on the table moves every seat measurement under it: come back to the
+// live card instead of leaving the seat parked on a resolved one.
+watch(() => [props.act.id, props.completedStack.length], () => { viewedGroup.value = null })
+
 async function clicked() {
   if (interactAction.value !== -1) {
     emits('choose', interactAction.value)
@@ -480,28 +532,53 @@ const chooseFromStoryCollection = (choice: number) => {
     <div class="act-row">
       <div
         class="card-container"
-        :class="{ 'act--objective': hasObjective, 'objective-ring': hasObjective }"
+        :class="{
+          'act--objective': viewed === null && hasObjective,
+          'objective-ring': viewed === null && hasObjective,
+        }"
+        @pointerdown="onPointerDown"
+        @pointermove="onPointerMove"
+        @pointerup="onPointerUp"
+        @pointercancel="onPointerUp"
+        @dragstart.prevent
       >
-        <img
-          :class="{
-            'act--can-progress': canProgress,
-            'act--can-interact': canInteract,
-            'card--sideways': !isVertical,
-            'card--flipping': flipping,
-            'card--flipping-diagonal': flippingDiagonally,
-          }"
-          class="card"
-          @click="clicked"
-          @load="updateOrientation"
-          :src="displayedImage"
-          ref="frame"
+        <StackHistoryCard
+          v-for="(image, i) in viewed ? viewed.images : []"
+          :key="`${viewedGroup}-${i}`"
+          :src="image.src"
+          :back="image.back"
+          :passed="image.passed"
+          :current="image.current"
         />
-        <PoolItem
-          v-if="showClueBadge"
-          class="act-clue-badge"
-          type="clue"
-          :amount="clues"
-          :tooltip="$t('multiplayerTable.actClues')"
+        <template v-if="viewed === null">
+          <img
+            :class="{
+              'act--can-progress': canProgress,
+              'act--can-interact': canInteract,
+              'card--sideways': !isVertical,
+              'card--flipping': flipping,
+              'card--flipping-diagonal': flippingDiagonally,
+            }"
+            class="card"
+            @click="clicked"
+            @load="updateOrientation"
+            :src="displayedImage"
+            ref="frame"
+          />
+          <PoolItem
+            v-if="showClueBadge"
+            class="act-clue-badge"
+            type="clue"
+            :amount="clues"
+            :tooltip="$t('multiplayerTable.actClues')"
+          />
+        </template>
+        <StackPips
+          v-if="hideStackControl"
+          :label="$t('multiplayerTable.actArea')"
+          :pips="pipStates"
+          :selected="viewedGroup"
+          @select="selectGroup"
         />
       </div>
       <StackIndicator
@@ -706,6 +783,17 @@ const chooseFromStoryCollection = (choice: number) => {
   width: auto;
   height: var(--card-width);
   aspect-ratio: var(--card-sideways-aspect);
+}
+
+/* Tabletop seats hide StackIndicator, so the pips ride on the card's own box:
+   the seat measures its card to fill its own width, so a column beside the card
+   would resize the card and the seat with it. */
+.card-container > .stack-pips {
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: var(--z-index-200);
 }
 
 .act--can-progress {

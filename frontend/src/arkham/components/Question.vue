@@ -85,6 +85,15 @@ const questionChoices = computed(() => {
 const choosePaymentAmounts = inject(choosePaymentAmountsKey)
 const chooseAmounts = inject(chooseAmountsKey)
 const question = computed(() => props.game.question[props.playerId])
+const isSkillTestResultOrder = computed(() => {
+  let current = question.value
+  while (current) {
+    if (current.tag === QuestionType.QUESTION_LABEL && current.label === '$label.chooseSkillTestResultOrder') return true
+    if (!current.question) return false
+    current = current.question
+  }
+  return false
+})
 const wizardQuestion = computed(() =>
   question.value?.tag === QuestionType.CHOOSE_ONE_WIZARD ? question.value : null
 )
@@ -984,6 +993,9 @@ const filteredCards = computed<{ choice: CardLabel; index: number }[]>(() => {
       />
     </div>
 
+    <p v-if="showChoices && isSkillTestResultOrder && questionChoices.length > 0" class="resolution-order-hint">
+      {{ t('label.chooseSkillTestResultOrder') }}
+    </p>
     <div v-if="showChoices && (hasInnerContent || questionChoices.length > 0)" class="choices">
       <div v-if="hasInnerContent" class="question-label">
         <div class="question-image" v-if="questionImage">
@@ -1407,6 +1419,16 @@ button:hover {
   width: min-width(calc(var(--card-width) * 2));
   margin: 2px;
   height: max(calc(var(--card-width) * 2));
+}
+
+.resolution-order-hint {
+  margin: 0;
+  padding: 10px 14px;
+  background: var(--surface-panel);
+  color: var(--text);
+  font-size: 0.85em;
+  line-height: 1.5;
+  text-align: left;
 }
 
 .question-label {

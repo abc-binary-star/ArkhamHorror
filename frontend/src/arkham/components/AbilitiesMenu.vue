@@ -193,7 +193,7 @@ onUnmounted(() => {
 
 
 <style scoped>
-.ability-atmosphere { width: min(260px, 72vw); margin: 6px 8px; font-size: .75rem; color: var(--text); }
+.ability-atmosphere { width: min(260px, 72vw); margin: 6px 8px; font-size: .75rem; }
 .abilities {
   position: fixed;
   padding: min(3px, 1vw);

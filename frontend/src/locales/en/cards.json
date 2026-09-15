@@ -1346,11 +1346,15 @@
       "fastExhaustAgency2": "{'{'}fast{'}'} Exhaust Agency Backup and deal 1 horror to it: Discover 1 clue at your location."
     },
     "arcaneStudies": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}intellect{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}intellect{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}willpower{'}'} for this skill test."
     },
     "arcaneStudies2": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}intellect{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}intellect{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}willpower{'}'} for this skill test."
     },
     "beguile": {
@@ -1371,9 +1375,13 @@
       "exhaustForDamage": "Exhaust to do +1 damage"
     },
     "combatTraining1": {
+      "spendForCombatShort": "1 resource → +1{'{'}combat{'}'}",
       "spendForCombat": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}combat{'}'} for this skill test.",
+      "spendForAgilityShort": "1 resource → +1{'{'}agility{'}'}",
       "spendForAgility": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}combat{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}combat{'}'} for this skill test."
     },
     "cosmicFlame": {
@@ -1396,11 +1404,15 @@
       "twoConnections": "{'{'}reaction{'}'} When you play Decoy, increase its cost by 2: Change \"at your location\" to \"at a location up to 2 connections away.\""
     },
     "digDeep": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}willpower{'}'} for this skill test."
     },
     "digDeep2": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}willpower{'}'} for this skill test."
     },
     "elinaHarpersCarRunning": {
@@ -1423,22 +1435,30 @@
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}combat{'}'} for this skill test. (+2 {'{'}combat{'}'} instead if this is an attack or evasion)."
     },
     "hardKnocks": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}combat{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}combat{'}'} for this skill test."
     },
     "hardKnocks2": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}combat{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}combat{'}'} for this skill test."
     },
     "hatchet1": {
       "takeControlOfHatchet": "Take control of Hatchet"
     },
     "higherEducation": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}intellect{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}intellect{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}willpower{'}'} for this skill test."
     },
     "higherEducation3": {
+      "fastSpend1ResourceShort": "1 resource → +2{'{'}intellect{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +2 {'{'}intellect{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +2{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +2 {'{'}willpower{'}'} for this skill test."
     },
     "holySpear5": {
@@ -1448,11 +1468,15 @@
       "actionYouGet2": "{'{'}action{'}'}: _Fight_. You get +2 {'{'}willpower{'}'} and deal +1 damage for this attack. When you initiate this ability, you may release a {'{'}bless{'}'} token sealed on Holy Spear."
     },
     "hyperawareness": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}intellect{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}intellect{'}'} for this skill test."
     },
     "hyperawareness2": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}intellect{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}intellect{'}'} for this skill test."
     },
     "joeyTheRatVigil3": {
@@ -1489,9 +1513,13 @@
       "fastIfYou2": "{'{'}fast{'}'} If you have no resources, exhaust Madame Labranche: Gain 1 resource."
     },
     "moxie1": {
+      "spendForWillpowerShort": "1 resource → +1{'{'}willpower{'}'}",
       "spendForWillpower": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}willpower{'}'} for this skill test.",
+      "spendForAgilityShort": "1 resource → +1{'{'}agility{'}'}",
       "spendForAgility": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}willpower{'}'} for this skill test."
     },
     "obsidianClaw": {
@@ -1510,18 +1538,24 @@
       "youNockAnotherArrow": "You nock another arrow"
     },
     "physicalTraining": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}combat{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}combat{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}willpower{'}'} for this skill test."
     },
     "physicalTraining2": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}combat{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}combat{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}willpower{'}'} for this skill test."
     },
     "pitchfork": {
       "takeControlOfPitchfork": "Take control of Pitchfork"
     },
     "plucky1": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}intellect{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}intellect{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}willpower{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}willpower{'}'} for this skill test."
     },
     "protectingTheAnirniq2": {
@@ -1547,17 +1581,25 @@
       "search": "Search your bonded cards for Uncanny Growth and add it to you hand."
     },
     "scientificTheory1": {
+      "spendForIntellectShort": "1 resource → +1{'{'}intellect{'}'}",
       "spendForIntellect": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}intellect{'}'} for this skill test.",
+      "spendForCombatShort": "1 resource → +1{'{'}combat{'}'}",
       "spendForCombat": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}combat{'}'} for this skill test.",
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}combat{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}combat{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}intellect{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}intellect{'}'} for this skill test."
     },
     "scrapper": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}combat{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}combat{'}'} for this skill test."
     },
     "scrapper3": {
+      "fastSpend1ResourceShort": "1 resource → +1{'{'}agility{'}'}",
       "fastSpend1Resource": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}agility{'}'} for this skill test.",
+      "fastSpend1Resource2Short": "1 resource → +1{'{'}combat{'}'}",
       "fastSpend1Resource2": "{'{'}fast{'}'} Spend 1 resource: You get +1 {'{'}combat{'}'} for this skill test."
     },
     "secondSight": {

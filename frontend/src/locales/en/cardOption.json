@@ -2,7 +2,7 @@
   "cardOption": {
     "testFast": {
     "title": "Skill test fast abilities",
-    "beforeDraw": "Use available fast abilities to make final adjustments before revealing.",
+    "beforeDraw": "Use fast abilities as needed, then reveal the chaos token.",
     "beforeCommit": "Use fast abilities before committing cards.",
     "reveal": "Reveal chaos token",
     "commit": "Commit cards",
@@ -11,10 +11,10 @@
     "prompt": {
     "title": "Card prompts",
     "shared": "Copies with the same card code share this setting. Forced effects are unaffected.",
-    "normal": "Normal prompts",
+    "normal": "Normal",
     "ownTurn": "Only on my turn",
-    "untilNextTurn": "Pause until my next turn",
-    "off": "Disable automatic prompts",
+    "untilNextTurn": "Pause until next turn",
+    "off": "Off",
     "error": "Could not save. Please retry."
 },
     "title": "Card Options",
