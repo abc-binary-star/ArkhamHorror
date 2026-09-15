@@ -17,7 +17,7 @@ import Control.Concurrent (threadDelay)
 import Control.Concurrent.MVar
 import Control.Concurrent.MVar qualified as MVar
 import Control.Exception (throwIO, try)
-import Control.Lens hiding (from)
+import Control.Lens hiding (from, (<.))
 import Control.Monad.Catch (MonadCatch, MonadMask, MonadThrow)
 import Control.Monad.Random (MonadRandom (..), StdGen)
 import Data.Aeson qualified as Aeson
@@ -44,7 +44,7 @@ import Database.Redis (
 import Entity.Arkham.Game
 import Entity.Arkham.LogEntry
 import GHC.Records
-import Import hiding (appLogger, (==.), (>=.))
+import Import hiding (appLogger, (==.), (<.), (>=.))
 import UnliftIO.Async qualified as UA
 
 newtype GameLog = GameLog {gameLogToLogEntries :: [Text]}
@@ -70,6 +70,22 @@ getGameLog gameId mStep = fmap (GameLog . fmap unValue) $ select $ do
     where_ $ entries.step >=. val step
   -- Order by step (monotonic per game) so the planner can use
   -- idx_arkham_log_entry_gameid_step directly without a Sort node.
+  orderBy [asc entries.step, asc entries.id]
+  pure entries.body
+
+{- | The log that survives an undo landing on @step@, in the order the client
+renders it.
+
+Log entries are tagged one lower than the ArkhamStep of the action that produced
+them (the action landing at ArkhamStep k logs under step k-1), so an undo to
+@step@ discards everything tagged @>= step@ -- including the log of the first
+undone action.
+-}
+getGameLogBelowStep :: ArkhamGameId -> Int -> DB GameLog
+getGameLogBelowStep gameId step = fmap (GameLog . fmap unValue) $ select $ do
+  entries <- from $ table @ArkhamLogEntry
+  where_ $ entries.arkhamGameId ==. val gameId
+  where_ $ entries.step <. val step
   orderBy [asc entries.step, asc entries.id]
   pure entries.body
 

@@ -233,9 +233,13 @@ putApiV1ArkhamGameUndoR gameId = do
       liftIO $ print err
       sendStatusJSON Status.status400 err
     Right (ArkhamGame {..}, mPropagate) -> do
+      -- Send back the log that survives the undo. The client renders the list it
+      -- is handed, so publishing an empty one blanked the whole panel instead of
+      -- dropping just the undone entries.
+      gameLog <- runDB $ gameLogToLogEntries <$> getGameLogBelowStep gameId arkhamGameStep
       publishToRoom gameId
         $ GameUpdate
-        $ PublicGame gameId arkhamGameName [] arkhamGameCurrentData
+        $ PublicGame gameId arkhamGameName gameLog arkhamGameCurrentData
       -- Epic Multiplayer: if this undo reverted shared-counter deltas (a
       -- commutative counter like countermeasures / blob health), propagate the
       -- restored shared state across the WHOLE event POST-COMMIT (outside the game
@@ -282,18 +286,7 @@ multiStepUndoHandler runStepBack gameId = do
     runExceptT do
       (agame, mPropagate) <- ExceptT $ runStepBack userId gameId
       lift do
-        gameLog :: [Text] <-
-          fmap unValue <$> select do
-            entries <- from $ table @ArkhamLogEntry
-            where_ $ entries.arkhamGameId ==. val gameId
-            -- After landing at agame.step the surviving log entries are exactly those
-            -- tagged < agame.step (the log delete drops >= toStep == agame.step).
-            where_ $ entries.step <. val agame.step
-            -- Order by step (monotonic per game) so the planner can use
-            -- idx_arkham_log_entry_gameid_step directly. id (bigserial)
-            -- is the within-step tiebreaker.
-            orderBy [desc entries.step, desc entries.id]
-            pure entries.body
+        gameLog <- gameLogToLogEntries <$> getGameLogBelowStep gameId agame.step
 
         let g =
               ArkhamGame
