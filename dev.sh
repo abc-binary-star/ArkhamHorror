@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # 本地开发一键启动：数据库（自建 PG16 :5433）+ 后端（本地构建产物）+ 前端 vite + 开浏览器。
-#   ./dev.sh          启动并打开 http://127.0.0.1:8080
+#   ./dev.sh          启动并打开 http://127.0.0.1:8080（启动前自动补迁移）
 #   ./dev.sh status   只看端口状态
 #   ./dev.sh stop     停掉本脚本拉起的后端和 vite
+#   ./dev.sh migrate  只补迁移，不起服务
 set -uo pipefail
 cd "$(dirname "$0")"
 ROOT_DIR="$(pwd)"
@@ -132,10 +133,26 @@ ensure_web() {
   fi
 }
 
+# 后端二进制按最新模型发 SQL，库落后一条迁移就是一片裸 500（缺列 → 42703）。
+# migrate.sh 是容器用的同一份实现，这里只把路径和连接参数覆盖成本地的。
+cmd_migrate() {
+  ensure_pg || return 1
+  PATH="${PG_BIN}:${PATH}" \
+  PGHOST=127.0.0.1 PGPORT="$PG_PORT" PGUSER=arkham_user PGDATABASE=arkham-horror-backend \
+  MIGRATIONS_DIR="$ROOT_DIR/migrations" \
+    sh "$ROOT_DIR/migrate.sh"
+}
+
 case "${1:-start}" in
   status) cmd_status; exit 0 ;;
   stop)   cmd_stop;   exit 0 ;;
+  migrate)
+    cmd_migrate || exit 1
+    ;;
   start)
+    ensure_pg
+    # 先补迁移再起后端：否则新模型查旧库，接口只会回空 body 的 500
+    cmd_migrate || exit 1
     ensure_backend
     ensure_web
     cmd_status
@@ -144,5 +161,5 @@ case "${1:-start}" in
     # 后台执行：个别环境下 open 会阻塞 LaunchServices 响应，拖住整个脚本
     (open "$URL" >/dev/null 2>&1 &)
     ;;
-  *) echo "用法: ./dev.sh [start|status|stop]"; exit 2 ;;
+  *) echo "用法: ./dev.sh [start|status|stop|migrate]"; exit 2 ;;
 esac

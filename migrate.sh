@@ -18,8 +18,11 @@ export PGHOST PGUSER PGDATABASE
 # assumed initialised from setup.sql, so migrations after this are applied.
 # Keep in sync with BASELINE_THROUGH in upgrade.sh.
 BASELINE_THROUGH="add_step_constraint"
-PLAN="/migrations/sqitch.plan"
-DEPLOY="/migrations/deploy"
+# Overridable so a local (non-container) caller can point at its checkout; the
+# docker image keeps the /migrations default.
+MIGRATIONS_DIR="${MIGRATIONS_DIR:-/migrations}"
+PLAN="${MIGRATIONS_DIR}/sqitch.plan"
+DEPLOY="${MIGRATIONS_DIR}/deploy"
 
 if [ -z "${PGPASSWORD:-}" ]; then
   if [ -n "${POSTGRES_PASSWORD:-}" ]; then
