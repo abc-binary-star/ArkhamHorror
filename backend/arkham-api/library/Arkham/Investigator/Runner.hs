@@ -1558,7 +1558,8 @@ runInvestigatorMessage msg a@InvestigatorAttrs {..} = runQueueT $ case msg of
         RemoveChosenCardFromGame -> [RemovePlayerCardFromGame True choice]
 
     pushAll
-      $ chosenCardMsgs
+      $ [ReplaceCard (toCardId card) (PlayerCard choiceAsCard)]
+      <> chosenCardMsgs
       <> msgs
       <> [InitiatePlayCardWithWindows iid (PlayerCard choiceAsCard) Nothing payment windows' asAction]
     pure $ a & handL %~ (PlayerCard choiceAsCard :) . filter (/= card)
