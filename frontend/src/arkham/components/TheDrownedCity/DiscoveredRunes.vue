@@ -20,8 +20,9 @@ const canDebug = computed(() => glyphDebug.value && !!props.gameId)
 
 const onKeyDown = (e: KeyboardEvent) => { if (e.key === 'Shift') shiftHeld.value = true }
 const onKeyUp = (e: KeyboardEvent) => { if (e.key === 'Shift') shiftHeld.value = false }
-onMounted(() => { window.addEventListener('keydown', onKeyDown); window.addEventListener('keyup', onKeyUp) })
-onUnmounted(() => { window.removeEventListener('keydown', onKeyDown); window.removeEventListener('keyup', onKeyUp) })
+const onBlur = () => { shiftHeld.value = false }
+onMounted(() => { window.addEventListener('keydown', onKeyDown); window.addEventListener('keyup', onKeyUp); window.addEventListener('blur', onBlur) })
+onUnmounted(() => { window.removeEventListener('keydown', onKeyDown); window.removeEventListener('keyup', onKeyUp); window.removeEventListener('blur', onBlur) })
 
 async function discover(letter: string) {
   if (!canDebug.value || !props.gameId || discovered.value.has(letter)) return

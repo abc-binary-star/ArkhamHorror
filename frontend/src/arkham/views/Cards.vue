@@ -145,6 +145,7 @@ provide('cardIgnoreArtVariants', true)
 const onKeydown = (event: KeyboardEvent) => {
   if (event.key !== 'f' && event.key !== 'F') return
   if (event.metaKey || event.ctrlKey || event.altKey) return
+  if (event.repeat) return
   if (view.value !== View.Image) return
   if (isTypingTarget(event.target)) return
 
@@ -847,7 +848,7 @@ function homebrewSetImagePath(code: string) {
 const SVG_SET_ICONS = new Set(['cob'])
 
 const setIconPath = (code: string) =>
-  `/img/arkham/encounter-sets/${code}.${SVG_SET_ICONS.has(code) ? 'svg' : 'png'}`
+  imgsrc(`encounter-sets/${code}.${SVG_SET_ICONS.has(code) ? 'svg' : 'png'}`)
 
 function setIconSrc(set: CardSet) {
   return set.homebrew ? homebrewSetImagePath(set.code) : setIconPath(set.code)

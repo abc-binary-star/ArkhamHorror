@@ -13,7 +13,7 @@ import XpBreakdown from '@/arkham/components/XpBreakdown.vue';
 import type { XpBreakdownStep } from '@/arkham/types/Xp';
 import Question from '@/arkham/components/Question.vue';
 import { isUsableDecklist, loadUpgradeDeckFromJsonText } from '@/arkham/upgradeDeckUpload';
-import { deckTotalXp, investigatorEarnedXp } from '@/arkham/deckXp';
+import { deckTotalXp } from '@/arkham/deckXp';
 import { randomId } from '@/arkham/randomId';
 import { useDbCardStore } from '@/stores/dbCards';
 import { deckRestrictionError, normalizeCardCode } from '@/arkham/deckRestrictions';
@@ -124,14 +124,15 @@ const originalInvestigatorId = computed(() => upgradeQuestionInvestigatorId.valu
 const dbCardStore = useDbCardStore()
 const xpForCode = (code: string) => dbCardStore.getDbCard(code.replace(/^c/, ''))?.xp
 
-// The engine's xp/spentXp pair cannot express an upgrade budget (an upgrade
-// application snapshots spentXp to everything available, even a zero-cost
-// one), so the budget is the investigator's TOTAL earned XP compared against
-// the deck's TOTAL XP value — no leftover bookkeeping needed.
-const earnedXp = computed(() =>
-  investigatorEarnedXp(originalInvestigatorId.value ?? '', props.game.campaign?.xpBreakdown ?? []),
-)
-const xp = computed(() => earnedXp.value)
+// Budget = the investigator's current XP pool vs the deck's TOTAL XP value.
+// Deck upgrades never deduct the pool (the engine only snapshots spentXp), so
+// the pool still holds every unspent point: pool − deck total is what's left
+// to spend. The xpBreakdown log is not a reliable source — it can miss gains.
+const xpBudget = computed(() => {
+  const iid = originalInvestigatorId.value
+  return iid ? props.game.investigators[iid]?.xp ?? 0 : 0
+})
+const xp = computed(() => xpBudget.value)
 
 function deckTotal(slots?: Record<string, number> | null): number {
   return deckTotalXp(slots, xpForCode)
@@ -797,13 +798,13 @@ async function upgrade(force = false) {
     return
   }
   // Budget rule: the deck's TOTAL XP value must not exceed the investigator's
-  // TOTAL earned XP — leveled replacements are priced at full XP, which equals
+  // current XP pool — leveled replacements are priced at full XP, which equals
   // their cumulative diff cost, so the comparison needs no leftover tracking.
   if (canUpgradeOriginalInvestigator.value) {
-    const earned = earnedXp.value
-    if (upgradeCost.value > earned) {
+    const budget = xpBudget.value
+    if (upgradeCost.value > budget) {
       fetching.value = false
-      submitError.value = t('upgrade.xpShortfall', { required: upgradeCost.value, available: earned })
+      submitError.value = t('upgrade.xpShortfall', { required: upgradeCost.value, available: budget })
       return
     }
   }
@@ -931,7 +932,7 @@ const tabooList = function (investigator: Investigator) {
             <template v-else-if="question">
               <template v-if="canUpgradeOriginalInvestigator && localDeckCandidates.length > 0">
                 <p class="info">{{ $t('upgrade.localDeckContent') }}</p>
-                <p class="info">{{ $t('upgrade.xpBudget', { earned: earnedXp }) }}</p>
+                <p class="info">{{ $t('upgrade.xpBudget', { earned: xpBudget }) }}</p>
                 <div class="local-deck-row">
                   <select v-model="selectedLocalDeckId">
                     <option v-for="localDeck in localDeckCandidates" :key="localDeck.id" :value="localDeck.id">

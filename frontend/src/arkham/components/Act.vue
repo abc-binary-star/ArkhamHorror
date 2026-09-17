@@ -794,6 +794,16 @@ const chooseFromStoryCollection = (choice: number) => {
   top: 50%;
   transform: translateY(-50%);
   z-index: var(--z-index-200);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+/* Chrome, not information: the strip waits until the pointer is on the card it
+   belongs to (or the keyboard is inside it), so a clean card reads clean. */
+.card-container:is(:hover, :focus-within) > .stack-pips {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .act--can-progress {

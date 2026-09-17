@@ -32,14 +32,20 @@ const onKeyUp = (event: KeyboardEvent) => {
   if (event.key === 'Shift') shiftHeld.value = false
 }
 
+const onBlur = () => {
+  shiftHeld.value = false
+}
+
 onMounted(() => {
   window.addEventListener('keydown', onKeyDown)
   window.addEventListener('keyup', onKeyUp)
+  window.addEventListener('blur', onBlur)
 })
 
 onUnmounted(() => {
   window.removeEventListener('keydown', onKeyDown)
   window.removeEventListener('keyup', onKeyUp)
+  window.removeEventListener('blur', onBlur)
 })
 
 type ResidentMeta = {
