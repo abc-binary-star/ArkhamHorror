@@ -50,7 +50,35 @@ const customizations = fs.existsSync(customizationsDir)
     .map(f => `customizations/${f}`)
   : [];
 
-const digests = [...files.map(f => `cards/${f}`), ...homebrew, ...tarot.map(f => `tarot/${f}`), ...customizations];
+// Secondary localized image libraries (sets/boxes/portraits/...), plus the
+// nested `extra/` tree the components reference (seals, playing cards).
+const localizedDirs = [
+  ['sets', ['.png']],
+  ['encounter-sets', ['.png']],
+  ['portraits', ['.jpg']],
+  ['boxes', ['.jpg']],
+  ['mini-cards', ['.jpg']],
+];
+
+const walkImages = (dir, exts, prefix = '') => fs.existsSync(dir)
+  ? fs.readdirSync(dir, { withFileTypes: true })
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .flatMap((entry) => {
+      const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+      if (entry.isDirectory()) return walkImages(path.join(dir, entry.name), exts, rel);
+      return exts.some(ext => entry.name.endsWith(ext)) ? [rel] : [];
+    })
+  : [];
+
+const localizedExtras = localizedDirs.flatMap(([dir, exts]) =>
+  walkImages(path.join(__dirname, `../public/img/arkham/${lang}/${dir}`), exts)
+    .map(f => `${dir}/${f}`)
+);
+
+const extraImages = walkImages(path.join(__dirname, `../public/img/arkham/${lang}/extra`), ['.png', '.jpg'])
+  .map(f => `extra/${f}`);
+
+const digests = [...files.map(f => `cards/${f}`), ...homebrew, ...tarot.map(f => `tarot/${f}`), ...customizations, ...localizedExtras, ...extraImages];
 
 fs.writeFileSync(digest, JSON.stringify(digests, null, 2));
 console.log(`Wrote ${digests.length} digests to ${digest}`);
