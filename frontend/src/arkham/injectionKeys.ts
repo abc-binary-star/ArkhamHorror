@@ -46,11 +46,14 @@ export const undoControlsKey: InjectionKey<{
   canUndoPhase: Readonly<Ref<boolean>>
   canUndoRound: Readonly<Ref<boolean>>
   canUndoScenario: Readonly<Ref<boolean>>
+  canExitSideStory: Readonly<Ref<boolean>>
   undoChordArmed: Readonly<Ref<boolean>>
   confirmingUndoScenario: Ref<boolean>
+  confirmingExitSideStory: Ref<boolean>
   undo: () => Promise<void>
   undoActionStart: () => Promise<void>
   undoTurnStart: () => Promise<void>
   undoPhaseStart: () => Promise<void>
   undoRoundStart: () => Promise<void>
+  exitSideStory: () => Promise<void>
 }> = Symbol('undoControls')

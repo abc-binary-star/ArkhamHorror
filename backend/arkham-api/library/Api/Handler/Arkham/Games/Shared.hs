@@ -16,6 +16,7 @@ import Arkham.Achievement.Types (Achievement, achievementChecklist, achievementN
 import Arkham.Asset.Types (Asset, assetController, assetOwner, assetPlacement)
 import Arkham.Campaign.Types (CampaignAttrs, campaignStep)
 import Arkham.CampaignStep (CampaignStep)
+import Arkham.CampaignStep qualified as CS
 import Arkham.Campaigns.TheDreamEaters.Meta qualified as TheDreamEaters
 import Arkham.Card.CardCode (CardCode (..), HasCardCode (toCardCode))
 import Arkham.ClassSymbol
@@ -73,7 +74,7 @@ import Arkham.Treachery.Types (treacheryPlacement)
 import Conduit
 import Control.Concurrent.MVar
 import Control.Concurrent.STM.TBQueue (readTBQueue)
-import Control.Lens (view)
+import Control.Lens (view, (?~))
 import Control.Monad.Random (mkStdGen)
 import Data.Aeson.Types (parse)
 import Data.ByteString.Lazy qualified as BSL
@@ -89,6 +90,7 @@ import Database.Esqueleto.Experimental hiding (update, (=.))
 import Database.Redis (Connection, RedisChannel, publish, runRedis)
 import Entity.Answer
 import Entity.Arkham.GameRaw
+import Entity.Arkham.LogEntry
 import Entity.Arkham.Step
 import Import hiding (delete, exists, on, (==.), (>=.))
 import Import qualified as P
@@ -410,7 +412,7 @@ updateGame response gameId mRoom = do
   let rejectOrganizerGate action =
         action `catch` \EpicOrganizerGateBlocked ->
           permissionDenied "This event is waiting for the organizer's clue allocation"
-  (ArkhamGame {..}, oldLogEntries, updatedLog, mSharedUpdate, actAdvanced, newAchievements) <- rejectOrganizerGate $ runDB $ atomicallyWithGame gameId \g@ArkhamGame {..} -> do
+  (ArkhamGame {..}, scenarioReset, oldLogEntries, updatedLog, mSharedUpdate, actAdvanced, newAchievements) <- rejectOrganizerGate $ runDB $ atomicallyWithGame gameId \g@ArkhamGame {..} -> do
     -- Read the prior log from the per-room cache when it's in sync with
     -- the just-locked game's step; otherwise fall back to the DB. Avoids
     -- the 217-row-avg getGameLog read on every action in the common case.
@@ -432,7 +434,7 @@ updateGame response gameId mRoom = do
     logRef <- newIORef []
     reply <- handleAnswer gameJson playerId response
     case reply of
-      Unhandled _ -> pure (g, oldLogEntries, [], Nothing, False, [])
+      Unhandled _ -> pure (g, False, oldLogEntries, [], Nothing, False, [])
       Handled answerMessages -> do
         -- Epic Multiplayer: if this game is a group within an event, build an
         -- EpicEnv so Shared* messages emitted during the action are captured as
@@ -479,10 +481,15 @@ updateGame response gameId mRoom = do
         achievementProgressRef <- newIORef []
         achievementProgressByRef <- newIORef []
         randomOutcomeRef <- newIORef False
+        scenarioResetRef <- newIORef False
         let
           collectStepMetadata msg = do
             when (isRandomOutcomeMessage msg) $ writeIORef randomOutcomeRef True
             case msg of
+              -- Every way of entering a scenario (next campaign step, side
+              -- story, standalone restart) runs StartScenario; the prior
+              -- scenario's log is dropped so the log holds one run only.
+              StartScenario {} -> writeIORef scenarioResetRef True
               EarnAchievement a -> modifyIORef' achievementsRef (a :)
               EarnAchievementBy iid a -> modifyIORef' achievementsByRef ((iid, a) :)
               AchievementProgress a items -> modifyIORef' achievementProgressRef ((a, items) :)
@@ -497,7 +504,19 @@ updateGame response gameId mRoom = do
           Nothing -> liftIO $ throwIO $ RunMessagesTimeout gameId runMessagesTimeoutMicros
 
         ge <- readIORef gameRef
-        let diffDown = diff ge arkhamGameCurrentData
+        -- Entering a side story records the interlude step to roll back to when
+        -- the player exits it. Absolute step number, because the per-scenario
+        -- counter resets at StartScenario mid-side-story.
+        let commitsSideStory = case response of
+              -- (nextStep, canUpgradeDecks, chooseSideStory, lead, canChooseSideStory)
+              CampaignStepAnswer (CS.ContinueCampaignStep (CS.Continuation nextStep' _ _ _ _)) ->
+                case nextStep' of
+                  CS.StandaloneScenarioStep {} -> True
+                  CS.StandaloneScenarioStepWithOptions {} -> True
+                  _ -> False
+              _ -> False
+            ge' = if commitsSideStory then ge & sideStoryEntryStepL ?~ arkhamGameStep else ge
+        let diffDown = diff ge' arkhamGameCurrentData
         -- Epic Multiplayer: detect an IN-GROUP act advance (the act entity is
         -- replaced on advance/loop) so we can wall off undo across it. Epic games
         -- only; cheap (acts in play is ~1).
@@ -531,19 +550,23 @@ updateGame response gameId mRoom = do
           -- the scenario just finished cannot be replayed.
           isCheckpoint =
             undoMode == StandardUndo
+              && not commitsSideStory
               && campaignStepFingerprint arkhamGameCurrentData
-              /= campaignStepFingerprint ge
+              /= campaignStepFingerprint ge'
           storedPatch = if isCheckpoint then mempty else diffDown
           storedRandomOutcome = not isCheckpoint && hasRandomOutcome
           g' =
             ArkhamGame
               arkhamGameName
-              ge
+              ge'
               newStep
               variant'
               arkhamGameCreatedAt
               now
         replace gameId g'
+        scenarioReset <- liftIO (readIORef scenarioResetRef)
+        when scenarioReset $
+          deleteWhere [ArkhamLogEntryArkhamGameId P.==. gameId]
         insertMany_ $ map (newLogEntry gameId arkhamGameStep now) updatedLog
         void
           $ upsertBy
@@ -656,11 +679,13 @@ updateGame response gameId mRoom = do
                 pure [achievement | or completions]
               pure $ ordNub $ directEarns <> soloEarns <> progressEarns <> soloProgressEarns
 
-        pure (g', oldLogEntries, updatedLog, mSharedUpdate, actAdvanced, newAchievements)
+        pure (g', scenarioReset, oldLogEntries, updatedLog, mSharedUpdate, actAdvanced, newAchievements)
 
   -- Update the per-room cache after the DB transaction has committed,
   -- so the cache is never ahead of durably-stored state.
-  let publishLog = oldLogEntries <> updatedLog
+  -- scenarioReset: a StartScenario in the batch dropped the prior scenario's
+  -- log rows, so the pre-read oldLogEntries must not resurrect them.
+  let publishLog = if scenarioReset then updatedLog else oldLogEntries <> updatedLog
   liftIO $ writeCachedLog mRoom arkhamGameStep publishLog
 
   -- Publish shared state before the acting game's parked question. In particular,

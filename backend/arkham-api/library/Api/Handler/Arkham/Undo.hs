@@ -5,6 +5,7 @@ module Api.Handler.Arkham.Undo (
   putApiV1ArkhamGameUndoTurnR,
   putApiV1ArkhamGameUndoPhaseR,
   putApiV1ArkhamGameUndoRoundR,
+  putApiV1ArkhamGameUndoSideStoryR,
 ) where
 
 import Api.Arkham.Epic (getGameUndoFloor, lookupGameEvent, revertEpicDeltasForGameStep)
@@ -269,6 +270,33 @@ putApiV1ArkhamGameUndoPhaseR =
 putApiV1ArkhamGameUndoRoundR :: ArkhamGameId -> Handler ()
 putApiV1ArkhamGameUndoRoundR =
   multiStepUndoHandler (stepBackToBoundary "gameUndoRoundStep")
+
+putApiV1ArkhamGameUndoSideStoryR :: ArkhamGameId -> Handler ()
+putApiV1ArkhamGameUndoSideStoryR =
+  multiStepUndoHandler stepBackSideStory
+
+-- | Exit a side story: fold every patch since the interlude step the side story
+-- was picked from. The XP fee, campaign log entries and all scenario changes
+-- live in that folded JSON, so the game returns to the interlude as if the side
+-- story never happened.
+stepBackSideStory
+  :: UserId
+  -> ArkhamGameId
+  -> DB (Either Json.Value (ArkhamGame, Maybe (ArkhamEpicEventId, SharedEventState)))
+stepBackSideStory userId gameId = do
+  lockGame gameId
+  rawGame <- get404 (ArkhamGameRawKey gameId)
+  case getMaybeIntField "gameSideStoryEntryStep" rawGame.currentData of
+    Nothing -> pure $ Left $ jsonError "Not in a side story"
+    Just target
+      | target >= arkhamGameRawStep rawGame -> pure $ Left $ jsonError "Nothing to undo"
+      -- 'stepBackToScenarioStep' expresses its target relative to the
+      -- per-scenario step counter, which resets at StartScenario mid-side-story;
+      -- translate the absolute entry step into that unit so the shared fold
+      -- machinery can be reused untouched.
+      | otherwise ->
+          stepBackToScenarioStep userId gameId rawGame
+            $ getScenarioSteps rawGame.currentData - (arkhamGameRawStep rawGame - target)
 
 {- | Shared handler logic for multi-step undo endpoints. Reseeds the game,
 replaces the row with an updated `updatedAt`, and rebroadcasts the

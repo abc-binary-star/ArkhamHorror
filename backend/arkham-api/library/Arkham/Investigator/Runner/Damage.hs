@@ -1115,6 +1115,13 @@ handleAssignDamage a@InvestigatorAttrs {..} target = do
     $ investigatorRef a
     $ numberVar "horror" investigatorAssignedSanityDamage
     $ ikey' "gameLog.investigatorTakesHorror"
+  when (investigatorAssignedHealthDamage > 0 || investigatorAssignedSanityDamage > 0)
+    $ push
+    $ UpdateInvestigatorStats (toId a)
+    $ mempty
+      { investigatorStatsDamageTaken = investigatorAssignedHealthDamage
+      , investigatorStatsHorrorTaken = investigatorAssignedSanityDamage
+      }
   push $ AssignedDamage target investigatorAssignedHealthDamage investigatorAssignedSanityDamage
   pure
     $ a

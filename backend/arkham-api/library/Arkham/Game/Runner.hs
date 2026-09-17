@@ -137,6 +137,7 @@ import Arkham.Skill.Types qualified as Skill
 import Arkham.SkillTest.Runner
 import Arkham.SkillTestResult
 import Arkham.Source
+import Arkham.Stats (InvestigatorStats (..))
 import Arkham.Spawn
 import Arkham.Story
 import Arkham.Story.Types (Field (..), StoryAttrs (..))
@@ -734,6 +735,7 @@ runGameMessage msg g = case msg of
       & (phaseHistoryL .~ mempty)
       & (turnHistoryL .~ mempty)
       & (roundHistoryL .~ mempty)
+      & (statsL .~ mempty)
       & (cardsL %~ if keepCardCache then id else const mempty)
       -- See EndOfScenario: drop action bookkeeping so a reset never persists a
       -- stale revert diff against torn-down entities.
@@ -3433,8 +3435,18 @@ runGameMessage msg g = case msg of
       turn = isJust $ view turnPlayerInvestigatorIdL g
       setTurnHistory =
         if turn then turnHistoryL %~ insertHistory iid historyItem else id
+      -- only the real controller earns the damageDealt stat; unattributed
+      -- sources (scenario effects, lead fallbacks) stay out of the totals
+      setStats = case miid of
+        Just controller ->
+          statsL
+            %~ Map.insertWith
+              (<>)
+              controller
+              (mempty {investigatorStatsDamageDealt = n})
+        Nothing -> id
 
-    pure $ g & (phaseHistoryL %~ insertHistory iid historyItem) & setTurnHistory
+    pure $ g & setStats & (phaseHistoryL %~ insertHistory iid historyItem) & setTurnHistory
   FoundEncounterCardFrom {} -> pure $ g & (focusedCardsL .~ mempty) & (foundCardsL .~ mempty)
   FoundAndDrewEncounterCard {} -> pure $ g & (focusedCardsL .~ mempty) & (foundCardsL .~ mempty)
   -- Every caller searches for a basic weakness, so this shares the deck building
@@ -3971,6 +3983,11 @@ runGameMessage msg g = case msg of
       setTurnHistory =
         if turn then turnHistoryL %~ insertHistory iid historyItem else id
     pure $ g & (phaseHistoryL %~ insertHistory iid historyItem) & setTurnHistory
+  UpdateInvestigatorStats iid delta ->
+    pure
+      $ g
+      & (statsL %~ Map.insertWith (<>) iid delta)
+      & (campaignStatsL %~ Map.insertWith (<>) iid delta)
   BecomeYithian iid -> do
     yithian <- becomeYithian <$> getInvestigator iid
     pure $ g & (entitiesL . investigatorsL . at iid ?~ yithian)

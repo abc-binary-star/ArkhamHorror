@@ -107,6 +107,20 @@ const multiplayerVariantDecoder = JsonDecoder.oneOf<MultiplayerVariant>(
 
 export type GameDetailsEntry = GameDetails & { tag: "game" }| { error: string, tag: "error" }
 
+export type InvestigatorStats = {
+  damageDealt: number;
+  damageTaken: number;
+  horrorTaken: number;
+  cluesGained: number;
+}
+
+const investigatorStatsDecoder = JsonDecoder.object<InvestigatorStats>({
+  damageDealt: withDefault(0, JsonDecoder.number()),
+  damageTaken: withDefault(0, JsonDecoder.number()),
+  horrorTaken: withDefault(0, JsonDecoder.number()),
+  cluesGained: withDefault(0, JsonDecoder.number()),
+}, 'InvestigatorStats');
+
 export type Game = {
   id: string;
   name: string;
@@ -163,9 +177,14 @@ export type Game = {
   undoTurnStep: number | null;
   undoPhaseStep: number | null;
   undoRoundStep: number | null;
+  sideStoryEntryStep: number | null;
   roundHistory: Record<string, History>;
   phaseHistory: Record<string, History>;
   turnHistory: Record<string, History>;
+  /** Damage dealt / damage & horror taken / clues gained, this scenario run. */
+  stats: Record<string, InvestigatorStats>;
+  /** Same counters, accumulated over the whole campaign. */
+  campaignStats: Record<string, InvestigatorStats>;
   enemyAttackTargets: EnemyAttackTarget[];
 }
 
@@ -402,13 +421,16 @@ export const gameDecoder: JsonDecoder.Decoder<Game> = JsonDecoder.object(
     undoTurnStep: v2Optional(JsonDecoder.number()),
     undoPhaseStep: v2Optional(JsonDecoder.number()),
     undoRoundStep: v2Optional(JsonDecoder.number()),
+    sideStoryEntryStep: v2Optional(JsonDecoder.number()),
     roundHistory: v2Optional(JsonDecoder.record<History>(historyDecoder, 'Dict<InvestigatorId, History>')),
     phaseHistory: v2Optional(JsonDecoder.record<History>(historyDecoder, 'Dict<InvestigatorId, History>')),
     turnHistory: v2Optional(JsonDecoder.record<History>(historyDecoder, 'Dict<InvestigatorId, History>')),
+    stats: v2Optional(JsonDecoder.record<InvestigatorStats>(investigatorStatsDecoder, 'Dict<InvestigatorId, InvestigatorStats>')),
+    campaignStats: v2Optional(JsonDecoder.record<InvestigatorStats>(investigatorStatsDecoder, 'Dict<InvestigatorId, InvestigatorStats>')),
     enemyAttackTargets: JsonDecoder.fallback([], JsonDecoder.array(JsonDecoder.object<EnemyAttackTarget>({ enemy: JsonDecoder.string(), target: targetDecoder }, 'EnemyAttackTarget'), 'EnemyAttackTarget[]')),
   },
   'Game',
-).map(({mode, killedInvestigators, retiredInvestigators, settings, gameSettings, inAction, undoActionStep, undoTurnStep, undoPhaseStep, undoRoundStep, roundHistory, phaseHistory, turnHistory, ...game}) => ({
+).map(({mode, killedInvestigators, retiredInvestigators, settings, gameSettings, inAction, undoActionStep, undoTurnStep, undoPhaseStep, undoRoundStep, sideStoryEntryStep, roundHistory, phaseHistory, turnHistory, stats, campaignStats, ...game}) => ({
   scenario: mode?.That ?? null,
   campaign: mode?.This ?? null,
   killedInvestigators: killedInvestigators ?? {},
@@ -429,8 +451,11 @@ export const gameDecoder: JsonDecoder.Decoder<Game> = JsonDecoder.object(
   undoTurnStep: undoTurnStep ?? null,
   undoPhaseStep: undoPhaseStep ?? null,
   undoRoundStep: undoRoundStep ?? null,
+  sideStoryEntryStep: sideStoryEntryStep ?? null,
   roundHistory: roundHistory ?? {},
   phaseHistory: phaseHistory ?? {},
   turnHistory: turnHistory ?? {},
+  stats: stats ?? {},
+  campaignStats: campaignStats ?? {},
   ...game
 }))

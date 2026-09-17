@@ -50,6 +50,7 @@ import {
   undoTurn,
   undoPhase,
   undoRound,
+  exitSideStory as exitSideStoryRequest,
   markEventReady,
   eventTimeUp,
 } from '@/arkham/api'
@@ -111,6 +112,7 @@ import type { Source } from '@/arkham/types/Source'
 import { TarotCard, tarotCardDecoder, tarotCardImage } from '@/arkham/types/TarotCard'
 import Campaign from '@/arkham/components/Campaign.vue'
 import CampaignLog from '@/arkham/components/CampaignLog.vue'
+import InvestigatorStatsPanel from '@/arkham/components/InvestigatorStatsPanel.vue'
 import CampaignSettings from '@/arkham/components/CampaignSettings.vue'
 import CardOverlay from '@/arkham/components/CardOverlay.vue'
 import CardView from '@/arkham/components/Card.vue'
@@ -1439,6 +1441,7 @@ watch(phaseAnnouncement, (active) => {
 })
 
 const confirmingUndoScenario = ref(false)
+const confirmingExitSideStory = ref(false)
 
 const actionMap = computed<Map<string, () => void>>(() => {
   const map = new Map<string, () => void>()
@@ -1463,27 +1466,22 @@ const canUndoAction = computed(() => canUndoBoundary(game.value?.undoActionStep 
 const canUndoTurn = computed(() => canUndoBoundary(game.value?.undoTurnStep ?? null))
 const canUndoPhase = computed(() => canUndoBoundary(game.value?.undoPhaseStep ?? null))
 const canUndoRound = computed(() => canUndoBoundary(game.value?.undoRoundStep ?? null))
+const canExitSideStory = computed(() => {
+  const tag = game.value?.scenario?.campaignStep?.tag
+  return !!game.value?.sideStoryEntryStep
+    && (tag === 'StandaloneScenarioStep' || tag === 'StandaloneScenarioStepWithOptions')
+})
 
-// Chord state for U + <key> shortcuts (T/R/P/S/A)
+// Hold-U chord: hold U and press A/T/P/R/S to pick the undo level; releasing
+// U without a chord key pressed performs a single undo.
 const undoChordArmed = ref(false)
-let undoChordTimer: number | null = null
-const UNDO_CHORD_TIMEOUT_MS = 1500
 
 const armUndoChord = () => {
   undoChordArmed.value = true
-  if (undoChordTimer) clearTimeout(undoChordTimer)
-  undoChordTimer = window.setTimeout(() => {
-    undoChordArmed.value = false
-    undoChordTimer = null
-  }, UNDO_CHORD_TIMEOUT_MS)
 }
 
 const clearUndoChord = () => {
   undoChordArmed.value = false
-  if (undoChordTimer) {
-    clearTimeout(undoChordTimer)
-    undoChordTimer = null
-  }
 }
 
 // --- Konami Code support ---
@@ -1557,13 +1555,14 @@ const feedKonami = (rawKey: string): boolean => {
 const handleKeyPress = (event: KeyboardEvent) => {
   if (filingBug.value) return
   if (isTypingTarget(event.target)) return
+  if (event.repeat) return
   if (event.ctrlKey) return
   if (event.metaKey) return
   if (event.altKey) return
 
   if (feedKonami(event.key)) return
 
-  // Chord: when U is armed, the next key chooses the undo level
+  // While U is held, the next key chooses the undo level
   if (undoChordArmed.value) {
     const k = event.key.toLowerCase()
     if (k === 'a' && canUndoAction.value) {
@@ -1591,22 +1590,11 @@ const handleKeyPress = (event: KeyboardEvent) => {
       confirmingUndoScenario.value = true
       return
     }
-    // Pressing U again while armed = single undo (re-pressing the prefix)
-    if (k === 'u') {
-      clearUndoChord()
-      undo()
-      return
-    }
-    // Any other key cancels the chord and falls through
+    // Any other key cancels the hold and falls through; releasing U then does nothing
     clearUndoChord()
   }
 
-  if (event.key === 'u') {
-    undo()
-    return
-  }
-
-  if (event.key === 'U') {
+  if (event.key === 'u' || event.key === 'U') {
     armUndoChord()
     return
   }
@@ -1752,6 +1740,13 @@ const handleKeyPress = (event: KeyboardEvent) => {
   actionMap.value.get(event.key)?.()
 }
 
+const handleKeyUp = (event: KeyboardEvent) => {
+  if (!undoChordArmed.value || event.key.toLowerCase() !== 'u') return
+  clearUndoChord()
+  if (isTypingTarget(event.target)) return
+  undo()
+}
+
 // Sidebar
 const toggleSidebar = function () {
   showSidebar.value = !showSidebar.value
@@ -1805,6 +1800,11 @@ async function undoScenario() {
   await runUndo(undoScenarioChoice)
 }
 
+async function exitSideStory() {
+  confirmingExitSideStory.value = false
+  await runUndo(exitSideStoryRequest)
+}
+
 const undoActionStart = () => runUndo(undoAction)
 const undoTurnStart = () => runUndo(undoTurn)
 const undoPhaseStart = () => runUndo(undoPhase)
@@ -1812,8 +1812,8 @@ const undoRoundStart = () => runUndo(undoRound)
 
 provide(undoControlsKey, {
   canUndoAction, canUndoTurn, canUndoPhase, canUndoRound, canUndoScenario,
-  undoChordArmed, confirmingUndoScenario, undo, undoActionStart, undoTurnStart,
-  undoPhaseStart, undoRoundStart,
+  canExitSideStory, undoChordArmed, confirmingUndoScenario, confirmingExitSideStory,
+  undo, undoActionStart, undoTurnStart, undoPhaseStart, undoRoundStart, exitSideStory,
 })
 
 const filingBug = ref(false)
@@ -2147,6 +2147,8 @@ onMounted(() => {
   ;(window as any).undo = undo
   ;(window as any).debugChoose = choose
   document.addEventListener('keydown', handleKeyPress)
+  window.addEventListener('keyup', handleKeyUp)
+  window.addEventListener('blur', clearUndoChord)
   window.addEventListener('pointermove', handleToolbarPointerMove, { passive: true })
   window.addEventListener('arkham-setting-change', handleSettingChange)
   stopDeckSaveNotifications = subscribeToDeckSaves((notification) => {
@@ -2169,6 +2171,8 @@ onUnmounted(() => {
   workbenchObserver?.disconnect()
   workbenchObserver = null
   document.removeEventListener('keydown', handleKeyPress)
+  window.removeEventListener('keyup', handleKeyUp)
+  window.removeEventListener('blur', clearUndoChord)
   window.removeEventListener('pointermove', handleToolbarPointerMove)
   window.removeEventListener('arkham-setting-change', handleSettingChange)
   if (endTurnKeyArmTimer !== null) clearTimeout(endTurnKeyArmTimer)
@@ -2804,6 +2808,7 @@ onUnmounted(() => {
           >
             {{ $t('watchReplay') }}
           </button>
+          <InvestigatorStatsPanel v-if="game !== null" :game="game" :stats="game.campaignStats" :title="$t('stats.campaignTitle')" />
           <CampaignLog v-if="game !== null" :game="game" :cards="cards" :playerId="playerId" on-dark />
         </div>
         <div
@@ -2820,6 +2825,13 @@ onUnmounted(() => {
       atmosphere="choice"
       :yes="undoScenario"
       :no="() => (confirmingUndoScenario = false)"
+    />
+    <Prompt
+      v-if="confirmingExitSideStory"
+      prompt="$game.areYouSureExitSideStory"
+      atmosphere="choice"
+      :yes="exitSideStory"
+      :no="() => (confirmingExitSideStory = false)"
     />
   </div>
 </template>

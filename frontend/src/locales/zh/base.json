@@ -614,6 +614,7 @@
     "loadOlderLogEntries": "载入更早的记录（还有 {n} 条）",
     "confirmEndTurnKeyboard": "还有 {n} 个未使用行动——再按一次 E 确认结束回合",
     "areYouSureUndoScenario": "你确定要撤销并回到冒险开始时吗？",
+    "areYouSureExitSideStory": "确定要退出这个支线剧本吗？支线中发生的一切都会被撤销，包括进入时消耗的经验，如同从未进入过。",
     "playabilityChecks": "可玩性检查",
     "unableToDownloadExport": "无法下载导出文件",
     "shortcutSection": {
@@ -631,6 +632,14 @@
     "shortcutUndoPhaseStart": "撤销至阶段开始时",
     "shortcutUndoRoundStart": "撤销至一轮开始时",
     "gameOver": "游戏结束"
+  },
+  "stats": {
+    "scenarioTitle": "本次冒险统计",
+    "campaignTitle": "战役统计",
+    "damageDealt": "造成伤害",
+    "damageTaken": "受到伤害",
+    "horrorTaken": "受到恐惧",
+    "cluesGained": "获得线索"
   },
   "cardsView": {
     "browseSets": "浏览扩展包",

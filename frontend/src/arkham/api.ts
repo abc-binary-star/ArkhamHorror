@@ -465,6 +465,9 @@ export const undoPhase = (gameId: string): Promise<void> =>
 export const undoRound = (gameId: string): Promise<void> =>
   undoRequest(`arkham/games/${gameId}/undo/round`, UNDO_MULTI_TIMEOUT_MS)
 
+export const exitSideStory = (gameId: string): Promise<void> =>
+  undoRequest(`arkham/games/${gameId}/undo/side-story`, UNDO_MULTI_TIMEOUT_MS)
+
 export const importGame = async (formData: FormData, multiplayerVariant: string): Promise<Game> => {
   const { data } = await api.post(`arkham/games/import?multiplayerVariant=${multiplayerVariant}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } })
   return gameDecoder.decodePromise(data)

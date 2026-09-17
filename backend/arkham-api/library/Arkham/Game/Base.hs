@@ -22,6 +22,7 @@ import Arkham.Modifier
 import Arkham.Phase
 import Arkham.Scenario.Types (Scenario)
 import Arkham.SkillTest.Base
+import Arkham.Stats (InvestigatorStats)
 import Arkham.Target
 import Arkham.Tarot
 import Arkham.Window
@@ -56,6 +57,10 @@ data Game = Game
   { gamePhaseHistory :: Map InvestigatorId History
   , gameTurnHistory :: Map InvestigatorId History
   , gameRoundHistory :: Map InvestigatorId History
+  , -- per-scenario run stats; cleared by ResetGame when the next scenario starts
+    gameStats :: Map InvestigatorId InvestigatorStats
+  , -- cumulative over the whole campaign; survives ResetGame
+    gameCampaignStats :: Map InvestigatorId InvestigatorStats
   , gameInitialSeed :: Int
   , gameSettings :: Settings
   , gameSeed :: Int
@@ -169,6 +174,9 @@ data Game = Game
   , gameUndoTurnStep :: Maybe Int
   , gameUndoPhaseStep :: Maybe Int
   , gameUndoRoundStep :: Maybe Int
+  , -- absolute step of the interlude a side story was picked from; rolling back
+    -- here on exit restores the game as if the side story never happened
+    gameSideStoryEntryStep :: Maybe Int
   , gameAsIfAtIgnored :: Set InvestigatorId -- transient: investigators with AsIfAt suppressed during window processing
   , gameLocationOffsets :: Map LocationId (Double, Double) -- player-driven board layout overrides; shared across players
   }

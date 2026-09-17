@@ -1397,6 +1397,9 @@ runInvestigatorMessage msg a@InvestigatorAttrs {..} = runQueueT $ case msg of
     pure a
   GainClues iid source n | iid == investigatorId -> do
     window <- checkWindows ((`mkWindow` Window.GainsClues iid source n) <$> [#when, #after])
+    when (n > 0)
+      $ push
+      $ UpdateInvestigatorStats iid mempty {investigatorStatsCluesGained = n}
     pushAll [window, PlaceTokens source (toTarget iid) Clue n, After (GainClues iid source n)]
     pure a
   FlipClues target n | isTarget a target -> do
@@ -1489,6 +1492,7 @@ runInvestigatorMessage msg a@InvestigatorAttrs {..} = runQueueT $ case msg of
               <> [ UpdateHistory iid (HistoryItem HistoryCluesDiscovered $ singletonMap lid clueCount)
                  , After $ GainClues iid d.source clueCount
                  ]
+              <> [UpdateInvestigatorStats iid mempty {investigatorStatsCluesGained = clueCount} | clueCount > 0]
               <> wrapWindows [locationWindowsAfter]
               <> d.discoverThen
             -- The count is the point: "2 clues" tells the reader what the

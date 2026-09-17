@@ -10,6 +10,7 @@ import type { Investigator } from '@/arkham/types/Investigator'
 import { type CampaignStep, campaignStepName, extendWithOptions } from '@/arkham/types/CampaignStep'
 import { useI18n } from 'vue-i18n'
 import InvestigatorRow from '@/arkham/components/InvestigatorRow.vue'
+import InvestigatorStatsPanel from '@/arkham/components/InvestigatorStatsPanel.vue'
 import LogIcons from '@/arkham/components/LogIcons.vue'
 import SideStoryOption from '@/arkham/components/SideStoryOption.vue'
 import sideStories from '@/arkham/data/side-stories.json'
@@ -25,6 +26,8 @@ import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { filterDisplayable, isDevBuild } from '@/arkham/displayRules'
 import { hasParallelContent } from '@/arkham/deckRestrictions'
+import { deckTotalXp } from '@/arkham/deckXp'
+import { useDbCardStore } from '@/stores/dbCards'
 import { sendKey, soloKey } from '@/arkham/injectionKeys'
 
 const props = defineProps<{
@@ -184,13 +187,21 @@ const usesTime = computed<boolean>(() => {
   return props.campaign.log.recordedCounts.some(([c, _v]: [any, number]) => c.tag === 'TheScarletKeysKey' && c.contents === 'Time')
 })
 
+const dbCardStore = useDbCardStore()
+const xpForCode = (code: string) => dbCardStore.getDbCard(code)?.xp
+
+/* Side-story affordability: pool minus what the deck already holds. Deck
+ * spending never deducts the engine pool, so filtering on the raw xp field
+ * alone would let a spent-out investigator enter paid side stories. */
+const availableXp = (investigator: Investigator): number =>
+  investigator.xp - deckTotalXp(deckSlotsFor(investigator), xpForCode)
+
 const minXp = computed<number>(() => {
   if(!props.campaign) return 0
   const time = props.campaign.log.recordedCounts.find(([c, v]) => c.tag === 'TheScarletKeysKey' && c.contents === 'Time')
   if (time) return (35 - time[1])
   return investigators.value.reduce((acc: number, investigator: Investigator) => {
-    const currentXp = investigator.xp
-    return Math.min(acc, currentXp)
+    return Math.min(acc, availableXp(investigator))
   }, Infinity)
 })
 
@@ -244,7 +255,7 @@ const standalones = computed(() => {
       if (!signature) return []
       if (usesTime.value) {
         if (xp > minXp.value) return []
-      } else if (signature.xp < xp || investigators.value.some((i) => i.id !== signature.id && i.xp < 1)) {
+      } else if (availableXp(signature) < xp || investigators.value.some((i) => i.id !== signature.id && availableXp(i) < 1)) {
         return []
       }
     } else if (xp > minXp.value) return []
@@ -500,6 +511,8 @@ const setIcon = computed(() => {
       </div>
       <div v-if="setIcon" class="next-step-icon"><img :src="setIcon" /></div>
     </div>
+
+    <InvestigatorStatsPanel :game="game" :stats="game.stats" :title="t('stats.scenarioTitle')" />
 
     <template v-if="!addSideStory && !chooseSideStory">
       <div v-if="investigators.length > 0" id="investigators">

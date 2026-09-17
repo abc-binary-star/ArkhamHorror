@@ -121,6 +121,7 @@
   "debugExportFull": "调试导出（完整）",
   "undo": "撤销",
   "restartScenario": "重新开始剧本",
+  "exitSideStory": "退出支线",
   "fileABug": "提交错误报告",
   "fileBugPart1": "即将存储当前游戏状态，并在GitHub提交一个问题。您需要一个GitHub帐户才能继续。",
   "fileBugPart2": "请注意，提交错误需要一些时间。在错误提交期间，你将不能继续游戏。",

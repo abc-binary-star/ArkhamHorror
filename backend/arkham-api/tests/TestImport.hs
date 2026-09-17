@@ -884,6 +884,8 @@ newGame scenario' investigator = do
         , gamePhaseHistory = mempty
         , gameRoundHistory = mempty
         , gameTurnHistory = mempty
+        , gameStats = mempty
+        , gameCampaignStats = mempty
         , gameTurnPlayerInvestigatorId = Just investigatorId
         , gameSeed = seed
         , gameSettings = defaultSettings
@@ -943,6 +945,7 @@ newGame scenario' investigator = do
         , gameUndoTurnStep = Nothing
         , gameUndoPhaseStep = Nothing
         , gameUndoRoundStep = Nothing
+        , gameSideStoryEntryStep = Nothing
         , gameAsIfAtIgnored = mempty
         , gameLocationOffsets = mempty
         }

@@ -2,14 +2,14 @@
 import { inject, ref } from 'vue'
 import { Dropdown } from 'floating-vue'
 import { Undo2 } from '@lucide/vue'
-import { ArrowUturnLeftIcon, ClockIcon, RectangleStackIcon, ArrowPathIcon, FlagIcon } from '@heroicons/vue/20/solid'
+import { ArrowUturnLeftIcon, ClockIcon, RectangleStackIcon, ArrowPathIcon, FlagIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 import { undoControlsKey } from '@/arkham/injectionKeys'
 
 const controls = inject(undoControlsKey)
 const menuOpen = ref(false)
 const { canUndoAction, canUndoTurn, canUndoPhase, canUndoRound, canUndoScenario,
-  undoChordArmed, confirmingUndoScenario, undo, undoActionStart, undoTurnStart,
-  undoPhaseStart, undoRoundStart } = controls!
+  canExitSideStory, undoChordArmed, confirmingUndoScenario, confirmingExitSideStory,
+  undo, undoActionStart, undoTurnStart, undoPhaseStart, undoRoundStart } = controls!
 </script>
 
 <template>
@@ -44,6 +44,7 @@ const { canUndoAction, canUndoTurn, canUndoPhase, canUndoRound, canUndoScenario,
                 <button v-if="canUndoPhase" type="button" class="undo-jump scope-phase" v-close-popper @click="undoPhaseStart"><RectangleStackIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfPhase') }}</span><kbd class="chord-key">P</kbd></button>
                 <button v-if="canUndoRound" type="button" class="undo-jump scope-round" v-close-popper @click="undoRoundStart"><ArrowPathIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('game.startOfRound') }}</span><kbd class="chord-key">R</kbd></button>
                 <button v-if="canUndoScenario" type="button" class="undo-jump scope-scenario" v-close-popper @click="confirmingUndoScenario = true"><FlagIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('gameBar.restartScenario') }}</span><kbd class="chord-key">S</kbd></button>
+                <button v-if="canExitSideStory" type="button" class="undo-jump scope-side-story" v-close-popper @click="confirmingExitSideStory = true"><XMarkIcon aria-hidden="true" /><span class="undo-jump-label">{{ $t('gameBar.exitSideStory') }}</span></button>
               </div>
             </div>
           </template>
@@ -178,6 +179,9 @@ const { canUndoAction, canUndoTurn, canUndoPhase, canUndoRound, canUndoScenario,
   }
   &.scope-scenario {
     --undo-scope: #d96a6a;
+  }
+  &.scope-side-story {
+    --undo-scope: #e08a3a;
   }
 
   &:hover {

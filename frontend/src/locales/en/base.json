@@ -621,6 +621,7 @@
     "loadOlderLogEntries": "Load older entries ({n} more)",
     "confirmEndTurnKeyboard": "You still have {n} unused actions — press E again to confirm end turn",
     "areYouSureUndoScenario": "Are you sure you wish to undo to the beginning of the scenario?",
+    "areYouSureExitSideStory": "Are you sure you wish to exit this side story? Everything that happened within it will be undone, including the XP spent to enter.",
     "playabilityChecks": "Playability Checks",
     "unableToDownloadExport": "Unable to download export",
     "shortcutSection": {
@@ -638,6 +639,14 @@
     "shortcutUndoPhaseStart": "Undo to start of phase",
     "shortcutUndoRoundStart": "Undo to start of round",
     "gameOver": "Game over"
+  },
+  "stats": {
+    "scenarioTitle": "Scenario statistics",
+    "campaignTitle": "Campaign statistics",
+    "damageDealt": "Damage dealt",
+    "damageTaken": "Damage taken",
+    "horrorTaken": "Horror taken",
+    "cluesGained": "Clues gained"
   },
   "cardsView": {
     "browseSets": "Browse sets",

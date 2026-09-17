@@ -115,6 +115,7 @@ import Arkham.ScenarioLogKey
 import Arkham.Scenarios.TheCircleUndone.BeforeTheBlackThrone.Cosmos.Types
 import Arkham.Search
 import {-# SOURCE #-} Arkham.SkillTest.Base
+import Arkham.Stats (InvestigatorStats)
 import Arkham.SkillTest.Type
 import Arkham.SkillTestResult qualified as SkillTest
 import Arkham.SkillType
@@ -1166,6 +1167,9 @@ data Message
   | FinishAction
   | ReplaceCard CardId Card
   | UpdateHistory InvestigatorId HistoryItem
+  | -- delta for the per-investigator run stats; accumulated in both gameStats
+    -- and gameCampaignStats (see Arkham.Game.Base)
+    UpdateInvestigatorStats InvestigatorId InvestigatorStats
   | -- The Forgotten Age
     PickSupply InvestigatorId Supply
   | UseSupply InvestigatorId Supply

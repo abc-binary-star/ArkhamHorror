@@ -1,4 +1,4 @@
-module Arkham.Stats (Stats (..), statsSkillValue) where
+module Arkham.Stats (Stats (..), statsSkillValue, InvestigatorStats (..)) where
 
 import Arkham.Prelude
 import Arkham.SkillType
@@ -26,3 +26,42 @@ instance Semigroup Stats where
 
 instance Monoid Stats where
   mempty = Stats 0 0 0 0 0 0
+
+data InvestigatorStats = InvestigatorStats
+  { investigatorStatsDamageDealt :: Int
+  , investigatorStatsDamageTaken :: Int
+  , investigatorStatsHorrorTaken :: Int
+  , investigatorStatsCluesGained :: Int
+  }
+  deriving stock (Eq, Ord, Show, Data)
+
+instance Semigroup InvestigatorStats where
+  InvestigatorStats a1 b1 c1 d1 <> InvestigatorStats a2 b2 c2 d2 =
+    InvestigatorStats (a1 + a2) (b1 + b2) (c1 + c2) (d1 + d2)
+
+instance Monoid InvestigatorStats where
+  mempty = InvestigatorStats 0 0 0 0
+
+instance ToJSON InvestigatorStats where
+  toJSON InvestigatorStats {..} =
+    object
+      [ "damageDealt" .= investigatorStatsDamageDealt
+      , "damageTaken" .= investigatorStatsDamageTaken
+      , "horrorTaken" .= investigatorStatsHorrorTaken
+      , "cluesGained" .= investigatorStatsCluesGained
+      ]
+  toEncoding InvestigatorStats {..} =
+    pairs
+      ( "damageDealt" .= investigatorStatsDamageDealt
+          <> "damageTaken" .= investigatorStatsDamageTaken
+          <> "horrorTaken" .= investigatorStatsHorrorTaken
+          <> "cluesGained" .= investigatorStatsCluesGained
+      )
+
+instance FromJSON InvestigatorStats where
+  parseJSON = withObject "InvestigatorStats" $ \o ->
+    InvestigatorStats
+      <$> o .:? "damageDealt" .!= 0
+      <*> o .:? "damageTaken" .!= 0
+      <*> o .:? "horrorTaken" .!= 0
+      <*> o .:? "cluesGained" .!= 0

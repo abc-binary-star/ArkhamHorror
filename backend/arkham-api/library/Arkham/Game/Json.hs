@@ -25,6 +25,8 @@ instance ToJSON Game where
       [ "gamePhaseHistory" .= gamePhaseHistory g
       , "gameTurnHistory" .= gameTurnHistory g
       , "gameRoundHistory" .= gameRoundHistory g
+      , "gameStats" .= gameStats g
+      , "gameCampaignStats" .= gameCampaignStats g
       , "gameInitialSeed" .= gameInitialSeed g
       , "gameSettings" .= gameSettings g
       , "gameSeed" .= gameSeed g
@@ -89,6 +91,7 @@ instance ToJSON Game where
       , "gameUndoTurnStep" .= gameUndoTurnStep g
       , "gameUndoPhaseStep" .= gameUndoPhaseStep g
       , "gameUndoRoundStep" .= gameUndoRoundStep g
+      , "gameSideStoryEntryStep" .= gameSideStoryEntryStep g
       , "gameAsIfAtIgnored" .= gameAsIfAtIgnored g
       , "gameLocationOffsets" .= gameLocationOffsets g
       ]
@@ -97,6 +100,8 @@ instance ToJSON Game where
       $ ("gamePhaseHistory" .= gamePhaseHistory g)
       <> ("gameTurnHistory" .= gameTurnHistory g)
       <> ("gameRoundHistory" .= gameRoundHistory g)
+      <> ("gameStats" .= gameStats g)
+      <> ("gameCampaignStats" .= gameCampaignStats g)
       <> ("gameInitialSeed" .= gameInitialSeed g)
       <> ("gameSettings" .= gameSettings g)
       <> ("gameSeed" .= gameSeed g)
@@ -161,6 +166,7 @@ instance ToJSON Game where
       <> ("gameUndoTurnStep" .= gameUndoTurnStep g)
       <> ("gameUndoPhaseStep" .= gameUndoPhaseStep g)
       <> ("gameUndoRoundStep" .= gameUndoRoundStep g)
+      <> ("gameSideStoryEntryStep" .= gameSideStoryEntryStep g)
       <> ("gameAsIfAtIgnored" .= gameAsIfAtIgnored g)
       <> ("gameLocationOffsets" .= gameLocationOffsets g)
 
@@ -169,6 +175,9 @@ instance FromJSON Game where
     gamePhaseHistory <- o .:? "gamePhaseHistory" .!= mempty
     gameTurnHistory <- o .:? "gameTurnHistory" .!= mempty
     gameRoundHistory <- o .:? "gameRoundHistory" .!= mempty
+    -- Games persisted before stats were tracked have none.
+    gameStats <- o .:? "gameStats" .!= mempty
+    gameCampaignStats <- o .:? "gameCampaignStats" .!= mempty
     gameInitialSeed <- o .: "gameInitialSeed"
     gameSettings <- o .:? "gameSettings" .!= defaultSettings
     gameSeed <- o .: "gameSeed"
@@ -242,6 +251,7 @@ instance FromJSON Game where
     gameUndoTurnStep <- o .:? "gameUndoTurnStep" .!= Nothing
     gameUndoPhaseStep <- o .:? "gameUndoPhaseStep" .!= Nothing
     gameUndoRoundStep <- o .:? "gameUndoRoundStep" .!= Nothing
+    gameSideStoryEntryStep <- o .:? "gameSideStoryEntryStep" .!= Nothing
     let gameAsIfAtIgnored = mempty
     gameLocationOffsets <- o .:? "gameLocationOffsets" .!= mempty
 
