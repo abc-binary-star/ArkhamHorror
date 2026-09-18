@@ -938,7 +938,11 @@ button {
   border-radius: 6px;
   color: #e6ece4;
   margin: 0 0 10px;
-  padding: 10px;
+  padding: 14px;
+}
+
+.overlay-panel :deep(.overlay-editor) {
+  padding: 0;
 }
 
 .overlay-help {
@@ -949,9 +953,12 @@ button {
 }
 
 .overlay-actions {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
 }
 
 @media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {

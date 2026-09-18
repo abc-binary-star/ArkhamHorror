@@ -1069,6 +1069,14 @@ const needsReply = computed(() => {
   flex: 0 0 100%;
   margin-top: 0;
   cursor: default;
+  padding: 0 12px 12px;
+}
+
+/* OverlayEditor is also used in the deck page and campaign roster. Keep its
+ * contents off the panel edge here, where the heading/help have their own
+ * padding. */
+.deck-item-weakness-pool :deep(.overlay-editor) {
+  padding: 0;
 }
 
 .weakness-pool-toggle {
@@ -1093,7 +1101,7 @@ const needsReply = computed(() => {
 }
 
 .weakness-pool-heading {
-  padding: 10px 12px;
+  padding: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1117,7 +1125,7 @@ const needsReply = computed(() => {
 .weakness-pool-help,
 .deck-form p.weakness-pool-help {
   margin: 0;
-  padding: 0 12px 10px;
+  padding: 0 12px 12px;
   color: rgba(255,255,255,0.6);
   font-size: 0.82em;
 }
