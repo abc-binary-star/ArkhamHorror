@@ -33,11 +33,13 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useSiteSettingsStore } from '@/stores/site_settings'
 import { checkImageExists, fallbackLocalizedCardImage } from '@/arkham/helpers'
+import { useSiteBgm } from '@/arkham/composables/useBgm'
 import NavBar from '@/components/NavBar.vue'
 import PageBackBar from '@/components/PageBackBar.vue'
 
 const route = useRoute()
 const settingsStore = useSiteSettingsStore()
+useSiteBgm()
 
 // Image errors do not bubble. Capture them for locations, acts, agendas and
 // card previews, including cards mounted after the initial page load.
