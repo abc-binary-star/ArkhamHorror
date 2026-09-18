@@ -631,16 +631,6 @@ handleAnswerPure game@Game {..} playerId = \case
           let handleCost (cId, n) = combinePaymentAmounts n $ Map.findWithDefault Noop cId costMap
           handled $ concatMap handleCost $ Map.toList (parAmounts response)
         _ -> unhandled "Wrong question type"
-  Raw (SetCardPromptMode iid code mode)
-    | iid /= playerInvestigator gameEntities playerId -> unhandled "Not your investigator"
-    | mode `notElem` ["normal", "ownTurn", "untilNextTurn", "off"] -> unhandled "Invalid prompt mode"
-    | otherwise -> do
-        -- As with ordinary answers, WindowAsk/PlayerWindow regenerate the
-        -- waiting seats. Restoring an AskMap here would block that queue with
-        -- stale choices. Preserve prompts that have no regeneration path.
-        let regenerates = any isRegeneratedWindowChoose (toList gameQuestion)
-        handled $ [SetCardPromptMode iid code mode]
-          <> [AskMap gameQuestion | not regenerates && not (Map.null gameQuestion)]
   Raw message -> do
     let inFastWindow =
           maybe
@@ -724,9 +714,6 @@ handleAnswerPure game@Game {..} playerId = \case
   isRegeneratedWindowChoose = \case
     PlayerWindowChooseOne _ -> True
     WindowChooseOne _ -> True
-    QuestionLabel _ _ q -> isRegeneratedWindowChoose q
-    PayCostQuestion _ q -> isRegeneratedWindowChoose q
-    QuestionWithSource _ _ q -> isRegeneratedWindowChoose q
     _ -> False
   go
     :: (Question Message -> Question Message)

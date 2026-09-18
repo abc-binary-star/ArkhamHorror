@@ -8,15 +8,6 @@
     "commit": "进入投入阶段",
     "finishCommit": "完成投入"
 },
-    "prompt": {
-    "title": "卡牌提示频率",
-    "shared": "相同卡牌代码共享设置；仅影响可选提示，不影响强制效果。",
-    "normal": "正常",
-    "ownTurn": "仅自己回合",
-    "untilNextTurn": "暂停至下回合",
-    "off": "关闭",
-    "error": "保存失败，请重试"
-},
     "title": "卡牌选项",
     "configure": "卡牌选项",
     "filterPlaceholder": "筛选具有选项的卡牌…",

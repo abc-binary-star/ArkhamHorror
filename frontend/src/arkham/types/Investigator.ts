@@ -108,7 +108,6 @@ type CardSettings = {
     cardAttachments?: string[];
     cardOptions?: Record<string, OptionValue>;
     cardSilenced?: boolean;
-    cardPromptMode?: string;
   }>;
 }
 
@@ -125,7 +124,6 @@ export const cardSettingsDecoder = JsonDecoder.object<CardSettings>({
       'Dict<string, OptionValue>',
     )),
     cardSilenced: v2Optional(JsonDecoder.boolean()),
-    cardPromptMode: v2Optional(JsonDecoder.string()),
   }, 'PerCardSettings'), 'Dict<string, PerCardSettings>'),
 }, 'CardSettings');
 

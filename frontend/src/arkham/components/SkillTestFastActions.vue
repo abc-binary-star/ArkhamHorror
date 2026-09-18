@@ -4,9 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { choices, type Game } from '@/arkham/types/Game'
 import { isInlineSkillTestFastWindow } from '@/arkham/skillTestFastWindow'
 import { phaseAnnouncementKey, processingKey, spectateKey } from '@/arkham/injectionKeys'
-import { sourceCardCode } from '@/arkham/cardImages'
 import AbilityButton from './AbilityButton.vue'
-import CardPromptSettings from './CardPromptSettings.vue'
 
 const props = defineProps<{ game: Game; playerId: string }>()
 const emit = defineEmits<{ choose: [index: number] }>()
@@ -17,9 +15,7 @@ const spectate = inject(spectateKey, ref(false))
 const submitted = ref(false)
 const busy = computed(() => submitted.value || processing.value || spectate.value)
 const visible = computed(() => !phaseAnnouncement.value && isInlineSkillTestFastWindow(props.game, props.playerId))
-const entries = computed(() => choices(props.game, props.playerId).map((choice, index) => ({ choice, index,
-  code: choice.tag === 'AbilityLabel' ? sourceCardCode(choice.ability.source, props.game) : null,
-})))
+const entries = computed(() => choices(props.game, props.playerId).map((choice, index) => ({ choice, index })))
 const beforeDraw = computed(() => props.game.skillTest?.step === 'SkillTestFastWindow2')
 const abilityEntries = computed(() => entries.value.filter(entry => entry.choice.tag === 'AbilityLabel'))
 const continueIndex = computed(() => entries.value.find(entry => entry.choice.tag === 'SkipTriggersButton')?.index)
@@ -39,8 +35,6 @@ function choose(index: number) {
       <div v-for="entry in abilityEntries" :key="entry.index" class="fast-action-row">
         <template v-if="entry.choice.tag === 'AbilityLabel'">
           <AbilityButton :game="game" :ability="entry.choice" tooltip-is-button-text @click="choose(entry.index)" />
-          <CardPromptSettings v-if="entry.code && game.skillTest" :game="game" :player-id="playerId"
-            :investigator-id="game.skillTest.investigator" :card-code="entry.code" />
         </template>
       </div>
       <button v-if="continueIndex !== undefined" type="button" class="continue-test" @click="choose(continueIndex)">

@@ -6,7 +6,7 @@ import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Messa
 import { MessageType } from '@/arkham/types/Message'
 import { imgsrc } from '@/arkham/helpers'
 import { cardImage } from '@/arkham/cardImages'
-import CardPromptSettings from '@/arkham/components/CardPromptSettings.vue'
+import CardSilenceBell from '@/arkham/components/CardSilenceBell.vue'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import * as ArkhamGame from '@/arkham/types/Game'
 import { useDebug } from '@/arkham/debug'
@@ -300,10 +300,9 @@ function oilPaintEffect(canvas, radius, intensity) {
       <font-awesome-icon icon="wrench" />
     </button>
 
-    <CardPromptSettings
+    <CardSilenceBell
       v-if="investigatorId && investigatorId === ownerId"
-      class="hand-prompt-settings"
-      compact
+      class="hand-silence-bell"
       :game="game"
       :player-id="playerId"
       :investigator-id="investigatorId"
@@ -326,11 +325,11 @@ function oilPaintEffect(canvas, radius, intensity) {
 </template>
 
 <style scoped>
-.hand-prompt-settings { position: absolute; left: 4px; top: 4px; z-index: 4; opacity: 0; }
-.card-container:hover .hand-prompt-settings,
-.card-container:focus-within .hand-prompt-settings,
-.hand-prompt-settings.configured { opacity: 1; }
-@media (hover: none) { .hand-prompt-settings { opacity: 1; } }
+.hand-silence-bell { opacity: 0; }
+.card-container:hover .hand-silence-bell,
+.card-container:focus-within .hand-silence-bell,
+.hand-silence-bell.silence-bell--muted { opacity: 1; }
+@media (hover: none) { .hand-silence-bell { opacity: 1; } }
 
 .card {
   width: var(--card-width);

@@ -531,10 +531,9 @@ data Message
   | -- | Set one option a card declares in @cdOptions@ for this investigator
     SetCardOption InvestigatorId CardCode Text OptionValue
   | {- | Silence a card for this investigator: stop offering its non-forced
-    window triggers. Set from the hidden-cards stack.
+    window triggers. Set from the card's bell toggle.
     -}
     SetCardSilenced InvestigatorId CardCode Bool
-  | SetCardPromptMode InvestigatorId CardCode Text
   | SetAsIfRuling AsIfRuling
   | SetUltimatumsAndBoonsEnabled Bool
   | -- | Ultimatum of The Scream: ban this ally for the rest of the campaign

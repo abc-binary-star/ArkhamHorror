@@ -381,7 +381,7 @@ getWindowSkippable attrs ws (windowType -> Window.WouldPayCardCost iid _ _ card@
     ]
 getWindowSkippable _ _ _ = pure True
 
-{- | Abilities the investigator has silenced from the hidden-cards stack. Only
+{- | Abilities the investigator has silenced via the card's bell toggle. Only
 non-forced triggers are dropped -- a forced ability on a silenced card still
 fires, since the game would be wrong without it.
 -}
@@ -402,19 +402,11 @@ runWindow
   => InvestigatorAttrs -> [Window] -> [Ability] -> [Card] -> m ()
 runWindow attrs windows allActions allPlayableCards = do
   let iid = toId attrs
-  skippableWindow <- getAllAbilitiesSkippable attrs windows
-  ownTurn <- iid <=~> TurnInvestigator
-  let
-    allowsPrompt code = not skippableWindow || case cardPromptMode <$> lookup code (perCardSettings attrs.settings) of
-      Just "off" -> False
-      Just "untilNextTurn" -> False
-      Just "ownTurn" -> ownTurn
-      _ -> True
-    playableCards = filter (allowsPrompt . toCardCode) allPlayableCards
-  unsilenced <- dropSilencedAbilities attrs allActions
-  actions <- filterM (\ability -> isForcedAbility iid ability >>= \case
-    True -> pure True
-    False -> maybe True (allowsPrompt . toCardCode) <$> sourceToMaybeCard ability.source) unsilenced
+      -- A silenced card's fast play offers are passive responses like its
+      -- triggers: silence stops the prompt, and un-silencing brings it back.
+      playableCards =
+        filter ((`notMember` silencedCardCodes attrs.settings) . toCardCode) allPlayableCards
+  actions <- dropSilencedAbilities attrs allActions
   unless (null playableCards && null actions) $ do
     anyForced <- anyM (isForcedAbility iid) actions
     player <- getPlayer iid
@@ -542,9 +534,6 @@ runInvestigatorMessage msg a@InvestigatorAttrs {..} = runQueueT $ case msg of
     pure $ a & settingsL %~ updateCardSetting cCode s
   SetCardOption iid cCode k v | iid == a.id -> do
     pure $ a & settingsL %~ setCardOption cCode k v
-  BeginTurn iid | iid == a.id -> pure $ a & settingsL %~ resumeCardPrompts
-  SetCardPromptMode iid cCode mode | iid == a.id ->
-    pure $ a & settingsL %~ setCardPromptMode cCode mode
   SetCardSilenced iid cCode v | iid == a.id -> do
     let attrs' = a & settingsL %~ setCardSilenced cCode v
     -- Same reasoning as UpdateGlobalSetting: silencing a card while its window

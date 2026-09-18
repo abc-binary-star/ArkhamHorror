@@ -820,7 +820,7 @@
   "player": {
     "hand": "手牌",
     "viewDeck": "查看牌组",
-    "silenceCard": "静默——隐藏时跳过此卡牌的快速触发和反应",
+    "silenceCard": "静默——跳过此卡牌的快速触发和反应，仅在你主动发动时响应",
     "unsilenceCard": "解除静默——再次提供此卡牌的触发能力"
   },
   "enemy": {

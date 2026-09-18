@@ -252,9 +252,11 @@ function showDraggedAsset(event: DragEvent) {
 }
 
 // Silencing drops a card's free triggers and reactions from the windows it
-// would otherwise interrupt; forced abilities still fire. Unlike the stack
-// itself it is real game state (`cardSilenced` in PerCardSettings), because the
-// engine is the one that has to stop offering the ability.
+// would otherwise interrupt; forced abilities still fire. It is real game
+// state (`cardSilenced` in PerCardSettings), because the engine is the one
+// that has to stop offering the ability, and it is keyed by card code so
+// copies share it. Silence lasts until the card is unsilenced — from the
+// stack, a hand card, or an asset in play — wherever it currently is.
 const controlsInvestigator = computed(() => !spectate.value && props.playerId === props.investigator.playerId)
 
 const perCardSettings = computed(() => props.investigator.settings.perCardSettings ?? {})
@@ -272,24 +274,6 @@ const cardIsSilenced = (card: CardT.Card | CardContents) => isSilenced(silenceCo
 function toggleSilenced(card: CardT.Card | CardContents) {
   setSilenced(silenceCodeOf(card), !cardIsSilenced(card))
 }
-
-// A card is only silenced for as long as it is hidden, so dragging one back out
-// of the stack — or losing it from play — turns its triggers back on. Left
-// alone while the stack is off entirely, so toggling the view setting doesn't
-// throw the choices away, and held off until the card defs land, since the
-// inert tags they carry are half of what decides the stack's contents.
-const hiddenCardCodes = computed(() => new Set(inertCards.value.map(silenceCodeOf)))
-
-const reconcileSilenced = computed(
-  () => tuckInertCards.value && controlsInvestigator.value && cardStore.loaded
-)
-
-watch([hiddenCardCodes, perCardSettings, reconcileSilenced], () => {
-  if (!reconcileSilenced.value) return
-  for (const [cardCode, setting] of Object.entries(perCardSettings.value)) {
-    if (setting.cardSilenced && !hiddenCardCodes.value.has(cardCode)) setSilenced(cardCode, false)
-  }
-}, { immediate: true })
 
 const currentTreacheries = computed(() => {
   return Object.

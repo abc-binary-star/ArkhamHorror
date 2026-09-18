@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, defineAsyncComponent, watch, ref } from 'vue'
+import { computed, defineAsyncComponent, inject, watch, ref } from 'vue'
 import { Dropdown } from 'floating-vue'
 import useHighlighter from '@/arkham/composables/useHighlighter'
 import { useDebug } from '@/arkham/debug'
@@ -28,10 +28,12 @@ import TokenPool, { type TokenPoolItem } from '@/arkham/components/TokenPool.vue
 import CardsUnderIndicator from '@/arkham/components/CardsUnderIndicator.vue'
 import AbilitiesMenu from '@/arkham/components/AbilitiesMenu.vue'
 import CardConfig from '@/arkham/components/CardConfig.vue'
+import CardSilenceBell from '@/arkham/components/CardSilenceBell.vue'
 import MissingCardBadge from '@/arkham/components/MissingCardBadge.vue'
 import Story from '@/arkham/components/Story.vue'
 import { useCardFlip } from '@/arkham/composables/useCardFlip'
 import SealedChaosTokens from '@/arkham/components/SealedChaosTokens.vue'
+import { spectateKey } from '@/arkham/injectionKeys'
 import * as ArkhamAsset from '@/arkham/types/Asset'
 import { useSettings } from '@/stores/settings'
 import { isManifestedSpiritAsset } from '@/arkham/spiritVisuals'
@@ -89,12 +91,18 @@ const uiRotation = computed<number>(() => {
 
 const cardCode = computed(() => props.asset.cardCode)
 
-// The card-options gear also lives top-left, so the jammed wrench has to know
-// whether it is sharing the corner.
+// The card-options gear and the silence bell both live top-left, so the
+// jammed wrench has to know what it is sharing the corner with.
 const cardStore = useCardStore()
 const hasCardOptions = computed(
   () => (cardStore.cards.find((def) => def.cardCode === cardCode.value)?.options?.length ?? 0) > 0,
 )
+const spectate = inject(spectateKey, ref(false))
+const controlsAsset = computed(() => {
+  const controller = props.asset.controller
+  if (!controller || spectate.value) return false
+  return props.game.investigators[controller]?.playerId === props.playerId
+})
 const isTheBeyond = computed(() => cardCode.value === 'c90052')
 const investigators = computed(() =>
   Object.values(props.game.investigators).filter((i) => {
@@ -510,7 +518,11 @@ function startDrag(event: DragEvent) {
           <span
             v-if="jammed"
             class="status-icon"
-            :class="{ 'status-icon--beside-gear': hasCardOptions }"
+            :class="{
+              'status-icon--beside-gear': !controlsAsset && hasCardOptions,
+              'status-icon--beside-bell': controlsAsset && !hasCardOptions,
+              'status-icon--third-slot': controlsAsset && hasCardOptions,
+            }"
             v-tooltip="'Jammed'"
           >
             <font-awesome-icon :icon="['fas', 'wrench']" />
@@ -592,6 +604,14 @@ function startDrag(event: DragEvent) {
           @choose="chooseAbility"
         />
         <CardConfig :game="game" :playerId="playerId" :cardCode="cardCode" />
+        <CardSilenceBell
+          class="asset-silence-bell"
+          :class="{ 'asset-silence-bell--shifted': hasCardOptions }"
+          :game="game"
+          :player-id="playerId"
+          :investigator-id="asset.controller"
+          :card-code="cardCode"
+        />
       </div>
       <span v-if="pending" class="pending-label">{{ $t('needsSlots') }}</span>
       <CardsUnderIndicator
@@ -1069,9 +1089,21 @@ img.card.ability-target {
   pointer-events: auto;
 }
 
-/* Shares the top-left corner with the card-options gear (CardConfig.vue), so it
-   steps right when the card declares options. */
-.status-icon--beside-gear {
+/* Shares the top-left corner with the silence bell (CardSilenceBell.vue) and
+   the card-options gear (CardConfig.vue), stepping right past whichever are
+   present. */
+.status-icon--beside-gear,
+.status-icon--beside-bell {
+  left: 21px;
+}
+
+.status-icon--third-slot {
+  left: 38px;
+}
+
+/* The bell yields to the gear (same slot chain as the wrench). The descendant
+   selector outranks the component's own positioning so the shift is stable. */
+.card-frame .asset-silence-bell--shifted {
   left: 21px;
 }
 

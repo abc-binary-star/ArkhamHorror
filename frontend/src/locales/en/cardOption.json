@@ -8,15 +8,6 @@
     "commit": "Commit cards",
     "finishCommit": "Finish committing"
 },
-    "prompt": {
-    "title": "Card prompts",
-    "shared": "Copies with the same card code share this setting. Forced effects are unaffected.",
-    "normal": "Normal",
-    "ownTurn": "Only on my turn",
-    "untilNextTurn": "Pause until next turn",
-    "off": "Off",
-    "error": "Could not save. Please retry."
-},
     "title": "Card Options",
     "configure": "Card options",
     "filterPlaceholder": "Filter cards with options…",

@@ -51,10 +51,10 @@ data PerCardSettings = PerCardSettings
   {- ^ Values the controller has chosen for the options this card declares in
   @cdOptions@. Absent keys fall back to the option's declared default.
   -}
-  , cardPromptMode :: Text
   , cardSilenced :: Bool
-  {- ^ Set from the hidden-cards stack: drop this card's non-forced window
-  triggers (fast abilities and reactions) instead of prompting for them. Forced
+  {- ^ Set from the card's silence bell (in play, in hand, or on the hidden
+  stack): drop this card's non-forced window triggers (fast abilities and
+  reactions) and fast play offers instead of prompting for them. Forced
   abilities still fire.
   -}
   }
@@ -62,8 +62,8 @@ data PerCardSettings = PerCardSettings
   deriving anyclass ToJSON
 
 instance Semigroup PerCardSettings where
-  PerCardSettings i1 d1 a1 o1 p1 s1 <> PerCardSettings i2 d2 a2 o2 p2 s2 =
-    PerCardSettings (i1 || i2) (d1 || d2) (a1 <> a2) (o1 <> o2) (if p1 == "normal" then p2 else p1) (s1 || s2)
+  PerCardSettings i1 d1 a1 o1 s1 <> PerCardSettings i2 d2 a2 o2 s2 =
+    PerCardSettings (i1 || i2) (d1 || d2) (a1 <> a2) (o1 <> o2) (s1 || s2)
 
 instance FromJSON PerCardSettings where
   parseJSON = withObject "PerCardSettings" \o -> do
@@ -71,7 +71,6 @@ instance FromJSON PerCardSettings where
     cardIgnoreDuringSkillTests <- o .: "cardIgnoreDuringSkillTests"
     cardAttachments <- o .:? "cardAttachments" .!= []
     cardOptions <- o .:? "cardOptions" .!= mempty
-    cardPromptMode <- o .:? "cardPromptMode" .!= "normal"
     cardSilenced <- o .:? "cardSilenced" .!= False
     pure PerCardSettings {..}
 
@@ -231,7 +230,6 @@ defaultPerCardSettings =
     , cardIgnoreDuringSkillTests = False
     , cardAttachments = []
     , cardOptions = mempty
-    , cardPromptMode = "normal"
     , cardSilenced = False
     }
 
@@ -311,12 +309,3 @@ updateCardSetting cCode = \case
       . non defaultPerCardSettings
       . cardAttachmentsL
       .~ v
-
--- Independent of hidden-stack silencing; shared by copies of a card code.
-setCardPromptMode :: CardCode -> Text -> CardSettings -> CardSettings
-setCardPromptMode code mode =
-  perCardSettingsL . at code . non defaultPerCardSettings %~ \s -> s {cardPromptMode = mode}
-
-resumeCardPrompts :: CardSettings -> CardSettings
-resumeCardPrompts = perCardSettingsL %~ fmap (\s ->
-  if cardPromptMode s == "untilNextTurn" then s {cardPromptMode = "normal"} else s)
