@@ -42,6 +42,10 @@ export interface DbCardsState {
   dbCardsIndex: Map<string, ArkhamDBCard>
   lang: string
   loadingLang: string | null
+  // Languages whose fetch failed. Card lookups happen on every hover, so
+  // without this a missing or malformed cards_<lang>.json is re-requested for
+  // the rest of the session.
+  failedLangs: Set<string>
 }
 
 export const useDbCardStore = defineStore("dbCards", {
@@ -49,7 +53,8 @@ export const useDbCardStore = defineStore("dbCards", {
     dbCards: [],
     dbCardsIndex: new Map(),
     lang: 'en',
-    loadingLang: null
+    loadingLang: null,
+    failedLangs: new Set<string>()
   } as DbCardsState),
 
   actions: {
@@ -77,11 +82,19 @@ export const useDbCardStore = defineStore("dbCards", {
     },
 
     async fetchDbCards(lang: string) {
-      const response = await fetch(`/cards/cards_${lang}.json`.replace(/^\//, ''))
+      const path = `/cards/cards_${lang}.json`.replace(/^\//, '')
+      const response = await fetch(path)
       // Without this a 404 hands back the SPA's index.html and .json() throws an
       // opaque SyntaxError from deep inside the store.
       if (!response.ok) {
         throw new Error(`card database for "${lang}" returned ${response.status}`)
+      }
+      // The dev server and the SPA fallback answer a missing file with
+      // index.html, which only fails once it hits JSON.parse. Say what is
+      // actually wrong instead.
+      const contentType = response.headers.get('content-type') ?? ''
+      if (!contentType.includes('json')) {
+        throw new Error(`card database for "${lang}": expected JSON, got ${contentType || 'no content type'}`)
       }
       const data = await response.json() as ArkhamDBCard[]
 
@@ -107,6 +120,7 @@ export const useDbCardStore = defineStore("dbCards", {
 
       if (this.lang === language && this.dbCards.length > 0) return true
       if (this.loadingLang === language) return false
+      if (this.failedLangs.has(language)) return false
 
       this.loadingLang = language
 
@@ -114,9 +128,11 @@ export const useDbCardStore = defineStore("dbCards", {
         await this.fetchDbCards(language)
         return this.lang === language
       } catch (err) {
-        // Swallowed on purpose: most callers fire this as `void initDbCards()`,
-        // and an unhandled rejection there would surface nowhere. Leaving
-        // this.lang alone is what lets the next call retry.
+        // Callers fire this as `void initDbCards()`, so swallow the rejection
+        // rather than leaving an unhandled one behind on every card lookup.
+        // Recording the failure stops the per-hover lookups from re-requesting
+        // a missing or malformed language file for the rest of the session.
+        this.failedLangs.add(language)
         console.error(`[dbCards] could not load the ${language} card database`, err)
         return false
       } finally {
