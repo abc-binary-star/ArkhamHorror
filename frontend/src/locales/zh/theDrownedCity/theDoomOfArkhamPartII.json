@@ -47,7 +47,7 @@
   "rules": {
     "cthulhuBoard": {
       "title": "克苏鲁版图",
-      "body": "<p class='basic'>克苏鲁在地图上由单个敌人表示，但实际上由克苏鲁版图上的多张敌人卡牌组成。与克苏鲁<i>（远古恶魔）</i>交战的调查员，也与克苏鲁版图上的每张卡牌交战（作为单个敌人）。在与克苏鲁互动<i>（攻击、躲避等等）</i>时，选择克苏鲁版图上的一张双面敌人卡牌与之互动。</p><p class='basic'>Cthulhu 攻击 每位调查员 于 他的 地点 在……期间  敌人 阶段 using  combined 伤害 和 恐惧 values 的 每位 Cthulhu 敌人 在  Cthulhu Board. 这 攻击 是 performed 在 addition 至 任意 其他 攻击 和/或 效果 prompted 由  Cthulhu 牌组 (看见 below). 如果 a 卡牌 在  Cthulhu Board 会 攻击 via a 关键词 或 其他 效果 当fighting 或 evading, 仅 该 卡牌 攻击.</p><p class='basic'>能对一个地点多个敌人造成伤害的卡牌效果，可以对克苏鲁版图上每张敌人卡牌单独造成伤害。</p>"
+      "body": "<p class=\"basic\">克苏鲁在地图上显示为一名敌人，但由克苏鲁版图上的多张敌人卡组成。与克苏鲁 (古老邪恶)交战的调查员也同时与克苏鲁版图上的每张卡交战，且它们视为同一名敌人。与克苏鲁互动（攻击、闪避等）时，选择克苏鲁版图上的一张双面敌人卡进行互动。</p><p class=\"basic\">敌人阶段期间，克苏鲁使用克苏鲁版图上所有克苏鲁敌人的伤害值与恐惧值总和，攻击其所在地点的每位调查员。此次攻击在克苏鲁牌库触发的其他攻击和/或效果之外进行（见下文）。如果克苏鲁版图上的一张卡因关键词或其他效果在攻击或闪避期间发动攻击，只有该卡攻击。</p><p class=\"basic\">对同一地点多名敌人造成伤害的卡牌效果，可以对克苏鲁版图上的每张敌人卡分别造成伤害。</p>"
     },
     "cthulhuDeck": {
       "title": "克苏鲁牌库",
@@ -106,8 +106,8 @@
     "noAlly": "Do 不 获得控制权 的 an _盟友_ 剧情支援卡.",
     "increaseFloodLevel": "Increase  淹没程度 的 Cthulhu's 地点",
     "dreadsightGroupChoice": "调查员 必须 decide,，作为一组",
-    "cthulhuAttacks": "Cthulhu <i>(Wicked Claw)</i> 攻击 每位调查员 于 它的 地点",
-    "chooseCthulhuEnemyToReturn": "选择 a [[Cthulhu]] 敌人 至 return 至 克苏鲁版图, [[Enraged]] 面 正面朝上",
+    "cthulhuAttacks": "克苏鲁<i>（邪恶利爪）</i>攻击其所在地点的每位调查员",
+    "chooseCthulhuEnemyToReturn": "选择一名[[克苏鲁]]敌人返回克苏鲁版图，[[愤怒]]面朝上",
     "chooseLocationToFlood": "选择 a 地点 至 increase  淹没程度 的",
     "chooseLocationToRuin": "选择  完全淹没 地点 Cthulhu moves 至",
     "cluesToPlace": "How many 的 你的 线索 做 你 want 放置on 这 地点?"

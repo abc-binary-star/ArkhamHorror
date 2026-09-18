@@ -30,14 +30,20 @@
       "buildActDeck": "使用场景1a“深入深渊”创建场景牌库。将其余场景从游戏中移除。",
       "placeBottomWalkways": "将剩余的两张_步道_地点和放在一边的黑曜石基层混洗，以使你无法分辨。将它们放置入场，位于深度5的位置，未揭示面朝上。",
       "setLocationsAside": "将黑曜石基层、溺亡小屋、沉没梯道、破碎遗迹{'{'}runeV{'}'}和海底秘库{'{'}runeZ{'}'}入放在一边，位于场外。",
-      "placeUpperWalkways": "将剩余的五张_步道_地点和放在一边的溺亡小屋、沉没梯道、破碎遗迹{'{'}runeV{'}'}混洗，将其中六张放置入场，位于西墙下方，深度2-4的位置，未揭示面朝上。"
+      "placeUpperWalkways": "将剩余的五张_步道_地点和放在一边的溺亡小屋、沉没梯道、破碎遗迹{'{'}runeV{'}'}混洗，将其中六张放置入场，位于西墙下方，深度2-4的位置，未揭示面朝上。",
+      "chooseExpeditionAsset": "按玩家顺序，每位玩家可以从_探险队_遭遇组中选择1张_道具_支援，使其在游戏开始时入场并由自己控制。该遭遇组的图标为：<section class=\"encounter-sets\"><img src=\"{setImgPath}/tdc_expedition.png\"/></section>",
+      "floodLevels": "提高第2–5层每个地点的淹没等级。",
+      "fullyFloodLevels": "提高第4层和第5层地点的淹没等级，使其完全淹没。"
     },
     "east": {
       "buildActDeck": "使用场景1a“浮出城墙”创建场景牌库。将其余场景从游戏中移除。",
       "title": "设置 (v.II) — Western 探险",
       "setLocationsAside": "将西墙、溺亡小屋、沉没梯道、破碎遗迹{'{'}runeV{'}'}和海底秘库{'{'}runeZ{'}'}放在一边，位于场外。",
       "placeUpperWalkways": "将剩余的五张_步道_地点和放在一边的溺亡小屋、沉没梯道、破碎遗迹{'{'}runeV{'}'}混洗，将其中六张放置入场，位于黑曜石基层上方，深度2-4的位置，未揭示面朝上。",
-      "placeBottomWalkways": "将放在一边的西墙和两张剩余的_步道_地点混洗，以使你无法分辨，以未揭示面朝上放置入场，位于深度5。"
+      "placeBottomWalkways": "将放在一边的西墙和两张剩余的_步道_地点混洗，以使你无法分辨，以未揭示面朝上放置入场，位于深度5。",
+      "chooseExpeditionAsset": "按玩家顺序，每位玩家可以选择1张已获得的_神器_支援，或从_探险队_遭遇组中选择1张_道具_支援，使其在游戏开始时入场并由自己控制。该遭遇组的图标为：<section class=\"encounter-sets\"><img src=\"{setImgPath}/tdc_expedition.png\"/></section>",
+      "floodLevels": "提高第1–4层每个地点的淹没等级。",
+      "fullyFloodLevels": "提高第1层和第2层地点的淹没等级，使其完全淹没。"
     },
     "gatherLocations": "收齐<i>西墙</i>遭遇组的所有地点。",
     "placeWesternWall": "将西墙放置入场，如图所示放在深度1。",

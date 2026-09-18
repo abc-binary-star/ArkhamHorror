@@ -85,5 +85,8 @@
     "waitingRoom": {
       "resign": "你 , 你的 ."
     }
+  },
+  "intro": {
+    "title": "冒险I-B：清醒噩梦"
   }
 }

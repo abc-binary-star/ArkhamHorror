@@ -32,22 +32,22 @@
     "darknessLevel": "在冒险参考卡牌的“黑暗等级”下方放置1个资源标记。在本场冒险接下来的时间里，“黑暗等级”下方的资源数量表示著当前时间的流逝。",
     "valeLantern": {
       "checkCampaignLog": "查看你的战役日志。",
-      "showedTheWay": "*如果 瑞秋主母指明道路。*: Find 山谷 Lantern 剧情支援卡 _与_  _Boon_ 特质 和 将其放进场 在……下  控制 的 an 调查员, _Lit_ 面 正面朝上. 移除  其他 Vale Lantern 从 游戏. 如果 那里 是 仅 1 调查员,  Vale Lantern 会 不 受到 up a 手牌 slot 在……期间 这 冒险.",
-      "lostThePath": "*如果 调查员们迷失路途。*: Find 山谷 Lantern 剧情支援卡 _不使用_  _Boon_ 特质 和 将其放进场 在……下  控制 的 an 调查员, _Lit_ 面 正面朝上. 移除  其他 Vale Lantern 从 游戏. 如果 那里 是 仅 1 调查员,  Vale Lantern 会 不 受到 up a 手牌 slot 在……期间 这 冒险."
+      "showedTheWay": "*如果瑞秋主母指明道路*：找出_具有福祉_属性的山谷提灯剧情支援，将其以_点燃_面朝上放置入场，由任意调查员控制。将另一张山谷提灯移出游戏。若只有1位调查员，本场冒险中山谷提灯不占用手部槽位。",
+      "lostThePath": "*如果调查员们迷失路途*：找出_不具有福祉_属性的山谷提灯剧情支援，将其以_点燃_面朝上放置入场，由任意调查员控制。将另一张山谷提灯移出游戏。若只有1位调查员，本场冒险中山谷提灯不占用手部槽位。"
     },
     "glimmeringWoods": {
       "checkCampaignLog": "查看你的战役日志。",
-      "lostThePath": "*如果  调查员 lost  道路*: 将除了放在一旁之外的一张随机西方大森林地点放置入场，忽略任何强制效果。每位调查员从该地点开始游戏。",
+      "lostThePath": "*如果调查员们迷失路途*: 将除了放在一旁之外的一张随机西方大森林地点放置入场，忽略任何强制效果。每位调查员从该地点开始游戏。",
       "showedTheWay": "瑞秋主母指明道路。"
     },
     "gatherSets": "将下列遭遇组中的所有遭遇卡找出: *第一天*, *扭曲空洞*, *森林*, 和 *霉菌*. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/the-first-day.png' /><img src='{setImgPath}/the-twisted-hollow.png' /><img src='{setImgPath}/the-forest.png' /><img src='{setImgPath}/myconids.png' /></section>",
-    "removeLocations": "Set 扭曲空洞 和 Glimmering 树林 地点 一边, 场外卡牌 (两者 是已揭示 面 的 a 西方大森林 地点). 然后, based 在 数量为调查员 在 游戏, randomly 移除 下列从gathered Western 树林 地点:",
+    "removeLocations": "将盘根空树和微光林地地点放在一边，位于场外（两者都是西方大森林地点的已揭示面）。然后根据游戏中的调查员人数，从找出的西方大森林地点中随机移除下列数量：",
     "residents": "检查 你的 冒险日志 和 gather 每位 剧情支援卡 从*居民* 遭遇组. 这些遭遇牌如下面图标所示：</p><section class='encounter-sets'><img src='{setImgPath}/cult-of-umordhoth.png' /></section></div><section class='encounter-sets'><img src='{setImgPath}/residents.png' /></section>",
     "oneOrTwoInvestigators": "如果 那里 是 1 或 2 调查员, 移除 2 地点 从 游戏.",
     "threeOrFourInvestigators": "如果 那里 是 3 或 4 调查员, 移除 1 地点 从 游戏.",
     "woodsDeck": "将放在一旁的微光草原地点和剩余的西方大森林地点混洗，构建“森林牌库”。将森林牌库顶4张卡牌放置入场，位于起始地点的上方、下方、左侧和右侧。",
-    "theoPeters": "如果 西奥．彼得斯 是 于 友好度 2 或 higher, 组 他 一边, 场外卡牌.",
-    "judithPark": "如果 茱蒂丝．朴 是 于 友好度 2 或 higher, 组 她的 一边, 场外卡牌."
+    "theoPeters": "如果西奥．彼得斯的友好度至少有2格，将他放在一边，位于场外。",
+    "judithPark": "如果茱蒂丝．朴的友好度至少有2格，将她放在一边，位于场外。"
   },
   "codex": {
     "bertieMusgrave": {
@@ -63,10 +63,10 @@
         "physical": "承受1点肉体创伤并受到1点直接伤害。",
         "mental": "承受1点精神创伤并受到1点直接恐惧。"
       },
-      "theBear2": "<h3>@:theFeastOfHemlockVale.theTwistedHollow.codex.sigma.title </h3><p>_The Bear 2_: 你反应不及，那只熊怪刀锋般尖锐的利爪已经朝你挥来。牠腐败、刺鼻的气息喷在你的脸上，淹没了你所有的感官，接著巨大的熊掌就击中了你的胸膛。这只生物逼近，威胁著要击碎你的肋骨，但你的视线却逐渐模糊下来。</p><p class='basic'>You must either (*choose one*), then continue reading:</p><ul><li>承受1点肉体创伤并受到1点直接伤害。</li><li>承受1点精神创伤并受到1点直接恐惧。</li></ul><p>突然，一声枪响，熊怪的头颅被击中。牠疼痛的哀号著，接著另外两发子弹击中那只熊怪斑驳的柔软身体，那只怪物发出一声可怜的咕囔声，消失在阴影中。你听见瑞秋主母的声音从附近传来：“快跑！”</p><p class='basic right'>在瑞秋主母的笔记中，记录下<i>瑞秋主母介入</i>。</p><p class='basic right'>Proceed to _The Bear 3_.</p>",
+      "theBear2": "<h3>@:theFeastOfHemlockVale.theTwistedHollow.codex.sigma.title </h3><p>你反应不及，那只熊怪刀锋般尖锐的利爪已经朝你挥来。牠腐败、刺鼻的气息喷在你的脸上，淹没了你所有的感官，接着巨大的熊掌就击中了你的胸膛。这只生物逼近，威胁着要击碎你的肋骨，但你的视线却逐渐模糊下来。</p><p class=\"basic\">你必须决定 （*选择一项*），然后继续阅读:</p><ul><li>承受1点肉体创伤并受到1点直接伤害。</li><li>承受1点精神创伤并受到1点直接恐惧。</li></ul><p>突然，一声枪响，熊怪的头颅被击中。牠疼痛的哀号着，接着另外两发子弹击中那只熊怪斑驳的柔软身体，那只怪物发出一声可怜的咕囔声，消失在阴影中。你听见瑞秋主母的声音从附近传来：“快跑！”</p><p class=\"basic right\">在瑞秋主母的笔记中，记录下*瑞秋主母介入*。</p><p class=\"basic right\">进入 _巨熊3_.</p>",
       "theBear3": "<h3>@:theFeastOfHemlockVale.theTwistedHollow.codex.sigma.title </h3><p>_The Bear 3_: 你逃离现场，躲进一片枯死的树林。你举起提灯，预期会再度见到熊怪幽灵般的蓝色眼睛在黑暗中发光。森林一片死寂，你慌乱地想找到正确的方向。</p><ul><li>将每个未交战的敌人移动到追击区域。</li><li>将熊属杂生物生成到你的所在地点，将其横置并对其造成1点伤害。</li><li>如果山谷提灯不在任意调查员的控制之下，选择一位调查员控制山谷提灯。</li><li>将每张无人[[黑暗]]地点重新设置为森林牌库放在一旁，依照以下步骤：<ul><li>将放在一旁的盘根空树与3张随机西方大森林地点混洗，组成森林牌库最底部的4张卡牌，西方大森林面朝上。</li><li>然后，将所有其他西方大森林地点，依照随机顺序放置在其上方。森林牌库中的所有卡牌都应该以西方大森林面朝上，借此让调查员无法分辨卡牌的差异。</li></ul></li><li>将森林牌库顶的卡牌放置入场，位于调查员地点的上方、下方、左侧和右侧。</li></ul>",
       "body": "<p><b>选择最勇敢的调查员阅读以下文字：</b></p>",
-      "theBear1": "<h3>@:theFeastOfHemlockVale.theTwistedHollow.codex.sigma.title </h3><p>_The Bear 1_: 你在树枝上看见一片被撕破的衣料，毫无疑问是柏蒂的。一阵剧烈、痛苦的咳嗽在你身后响起，腐烂的气味随即飘进你的鼻子。你转过身看见一只身形魁武的巨熊像鬼火般在黑暗中闪烁，这只生物的背上生长著一片蕈类，诡异的白炽闪光照亮黑暗。那只生物发出一声咆啸，朝你冲了过来。</p><p class='basic'>Check the set-aside cards.<p><ul><li>选择其中一张并将其放置入场，置于你的控制之下并立即结算其所对应的圣典条目。</li><li>Otherwise, proceed to _The Bear 2_.</li></ul>",
+      "theBear1": "<h3>@:theFeastOfHemlockVale.theTwistedHollow.codex.sigma.title </h3><p>你在树枝上看见一片被撕破的衣料，毫无疑问是柏蒂的。一阵剧烈、痛苦的咳嗽在你身后响起，腐烂的气味随即飘进你的鼻子。你转过身看见一只身形魁武的巨熊像鬼火般在黑暗中闪烁，这只生物的背上生长着一片蕈类，诡异的白炽闪光照亮黑暗。那只生物发出一声咆啸，朝你冲了过来。</p><p class=\"basic\">检查放在一边的卡牌。<p><ul><li>如果茱蒂丝．朴或西奥．彼得斯放在一边，选择其中一人放置入场，由你控制，并立即结算其圣典条目。</li><li>否则， 进入 _巨熊2_.</li></ul></p></p>",
       "title": "{'{'}codex{'}'} 圣典Σ：熊"
     },
     "judithPark": {
@@ -96,7 +96,7 @@
     },
     "resolution3": {
       "title": "结局3",
-      "body": "<p>_结局 3_: “Miskatonic Survey, June 1926. Members Marquez, Musgrave, et alii. An unplanned foray 进入  Western 树林, 于 夜晚. Local flora 和 fauna 有 evolved highly specialized behavior patterns 之后 dark, likely dictated 由 extreme circadian rhythms 和 aggressive predation. A highly toxic environment. Identified a hitherto unknown symbiosis 与 a 新 strain 的 parasitic fungus. Further observation necessary.”</p><ul><li>每位调查员取得1点奖励经验值，因为其洞见了赫姆拉克岛的独特生态系。<ul><li>每位调查员 获得 1 额外 经验 如果 an 调查员 resigned 与 Bertie Musgrave 在……下 他们的 控制.</li></ul></li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的胜利X数值之和。<b>每位调查员现在可以花费剧本日志中，“未花费的经验值”下所记录的经验值。</b></li><li>更新剧本日志。<ul><li>如果 Ursine Hybrid 是 在 胜利牌区, 记录 * bear 是 wounded*.</li><li>在剧本日志中“已调查区域”的区域，将<i>西方大森林</i>打勾。</li></ul></li><li>前往_Prelude: 黎明 的  Second 白天_.</li></ul>"
+      "body": "<p>“1926年6月，米斯卡塔尼克大学实地调查。成员：马尔克斯、马斯格雷夫，及其他人员。本次前往西方大森林的夜间调查不在原定计划之内。该地区动植物的进化方向高度专一，专注于发展在黑暗中的行动模式，很可能出自于极端的昼夜节律与极具侵略性的掠食习性。环境毒性程度极高，发现迄今未见的共生体系，一种全新品系的寄生蕈类。需要进一步调查。”</p><ul><li>每位调查员取得1点奖励经验值，因为其洞见了赫姆拉克岛的独特生态系。<ul><li>如果有调查员在控制柏蒂．马斯格雷夫时撤退，每位调查员获得1点奖励经验值。</li></ul></li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的胜利X数值之和。**每位调查员现在可以花费剧本日志中，“未花费的经验值”下所记录的经验值。**</li><li>更新剧本日志。<ul><li>如果熊形混种在胜利区，记录下*熊怪受伤*。</li><li>在剧本日志中“已调查区域”的区域，将*西方大森林*打勾。</li></ul></li><li>进入 _序幕: 次日黎明</li></ul>"
     },
     "noResolution": {
       "body": "浓密的树冠上，细长的树枝像纤细的双手般伸向天空。奇异的低语从周遭的黑暗中传出，让你感到头晕目眩。你用尽全身的力气，跌跌撞撞的走到黑色的湖泊旁。皎洁的月亮在水面上留下完美的倒影，但一抹怪异的虹彩搅乱了湖水，模糊了月影。湖对面的雾气中站著一个身影，你大声叫喊，而它渐渐靠近，漂浮在水面上。随著距离缩短，你看见它的脸上挂著龇牙咧嘴的狞笑。\n“帮帮忙，快醒醒！”马尔克斯博士将你从梦魇中摇醒，看见你将眼睛睁开后，她的担忧很快就转为了烦躁：“很高兴你醒过来了，我不敢想像如果连你都出事，我得写多少报告。”你发现自己躺在森林边缘的花田中。当你问起柏蒂的下落时，教授将一缕发丝拨到耳后，抬头看著即将来临的黎明：“他不见了，我失去他了。”",
@@ -118,12 +118,12 @@
       "elderThing": "-4。如果你检定失败，受到1点恐惧。",
       "cultist": "-1. 治愈1点伤害 从 你的 调查员.",
       "skull": "-X. X 是当前 黑暗等级.",
-      "tablet": "-3. 如果 你 失败, 找出  敌人 在 pursuit 与highest 躲避. Spawn 它 在你的地点."
+      "tablet": "-3。若你失败，找出处于追逐中且闪避值最高的敌人。将其生成于你的地点。"
     },
     "hardExpert": {
       "cultist": "-3. 如果 你 成功, 治愈1点伤害 从 你的 调查员.",
       "skull": "-X. X 是 两次  当前 黑暗等级.",
-      "tablet": "-4. Find  敌人 在 pursuit 与highest 躲避. Spawn 它 在你的地点.",
+      "tablet": "-4。找出处于追逐中且闪避值最高的敌人。将其生成于你的地点。",
       "elderThing": "-5. 受到1点恐惧."
     }
   },

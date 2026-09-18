@@ -40,7 +40,7 @@
     "powerWasDiverted": "在左下方的秘库穴室上放置1资源。该地点“已激活”。",
     "otherwise": "在左下方、右下方和右上方的秘库穴室地点上各放置1资源。这些地点即“已激活”。",
     "gatherSets": "将下列遭遇组中的所有遭遇卡找出: _大秘库_, _异星装置_, _淹水_, _穷途异魔_, _R’lyeh_, 和 _星之眷族_. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/the-grand-vault.png' /><img src='{setImgPath}/alien-machinery.png' /><img src='{setImgPath}/flood.png' /><img src='{setImgPath}/the-inescapable.png' /><img src='{setImgPath}/rlyeh.png' /><img src='{setImgPath}/star-spawn.png' /></section>",
-    "setCardsAside": "将下列卡牌放在一旁，置于场外：池底之物敌人、拟鳄龟杂生 每位 copy 的  double-sided Ancient Vault 诡计, 每位 copy 的  Vault Attendant 敌人,  潮汐碑匾 剧情支援卡, 和 _穷途异魔_ 遭遇组.",
+    "setCardsAside": "将下列卡牌放在一边，位于场外：每张双面的远古秘库诡计、每名秘库随从敌人、潮汐碑匾剧情支援，以及_无可逃脱者_遭遇组。",
     "chooseExpeditionAsset": "按玩家顺序，每位玩家可以从<i>探险</i>遭遇组选择1张_道具_支援，使其位于自己控制之下开始游戏。该遭遇组的图标为：<img src='{setImgPath}/tdc_expedition.png' />"
   },
   "theVaultCore": {
@@ -61,7 +61,7 @@
   "resolutions": {
     "resolution1": {
       "title": "结局1",
-      "body": "<p>_结局 1_: The expedition members pass  evening sharing 剧情 和 cracking jokes. Even 在 spite 的  城市’s dour atmosphere, spirits seem 至 是 high. 你 share 你的 findings 与 Ruby 和 她的 companions 当Andy attempts 至 使 stew. 她 describes 他们的 difficult route 至  vault, 和 advises 你 受到  道路 up 穿过  ancient court above, 改为 的  route 她 took 穿过  silent factories.</p><p>“再说，我确信工厂在我们后面就全塌了，”露比说道，“要是你取道宫廷，我建议你避开那些所谓的‘朝圣者’。整座城里都是这帮货色。我看到一大帮子摇摇晃晃地朝顶上的大神庙去了。他们告诉我，他们是从某种地下巢穴里逃出来的，其中有人感染了相当严重的热病，所以我建议你离他们远点。”</p><ul><li>更新剧本日志。<ul><li>在拉莱耶地图的部分划掉“大秘库”。</li><li>如果  Tidal 石板 是 在……下  控制 的 an 调查员 当  冒险 ended, 检查  框 旁边“Tidal 石板” 在……下 “神器 Earned.”</li></ul></li><li>如果 任意 调查员 有  Good Money 任务, 有 他们 结算 他们的 respective 剧情 在 这 页.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>前往_Court 的  Ancients_.</li></ul>"
+      "body": "<p>_结局1_：探险队在玩笑和轶事中度过了这一夜。即便城里的气氛不佳，大家的精神却很高涨。安迪忙着烹饪炖菜的时候，你跟露比和她的同伴分享了发现。在她的描述中，通往秘库艰难重重。她建议你取道往上，走远古宫廷那条路，而不是像她一样，穿过寂静的工厂。</p><p>“再说，我确信工厂在我们后面就全塌了，”露比说道，“要是你取道宫廷，我建议你避开那些所谓的‘朝圣者’。整座城里都是这帮货色。我看到一大帮子摇摇晃晃地朝顶上的大神庙去了。他们告诉我，他们是从某种地下巢穴里逃出来的，其中有人感染了相当严重的热病，所以我建议你离他们远点。”</p><ul><li>更新你的剧本记录。<ul><li>在拉莱耶地图上划掉“宏伟宝库”。</li><li>如果冒险结束时潮汐碑匾在某位调查员的操控下，勾选“已获得的神器”下“潮汐碑匾”旁的方框。</li></ul></li><li>如果有调查员拥有“好钱”任务，让他们在本页结算各自的故事。</li><li>每位调查员获得经验，数值等同于胜利区中每张卡牌的胜利X数值之和。</li><li>前往_远古宫廷_。</li></ul>"
     },
     "resolution2": {
       "title": "结局2",
@@ -83,7 +83,7 @@
       }
     },
     "noResolution": {
-      "body": "<p>_如果 没有 结局 是 到达 (每位调查员 resigned 在……期间 act 1 或 是 被击败)_: 你rescued 从churning water battered 和 bruised, 但 thankfully still alive. 之后 returning 至  towering precipice 哪里 你 began, 你pleasantly surprised 至 找出 Ruby 和 Andy chatting 在……上 a meal 的 dry rations. Rather 于 cut  reunion short, 你 结算 至 使 camp. Together, 你 pass  evening cracking jokes 和 sharing 剧情. 之前 parting ways, Ruby 和 Andy share 他们的 findings 和 compile a crude 地图 的  ancient 城市.</p><ul><li>更新剧本日志。<ul><li>在拉莱耶地图的部分划掉“大秘库”。</li><li>如果  Tidal 石板 是 在……下  控制 的 an 调查员 当  冒险 ended, 检查  框 旁边“Tidal 石板” 在……下 “神器 Earned.”</li></ul></li><li>如果 任意 调查员 有  Good Money 任务, 有 他们 结算 他们的 respective 剧情 在 这 页.</li><li>每位调查员取得经验值，数量等于胜利区所有卡牌的<b>胜利X</b>数值之和。</li><li>检查 你的 战役 Log.<ul><li>如果  expedition 前往 西, 前往_Court 的  Ancients_.</li><li>如果  expedition 前往 东, 前往_The Apiary_.</li></ul></li></ul>",
+      "body": "<p>_若未达成结局（每位调查员均在场景1期间撤退或被击败）_：你被人从翻滚的水里救了出来，虽然遍体鳞伤，但谢天谢地，至少还活着。回到出发时那处高耸悬崖后，你惊喜地发现露比和安迪正一边啃着干粮一边聊天。你不愿匆匆结束这场重逢，于是决定就地扎营。你们一起说笑谈天，度过了这个夜晚。分别前，露比和安迪分享了各自的发现，合力画出一幅粗略的古城地图。</p><ul><li>更新你的剧本记录。<ul><li>在拉莱耶地图上划掉“宏伟宝库”。</li><li>如果冒险结束时潮汐碑匾在某位调查员的操控下，勾选“已获得的神器”下“潮汐碑匾”旁的方框。</li></ul></li><li>如果有调查员拥有“好钱”任务，让他们在本页结算各自的故事。</li><li>每位调查员获得经验，数值等同于胜利区中每张卡牌的胜利X数值之和。</li><li>检查你的剧本记录。<ul><li>如果探险队向西行进，前往_远古宫廷_。</li><li>如果探险队向东行进，前往_育蜂场_。</li></ul></li></ul>",
       "title": "如果未达成任何结局"
     }
   },
@@ -92,13 +92,13 @@
       "tablet": "-2 (如果你所在地点部分淹没，改为-3；如果你所在地点完全淹没，改为-4)。",
       "cultist": "-3. 如果 你 失败, 你 必须 任一 deactivate 你的 地点 或 受到1点伤害 或 1 恐惧.",
       "skull": "-X. X 是 half 数量为activated 地点 (rounded 向下).",
-      "elderThing": "-4. 如果 你 失败, 搜索  遭遇 弃牌堆 为 a copy 的  Still Behind 你 诡计 和 加入 它 加入胜利牌区。"
+      "elderThing": "-4。若你失败，在遭遇弃牌堆中查找一张仍在你身后诡计，将其加入胜利区。"
     },
     "hardExpert": {
       "cultist": "-4. 之后 这 检定 resolves, 你 必须 任一 deactivate 你的 地点 或 受到1点伤害和1点恐惧.",
       "skull": "-X. X 是 数量为activated 地点.",
       "tablet": "-3 (-4 改为 如果 你的 地点 是 部分淹没; -5 改为 如果 你的 地点 是 完全淹没).",
-      "elderThing": "-5. 如果 你 失败, 搜索  遭遇 弃牌堆 为 a copy 的  Still Behind 你 诡计 和 抽取 它."
+      "elderThing": "-5。若你失败，在遭遇弃牌堆中查找一张仍在你身后诡计并抽取它。"
     }
   },
   "label": {

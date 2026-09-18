@@ -180,5 +180,8 @@
     "label": {
       "shroudPlus2": "你的 地点 gets +2 shroud 为 这 调查阶段"
     }
+  },
+  "intro": {
+    "title": "冒险II–A：寻觅卡达斯"
   }
 }
