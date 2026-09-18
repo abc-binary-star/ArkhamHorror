@@ -746,6 +746,9 @@ input[type='image'] {
 .wizard-actions {
   grid-auto-flow: row;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .wizard-actions .action {
