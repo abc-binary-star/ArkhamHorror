@@ -129,15 +129,18 @@ function tokenizeParams(paramsString: string) {
         const c = paramsString[i];
 
         if (inQuotes) {
-            if (c !== '\\')
-              currentToken += c;
-            if (c === quoteChar && !escaped) {
-                inQuotes = false;
-            }
-            if (c === '\\' && !escaped) {
+            if (escaped) {
+                // Unescape exactly what the backend's quoted() escaped:
+                // \" -> ", \\ -> \, so escapes inside the value survive.
+                currentToken += c;
+                escaped = false;
+            } else if (c === '\\') {
                 escaped = true; // Next character is escaped
             } else {
-                escaped = false; // Reset escape state
+                currentToken += c;
+                if (c === quoteChar) {
+                    inQuotes = false;
+                }
             }
         } else {
             if (c === ' ') {

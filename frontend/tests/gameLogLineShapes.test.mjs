@@ -41,10 +41,17 @@ function tokenizeParams(paramsString) {
   for (let i = 0; i < paramsString.length; i++) {
     const c = paramsString[i]
     if (inQuotes) {
-      if (c !== '\\') currentToken += c
-      if (c === quoteChar && !escaped) inQuotes = false
-      if (c === '\\' && !escaped) escaped = true
-      else escaped = false
+      if (escaped) {
+        // Unescape exactly what the backend's quoted() escaped:
+        // \" -> ", \\ -> \, so escapes inside the value survive.
+        currentToken += c
+        escaped = false
+      } else if (c === '\\') {
+        escaped = true
+      } else {
+        currentToken += c
+        if (c === quoteChar) inQuotes = false
+      }
     } else if (c === ' ') {
       if (currentToken.length > 0) {
         tokens.push(currentToken)
@@ -117,6 +124,10 @@ const referencePatterns = [
 
 const investigator = '{investigator:"Mark Harrigan: The Soldier":"01001"}'
 const enemy = '{enemy:"Ghoul Priest":"e2b1":"01119"}'
+// Card titles can contain quotes (e.g. "Wolf-Man" Drew, 01137). The reference
+// carries them tshow-escaped as \" and must survive the var round-trip.
+const enemyQuotedName =
+  '{enemy:"\\"Wolf-Man\\" Drew":39e4fc46-a140-4c79-95d0-eaf661f46c9b:"01137"}'
 const location = '{location:"Study":6f2d:"01113"}'
 const card = '{card:"Machete":"01020":"c-abc-123"}'
 // cardCodeRef writes the code into all three fields (see Arkham/Helpers/GameLog.hs).
@@ -144,6 +155,10 @@ const lines = [
   ['gameLog.enemyDefeated', { enemy }, zh],
   ['gameLog.enemyTakesDamage', { enemy, count: 2 }, zh],
   ['gameLog.enemyTakesDamageFrom', { investigator, enemy, count: 2 }, zh],
+  ['gameLog.enemyDefeated', { enemy: enemyQuotedName }, zh],
+  ['gameLog.enemyTakesDamageFrom', { investigator, enemy: enemyQuotedName, count: 1 }, zh],
+  ['gameLog.fightsEnemy', { investigator, enemy: enemyQuotedName }, zh],
+  ['gameLog.enemyAttacks', { investigator, enemy: enemyQuotedName, damage: 2, horror: 1 }, zh],
   ['gameLog.enemyHealsDamage', { enemy, count: 1 }, en],
   ['gameLog.enemyAttacks', { investigator, enemy, damage: 2, horror: 1 }, zh],
   ['gameLog.enemyMovesTo', { enemy, location }, zh],
