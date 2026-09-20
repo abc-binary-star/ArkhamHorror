@@ -58,6 +58,13 @@ export const useDbCardStore = defineStore("dbCards", {
   } as DbCardsState),
 
   actions: {
+    // The cards_zh.json file is Traditional Chinese; the zh UI is Simplified, so
+    // cards follow it and load the zh-cn database instead.
+    cardLanguage(): string {
+      const language = localStorage.getItem('language') || 'en'
+      return language === 'zh' ? 'zh-cn' : language
+    },
+
     getDbCard(code: string): ArkhamDBCard | null {
       if (this.dbCards.length < 1) {
         void this.initDbCards()
@@ -70,7 +77,7 @@ export const useDbCardStore = defineStore("dbCards", {
 
     getCardName(cardTitle: string, typeCode: string = ""): string {
       if (this.dbCards.length < 1) {
-        const language = localStorage.getItem('language') || 'en'
+        const language = this.cardLanguage()
         if (language !== 'en') void this.initDbCards()
       }
 
@@ -82,7 +89,10 @@ export const useDbCardStore = defineStore("dbCards", {
     },
 
     async fetchDbCards(lang: string) {
-      const path = `/cards/cards_${lang}.json`.replace(/^\//, '')
+      // Absolute via BASE_URL: a relative path breaks inside the tabletop
+      // iframe, whose deep route resolves it to /games/cards/... and gets the
+      // SPA fallback instead of the JSON.
+      const path = `${import.meta.env.BASE_URL}cards/cards_${lang}.json`
       const response = await fetch(path)
       // Without this a 404 hands back the SPA's index.html and .json() throws an
       // opaque SyntaxError from deep inside the store.
@@ -116,7 +126,7 @@ export const useDbCardStore = defineStore("dbCards", {
 
     /** Resolves true when the cards on screen match the stored language. */
     async initDbCards(): Promise<boolean> {
-      const language = localStorage.getItem('language') || 'en'
+      const language = this.cardLanguage()
 
       if (this.lang === language && this.dbCards.length > 0) return true
       if (this.loadingLang === language) return false

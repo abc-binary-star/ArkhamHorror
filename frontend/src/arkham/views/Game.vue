@@ -2133,6 +2133,14 @@ async function applySavedCampaignDeck(deckId: string) {
     }
 
     await Api.upgradeDeck(props.gameId, target.id, undefined, savedDeckList(deck))
+
+    // Rename the campaign copy so its xp state is visible at a glance, e.g.
+    // "… +7xp". Idempotent: an earlier +Nxp suffix is replaced, not stacked.
+    const baseName = deck.name.replace(/ \+\d+xp$/, '')
+    const renamed = `${baseName} +${required}xp`
+    if (deck.name !== renamed) {
+      await Api.updateDeck(deck.id, { deckUrl: deck.url ?? null, deckName: renamed })
+    }
   } catch (error) {
     console.warn('Could not apply the saved campaign deck', error)
   } finally {

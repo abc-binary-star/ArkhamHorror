@@ -15,6 +15,7 @@ import Question from '@/arkham/components/Question.vue';
 import { isUsableDecklist, loadUpgradeDeckFromJsonText } from '@/arkham/upgradeDeckUpload';
 import { deckTotalXp } from '@/arkham/deckXp';
 import { randomId } from '@/arkham/randomId';
+import { onDeckBuilderSave } from '@/arkham/deckBuilderBridge';
 import { useDbCardStore } from '@/stores/dbCards';
 import { deckRestrictionError, normalizeCardCode } from '@/arkham/deckRestrictions';
 import { useI18n } from 'vue-i18n';
@@ -106,8 +107,11 @@ function waitForOtherPlayers() {
   }
 }
 
+let stopDeckSaveSubscription: (() => void) | null = null
+
 onUnmounted(() => {
   if (waitingPoll !== null) clearTimeout(waitingPoll)
+  stopDeckSaveSubscription?.()
 })
 const deck = ref<string | null>(null)
 const deckUrl = ref<string | null>(null)
@@ -176,22 +180,12 @@ const canUpgradeOriginalInvestigator = computed(() =>
 const arkhamBuildShareRegex = /https:\/\/arkham\.build\/(?:deck\/view|share(?:\/view)?)\/([^/?]+)/
 const arkhamBuildDecklistRegex = /https:\/\/arkham\.build\/decklist(?:\/view)?\/([^/?]+)/
 
-function openDeckInNewTab(url: string) {
-  window.open(url, '_blank', 'noopener')
-}
-
 function openBuildTab() {
   // Open synchronously from the click handler so browsers do not block the tab
   // while the campaign deck branch is created asynchronously.
   const tab = window.open('about:blank', '_blank')
   if (tab) tab.opener = null
   return tab
-}
-
-function arkhamDbApiUrl(value: string) {
-  const arkhamDbRegex = /https:\/\/(?:[a-zA-Z0-9-]+\.)?arkhamdb\.com\/(deck(list)?)(\/view)?\/([^/?]+)/
-  const matches = value.match(arkhamDbRegex)
-  return matches ? `${localizeArkhamDBBaseUrl()}/api/public/${matches[1]}/${matches[4]}` : null
 }
 
 function appBasePath() {
@@ -400,6 +394,9 @@ async function applySelectedLocalDeck() {
 onMounted(() => {
   void dbCardStore.initDbCards()
   void loadLocalDecks()
+  // A builder save can rename or change the xp of the campaign copy while this
+  // window is open; re-pull so the dropdown shows the saved state immediately.
+  stopDeckSaveSubscription = onDeckBuilderSave(() => { void loadLocalDecks() })
 })
 
 const error = computed(() => {
@@ -457,37 +454,6 @@ const deckSource = computed(() => {
   return isArkhamDBDeck.value ? 'ArkhamDB' : (isArkhamBuildDeck.value ? 'arkham.build' : null)
 })
 
-function viewDeck() {
-  if (currentDeckUrl.value) {
-    const localDeckId = localDeckIdFromUrl(currentDeckUrl.value)
-    if (localDeckId) {
-      openDeckInNewTab(localDeckViewUrl(localDeckId))
-      return
-    }
-
-    const arkhamDbApiRegex = /https:\/\/(?:[a-zA-Z0-9-]+\.)?arkhamdb\.com\/api\/public\/deck\/([^/]+)/
-    const matches = currentDeckUrl.value.match(arkhamDbApiRegex)
-    if (matches) {
-      openDeckInNewTab(`${localizeArkhamDBBaseUrl()}/deck/view/${matches[1]}`)
-      return
-    }
-
-    const arkhamDbDecklistRegex = /https:\/\/(?:[a-zA-Z0-9-]+\.)?arkhamdb\.com\/api\/public\/decklist\/([^/]+)/
-    const dlmatches = currentDeckUrl.value.match(arkhamDbDecklistRegex)
-    if (dlmatches) {
-      openDeckInNewTab(`${localizeArkhamDBBaseUrl()}/decklist/view/${dlmatches[1]}`)
-      return
-    }
-
-    const arkhamBuildApiRegex = /https:\/\/api.arkham\.build\/v1\/public\/share\/([^/]+)/
-    const abmatches = currentDeckUrl.value.match(arkhamBuildApiRegex)
-    if (abmatches) {
-      openDeckInNewTab(`https://arkham.build/deck/view/${abmatches[1]}?upgrade_xp=${xp.value}`)
-      return
-    }
-  }
-}
-
 // Reads the errorMsg the API returns for a rejected upgrade (Api.Handler.Arkham.Decks
 // answers with a JSONError), falling back to a generic message.
 function submitErrorMessage(e: unknown, fallback: string): string {
@@ -496,9 +462,6 @@ function submitErrorMessage(e: unknown, fallback: string): string {
 }
 
 type ChainDeck = ArkhamDbDecklist & { next_deck?: string | number | null }
-
-const arkhamBuildShareUrl = (id: string | number) => `https://api.arkham.build/v1/public/share/${id}`
-const arkhamDbDeckUrl = (id: string | number) => `${localizeArkhamDBBaseUrl()}/api/public/deck/${id}`
 
 // Fetches one deck, refusing anything that isn't a usable decklist. `fetch` resolves for a
 // 404, and processArkhamBuildDeck turns an error body into {message, slots: {}} -- which used
@@ -542,80 +505,6 @@ async function fetchDeckAt(url: string, isArkhamBuild: boolean): Promise<ChainDe
   }
 
   return processed as ChainDeck
-}
-
-// Walks next_deck to the end of the chain. Any failure fails the WHOLE pull: applying the last
-// link that happened to load would silently upgrade to a stale version, which is exactly how a
-// pull could "succeed" while adding no new cards (#5257).
-async function followUpgradeChain(
-  startUrl: string,
-  urlFor: (id: string | number) => string,
-  isArkhamBuild: boolean,
-): Promise<ChainDeck | null> {
-  let url: string | null = startUrl
-  let last: ChainDeck | null = null
-  const seen = new Set<string>()
-
-  while (url) {
-    if (seen.has(url)) break
-    seen.add(url)
-    const fetched = await fetchDeckAt(url, isArkhamBuild)
-    if (!fetched) return null
-    last = fetched
-    url = fetched.next_deck != null ? urlFor(fetched.next_deck) : null
-  }
-
-  return last
-}
-
-async function syncUpgrade() {
-  if(error.value) return
-  const startUrl = investigator.value?.deckUrl
-  if (!startUrl) return
-  submitError.value = null
-  loadError.value = null
-
-  const localDeckId = localDeckIdFromUrl(startUrl)
-  if (localDeckId) {
-    fetching.value = true
-    try {
-      const localDeck = await fetchDeck(localDeckId)
-      const content = deckToDecklist(localDeck)
-      model.value = content
-      deckList.value = content
-      deck.value = content.url
-      deckUrl.value = content.url
-      deckInvestigator.value = investigatorCode(content.investigator_code)
-      await upgrade()
-    } catch {
-      loadError.value = t('upgrade.localDeckReadFailed')
-    } finally {
-      fetching.value = false
-    }
-    return
-  }
-
-  const isArkhamDb = /https:\/\/(?:[a-zA-Z0-9-]+\.)?arkhamdb\.com\/api\/public\/deck\/([^/]+)/.test(startUrl)
-  const isArkhamBuild = /https:\/\/api\.arkham\.build\/v1\/public\/share\/([^/]+)/.test(startUrl)
-  if (!isArkhamDb && !isArkhamBuild) return
-
-  fetching.value = true
-  try {
-    const content = await followUpgradeChain(
-      startUrl,
-      isArkhamBuild ? arkhamBuildShareUrl : arkhamDbDeckUrl,
-      isArkhamBuild,
-    )
-    if (!content?.url) return
-    model.value = content
-    deckList.value = content
-    deck.value = content.url
-    deckUrl.value = content.url
-    deckInvestigator.value = investigatorCode(content.investigator_code)
-    await upgrade()
-  } finally {
-    fetching.value = false
-  }
 }
 
 async function loadDeck(): Promise<ChainDeck | null> {
@@ -946,40 +835,10 @@ const tabooList = function (investigator: Investigator) {
                     {{ $t('upgrade.applyLocalDeck') }}
                   </button>
                 </div>
-                <span class="separator">{{ $t('upgrade.OR') }}</span>
               </template>
               <p v-else-if="localDecksLoaded && canUpgradeOriginalInvestigator && !deckSource" class="info">
                 {{ $t('upgrade.noLocalDeck') }}
               </p>
-              <template v-if="canUpgradeOriginalInvestigator && deckSource">
-                <p class="info">{{ $t('upgrade.directlyUpdateContent', {deckSource: deckSource}) }}</p>
-                <div class="step-buttons">
-                  <button class="step secondary" @click.prevent="viewDeck">
-                    <span class="step-number">1</span>
-                    <span class="step-label">{{ $t('upgrade.openDeck', {deckSource: deckSource}) }}</span>
-                  </button>
-                  <span class="step-arrow" aria-hidden="true">→</span>
-                  <button class="step primary" @click.prevent="syncUpgrade">
-                    <span class="step-number">2</span>
-                    <span class="step-label">{{ $t('upgrade.pullUpdate', {deckSource: deckSource}) }}</span>
-                  </button>
-                </div>
-                <span class="separator">{{ $t('upgrade.OR') }}</span>
-              </template>
-              <div class="input-row">
-                <input
-                  type="url"
-                  v-model="deck"
-                  @change="loadDeck"
-                  @paste.prevent="pasteDeck($event)"
-                  v-bind:placeholder="$t('upgrade.deckUrlPlaceholder')"
-                />
-                <button class="primary" @click.prevent="upgrade()">{{ originalInvestigatorId && killedInvestigators.includes(originalInvestigatorId) ? $t('upgrade.newInvestigator') : $t('upgrade.Upgrade') }}</button>
-              </div>
-              <label class="file-upload">
-                <span class="file-upload-text">{{ $t('upgrade.orUploadJson') }}</span>
-                <input type="file" accept=".json,application/json" @change="loadDeckFromFile" />
-              </label>
               <div v-if="investigatorId == originalInvestigatorId" class="footer">
                 <button class="skip" @click.prevent="skipping = true">{{ $t('upgrade.continueWithoutUpgrading') }}</button>
               </div>
@@ -1219,64 +1078,6 @@ input[type=url] {
   gap: 10px;
 }
 
-.step-buttons {
-  display: flex;
-  align-items: stretch;
-  gap: 8px;
-}
-
-.step {
-  display: inline-flex;
-  align-items: stretch;
-  justify-content: flex-start;
-  gap: 0;
-  padding: 0;
-  overflow: hidden;
-  flex: 1;
-  text-align: left;
-}
-
-.step-number {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 32px;
-  padding: 0 10px;
-  background: var(--panel-inset);
-  border-right: var(--edge-width) solid var(--edge-dim);
-  color: var(--ink);
-  font-size: 0.95em;
-  font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1;
-}
-
-.step.primary .step-number {
-  background: color-mix(in srgb, var(--spooky-green) 12%, var(--panel-inset));
-  border-right-color: var(--spooky-green);
-}
-
-.step-label {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 14px;
-  white-space: normal;
-  line-height: 1.25;
-}
-
-.step-arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-faint);
-  font-size: 1.05em;
-  flex-shrink: 0;
-  user-select: none;
-}
-
 button {
   text-transform: uppercase;
   font-size: 0.78em;
@@ -1328,32 +1129,6 @@ button.skip {
     transform: none;
     box-shadow: none;
   }
-}
-
-.separator {
-  display: flex;
-  align-items: center;
-  text-align: center;
-  font-size: 0.72em;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  margin: 2px 0;
-}
-
-.separator::before,
-.separator::after {
-  content: '';
-  flex: 1;
-  border-bottom: 1px solid var(--edge-faint);
-}
-
-.separator:not(:empty)::before {
-  margin-right: 0.85em;
-}
-
-.separator:not(:empty)::after {
-  margin-left: 0.85em;
 }
 
 .file-upload {
@@ -1414,8 +1189,6 @@ button.skip {
 .footer {
   display: flex;
   margin-top: 8px;
-  padding-top: 18px;
-  border-top: 1px solid var(--edge-faint);
 }
 
 .killed-prompt {
@@ -1458,10 +1231,9 @@ button.skip {
 
   .panel { display: flex; flex-direction: column; min-width: 0; width: 100%; max-width: 100%; padding: 16px 12px; }
   .content, .question-pane { min-width: 0; max-width: 100%; }
-  .input-row, .step-buttons, .buttons { display: flex; flex-wrap: wrap; gap: 10px; }
+  .input-row, .buttons { display: flex; flex-wrap: wrap; gap: 10px; }
   .input-row input { min-width: 0; width: 100%; flex: 1 1 180px; }
-  .step, .input-row button { flex: 1 1 140px; min-height: 44px; white-space: normal; }
-  .step-arrow { display: none; }
+  .input-row button { flex: 1 1 140px; min-height: 44px; white-space: normal; }
   .portrait { max-width: 160px; align-self: center; }
 
 }

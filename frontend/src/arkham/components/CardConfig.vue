@@ -121,6 +121,9 @@ onUnmounted(() => {
   place-items: center;
   width: 18px;
   height: 18px;
+  /* Global `button { min-height: var(--control-height) }` would stretch the box
+     and sink the glyph well below the corner. */
+  min-height: 0;
   padding: 0;
   margin: 0;
   border: 0;

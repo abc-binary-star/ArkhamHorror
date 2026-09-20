@@ -6,6 +6,7 @@ import type { User } from '@/types'
 import { OnClickOutside } from '@vueuse/components'
 import { storeToRefs } from 'pinia'
 import { useSettings } from '@/stores/settings'
+import { Layers, SquarePen, SquareStack, Trophy, Hammer, Info, Shield } from '@lucide/vue'
 
 const expanded = ref(false)
 const mobileOpen = ref(false)
@@ -62,7 +63,7 @@ async function logout() {
         to="/decks"
         class="nav-link"
         :class="{ 'nav-link--current': isNavCurrent('/decks') }"
-        >{{ $t('nav.myDecks') }}</router-link
+        ><Layers class="nav-icon" aria-hidden="true" />{{ $t('nav.myDecks') }}</router-link
       >
       <a
         v-if="currentUser && deckBuilderAvailable"
@@ -70,42 +71,42 @@ async function logout() {
         class="nav-link"
         target="_blank"
         rel="noopener"
-        >{{ $t('nav.deckBuilder') }}</a
+        ><SquarePen class="nav-icon" aria-hidden="true" />{{ $t('nav.deckBuilder') }}</a
       >
       <router-link
         v-if="currentUser"
         to="/cards"
         class="nav-link"
         :class="{ 'nav-link--current': isNavCurrent('/cards') }"
-        >{{ $t('nav.cards') }}</router-link
+        ><SquareStack class="nav-icon" aria-hidden="true" />{{ $t('nav.cards') }}</router-link
       >
       <router-link
         v-if="currentUser"
         to="/achievements"
         class="nav-link"
         :class="{ 'nav-link--current': isNavCurrent('/achievements') }"
-        >{{ $t('nav.achievements') }}</router-link
+        ><Trophy class="nav-icon" aria-hidden="true" />{{ $t('nav.achievements') }}</router-link
       >
       <router-link
         v-if="currentUser && customCardsEnabled"
         to="/card-builder"
         class="nav-link"
         :class="{ 'nav-link--current': isNavCurrent('/card-builder') }"
-        >{{ $t('nav.cardBuilder') }}</router-link
+        ><Hammer class="nav-icon" aria-hidden="true" />{{ $t('nav.cardBuilder') }}</router-link
       >
       <router-link
         v-if="currentUser"
         to="/about"
         class="nav-link"
         :class="{ 'nav-link--current': isAboutCurrent }"
-        >{{ $t('nav.about') }}</router-link
+        ><Info class="nav-icon" aria-hidden="true" />{{ $t('nav.about') }}</router-link
       >
       <router-link
         v-if="currentUser && currentUser.admin"
         to="/admin"
         class="nav-link"
         :class="{ 'nav-link--current': isNavCurrent('/admin') }"
-        >{{ $t('nav.admin') }}</router-link
+        ><Shield class="nav-icon" aria-hidden="true" />{{ $t('nav.admin') }}</router-link
       >
     </nav>
 
@@ -255,6 +256,7 @@ async function logout() {
   gap: 1px;
   min-width: 0;
   line-height: 1;
+  padding-top: 4px;
 }
 
 .brand-name {
@@ -296,6 +298,7 @@ async function logout() {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 7px;
   flex-shrink: 0;
   height: 44px;
   padding: 0 16px;
@@ -345,6 +348,13 @@ async function logout() {
 .nav-link--current {
   color: var(--text-on-dark, #f4efe4);
   font-weight: var(--font-black);
+}
+
+.nav-icon {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  opacity: 0.8;
 }
 
 .nav-link.nav-link--current::after {
@@ -553,18 +563,15 @@ async function logout() {
   height: 36px;
   max-width: 180px;
   padding: 0 11px;
-  background: rgba(244, 239, 228, 0.04);
-  border-radius: 3px;
-  box-shadow: 0 2px 4px rgba(18, 25, 25, 0.2);
+  background: none;
+  border: 0;
+  box-shadow: none;
   color: var(--text-on-dark, #f4efe4);
   font-size: 0.78rem;
   font-weight: var(--font-black);
   cursor: pointer;
   white-space: nowrap;
-  transition:
-    border-color 140ms ease,
-    color 140ms ease,
-    background-color 140ms ease;
+  transition: color 140ms ease;
 
   span {
     overflow: hidden;
@@ -574,9 +581,7 @@ async function logout() {
   &:hover,
   &:focus-visible,
   &.open {
-    border-color: var(--accent-brass-bright, #c8ad78);
-    background: rgba(200, 173, 120, 0.08);
-    color: var(--text-on-dark, #f4efe4);
+    color: var(--accent-brass-bright, #c8ad78);
   }
 
   &:focus-visible {

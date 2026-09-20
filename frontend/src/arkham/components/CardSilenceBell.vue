@@ -54,13 +54,16 @@ function toggle() {
    drop-shadows, so it survives light card art in the shared top-left corner. */
 .silence-bell {
   position: absolute;
-  left: 3px;
-  top: 3px;
+  left: 1px;
+  top: 1px;
   z-index: var(--z-index-3);
   display: grid;
   place-items: center;
   width: 18px;
   height: 18px;
+  /* Global `button { min-height: var(--control-height) }` would stretch the box
+     and sink the glyph well below the corner. */
+  min-height: 0;
   padding: 0;
   margin: 0;
   border: 0;

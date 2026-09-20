@@ -160,8 +160,9 @@ const dismissNotification = (notification: AppNotification) => {
           <p class="hero-subtitle">{{ leadGame?.name || $t('home.heroSubtitle') }}</p>
           <p class="hero-caption">{{ $t('home.heroCaption') }}</p>
           <div class="hero-actions">
-            <PrimaryButton :label="leadGame ? $t('continue') : $t('newGame')" @click="leadGame ? router.push(`/games/${leadGame.id}`) : toggleNewGame()" />
+            <PrimaryButton v-if="leadGame" :label="$t('continue')" @click="router.push(`/games/${leadGame.id}`)" />
             <button v-if="currentUser" class="hero-secondary plaque plaque--paper" type="button" @click="toggleImportGame">{{ $t('home.loadGame') }}</button>
+            <button class="hero-secondary plaque plaque--paper" type="button" @click="toggleNewGame">{{ $t('newGame') }}</button>
           </div>
         </div>
         <div class="home-hero-seal" aria-hidden="true">
@@ -174,12 +175,6 @@ const dismissNotification = (notification: AppNotification) => {
         <div>
           <p class="archive-kicker archive-kicker--dark">{{ $t('home.caseKicker') }}</p>
           <h2>{{$t('activeGames')}}</h2>
-        </div>
-        <div class="header-actions">
-          <button v-if="currentUser" class="secondary-cta plaque plaque--paper" type="button" @click="toggleImportGame">
-            {{ $t('home.loadGame') }}
-          </button>
-          <PrimaryButton :label="$t('newGame')" @click="toggleNewGame" />
         </div>
       </div>
 
@@ -377,29 +372,14 @@ header {
   gap: 12px;
 }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-/* Material comes from `.plaque--paper`. */
-.secondary-cta {
-  align-self: center;
-  cursor: pointer;
-  font-size: 0.85em;
+/* Material comes from `.plaque--paper`; only sizing and rhythm live here.
+   Sized to PrimaryButton's control metrics so the hero row reads as one step. */
+.hero-secondary {
+  height: var(--control-height-primary);
+  padding: 0 22px;
+  font-size: 1em;
   font-weight: var(--font-bold);
   letter-spacing: 0.04em;
-  outline: 0;
-  padding: 8px 12px;
-  text-transform: uppercase;
-
-  @media (max-width: 768px) {
-    padding: 6px 9px;
-    font-size: 0.75em;
-  }
 }
 
 .load-game-panel {
@@ -639,15 +619,6 @@ header.main-header {
 
 .hero-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
-/* Material comes from `.plaque--paper`; only sizing and rhythm live here. */
-.hero-secondary {
-  height: 40px;
-  padding: 0 14px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
 .home-hero-seal {
   position: absolute;
   right: 22px;
@@ -727,7 +698,6 @@ header.main-header {
   .home-hero h1 { font-size: 2.5rem; }
   .home-hero-seal { right: 14px; bottom: 12px; }
   .archive-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
-  .archive-heading .header-actions { width: 100%; justify-content: flex-start; }
   .archive-side-column { grid-template-columns: 1fr; }
 }
 
@@ -737,8 +707,8 @@ header.main-header {
   .archive-layout { grid-template-columns: minmax(0, 1fr); }
   .archive-main-column, .archive-side-column { min-width: 0; }
   .archive-heading, .panel-header { flex-wrap: wrap; gap: 12px; }
-  .hero-actions, .header-actions, .panel-actions { flex-wrap: wrap; gap: 8px; }
-  .hero-actions > *, .header-actions > * { min-height: 44px; }
+  .hero-actions, .panel-actions { flex-wrap: wrap; gap: 8px; }
+  .hero-actions > * { min-height: 44px; }
   .home-hero-content { padding: 24px 16px; }
   .home-hero h1 { font-size: clamp(28px, 7vw, 42px); }
 
