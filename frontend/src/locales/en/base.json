@@ -607,8 +607,9 @@
     "archiveDescription": "Keep your decks in order. Prepare for the next investigation.",
     "collectionLabel": "YOUR COLLECTION",
     "resultCount": "{count} / {total} decks",
-    "newDeck": "New Deck",
-    "createInBuilder": "Build with builder",
+    "newDeck": "Import Deck",
+    "createInBuilder": "Create Locally",
+    "allDecks": "All Decks",
     "saveToDeckList": "Save to Deck List",
     "saveToDeckListDescription": "Keep this deck available for future campaigns"
   },

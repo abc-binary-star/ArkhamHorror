@@ -100,4 +100,26 @@ button { min-height: 42px; padding: 9px 14px; border: 1px solid #ad8b65; border-
 button:focus-visible { outline: 2px solid #e2c59e; outline-offset: 3px; }
 .inspect { display: block; margin: 8px auto 0; background: transparent; border-color: #ad8b6540; }
 .attack-reminder { position: fixed; bottom: calc(84px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 1100; max-width: calc(100vw - 32px); }
+
+/* Threat window: blood-red wax and aged copper on pale parchment. */
+.attack-dialog {
+  background: linear-gradient(#b0503417, #b0503417),
+    #eee2c9 url('@/assets/veiled-harbour/story-folio-v1.png') center / 100% 100% no-repeat;
+  color: #49312b;
+  border: 1px solid #a56c52;
+  border-top: 4px solid #864333;
+  box-shadow: inset 0 0 0 3px #f5dfc766, 0 24px 80px #000b;
+}
+.attack-dialog h2 { color: #793b2e; }
+.verse, .instruction { color: #755749; }
+.values { color: #873e31; font-weight: 700; }
+.attack-dialog button, .attack-entry :deep(.question-choices > button) {
+  background: linear-gradient(#814637, #4c2924);
+  border-color: #b18060;
+  color: #fff0da;
+}
+.attack-dialog button:hover:not(:disabled) { filter: brightness(1.12); }
+.attack-dialog .inspect { background: #fff3dd66; color: #754332; border-color: #ae806166; }
+.attack-dialog button:focus-visible { outline-color: #904f34; }
+
 </style>

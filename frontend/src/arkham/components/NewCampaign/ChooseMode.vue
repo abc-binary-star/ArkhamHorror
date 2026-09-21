@@ -132,6 +132,8 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
 </script>
 
 <template>
+  <div class="archive-picker">
+  <aside class="archive-filters">
   <div class="chapter-select" :style="{ '--item-count': chapterGroups.length }">
     <template v-for="group in chapterGroups" :key="group.id">
       <input :id="`chapter-${group.id}`" v-model="campaignGroup" type="radio" name="campaign-chapter" :value="group.id" />
@@ -172,6 +174,8 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
     </template>
   </div>
 
+  </aside>
+  <section class="archive-catalog">
   <template v-if="gameMode === 'SideStory'">
     <div class="scenarios">
       <div
@@ -193,6 +197,7 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
             @click.prevent="selectedScenario = s.id; emits('go')"
           />
         </div>
+        <div class="catalog-title" :title="s.name">{{ s.name }}</div>
         <span v-if="s.requiredInvestigator" class="requires-investigator">
           {{ $t('create.requiresInvestigator', { name: s.requiredInvestigator }) }}
         </span>
@@ -235,6 +240,7 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
               {{ c.name }}
             </button>
           </div>
+          <div class="catalog-title" :title="c.name">{{ c.name }}</div>
           <span v-if="c.designer" class="designer-credit">
             {{ $t('create.designedBy', { name: c.designer }) }}
           </span>
@@ -242,6 +248,8 @@ function selectGameMode(mode: 'Campaign' | 'SideStory') {
       </template>
     </div>
   </template>
+  </section>
+  </div>
 </template>
 
 <style lang="css" scoped>
@@ -733,5 +741,41 @@ input[type='radio']:focus-visible + label {
     outline-color: #b8a273;
     box-shadow: 0 12px 30px rgb(0 0 0 / 0.34);
   }
+}
+
+/* Daylit archive catalog. */
+.archive-picker { display: grid; grid-template-columns: 216px minmax(0, 1fr); gap: 8px; min-height: min(720px, calc(100dvh - 160px)); align-items: stretch; }
+.archive-filters, .archive-catalog { min-width: 0; box-sizing: border-box; border: 1px solid #b5a078; border-radius: 7px; background: linear-gradient(120deg, rgb(249 246 235 / 0.97), rgb(243 238 221 / 0.9)); box-shadow: inset 0 0 0 3px #f4efdf, inset 0 0 0 4px rgb(181 160 120 / 0.4), 0 4px 14px rgb(59 47 27 / 0.12); }
+.archive-filters { padding: 18px 14px; }
+.archive-catalog { padding: 20px; }
+.chapter-select { display: flex; flex-direction: column; gap: 4px; padding: 0 0 16px; margin: 0 0 16px; border: 0; border-bottom: 1px solid #d6ccb5; border-radius: 0; background: none; }
+.chapter-select label { justify-content: flex-start; min-height: 44px; padding: 8px 14px; border: 1px solid transparent; border-radius: 4px; color: #52604b; font-size: 0.88rem; letter-spacing: 0.04em; }
+.chapter-select label:hover { background: #e6e6d8; color: #354337; border-color: transparent; }
+.chapter-select input[type='radio']:checked + label { background: #d7ddc7; color: #31432f; border-color: #c3caae; }
+.mode-toggle { width: 100%; margin: 0; background: #e7e5d7; border: 1px solid #b9b398; box-shadow: none; }
+.segmented::before { display: none; }
+.segmented label { min-height: 42px; padding: 8px 4px; font-size: 0.76rem; color: #5a654f; letter-spacing: 0; }
+.segmented label:hover { color: #354337; }
+.segmented input[type='radio']:checked + label { color: #fbf4df; background: #435740; }
+.scenario-select { width: 100%; grid-template-columns: 1fr; margin: 14px 0 0; border-radius: 4px; box-shadow: none; background: #eeeadd; }
+.campaigns, .scenarios { grid-template-columns: repeat(auto-fill, minmax(min(100%, 190px), 1fr)); gap: 20px; margin: 0; align-items: start; }
+.campaign, .scenario { min-width: 0; padding: 7px; border: 1px solid #c2b18b; border-radius: 6px; background: #f9f5e9; box-shadow: 0 3px 8px rgb(68 52 27 / 0.1); }
+.vt-box { padding: 0; border-radius: 3px; background: #e5dfcc; outline: none; box-shadow: none; }
+.vt-box:hover, .vt-box:focus-within { transform: none; outline: none; box-shadow: none; }
+.campaign:has(.vt-box:hover), .scenario:has(.vt-box:hover), .campaign:focus-within, .scenario:focus-within { border-color: #778359; box-shadow: 0 4px 14px rgb(68 52 27 / 0.19); }
+.campaign-box, .scenario-box { aspect-ratio: 1; object-fit: contain; }
+.campaign-box:not(.selected-campaign), .scenario-box:not(.selected-scenario) { filter: none; }
+.vt-box[style*="view-transition-name"] { outline: 2px solid #71814f; outline-offset: -2px; box-shadow: none; }
+.catalog-title { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; padding: 10px 4px 4px; color: #36442f; font: 600 0.88rem / 1.5 'Source Han Serif', 'Arno', serif; }
+.requires-investigator, .designer-credit { color: #69735d; line-height: 1.5; letter-spacing: 0; }
+.campaign-box-placeholder { border-color: #baab87; border-radius: 3px; background: #e6e5d5; color: #43543b; font-size: 1rem; }
+@media (min-width: 1800px) { .campaigns, .scenarios { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); } }
+@media (max-width: 760px) {
+  .archive-picker { grid-template-columns: 1fr; min-height: 0; }
+  .archive-filters { padding: 12px; }
+  .chapter-select { flex-direction: row; margin-bottom: 10px; padding-bottom: 10px; }
+  .chapter-select label { flex: 1; justify-content: center; padding: 8px 4px; }
+  .archive-catalog { padding: 12px; }
+  .campaigns, .scenarios { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 }
 </style>

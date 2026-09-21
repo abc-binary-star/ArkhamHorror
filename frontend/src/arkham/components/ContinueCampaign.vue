@@ -967,4 +967,98 @@ button {
   .side-story-option { flex-wrap: wrap; }
 
 }
+
+/* Occult archive finish, scoped to the campaign intermission. */
+.continue-campaign {
+  --text: #322c24;
+  --title: #48351f;
+  --text-dim: #6e6454;
+  --surface-panel: #e9dfca;
+  --surface-raised: #f0e7d5;
+  --button-2: #29473e;
+  --button-2-text: #f1e7ce;
+  --button-2-highlight: #365b4d;
+  --border-panel: #716348;
+}
+
+.next-scenario,
+#investigators {
+  border: 1px solid #87734e;
+  border-radius: 10px;
+  /* Bundle the texture with the component so deployments cannot omit it. */
+  background: #eee4cd url('@/assets/veiled-harbour/occult-panel-v1.png') center / 100% 100% no-repeat;
+  box-shadow: inset 0 0 0 3px #f5ecd1, inset 0 0 0 4px #94743f66,
+    0 12px 32px #0007;
+  color: #322c24;
+}
+
+.next-scenario { padding: 22px; }
+#investigators { padding: 14px; gap: 12px; }
+.scenario-info h2 { color: #48351f; letter-spacing: 0.06em; }
+.scenario-info h3 { color: #6e5c40; }
+.next-scenario-info { min-width: 0; width: 100%; }
+
+.continue-campaign .actions > button,
+.continue-campaign .roster-btn,
+.continue-campaign .screen-back {
+  min-height: 44px;
+  border: 1px solid #a38a55;
+  border-radius: 5px;
+  background: linear-gradient(180deg, #65523d, #382e25);
+  color: #f1e7ce;
+  box-shadow: inset 0 1px 0 #e8d79b26, 0 3px 8px #0004;
+  text-shadow: 0 1px 2px #0008;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+.continue-campaign .actions > button:hover:not(:disabled),
+.continue-campaign .roster-btn:hover:not(:disabled),
+.continue-campaign .screen-back:hover:not(:disabled) {
+  background: linear-gradient(180deg, #7a6348, #4a3b2c);
+  border-color: #dcc18a;
+  color: #f1e7ce;
+}
+.continue-campaign button:focus-visible {
+  outline: 2px solid #795b29;
+  outline-offset: 3px;
+}
+.continue-campaign button:disabled { opacity: 0.5; cursor: not-allowed; }
+.continue-campaign .roster-add {
+  background: linear-gradient(180deg, #ede1c5, #d8c6a1);
+  border-color: #9b8052;
+  color: #493820;
+}
+.continue-campaign .roster-btn--danger {
+  background: #582f2b;
+  border-color: #be8170;
+}
+.continue-campaign :deep(.investigator) {
+  background: linear-gradient(110deg, color-mix(in srgb, var(--row-bg) 18%, #342e28), #25221e);
+  border: 1px solid #ad96633b;
+  border-left: 3px solid var(--row-accent);
+  border-radius: 6px;
+}
+.continue-campaign :deep(.basic-top) { padding-block: 14px; }
+.continue-campaign :deep(.name) {
+  font-family: 'Source Han Serif', Arno, serif;
+  color: #e8dfcc;
+}
+.continue-campaign :deep(.portrait-wrap) {
+  border-width: 1px;
+  box-shadow: 0 0 0 3px #0004, 0 3px 10px #0008;
+}
+.continue-campaign :deep(.basic-bottom) { border-top-color: #baa16c26; }
+.continue-campaign :deep(.stat-chip) {
+  background: #07151180;
+  border-color: #baa16c26;
+  border-radius: 4px;
+}
+.continue-campaign :deep(.stat-label) { color: #b5c0af; }
+@media (max-width: 800px) {
+  .next-scenario { padding: 18px; }
+  #investigators { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .continue-campaign button { transition: none; }
+}
+
 </style>

@@ -1,20 +1,26 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
+import { Layers, Shield, Search, Gem, Triangle, Bird, Sparkles } from '@lucide/vue'
 import type { DeckSort } from '@/arkham/types/Deck'
 
 const { t } = useI18n()
 const classLabel = (name: string) => t(`deckToolbar.classes.${name}`)
 
 const props = withDefaults(defineProps<{
+  showSearch?: boolean
+  showAllClasses?: boolean
+  archive?: boolean
   compact?: boolean
   searchPlaceholder?: string
   showValidFilter?: boolean
-}>(), { compact: false, searchPlaceholder: '', showValidFilter: false })
+}>(), { compact: false, searchPlaceholder: '', showValidFilter: false, showSearch: true, showAllClasses: false, archive: false })
 
 const effectivePlaceholder = computed(() => props.searchPlaceholder || t('deckToolbar.searchDecks'))
 
-const allClasses = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"]
+const classIcons = { guardian: Shield, seeker: Search, rogue: Gem, mystic: Triangle, survivor: Bird, neutral: Sparkles }
+
+const allClasses = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"] as const
 
 const search = defineModel<string>('search', { default: '' })
 const filterClasses = defineModel<string[]>('filterClasses', { default: () => [] })
@@ -32,6 +38,9 @@ function toggleClass(c: string) {
 <template>
   <div class="deck-toolbar" :class="{ compact }">
     <div class="class-filters">
+      <button v-if="showAllClasses" class="class-pill" :class="{ active: filterClasses.length === 0 }" :aria-pressed="filterClasses.length === 0" type="button" @click.prevent="filterClasses = []">
+        <Layers aria-hidden="true" /><span class="pill-label">{{ t('deckList.allDecks') }}</span>
+      </button>
       <button
         v-for="iclass in allClasses"
         :key="iclass"
@@ -43,7 +52,8 @@ function toggleClass(c: string) {
         type="button"
         @click.prevent="toggleClass(iclass)"
       >
-        <span :class="`${iclass}-icon`"></span>
+        <component :is="classIcons[iclass]" v-if="archive" aria-hidden="true" />
+        <span v-else :class="`${iclass}-icon`"></span>
         <span v-if="!compact" class="pill-label">{{ classLabel(iclass) }}</span>
       </button>
     </div>
@@ -58,6 +68,7 @@ function toggleClass(c: string) {
         Valid decks
       </button>
       <input
+        v-if="showSearch"
         v-model="search"
         class="search-input"
         :placeholder="effectivePlaceholder"

@@ -584,8 +584,9 @@
     "archiveDescription": "整理你的牌组，为下一场未知的调查做好准备。",
     "collectionLabel": "我的收藏",
     "resultCount": "{count} / {total} 份牌组",
-    "newDeck": "新牌组",
-    "createInBuilder": "构筑器新建",
+    "newDeck": "卡组导入",
+    "createInBuilder": "本地新建",
+    "allDecks": "全部牌组",
     "saveToDeckList": "保存到牌组列表",
     "saveToDeckListDescription": "保留此牌组以供未来的战役使用"
   },

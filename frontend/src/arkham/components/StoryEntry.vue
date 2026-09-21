@@ -1018,4 +1018,55 @@ a.button {
   box-shadow: inset 0 0 0 2px #795c23;
   font-weight: 800;
 }
+
+/* Archive folio: preserve campaign-specific illustrated story treatments. */
+.entry:not(:has(.black, .haunted, .checkpoint, .interlude, .resolution)) {
+  --folio-padding: clamp(20px, 2.5vw, 36px);
+  position: relative;
+  isolation: isolate;
+  background: #eee2c9 url('@/assets/veiled-harbour/story-folio-v1.png') center / 100% 100% no-repeat;
+  color: #382e23;
+  border: 1px solid #9c8051;
+  border-radius: 8px;
+  padding: var(--folio-padding);
+  box-shadow: inset 0 0 0 3px #f9efd966, 0 8px 24px #0005;
+}
+/* Keep an opaque reading surface behind every line, with a soft transition
+   into the ornamental perimeter. No extra whitespace or interaction layer. */
+.entry:not(:has(.black, .haunted, .checkpoint, .interlude, .resolution))::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--folio-padding) - 8px);
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 6px;
+  background: linear-gradient(110deg, #f4e9d0, #f0e3c7);
+  box-shadow: 0 0 12px 8px #f2e6cd;
+}
+.entry:not(:has(.black, .haunted, .checkpoint, .interlude, .resolution)) :deep(h1) {
+  color: #634722;
+  border-bottom-color: #9c805180;
+  letter-spacing: .035em;
+}
+.entry:not(:has(.black, .haunted, .checkpoint, .interlude, .resolution)) :deep(h1::after) {
+  border-bottom-color: #9c805140;
+}
+.options :is(button, a.button):not(.task-choice) {
+  min-height: 44px;
+  border: 1px solid #a88b58;
+  border-radius: 5px;
+  background: linear-gradient(#65513a, #382e24);
+  color: #f7ecd5;
+  box-shadow: inset 0 1px #fff2cc26, 0 3px 9px #0004;
+  padding: 12px 16px;
+}
+.options :is(button, a.button):not(.task-choice):hover:not(:disabled) {
+  background: linear-gradient(#7a6243, #4c3a28);
+  border-color: #d8bb7c;
+}
+.options :is(button, a.button):focus-visible {
+  outline: 2px solid #b59558;
+  outline-offset: 3px;
+}
+
 </style>

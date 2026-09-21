@@ -366,10 +366,10 @@ function moveUp() {
 <style scoped>
 .draggable {
   position: absolute;
-  background: rgba(94, 123, 115, 0.5);
+  background: #e9dfc8 url('@/assets/veiled-harbour/occult-panel-v1.png') center / 100% 100%;
   border-radius: 16px;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 0 0 3px #f1e6cb, inset 0 0 0 4px #9a7c4d66, 0 18px 48px #0009;
+  border: 1px solid #948057;
   z-index: var(--z-index-10);
   overflow: hidden;
   backdrop-filter: blur(5px);
@@ -518,8 +518,9 @@ function moveUp() {
     position: relative;
     padding: 5px 10px;
     font-family: "Source Han Serif", "Arno", serif;
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
+    background: linear-gradient(180deg, #584a39, #302923);
+    border-bottom: 1px solid #b59a5e55;
+    color: #e8d9b6;
     text-transform: uppercase;
     font-size: 1.2em;
     cursor: move;
@@ -536,7 +537,10 @@ function moveUp() {
       transform: translateX(12px);
     }
 
+    :deep(h1) { color: #e8d9b6; letter-spacing: 0.04em; }
+
     .minimize-btn {
+      border: 1px solid #ad935d66;
       color: #efe4c9;
       border-radius: 3px;
       width: 36px;
@@ -678,4 +682,24 @@ function moveUp() {
   .draggable.minimized { top: auto !important; bottom: calc(68px + env(safe-area-inset-bottom)); }
 
 }
+
+/* Match window chrome to the content family without changing drag behavior. */
+.draggable:has(.skill-test) {
+  background: #e2e5eb url('@/assets/veiled-harbour/arcane-silver-v1.png') center / 100% 100% no-repeat;
+  border-color: #8996a8;
+}
+.draggable:has(.skill-test) > header {
+  background: linear-gradient(#516075, #2e394a);
+  border-bottom-color: #a1b1c4;
+}
+.draggable:has(.skill-test) > header :deep(h1) { color: #e9e8ed; }
+.draggable:has(.amount-modal), .draggable:has(.amount-modal) > .content {
+  background: #eee2c9;
+  border-color: #a38d60;
+}
+.draggable:has(.amount-modal) > header {
+  background: linear-gradient(#65513a, #382e24);
+  border-bottom-color: #a88b58;
+}
+
 </style>

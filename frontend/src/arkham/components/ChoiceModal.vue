@@ -774,7 +774,12 @@ const title = computed(() => {
   flex-direction: column;
   gap: 10px;
   padding: 18px;
-  background: url('/assets/veiled-harbour/C02-象牙档案纸微纹理.avif') center / 256px 256px repeat;
+  background: linear-gradient(120deg, #e7ddc5db, #c9b998b8),
+    url('/assets/veiled-harbour/C02-象牙档案纸微纹理.avif') center / 256px 256px repeat;
+  border: 1px solid #a38d60;
+  --button-2: #29473e;
+  --button-2-highlight: #3c5b49;
+  --button-2-text: #f1e7ce;
   border-radius: 8px;
   box-shadow: var(--shadow-2);
 }
@@ -815,4 +820,22 @@ const title = computed(() => {
   .mobile-hand-choices button:disabled { opacity: 0.6; }
 
 }
+
+/* General choices keep the warm brass folio family. */
+.choice-modal-wrapper:not(:has(.card-pool-picker, .haunted)) {
+  background: #eee4cd url('@/assets/veiled-harbour/occult-panel-v1.png') center / 100% 100% no-repeat;
+  --button: #e2d2b3;
+  --button-highlight: #f1e2c5;
+  --button-text: #48351f;
+  --edge: #9b7d4e;
+  --edge-dim: #a58c625e;
+}
+.choice-modal-wrapper:not(:has(.card-pool-picker, .haunted)) :deep(.question-choices > button:not(.connection-choice)) {
+  background-image: linear-gradient(#f2e5ca, #dbcaab);
+  border: 1px solid #a38d60;
+  color: #48351f;
+  border-radius: 5px;
+  box-shadow: inset 0 1px #fff7;
+}
+
 </style>

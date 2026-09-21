@@ -633,4 +633,16 @@ button {
 .scenario-tile:focus-visible {
   outline-color: var(--select, #6E8644);
 }
+
+.question-content {
+  background: #eee4cd url('@/assets/veiled-harbour/occult-panel-v1.png') center / 100% 100% no-repeat;
+  border: 1px solid #a38d60;
+  --button: #e2d2b3;
+  --button-highlight: #f1e2c5;
+  --button-text: #48351f;
+  --text: #382e23;
+  --title: #634722;
+  box-shadow: inset 0 0 0 3px #f9efd966, 0 8px 24px #0005;
+}
+
 </style>

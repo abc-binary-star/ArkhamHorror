@@ -1,0 +1,8 @@
+Generated with the built-in image_gen tool. Assets are bundled from frontend/src/assets/veiled-harbour/.
+
+story-folio-v1.png
+Production game UI texture, flat landscape 1536x1024 full bleed. Elegant 1920s Lovecraft investigator case dossier. Light warm ivory archival paper, fine visible fibers, restrained engraved antique bronze tentacle and botanical curls confined to very outer corners, delicate double rule perimeter, subtle aged sepia patina. Center 88 percent clean uniform LIGHT cream for dark long Chinese story text. Detailed refined craftsmanship, calm readable center, no text, no letters, no mockup, no objects, no controls, no shadows across center, no dark background.
+
+arcane-silver-v1.png
+Production game UI texture, flat landscape 1536x1024 full bleed. Elegant Lovecraft occult instrument plate in LIGHT silver grey parchment, faint desaturated lavender undertone, finely engraved tarnished pewter astrolabe arcs, constellations and restrained tentacle curls only at outermost corners. Fine visible perimeter etching, center 88 percent clean uniform very PALE silver for dark interface text. Sophisticated 1920s occult archive, refined fine tactile grain, no letters, no text, no numbers, no controls, no mockup, no dark center, no green background.
+

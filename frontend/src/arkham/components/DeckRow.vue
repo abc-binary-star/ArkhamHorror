@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { SquarePen, ExternalLink, RefreshCw, Trash2, BookOpen, Layers } from '@lucide/vue'
+import { computed, ref, watch } from 'vue'
+import { SquarePen, ExternalLink, RefreshCw, Trash2, Layers, Shield, Search, Gem, Triangle, Bird, Sparkles } from '@lucide/vue'
 import { useRouter } from 'vue-router'
-import { displayTabooId } from '@/arkham/taboo';
+import { portraitImage } from '@/arkham/cardImages'
 import {cardImg, localizeArkhamDBBaseUrl, investigatorClass} from '@/arkham/helpers';
 import * as ArkhamDeck from '@/arkham/types/Deck'
 import { overlayIsEmpty } from '@/arkham/deckOverlay'
@@ -45,10 +45,13 @@ const deckClass = computed(() => {
 // A laid-over deck plays differently from the one it was built as, so the row says so.
 const hasOverlay = computed(() => !overlayIsEmpty(props.deck.overlay ?? null))
 
-const tabooList = computed(() => {
-  const list = ArkhamDeck.deckPlayList(props.deck)
-  return list.taboo_id ? displayTabooId(list.taboo_id) : null
-})
+const classIcons = { guardian: Shield, seeker: Search, rogue: Gem, mystic: Triangle, survivor: Bird, neutral: Sparkles }
+const classes = computed(() => Object.entries(deckClass.value)
+  .filter(([key, active]) => active && key in classIcons)
+  .map(([key]) => key as keyof typeof classIcons))
+const portraitFailed = ref(false)
+watch(deckInvestigator, () => { portraitFailed.value = false })
+const coverImage = computed(() => portraitFailed.value ? cardImg(deckInvestigator.value) : portraitImage(deckInvestigator.value))
 
 // Makes the "recently used" sort legible: the row says what it is being ordered by.
 const lastPlayed = computed(() => {
@@ -59,8 +62,15 @@ const lastPlayed = computed(() => {
 </script>
 
 <template>
-  <div class="decklist box" :class="deckClass" @click="navigateToDeck">
-    <img class="portrait--decklist" :src="cardImg(deckInvestigator)" alt="" loading="lazy" />
+  <div class="decklist" :class="deckClass" @click="navigateToDeck">
+    <div class="deck-cover">
+      <img class="portrait--decklist" :class="{ 'portrait--fallback': portraitFailed }" :src="coverImage" alt="" loading="lazy" @error="portraitFailed = true" />
+      <div v-if="classes.length" class="cover-classes">
+        <span v-for="iclass in classes" :key="iclass" class="cover-class">
+          <component :is="classIcons[iclass]" aria-hidden="true" />{{ $t(`deckToolbar.classes.${iclass}`) }}
+        </span>
+      </div>
+    </div>
     <div class="deck-details">
       <div class="deck-main">
         <div class="deck-name-row">
@@ -72,15 +82,13 @@ const lastPlayed = computed(() => {
           >
             <Layers aria-hidden="true" />
           </span>
-          <router-link class="deck-name" :to="{ name: 'Deck', params: { deckId: deck.id } }" @click.stop>{{ deck.name }}</router-link>
-        </div>
-        <div class="deck-badges">
-          <span v-if="tabooList" class="taboo-badge"><BookOpen aria-hidden="true" /> Taboo: {{ tabooList }}</span>
-          <span class="last-played">
-            {{ lastPlayed ? $t('deck.lastPlayed', { date: lastPlayed }) : $t('deck.neverPlayed') }}
-          </span>
+          <router-link class="deck-name" :title="deck.name" :to="{ name: 'Deck', params: { deckId: deck.id } }" @click.stop>{{ deck.name }}</router-link>
         </div>
       </div>
+      <div class="deck-footer">
+        <span class="last-played" :title="lastPlayed ? $t('deck.lastPlayed', { date: lastPlayed }) : $t('deck.neverPlayed')">
+          {{ lastPlayed ? $t('deck.lastPlayed', { date: lastPlayed }) : $t('deck.neverPlayed') }}
+        </span>
       <div class="deck-actions" @click.stop>
         <a class="action-btn" :href="builderEditUrl()" target="_blank" rel="noreferrer noopener" :title="$t('deck.editInBuilder')" :aria-label="$t('deck.editInBuilder')">
           <SquarePen aria-hidden="true" />
@@ -95,6 +103,7 @@ const lastPlayed = computed(() => {
           <Trash2 aria-hidden="true" />
         </button>
       </div>
+      </div>
     </div>
   </div>
 </template>
@@ -102,155 +111,44 @@ const lastPlayed = computed(() => {
 <style scoped>
 .decklist {
   position: relative;
-  isolation: isolate;
   display: flex;
-  gap: 16px;
-  color: var(--text);
-  border-left: 4px solid transparent;
+  flex-direction: column;
+  min-width: 0;
+  margin: 0;
+  padding: 7px;
+  box-sizing: border-box;
   overflow: hidden;
-  background: var(--surface-panel) url('/assets/veiled-harbour/03-档案纸纹理.svg') repeat;
-  box-shadow: 0 8px 18px rgba(37, 39, 37, 0.12);
+  border: 1px solid #b5a078;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #fcf9ef, #f0eadb);
+  color: #344136;
+  box-shadow: inset 0 0 0 3px rgb(255 252 240 / 0.7), 0 3px 8px rgb(77 61 33 / 0.12);
   cursor: pointer;
-  transition: background-color 0.2s, border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 8px;
-    z-index: -1;
-    border: 1px solid color-mix(in srgb, var(--brass) 26%, transparent);
-    pointer-events: none;
-  }
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(37, 39, 37, 0.17);
-  }
-
-  &.guardian { border-left-color: var(--guardian-dark); &:hover { background-color: color-mix(in srgb, var(--guardian-dark) 10%, var(--surface-panel)); .deck-name { color: var(--guardian-dark); } } }
-  &.seeker   { border-left-color: var(--seeker-dark);   &:hover { background-color: color-mix(in srgb, var(--seeker-dark) 10%, var(--surface-panel));   .deck-name { color: var(--seeker-dark); } } }
-  &.rogue    { border-left-color: var(--rogue-dark);    &:hover { background-color: color-mix(in srgb, var(--rogue-dark) 10%, var(--surface-panel));    .deck-name { color: var(--rogue-dark); } } }
-  &.mystic   { border-left-color: var(--mystic-dark);   &:hover { background-color: color-mix(in srgb, var(--mystic-dark) 10%, var(--surface-panel));   .deck-name { color: var(--mystic-dark); } } }
-  &.survivor { border-left-color: var(--survivor-dark); &:hover { background-color: color-mix(in srgb, var(--survivor-dark) 10%, var(--surface-panel)); .deck-name { color: var(--survivor-dark); } } }
-  &.neutral  { border-left-color: var(--neutral-dark);  &:hover { background-color: color-mix(in srgb, var(--neutral-dark) 10%, var(--surface-panel));  .deck-name { color: var(--neutral-dark); } } }
+  transition: border-color 160ms ease, box-shadow 160ms ease;
 }
-
-.portrait--decklist {
-  width: 150px;
-  margin: 10px 0 10px 10px;
-  border-radius: 5px;
-  border: 1px solid color-mix(in srgb, var(--brass) 55%, transparent);
-  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.45);
-  flex-shrink: 0;
-  align-self: flex-start;
-  transition: transform 0.3s ease;
-
-  .decklist:hover & {
-    transform: scale(1.04);
-  }
+.decklist:hover { border-color: #887044; box-shadow: 0 5px 14px rgb(77 61 33 / 0.2); }
+.deck-cover { position: relative; height: 184px; flex-shrink: 0; overflow: hidden; border: 1px solid #c5b58f; border-radius: 3px; background: #d6d3c1; }
+.portrait--decklist { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 28%; }
+.portrait--fallback { object-fit: contain; }
+.cover-classes { position: absolute; left: 8px; bottom: 8px; display: flex; flex-wrap: wrap; gap: 5px; }
+.cover-class { display: inline-flex; align-items: center; gap: 6px; padding: 4px 7px; border: 1px solid #c3b184; border-radius: 4px; background: rgb(40 51 37 / 0.9); color: #faf3df; font-size: 0.72rem; line-height: 1.3; }
+.cover-class svg { width: 15px; height: 15px; stroke-width: 1.6; }
+.deck-details { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 8px 7px 3px; }
+.deck-name-row { display: flex; align-items: center; gap: 6px; min-width: 0; height: 28px; }
+.deck-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #303d31; font: 600 1rem / 1.5 'Source Han Serif', 'Arno', serif; text-decoration: none; }
+.deck-name:hover { color: #7a6035; }
+.deck-footer { display: flex; align-items: center; gap: 4px; min-width: 0; height: 32px; }
+.last-played { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.68rem; font-weight: 400; color: #737a69; }
+.deck-actions { display: flex; align-items: center; gap: 1px; flex-shrink: 0; }
+.action-btn { display: inline-flex; justify-content: center; align-items: center; flex-shrink: 0; width: 28px; height: 32px; margin: 0; padding: 0; border: 1px solid transparent; border-radius: 3px; background: transparent; color: #40503d; box-shadow: none; text-decoration: none; cursor: pointer; }
+.action-btn:hover { background: #e1e3d1; border-color: #b5ba9c; }
+.action-btn--delete:hover { color: #984d40; background: #efe0d7; border-color: #c5a18e; }
+.action-btn svg { width: 17px; height: 17px; stroke-width: 1.6; }
+.overlay-badge { display: inline-flex; flex-shrink: 0; color: #647b4b; }
+.overlay-badge svg { width: 16px; height: 16px; }
+a:focus-visible, button:focus-visible { outline: 2px solid #53694b; outline-offset: 1px; }
+@media (pointer: coarse) {
+  .deck-footer { height: 44px; }
+  .action-btn { width: 36px; height: 44px; }
 }
-
-.deck-details {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  flex: 1;
-  min-width: 0;
-  padding: 4px 0;
-}
-
-.deck-main {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.deck-name {
-  font-size: 1.2em;
-  font-weight: 800;
-  color: var(--title);
-  line-height: 1.2;
-  transition: color 0.15s;
-}
-
-
-.taboo-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  width: fit-content;
-  padding: 1px 7px;
-  line-height: 1.6;
-  font-size: 0.75em;
-  font-weight: 600;
-  color: #765f31;
-  background: color-mix(in srgb, var(--brass) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--brass) 46%, transparent);
-  border-radius: 4px;
-  letter-spacing: 0.02em;
-}
-
-.deck-badges {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.last-played {
-  font-size: 0.75em;
-  font-weight: 600;
-  color: #8a93a8;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-}
-
-.deck-actions {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.action-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  cursor: pointer;
-  color: var(--text-dim);
-  font-size: 0.9em;
-  text-decoration: none;
-  transition: color 0.15s;
-
-  &:hover { color: var(--spooky-green); }
-  &.action-btn--delete { &:hover { color: var(--delete); } }
-}
-
-/* Sits before the name so a laid-over deck reads as such at a glance. The row
- * is a stretching column, so the pill has to be sized to its own text. */
-.deck-name-row {
-  align-items: center;
-  display: flex;
-  gap: 8px;
-  min-width: 0;
-}
-
-.overlay-badge {
-  align-items: center;
-  background: color-mix(in srgb, var(--spooky-green) 14%, transparent);
-  border: 1px solid color-mix(in srgb, var(--spooky-green) 55%, transparent);
-  border-radius: 999px;
-  color: var(--spooky-green);
-  display: inline-flex;
-  flex: 0 0 auto;
-  font-size: 0.75em;
-  padding: 0.25em 0.45em;
-  white-space: nowrap;
-  width: fit-content;
-}
-.action-btn svg, .taboo-badge svg, .overlay-badge svg { width: 16px; height: 16px; flex-shrink: 0; }
-.deck-name { text-decoration: none; }
 </style>

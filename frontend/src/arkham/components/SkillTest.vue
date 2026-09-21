@@ -1223,4 +1223,29 @@ i.iconSkillAgility {
   .apply-results, .skip-triggers-button { min-height: 44px; white-space: normal; }
 
 }
+
+/* Skill checks: cool silver instrument face; retain semantic result colors. */
+.skill-test {
+  --text: #303846;
+  --title: #38495d;
+  --surface-panel: #e1e5ea;
+  --surface-raised: #edf0f2;
+  --panel-inset: #d2d9e0;
+  --button-2: #405267;
+  --button-2-text: #f1eee5;
+  background: #e2e5eb url('@/assets/veiled-harbour/arcane-silver-v1.png') center / 100% 100% no-repeat;
+}
+.skill-test-contents {
+  background: #eef1f385;
+  border-block: 1px solid #7e8c9e66;
+  box-shadow: inset 0 1px #fff8;
+}
+.apply-results, .skip-triggers-button {
+  background: linear-gradient(#51647c, #303e52);
+  border: 1px solid #899ab1;
+  color: #fff3dc;
+  border-radius: 5px;
+}
+.results-continuation { color: #4e596a; }
+
 </style>

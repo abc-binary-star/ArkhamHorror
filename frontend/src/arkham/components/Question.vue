@@ -2308,4 +2308,20 @@ h2 {
   .amount-input { min-height: 44px; font-size: 16px; }
 
 }
+
+/* Numeric allocation uses ledger paper, with clear inset inputs. */
+.amount-modal .amount-contents {
+  background: #eee2c9 url('@/assets/veiled-harbour/story-folio-v1.png') center / 100% 100% no-repeat;
+  color: #493b28;
+}
+.amount-contents legend, .amount-choice label { color: #493b28; }
+.amount-choice { background: #fff6df80; border: 1px solid #ae91614d; border-radius: 6px; }
+.amount-input { background: #fff9eb; color: #382d20; border-color: #ae9161; border-radius: 4px; }
+.amount-input:focus { outline-color: #94713d; }
+.choices .amount-form > .amount-submit {
+  background: linear-gradient(#65513a, #382e24);
+  color: #f7ecd5;
+  border-top: 1px solid #a88b58;
+}
+
 </style>

@@ -310,4 +310,24 @@ button:focus-visible, .entry-actions :deep(button:focus-visible) { outline: 2px 
   .trigger-dialog { padding: 16px; }
   .trigger-entry img { max-height: 32dvh; }
 }
+
+/* Response window: silver paper and amethyst controls. */
+.trigger-dialog {
+  background: #e0dfe8 url('@/assets/veiled-harbour/arcane-silver-v1.png') center / 100% 100% no-repeat;
+  color: #363143;
+  border-color: #8f819e;
+  box-shadow: inset 0 0 0 3px #f2eff46b, 0 24px 80px #0009;
+}
+.trigger-dialog h2 { color: #514060; font-family: 'Source Han Serif', Arno, serif; }
+.collection-hint { color: #665d73; }
+.context { background: #5340660a; border-left-color: #8c749e; }
+.trigger-entry { background: #f6f3fa80; border-color: #8e7aa34d; }
+.ability-count { color: #534060; }
+.skip, .collapse { color: #574562; border-color: #8e7aa380; background: #f5f0f780; }
+.skip:hover, .collapse:hover { background: #d8cee1; border-color: #786087; }
+.action-row .collapse { color: #f4eaf5; }
+.trigger-dialog button:focus-visible,
+.entry-actions :deep(button:focus-visible) { outline-color: #78558f; }
+.response-card:hover:not(:disabled), .response-card[aria-expanded="true"] { border-color: #78558f; }
+
 </style>

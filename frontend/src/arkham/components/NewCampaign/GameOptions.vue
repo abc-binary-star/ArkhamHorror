@@ -382,6 +382,8 @@ function setOptEnabled(o: RecommendedToggle, enabled: boolean) {
       >
         <img class="selection-img" :src="selectionBoxSrc" :alt="selectionSummary.title" />
       </div>
+      <h3 class="selection-title">{{ selectionSummary.title }}</h3>
+      <div class="summary-actions"><slot name="actions" /></div>
     </aside>
 
     <section class="config">
@@ -392,7 +394,7 @@ function setOptEnabled(o: RecommendedToggle, enabled: boolean) {
         </ul>
       </div>
 
-      <div class="card">
+      <div class="card compact-setting">
         <div class="card-title">{{ $t('create.gameName') }}</div>
         <input class="text" type="text" v-model="campaignName" :placeholder="currentCampaignName" />
       </div>
@@ -459,7 +461,7 @@ function setOptEnabled(o: RecommendedToggle, enabled: boolean) {
         </transition>
       </div>
 
-      <div v-if="!isEpicActive" class="card">
+      <div v-if="!isEpicActive" class="card compact-setting">
         <div class="card-title">{{ $t('create.numberOfPlayers') }}</div>
         <div class="segmented segmented-4">
           <input type="radio" v-model="playerCount" :value="1" id="player1" />
@@ -809,21 +811,21 @@ function setOptEnabled(o: RecommendedToggle, enabled: boolean) {
 .subcard {
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid #d7cfba;
 }
 
 .card-title {
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.78);
+  color: #65705c;
   margin-bottom: 8px;
 }
 
 .mini-campaign-desc {
   font-size: 13px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.72);
+  color: #65705c;
 }
 
 .mini-campaign-desc :deep(p) {
@@ -852,7 +854,7 @@ function setOptEnabled(o: RecommendedToggle, enabled: boolean) {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.32);
+  background: #d7cfba;
 }
 
 .card-title.small {
@@ -883,7 +885,7 @@ function setOptEnabled(o: RecommendedToggle, enabled: boolean) {
 }
 
 .text::placeholder {
-  color: rgba(255, 255, 255, 0.45);
+  color: #65705c;
 }
 
 /* Segmented controls */
@@ -906,7 +908,7 @@ input[type='radio']:focus-visible + label {
   display: grid;
   border-radius: 3px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid #d7cfba;
   background: rgba(0, 0, 0, 0.12);
 }
 
@@ -933,8 +935,8 @@ input[type='radio']:focus-visible + label {
   font-size: 12px;
   user-select: none;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.06);
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: #d7cfba;
+  border-right: 1px solid #d7cfba;
 }
 
 /* Five across is tighter than the others, and labels like "Standard" overflow
@@ -950,7 +952,7 @@ input[type='radio']:focus-visible + label {
 }
 
 .segmented label:hover {
-  background: rgba(255, 255, 255, 0.10);
+  background: #d7cfba;
 }
 
 input[type='radio']:checked + label {
@@ -980,7 +982,7 @@ input[type='radio']:checked + label {
   overflow: hidden;
   cursor: pointer;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
-  outline: 1px solid rgba(255, 255, 255, 0.08);
+  outline: 1px solid #d7cfba;
 }
 
 .scenario-tile img {
@@ -1034,7 +1036,7 @@ input[type='radio']:checked + label {
   font-size: 12px;
   letter-spacing: 0.10em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.82);
+  color: #65705c;
   margin-bottom: 6px;
 }
 
@@ -1046,7 +1048,7 @@ input[type='radio']:checked + label {
 .callout-body {
   font-size: 13px;
   line-height: 1.35;
-  color: rgba(255,255,255,0.72);
+  color: #65705c;
 }
 
 @keyframes glow {
@@ -1108,7 +1110,7 @@ input[type='radio']:checked + label {
       width: 50px;
       border-radius: 50px;
     }
-    border: 1px solid rgba(255,255,255,0.4);
+    border: 1px solid #65705c;
     border-radius: 30px;
     box-shadow: 0 4px 4px rgba(0,0,0,0.5);
   }
@@ -1139,7 +1141,7 @@ input[type='radio']:checked + label {
   :deep(small) {
     font-size: 0.85em;
     margin-top: 4px;
-    color: rgba(255 255 255 / 0.75);
+    color: #f3ebd8;
   }
 }
 
@@ -1193,7 +1195,7 @@ input[type='radio']:checked + label {
   margin-top: 10px;
   font-size: 12px;
   line-height: 1.35;
-  color: rgba(255, 255, 255, 0.6);
+  color: #65705c;
 }
 
 .recommended-list {
@@ -1207,7 +1209,7 @@ input[type='radio']:checked + label {
   gap: 12px;
   align-items: center;
   padding-top: 8px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid #d7cfba;
 }
 
 .recommended-row:first-child {
@@ -1217,14 +1219,14 @@ input[type='radio']:checked + label {
 
 .recommended-name {
   font-size: 13px;
-  color: rgba(255,255,255,0.85);
+  color: #65705c;
 }
 
 .recommended-desc {
   margin-top: 4px;
   font-size: 12px;
   line-height: 1.3;
-  color: rgba(255,255,255,0.65);
+  color: #65705c;
 }
 
 .recommended-toggle {
@@ -1261,19 +1263,19 @@ input[type='radio']:checked + label {
 }
 
 .preset-option:hover:not(.selected) {
-  background: rgba(255, 255, 255, 0.06);
+  background: #d7cfba;
 }
 
 .preset-name {
   font-size: 13px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: #65705c;
 }
 
 .preset-desc {
   font-size: 11px;
   line-height: 1.3;
-  color: rgba(255, 255, 255, 0.55);
+  color: #65705c;
 }
 
 .rule-setting {
@@ -1315,7 +1317,7 @@ input[type='radio']:checked + label {
 
 .as-if-at-name {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.9);
+  color: #65705c;
   font-weight: 500;
 }
 
@@ -1323,7 +1325,7 @@ input[type='radio']:checked + label {
   margin-top: 5px;
   font-size: 12px;
   line-height: 1.35;
-  color: rgba(255, 255, 255, 0.6);
+  color: #65705c;
 }
 
 .rules-header-right {
@@ -1338,8 +1340,8 @@ input[type='radio']:checked + label {
   text-transform: uppercase;
   padding: 2px 8px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.6);
+  background: #d7cfba;
+  color: #65705c;
 }
 
 .preset-pill.chapter1,
@@ -1363,7 +1365,7 @@ input[type='radio']:checked + label {
 
 .rules-chevron {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.55);
+  color: #65705c;
   transition: transform 200ms ease;
 }
 
@@ -1414,13 +1416,13 @@ input[type='radio']:checked + label {
 .uab-name {
   font-size: 13px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: #65705c;
 }
 
 .uab-desc {
   font-size: 12px;
   line-height: 1.35;
-  color: rgba(255, 255, 255, 0.6);
+  color: #65705c;
 }
 
 .uab-deckbuilding-badge {
@@ -1468,4 +1470,49 @@ input[type='radio']:checked + label {
     width: 100%;
   }
 }
+
+/* Expedition dossier: light materials, compact configuration, full-color cover. */
+.game-options { grid-template-columns: minmax(220px, 300px) minmax(0, 1fr); gap: 18px; color: #354337; }
+.summary { top: 12px; padding: 10px; border: 1px solid #b5a078; border-radius: 7px; background: #f7f2e5; box-shadow: inset 0 0 0 3px #ede5d2, 0 5px 18px rgb(62 50 27 / 0.15); }
+.selection-box.campaign, .selection-box.sidestory { aspect-ratio: auto; }
+.selection-img { object-fit: contain; filter: none; border-radius: 3px; outline-color: #b5a078; }
+.selection-title { margin: 12px 4px 5px; color: #36442f; font: 600 1.1rem / 1.5 'Source Han Serif', 'Arno', serif; }
+.config { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 16px; border: 1px solid #b5a078; border-radius: 7px; background: rgb(246 242 229 / 0.94); box-shadow: inset 0 0 0 3px rgb(255 251 239 / 0.7), 0 5px 18px rgb(62 50 27 / 0.1); }
+.config > .card { grid-column: 1 / -1; }
+.config > .compact-setting { grid-column: auto; }
+.card { min-width: 0; padding: 14px; border: 1px solid #d1c6ad; border-radius: 5px; background: linear-gradient(130deg, #fcf9f0, #eee9da); box-shadow: 0 2px 5px rgb(62 50 27 / 0.04); }
+.card-title { font-size: 0.82rem; font-weight: 600; letter-spacing: 0.03em; color: #405039; }
+.subcard, .recommended-row { border-color: #d7cfba; }
+.text { box-sizing: border-box; width: 100%; min-height: 40px; margin: 0; padding: 9px 11px; border: 1px solid #b9b096; border-radius: 4px; background: #fffcf4; color: #354337; font: inherit; font-size: 0.86rem; }
+.text::placeholder { color: #838773; }
+.epic-field .text { border-radius: 4px; }
+.segmented { gap: 2px; padding: 3px; border: 1px solid #c6bea7; border-radius: 4px; background: #e6e3d4; }
+.segmented label { min-height: 38px; padding: 7px 8px; border: 0; border-radius: 3px; background: transparent; color: #59644e; letter-spacing: 0.02em; }
+.segmented label:hover { background: #f8f5eb; }
+input[type='radio']:checked + label { background: #485e42; color: #fff6df; box-shadow: inset 0 0 0 1px #a1a776; }
+.variant:has(input:checked) :deep(small) { color: #f3ebd8; }
+.variant :deep(small) { color: #707a63; }
+.callout { background: #e4e7d4; border: 1px solid #bfc8a4; box-shadow: none; }
+.callout-title, .recommended-name, .preset-name, .as-if-at-name, .uab-name { color: #3c4d35; }
+.callout-body, .mini-campaign-desc, .achievements-desc, .recommended-desc, .preset-desc, .as-if-at-desc, .uab-desc { color: #68725d; line-height: 1.6; }
+.callout-icon { animation: none; color: #6d7f4b; }
+.rules-card { padding: 12px 14px; }
+.rules-toggle { min-height: 32px; box-shadow: none; border-radius: 3px; background: transparent; text-align: left; }
+.rules-chevron { color: #737e63; }
+.preset-pill { background: #e3e6d7; color: #69775d; }
+.preset-pill.chapter1, .preset-pill.chapter2, .preset-pill.uab-active { background: #dbe3c9; color: #52653b; }
+.preset-option, .as-if-at-option, .uab-row { border: 1px solid #d3cbb6; border-radius: 4px; background: #f8f5eb; }
+.preset-option.selected, .as-if-at-option.selected, .uab-row:has(input:checked) { background: #e0e7d0; border-color: #a9b68e; }
+.preset-option:hover:not(.selected) { background: #eeefdf; }
+.deck-requirements-card, .beta-warning { background: #f4e7c6; border: 1px solid #c7aa70; color: #775a27; box-shadow: none; }
+.deck-requirements, .uab-deckbuilding-badge { color: #775a27; }
+.uab-deckbuilding-badge { background: #f3e6c8; border-color: #c7aa70; }
+.alpha-warning { color: #8a4437; background: #f0ded1; box-shadow: none; }
+.scenario-tile { border: 1px solid #b7ab8a; padding: 4px; background: #f8f3e5; box-shadow: 0 2px 5px rgb(62 50 27 / 0.1); }
+.scenario-tile.selected { outline: 2px solid #788957; outline-offset: 1px; }
+.token-preview { justify-content: flex-start; padding: 8px; border-radius: 4px; background: #e2ddca; }
+.token-preview img { box-shadow: 0 2px 3px rgb(56 47 30 / 0.2); }
+input[type='radio']:focus-visible + label, button:focus-visible, .text:focus-visible { outline: 2px solid #61774f; outline-offset: 2px; }
+@media (max-width: 1100px) { .game-options { grid-template-columns: 220px minmax(0, 1fr); } .config { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .game-options { grid-template-columns: 1fr; } .summary { position: static; display: grid; grid-template-columns: 120px minmax(0, 1fr); align-items: center; gap: 14px; } .summary-actions { grid-column: 1 / -1; } .selection-box { width: 120px; flex-shrink: 0; } .selection-title { font-size: 1rem; } .config { padding: 10px; } .scenario-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 </style>
