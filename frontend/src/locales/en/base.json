@@ -290,6 +290,18 @@
     "cardDataFailed": "Card names couldn't be loaded in the new language, so they stay in the previous one.",
     "sessionExpired": "Your session expired — sign in again to pick up where you left off."
   },
+  "navigationBack": {
+    "home": "Back to home",
+    "games": "Back to games",
+    "table": "Back to table",
+    "decks": "Back to my decks",
+    "admin": "Back to administration",
+    "signIn": "Back to sign in",
+    "about": "Back to about",
+    "interlude": "Back to interlude",
+    "resumeUpgrade": "Resume deck upgrade",
+    "pendingUpgrade": "Upgrading is still pending. Resume the upgrade to finish or explicitly continue without upgrading."
+  },
   "nav": {
     "menu": "Navigation menu",
     "home": "Home",
@@ -591,6 +603,10 @@
     "neverPlayed": "Never played"
   },
   "deckList": {
+    "archiveLabel": "INVESTIGATOR ARCHIVES",
+    "archiveDescription": "Keep your decks in order. Prepare for the next investigation.",
+    "collectionLabel": "YOUR COLLECTION",
+    "resultCount": "{count} / {total} decks",
     "newDeck": "New Deck",
     "createInBuilder": "Build with builder",
     "saveToDeckList": "Save to Deck List",
@@ -865,6 +881,8 @@
     }
   },
   "deckToolbar": {
+    "sortLabel": "Sort decks",
+    "classes": {"guardian": "Guardian", "seeker": "Seeker", "rogue": "Rogue", "mystic": "Mystic", "survivor": "Survivor", "neutral": "Neutral"},
     "searchDecks": "Search decks…",
     "sortName": "Sort: Name",
     "sortClass": "Sort: Class",

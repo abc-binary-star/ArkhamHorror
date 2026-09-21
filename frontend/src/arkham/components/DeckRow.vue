@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { SquarePen, ExternalLink, RefreshCw, Trash2, BookOpen, Layers } from '@lucide/vue'
 import { useRouter } from 'vue-router'
 import { displayTabooId } from '@/arkham/taboo';
 import {cardImg, localizeArkhamDBBaseUrl, investigatorClass} from '@/arkham/helpers';
@@ -59,7 +60,7 @@ const lastPlayed = computed(() => {
 
 <template>
   <div class="decklist box" :class="deckClass" @click="navigateToDeck">
-    <img class="portrait--decklist" :src="cardImg(deckInvestigator)" />
+    <img class="portrait--decklist" :src="cardImg(deckInvestigator)" alt="" loading="lazy" />
     <div class="deck-details">
       <div class="deck-main">
         <div class="deck-name-row">
@@ -69,30 +70,30 @@ const lastPlayed = computed(() => {
             title="Overlay — this deck is laid over with custom cards"
             aria-label="Overlay"
           >
-            <font-awesome-icon icon="layer-group" />
+            <Layers aria-hidden="true" />
           </span>
-          <span class="deck-name">{{ deck.name }}</span>
+          <router-link class="deck-name" :to="{ name: 'Deck', params: { deckId: deck.id } }" @click.stop>{{ deck.name }}</router-link>
         </div>
         <div class="deck-badges">
-          <span v-if="tabooList" class="taboo-badge"><font-awesome-icon icon="book" /> Taboo: {{ tabooList }}</span>
+          <span v-if="tabooList" class="taboo-badge"><BookOpen aria-hidden="true" /> Taboo: {{ tabooList }}</span>
           <span class="last-played">
             {{ lastPlayed ? $t('deck.lastPlayed', { date: lastPlayed }) : $t('deck.neverPlayed') }}
           </span>
         </div>
       </div>
       <div class="deck-actions" @click.stop>
-        <a class="action-btn" :href="builderEditUrl()" target="_blank" rel="noreferrer noopener" :title="$t('deck.editInBuilder')">
-          <font-awesome-icon icon="pen" />
+        <a class="action-btn" :href="builderEditUrl()" target="_blank" rel="noreferrer noopener" :title="$t('deck.editInBuilder')" :aria-label="$t('deck.editInBuilder')">
+          <SquarePen aria-hidden="true" />
         </a>
-        <a v-if="deck.url" class="action-btn" :href="deckUrlToPage(deck.url)" target="_blank" rel="noreferrer noopener" :title="$t('deck.viewOnArkhamDb')">
-          <font-awesome-icon icon="external-link" />
+        <a v-if="deck.url" class="action-btn" :href="deckUrlToPage(deck.url)" target="_blank" rel="noreferrer noopener" :title="$t('deck.viewOnArkhamDb')" :aria-label="$t('deck.viewOnArkhamDb')">
+          <ExternalLink aria-hidden="true" />
         </a>
-        <a v-if="deck.url && sync" class="action-btn" href="#" :title="$t('deck.syncDeck')" @click.prevent="sync">
-          <font-awesome-icon icon="refresh" />
-        </a>
-        <a v-if="markDelete" class="action-btn action-btn--delete" href="#" :title="$t('deck.deleteDeck')" @click.prevent="markDelete">
-          <font-awesome-icon icon="trash" />
-        </a>
+        <button v-if="deck.url && sync" type="button" class="action-btn" :title="$t('deck.syncDeck')" :aria-label="$t('deck.syncDeck')" @click="sync">
+          <RefreshCw aria-hidden="true" />
+        </button>
+        <button v-if="markDelete" type="button" class="action-btn action-btn--delete" :title="$t('deck.deleteDeck')" :aria-label="$t('deck.deleteDeck')" @click="markDelete">
+          <Trash2 aria-hidden="true" />
+        </button>
       </div>
     </div>
   </div>
@@ -211,6 +212,14 @@ const lastPlayed = computed(() => {
 }
 
 .action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  cursor: pointer;
   color: var(--text-dim);
   font-size: 0.9em;
   text-decoration: none;
@@ -242,4 +251,6 @@ const lastPlayed = computed(() => {
   white-space: nowrap;
   width: fit-content;
 }
+.action-btn svg, .taboo-badge svg, .overlay-badge svg { width: 16px; height: 16px; flex-shrink: 0; }
+.deck-name { text-decoration: none; }
 </style>

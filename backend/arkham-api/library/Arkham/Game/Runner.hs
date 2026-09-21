@@ -60,6 +60,7 @@ import Arkham.Game.State
 import Arkham.Game.Utils
 import {-# SOURCE #-} Arkham.GameEnv
 import Arkham.Helpers
+import Arkham.Helpers.Ability (isForcedAbility)
 import Arkham.Helpers.Criteria
 import Arkham.Helpers.Customization
 import Arkham.Helpers.Enemy (getModifiedKeywords, spawnAt)
@@ -1915,12 +1916,19 @@ runGameMessage msg g = case msg of
       WindowAsk ws' _ _ -> ws == ws'
       _ -> False
 
-    pushAll
-      $ ( if notNull others
+    -- A sole mandatory trigger has no activation decision. Keep UseAbility and
+    -- the subsequent window recheck, so costs, targets and nested responses still
+    -- resolve normally. Other players' simultaneous prompts prevent this shortcut.
+    resolution <- case (others, q) of
+      ([], WindowChooseOne [choice@(AbilityLabel iid ability _ _ _)]) -> do
+        forced <- isForcedAbility iid ability
+        pure $ if forced then uiToRun choice else Ask pid q
+      _ ->
+        pure
+          $ if notNull others
             then AskMap $ Map.fromList $ (pid, q) : [(pid', q') | WindowAsk _ pid' q' <- others]
             else Ask pid q
-        )
-      : [Do (CheckWindows ws) | notNull ws]
+    pushAll $ resolution : [Do (CheckWindows ws) | notNull ws]
 
     pure g
   PlayCard iid card mtarget payment windows' False -> do

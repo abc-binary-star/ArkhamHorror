@@ -4,7 +4,8 @@ import { isInlineSkillTestFastWindow } from '@/arkham/skillTestFastWindow'
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
 import Question from '@/arkham/components/Question.vue';
 import { useDebug } from '@/arkham/debug'
-import { computed, watch } from 'vue';
+import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { processingKey, uiLockKey, phaseAnnouncementKey, spectateKey, isMinimizedSkillTestKey } from '@/arkham/injectionKeys';
 import { ChaosBag } from '@/arkham/types/ChaosBag';
 import * as Cards from '@/arkham/types/Card';
 import { chaosTokenImage, type TokenFace } from '@/arkham/types/ChaosToken';
@@ -29,6 +30,10 @@ import { useSoundsDisabled } from '@/arkham/composables/useSoundsDisabled';
 
 const debug = useDebug()
 const { t } = useI18n()
+const { t: flowText } = useI18n({ useScope: 'local', messages: {
+  zh: { autoApply: '结果将在 1.5 秒后自动结算', pause: '暂停查看', paused: '已暂停，查看后点击应用结果' },
+  en: { autoApply: 'Results apply automatically in 1.5 seconds', pause: 'Pause to inspect', paused: 'Paused. Apply results when ready.' },
+} })
 const { menuItems } = useMenu()
 const props = defineProps<{
   game: Game
@@ -160,6 +165,10 @@ const abilities = computed<AbilityMessage[]>(() => {
 
 
 async function choose(idx: number) {
+  if (idx === applyResultsAction.value && idx >= 0) {
+    applyResults()
+    return
+  }
   emit('choose', idx)
 }
 
@@ -235,6 +244,74 @@ const sourceCardRevealed = computed(() => cardIsRevealed(props.skillTest.sourceC
 
 const applyResultsAction = computed(() => {
   return choices.value.findIndex((c) => c.tag === "SkillTestApplyResultsButton");
+})
+
+const processing = inject(processingKey, ref(false))
+const uiLock = inject(uiLockKey, ref(false))
+const phaseAnnouncement = inject(phaseAnnouncementKey, ref(false))
+const spectating = inject(spectateKey, ref(false))
+const minimized = inject(isMinimizedSkillTestKey, ref(false))
+const resultsPaused = ref(false)
+const resultsSubmitted = ref(false)
+const autoApplyPending = ref(false)
+const pageVisible = ref(true)
+function syncPageVisibility() { pageVisible.value = document.visibilityState === 'visible' }
+onMounted(() => {
+  syncPageVisibility()
+  document.addEventListener('visibilitychange', syncPageVisibility)
+})
+let applyTimer: ReturnType<typeof setTimeout> | undefined
+let attemptedResult: string | null = null
+const resultKey = computed(() => JSON.stringify([
+  props.game.id, props.playerId, props.skillTest.id,
+  props.game.question[props.playerId], skillTestResults.value,
+]))
+const resultsBlocked = computed(() => processing.value || uiLock.value || phaseAnnouncement.value || spectating.value)
+const canAutoApply = computed(() => {
+  let question = props.game.question[props.playerId]
+  while (question && 'question' in question && question.question) question = question.question
+  return question?.tag === 'ChooseOne' && !question.isWindow && !question.isPlayerWindow
+    && question.choices.length === 1 && question.choices[0].tag === 'SkillTestApplyResultsButton'
+    && Object.entries(props.game.question).every(([player, pending]) => player === props.playerId || !pending)
+    && !!skillTestResults.value && !resultsBlocked.value && !resultsSubmitted.value
+    && !resultsPaused.value && !minimized.value && pageVisible.value
+})
+function clearApplyTimer() {
+  clearTimeout(applyTimer)
+  autoApplyPending.value = false
+}
+function pauseResults() {
+  resultsPaused.value = true
+  clearApplyTimer()
+}
+function applyResults() {
+  if (resultsBlocked.value || resultsSubmitted.value || applyResultsAction.value < 0) return
+  clearApplyTimer()
+  attemptedResult = resultKey.value
+  resultsSubmitted.value = true
+  emit('choose', applyResultsAction.value)
+}
+watch(() => [props.game.id, props.playerId, props.skillTest.id].join(':'), () => {
+  resultsPaused.value = false
+  resultsSubmitted.value = false
+  attemptedResult = null
+})
+watch(resultKey, () => { resultsSubmitted.value = false })
+// Failed submissions remain manually retryable, without an automatic retry loop.
+watch(processing, value => { if (!value) resultsSubmitted.value = false })
+watch([canAutoApply, resultKey], () => {
+  clearApplyTimer()
+  if (!canAutoApply.value || attemptedResult === resultKey.value) return
+  const expectedResult = resultKey.value
+  autoApplyPending.value = true
+  applyTimer = setTimeout(() => {
+    autoApplyPending.value = false
+    if (canAutoApply.value && resultKey.value === expectedResult) applyResults()
+  }, 1500)
+}, { immediate: true, flush: 'post' })
+onBeforeUnmount(() => {
+  clearApplyTimer()
+  document.removeEventListener('visibilitychange', syncPageVisibility)
 })
 
 const skillValue = computed(() => {
@@ -316,7 +393,7 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
 </script>
 
 <template>
-  <Draggable :atmosphere="skillTestResults ? (skillTestResults.skillTestResultsSuccess ? 'success' : 'failure') : 'test'"
+  <Draggable
     avoid-selector=".concealed-card--can-interact, .location-cell--can-interact, .location-cell--can-interact .location-wrapper, .location-cell--can-interact .card-frame"
   >
     <template #handle>
@@ -553,10 +630,15 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
         class="skip-triggers-button"
       >{{ $t('investigator.skipTriggers') }}</button>
       <Question v-if="!inlineFastWindow" :game="game" :playerId="playerId" @choose="choose" :isSkillTest="true" />
+      <div v-if="applyResultsAction !== -1 && (autoApplyPending || resultsPaused)" class="results-continuation" role="status">
+        <span>{{ flowText(resultsPaused ? 'paused' : 'autoApply') }}</span>
+        <button v-if="autoApplyPending" type="button" @click="pauseResults">{{ flowText('pause') }}</button>
+      </div>
       <button
         class="apply-results"
         v-if="applyResultsAction !== -1"
-        @click="choose(applyResultsAction)"
+        :disabled="resultsBlocked || resultsSubmitted"
+        @click="applyResults"
       >{{ $t('label.applyResults') }}</button>
     </div>
   </Draggable>
@@ -729,6 +811,26 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
   padding: 10px;
   background: var(--button-2);
   color: var(--button-2-text);
+}
+
+.results-continuation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+  color: #e9dfcb;
+  font-size: .85rem;
+}
+.results-continuation button {
+  width: auto;
+  min-height: 36px;
+  padding: 6px 12px;
+  border: 1px solid #b8a17a;
+  border-radius: 6px;
+  background: #292d2b;
+  color: #f2e4c8;
 }
 
 button {

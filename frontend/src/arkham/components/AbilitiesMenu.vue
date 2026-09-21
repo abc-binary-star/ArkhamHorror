@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import AtmosphereLine from './AtmosphereLine.vue'
-import { triggerAtmosphere } from '@/arkham/atmosphere'
 import type { Game } from '@/arkham/types/Game';
 import { OnClickOutside } from '@vueuse/components'
 import { ref, watch, computed, nextTick, onMounted, onUnmounted, useId } from 'vue';
@@ -166,10 +164,6 @@ onUnmounted(() => {
   <Teleport to="body">
     <OnClickOutside @trigger="showAbilities = false" v-if="showAbilities" :options="{ ignore: [frame] }">
       <div class="abilities" :class="[positionClass, { anchored: supportsAnchor }]" :style="anchorStyle" ref="abilitiesRef" >
-        <AtmosphereLine
-          class="ability-atmosphere"
-          :tone="abilities[0]?.contents.tag === 'AbilityLabel' ? triggerAtmosphere(abilities[0].contents.ability.source, abilities[0].contents.ability.type) : 'resolve'"
-        />
         <button
           v-if="playAction !== undefined"
           class="play-card-button"
@@ -193,7 +187,6 @@ onUnmounted(() => {
 
 
 <style scoped>
-.ability-atmosphere { width: min(260px, 72vw); margin: 6px 8px; font-size: .75rem; }
 .abilities {
   position: fixed;
   padding: min(3px, 1vw);

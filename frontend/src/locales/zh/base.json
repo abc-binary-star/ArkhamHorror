@@ -290,6 +290,18 @@
     "cardDataFailed": "新语言的卡牌数据没能加载出来，卡名会暂时停留在原来的语言。",
     "sessionExpired": "登录已过期——重新登录后会回到你刚才的页面。"
   },
+  "navigationBack": {
+    "home": "返回首页",
+    "games": "返回游戏列表",
+    "table": "返回牌桌",
+    "decks": "返回我的牌组",
+    "admin": "返回管理后台",
+    "signIn": "返回登录",
+    "about": "返回关于",
+    "interlude": "返回幕间",
+    "resumeUpgrade": "继续升级牌组",
+    "pendingUpgrade": "升级尚未完成。请返回升级页面完成升级，或明确选择不升级继续。"
+  },
   "nav": {
     "menu": "导航菜单",
     "home": "首页",
@@ -568,6 +580,10 @@
     "neverPlayed": "从未游玩"
   },
   "deckList": {
+    "archiveLabel": "调查员档案馆",
+    "archiveDescription": "整理你的牌组，为下一场未知的调查做好准备。",
+    "collectionLabel": "我的收藏",
+    "resultCount": "{count} / {total} 份牌组",
     "newDeck": "新牌组",
     "createInBuilder": "构筑器新建",
     "saveToDeckList": "保存到牌组列表",
@@ -878,6 +894,8 @@
     }
   },
   "deckToolbar": {
+    "sortLabel": "牌组排序",
+    "classes": {"guardian": "守护者", "seeker": "探求者", "rogue": "流浪者", "mystic": "潜修者", "survivor": "求生者", "neutral": "中立"},
     "searchDecks": "搜索牌组…",
     "sortName": "排序: 名称",
     "sortClass": "排序: 职阶",

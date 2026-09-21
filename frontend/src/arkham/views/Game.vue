@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import { clientLog, clientError } from '@/utils/clientLog'
 import { isTabletopFrame, TABLETOP_DISMISS, tabletopDocument, useFixedTabletop } from '@/arkham/composables/useFixedTabletop'
+import NavigationBack from '@/components/NavigationBack.vue'
+import { provideNavigationBack } from '@/composables/useNavigationBack'
 import { useGameAudio } from '@/arkham/composables/useGameAudio'
-import { ArrowLeft, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight, Monitor, Eye, EyeOff, BookOpen } from '@lucide/vue'
+import { Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight, Monitor, Eye, EyeOff, BookOpen } from '@lucide/vue'
 import {
   computed,
   markRaw,
@@ -129,7 +131,6 @@ import StandaloneScenario from '@/arkham/components/StandaloneScenario.vue'
 import StoryQuestion from '@/arkham/components/StoryQuestion.vue'
 import AchievementToast from '@/arkham/components/AchievementToast.vue'
 import { clearCurrentNarration, stopNarration } from '@/arkham/narration'
-import AtmosphereLine from '@/arkham/components/AtmosphereLine.vue'
 import Draggable from '@/components/Draggable.vue'
 import Menu from '@/components/Menu.vue'
 import Prompt from '@/components/Prompt.vue'
@@ -415,7 +416,12 @@ const gameLog = shallowRef<readonly string[]>(Object.freeze([]))
 const playerId = ref<string | null>(null)
 const ready = ref(false)
 const resultQueue = ref<any>([])
+const navigationBack = provideNavigationBack()
 const showLog = ref(false)
+navigationBack.register({
+  priority: 100,
+  get: () => showLog.value ? { label: t('navigationBack.table'), run: () => { showLog.value = false } } : null,
+})
 const showTools = ref(false)
 const showShortcuts = ref(false)
 const isMobileViewport = () =>
@@ -495,9 +501,6 @@ function toggleSounds() {
   )
 }
 
-function leaveGame() {
-  void router.push({ name: 'Home' })
-}
 
 const { isFullscreen, isSupported: fullscreenSupported, enter: enterFullscreen, toggle: toggleFullscreen } = useFullscreen(undefined, { document: tabletopDocument() })
 
@@ -517,7 +520,8 @@ const toolbarHidden = computed(
     !toolbarRevealed.value &&
     !showTools.value &&
     !showSettings.value &&
-    !showShortcuts.value,
+    !showShortcuts.value &&
+    !showLog.value,
 )
 
 function handleToolbarPointerMove(event: PointerEvent) {
@@ -2249,7 +2253,7 @@ onUnmounted(() => {
       :style="{ '--focus-light-x': `${focusLightX}px`, '--focus-light-y': `${focusLightY}px` }"
       aria-hidden="true"
     ></div>
-    <Draggable v-if="showShortcuts" atmosphere="preparation">
+    <Draggable v-if="showShortcuts">
       <div class="shortcuts-modal">
         <div class="shortcuts-header">
           <h2 class="shortcuts-title">{{ $t('gameBar.shortcutsTitle') }}</h2>
@@ -2357,7 +2361,7 @@ onUnmounted(() => {
         <button class="shortcuts-footer" @click="showShortcuts = false">{{ $t('close') }}</button>
       </div>
     </Draggable>
-    <Draggable v-if="filingBug" atmosphere="archive">
+    <Draggable v-if="filingBug">
       <template #handle>
         <header>
           <h2>{{ $t('gameBar.fileABug') }}</h2>
@@ -2494,17 +2498,7 @@ onUnmounted(() => {
       </div>
     </aside>
     <div class="game-bar">
-      <div class="game-bar-item game-bar-item--leave">
-        <div>
-          <button
-            @click="leaveGame"
-            v-tooltip="$t('gameBar.leaveGame')"
-            :aria-label="$t('gameBar.leaveGame')"
-          >
-            <ArrowLeft aria-hidden="true" />
-          </button>
-        </div>
-      </div>
+      <NavigationBack />
       <div class="game-bar-item game-bar-item--sounds">
         <div>
           <button
@@ -2602,7 +2596,7 @@ onUnmounted(() => {
       :player-id="playerId"
     />
     <template v-else>
-      <Draggable v-if="showSettings" atmosphere="preparation">
+      <Draggable v-if="showSettings">
         <Settings
           :game="game"
           :playerId="playerId"
@@ -2612,14 +2606,7 @@ onUnmounted(() => {
         />
       </Draggable>
       <div v-if="showLog && game !== null" class="campaign-log-panel">
-      <CampaignLog :game="game" :cards="cards" :playerId="playerId" on-dark>
-        <template #header-leading>
-          <button class="back-button" @click="showLog = false">
-            <font-awesome-icon icon="arrow-left" class="back-icon" />
-            <span>{{ $t('back') }}</span>
-          </button>
-        </template>
-      </CampaignLog>
+      <CampaignLog :game="game" :cards="cards" :playerId="playerId" on-dark />
       </div>
       <div
         v-else
@@ -2646,7 +2633,6 @@ onUnmounted(() => {
             />
             <div class="the-silence-modal__body">
               <h2 id="the-silence-modal-title">The Silence</h2>
-              <AtmosphereLine tone="horror" />
               <p>
                 If you look at the Cosmic Emissary enemy for more than 15 seconds at a time, you are
                 <strong>driven insane</strong>.
@@ -2666,7 +2652,6 @@ onUnmounted(() => {
         >
           <div class="revelation-container">
             <h2>{{ format(gameCard.title) }}</h2>
-            <AtmosphereLine :tone="gameCard.title.startsWith('$attackNotice.') ? 'enemy' : gameCard.card.tag === 'EncounterCard' ? 'encounter' : 'revelation'" />
             <div class="revelation-card-container">
               <div
                 class="revelation-card"
@@ -2736,7 +2721,6 @@ onUnmounted(() => {
           </div>
         </div>
         <div v-if="tarotCards.length > 0" class="revelation">
-          <AtmosphereLine tone="tarot" />
           <div class="revelation-container">
             <div class="revelation-card-container">
               <div class="tarot-cards">
@@ -2830,14 +2814,12 @@ onUnmounted(() => {
     <Prompt
       v-if="confirmingUndoScenario"
       prompt="$game.areYouSureUndoScenario"
-      atmosphere="choice"
       :yes="undoScenario"
       :no="() => (confirmingUndoScenario = false)"
     />
     <Prompt
       v-if="confirmingExitSideStory"
       prompt="$game.areYouSureExitSideStory"
-      atmosphere="choice"
       :yes="exitSideStory"
       :no="() => (confirmingExitSideStory = false)"
     />
@@ -2845,40 +2827,6 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-.back-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 8px;
-  background: var(--surface-panel, #e8e1d2);
-  color: var(--text);
-  font-family: teutonic, sans-serif;
-  font-size: 0.95em;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-  transition:
-    background 0.15s,
-    border-color 0.15s,
-    color 0.15s;
-
-  .back-icon {
-    font-size: 0.85em;
-    transition: transform 0.15s;
-  }
-
-  &:hover {
-    background: var(--surface-raised, #f4efe4);
-    border-color: var(--edge);
-    color: var(--spooky-green);
-
-    .back-icon {
-      transform: translateX(-3px);
-    }
-  }
-}
 
 .reality-acid-flashlight {
   --flashlight-x: 50vw;
@@ -3964,7 +3912,7 @@ header {
      carries its child component's scope id, and Menu's own scoped
      `button { background: none }` matches this ghost look. Dropdown panel
      buttons sit deeper and are deliberately not matched. */
-  > div > :deep(button),
+  > div:not(.navigation-back-slot) > :deep(button),
   > div > div > :deep(button) {
     display: flex;
     align-items: center;
@@ -4037,7 +3985,7 @@ header {
        reachable; the sheet only keeps the 50px above the tray. */
     z-index: var(--z-index-199);
 
-    > div > :deep(button),
+    > div:not(.navigation-back-slot) > :deep(button),
     > div > div > :deep(button) {
       min-width: 44px;
       padding-inline: 8px;
@@ -4075,7 +4023,7 @@ header {
     pointer-events: none;
   }
 
-  .game-bar > div > :deep(button),
+  .game-bar > div:not(.navigation-back-slot) > :deep(button),
   .game-bar > div > div > :deep(button) {
     padding-inline: 9px;
   }

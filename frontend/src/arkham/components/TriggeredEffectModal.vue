@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, inject, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, inject, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Game } from '@/arkham/types/Game'
 import { choices, choicesTooltip } from '@/arkham/types/Game'
@@ -8,20 +8,28 @@ import type { Source } from '@/arkham/types/Source'
 import { formatContent } from '@/arkham/helpers'
 import { handleEmbeddedI18n } from '@/arkham/i18n'
 import { cardImage, sourceCardCode } from '@/arkham/cardImages'
-import { processingKey } from '@/arkham/injectionKeys'
-import AtmosphereLine from './AtmosphereLine.vue'
-import { triggerAtmosphere } from '@/arkham/atmosphere'
+import { processingKey, phaseAnnouncementKey, uiLockKey, spectateKey } from '@/arkham/injectionKeys'
 import AbilityButton from './AbilityButton.vue'
 import QuestionChoices from './QuestionChoices.vue'
 
 const props = defineProps<{ game: Game; playerId: string }>()
 const emit = defineEmits<{ choose: [index: number] }>()
 const { t } = useI18n()
+const { t: responseText } = useI18n({ useScope: 'local', messages: {
+  zh: { title: '可响应的卡牌', hint: '点击卡牌发动；同一张牌有多个能力时，点击后选择。', activate: '发动这张卡牌', select: '选择这张卡牌的能力', abilities: '{count} 个可用能力' },
+  en: { title: 'Available responses', hint: 'Select a card to respond. Cards with several abilities let you choose one.', activate: 'Activate this card', select: 'Choose an ability on this card', abilities: '{count} available abilities' },
+} })
+const titleId = useId()
+const expandedGroup = ref<string | null>(null)
 const dialog = ref<HTMLDialogElement | null>(null)
 const collapsed = ref(false)
 const submitted = ref(false)
 const processing = inject(processingKey)
-const busy = computed(() => submitted.value || processing?.value === true)
+const phaseAnnouncement = inject(phaseAnnouncementKey, ref(false))
+const uiLock = inject(uiLockKey, ref(false))
+const spectating = inject(spectateKey, ref(false))
+const blocked = computed(() => phaseAnnouncement.value || uiLock.value || spectating.value)
+const busy = computed(() => submitted.value || processing?.value === true || blocked.value)
 const questionKey = computed(() => JSON.stringify(props.game.question[props.playerId]))
 const context = computed(() => {
   let question = props.game.question[props.playerId]
@@ -48,12 +56,36 @@ function effectCardCode(source: Source): string | null {
   }
   return sourceCardCode(source, props.game)
 }
+// Group by entity identity, never by artwork: two copies of the same card may
+// have different resources, exhaustion states and response costs.
+function effectIdentity(source: Source): string {
+  switch (source.sourceTag) {
+    case 'AbilitySource': return effectIdentity(source.contents[0])
+    case 'UseAbilitySource': return effectIdentity(source.contents[1])
+    case 'PaymentSource': return effectIdentity(source.contents)
+    case 'IndexedSource': return source.contents ? effectIdentity(source.contents[1]) : JSON.stringify(source)
+    case 'ProxySource': return effectIdentity(effectCardCode(source.source) ? source.source : source.originalSource)
+    case 'OtherSource': return `${source.tag.replace(/Source$/, '')}:${source.contents ?? ''}`
+    default: return JSON.stringify(source)
+  }
+}
 const promptInvestigator = computed(() => Object.values(props.game.investigators).find(i => i.playerId === props.playerId))
 const entries = computed(() => {
   const investigator = promptInvestigator.value
   return choices(props.game, props.playerId).map((choice, index) => {
     let code: string | null = null
-    if (choice.tag === 'AbilityLabel') code = effectCardCode(choice.ability.source)
+    let key = `choice:${index}`
+    if (choice.tag === 'AbilityLabel') {
+      code = effectCardCode(choice.ability.source)
+      key = effectIdentity(choice.ability.source)
+    }
+    if (choice.tag === 'TargetLabel') {
+      const id = typeof choice.target.contents === 'string' ? choice.target.contents : ''
+      key = id ? `${choice.target.tag.replace(/Target$/, '')}:${id}` : `choice:${index}`
+      const entity = choice.target.tag === 'AssetTarget' ? props.game.assets[id]
+        : choice.target.tag === 'EnemyTarget' ? props.game.enemies[id] : undefined
+      if (entity) code = `${entity.cardCode}${entity.flipped ? 'b' : ''}`
+    }
     if (choice.tag === 'TargetLabel' && choice.target.tag === 'CardIdTarget') {
       // Resolve only already-visible zones, never inspect another player's hand.
       const visibleCards = investigator ? [
@@ -67,20 +99,18 @@ const entries = computed(() => {
         code = `${contents.cardCode}${contents.isFlipped ? 'b' : ''}`
       }
     }
-    return { choice, index, image: code ? cardImage(code) : null }
+    return { choice, index, key, image: code ? cardImage(code) : null }
   })
 })
-// Merge adjacent entries that resolve to the same card image so several
-// abilities of one card share a single card picture. Choices keep their own
-// indices; ordering with unrelated entries is untouched.
+// Collect all abilities on one physical card, retaining server choice indices.
 const groupedEntries = computed(() => {
-  const groups: { image: string | null; entries: typeof entries.value }[] = []
+  const groups: { key: string; image: string | null; entries: typeof entries.value }[] = []
   for (const entry of entries.value) {
-    const last = groups[groups.length - 1]
-    if (last && last.image && entry.image && last.image === entry.image) {
-      last.entries.push(entry)
+    const group = entry.image ? groups.find(group => group.key === entry.key) : undefined
+    if (group) {
+      group.entries.push(entry)
     } else {
-      groups.push({ image: entry.image, entries: [entry] })
+      groups.push({ key: entry.key, image: entry.image, entries: [entry] })
     }
   }
   return groups
@@ -88,11 +118,21 @@ const groupedEntries = computed(() => {
 const compactLayout = computed(() => groupedEntries.value.filter(group =>
   !group.entries.every(entry => entry.choice.tag === 'SkipTriggersButton')
 ).length <= 1)
+const revealWindow = computed(() => props.game.skillTest?.step === 'SkillTestFastWindow2'
+  && entries.value.some(entry => entry.choice.tag === 'SkipTriggersButton')
+  && entries.value.every(({ choice }) => choice.tag === 'SkipTriggersButton'
+    || (choice.tag === 'AbilityLabel' && choice.ability.type.tag === 'FastAbility'
+      && choice.windows.length > 0 && choice.windows.every(window => window.windowType.tag === 'FastPlayerWindow'))))
+function activateCard(group: typeof groupedEntries.value[number]) {
+  if (busy.value) return
+  if (group.entries.length === 1) choose(group.entries[0].index)
+  else expandedGroup.value = expandedGroup.value === group.key ? null : group.key
+}
 
 async function open() {
   collapsed.value = false
   await nextTick()
-  if (dialog.value?.isConnected && !dialog.value.open) dialog.value.showModal()
+  if (!blocked.value && !collapsed.value && dialog.value?.isConnected && !dialog.value.open) dialog.value.showModal()
 }
 function collapse() {
   dialog.value?.close()
@@ -106,42 +146,49 @@ function choose(index: number) {
 // A fresh server question supersedes the old window, including after undo.
 watch(questionKey, () => {
   submitted.value = false
+  expandedGroup.value = null
   void open()
 }, { immediate: true, flush: 'post' })
 // Allow retry after the shared request handler finishes, including failures.
 watch(() => processing?.value, value => {
   if (value === false) submitted.value = false
 })
+watch(blocked, value => {
+  if (value) dialog.value?.close()
+  else if (!collapsed.value) void open()
+})
 onBeforeUnmount(() => dialog.value?.close())
 </script>
 
 <template>
   <Teleport to="body">
-    <button v-if="collapsed" class="trigger-reminder" type="button" @click="open">
+    <button v-if="collapsed && !blocked" class="trigger-reminder" type="button" @click="open">
       {{ t('triggeredEffect.restore') }}
     </button>
-    <dialog ref="dialog" class="trigger-dialog" :class="{ 'trigger-dialog--compact': compactLayout }" @cancel.prevent="collapse">
+    <dialog ref="dialog" class="trigger-dialog" :aria-labelledby="titleId" :class="{ 'trigger-dialog--compact': compactLayout }" @cancel.prevent="collapse">
+      <h2 :id="titleId">{{ responseText('title') }}</h2>
+      <p class="collection-hint">{{ responseText('hint') }}</p>
+      <p v-if="revealWindow" class="collection-hint">{{ t('cardOption.testFast.beforeDraw') }}</p>
       <p v-if="contextHtml" class="context" v-html="contextHtml"></p>
       <fieldset :disabled="busy" :aria-busy="busy">
-        <template v-for="(group, groupIndex) in groupedEntries" :key="groupIndex">
+        <template v-for="group in groupedEntries" :key="group.key">
           <div
             v-if="group.entries.length === 1 && group.entries[0].choice.tag === 'SkipTriggersButton'"
             class="skip-row"
           >
             <button type="button" class="skip" @click="choose(group.entries[0].index)">
-              {{ t('triggeredEffect.skip') }}
+              {{ t(revealWindow ? 'cardOption.testFast.reveal' : 'triggeredEffect.skip') }}
             </button>
           </div>
           <div v-else class="trigger-entry" :class="{ 'trigger-entry--card': group.image }">
-            <img v-if="group.image" :src="group.image" :alt="t('triggeredEffect.card')" />
-            <div class="entry-actions">
-              <template v-for="entry in group.entries" :key="entry.index">
-                <AtmosphereLine
-                  v-if="entry.choice.tag === 'AbilityLabel'"
-                  :tone="triggerAtmosphere(entry.choice.ability.source, entry.choice.ability.type)"
-                />
-                <AtmosphereLine v-else-if="entry.choice.tag !== 'SkipTriggersButton'" tone="choice" />
-              </template>
+            <button v-if="group.image" type="button" class="response-card" :disabled="busy"
+              :aria-label="responseText(group.entries.length === 1 ? 'activate' : 'select')"
+              :aria-expanded="group.entries.length > 1 ? expandedGroup === group.key : undefined"
+              @click="activateCard(group)">
+              <img :src="group.image" :alt="t('triggeredEffect.card')" />
+              <span v-if="group.entries.length > 1" class="ability-count">{{ responseText('abilities', { count: group.entries.length }) }}</span>
+            </button>
+            <div v-if="!group.image || group.entries.length === 1 || expandedGroup === group.key" class="entry-actions">
               <div class="action-row">
                 <template v-for="entry in group.entries" :key="entry.index">
                   <AbilityButton
@@ -156,12 +203,12 @@ onBeforeUnmount(() => dialog.value?.close())
                   </button>
                   <QuestionChoices v-else :game="game" :choices="[[entry.choice, entry.index]]" @choose="choose" />
                 </template>
-                <button type="button" class="collapse" @click="collapse">{{ t('triggeredEffect.inspect') }}</button>
               </div>
             </div>
           </div>
         </template>
       </fieldset>
+      <footer><button type="button" class="collapse" @click="collapse">{{ t('triggeredEffect.inspect') }}</button></footer>
     </dialog>
   </Teleport>
 </template>
@@ -172,7 +219,7 @@ onBeforeUnmount(() => dialog.value?.close())
   inset: 0;
   margin: auto;
   box-sizing: border-box;
-  width: min(560px, calc(100vw - 32px));
+  width: min(920px, calc(100vw - 32px));
   max-height: calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   overflow: auto;
   overscroll-behavior: contain;
@@ -184,6 +231,12 @@ onBeforeUnmount(() => dialog.value?.close())
   box-shadow: 0 24px 80px #0009, inset 0 0 0 4px #ffffff03;
 }
 .trigger-dialog::backdrop { background: rgb(10 12 18 / 65%); }
+h2 { margin: 0; text-align: center; font-size: 1.15rem; color: #e2cba7; }
+.collection-hint { font-size: .85rem; text-align: center; color: #c9bdcf; }
+footer { display: flex; justify-content: center; margin-top: 14px; }
+.response-card { position: relative; width: 100%; padding: 0; border: 2px solid transparent; border-radius: 9px; background: transparent; cursor: pointer; transition: border-color .15s, transform .15s; }
+.response-card:hover:not(:disabled), .response-card[aria-expanded="true"] { border-color: #cbb0dd; transform: translateY(-2px); }
+.ability-count { display: block; padding: 6px; font-size: .8rem; color: #eee5d2; }
 .trigger-dialog--compact { width: min(360px, calc(100vw - 32px)); padding: 16px; }
 /* A full-width skip row otherwise keeps unused auto-fit columns occupied. */
 .trigger-dialog--compact fieldset { grid-template-columns: minmax(0, 1fr); }

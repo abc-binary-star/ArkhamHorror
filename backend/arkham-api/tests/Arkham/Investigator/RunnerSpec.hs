@@ -1,6 +1,8 @@
 module Arkham.Investigator.RunnerSpec (spec) where
 
 import Arkham.Agenda.CardDefs.TheDunwichLegacy.LostInTimeAndSpace qualified as Agendas
+import Arkham.Asset.Cards qualified as Assets
+import Arkham.Attack qualified as Attack
 import Arkham.Classes.HasGame (getGame)
 import Arkham.Entities qualified as Entities
 import Arkham.Investigator.Cards qualified as Investigators
@@ -17,6 +19,41 @@ realAgenda def = do
 
 spec :: Spec
 spec = describe "Investigator.Runner" do
+  describe "enemy attack assignment" do
+    it "automatically assigns both damage and horror when only the investigator can take them" . gameTest $ \self -> do
+      enemy <- testEnemy
+      run $ InvestigatorAssignDamage self.id (EnemyAttackSource $ toId enemy) DamageAny 2 1
+      self.damage `shouldReturn` 2
+      self.horror `shouldReturn` 1
+      (length . gameQuestion <$> getGame) `shouldReturn` (0 :: Int)
+
+    it "keeps the choice to absorb damage on an asset" . gameTest $ \self -> do
+      enemy <- testEnemy
+      beatCop <- self `putAssetIntoPlay` Assets.beatCop
+      run $ InvestigatorAssignDamage self.id (EnemyAttackSource $ toId enemy) DamageAny 1 0
+      self.damage `shouldReturn` 0
+      chooseOptionMatching "assign damage to asset" \case
+        AssetDamageLabel aid _ -> aid == beatCop
+        _ -> False
+      self.damage `shouldReturn` 0
+      (length . gameQuestion <$> getGame) `shouldReturn` (0 :: Int)
+
+    it "does not auto-assign damage from non-attack sources" . gameTest $ \self -> do
+      run $ InvestigatorAssignDamage self.id (TestSource mempty) DamageAny 1 0
+      self.damage `shouldReturn` 0
+      applyAllDamage
+      self.damage `shouldReturn` 1
+
+    it "automatically starts the only pending enemy attack" . gameTest $ \self -> do
+      enemy <- testEnemy & prop @"healthDamage" 1 & prop @"sanityDamage" 1
+      location <- testLocation
+      enemy `spawnAt` location
+      self `moveTo` location
+      run $ EnemyAttacks [EnemyAttack $ Attack.enemyAttack (toId enemy) (toId enemy) self.id]
+      self.damage `shouldReturn` 1
+      self.horror `shouldReturn` 1
+      (length . gameQuestion <$> getGame) `shouldReturn` (0 :: Int)
+
   it "moves one clue between investigators without duplicating it" . gameTest $ \self -> do
     other <- addInvestigator Investigators.rolandBanks
     run $ PlaceTokens (TestSource mempty) (toTarget self) Clue 1

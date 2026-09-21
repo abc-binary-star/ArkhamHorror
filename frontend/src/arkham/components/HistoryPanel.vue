@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import AtmosphereLine from './AtmosphereLine.vue'
 import { computed, ref } from 'vue';
 import { useStorage } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
@@ -373,7 +372,6 @@ function damagedFallbackText(view: DamagedTargetView): string {
         <button class="close-btn" @click="emit('close')">×</button>
       </header>
 
-      <AtmosphereLine tone="archive" class="history-atmosphere" />
       <nav class="scope-tabs">
         <button
           v-for="s in scopes"

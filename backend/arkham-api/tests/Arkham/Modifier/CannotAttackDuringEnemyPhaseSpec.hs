@@ -27,7 +27,6 @@ spec = describe "CannotAttackDuringEnemyPhase" do
       enemy <- setup self
       run $ SetPhase EnemyPhase
       run EnemiesAttack
-      chooseTarget enemy
       applyAllDamage
       self.damage `shouldReturn` 1
 

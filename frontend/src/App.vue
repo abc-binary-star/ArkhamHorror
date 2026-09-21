@@ -7,7 +7,6 @@
   </div>
   <template v-else>
     <NavBar v-if="!route.meta.hideNav"/>
-    <PageBackBar v-if="!route.meta.hideNav && !['Home', 'NewGame'].includes(String(route.name))" />
     <main class="router-container" :class="{ 'router-container--scrollable': !route.meta.hideNav }">
       <Suspense>
         <router-view v-slot="{ Component }">
@@ -35,7 +34,9 @@ import { useSiteSettingsStore } from '@/stores/site_settings'
 import { checkImageExists, fallbackLocalizedCardImage } from '@/arkham/helpers'
 import { useSiteBgm } from '@/arkham/composables/useBgm'
 import NavBar from '@/components/NavBar.vue'
-import PageBackBar from '@/components/PageBackBar.vue'
+import { provideNavigationBack } from '@/composables/useNavigationBack'
+
+provideNavigationBack()
 
 const route = useRoute()
 const settingsStore = useSiteSettingsStore()

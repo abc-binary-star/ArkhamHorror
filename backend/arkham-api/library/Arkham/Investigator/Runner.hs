@@ -438,10 +438,9 @@ runWindow attrs windows allActions allPlayableCards = do
           for actions' $ \ability@Ability {..} ->
             (ability,) <$> filterM (\w -> windowMatches iid abilitySource w abilityWindow) windows
         skippable <- getAllAbilitiesSkippable attrs windows
-        -- A window containing only resource-paid test boosts need not stop both
-        -- before and after committing. Offer these together in the second fast
-        -- window, before any token is requested. Mixed windows still allow early
-        -- spending, since other cards may care about resources or commit timing.
+        -- Offer resource-paid test boosts after committing, before the token
+        -- draw. Filter only these abilities in the first fast window: other
+        -- responses and playable cards must still be offered at their own timing.
         skillTest <- getSkillTest
         let
           isResourceBoost ab = isJust ab.wantsSkillTest && case abilityType ab of
@@ -449,15 +448,16 @@ runWindow attrs windows allActions allPlayableCards = do
             _ -> False
           deferResourceBoosts =
             skippable
-              && maybe False (\st -> st.step == SkillTestFastWindow2) skillTest
+              && maybe False (\st -> st.step == SkillTestFastWindow1) skillTest
               && notNull windows
               && all (\w -> case windowType w of
                 Window.FastPlayerWindow -> True
                 _ -> False) windows
-              && null playableCards
-              && notNull actionsWithMatchingWindows
-              && all (isResourceBoost . fst) actionsWithMatchingWindows
-        unless (deferResourceBoosts || (null playableCards && null actionsWithMatchingWindows)) do
+          actionsForWindow =
+            if deferResourceBoosts
+              then filter (not . isResourceBoost . fst) actionsWithMatchingWindows
+              else actionsWithMatchingWindows
+        unless (null playableCards && null actionsForWindow) do
           push
             $ asWindowChoose windows
             $ chooseOne player
@@ -474,7 +474,7 @@ runWindow attrs windows allActions allPlayableCards = do
                           else ability
                    in AbilityLabel iid ability' windows' [] []
               )
-              actionsWithMatchingWindows
+              actionsForWindow
             <> [SkipTriggersButton iid | skippable]
 
 {- | TEMPORARY profiling instrumentation. 'Arkham.Metrics.withMetric' needs

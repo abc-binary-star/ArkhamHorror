@@ -10,6 +10,11 @@ export function isInlineSkillTestFastWindow(game: Game, playerId: string): boole
   while (question?.question) question = question.question
   if (question?.tag !== 'ChooseOne' || !question.isWindow) return false
   const entries = choices(game, playerId)
+  // Multiple card sources belong together in the response collection dialog.
+  // Keep a single card's repeatable boosts inline during the test.
+  const sources = new Set(entries.flatMap(entry => entry.tag === 'AbilityLabel'
+    ? [JSON.stringify(entry.ability.source)] : []))
+  if (sources.size > 1) return false
   return entries.some(entry => entry.tag === 'SkipTriggersButton')
     && entries.some(entry => entry.tag === 'AbilityLabel')
     && entries.every(entry => entry.tag === 'SkipTriggersButton'

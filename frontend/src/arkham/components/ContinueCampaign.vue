@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useNavigationBack } from '@/composables/useNavigationBack'
 import { inject, computed, ref, onMounted, watch } from 'vue'
 import { toCamelCase } from '@/arkham/helpers'
 import { imgsrc } from '@/arkham/helpers'
@@ -32,6 +33,7 @@ import { sendKey, soloKey } from '@/arkham/injectionKeys'
 
 const props = defineProps<{
   game: Game
+  readOnly?: boolean
   campaign?: Campaign
   scenario?: Scenario
   playerId?: string
@@ -54,7 +56,7 @@ const dev = isDevBuild()
 const isBetaUser = computed(() => !!currentUser.value?.beta)
 const displayRuleOptions = computed(() => ({ alpha: alpha.value, beta: isBetaUser.value, dev }))
 const sendOnce = (payload: unknown) => {
-  if (hasSent.value) return
+  if (hasSent.value || props.readOnly) return
   hasSent.value = true
   send(JSON.stringify(payload))
 }
@@ -401,7 +403,7 @@ const holdsContinuation = computed(() => {
   return inner.tag === 'ContinueCampaign'
 })
 
-const canManageRoster = computed(() => !!props.campaign && holdsContinuation.value)
+const canManageRoster = computed(() => !props.readOnly && !!props.campaign && holdsContinuation.value)
 const retired = computed(() => Object.values(props.game.retiredInvestigators ?? {}))
 const canRetire = computed(() => investigators.value.length > 1)
 // A scenario is played by one to four investigators.
@@ -417,6 +419,15 @@ const becomesMultihandedSolo = computed(() => !solo.value && isSingleSeat.value)
 // The add control starts as one button. It only opens a panel when there is a
 // choice to make: taking a second hand yourself versus inviting someone.
 const addOpen = ref(false)
+useNavigationBack(() => {
+  if (addSideStory.value && !props.chooseSideStory) return {
+    label: t('navigationBack.interlude'), run: () => { addSideStory.value = false }, disabled: hasSent.value,
+  }
+  if (addOpen.value) return {
+    label: t('navigationBack.interlude'), run: () => { addOpen.value = false }, disabled: rosterBusy.value,
+  }
+  return null
+})
 const addOptionCount = computed(() => (canAddOwnInvestigator.value ? 1 : 0) + (solo.value ? 0 : 1))
 
 function startAdd() {
@@ -477,7 +488,6 @@ const setIcon = computed(() => {
   <div class="continue-campaign scroll-container">
     <div v-if="chooseSideStory || (addSideStory && standalones.length > 0)" class="side-story-selection">
       <div class="side-story-header">
-        <button v-if="!chooseSideStory" class="screen-back" @click="addSideStory = false">← {{ $t('back') }}</button>
         <h2>{{ $t('sideStory.selectSideScenario') }}</h2>
       </div>
       <SideStoryOption
@@ -487,7 +497,6 @@ const setIcon = computed(() => {
         :disabled="hasSent"
         @select="loadSideStory"
       />
-      <button v-if="!chooseSideStory" @click="addSideStory = false">{{t('cancel')}}</button>
     </div>
     <div v-else class="next-scenario">
       <div class="next-scenario-info">
@@ -496,7 +505,7 @@ const setIcon = computed(() => {
           <h2>{{name}}</h2>
           <p v-if="scenarioOverlay" class="campaign-overlay-label">{{ t('sideStory.variant') }}</p>
         </div>
-        <div class="actions">
+        <div v-if="!readOnly" class="actions">
           <button @click="startStep" :disable="hasSent">{{t('continue')}}</button>
           <button v-if="canUpgrade" @click="upgradeDecks" :disable="hasSent">{{t('upgradeDecks')}}</button>
           <button v-if="canChooseSideStory && standalones.length > 0" @click="addSideStory = true" :disable="hasSent">+ {{t('addSideScenario')}}</button>

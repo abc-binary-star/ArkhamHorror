@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { capitalize } from '@/arkham/helpers'
 import { useI18n } from 'vue-i18n'
 import { computed } from 'vue'
 import type { DeckSort } from '@/arkham/types/Deck'
 
 const { t } = useI18n()
+const classLabel = (name: string) => t(`deckToolbar.classes.${name}`)
 
 const props = withDefaults(defineProps<{
   compact?: boolean
@@ -37,11 +37,14 @@ function toggleClass(c: string) {
         :key="iclass"
         class="class-pill"
         :class="{ [iclass]: filterClasses.includes(iclass), active: filterClasses.includes(iclass) }"
-        :title="capitalize(iclass)"
+        :title="classLabel(iclass)"
+        :aria-label="classLabel(iclass)"
+        :aria-pressed="filterClasses.includes(iclass)"
+        type="button"
         @click.prevent="toggleClass(iclass)"
       >
         <span :class="`${iclass}-icon`"></span>
-        <span v-if="!compact" class="pill-label">{{ capitalize(iclass) }}</span>
+        <span v-if="!compact" class="pill-label">{{ classLabel(iclass) }}</span>
       </button>
     </div>
     <div class="toolbar-right">
@@ -58,9 +61,10 @@ function toggleClass(c: string) {
         v-model="search"
         class="search-input"
         :placeholder="effectivePlaceholder"
+        :aria-label="effectivePlaceholder"
         type="search"
       />
-      <select v-model="sortBy" class="sort-select">
+      <select v-model="sortBy" class="sort-select" :aria-label="t('deckToolbar.sortLabel')">
         <option value="name">{{ t('deckToolbar.sortName') }}</option>
         <option value="class">{{ t('deckToolbar.sortClass') }}</option>
         <option value="recent">{{ t('deckToolbar.sortRecent') }}</option>
@@ -76,8 +80,8 @@ function toggleClass(c: string) {
   flex-wrap: wrap;
   gap: 8px;
   padding: 10px 12px;
-  border-top: 1px solid color-mix(in srgb, var(--brass) 40%, transparent);
-  border-bottom: 1px solid var(--box-border);
+  border-top: 1px solid rgb(220 211 188 / 0.58);
+  border-bottom: 1px solid rgb(220 211 188 / 0.48);
   background: color-mix(in srgb, var(--surface-panel) 92%, var(--brass));
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.28);
   @media (max-width: 768px) {
@@ -113,7 +117,7 @@ function toggleClass(c: string) {
   transition: background 0.12s, color 0.12s, border-color 0.12s;
   user-select: none;
 
-  &:hover { color: var(--text); border-color: var(--spooky-green); }
+  &:hover { color: var(--text); border-color: #eadfbe; }
 
   &.active.guardian { background: var(--guardian-extra-dark); border-color: var(--guardian-dark); color: #fff; }
   &.active.seeker   { background: var(--seeker-extra-dark);   border-color: var(--seeker-dark);   color: #fff; }
@@ -176,7 +180,7 @@ function toggleClass(c: string) {
   border-radius: var(--radius-sm);
   cursor: pointer;
 
-  &:hover { color: var(--text); border-color: var(--spooky-green); }
+  &:hover { color: var(--text); border-color: #eadfbe; }
   &.active {
     color: #fff;
     background: rgba(110, 134, 64, 0.85);
@@ -206,7 +210,7 @@ function toggleClass(c: string) {
   transition: border-color 0.12s;
 
   &::placeholder { color: var(--text-faint); }
-  &:focus { border-color: var(--spooky-green); box-shadow: var(--shadow-2); }
+  &:focus { border-color: #eadfbe; box-shadow: var(--shadow-2); }
 
   @media (max-width: 768px) {
     flex: 1;
@@ -221,7 +225,7 @@ function toggleClass(c: string) {
   width: 140px;
 
   &::placeholder { color: var(--text-faint); }
-  &:focus { border-color: var(--spooky-green); }
+  &:focus { border-color: #eadfbe; }
 }
 
 .sort-select {

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import AtmosphereLine from './AtmosphereLine.vue'
 import { computed, inject, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Game } from '@/arkham/types/Game'
+import type { Question } from '@/arkham/types/Question'
 import { choices, damageAssignmentTokens } from '@/arkham/types/Game'
 import { processingKey, uiLockKey, phaseAnnouncementKey } from '@/arkham/injectionKeys'
 import { useDbCardStore } from '@/stores/dbCards'
@@ -14,11 +14,13 @@ const { t } = useI18n({ useScope: 'local', messages: {
     drawAnnouncement: '{name} 抽取了遭遇卡',
     assignTitle: '需要分配伤害／恐惧',
     damage: '{count} 点伤害', horror: '{count} 点恐惧', assign: '开始分配', inspect: '查看牌桌',
+    assignOnTable: '点击高亮的调查员或资产，分配伤害／恐惧',
   },
   en: {
     drawAnnouncement: '{name} drew an encounter card',
     assignTitle: 'Assign damage / horror',
     damage: '{count} damage', horror: '{count} horror', assign: 'Start assigning', inspect: 'View table',
+    assignOnTable: 'Select a highlighted investigator or asset to assign damage / horror',
   },
 } })
 const titleId = useId()
@@ -30,6 +32,15 @@ const dbCards = useDbCardStore()
 const submitted = ref(false)
 const dismissed = ref(false)
 const tokens = computed(() => damageAssignmentTokens(props.game, props.playerId))
+const enemyDamage = computed(() => {
+  let question: Question | undefined = props.game.question[props.playerId]
+  while (question) {
+    if (question.tag === 'QuestionWithSource' && question.source.tag === 'EnemyAttackSource') return true
+    if (!('question' in question)) break
+    question = question.question
+  }
+  return false
+})
 const assignVisible = computed(() => !!tokens.value && !props.suppressed && !uiLock.value && !phaseAnnouncement.value)
 const drawIndex = computed(() => props.game.phase === 'MythosPhase'
   ? choices(props.game, props.playerId).findIndex(choice => choice.tag === 'TargetLabel' && choice.target.tag === 'EncounterDeckTarget')
@@ -49,7 +60,7 @@ function collapse() {
 }
 async function syncDialog() {
   await nextTick()
-  if (!assignVisible.value || dismissed.value) dialog.value?.close()
+  if (!assignVisible.value || dismissed.value || enemyDamage.value) dialog.value?.close()
   else if (dialog.value?.isConnected && !dialog.value.open) dialog.value.showModal()
 }
 function act() {
@@ -94,7 +105,7 @@ watch(drawVisible, active => {
   }
 }, { flush: 'post' })
 watch(() => props.playerId, () => { lastAssignVisible = assignVisible.value; dismissed.value = false; submitted.value = false })
-watch([assignVisible, dismissed], syncDialog, { flush: 'post' })
+watch([assignVisible, dismissed, enemyDamage], syncDialog, { flush: 'post' })
 watch(processing, value => {
   if (value) return
   submitted.value = false
@@ -105,12 +116,15 @@ onBeforeUnmount(() => { clearTimeout(resetTimer); clearTimeout(drawTimer); dialo
 
 <template>
   <Teleport to="body">
-    <button v-if="assignVisible && dismissed" class="action-reminder" type="button" @click="dismissed = false">
+    <div v-if="assignVisible && enemyDamage" class="action-reminder assignment-hint" role="status" aria-live="polite">
+      <strong>{{ t('assignOnTable') }}</strong>
+      <span v-if="tokens">{{ t('damage', { count: tokens.damage }) }} / {{ t('horror', { count: tokens.horror }) }}</span>
+    </div>
+    <button v-else-if="assignVisible && dismissed" class="action-reminder" type="button" @click="dismissed = false">
       {{ t('assignTitle') }}<template v-if="tokens"> · {{ t('damage', { count: tokens.damage }) }} / {{ t('horror', { count: tokens.horror }) }}</template>
     </button>
     <dialog ref="dialog" class="action-dialog" :aria-labelledby="titleId" @cancel.prevent="collapse">
       <h2 :id="titleId">{{ t('assignTitle') }}</h2>
-      <AtmosphereLine :tone="tokens?.damage && tokens?.horror ? 'peril' : tokens?.horror ? 'horror' : 'damage'" />
       <div v-if="tokens" class="token-counts">
         <span v-if="tokens.damage > 0" class="damage">{{ t('damage', { count: tokens.damage }) }}</span>
         <span v-if="tokens.horror > 0" class="horror">{{ t('horror', { count: tokens.horror }) }}</span>
@@ -142,6 +156,7 @@ button { cursor: pointer; min-height: 42px; padding: 9px 12px; border-radius: 6p
 button:disabled { opacity: .6; cursor: wait; }
 button:focus-visible { outline: 2px solid #e2c2ff; outline-offset: 3px; }
 .action-reminder { position: fixed; left: 50%; top: calc(84px + env(safe-area-inset-top)); transform: translateX(-50%); z-index: 1100; max-width: calc(100vw - 32px); border: 1px solid #a58cba; background: #342d3c; box-shadow: 0 4px 24px #0008; }
+.assignment-hint { display: flex; flex-direction: column; gap: 6px; width: max-content; box-sizing: border-box; padding: 10px 16px; border-radius: 8px; color: #f4eaf5; font-size: .85rem; text-align: center; pointer-events: none; }
 
 .draw-interlude {
   position: fixed;

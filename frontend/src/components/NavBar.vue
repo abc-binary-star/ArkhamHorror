@@ -1,12 +1,26 @@
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import NavigationBack from '@/components/NavigationBack.vue'
 import { useUserStore } from '@/stores/user'
 import { useRoute, useRouter } from 'vue-router'
 import type { User } from '@/types'
 import { OnClickOutside } from '@vueuse/components'
 import { storeToRefs } from 'pinia'
 import { useSettings } from '@/stores/settings'
-import { Layers, SquarePen, SquareStack, Trophy, Hammer, Info, Shield } from '@lucide/vue'
+import {
+  Layers,
+  SquarePen,
+  SquareStack,
+  Trophy,
+  Hammer,
+  Info,
+  Shield,
+  Menu,
+  ChevronDown,
+  UserRound,
+  Settings,
+  LogOut,
+} from '@lucide/vue'
 
 const expanded = ref(false)
 const mobileOpen = ref(false)
@@ -23,6 +37,26 @@ const deckBuilderHref = '/build/'
 
 const isNavCurrent = (path: string) => route.path === path || route.path.startsWith(`${path}/`)
 const isAboutCurrent = computed(() => route.path === '/about')
+watch(
+  () => route.fullPath,
+  () => {
+    mobileOpen.value = false
+    expanded.value = false
+  },
+)
+
+function closeMenus() {
+  mobileOpen.value = false
+  expanded.value = false
+}
+function toggleMobileMenu() {
+  mobileOpen.value = !mobileOpen.value
+  expanded.value = false
+}
+function toggleAccountMenu() {
+  expanded.value = !expanded.value
+  mobileOpen.value = false
+}
 
 async function logout() {
   await store.logout()
@@ -31,144 +65,149 @@ async function logout() {
 </script>
 
 <template>
-  <header id="nav" @keydown.esc="mobileOpen = false; expanded = false">
-    <button
-      v-if="currentUser"
-      type="button"
-      class="mobile-menu-btn"
-      aria-controls="mobile-navigation"
-      :aria-expanded="mobileOpen"
-      :aria-label="$t('nav.menu')"
-      @click="mobileOpen = !mobileOpen"
-    >
-      <font-awesome-icon icon="bars" />
-    </button>
+  <header id="nav" @keydown.esc="closeMenus">
+    <div class="nav-inner">
+      <NavigationBack />
+      <button
+        v-if="currentUser"
+        type="button"
+        class="mobile-menu-btn"
+        aria-controls="mobile-navigation"
+        :aria-expanded="mobileOpen"
+        :aria-label="$t('nav.menu')"
+        @click="toggleMobileMenu"
+      >
+        <Menu aria-hidden="true" />
+      </button>
 
-    <router-link to="/" class="home-plaque" :aria-label="$t('nav.home')">
-      <img
-        class="brand-mark"
-        src="/assets/veiled-harbour/06-诡镇奇谈徽记.svg"
-        alt=""
-        aria-hidden="true"
-      />
-      <span class="brand-lockup">
-        <span class="brand-name">诡镇奇谈</span>
-        <span class="brand-subtitle">ARKHAM HORROR</span>
-      </span>
-    </router-link>
+      <router-link to="/" class="home-plaque" :aria-label="$t('nav.home')">
+        <img
+          class="brand-mark"
+          src="/assets/veiled-harbour/06-诡镇奇谈徽记.svg"
+          alt=""
+          aria-hidden="true"
+        />
+        <span class="brand-lockup">
+          <span class="brand-name">诡镇奇谈</span>
+          <span class="brand-subtitle">ARKHAM HORROR</span>
+        </span>
+      </router-link>
 
-    <nav v-if="currentUser" class="main-links">
-      <router-link
-        v-if="currentUser"
-        to="/decks"
-        class="nav-link"
-        :class="{ 'nav-link--current': isNavCurrent('/decks') }"
-        ><Layers class="nav-icon" aria-hidden="true" />{{ $t('nav.myDecks') }}</router-link
-      >
-      <a
-        v-if="currentUser && deckBuilderAvailable"
-        :href="deckBuilderHref"
-        class="nav-link"
-        target="_blank"
-        rel="noopener"
-        ><SquarePen class="nav-icon" aria-hidden="true" />{{ $t('nav.deckBuilder') }}</a
-      >
-      <router-link
-        v-if="currentUser"
-        to="/cards"
-        class="nav-link"
-        :class="{ 'nav-link--current': isNavCurrent('/cards') }"
-        ><SquareStack class="nav-icon" aria-hidden="true" />{{ $t('nav.cards') }}</router-link
-      >
-      <router-link
-        v-if="currentUser"
-        to="/achievements"
-        class="nav-link"
-        :class="{ 'nav-link--current': isNavCurrent('/achievements') }"
-        ><Trophy class="nav-icon" aria-hidden="true" />{{ $t('nav.achievements') }}</router-link
-      >
-      <router-link
-        v-if="currentUser && customCardsEnabled"
-        to="/card-builder"
-        class="nav-link"
-        :class="{ 'nav-link--current': isNavCurrent('/card-builder') }"
-        ><Hammer class="nav-icon" aria-hidden="true" />{{ $t('nav.cardBuilder') }}</router-link
-      >
-      <router-link
-        v-if="currentUser"
-        to="/about"
-        class="nav-link"
-        :class="{ 'nav-link--current': isAboutCurrent }"
-        ><Info class="nav-icon" aria-hidden="true" />{{ $t('nav.about') }}</router-link
-      >
-      <router-link
-        v-if="currentUser && currentUser.admin"
-        to="/admin"
-        class="nav-link"
-        :class="{ 'nav-link--current': isNavCurrent('/admin') }"
-        ><Shield class="nav-icon" aria-hidden="true" />{{ $t('nav.admin') }}</router-link
-      >
-    </nav>
+      <nav v-if="currentUser" class="main-links">
+        <router-link
+          v-if="currentUser"
+          to="/decks"
+          class="nav-link"
+          :class="{ 'nav-link--current': isNavCurrent('/decks') }"
+          ><Layers class="nav-icon" aria-hidden="true" />{{ $t('nav.myDecks') }}</router-link
+        >
+        <a
+          v-if="currentUser && deckBuilderAvailable"
+          :href="deckBuilderHref"
+          class="nav-link"
+          target="_blank"
+          rel="noopener"
+          ><SquarePen class="nav-icon" aria-hidden="true" />{{ $t('nav.deckBuilder') }}</a
+        >
+        <router-link
+          v-if="currentUser"
+          to="/cards"
+          class="nav-link"
+          :class="{ 'nav-link--current': isNavCurrent('/cards') }"
+          ><SquareStack class="nav-icon" aria-hidden="true" />{{ $t('nav.cards') }}</router-link
+        >
+        <router-link
+          v-if="currentUser"
+          to="/achievements"
+          class="nav-link"
+          :class="{ 'nav-link--current': isNavCurrent('/achievements') }"
+          ><Trophy class="nav-icon" aria-hidden="true" />{{ $t('nav.achievements') }}</router-link
+        >
+        <router-link
+          v-if="currentUser && customCardsEnabled"
+          to="/card-builder"
+          class="nav-link"
+          :class="{ 'nav-link--current': isNavCurrent('/card-builder') }"
+          ><Hammer class="nav-icon" aria-hidden="true" />{{ $t('nav.cardBuilder') }}</router-link
+        >
+        <router-link
+          v-if="currentUser"
+          to="/about"
+          class="nav-link"
+          :class="{ 'nav-link--current': isAboutCurrent }"
+          ><Info class="nav-icon" aria-hidden="true" />{{ $t('nav.about') }}</router-link
+        >
+        <router-link
+          v-if="currentUser && currentUser.admin"
+          to="/admin"
+          class="nav-link"
+          :class="{ 'nav-link--current': isNavCurrent('/admin') }"
+          ><Shield class="nav-icon" aria-hidden="true" />{{ $t('nav.admin') }}</router-link
+        >
+      </nav>
 
-    <OnClickOutside class="account-menu" @trigger="expanded = false">
-      <div class="user-links">
-        <template v-if="currentUser">
-          <button
-            type="button"
-            class="user-btn"
-            :class="{ open: expanded }"
-            :aria-expanded="expanded"
-            @click="expanded = !expanded"
-          >
-            <span>{{ currentUser.username }}</span>
-            <font-awesome-icon
-              icon="angle-down"
-              class="dropdown-icon"
+      <OnClickOutside class="account-menu" @trigger="expanded = false">
+        <div class="user-links">
+          <template v-if="currentUser">
+            <button
+              type="button"
+              class="user-btn"
               :class="{ open: expanded }"
-            />
-          </button>
-          <div v-if="expanded" class="user-dropdown">
-            <router-link @click="expanded = false" to="/settings">{{ $t('settings') }}</router-link>
-            <a href="#" @click="logout">{{ $t('logOut') }}</a>
-          </div>
-        </template>
-        <template v-else>
-          <router-link to="/sign-in">{{ $t('logIn') }}</router-link>
-          <router-link to="/sign-up">{{ $t('register') }}</router-link>
-        </template>
-      </div>
-    </OnClickOutside>
+              :aria-expanded="expanded"
+              aria-controls="account-dropdown"
+              @click="toggleAccountMenu"
+            >
+              <UserRound class="account-icon" aria-hidden="true" />
+              <span>{{ currentUser.username }}</span>
+              <ChevronDown aria-hidden="true" class="dropdown-icon" :class="{ open: expanded }" />
+            </button>
+            <div v-if="expanded" id="account-dropdown" class="user-dropdown">
+              <router-link @click="expanded = false" to="/settings"
+                ><Settings aria-hidden="true" />{{ $t('settings') }}</router-link
+              >
+              <button type="button" @click="logout">
+                <LogOut aria-hidden="true" />{{ $t('logOut') }}
+              </button>
+            </div>
+          </template>
+          <template v-else>
+            <router-link to="/sign-in">{{ $t('logIn') }}</router-link>
+            <router-link to="/sign-up">{{ $t('register') }}</router-link>
+          </template>
+        </div>
+      </OnClickOutside>
 
-    <div v-if="mobileOpen" id="mobile-navigation" class="mobile-menu" @click="mobileOpen = false">
-      <router-link to="/decks" :class="{ 'nav-link--current': isNavCurrent('/decks') }">{{
-        $t('nav.myDecks')
-      }}</router-link>
-      <a v-if="deckBuilderAvailable" :href="deckBuilderHref" target="_blank" rel="noopener">{{
-        $t('nav.deckBuilder')
-      }}</a>
-      <router-link to="/cards" :class="{ 'nav-link--current': isNavCurrent('/cards') }">{{
-        $t('nav.cards')
-      }}</router-link>
-      <router-link
-        to="/achievements"
-        :class="{ 'nav-link--current': isNavCurrent('/achievements') }"
-        >{{ $t('nav.achievements') }}</router-link
-      >
-      <router-link
-        v-if="customCardsEnabled"
-        to="/card-builder"
-        :class="{ 'nav-link--current': isNavCurrent('/card-builder') }"
-        >{{ $t('nav.cardBuilder') }}</router-link
-      >
-      <router-link to="/about" :class="{ 'nav-link--current': isAboutCurrent }">{{
-        $t('nav.about')
-      }}</router-link>
-      <router-link
-        v-if="currentUser && currentUser.admin"
-        to="/admin"
-        :class="{ 'nav-link--current': isNavCurrent('/admin') }"
-        >{{ $t('nav.admin') }}</router-link
-      >
+      <div v-if="mobileOpen" id="mobile-navigation" class="mobile-menu" @click="mobileOpen = false">
+        <router-link to="/decks" :class="{ 'nav-link--current': isNavCurrent('/decks') }">{{
+          $t('nav.myDecks')
+        }}</router-link>
+        <a v-if="deckBuilderAvailable" :href="deckBuilderHref" target="_blank" rel="noopener">{{
+          $t('nav.deckBuilder')
+        }}</a>
+        <router-link to="/cards" :class="{ 'nav-link--current': isNavCurrent('/cards') }">{{
+          $t('nav.cards')
+        }}</router-link>
+        <router-link
+          to="/achievements"
+          :class="{ 'nav-link--current': isNavCurrent('/achievements') }"
+          >{{ $t('nav.achievements') }}</router-link
+        >
+        <router-link
+          v-if="customCardsEnabled"
+          to="/card-builder"
+          :class="{ 'nav-link--current': isNavCurrent('/card-builder') }"
+          >{{ $t('nav.cardBuilder') }}</router-link
+        >
+        <router-link to="/about" :class="{ 'nav-link--current': isAboutCurrent }">{{
+          $t('nav.about')
+        }}</router-link>
+        <router-link
+          v-if="currentUser && currentUser.admin"
+          to="/admin"
+          :class="{ 'nav-link--current': isNavCurrent('/admin') }"
+          >{{ $t('nav.admin') }}</router-link
+        >
+      </div>
     </div>
   </header>
 </template>
@@ -187,11 +226,27 @@ async function logout() {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 0 20px;
+  padding: 0 12px;
   height: 60px;
   flex-shrink: 0;
   position: relative;
   z-index: var(--z-index-100);
+}
+
+.nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  margin: 0 auto;
+  min-width: 0;
+  position: relative;
+}
+/* Keep the shared back control available without reserving blank space on Home. */
+:deep(.navigation-back-slot:not(:has(button))) {
+  display: none;
 }
 
 #nav::before {
@@ -211,9 +266,9 @@ async function logout() {
   justify-content: flex-start;
   flex-shrink: 0;
   gap: 8px;
-  min-width: 196px;
+  min-width: 174px;
   height: 44px;
-  padding: 0 22px 0 0;
+  padding: 0 24px 0 0;
   color: var(--text-on-dark, #f4efe4);
   position: relative;
   text-decoration: none;
@@ -235,11 +290,10 @@ async function logout() {
     position: absolute;
     top: 50%;
     right: 0;
-    width: 18px;
-    height: 18px;
+    width: 1px;
+    height: 26px;
     transform: translateY(-50%);
-    background: url('/assets/veiled-harbour/40-导航黄铜索引压印-v1.avif') center / contain no-repeat;
-    opacity: 0.42;
+    background: linear-gradient(transparent, rgba(200, 173, 120, 0.5), transparent);
     pointer-events: none;
   }
 }
@@ -280,7 +334,7 @@ async function logout() {
 .main-links {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   flex: 1;
   min-width: 0;
   height: 48px;
@@ -301,12 +355,12 @@ async function logout() {
   gap: 7px;
   flex-shrink: 0;
   height: 44px;
-  padding: 0 16px;
+  padding: 0 13px;
   border-radius: 0;
   color: var(--text-dim-on-dark, #c7cfcc);
-  font-size: 0.88rem;
-  font-weight: var(--font-bold);
-  letter-spacing: 0.02em;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   text-decoration: none;
   white-space: nowrap;
   transition:
@@ -354,7 +408,8 @@ async function logout() {
   width: 15px;
   height: 15px;
   flex-shrink: 0;
-  opacity: 0.8;
+  opacity: 0.72;
+  stroke-width: 1.6;
 }
 
 .nav-link.nav-link--current::after {
@@ -373,11 +428,11 @@ async function logout() {
   transform: translate(-50%, 35%) rotate(45deg);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
   #nav {
     gap: 8px;
     padding: 0 12px;
-    height: 56px;
+    height: 60px;
   }
 
   .home-plaque {
@@ -437,7 +492,7 @@ async function logout() {
     outline-offset: 2px;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1100px) {
     display: flex;
   }
 }
@@ -503,7 +558,10 @@ async function logout() {
   }
 }
 
-.account-menu { margin-left: auto; min-width: 0; }
+.account-menu {
+  margin-left: auto;
+  min-width: 0;
+}
 
 /* ── User section ──────────────────────────────────────────────────────── */
 
@@ -547,7 +605,7 @@ async function logout() {
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1100px) {
     gap: 4px;
     a {
       padding: 0 8px;
@@ -563,12 +621,13 @@ async function logout() {
   height: 36px;
   max-width: 180px;
   padding: 0 11px;
-  background: none;
-  border: 0;
+  background: rgba(244, 239, 228, 0.035);
+  border: 1px solid rgba(200, 173, 120, 0.22);
+  border-radius: 4px;
   box-shadow: none;
   color: var(--text-on-dark, #f4efe4);
   font-size: 0.78rem;
-  font-weight: var(--font-black);
+  font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
   transition: color 140ms ease;
@@ -590,7 +649,17 @@ async function logout() {
   }
 }
 
+.account-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: #b8ab8b;
+  stroke-width: 1.5;
+}
+
 .dropdown-icon {
+  width: 13px;
+  height: 13px;
   flex-shrink: 0;
   font-size: 0.75em;
   transition: transform 0.2s;
@@ -612,8 +681,16 @@ async function logout() {
   box-shadow: 0 12px 28px rgba(18, 25, 25, 0.34);
   overflow: hidden;
 
-  a {
-    display: block;
+  a,
+  button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: none;
+    cursor: pointer;
+    font-family: inherit;
     height: auto;
     min-height: 44px;
     padding: 12px 11px;
@@ -647,15 +724,68 @@ async function logout() {
     }
   }
 }
+.user-dropdown svg {
+  width: 16px;
+  height: 16px;
+  stroke-width: 1.6;
+}
+.mobile-menu-btn > svg {
+  width: 20px;
+  height: 20px;
+}
+.home-plaque:focus-visible {
+  outline: 2px solid #c8ad78;
+  outline-offset: 2px;
+}
+
 .user-btn > span {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+@media (max-width: 1100px) {
+  .nav-inner {
+    gap: 8px;
+  }
+  .user-btn {
+    max-width: 108px;
+    padding: 0 8px;
+    min-height: 40px;
+  }
+  .account-icon {
+    display: none;
+  }
+  .brand-mark {
+    width: 26px;
+    height: 26px;
+    flex-basis: 26px;
+  }
+  .home-plaque {
+    gap: 5px;
+  }
+}
 @media (max-width: 768px) {
-  .user-btn { max-width: 100px; }
-  .brand-mark { width: 26px; height: 26px; flex-basis: 26px; }
-  .home-plaque { gap: 5px; }
+  #nav {
+    height: 56px;
+  }
+}
+@media (min-width: 1280px) {
+  #nav {
+    padding-inline: clamp(12px, 1.2vw, 24px);
+  }
+  .nav-inner {
+    gap: clamp(12px, 1vw, 20px);
+  }
+  .main-links {
+    gap: clamp(2px, 0.6vw, 14px);
+  }
+  .nav-link {
+    padding-inline: clamp(13px, 1.2vw, 24px);
+    font-size: clamp(0.8rem, 0.85vw, 1rem);
+  }
+  .brand-name {
+    font-size: clamp(1.12rem, 1.2vw, 1.4rem);
+  }
 }
 </style>

@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import AtmosphereLine from './AtmosphereLine.vue'
 import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { isCustomCardCode } from '@/arkham/customCards'
 import { localizeArkhamDBBaseUrl } from '@/arkham/helpers'
@@ -100,7 +99,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 
         <div class="info">
           <h2>{{ title }}<span v-if="levelText(card)" class="level">{{ levelText(card) }}</span></h2>
-          <AtmosphereLine tone="archive" />
           <p v-if="card.name.subtitle" class="subtitle">{{ card.name.subtitle }}</p>
           <p v-if="unimplemented" class="not-implemented">{{ $t('cardDetails.notImplemented') }}</p>
 

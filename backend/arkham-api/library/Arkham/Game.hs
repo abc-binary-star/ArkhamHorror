@@ -6809,6 +6809,12 @@ runMessages gameId mLogger = do
             Ask _ (ChooseOneAtATime []) -> runMessages gameId mLogger
             Ask _ (ChooseOneAtATimeWithAuto _ []) -> runMessages gameId mLogger
             Ask _ (ChooseN _ []) -> runMessages gameId mLogger
+            -- Incoming attacks only need an ordering decision when more than
+            -- one remains. Run the normal attack message, including its response
+            -- windows, rather than asking the player to confirm the sole enemy.
+            Ask _ (QuestionLabel label _ (ChooseOneAtATime [TargetLabel (EnemyTarget _) [attack@EnemyAttack {}]]))
+              | label `elem` ["$enemyAttackPrompt.regular", "$enemyAttackPrompt.opportunity"] ->
+                  push attack >> runMessages gameId mLogger
             Ask pid q -> do
               -- if we are choosing decks, we do not want to clobber other ChooseDeck
               moreChooseDecks <-

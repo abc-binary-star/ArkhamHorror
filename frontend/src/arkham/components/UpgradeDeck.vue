@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useNavigationBack } from '@/composables/useNavigationBack';
 import { displayTabooList } from '@/arkham/taboo';
 import { portraitImage } from '@/arkham/cardImages'
 import { ref, computed, inject, onMounted, onUnmounted, watch } from 'vue';
@@ -24,6 +25,8 @@ import { soloKey } from '@/arkham/injectionKeys';
 // TODO should we pass in the investigator
 export interface Props {
   game: Game
+  canBack?: boolean
+  active?: boolean
   playerId: string
 }
 
@@ -63,7 +66,7 @@ const fetching = ref(false)
 const submitError = ref<string | null>(null)
 const loadError = ref<string | null>(null)
 const props = defineProps<Props>()
-const emit = defineEmits<{ choose: [value: number]; update: [game: Game] }>()
+const emit = defineEmits<{ choose: [value: number]; update: [game: Game]; back: [] }>()
 const choose = (idx: number) => emit('choose', idx)
 const waiting = ref(false)
 let waitingPoll: ReturnType<typeof setTimeout> | null = null
@@ -762,15 +765,17 @@ const breakdowns = computed<XpBreakdownStep[]>(() => {
 const tabooList = function (investigator: Investigator) {
   return investigator.taboo ? displayTabooList(investigator.taboo) : null
 }
+// Returning only changes the local view. Skipping an upgrade remains an
+// explicit, confirmed game action in the footer.
+useNavigationBack(() => props.canBack && props.active !== false ? {
+  label: t('navigationBack.interlude'),
+  disabled: fetching.value,
+  run: () => emit('back'),
+} : null)
 </script>
 
 <template>
   <div id="upgrade-deck" class="scroll-container">
-    <button
-      v-if="!waiting && question && question.tag === 'ChooseUpgradeDeck' && investigatorId == originalInvestigatorId"
-      class="screen-back"
-      @click.prevent="skip()"
-    >← {{ $t('back') }}</button>
     <h2 class="title">{{ $t('upgrade.title', {xp: xp}) }}</h2>
 
     <div v-if="!waiting" class="panel">

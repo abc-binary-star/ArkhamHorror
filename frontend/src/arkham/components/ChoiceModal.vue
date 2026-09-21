@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { AtmosphereTone } from '@/arkham/atmosphere';
-import AtmosphereLine from './AtmosphereLine.vue';
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch, type CSSProperties } from 'vue';
 import { useI18n } from 'vue-i18n';
 import type { Game } from '@/arkham/types/Game';
@@ -326,15 +324,6 @@ const title = computed(() => {
 
   return t("Choose")
 })
-const choiceAtmosphere = computed<AtmosphereTone>(() => {
-  if (question.value?.tag === QuestionType.READ) return 'story'
-  if (skillTestResults.value) return skillTestResults.value.skillTestResultsSuccess ? 'success' : 'failure'
-  if (paymentAmountsLabel.value || question.value?.tag === 'PayCostQuestion' || question.value?.tag === 'ChooseExchangeAmounts') return 'payment'
-  if (searchedCards.value.length) return 'search'
-  if (props.game.focusedChaosTokens.length || tokenChoices.value) return 'chaos'
-  if (focusedCards.value.length) return 'revelation'
-  return 'choice'
-})
 </script>
 
 <template>
@@ -363,7 +352,6 @@ const choiceAtmosphere = computed<AtmosphereTone>(() => {
     class="cthulhu-enact no-card-overlay"
     :class="{ 'cthulhu-enact--processing': isProcessing }"
   >
-    <AtmosphereLine tone="revelation" class="cthulhu-atmosphere" />
     <span class="cthulhu-space-backdrop" aria-hidden="true"></span>
     <span
       v-if="cthulhuDeckCount"
@@ -406,7 +394,6 @@ const choiceAtmosphere = computed<AtmosphereTone>(() => {
   >
     <template #handle><h1 v-html="label(title)"></h1></template>
     <div class="choice-modal-wrapper" :class="{ 'choice-modal-wrapper--processing': isProcessing }">
-      <AtmosphereLine :tone="choiceAtmosphere" />
       <p class="body" v-if="body" v-html="label(body)"></p>
       <section v-if="isMobile && handChoices.length" class="mobile-hand-choices" :aria-label="t('player.hand')">
         <button v-for="card in handChoices" :key="card.id" type="button" :disabled="isProcessing" :aria-label="`${t('player.hand')} ${card.code}`" @click="choose(card.index)">
@@ -419,7 +406,6 @@ const choiceAtmosphere = computed<AtmosphereTone>(() => {
 </template>
 
 <style scoped>
-.cthulhu-atmosphere { position: absolute; top: 24px; left: 50%; transform: translateX(-50%); width: min(520px, 85vw); z-index: 2; color: #e9dfcb; text-align: center; }
 .cthulhu-enact {
   position: fixed;
   inset: 0;

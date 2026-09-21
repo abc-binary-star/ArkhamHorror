@@ -1052,14 +1052,27 @@ assignDamageDivided a@InvestigatorAttrs {..} iid source strategy matcher health 
     restrictToCurrent DamageToken AssetRemainingHealth damageTargets healthDamageMessages
   sanityDamageMessages' <-
     restrictToCurrent HorrorToken AssetRemainingSanity horrorTargets sanityDamageMessages
-  -- Wrap with the damage source so the client highlights it as the actor
-  -- (yellow source-highlight), and with the totals label for the token counts.
-  push
-    $ questionWithSource source player
-    $ QuestionLabel (assignDamageTotalsLabel health sanity) Nothing
-    $ ChooseOne
-    $ healthDamageMessages'
-    <> sanityDamageMessages'
+  let
+    assignmentChoices = healthDamageMessages' <> sanityDamageMessages'
+    -- Only skip decisions for enemy attacks. Keep the existing assignment
+    -- messages so prevention, deferred placement and defeat windows still run.
+    automaticAssignment = case source of
+      EnemyAttackSource _ -> case assignmentChoices of
+        [ComponentLabel _ msgs] -> Just msgs
+        [ ComponentLabel (InvestigatorComponent damageIid DamageToken) msgs
+          , ComponentLabel (InvestigatorComponent horrorIid HorrorToken) _
+          ]
+            | damageIid == iid && horrorIid == iid && not agony
+            , strategy `elem` [DamageAny, DamageAnyDeferred] -> Just msgs
+        _ -> Nothing
+      _ -> Nothing
+  case automaticAssignment of
+    Just msgs -> pushAll msgs
+    Nothing ->
+      push
+        $ questionWithSource source player
+        $ QuestionLabel (assignDamageTotalsLabel health sanity) Nothing
+        $ ChooseOne assignmentChoices
   pure a
 
 handleDrivenInsane a@InvestigatorAttrs {..} iid = do

@@ -855,7 +855,7 @@ const spadeInjury = computed(() => {
       @choose="$emit('choose', $event)"
     />
 
-    <Draggable v-if="doShowBonded" atmosphere="support">
+    <Draggable v-if="doShowBonded">
       <template #handle><header><h2>{{$t('gameBar.bonded')}}</h2></header></template>
       <div class="card-row-cards">
         <div v-for="card in investigator.bondedCards" :key="cardId(card)" class="card-row-card">

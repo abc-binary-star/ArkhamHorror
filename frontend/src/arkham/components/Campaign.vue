@@ -172,6 +172,14 @@ const hasQuestion = computed(() => Object.keys(props.game.question).length > 0)
 // "back to the interlude" cannot be a route push: remember the dismissal locally
 // and reveal the interlude over it until the ask itself goes away or the seat
 // switch changes who is answering.
+const upgradeScreenDismissed = ref(false)
+watch(upgradeDeck, (active) => { if (!active) upgradeScreenDismissed.value = false })
+watch(() => props.playerId, () => { upgradeScreenDismissed.value = false })
+const upgradeBackStep = computed(() => {
+  const step = props.campaign.step
+  if (step?.tag === 'UpgradeDeckStep' && step.contents.tag === 'ContinueCampaignStep') return step.contents.contents
+  return null
+})
 const deckScreenDismissed = ref(false)
 watch(chooseDeck, (v) => { if (!v) deckScreenDismissed.value = false })
 watch(() => props.playerId, () => { deckScreenDismissed.value = false })
@@ -197,7 +205,22 @@ const deckBackInterlude = computed(
 
 <template>
   <div v-if="upgradeDeck" id="game" class="game">
-    <UpgradeDeck :game="game" :playerId="playerId" @choose="choose" @update="update" />
+    <div v-show="!upgradeScreenDismissed" class="upgrade-screen">
+      <UpgradeDeck
+        :game="game" :playerId="playerId"
+        :can-back="upgradeBackStep !== null" :active="!upgradeScreenDismissed"
+        @back="upgradeScreenDismissed = true" @choose="choose" @update="update"
+      />
+    </div>
+    <template v-if="upgradeScreenDismissed && upgradeBackStep">
+      <button class="screen-back" type="button" @click="upgradeScreenDismissed = false">{{ $t('navigationBack.resumeUpgrade') }}</button>
+      <p class="pending-deck-notice">{{ $t('navigationBack.pendingUpgrade') }}</p>
+      <ContinueCampaign
+        :game="game" :campaign="campaign" :scenario="game.scenario ?? undefined" :playerId="playerId"
+        :step="upgradeBackStep.nextStep" :canUpgradeDecks="false" :chooseSideStory="false" :canChooseSideStory="false"
+        read-only
+      />
+    </template>
   </div>
   <div v-else-if="chooseDeck && !deckScreenDismissed" id="game" class="game">
     <h2 v-if="questionLabel" class="title question-label">{{ questionLabel }}</h2>
@@ -216,6 +239,7 @@ const deckBackInterlude = computed(
       :campaign="campaign"
       :scenario="game.scenario ?? undefined"
       :playerId="playerId"
+      read-only
       :canUpgradeDecks="campaignStepContents.canUpgradeDecks"
       :step="scenarioContinuationStep || campaignStepContents.nextStep"
       :chooseSideStory="campaignStepContents.chooseSideStory"
@@ -272,6 +296,8 @@ const deckBackInterlude = computed(
 </template>
 
 <style scoped>
+.upgrade-screen { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+.pending-deck-notice { padding: 8px 16px; color: var(--text); }
 .screen-back {
   margin: 16px 0 0 16px;
   background: var(--button-2);

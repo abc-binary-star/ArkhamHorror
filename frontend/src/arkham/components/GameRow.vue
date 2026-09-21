@@ -7,6 +7,7 @@ import type { CampaignDetails } from '@/arkham/types/Campaign'
 import type { ScenarioDetails } from '@/arkham/types/Scenario'
 import { imgsrc } from '@/arkham/helpers'
 import Prompt from '@/components/Prompt.vue'
+import { Trash2 } from '@lucide/vue'
 
 const props = withDefaults(
   defineProps<{
@@ -112,9 +113,15 @@ const scenarioIcon = computed(() => {
           <div class="game-difficulty">{{ difficulty }}</div>
 
           <div v-if="deleteGame" class="game-delete">
-            <a href="#delete" @click.prevent="deleting = true"
-              ><font-awesome-icon icon="trash"
-            /></a>
+            <button
+              type="button"
+              class="delete-game-button"
+              :aria-label="$t('doDeleteGame')"
+              :title="$t('doDeleteGame')"
+              @click="deleting = true"
+            >
+              <Trash2 aria-hidden="true" />
+            </button>
           </div>
           <Prompt
             v-if="deleting && deleteGame"
@@ -136,10 +143,7 @@ const scenarioIcon = computed(() => {
               <div
                 :class="`investigator-portrait-container ${toCssName(investigator.classSymbol)}`"
               >
-                <img
-                  :src="portraitImage(investigator.id)"
-                  class="investigator-portrait"
-                />
+                <img :src="portraitImage(investigator.id)" class="investigator-portrait" />
               </div>
             </div>
           </div>
@@ -155,10 +159,7 @@ const scenarioIcon = computed(() => {
               <div
                 :class="`investigator-portrait-container ${toCssName(investigator.classSymbol)}`"
               >
-                <img
-                  :src="portraitImage(investigator.id)"
-                  class="investigator-portrait"
-                />
+                <img :src="portraitImage(investigator.id)" class="investigator-portrait" />
               </div>
             </div>
           </div>
@@ -174,7 +175,7 @@ h2 {
   font-size: 2em;
   font-weight: 600;
   letter-spacing: 0.02em;
-  font-family: "Arno", "Noto Sans", sans-serif;
+  font-family: 'Arno', 'Noto Sans', sans-serif;
 }
 .game {
   display: flex;
@@ -184,7 +185,9 @@ h2 {
   box-shadow: var(--shadow-2);
   margin-bottom: 12px;
   overflow: hidden;
-  transition: border-color 120ms ease, transform 120ms ease;
+  transition:
+    border-color 120ms ease,
+    transform 120ms ease;
 
   &:hover {
     border-color: var(--edge);
@@ -222,16 +225,46 @@ h2 {
 }
 
 .game-delete {
-  transition: all 0.5s;
   position: relative;
   align-self: center;
   display: flex;
-  a {
-    font-size: 1.2em;
-    color: var(--delete);
-    &:hover {
-      color: var(--survivor);
-    }
+}
+.delete-game-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  box-shadow: none;
+  color: #786e61;
+  cursor: pointer;
+  transition:
+    color 140ms ease,
+    background 140ms ease,
+    border-color 140ms ease;
+}
+.delete-game-button svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 1.6;
+}
+.delete-game-button:hover {
+  color: var(--delete);
+  background: rgb(135 61 57 / 0.07);
+  border-color: rgb(135 61 57 / 0.2);
+}
+.delete-game-button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+@media (pointer: coarse) {
+  .delete-game-button {
+    width: 44px;
+    height: 44px;
   }
 }
 
@@ -261,7 +294,7 @@ h2 {
 
 .title {
   flex: 1;
-  font-family: "Arno", "Noto Sans", sans-serif;
+  font-family: 'Arno', 'Noto Sans', sans-serif;
   font-size: 1.6em;
   font-weight: var(--font-black);
   letter-spacing: 0.02em;
@@ -476,5 +509,4 @@ h2 {
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
-
 </style>

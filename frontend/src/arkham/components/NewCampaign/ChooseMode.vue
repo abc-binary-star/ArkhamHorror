@@ -670,4 +670,68 @@ input[type='radio']:focus-visible + label {
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
   white-space: nowrap;
 }
+@media (min-width: 1280px) {
+  .chapter-select {
+    gap: 0;
+    margin-bottom: 0;
+    border: 1px solid rgb(200 173 120 / 0.22);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .chapter-select label {
+    min-height: clamp(48px, 3.5vw, 64px);
+    padding: 12px 24px;
+    font-size: clamp(0.85rem, 1vw, 1.1rem);
+    font-weight: 500;
+    letter-spacing: 0.12em;
+  }
+  .chapter-select input:checked + label {
+    background: linear-gradient(180deg, rgb(200 173 120 / 0.04), rgb(200 173 120 / 0.12));
+  }
+  .mode-toggle {
+    width: min(100%, 560px);
+    box-sizing: border-box;
+    margin: 0;
+    background: rgb(13 29 28 / 0.6);
+    border-color: rgb(200 173 120 / 0.35);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  }
+  .segmented label {
+    min-height: 46px;
+    font-size: clamp(0.8rem, 0.9vw, 1rem);
+    color: #c9c6b6;
+  }
+  .segmented label:hover {
+    color: #f4efdf;
+  }
+  .segmented input[type='radio']:disabled + label {
+    color: #888d80;
+  }
+  .scenario-select {
+    margin: 0;
+  }
+  .campaigns,
+  .scenarios {
+    grid-template-columns: repeat(auto-fill, minmax(clamp(190px, 14vw, 320px), 1fr));
+    gap: clamp(16px, 1.4vw, 28px);
+    margin-top: 4px;
+    align-items: start;
+  }
+  .campaign,
+  .scenario {
+    min-width: 0;
+  }
+  .vt-box {
+    padding: clamp(6px, 0.5vw, 10px);
+    border-radius: 5px;
+    background: linear-gradient(145deg, rgb(200 173 120 / 0.08), rgb(0 0 0 / 0.25));
+    outline-color: rgb(200 173 120 / 0.24);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.24);
+  }
+  .vt-box:hover,
+  .vt-box:focus-within {
+    outline-color: #b8a273;
+    box-shadow: 0 12px 30px rgb(0 0 0 / 0.34);
+  }
+}
 </style>

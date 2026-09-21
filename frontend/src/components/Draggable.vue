@@ -1,10 +1,7 @@
 <script lang="ts" setup>
-import AtmosphereLine from '@/arkham/components/AtmosphereLine.vue'
-import type { AtmosphereTone } from '@/arkham/atmosphere'
 import { nextTick, ref, onMounted, onBeforeUnmount, useId } from 'vue'
 
 const props = withDefaults(defineProps<{
-  atmosphere?: AtmosphereTone
   centerInSelector?: string
   avoidSelector?: string
   avoidPadding?: number
@@ -360,7 +357,6 @@ function moveUp() {
         </button>
       </header>
       <div class="content" v-show="!isMinimized">
-        <AtmosphereLine v-if="atmosphere" :tone="atmosphere" class="draggable-atmosphere" />
         <slot></slot>
       </div>
     </div>
@@ -368,7 +364,6 @@ function moveUp() {
 </template>
 
 <style scoped>
-.draggable-atmosphere { margin: 12px 16px; flex: 0 0 auto; }
 .draggable {
   position: absolute;
   background: rgba(94, 123, 115, 0.5);

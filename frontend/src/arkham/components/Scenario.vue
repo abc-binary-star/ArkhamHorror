@@ -1917,7 +1917,7 @@ async function addChaosToken(face: any) {
         'scenario-body--teammate-open': focusedTeammate !== null,
       }"
     >
-      <Draggable v-if="showOutOfPlay || forcedShowOutOfPlay" atmosphere="archive">
+      <Draggable v-if="showOutOfPlay || forcedShowOutOfPlay">
         <template #handle
           ><header>
             <h2>{{ $t('gameBar.outOfPlay') }}</h2>
@@ -1945,7 +1945,7 @@ async function addChaosToken(face: any) {
           {{ $t('close') }}
         </button>
       </Draggable>
-      <Draggable v-if="showChaosBag" atmosphere="chaos">
+      <Draggable v-if="showChaosBag">
         <template #handle
           ><header>
             <h2>

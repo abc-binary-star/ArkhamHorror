@@ -429,7 +429,7 @@ async function createGame() {
 </script>
 
 <template>
-  <div class="new-campaign-content">
+  <div class="new-campaign-content" :class="{ 'new-campaign-content--choosing': step === 'ChooseMode' }">
     <header class="main-header">
       <h2>{{ $t('newGame') }}</h2>
       <slot name="cancel" />
@@ -846,5 +846,33 @@ header.main-header {
   .wizard-actions { position: sticky; bottom: 0; flex-wrap: wrap; padding: 12px 0 max(12px, env(safe-area-inset-bottom)); background: var(--background); z-index: 2; }
   .wizard-actions > * { flex: 1 1 130px; min-height: 44px; }
 
+}
+@media (min-width: 1280px) {
+  .new-campaign-content--choosing {
+    padding-top: clamp(24px, 2vw, 40px);
+    padding-bottom: clamp(36px, 4vw, 72px);
+  }
+  .new-campaign-content--choosing > header,
+  .new-campaign-content--choosing > #new-campaign {
+    width: calc(100% - clamp(48px, 6vw, 160px));
+  }
+  .new-campaign-content--choosing > header {
+    margin-bottom: clamp(18px, 1.8vw, 32px);
+  }
+  .new-campaign-content--choosing > header h2 {
+    font-size: clamp(2rem, 2.5vw, 3rem);
+    letter-spacing: 0.06em;
+  }
+  .new-campaign-content--choosing > #new-campaign {
+    gap: clamp(14px, 1.4vw, 24px);
+  }
+  .new-campaign-content--choosing > header :deep(button) {
+    min-height: 44px;
+    padding: 10px 22px;
+    border: 1px solid rgb(200 173 120 / 0.5);
+    border-radius: 4px;
+    box-shadow: none;
+    font-size: 0.9rem;
+  }
 }
 </style>
