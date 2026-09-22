@@ -1827,10 +1827,7 @@ instance RunMessage EnemyAttrs where
       canDamage <- sourceCanDamageEnemy eid source
       if canDamage
         then do
-          amount' <-
-            if damageAssignment.delayed
-              then pure damageAssignment.amount
-              else getModifiedDamageAmount a damageAssignment
+          amount' <- getModifiedDamageAmount a damageAssignment
           -- The damage that actually lands, credited to the investigator whose
           -- ability or card dealt it when there is one (scenario effects have
           -- no controller).

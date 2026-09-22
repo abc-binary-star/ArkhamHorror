@@ -17,6 +17,7 @@ import EnemyAttackChoiceModal from '@/arkham/components/EnemyAttackChoiceModal.v
 import RequiredActionReminder from '@/arkham/components/RequiredActionReminder.vue';
 import { IsMobile } from '@/arkham/isMobile';
 import { processingKey, phaseAnnouncementKey } from '@/arkham/injectionKeys';
+import { abilityNeedsGhostModal } from '@/arkham/ghostAbility';
 
 export interface Props {
   game: Game
@@ -211,7 +212,9 @@ const paymentAmountsLabel = computed(() => {
   return null
 })
 
-const choicesRequireModal = computed(() => choices.value.some(choiceRequiresModal))
+const choicesRequireModal = computed(() =>
+  choices.value.some((c) => choiceRequiresModal(c) || abilityNeedsGhostModal(props.game, c))
+)
 
 const tokenChoices = computed(() => props.game.scenario?.chaosBag.choice)
 
