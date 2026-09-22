@@ -82,6 +82,10 @@ const investigator = computed(() => {
 
 const skipTriggers = ref(investigator.value?.settings.globalSettings.ignoreUnrelatedSkillTestTriggers ?? false)
 const asIfRuling = ref(props.game.settings.settingsAsIfRuling)
+
+watch(() => props.playerId, () => {
+  skipTriggers.value = investigator.value?.settings.globalSettings.ignoreUnrelatedSkillTestTriggers ?? false
+})
 const ultimatumsAndBoonsEnabled = ref(props.game.settings.settingsUltimatumsAndBoonsEnabled)
 const hasUltimatumsAndBoons = computed(() => props.game.settings.settingsUltimatumsAndBoons.length > 0)
 const cosmicEmissaryAnimationKey = computed(() => gameLocalStorageKey(props.game.id, 'enableCosmicEmissaryAnimation'))
@@ -93,7 +97,8 @@ const enableCosmicEmissaryAnimation = ref(
 )
 
 watch(() => skipTriggers.value, (value) => {
-  if (investigator.value) {
+  const currentValue = investigator.value?.settings.globalSettings.ignoreUnrelatedSkillTestTriggers ?? false
+  if (investigator.value && value !== currentValue) {
     debug.send(props.game.id,
       ({ tag: 'UpdateGlobalSetting'
        , contents: [investigator.value.id, {tag: "SetIgnoreUnrelatedSkillTestTriggers", contents: value}]
