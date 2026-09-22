@@ -2875,6 +2875,7 @@ async function addChaosToken(face: any) {
                 :playerId="playerId"
                 :allowCurvedPaths="allowCurvedPaths"
                 :enableCosmicEmissaryAnimation="enableCosmicEmissaryAnimation"
+                :zoom="zoom"
               />
               <transition-group
                 name="map"
