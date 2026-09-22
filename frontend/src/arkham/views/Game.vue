@@ -109,6 +109,7 @@ import {
 import { Card, asCardCode, cardDecoder, toCardContents } from '@/arkham/types/Card'
 import { customCardDef, isCustomCardCode } from '@/arkham/customCards'
 import * as Message from '@/arkham/types/Message'
+import type { Phase } from '@/arkham/types/Phase'
 import { type Question } from '@/arkham/types/Question'
 import type { Source } from '@/arkham/types/Source'
 import { TarotCard, tarotCardDecoder, tarotCardImage } from '@/arkham/types/TarotCard'
@@ -157,6 +158,7 @@ type ServerResult =
   | { tag: 'GameCard'; contents: string }
   | { tag: 'GameCardOnly'; contents: string }
   | { tag: 'GameUpdate'; contents: string }
+  | { tag: 'PhaseChanged'; contents: Phase }
   | { tag: 'GameShowDiscard'; contents: string }
   | { tag: 'GameShowUnder'; contents: string }
   | { tag: 'GameUI'; contents: string }
@@ -447,7 +449,7 @@ watch(showOtherPlayersHands, (v) => {
 })
 const tarotCards = ref<TarotCard[]>([])
 const uiLock = ref<boolean>(false)
-const { current: announcedPhase, active: phaseAnnouncement } = usePhaseAnnouncement(
+const { current: announcedPhase, active: phaseAnnouncement, push: pushAnnouncedPhase } = usePhaseAnnouncement(
   () => game.value?.phase, uiLock,
 )
 const showSettings = ref(false)
@@ -1425,6 +1427,9 @@ const handleResult = (result: ServerResult) => {
       if (eid) void eventStore.load(eid).catch((e) => console.error(e))
       return
     }
+    case 'PhaseChanged':
+      pushAnnouncedPhase(result.contents as Phase)
+      return
     case 'GameUpdate':
       // Flush the latest state onto the board even while a revelation/modal holds
       // the UI lock, so the table behind it reflects the current situation instead
@@ -4401,6 +4406,7 @@ dialog {
     margin-top: 1rem;
   }
 }
+
 
 .debug-playability-content {
   display: flex;

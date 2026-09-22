@@ -31,6 +31,17 @@ export function usePhaseAnnouncement(
     }
   }
 
+  // Server-driven phase transitions (PhaseChanged broadcasts) enter through
+  // here. Deduplicate against the current banner and queue so a broadcast
+  // arriving after the GameUpdate-driven watch(phase) push cannot double-play
+  // the phase the client already observed.
+  function push(phase: Phase) {
+    if (!phase || phase === 'CampaignPhase') return
+    if (current.value === phase || pending.includes(phase)) return
+    pending.push(phase)
+    if (!current.value) advance()
+  }
+
   function reset() {
     generation++
     clearTimeout(timer)
@@ -65,5 +76,5 @@ export function usePhaseAnnouncement(
   }, { flush: 'sync' })
 
   onScopeDispose(reset)
-  return { current, active }
+  return { current, active, push }
 }

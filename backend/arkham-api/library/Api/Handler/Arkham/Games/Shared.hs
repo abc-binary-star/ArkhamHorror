@@ -62,6 +62,7 @@ import Arkham.Investigator (lookupInvestigator)
 import Arkham.Investigator.Types (Investigator, investigatorPlacement, investigatorPlayerId)
 import Arkham.Location.CardDefs.TheBlobThatAteEverythingELSE qualified as Locations
 import Arkham.Message
+import Arkham.Phase (Phase (..))
 import Arkham.Name
 import Arkham.Placement (
   Placement (AtLocation, AttachedToInvestigator, InPlayArea, InThreatArea, StillInHand),
@@ -373,6 +374,15 @@ data EpicOrganizerGateBlocked = EpicOrganizerGateBlocked
   deriving stock Show
   deriving anyclass Exception
 
+phaseTransitions :: Phase -> Phase -> [Phase]
+phaseTransitions oldPhase newPhase
+  | oldPhase == newPhase = []
+  | oldPhase `elem` standardPhases && newPhase `elem` standardPhases =
+      takeWhile (/= newPhase) (drop 1 (dropWhile (/= oldPhase) (cycle standardPhases))) <> [newPhase]
+  | otherwise = [newPhase]
+  where
+    standardPhases = [MythosPhase, InvestigationPhase, EnemyPhase, UpkeepPhase]
+
 {- | Whether a log message records an outcome nobody could have predicted: a
 chaos token drawn or revealed, or an encounter card / enemy drawn. Hardcore undo
 reads this to refuse rewinding such a step, so a revealed token cannot be
@@ -412,7 +422,7 @@ updateGame response gameId mRoom = do
   let rejectOrganizerGate action =
         action `catch` \EpicOrganizerGateBlocked ->
           permissionDenied "This event is waiting for the organizer's clue allocation"
-  (ArkhamGame {..}, scenarioReset, oldLogEntries, updatedLog, mSharedUpdate, actAdvanced, newAchievements) <- rejectOrganizerGate $ runDB $ atomicallyWithGame gameId \g@ArkhamGame {..} -> do
+  (ArkhamGame {..}, scenarioReset, oldLogEntries, updatedLog, mSharedUpdate, actAdvanced, newAchievements, mPhaseChanged) <- rejectOrganizerGate $ runDB $ atomicallyWithGame gameId \g@ArkhamGame {..} -> do
     -- Read the prior log from the per-room cache when it's in sync with
     -- the just-locked game's step; otherwise fall back to the DB. Avoids
     -- the 217-row-avg getGameLog read on every action in the common case.
@@ -423,7 +433,7 @@ updateGame response gameId mRoom = do
 
     mLastStep <- getBy $ UniqueStep gameId arkhamGameStep
     let
-      gameJson@Game {..} = arkhamGameCurrentData
+      gameJson@Game {gamePhase = oldPhase, ..} = arkhamGameCurrentData
       currentQueue =
         maybe [] (choiceMessages . arkhamStepChoice . entityVal) mLastStep
 
@@ -434,7 +444,7 @@ updateGame response gameId mRoom = do
     logRef <- newIORef []
     reply <- handleAnswer gameJson playerId response
     case reply of
-      Unhandled _ -> pure (g, False, oldLogEntries, [], Nothing, False, [])
+      Unhandled _ -> pure (g, False, oldLogEntries, [], Nothing, False, [], [])
       Handled answerMessages -> do
         -- Epic Multiplayer: if this game is a group within an event, build an
         -- EpicEnv so Shared* messages emitted during the action are captured as
@@ -679,7 +689,17 @@ updateGame response gameId mRoom = do
                 pure [achievement | or completions]
               pure $ ordNub $ directEarns <> soloEarns <> progressEarns <> soloProgressEarns
 
-        pure (g', scenarioReset, oldLogEntries, updatedLog, mSharedUpdate, actAdvanced, newAchievements)
+        pure
+          ( g'
+          , scenarioReset
+          , oldLogEntries
+          , updatedLog
+          , mSharedUpdate
+          , actAdvanced
+          , newAchievements
+          , case ge of
+              Game {gamePhase = newPhase} -> phaseTransitions oldPhase newPhase
+          )
 
   -- Update the per-room cache after the DB transaction has committed,
   -- so the cache is never ahead of durably-stored state.
@@ -710,6 +730,8 @@ updateGame response gameId mRoom = do
       arkhamGameCurrentData
 
   -- Achievement unlock toasts, after the rows are durably committed.
+  for_ mPhaseChanged \phase -> publishToRoom gameId $ PhaseChanged phase
+
   for_ newAchievements \achievement ->
     publishToRoom gameId $ GameAchievement (achievementName achievement)
 
