@@ -328,6 +328,7 @@ function oilPaintEffect(canvas, radius, intensity) {
 .hand-silence-bell { opacity: 0; }
 .card-container:hover .hand-silence-bell,
 .card-container:focus-within .hand-silence-bell,
+.hand-silence-bell.silence-bell--automatic,
 .hand-silence-bell.silence-bell--muted { opacity: 1; }
 @media (hover: none) { .hand-silence-bell { opacity: 1; } }
 

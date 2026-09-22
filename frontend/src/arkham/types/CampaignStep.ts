@@ -203,11 +203,13 @@ export const checkpointStepDecoder = JsonDecoder.object<CheckpointStep>(
 
 export type UpgradeDeckStep = {
   tag: 'UpgradeDeckStep';
+  contents: CampaignStep;
 }
 
 export const upgradeStepDecoder = JsonDecoder.object<UpgradeDeckStep>(
   {
     tag: JsonDecoder.literal('UpgradeDeckStep'),
+    contents: JsonDecoder.lazy<CampaignStep>(() => campaignStepDecoder),
   },
   'UpgradeDeckStep',
 );

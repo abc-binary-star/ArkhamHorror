@@ -177,7 +177,7 @@ watch(upgradeDeck, (active) => { if (!active) upgradeScreenDismissed.value = fal
 watch(() => props.playerId, () => { upgradeScreenDismissed.value = false })
 const upgradeBackStep = computed(() => {
   const step = props.campaign.step
-  if (step?.tag === 'UpgradeDeckStep' && step.contents.tag === 'ContinueCampaignStep') return step.contents.contents
+  if (step?.tag === 'UpgradeDeckStep' && step.contents?.tag === 'ContinueCampaignStep') return step.contents.contents
   return null
 })
 const deckScreenDismissed = ref(false)

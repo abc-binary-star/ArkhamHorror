@@ -43,6 +43,10 @@ instance Semigroup GlobalSettings where
   GlobalSettings i1 <> GlobalSettings i2 =
     GlobalSettings (i1 || i2)
 
+data CardResponseMode = NormalResponse | SilentResponse | AutomaticResponse
+  deriving stock (Show, Ord, Eq, Generic, Data)
+  deriving anyclass (ToJSON, FromJSON)
+
 data PerCardSettings = PerCardSettings
   { cardIgnoreUnrelatedSkillTestTriggers :: Bool
   , cardIgnoreDuringSkillTests :: Bool
@@ -51,6 +55,7 @@ data PerCardSettings = PerCardSettings
   {- ^ Values the controller has chosen for the options this card declares in
   @cdOptions@. Absent keys fall back to the option's declared default.
   -}
+  , cardAutoRespond :: Bool
   , cardSilenced :: Bool
   {- ^ Set from the card's silence bell (in play, in hand, or on the hidden
   stack): drop this card's non-forced window triggers (fast abilities and
@@ -62,8 +67,8 @@ data PerCardSettings = PerCardSettings
   deriving anyclass ToJSON
 
 instance Semigroup PerCardSettings where
-  PerCardSettings i1 d1 a1 o1 s1 <> PerCardSettings i2 d2 a2 o2 s2 =
-    PerCardSettings (i1 || i2) (d1 || d2) (a1 <> a2) (o1 <> o2) (s1 || s2)
+  PerCardSettings i1 d1 a1 o1 r1 s1 <> PerCardSettings i2 d2 a2 o2 r2 s2 =
+    PerCardSettings (i1 || i2) (d1 || d2) (a1 <> a2) (o1 <> o2) (r1 || r2) (s1 || s2)
 
 instance FromJSON PerCardSettings where
   parseJSON = withObject "PerCardSettings" \o -> do
@@ -71,6 +76,7 @@ instance FromJSON PerCardSettings where
     cardIgnoreDuringSkillTests <- o .: "cardIgnoreDuringSkillTests"
     cardAttachments <- o .:? "cardAttachments" .!= []
     cardOptions <- o .:? "cardOptions" .!= mempty
+    cardAutoRespond <- o .:? "cardAutoRespond" .!= False
     cardSilenced <- o .:? "cardSilenced" .!= False
     pure PerCardSettings {..}
 
@@ -230,6 +236,7 @@ defaultPerCardSettings =
     , cardIgnoreDuringSkillTests = False
     , cardAttachments = []
     , cardOptions = mempty
+    , cardAutoRespond = False
     , cardSilenced = False
     }
 
@@ -284,6 +291,11 @@ the 'PerCardSetting' GADT for the same reason as 'setCardOption'.
 setCardSilenced :: CardCode -> Bool -> CardSettings -> CardSettings
 setCardSilenced cCode v =
   perCardSettingsL . at cCode . non defaultPerCardSettings . cardSilencedL .~ v
+
+setCardResponseMode :: CardCode -> CardResponseMode -> CardSettings -> CardSettings
+setCardResponseMode cCode mode =
+  perCardSettingsL . at cCode . non defaultPerCardSettings
+    %~ (\settings -> settings {cardSilenced = mode == SilentResponse, cardAutoRespond = mode == AutomaticResponse})
 
 -- | The card codes whose non-forced window triggers should be skipped.
 silencedCardCodes :: CardSettings -> Set CardCode

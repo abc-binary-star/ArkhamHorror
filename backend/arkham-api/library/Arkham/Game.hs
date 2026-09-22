@@ -6623,6 +6623,38 @@ isDeckQuestion = \case
   QuestionWithSource _ _ q -> isDeckQuestion q
   _ -> False
 
+-- | A required target selection with only one selectable option has no
+-- decision left. Keep optional selections, activation windows, story text,
+-- payment amounts and generic confirmation buttons interactive.
+soleRequiredTarget :: Question Message -> Maybe (UI Message)
+soleRequiredTarget = \case
+  QuestionLabel _ _ q -> soleRequiredTarget q
+  QuestionWithSource _ _ q -> soleRequiredTarget q
+  PayCostQuestion _ q -> soleRequiredTarget q
+  ChooseOne cs -> soleTarget cs
+  ChooseN 1 cs -> soleTarget cs
+  ChooseOneAtATime cs -> soleTarget cs
+  ChooseOneAtATimeWithAuto _ cs -> soleTarget cs
+  _ -> Nothing
+ where
+  soleTarget cs = case filter selectable cs of
+    [choice] | isTargetChoice choice -> Just choice
+    _ -> Nothing
+  selectable = \case
+    InvalidLabel {} -> False
+    _ -> True
+  isTargetChoice = \case
+    TargetLabel {} -> True
+    PortraitLabel {} -> True
+    CardLabel {} -> True
+    FightLabel {} -> True
+    FightLabelWithSkill {} -> True
+    EvadeLabel {} -> True
+    EvadeLabelWithSkill {} -> True
+    EngageLabel {} -> True
+    ComponentLabel {} -> True
+    _ -> False
+
 popMessageWithPriority :: HasQueue Message m => m (Maybe Message)
 popMessageWithPriority = withQueue \case
   [] -> ([], Nothing)
@@ -6809,12 +6841,28 @@ runMessages gameId mLogger = do
             Ask _ (ChooseOneAtATime []) -> runMessages gameId mLogger
             Ask _ (ChooseOneAtATimeWithAuto _ []) -> runMessages gameId mLogger
             Ask _ (ChooseN _ []) -> runMessages gameId mLogger
-            -- Incoming attacks only need an ordering decision when more than
-            -- one remains. Run the normal attack message, including its response
-            -- windows, rather than asking the player to confirm the sole enemy.
-            Ask _ (QuestionLabel label _ (ChooseOneAtATime [TargetLabel (EnemyTarget _) [attack@EnemyAttack {}]]))
-              | label `elem` ["$enemyAttackPrompt.regular", "$enemyAttackPrompt.opportunity"] ->
-                  push attack >> runMessages gameId mLogger
+            Ask pid q | Just choice <- soleRequiredTarget q -> do
+              -- Match the existing Ask validity check before running a target
+              -- that may have left play while this message was queued.
+              let targetValid = case choice of
+                    TargetLabel target _ -> case target of
+                      EnemyTarget _ -> selectAny $ targetIs target
+                      LocationTarget _ -> selectAny $ targetIs target
+                      AssetTarget _ -> selectAny $ targetIs target
+                      EventTarget _ -> selectAny $ targetIs target
+                      SkillTarget _ -> selectAny $ targetIs target
+                      ActTarget _ -> selectAny $ targetIs target
+                      AgendaTarget _ -> selectAny $ targetIs target
+                      EffectTarget _ -> selectAny $ targetIs target
+                      _ -> pure True
+                    _ -> pure True
+              canResolve <- runReaderT targetValid g
+              when canResolve do
+                overGame $ activePlayerIdL .~ pid
+                -- Use the same resolution as a submitted choice, retaining all
+                -- nested costs, responses and any subsequent target questions.
+                pushAll [ClearUI, uiToRun choice]
+              runMessages gameId mLogger
             Ask pid q -> do
               -- if we are choosing decks, we do not want to clobber other ChooseDeck
               moreChooseDecks <-
@@ -6861,6 +6909,18 @@ runMessages gameId mLogger = do
                         )
                         >>= putGame
                     else runMessages gameId mLogger
+            AskMap askMap
+              | Just (pid, q) <- find (isJust . soleRequiredTarget . snd) (mapToList askMap) -> do
+                  -- Mirror an answered seat: retained maps keep their remaining
+                  -- choices, barriers own their continuation, and normal window
+                  -- asks regenerate rather than reusing stale target lists.
+                  let others
+                        | isJust (barrierSeat pid g) = mempty
+                        | retained = Map.delete pid askMap
+                        | otherwise = Map.filter isDeckQuestion $ Map.delete pid askMap
+                      retain = if retained then Retain else id
+                  pushAll [retain (AskMap others) | not (Map.null others)]
+                  go' retained (Ask pid q)
             AskMap askMap -> do
               -- Read might have only one player being prompted so we need to find the active player
               let current = g ^. activePlayerIdL

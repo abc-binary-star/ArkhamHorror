@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Game, InvestigatorStats } from '@/arkham/types/Game'
 import { investigatorPortrait } from '@/arkham/cardImages'
+import { useDbCardStore } from '@/stores/dbCards'
 
 const props = defineProps<{
   game: Game
@@ -10,7 +11,11 @@ const props = defineProps<{
   title?: string
 }>()
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
+const cardStore = useDbCardStore()
+
+const investigatorName = (title: string) =>
+  locale.value.startsWith('en') ? title : cardStore.getCardName(title, 'investigator')
 
 const lookup = (id: string) =>
   props.game.investigators[id]
@@ -47,8 +52,8 @@ const hasStats = computed(() => rows.value.length > 0)
         <tr v-for="row in rows" :key="row.id">
           <td class="who">
             <div class="who-inner">
-              <img :src="investigatorPortrait(game, row.id)" :alt="row.investigator!.name.title" />
-              <span>{{ row.investigator!.name.title }}</span>
+              <img :src="investigatorPortrait(game, row.id)" :alt="investigatorName(row.investigator!.name.title)" />
+              <span>{{ investigatorName(row.investigator!.name.title) }}</span>
             </div>
           </td>
           <td>{{ row.stats.damageDealt }}</td>

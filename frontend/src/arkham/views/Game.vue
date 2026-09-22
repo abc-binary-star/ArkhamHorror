@@ -129,6 +129,7 @@ import EventStartBarrier from '@/arkham/components/EventStartBarrier.vue'
 import EventActAdvanceBarrier from '@/arkham/components/EventActAdvanceBarrier.vue'
 import StandaloneScenario from '@/arkham/components/StandaloneScenario.vue'
 import StoryQuestion from '@/arkham/components/StoryQuestion.vue'
+import ForcedEffectAnnouncement from '@/arkham/components/ForcedEffectAnnouncement.vue'
 import AchievementToast from '@/arkham/components/AchievementToast.vue'
 import { clearCurrentNarration, stopNarration } from '@/arkham/narration'
 import Draggable from '@/components/Draggable.vue'
@@ -182,6 +183,8 @@ const userStore = useUserStore()
 const eventStore = useEventStore()
 const { addEntry, menuItems } = useMenu()
 const toast = useToast()
+const forcedEffectNotices = ref<{ id: number; name: string }[]>([])
+let forcedEffectNoticeId = 0
 
 // "Epic Multiplayer": a group's game can be entered two ways — via the dashboard's
 // per-group links (which carry an ?event=<id> query param) OR via the plain
@@ -902,6 +905,11 @@ const websocketUrl = computed(() => {
 })
 
 const loadError = ref(false)
+watch(loadError, failed => {
+  if (fixedTabletopFrame && failed) {
+    window.parent.postMessage({ type: 'arkham-tabletop-failed' }, window.location.origin)
+  }
+})
 let loadController: AbortController | null = null
 
 // A failed child setup/render must not leave the previous loading frame on screen.
@@ -1282,6 +1290,13 @@ const handleResult = (result: ServerResult) => {
       playAudioFile(result.contents)
       return
     case 'GameUI':
+      if (result.contents.startsWith('forcedAbility:')) {
+        forcedEffectNotices.value.push({
+          id: ++forcedEffectNoticeId,
+          name: handleEmbeddedI18n(result.contents.slice('forcedAbility:'.length), t),
+        })
+        return
+      }
       if (result.contents.startsWith('theSilence:')) {
         if (props.spectate) return
         const targetPlayer = result.contents.slice('theSilence:'.length)
@@ -2587,6 +2602,10 @@ onUnmounted(() => {
         :current-act-stage="currentActStage"
       />
     </div>
+    <ForcedEffectAnnouncement
+      :notice="forcedEffectNotices[0]"
+      @finished="forcedEffectNotices.shift()"
+    />
     <EventStartBarrier v-if="showStartBarrier" />
     <EventActAdvanceBarrier v-if="showActAdvanceWait" :organizer-event-id="organizerEventId" />
     <MultiplayerLobby

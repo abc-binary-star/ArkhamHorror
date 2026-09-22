@@ -542,6 +542,13 @@ runInvestigatorMessage msg a@InvestigatorAttrs {..} = runQueueT $ case msg of
     when (any (\w -> Window.windowType w == Window.FastPlayerWindow) currentWindows) do
       push $ Do (CheckWindows currentWindows)
     pure attrs'
+  SetCardResponseMode iid cCode mode | iid == a.id -> do
+    -- WindowChooseOne already has a queued recheck. Only explicitly refresh
+    -- fast player windows, matching the existing silence setting.
+    currentWindows <- concat <$> getWindowStack
+    when (any (\w -> Window.windowType w == Window.FastPlayerWindow) currentWindows) do
+      push $ Do (CheckWindows currentWindows)
+    pure $ a & settingsL %~ setCardResponseMode cCode mode
   EndOfGame _ -> do
     -- Transfiguration (and Hank Samson's resolute flip) last "until the end
     -- of the game", so the form must revert before interludes check traits

@@ -19,6 +19,7 @@ const frame = ref<HTMLIFrameElement>()
 const scale = ref(fitTabletop(window.innerWidth, window.innerHeight) || 1)
 const frameReady = ref(false)
 const frameFailed = ref(false)
+const frameGeneration = ref(0)
 let readyTimer: ReturnType<typeof setTimeout> | undefined
 const frameSource = ref('about:blank')
 const pendingSource = ref('')
@@ -89,6 +90,12 @@ function startFrame() {
 useEventListener(window, 'message', (event: MessageEvent) => {
   if (!framed.value || event.origin !== window.location.origin ||
       event.source !== frame.value?.contentWindow) return
+  if (event.data?.type === 'arkham-tabletop-failed') {
+    frameReady.value = false
+    frameFailed.value = true
+    clearTimeout(readyTimer)
+    return
+  }
   if (event.data?.type === 'arkham-tabletop-ready') {
     frameReady.value = true
     frameFailed.value = false
@@ -102,6 +109,15 @@ useEventListener(window, 'message', (event: MessageEvent) => {
   childPath = path
   if (route.fullPath !== path) void router.push(path)
 })
+
+function retryFrame() {
+  clearTimeout(readyTimer)
+  frameReady.value = false
+  frameFailed.value = false
+  frameSource.value = 'about:blank'
+  pendingSource.value = frameUrl(route.fullPath)
+  frameGeneration.value += 1
+}
 
 // The child document never sees presses on the surrounding table field (they
 // land in this document), so forward them so it can dismiss its popouts.
@@ -130,6 +146,7 @@ onBeforeUnmount(() => {
       >
         <iframe
           ref="frame"
+          :key="frameGeneration"
           data-arkham-tabletop="true"
           :src="frameSource"
           :title="$t('gameBar.fixedResolution')"
@@ -142,7 +159,11 @@ onBeforeUnmount(() => {
         />
       </div>
       <div v-if="!frameReady" class="fixed-tabletop-status" role="status">
-        {{ frameFailed ? $t('gameBar.fixedResolutionFailed') : $t('loadState.loading') }}
+        <p>{{ frameFailed ? $t('gameBar.fixedResolutionFailed') : $t('loadState.loading') }}</p>
+        <div v-if="frameFailed" class="fixed-tabletop-recovery">
+          <button type="button" @click="retryFrame">{{ $t('loadState.retry') }}</button>
+          <button type="button" @click="fixed = false">{{ $t('gameBar.exitFixedResolution') }}</button>
+        </div>
       </div>
     </template>
     <Game v-else v-bind="props" />
@@ -174,6 +195,9 @@ onBeforeUnmount(() => {
   border-radius: 5px;
   padding: 8px 12px;
 }
+
+.fixed-tabletop-recovery { display: flex; gap: 8px; }
+.fixed-tabletop-status p { margin: 0 0 8px; }
 
 .fixed-tabletop-host {
   position: relative;

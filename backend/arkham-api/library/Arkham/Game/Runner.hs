@@ -1916,19 +1916,35 @@ runGameMessage msg g = case msg of
       WindowAsk ws' _ _ -> ws == ws'
       _ -> False
 
-    -- A sole mandatory trigger has no activation decision. Keep UseAbility and
-    -- the subsequent window recheck, so costs, targets and nested responses still
-    -- resolve normally. Other players' simultaneous prompts prevent this shortcut.
-    resolution <- case (others, q) of
-      ([], WindowChooseOne [choice@(AbilityLabel iid ability _ _ _)]) -> do
-        forced <- isForcedAbility iid ability
-        pure $ if forced then uiToRun choice else Ask pid q
-      _ ->
-        pure
-          $ if notNull others
-            then AskMap $ Map.fromList $ (pid, q) : [(pid', q') | WindowAsk _ pid' q' <- others]
-            else Ask pid q
-    pushAll $ resolution : [Do (CheckWindows ws) | notNull ws]
+    -- Resolve one currently legal automatic trigger, then rebuild every seat's
+    -- offers. Never execute a stale list: the first ability may invalidate the
+    -- next. Costs, targets and nested windows still use the normal queue.
+    let seatAsks = (pid, q) : [(pid', q') | WindowAsk _ pid' q' <- others]
+        candidates = [choice | (_, WindowChooseOne cs) <- seatAsks, choice@AbilityLabel {} <- cs]
+    forcedChoices <- filterM (\case
+      AbilityLabel iid ability _ _ _ -> isForcedAbility iid ability
+      _ -> pure False) candidates
+    automaticChoices <- filterM (\case
+      AbilityLabel iid ability _ _ _ -> do
+        settings <- field Investigator.InvestigatorSettings iid
+        mcard <- sourceToMaybeCard ability.source
+        pure $ fromMaybe False $ do
+          card <- mcard
+          preference <- lookup (toCardCode card) (perCardSettings settings)
+          pure $ cardAutoRespond preference && not (cardSilenced preference)
+      _ -> pure False) candidates
+    case listToMaybe (forcedChoices <> automaticChoices) of
+      Just choice -> do
+        when (choice `elem` forcedChoices) do
+          case choice of
+            AbilityLabel _ ability _ _ _ -> do
+              mcard <- sourceToMaybeCard ability.source
+              sendUI $ "forcedAbility:" <> maybe "" (format . toName) mcard
+            _ -> pure ()
+        pushAll $ uiToRun choice : [Do (CheckWindows ws) | notNull ws]
+      Nothing -> do
+        let resolution = if notNull others then AskMap (Map.fromList seatAsks) else Ask pid q
+        pushAll $ resolution : [Do (CheckWindows ws) | notNull ws]
 
     pure g
   PlayCard iid card mtarget payment windows' False -> do

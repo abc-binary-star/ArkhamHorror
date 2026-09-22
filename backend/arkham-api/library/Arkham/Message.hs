@@ -534,6 +534,7 @@ data Message
     window triggers. Set from the card's bell toggle.
     -}
     SetCardSilenced InvestigatorId CardCode Bool
+  | SetCardResponseMode InvestigatorId CardCode CardResponseMode
   | SetAsIfRuling AsIfRuling
   | SetUltimatumsAndBoonsEnabled Bool
   | -- | Ultimatum of The Scream: ban this ally for the rest of the campaign

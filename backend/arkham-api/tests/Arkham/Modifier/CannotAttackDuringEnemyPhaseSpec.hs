@@ -24,7 +24,7 @@ spec = describe "CannotAttackDuringEnemyPhase" do
     -- control: proves the harness actually observes an enemy-phase attack, so
     -- the suppression test below cannot pass vacuously
     it "attacks when unmodified" . gameTest $ \self -> do
-      enemy <- setup self
+      _ <- setup self
       run $ SetPhase EnemyPhase
       run EnemiesAttack
       applyAllDamage

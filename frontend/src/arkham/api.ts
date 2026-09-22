@@ -362,6 +362,16 @@ export const setCardSilenced = (
 ): Promise<void> =>
   updateGameRaw(gameId, { tag: 'SetCardSilenced', contents: [investigatorId, cardCode, silenced] })
 
+export type CardResponseMode = 'NormalResponse' | 'SilentResponse' | 'AutomaticResponse'
+
+export const setCardResponseMode = (
+  gameId: string,
+  investigatorId: string,
+  cardCode: string,
+  mode: CardResponseMode,
+): Promise<void> =>
+  updateGameRaw(gameId, { tag: 'SetCardResponseMode', contents: [investigatorId, cardCode, mode] })
+
 export interface PlayabilityResponse {
   cardId: string
   cardCode: string
