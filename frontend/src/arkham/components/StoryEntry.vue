@@ -328,6 +328,7 @@ const flippableCard = (cardCode: string) => {
       content: "";
       filter: blur(0.25em);
       z-index: var(--z-index-1);
+      pointer-events: none;
     }
     h1 {
       color: #19214F;
@@ -504,6 +505,7 @@ const flippableCard = (cardCode: string) => {
     content: "";
     filter: blur(0.25em);
     z-index: var(--z-index-1);
+    pointer-events: none;
   }
   h1 {
     color: #000 !important;
