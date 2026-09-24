@@ -1,9 +1,15 @@
 import { ref, computed, watchEffect } from 'vue'
 import { imgsrc } from '@/arkham/helpers'
+import { fetchCard } from '@/arkham/api'
 import { useDbCardStore, ArkhamDBCard } from '@/stores/dbCards'
 import { homebrewTokenMap } from '@/arkham/homebrewAssets'
 import { originalArt } from '@/arkham/artVariants'
+import type { CardDef } from '@/arkham/types/CardDef'
 import type { ComputedRef } from 'vue'
+
+// Shared across composable instances: the engine's card defs never change in a
+// session, and a failed lookup is worth remembering just as much as a hit.
+const cardDefCache = new Map<string, CardDef | null>()
 
 export function useDbCardFallback(card: ComputedRef<string | null>) {
   const store = useDbCardStore()
@@ -120,24 +126,7 @@ export function useDbCardFallback(card: ComputedRef<string | null>) {
     return !!m && m[1] !== undefined && m[1].length === 2
   }
 
-  watchEffect(() => {
-    dbCardName.value = dbCardTypeName.value = dbCardFactionName.value = dbCardFactionCode.value = dbCardTraits.value = dbCardText.value = dbCardCustomizationText.value = dbCardFlavor.value = ''
-    const src = card.value
-    if (!src) return
-    const m = src.match(/(\d+b?)(_.*)?\.avif$/)
-    if (!m) return
-    const code = originalArt(m[1])
-    const tabooSuffix = m[2]
-    const language = localStorage.getItem('language') || 'en'
-    if (imgsrc(`cards/${m[0]}`).includes(language)) return
-
-    const dbCard = store.getDbCard(code)
-    if (!dbCard) return
-    // ArkhamDB records a handful of cards the engine flips (Atlach-Nacha's spinner face,
-    // Hank Samson's transformed face) as single-sided, so their `b` face carries no back_*
-    // fields. Describe it with the front's rather than showing nothing.
-    const needBack = dbCard.code !== code && dbCard.double_sided
-
+  const applyDbCard = (dbCard: ArkhamDBCard, needBack: boolean, tabooSuffix: string | undefined) => {
     const name = getCardName(dbCard, needBack)
     const type = getCardTypeName(dbCard)
     const faction = getCardFactionName(dbCard)
@@ -155,6 +144,52 @@ export function useDbCardFallback(card: ComputedRef<string | null>) {
     dbCardText.value = text ?? ''
     dbCardFlavor.value = flavor ?? ''
     dbCardCustomizationText.value = cust ?? ''
+  }
+
+  /* We reached `front` through the `<code>b` alias, so the hovered face is a back, and a
+   * single-sided record carries no back_* fields describing it. Ask the engine whether
+   * that face is a card in its own right: each Masked Carnevale-Goer is the back of a
+   * different Carnevale enemy, so describing it with the front would give away which
+   * enemy is hiding there -- look up the record filed under the face's own name instead.
+   * When the engine has no def for the face it is only the front's back art (Atlach-Nacha's
+   * spinner face, Hank Samson's transformed face), and the front does describe it. */
+  const resolveHiddenFace = async (src: string, code: string, front: ArkhamDBCard, tabooSuffix: string | undefined) => {
+    let faceDef: CardDef | null
+    if (cardDefCache.has(code)) {
+      faceDef = cardDefCache.get(code) ?? null
+    } else {
+      try {
+        faceDef = await fetchCard(code)
+      } catch {
+        faceDef = null
+      }
+      cardDefCache.set(code, faceDef)
+    }
+
+    if (card.value !== src) return
+    if (!faceDef) return applyDbCard(front, false, tabooSuffix)
+
+    const face = store.getDbCardByRealName(faceDef.name.title)
+    if (face) applyDbCard(face, false, tabooSuffix)
+  }
+
+  watchEffect(() => {
+    dbCardName.value = dbCardTypeName.value = dbCardFactionName.value = dbCardFactionCode.value = dbCardTraits.value = dbCardText.value = dbCardCustomizationText.value = dbCardFlavor.value = ''
+    const src = card.value
+    if (!src) return
+    const m = src.match(/(\d+b?)(_.*)?\.avif$/)
+    if (!m) return
+    const code = originalArt(m[1])
+    const tabooSuffix = m[2]
+    const language = localStorage.getItem('language') || 'en'
+    if (imgsrc(`cards/${m[0]}`).includes(language)) return
+
+    const dbCard = store.getDbCard(code)
+    if (!dbCard) return
+    const needBack = dbCard.code !== code
+    if (needBack && !dbCard.double_sided) return void resolveHiddenFace(src, code, dbCard, tabooSuffix)
+
+    applyDbCard(dbCard, needBack, tabooSuffix)
   })
 
   return {
