@@ -6638,8 +6638,17 @@ soleRequiredTarget = \case
   _ -> Nothing
  where
   soleTarget cs = case filter selectable cs of
-    [choice] | isTargetChoice choice -> Just choice
+    [choice] | isTargetChoice choice, not (isCommitChoice $ uiToRun choice) -> Just choice
     _ -> Nothing
+  -- A teammate's commit window may contain just one card and no Done button:
+  -- the testing investigator owns the Start button in another AskMap seat.
+  -- Auto-selecting that card then auto-selects its uncommit choice forever.
+  isCommitChoice = \case
+    SkillTestCommitCard {} -> True
+    SkillTestUncommitCard {} -> True
+    Run msgs -> any isCommitChoice msgs
+    Do msg -> isCommitChoice msg
+    _ -> False
   selectable = \case
     InvalidLabel {} -> False
     _ -> True

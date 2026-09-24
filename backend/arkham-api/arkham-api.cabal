@@ -8629,6 +8629,7 @@ test-suite spec
       Arkham.Game.ChooseDecksSpec
       Arkham.Game.DiffSpec
       Arkham.Game.PendingGameOptionsSpec
+      Arkham.Game.RequiredTargetSpec
       Arkham.Game.ResetGameSpec
       Arkham.Game.SettingsSpec
       Arkham.GameSpec
