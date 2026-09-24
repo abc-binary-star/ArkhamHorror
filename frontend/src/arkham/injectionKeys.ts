@@ -39,6 +39,10 @@ export const chooseAmountsKey: InjectionKey<
 export const scenarioSpecificAnswerKey: InjectionKey<
   (key: string, value: unknown) => Promise<void>
 > = Symbol('scenarioSpecificAnswer')
+// Answers a one-at-a-time question in one pass, in the order given; the panel
+// that arranges the cards provides the order.
+export const chooseOrderedKey: InjectionKey<(choices: number[]) => Promise<void>> =
+  Symbol('chooseOrdered')
 
 export const undoControlsKey: InjectionKey<{
   canUndoAction: Readonly<Ref<boolean>>

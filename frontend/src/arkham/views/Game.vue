@@ -90,6 +90,7 @@ import {
   chooseAmountsKey,
   chooseDeckKey,
   chooseDeckListKey,
+  chooseOrderedKey,
   choosePaymentAmountsKey,
   processingKey,
   scenarioSpecificAnswerKey,
@@ -1914,7 +1915,10 @@ function shouldPreserveFocusedChaosWindow() {
 // returns a new question after each card, and clearing the old one eagerly makes
 // the modal disappear and reappear between those responses.
 function shouldPreserveFocusedCardChoice() {
-  if (!game.value || !playerId.value || game.value.focusedCards.length === 0) return false
+  if (!game.value || !playerId.value) return false
+  // Not just `focusedCards`: a look that leaves its cards in the search results
+  // (putting them back in any order) is the same one-at-a-time modal.
+  if (ArkhamGame.revealedCards(game.value, playerId.value).length === 0) return false
   return Boolean(game.value.question[playerId.value])
 }
 
@@ -1949,6 +1953,29 @@ async function choose(idx: number) {
       }),
     )
   }
+}
+
+/* Answer a one-at-a-time question in one go, in the order given. The engine
+ * resolves every choice in a single pass, so the whole sequence is one action
+ * and one undo step -- answering them one at a time leaves a step per choice,
+ * and undoing into the middle of a sequence strands the rest of it. Provided
+ * rather than emitted: the components between here and the panel that needs it
+ * would otherwise each have to relay an event they have no use for. */
+async function chooseOrdered(choices: number[]) {
+  if (processing.value || choices.length === 0) return
+  if (!game.value || props.spectate) return
+
+  oldQuestion.value = game.value.question
+  const questionVersion = game.value.scenarioSteps
+  if (!shouldPreserveFocusedChaosWindow() && !shouldPreserveFocusedCardChoice()) {
+    setGameQuestion({})
+  }
+  sendAnswer(
+    JSON.stringify({
+      tag: 'OrderedAnswer',
+      contents: { choices, playerId: playerId.value, questionVersion },
+    }),
+  )
 }
 
 /* An overlay chosen at deck selection applies to this game only -- it is sent
@@ -2056,6 +2083,7 @@ provide(sendKey, message => {
   if (phaseAnnouncement.value || uiLock.value) return
   send(message)
 })
+})
 provide(choosePaymentAmountsKey, choosePaymentAmounts)
 provide(chooseAmountsKey, chooseAmounts)
 provide(scenarioSpecificAnswerKey, scenarioSpecificAnswer)
@@ -2066,6 +2094,7 @@ provide(
   computed(() => props.spectate),
 )
 provide(processingKey, processing)
+provide(chooseOrderedKey, chooseOrdered)
 provide(storyAnswerPendingKey, storyAnswerPending)
 provide(uiLockKey, uiLock)
 provide(phaseAnnouncementKey, phaseAnnouncement)
