@@ -22,7 +22,6 @@ spec = describe "Seeking Answers" $ do
       commit deduction
       startSkillTest
       applyResults
-      chooseTarget connecting
       -- Deduction must not add a clue at the connecting location (home has no clues to
       -- discover its bonus from), so only Seeking Answers' single clue is taken.
       connecting.clues `shouldReturn` 1
@@ -45,7 +44,6 @@ spec = describe "Seeking Answers" $ do
       commit deduction
       startSkillTest
       applyResults
-      chooseTarget connecting
       -- Seeking Answers takes 1 clue from the connecting location, Deduction takes 1 from
       -- the investigated (home) location.
       connecting.clues `shouldReturn` 1

@@ -710,7 +710,7 @@ stripQuestionWrappers = \case
   q -> q
 
 chooseOnlyOption :: HasCallStack => String -> TestAppT ()
-chooseOnlyOption _reason = do
+chooseOnlyOption reason = do
   questionMap <- gameQuestion <$> getGame
   case mapToList questionMap of
     [(_, question)] -> case stripQuestionWrappers question of
@@ -719,8 +719,8 @@ chooseOnlyOption _reason = do
       ChooseOneAtATime [msg] -> push (uiToRun msg) <* runMessages
       ChooseN _ [msg] -> push (uiToRun msg) <* runMessages
       Read {} -> runMessages
-      _ -> error "spec expectation mismatch"
-    _ -> error "There must be only one choice to use this function"
+      q -> error $ reason <> ": expected one option, got " <> show q
+    _ -> error $ reason <> ": expected one question, got " <> show questionMap
 
 chooseFirstOption :: HasCallStack => String -> TestAppT ()
 chooseFirstOption _reason = do

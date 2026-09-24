@@ -28,5 +28,5 @@ spec = describe "\"I'll take that!\"" do
       applyResults
       chooseTarget illTakeThat
       skip
-      chooseTarget lockpicks
+      -- The sole eligible asset is selected automatically after declining Chuck.
       assertAny $ assetIs Assets.lockpicks

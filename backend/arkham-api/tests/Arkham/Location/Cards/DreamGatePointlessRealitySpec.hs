@@ -41,7 +41,6 @@ spec = describe "Dream Gate (Pointless Reality)" do
           self `moveTo` dreamGate
         useForcedAbility
         assertNotTarget location2
-        chooseTarget location1
         self.location `shouldReturn` Just (toId location1)
 
     it
@@ -69,7 +68,6 @@ spec = describe "Dream Gate (Pointless Reality)" do
         duringPhase #investigation $ do
           self `moveTo` dreamGate
         useForcedAbility
-        chooseTarget location1
         self.location `shouldReturn` Just (toId location1)
 
     -- #4822 / FAQ 071: a "cannot move" effect (e.g. Entombed) must not strand Luke
@@ -86,6 +84,5 @@ spec = describe "Dream Gate (Pointless Reality)" do
           self `moveTo` dreamGate
         run =<< gameModifier (TestSource mempty) (toTarget self) CannotMove
         useForcedAbility
-        chooseTarget location1
         self.location `shouldReturn` Just (toId location1)
         self.defeated `shouldReturn` False

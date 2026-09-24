@@ -1,5 +1,11 @@
 {
   "harmsWay": {
+    "startingCards": {
+      "label": {
+        "take": "将此卡作为额外卡牌加入你的起始手牌",
+        "leave": "将此卡留在你的牌库中"
+      }
+    },
     "intro": {
       "title": "冒险 III: 危险之路",
       "body": "<p>当 你 slip back out 的 ringmaster's trailer, ghastly growls 和 其他 更少 identifiable sounds rumble through camp. 你 nearly flinch 作为 一 shadow sweeps across 月亮, which leads 你的 view 至 一 worse spectacle. 4 massive figures tower above camp, large enough 至 be oak trees &mdash; 和 indeed resembling 他们 在……中 silhouette &mdash; 但是 far 更多 horrible. Like smaller abominations 你 encountered 在……中 树林, 这些 things 是 一 horrid jumble 的 tentacles, mouths, hooves, 和 horns. 他们 writhe 和 roar dully 与 sluggish movements. Perhaps 这些 monsters 是 rousing 从 sleep, which lends 一 little 更多 urgency 至 mission. Thea holds 一 手牌 在……上 她的 mouth 在……中 shock, 但是 soon lowers 它 与 一 shudder. Whether 或 不 she's seen 他们 在……中 她的 visions 在……之前, 此 appears 至 be 第一 time 在……中 person. 它 goes 不使用 saying 该 你 必须 plan how 至 前往 在……中 finding 和 rescuing captives.</p><ul><li>调查员 必须 decide (选择 1):<ul><li>“ faster 我们 get 他们 out 的 here, better.” 加入 一 {'{'}cultist{'}'} 标记 至 混乱袋 为 remainder 的 campaign.</li><li>“Caution 第一. Saving 他们 won’t help otherwise.” 加入 一 {'{'}tablet{'}'} 标记 至 混乱袋 为 remainder 的 campaign.</li></ul></li></ul>",

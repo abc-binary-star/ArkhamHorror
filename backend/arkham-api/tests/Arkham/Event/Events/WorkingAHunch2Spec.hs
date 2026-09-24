@@ -26,6 +26,6 @@ spec = describe "Working a Hunch (2)" do
     duringTurn self do
       asDefs self.playableCards `shouldReturn` [Events.workingAHunch2]
       self `playCard` card
-      chooseTarget there
+      -- The sole location with clues is selected automatically.
       self.clues `shouldReturn` 1
       there.clues `shouldReturn` 0

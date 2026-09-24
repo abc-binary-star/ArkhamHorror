@@ -15,5 +15,5 @@ spec = describe "Book of Shadows (3)" $ do
       bookOfShadows3 <- self `putAssetIntoPlay` Assets.bookOfShadows3
       [addCharge] <- self `getActionsFrom` bookOfShadows3
       self `useAbility` addCharge
-      chooseTarget shrivelling
+      -- The only eligible spell is selected automatically.
       shrivelling.charges `shouldReturn` 5

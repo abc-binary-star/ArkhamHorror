@@ -27,7 +27,6 @@ spec = describe "Carson Sinclair" do
 
         [grant] <- self `getActionsFrom` self
         self `useAbility` grant
-        chooseTarget roland
 
         -- The granted window must not offer the Fast Shortcut play...
         assertNotTarget (toCardId shortcut)
@@ -35,7 +34,7 @@ spec = describe "Carson Sinclair" do
         -- ...but the granted action is still usable on a real action (taking a
         -- resource consumes it), and Shortcut stays in hand (never played).
         chooseOptionMatching "take resource as granted action" \case
-          ResourceLabel iid _ -> iid == toId roland
+          ComponentLabel (InvestigatorComponent iid ResourceToken) _ -> iid == toId roland
           _ -> False
 
         roland.remainingActions `shouldReturn` 0

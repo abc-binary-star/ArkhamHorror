@@ -60,7 +60,6 @@ spec = describe "Fire Axe" $ do
             StartSkillTestButton {} -> True
             _ -> False
         )
-      skip
       chooseOnlyOption "Apply Results"
       fieldAssert EnemyDamage (== 1) enemy
 

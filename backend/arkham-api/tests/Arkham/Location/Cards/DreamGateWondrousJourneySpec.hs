@@ -45,7 +45,6 @@ spec = describe "Dream Gate (Wondrous Journey)" do
           self `moveTo` dreamGate
         useForcedAbility
         assertNotTarget location2
-        chooseTarget location1
         self.location `shouldReturn` Just (toId location1)
 
     it

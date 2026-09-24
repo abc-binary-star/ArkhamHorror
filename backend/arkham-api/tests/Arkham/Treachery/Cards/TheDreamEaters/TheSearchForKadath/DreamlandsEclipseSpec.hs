@@ -37,7 +37,7 @@ spec = describe "Dreamlands Eclipse" $ do
         [investigateAction] <- self `getActionsFrom` ancientStone
         self `useAbility` investigateAction
         useDreamlandsEclipseForcedAbility dreamlandsEclipse
-        chooseLabel "$label.takeHorror"
+        chooseLabel "$label.takeHorror count=i:1.0"
 
         skillTest <- getJustSkillTest
         difficulty <- getModifiedSkillTestDifficulty skillTest

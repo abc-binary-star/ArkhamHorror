@@ -89,10 +89,23 @@ instance HasChaosTokenValue HarmsWay where
 
 instance RunMessage HarmsWay where
   runMessage msg s@(HarmsWay attrs) = runQueueT $ scenarioI18n "harmsWay" $ case msg of
-    PreScenarioSetup -> scope "intro" do
-      storyWithChooseOneM (h "title" >> p "body") do
-        labeled "faster" $ addChaosToken Cultist
-        labeled "caution" $ addChaosToken Tablet
+    PreScenarioSetup -> do
+      scope "intro" do
+        storyWithChooseOneM (h "title" >> p "body") do
+          labeled "faster" $ addChaosToken Cultist
+          labeled "caution" $ addChaosToken Tablet
+      -- Reserve optional story cards before opening hands and mulligans.
+      owners <- catMaybes <$> sequence [getAmaltheaWeaverOwner, getDeCultusBestiaeOwner]
+      scope "startingCards" do
+        for_ owners \(iid, def) -> do
+          deck <- field InvestigatorDeck iid
+          for_ (find ((== def) . toCardDef) (unDeck deck)) \card -> do
+            focusCards [card] do
+              chooseOneM iid do
+                labeled "take" do
+                  push $ ObtainCard (toCardId card)
+                  setupModifier ScenarioSource iid (AdditionalStartingCards [toCard card])
+                labeled "leave" nothing
       pure s
     Setup -> runScenarioSetup HarmsWay attrs do
       gather Set.HarmsWay
@@ -145,16 +158,6 @@ instance RunMessage HarmsWay where
       removeEvery [unusedAct1]
 
       setAside [Locations.campOutskirtsGuardedClosely, Locations.campOutskirtsQuietForNow]
-
-      -- "The investigators with Amalthea Weaver and De Cultus Bestiae in their
-      -- decks may begin the game with those cards in their opening hands as
-      -- additional cards."
-      owners <- catMaybes <$> sequence [getAmaltheaWeaverOwner, getDeCultusBestiaeOwner]
-      for_ owners \(iid, def) -> do
-        deck <- field InvestigatorDeck iid
-        for_ (find ((== def) . toCardDef) (unDeck deck)) \card -> do
-          push $ ObtainCard (toCardId card)
-          setupModifier ScenarioSource iid (AdditionalStartingCards [toCard card])
 
       setAgendaDeck [Agendas.theCircusSleeps, Agendas.treadingOnEggshells, Agendas.sleepWhenYoureDead]
       setActDeck [act1, Acts.overdueDeparture]

@@ -29,4 +29,4 @@ spec = describe "Clean Sweep" $ do
         _ -> False
       -- Clean Sweep's option is the only one left, so it runs without a further prompt
       clickLabel "$label.moveToConnecting"
-      assertTarget passengerCar
+      self.location `shouldReturn` Just (toId passengerCar)

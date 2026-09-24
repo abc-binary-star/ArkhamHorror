@@ -359,7 +359,10 @@ getWindowSkippable
     initiationWindows <- getInitiationWindows ws
     withAlteredGame withoutCanModifiers
       $ getIsPlayableAfterInitiation iid iid Cost.PaidCost initiationWindows card
-getWindowSkippable _ _ w@(windowTiming &&& windowType -> (Timing.When, Window.ActivateAbility iid _ ab)) = do
+getWindowSkippable _ ws w@(windowTiming &&& windowType -> (Timing.When, Window.ActivateAbility iid _ ab)) = do
+  -- Reaction criteria (e.g. Aquinnah's NotAttackingEnemy) need the original
+  -- triggering window, not only the nested ActivateAbility window.
+  initiationWindows <- getInitiationWindows ws
   let
     excludeOne [] = []
     excludeOne (uab : xs) | ab == usedAbility uab = do
@@ -370,7 +373,7 @@ getWindowSkippable _ _ w@(windowTiming &&& windowType -> (Timing.When, Window.Ac
   andM
     [ getCanAffordUseWith excludeOne CanNotIgnoreAbilityLimit iid ab [w]
     , withAlteredGame withoutCanModifiers
-        $ passesCriteria iid Nothing ab.source ab.requestor [w] (abilityCriteria ab)
+        $ passesCriteria iid Nothing ab.source ab.requestor initiationWindows (abilityCriteria ab)
     ]
 getWindowSkippable attrs ws (windowType -> Window.WouldPayCardCost iid _ _ card@(PlayerCard pc)) | iid == toId attrs = do
   allModifiers <- getModifiers card

@@ -46,7 +46,7 @@ spec = describe "The Grapevine" do
   context "action" do
     it "moves you one location at a time to the enemy and engages it" . gameTest $ \self -> do
       grapevine <- self `putAssetIntoPlay` Assets.theGrapevine
-      (location1, location2, location3) <- threeInARow
+      (location1, _location2, location3) <- threeInARow
       self `moveTo` location1
       enemy <- testEnemy
       enemy `spawnAt` location3
@@ -55,9 +55,7 @@ spec = describe "The Grapevine" do
 
       [action] <- self `getActionsFrom` grapevine
       self `useAbility` action
-      chooseTarget enemy
-      chooseTarget location2
-      chooseTarget location3
+      -- The only enemy and each mandatory step are selected automatically.
 
       self.location `shouldReturn` Just (toId location3)
       enemy.location `shouldReturn` Just (toId location3)
@@ -76,7 +74,6 @@ spec = describe "The Grapevine" do
 
       [action] <- self `getActionsFrom` grapevine
       self `useAbility` action
-      chooseTarget enemy
 
       self.location `shouldReturn` Just (toId location1)
       enemy.location `shouldReturn` Just (toId location3)

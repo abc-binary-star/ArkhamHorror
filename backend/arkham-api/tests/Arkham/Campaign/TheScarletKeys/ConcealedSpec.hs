@@ -22,15 +22,13 @@ concealAgentAt self location = do
   run $ PlaceConcealedCard (toId self) card.id (AtLocation $ toId location)
   pure agent
 
-{- | Walk the prompts that follow choosing to expose: pick the mini-card, confirm the flip, then
-decline Coterie Agent (A)'s own "when exposed" free reaction (discard itself), which pauses the
-queue before the enemy moves out of the shadows.
+{- | The sole mini-card is selected and flipped automatically. Decline Coterie Agent (A)'s
+own "when exposed" free reaction (discard itself), which pauses the queue before the enemy
+moves out of the shadows.
 -}
 exposeConcealedCard :: HasCallStack => TestAppT ()
 exposeConcealedCard = do
   clickLabel "$label.exposeConcealedCard"
-  click "choose concealed card"
-  click "flip concealed card"
   skip
 
 spec :: Spec

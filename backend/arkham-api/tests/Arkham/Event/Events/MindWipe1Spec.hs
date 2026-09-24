@@ -15,6 +15,5 @@ spec = describe "Mind Wipe (1)" $ do
     enemy `spawnAt` location
     duringPhase #investigation $ do
       chooseTarget mindWipe1
-      chooseTarget enemy
       getModifiers enemy `shouldReturn` [Blank]
     getModifiers enemy `shouldReturn` []

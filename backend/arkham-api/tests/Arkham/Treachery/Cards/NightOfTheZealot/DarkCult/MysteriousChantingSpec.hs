@@ -25,5 +25,4 @@ spec = describe "Mysterious Chanting" $ do
       , drawEncounterCard investigator.id GameSource
       ]
 
-    chooseOnlyOption "choose cultist"
     fieldAssert EnemyDoom (== 2) cultist

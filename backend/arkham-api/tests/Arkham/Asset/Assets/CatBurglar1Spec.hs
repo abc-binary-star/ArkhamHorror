@@ -18,7 +18,7 @@ spec = describe "Cat Burglar (1)" $ do
       enemy2 `spawnAt` location1
       [action] <- self `getActionsFrom` catBurglar1
       self `useAbility` action
-      chooseTarget location2
+      -- The only connecting location is selected automatically.
 
       self.location `shouldReturn` Just (toId location2)
       self.engagedEnemies `shouldReturn` []

@@ -56,7 +56,6 @@ spec = describe "End of Negotiations" $ do
       [doParley] <- filter ((== 1) . abilityIndex) <$> getActionsFrom self act
       run $ UseAbility (toId self) doParley (defaultWindows $ toId self)
       -- the act's parley effect discards its chosen criminal target...
-      chooseTarget victim
       -- ...and only then does the after-parley window offer EoN's forced ability.
       useForcedAbility
       -- the attached enemy attacks; resolve the damage assignment.
