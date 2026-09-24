@@ -62,7 +62,7 @@ import Arkham.Investigator (lookupInvestigator)
 import Arkham.Investigator.Types (Investigator, investigatorPlacement, investigatorPlayerId)
 import Arkham.Location.CardDefs.TheBlobThatAteEverythingELSE qualified as Locations
 import Arkham.Message
-import Arkham.Phase (Phase (..))
+import Arkham.Phase (Phase)
 import Arkham.Name
 import Arkham.Placement (
   Placement (AtLocation, AttachedToInvestigator, InPlayArea, InThreatArea, StillInHand),
@@ -374,14 +374,18 @@ data EpicOrganizerGateBlocked = EpicOrganizerGateBlocked
   deriving stock Show
   deriving anyclass Exception
 
-phaseTransitions :: Phase -> Phase -> [Phase]
-phaseTransitions oldPhase newPhase
-  | oldPhase == newPhase = []
-  | oldPhase `elem` standardPhases && newPhase `elem` standardPhases =
-      takeWhile (/= newPhase) (drop 1 (dropWhile (/= oldPhase) (cycle standardPhases))) <> [newPhase]
-  | otherwise = [newPhase]
-  where
-    standardPhases = [MythosPhase, InvestigationPhase, EnemyPhase, UpkeepPhase]
+{- | The phases to announce, in the order the action actually entered them.
+@entered@ holds every phase whose @Begin@ ran, so an answer that carries the
+game through a whole round announces each phase instead of nothing; the final
+phase is appended for the paths that set it without a @Begin@.
+-}
+phaseTransitions :: Phase -> Phase -> [Phase] -> [Phase]
+phaseTransitions oldPhase newPhase entered = go oldPhase (entered <> [newPhase])
+ where
+  go _ [] = []
+  go prev (p : ps)
+    | p == prev = go prev ps
+    | otherwise = p : go p ps
 
 {- | Whether a log message records an outcome nobody could have predicted: a
 chaos token drawn or revealed, or an encounter card / enemy drawn. Hardcore undo
@@ -422,7 +426,7 @@ updateGame response gameId mRoom = do
   let rejectOrganizerGate action =
         action `catch` \EpicOrganizerGateBlocked ->
           permissionDenied "This event is waiting for the organizer's clue allocation"
-  (ArkhamGame {..}, scenarioReset, oldLogEntries, updatedLog, mSharedUpdate, actAdvanced, newAchievements, mPhaseChanged) <- rejectOrganizerGate $ runDB $ atomicallyWithGame gameId \g@ArkhamGame {..} -> do
+  (ArkhamGame {..}, scenarioReset, oldLogEntries, updatedLog, mSharedUpdate, actAdvanced, newAchievements, mPhaseChanged, enteredPhases) <- rejectOrganizerGate $ runDB $ atomicallyWithGame gameId \g@ArkhamGame {..} -> do
     -- Read the prior log from the per-room cache when it's in sync with
     -- the just-locked game's step; otherwise fall back to the DB. Avoids
     -- the 217-row-avg getGameLog read on every action in the common case.
@@ -492,6 +496,7 @@ updateGame response gameId mRoom = do
         achievementProgressByRef <- newIORef []
         randomOutcomeRef <- newIORef False
         scenarioResetRef <- newIORef False
+        enteredPhasesRef <- newIORef []
         let
           collectStepMetadata msg = do
             when (isRandomOutcomeMessage msg) $ writeIORef randomOutcomeRef True
@@ -500,6 +505,7 @@ updateGame response gameId mRoom = do
               -- story, standalone restart) runs StartScenario; the prior
               -- scenario's log is dropped so the log holds one run only.
               StartScenario {} -> writeIORef scenarioResetRef True
+              Begin phase -> modifyIORef' enteredPhasesRef (phase :)
               EarnAchievement a -> modifyIORef' achievementsRef (a :)
               EarnAchievementBy iid a -> modifyIORef' achievementsByRef ((iid, a) :)
               AchievementProgress a items -> modifyIORef' achievementProgressRef ((a, items) :)
@@ -539,6 +545,7 @@ updateGame response gameId mRoom = do
         -- handleMessageLog conses for O(1) inserts; reverse here to restore order.
         updatedLog <- reverse <$> readIORef logRef
         hasRandomOutcome <- readIORef randomOutcomeRef
+        enteredPhases <- reverse <$> readIORef enteredPhasesRef
 
         now <- liftIO getCurrentTime
         -- A one-player game is created WithFriends, but its player adding a second
@@ -698,7 +705,7 @@ updateGame response gameId mRoom = do
           , actAdvanced
           , newAchievements
           , case ge of
-              Game {gamePhase = newPhase} -> phaseTransitions oldPhase newPhase
+              Game {gamePhase = newPhase} -> phaseTransitions oldPhase newPhase enteredPhases
           )
 
   -- Update the per-room cache after the DB transaction has committed,
