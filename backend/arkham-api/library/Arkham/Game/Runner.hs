@@ -58,7 +58,7 @@ import Arkham.Game.Settings (
  )
 import Arkham.Game.State
 import Arkham.Game.Utils
-import {-# SOURCE #-} Arkham.GameEnv
+import Arkham.GameEnv
 import Arkham.Helpers
 import Arkham.Helpers.Ability (isForcedAbility)
 import Arkham.Helpers.Criteria
