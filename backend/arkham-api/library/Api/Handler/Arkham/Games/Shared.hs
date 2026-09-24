@@ -426,7 +426,7 @@ updateGame response gameId mRoom = do
   let rejectOrganizerGate action =
         action `catch` \EpicOrganizerGateBlocked ->
           permissionDenied "This event is waiting for the organizer's clue allocation"
-  (ArkhamGame {..}, scenarioReset, oldLogEntries, updatedLog, mSharedUpdate, actAdvanced, newAchievements, mPhaseChanged, enteredPhases) <- rejectOrganizerGate $ runDB $ atomicallyWithGame gameId \g@ArkhamGame {..} -> do
+  (ArkhamGame {..}, scenarioReset, oldLogEntries, updatedLog, mSharedUpdate, actAdvanced, newAchievements, mPhaseChanged) <- rejectOrganizerGate $ runDB $ atomicallyWithGame gameId \g@ArkhamGame {..} -> do
     -- Read the prior log from the per-room cache when it's in sync with
     -- the just-locked game's step; otherwise fall back to the DB. Avoids
     -- the 217-row-avg getGameLog read on every action in the common case.
