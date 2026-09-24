@@ -7,7 +7,8 @@ import { fetchDecks, deleteDeck, syncDeck } from '@/arkham/api'
 import NewDeck from '@/arkham/components/NewDeck.vue';
 import Deck from '@/arkham/components/DeckRow.vue';
 import DeckToolbar from '@/arkham/components/DeckToolbar.vue';
-import { Import, X, SquarePen } from '@lucide/vue'
+import StarterDeckPanel from '@/arkham/components/StarterDeckPanel.vue';
+import { Import, X, SquarePen, BookOpen } from '@lucide/vue'
 import { useToast } from "vue-toastification";
 import { useI18n } from 'vue-i18n'
 import type { InvestigatorClass } from '@/arkham/helpers'
@@ -26,12 +27,17 @@ const allDecks = ref<ArkhamDeck.Deck[]>([])
 const deleteId = ref<string | null>(null)
 const toast = useToast()
 const showNewDeck = ref(false)
+const showStarterDecks = ref(false)
 const sortBy = ref<ArkhamDeck.DeckSort>('name')
 const filterClasses = ref<InvestigatorClass[]>([])
 
 async function addDeck(d: ArkhamDeck.Deck) {
   allDecks.value.push(d)
   showNewDeck.value = false
+}
+
+function addStarterDeck(d: ArkhamDeck.Deck) {
+  allDecks.value.push(d)
 }
 
 async function deleteDeckEvent() {
@@ -106,6 +112,10 @@ async function sync(deck: ArkhamDeck.Deck) {
               <X v-if="showNewDeck" aria-hidden="true" /><Import v-else aria-hidden="true" />
               {{ showNewDeck ? t('cancel') : t('deckList.newDeck') }}
             </button>
+            <button class="starter-decks-button" type="button" :aria-expanded="showStarterDecks" aria-controls="starter-decks-panel" @click="showStarterDecks = !showStarterDecks">
+              <X v-if="showStarterDecks" aria-hidden="true" /><BookOpen v-else aria-hidden="true" />
+              {{ showStarterDecks ? t('cancel') : t('deckList.starterDecks') }}
+            </button>
           </div>
           <DeckToolbar
             v-model:filterClasses="filterClasses"
@@ -119,6 +129,9 @@ async function sync(deck: ArkhamDeck.Deck) {
         <section class="library-collection" :aria-label="$t('decks')">
           <div v-if="showNewDeck" id="new-deck-panel" class="new-deck-panel">
             <NewDeck always-save @new-deck="addDeck" />
+          </div>
+          <div v-if="showStarterDecks" id="starter-decks-panel" class="new-deck-panel">
+            <StarterDeckPanel :decks="allDecks" @added="addStarterDeck" />
           </div>
       <LoadState v-if="loadError" error @retry="loadDecks" />
       <LoadState v-else-if="!loaded" />
@@ -206,8 +219,10 @@ async function sync(deck: ArkhamDeck.Deck) {
   transition: background 160ms ease, border-color 160ms ease;
 }
 .new-deck-button { background: linear-gradient(135deg, #43533e, #303e30); color: #f7efd8; }
+.starter-decks-button { background: linear-gradient(135deg, #54506e, #3f3c54); color: #f7efd8; }
 .builder-new-btn:hover { background: #fffdf5; border-color: #75633e; }
 .new-deck-button:hover { background: #4b6046; border-color: #75633e; }
+.starter-decks-button:hover { background: #615d80; border-color: #75633e; }
 .library-actions svg { width: 19px; height: 19px; stroke-width: 1.6; }
 .library-actions > :focus-visible { outline: 2px solid #53694b; outline-offset: 3px; }
 .new-deck-panel { padding: 20px; margin-bottom: 20px; border: 1px solid #b9a477; border-radius: 5px; background: #f5f0e4; }

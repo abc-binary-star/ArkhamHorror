@@ -611,7 +611,14 @@
     "createInBuilder": "Create Locally",
     "allDecks": "All Decks",
     "saveToDeckList": "Save to Deck List",
-    "saveToDeckListDescription": "Keep this deck available for future campaigns"
+    "saveToDeckListDescription": "Keep this deck available for future campaigns",
+    "starterDecks": "Starter Decks",
+    "starterDeckHint": "Five community starter presets, one per class. Add them to your library and tweak freely.",
+    "starterDeckAdd": "Add",
+    "starterDeckInLibrary": "In library",
+    "starterDeckNotes": "Deck notes",
+    "starterDeckAddedToast": "Starter deck added to your library",
+    "starterDeckUnimplemented": "Engine does not implement: {cards}"
   },
   "lobby": {
     "scenario": "Scenario",

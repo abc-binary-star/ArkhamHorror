@@ -588,7 +588,14 @@
     "createInBuilder": "本地新建",
     "allDecks": "全部牌组",
     "saveToDeckList": "保存到牌组列表",
-    "saveToDeckListDescription": "保留此牌组以供未来的战役使用"
+    "saveToDeckListDescription": "保留此牌组以供未来的战役使用",
+    "starterDecks": "新手起始卡组",
+    "starterDeckHint": "五套社区新手预设，一人一套职业入门。点击添加即入牌组库，可随时自行调整。",
+    "starterDeckAdd": "添加",
+    "starterDeckInLibrary": "已添加",
+    "starterDeckNotes": "卡组思路",
+    "starterDeckAddedToast": "起始卡组已加入牌组库",
+    "starterDeckUnimplemented": "引擎未实现以下卡牌：{cards}"
   },
   "cardPool": {
     "remaining": "还需添加 1 张 | 还需添加 {count} 张",
