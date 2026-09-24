@@ -15,7 +15,7 @@ heroicRescue :: EventCard HeroicRescue
 heroicRescue = event HeroicRescue Cards.heroicRescue
 
 instance RunMessage HeroicRescue where
-  runMessage msg e@(HeroicRescue attrs) = runQueueT $ case msg of
+  runMessage msg (HeroicRescue attrs) = runQueueT $ case msg of
     PlayThisEvent iid (is attrs -> True) -> do
       let details = getAttackDetails attrs.windows
       let enemy = attackEnemy details
@@ -30,5 +30,5 @@ instance RunMessage HeroicRescue where
                 <> [DealDamage (EnemyTarget enemy) $ nonAttack (Just iid) attrs 1 | canDealDamage]
           }
 
-      pure e
+      pure . HeroicRescue $ attrs & targetL ?~ EnemyTarget enemy
     _ -> HeroicRescue <$> liftRunMessage msg attrs

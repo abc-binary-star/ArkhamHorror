@@ -56,6 +56,7 @@ import {-# SOURCE #-} Arkham.Game.Utils (sourceCanClaimUseAbility)
 import {-# SOURCE #-} Arkham.GameEnv
 import Arkham.Helpers
 import Arkham.Helpers.Ability (
+  abilityWindowFor,
   getAbilityLimit,
   getCanAffordAbility,
   getCanAffordUseWith,
@@ -445,6 +446,17 @@ initiationsAsk player iid windows pending =
     [_] -> True
     _ -> False
 
+{- | Whether an initiation can still be offered, at its own windows.
+
+Two places decide this and they must agree: 'runWindow' derives the set with it, and
+'ResolveWindowInitiations' re-filters the materialised set with it every round. If the
+deriving side is laxer, the filter empties a set 'runWindow' will just rebuild, and the
+@Do (CheckWindows ws)@ that follows re-checks the same window forever. #5764
+-}
+initiationIsLive :: HasGame m => InvestigatorId -> Ability -> [Window] -> m Bool
+initiationIsLive iid ability ws =
+  andM [sourceCanClaimUseAbility ability.source, getCanAffordAbility iid ability ws]
+
 runWindow
   :: (HasGame m, HasQueue Message m)
   => InvestigatorAttrs -> [Window] -> [Ability] -> [Card] -> m ()
@@ -469,13 +481,24 @@ runWindow attrs windows allActions allPlayableCards = do
         if abilityHighlightFromWindow ability && isNothing (abilityTarget ability)
           then maybe ability (`withHighlight` ability) (primaryWindowTarget $ windowType window)
           else ability
+      -- `abilityWindowFor`, not the raw matcher: `getActions` admitted this ability
+      -- against a `ThisLocation` resolved to its (proxied) source location, and a bare
+      -- `ThisLocation` matches nothing -- leaving every initiation empty and this window
+      -- re-checked forever. #5764
       initiationsFor ability@Ability {..} = do
-        matching <- filterM (\w -> windowMatches iid abilitySource w abilityWindow) windows
-        if windowIsSingleEvent abilityWindow
-          then pure [(ability, matching) | notNull matching]
+        let abWindow = abilityWindowFor ability
+        matching <- filterM (\w -> windowMatches iid abilitySource w abWindow) windows
+        if windowIsSingleEvent abWindow
+          then
+            -- one initiation over the whole batch, so it is live or it is not
+            if null matching
+              then pure []
+              else do
+                live <- initiationIsLive iid ability matching
+                pure [(ability, matching) | live]
           else do
             -- drop the points already resolved: each use is recorded against its own window
-            unconsumed <- filterM (\w -> getCanAffordAbility iid ability [w]) matching
+            unconsumed <- filterM (\w -> initiationIsLive iid ability [w]) matching
             pure $ map (\w -> (ability, [w])) unconsumed
     if anyForced
       then do
@@ -492,7 +515,10 @@ runWindow attrs windows allActions allPlayableCards = do
           <> [ ResolveWindowInitiations iid windows [(ability, ws, []) | (ability, ws) <- normalInitiations]
              | notNull normalInitiations
              ]
-          <> [Do (CheckWindows windows) | null normalInitiations] -- if we have no normal windows the forced silent will not retrigger
+          -- if we have no normal windows the forced silent will not retrigger. Gated on
+          -- the silent set: with both empty nothing was pushed, so re-checking the same
+          -- window cannot make progress and just spins the runner. #5764
+          <> [Do (CheckWindows windows) | null normalInitiations, notNull silentInitiations]
       else do
         let globalSkip = attrs.settings.globalSettings.ignoreUnrelatedSkillTestTriggers
         let
@@ -511,7 +537,8 @@ runWindow attrs windows allActions allPlayableCards = do
         -- every matching window and is offered once.
         actionsWithMatchingWindows <-
           for actions' $ \ability@Ability {..} ->
-            (ability,) <$> filterM (\w -> windowMatches iid abilitySource w abilityWindow) windows
+            (ability,)
+              <$> filterM (\w -> windowMatches iid abilitySource w (abilityWindowFor ability)) windows
         skippable <- getAllAbilitiesSkippable attrs windows
         -- Offer resource-paid test boosts after committing, before the token
         -- draw. Filter only these abilities in the first fast window: other
@@ -2521,9 +2548,9 @@ runInvestigatorMessage msg a@InvestigatorAttrs {..} = runQueueT $ case msg of
     -- source can no longer claim UseAbility is dropped too: nothing would push
     -- Do (UseAbility ...), so neither the recorded use nor releaseInitiationEffects
     -- could ever consume it and the same button would be re-offered forever (#5761).
-    remaining <-
-      flip filterM pending \(ability, ws, _) ->
-        andM [sourceCanClaimUseAbility ability.source, getCanAffordAbility iid ability ws]
+    -- 'initiationIsLive' is the same predicate 'runWindow' derives the set with, so an
+    -- emptied set cannot be rebuilt by the Do (CheckWindows ws) below. #5764
+    remaining <- flip filterM pending \(ability, ws, _) -> initiationIsLive iid ability ws
     if null remaining
       then push $ Do (CheckWindows windows) -- anything newly available still gets a look
       else do
