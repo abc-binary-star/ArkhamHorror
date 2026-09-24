@@ -293,6 +293,7 @@ const {
   focusLightX,
   focusLightY,
   updateFocusLight,
+  setEnabled: setFocusLightEnabled,
 } = useFocusLight()
 
 store.fetchCards()
@@ -775,6 +776,8 @@ const realityAcidLightActive = computed(
 watch(realityAcidLightMetaActive, () => {
   realityAcidLightOverride.value = null
 })
+
+watch(realityAcidLightActive, (active) => setFocusLightEnabled(active), { immediate: true })
 
 watch(question, async () => {
   await nextTick()

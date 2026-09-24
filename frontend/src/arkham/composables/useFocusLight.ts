@@ -17,8 +17,39 @@ export function useFocusLight() {
 
   let observer: MutationObserver | null = null
   let animationFrame: number | null = null
+  // Only one scenario draws either light. The observer is a body-wide subtree
+  // watch on every class change and the sweep reads a rect per match, so both
+  // stay disconnected until a caller arms the effect.
+  let enabled = false
+
+  function setEnabled(active: boolean) {
+    enabled = active
+    if (active) {
+      if (!observer) {
+        observer = new MutationObserver(scheduleUpdate)
+        observer.observe(document.body, {
+          attributes: true,
+          attributeFilter: ['class'],
+          subtree: true,
+        })
+      }
+      scheduleUpdate()
+    } else {
+      observer?.disconnect()
+      observer = null
+      if (animationFrame !== null) {
+        cancelAnimationFrame(animationFrame)
+        animationFrame = null
+      }
+      focusLightX.value = -1000
+      focusLightY.value = -1000
+      flashlightX.value = -1000
+      flashlightY.value = -1000
+    }
+  }
 
   function updateFocusLight() {
+    if (!enabled) return
     const highlighted = [
       ...document.querySelectorAll<HTMLElement>(
         '.source-highlight, .ability-target, .card-frame-inner.highlighted, .cards-under-indicator--highlighted',
@@ -58,22 +89,16 @@ export function useFocusLight() {
   function onMove(event: MouseEvent) {
     pointer.x = event.clientX
     pointer.y = event.clientY
+    if (!enabled) return
     flashlightX.value = event.clientX
     flashlightY.value = event.clientY
     scheduleUpdate()
   }
 
   onMounted(() => {
-    flashlightX.value = window.innerWidth / 2
-    flashlightY.value = window.innerHeight / 2
+    // The mousemove listener itself is cheap and keeps `pointer` fresh for the
+    // debug 'e' shortcut; the light updates it drives are gated on `enabled`.
     document.addEventListener('mousemove', onMove, { passive: true })
-    observer = new MutationObserver(scheduleUpdate)
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ['class'],
-      subtree: true,
-    })
-    scheduleUpdate()
   })
 
   onUnmounted(() => {
@@ -83,5 +108,5 @@ export function useFocusLight() {
     if (animationFrame !== null) cancelAnimationFrame(animationFrame)
   })
 
-  return { pointer, flashlightX, flashlightY, focusLightX, focusLightY, updateFocusLight }
+  return { pointer, flashlightX, flashlightY, focusLightX, focusLightY, updateFocusLight, setEnabled }
 }
