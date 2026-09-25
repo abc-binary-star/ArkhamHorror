@@ -178,6 +178,7 @@ function updateRealityAcidLightRect() {
 const {
   zoom,
   onWheel: onMapWheel,
+  zoomBy,
   toggleZoom,
   updateScrollMargins,
   doubleZoomActive,
@@ -2854,8 +2855,8 @@ async function addChaosToken(face: any) {
             v-model:map-move-mode="mapMoveMode"
             :locations-unlocked="locationsUnlocked"
             :map-resetting="mapResetting"
-            @zoom-in="zoom = Math.min(6, zoom + 0.15)"
-            @zoom-out="zoom = Math.max(0.25, zoom - 0.15)"
+            @zoom-in="zoomBy(0.15)"
+            @zoom-out="zoomBy(-0.15)"
             @toggle-lock="toggleLocationsUnlocked"
             @reset="resetLocationsLayout"
           />

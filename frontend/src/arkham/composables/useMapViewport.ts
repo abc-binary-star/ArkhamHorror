@@ -58,9 +58,16 @@ export function useMapViewport(options: MapViewportOptions) {
     return Math.max(min, max * Math.exp(-Math.pow(value - center, 2) / (2 * sigma * sigma)))
   }
 
+  // Zooming by hand takes over from the double-tap toggle, whose saved level and
+  // scroll are stale the moment the user zooms by hand.
+  function zoomBy(delta: number) {
+    if (doubleZoomActive.value) doubleZoomActive.value = false
+    zoom.value = parseFloat(Math.min(6, Math.max(0.25, zoom.value + delta)).toFixed(3))
+  }
+
   function onWheel(event: WheelEvent) {
     const delta = event.deltaY < 0 ? zoomStep(zoom.value) : -zoomStep(zoom.value)
-    zoom.value = parseFloat(Math.min(6, Math.max(0.25, zoom.value + delta)).toFixed(3))
+    zoomBy(delta)
   }
 
   async function toggleZoom(event: MouseEvent) {
@@ -130,5 +137,5 @@ export function useMapViewport(options: MapViewportOptions) {
     scroller.scrollTop = gridLayoutTop + natY * DOUBLE_ZOOM_LEVEL - scroller.clientHeight / 2
   }
 
-  return { zoom, onWheel, toggleZoom, updateScrollMargins, doubleZoomActive }
+  return { zoom, onWheel, zoomBy, toggleZoom, updateScrollMargins, doubleZoomActive }
 }
