@@ -214,6 +214,8 @@ onBeforeUnmount(() => dialog.value?.close())
 </template>
 
 <style scoped>
+/* Response window: the aged folio the choice modal uses, so every prompt over
+   the table reads as one material. A single border-image supplies the frame. */
 .trigger-dialog {
   position: fixed;
   inset: 0;
@@ -224,26 +226,32 @@ onBeforeUnmount(() => dialog.value?.close())
   overflow: auto;
   overscroll-behavior: contain;
   padding: 22px;
-  border: 1px solid #a58cba80;
-  border-radius: 12px;
-  background: radial-gradient(ellipse at top, #34313d 0%, #1b2425 65%);
-  color: #eee5d2;
-  box-shadow: 0 24px 80px #0009, inset 0 0 0 4px #ffffff03;
+  /* Reserve a real border: square corners keep their aspect ratio; only
+     the edge strips repeat. No artwork or masking layer sits under text. */
+  border: 20px solid transparent;
+  border-image: url('@/assets/veiled-harbour/occult-panel-v1.png') 300 / 1 / 0 round;
+  border-radius: 0;
+  background:
+    radial-gradient(140% 70% at 50% -10%, #fff6e0a8, transparent 72%),
+    radial-gradient(120% 80% at 50% 118%, #b99a5f26, transparent 70%),
+    #efe5cf;
+  color: #3f3121;
+  box-shadow: 0 24px 80px #0009;
 }
-.trigger-dialog::backdrop { background: rgb(10 12 18 / 65%); }
-h2 { margin: 0; text-align: center; font-size: 1.15rem; color: #e2cba7; }
-.collection-hint { font-size: .85rem; text-align: center; color: #c9bdcf; }
+.trigger-dialog::backdrop { background: radial-gradient(circle at 50% 42%, rgb(9 22 24 / 62%), rgb(3 8 10 / 84%)); }
+h2 { margin: 0; text-align: center; font-size: 1.15rem; color: #3d2f1c; font-family: 'Source Han Serif', Arno, serif; letter-spacing: .08em; }
+.collection-hint { font-size: .85rem; text-align: center; color: #7a6a52; }
 footer { display: flex; justify-content: center; margin-top: 14px; }
-.response-card { position: relative; width: 100%; padding: 0; border: 2px solid transparent; border-radius: 9px; background: transparent; cursor: pointer; transition: border-color .15s, transform .15s; }
-.response-card:hover:not(:disabled), .response-card[aria-expanded="true"] { border-color: #cbb0dd; transform: translateY(-2px); }
-.ability-count { display: block; padding: 6px; font-size: .8rem; color: #eee5d2; }
+.response-card { position: relative; width: 100%; padding: 0; border: 0; border-radius: 9px; background: none; box-shadow: none; cursor: pointer; transition: transform .15s, filter .15s; }
+.response-card:hover:not(:disabled), .response-card[aria-expanded="true"] { transform: translateY(-2px); filter: drop-shadow(0 0 10px #b99a5f80); }
+.ability-count { display: block; padding: 6px 0 0; font-size: .78rem; letter-spacing: .04em; color: #6b5a41; }
 .trigger-dialog--compact { width: min(360px, calc(100vw - 32px)); padding: 16px; }
 /* A full-width skip row otherwise keeps unused auto-fit columns occupied. */
 .trigger-dialog--compact fieldset { grid-template-columns: minmax(0, 1fr); }
 /* One entry needs no inner frame; the dialog already draws the only box. */
 .trigger-dialog--compact .trigger-entry { padding: 0; border: 0; background: transparent; }
 p { line-height: 1.6; }
-.context { padding: 10px 12px; border-left: 2px solid #a58cba80; background: #ffffff05; font-size: .9rem; }
+.context { padding: 10px 12px; border-left: 2px solid #a5883f; background: #8a6e3512; font-size: .9rem; color: #5b4a33; }
 fieldset { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 14px; min-width: 0; }
 fieldset:disabled { opacity: .65; pointer-events: none; }
 .trigger-entry {
@@ -253,81 +261,67 @@ fieldset:disabled { opacity: .65; pointer-events: none; }
   min-width: 0;
   margin-inline: auto;
   padding: 12px;
-  border: 1px solid #a58cba30;
-  border-radius: 9px;
-  background: #10181980;
+  border: 1px solid #b39a6a42;
+  border-radius: 8px;
+  background: #fffdf51f;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-.trigger-entry img { display: block; width: min(100%, 210px); height: auto; max-height: 294px; object-fit: contain; margin: auto; border-radius: 7px; box-shadow: 0 5px 16px #0006; }
+.trigger-entry img { display: block; width: min(100%, 210px); height: auto; max-height: 294px; object-fit: contain; margin: auto; border-radius: 7px; box-shadow: 0 6px 16px #2b211638; }
 .entry-actions { display: flex; flex-direction: column; gap: 8px; min-width: 0; margin-top: auto; }
 /* Button + 查看牌桌 share one line. */
 .action-row { display: flex; flex-wrap: wrap; align-items: stretch; justify-content: center; gap: 8px; min-width: 0; }
+/* The card's ability is the primary action: the table's lacquer plaque. */
 .entry-actions :deep(button) {
   width: 100%;
   min-width: 0;
-  min-height: 42px;
+  min-height: 44px;
   margin: 0;
-  padding: 8px 12px;
+  padding: 10px 16px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border: 1px solid #b8a0c660;
-  border-radius: 6px;
-  background: linear-gradient(180deg, #504158, #3b3043);
-  color: #f4eaf5;
-  font-size: .9rem;
+  border: var(--plaque-border);
+  border-radius: 4px;
+  background: var(--plaque-plate);
+  color: var(--plaque-ink);
+  text-shadow: var(--plaque-text-shadow);
+  box-shadow: var(--plaque-shadow);
+  font-family: 'Source Han Serif', Arno, serif;
+  font-size: .92rem;
+  letter-spacing: .06em;
   white-space: normal;
   overflow-wrap: anywhere;
   cursor: pointer;
 }
-.entry-actions :deep(button:hover:not(:disabled)) { border-color: #cbb0dd; filter: brightness(1.12); }
+.entry-actions :deep(button:hover:not(:disabled)) { border: var(--plaque-border-hover); filter: brightness(1.12); }
 .entry-actions :deep(.button-label) { flex: 0 1 auto; padding: 0; white-space: normal; }
 .entry-actions :deep(button::before) { flex: 0 0 auto; padding: 0; margin: 0; }
 /* Override the width:100% / white-space rules above for buttons sharing the row. */
 .action-row :deep(button) { flex: 0 1 auto; width: auto; min-width: 0; max-width: 100%; }
 .action-row :deep(.button-label) { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
 .action-row .collapse { flex-shrink: 0; white-space: nowrap; }
-.skip-row { grid-column: 1 / -1; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid #a58cba25; }
+.skip-row { grid-column: 1 / -1; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid #8a6e351f; }
 .skip, .collapse {
   cursor: pointer;
   min-height: 40px;
   padding: 8px 14px;
-  border: 1px solid #a58cba40;
-  border-radius: 6px;
-  background: transparent;
-  color: #d0c5d4;
-  font-size: .8rem;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: #6d5c45;
+  font-size: .82rem;
   font-weight: 400;
+  letter-spacing: .04em;
 }
 .skip { min-width: 160px; }
-.skip:hover, .collapse:hover { background: #ffffff08; border-color: #a58cba90; }
-button:focus-visible, .entry-actions :deep(button:focus-visible) { outline: 2px solid #e2c2ff; outline-offset: 3px; }
-.trigger-reminder { position: fixed; bottom: calc(84px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 1100; padding: 10px 18px; border: 1px solid #a58cba; border-radius: 8px; background: #342d3c; color: #eee5d2; box-shadow: 0 4px 24px #0008; cursor: pointer; }
+.skip:hover, .collapse:hover { background: #8a6e3514; color: #43331f; }
+button:focus-visible, .entry-actions :deep(button:focus-visible) { outline: 2px solid #8a6e35; outline-offset: 3px; }
+.trigger-reminder { position: fixed; bottom: calc(84px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 1100; padding: 10px 18px; border: 1px solid #b39a6a99; border-radius: 6px; background: #23332e; color: #f0e6cd; box-shadow: 0 4px 24px #0008; cursor: pointer; }
 @media (max-width: 600px) {
   .trigger-dialog { padding: 16px; }
   .trigger-entry img { max-height: 32dvh; }
 }
-
-/* Response window: silver paper and amethyst controls. */
-.trigger-dialog {
-  background: #e0dfe8 url('@/assets/veiled-harbour/arcane-silver-v1.png') center / 100% 100% no-repeat;
-  color: #363143;
-  border-color: #8f819e;
-  box-shadow: inset 0 0 0 3px #f2eff46b, 0 24px 80px #0009;
-}
-.trigger-dialog h2 { color: #514060; font-family: 'Source Han Serif', Arno, serif; }
-.collection-hint { color: #665d73; }
-.context { background: #5340660a; border-left-color: #8c749e; }
-.trigger-entry { background: #f6f3fa80; border-color: #8e7aa34d; }
-.ability-count { color: #534060; }
-.skip, .collapse { color: #574562; border-color: #8e7aa380; background: #f5f0f780; }
-.skip:hover, .collapse:hover { background: #d8cee1; border-color: #786087; }
-.action-row .collapse { color: #f4eaf5; }
-.trigger-dialog button:focus-visible,
-.entry-actions :deep(button:focus-visible) { outline-color: #78558f; }
-.response-card:hover:not(:disabled), .response-card[aria-expanded="true"] { border-color: #78558f; }
-
 </style>

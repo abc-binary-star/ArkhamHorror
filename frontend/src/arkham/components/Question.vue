@@ -2320,7 +2320,13 @@ h2 {
 
 /* Numeric allocation uses ledger paper, with clear inset inputs. */
 .amount-modal .amount-contents {
-  background: #eee2c9 url('@/assets/veiled-harbour/story-folio-v1.png') center / 100% 100% no-repeat;
+  background: linear-gradient(115deg, #ffffff38, transparent 65%), #eee2c9;
+  /* Reserve a real border: square corners keep their aspect ratio; only
+     the edge strips repeat. No artwork or masking layer sits under text. */
+  box-sizing: border-box;
+  border: 20px solid transparent;
+  border-image: url('@/assets/veiled-harbour/story-folio-v1.png') 300 / 1 / 0 round;
+  border-radius: 0;
   color: #493b28;
 }
 .amount-contents legend, .amount-choice label { color: #493b28; }

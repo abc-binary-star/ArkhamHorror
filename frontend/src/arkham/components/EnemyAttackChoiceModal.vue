@@ -103,12 +103,15 @@ button:focus-visible { outline: 2px solid #e2c59e; outline-offset: 3px; }
 
 /* Threat window: blood-red wax and aged copper on pale parchment. */
 .attack-dialog {
-  background: linear-gradient(#b0503417, #b0503417),
-    #eee2c9 url('@/assets/veiled-harbour/story-folio-v1.png') center / 100% 100% no-repeat;
+  background: linear-gradient(#b0503417, #b0503417), #eee2c9;
+  /* Reserve a real border: square corners keep their aspect ratio; only
+     the edge strips repeat. No artwork or masking layer sits under text. */
+  box-sizing: border-box;
+  border: 20px solid transparent;
+  border-image: url('@/assets/veiled-harbour/story-folio-v1.png') 300 / 1 / 0 round;
+  border-radius: 0;
   color: #49312b;
-  border: 1px solid #a56c52;
-  border-top: 4px solid #864333;
-  box-shadow: inset 0 0 0 3px #f5dfc766, 0 24px 80px #000b;
+  box-shadow: inset 0 3px #864333, inset 0 0 0 3px #f5dfc766, 0 24px 80px #000b;
 }
 .attack-dialog h2 { color: #793b2e; }
 .verse, .instruction { color: #755749; }

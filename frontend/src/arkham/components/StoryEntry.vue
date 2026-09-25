@@ -1023,27 +1023,19 @@ a.button {
 
 /* Archive folio: preserve campaign-specific illustrated story treatments. */
 .entry:not(:has(.black, .haunted, .checkpoint, .interlude, .resolution)) {
-  --folio-padding: clamp(20px, 2.5vw, 36px);
+  --folio-padding: clamp(12px, 2vw, 24px);
   position: relative;
   isolation: isolate;
-  background: #eee2c9 url('@/assets/veiled-harbour/story-folio-v1.png') center / 100% 100% no-repeat;
+  background: linear-gradient(115deg, #ffffff38, transparent 65%), #eee2c9;
+  /* Reserve a real border: square corners keep their aspect ratio; only
+     the edge strips repeat. No artwork or masking layer sits under text. */
+  box-sizing: border-box;
+  border: 20px solid transparent;
+  border-image: url('@/assets/veiled-harbour/story-folio-v1.png') 300 / 1 / 0 round;
+  border-radius: 0;
   color: #382e23;
-  border: 1px solid #9c8051;
-  border-radius: 8px;
   padding: var(--folio-padding);
   box-shadow: inset 0 0 0 3px #f9efd966, 0 8px 24px #0005;
-}
-/* Keep an opaque reading surface behind every line, with a soft transition
-   into the ornamental perimeter. No extra whitespace or interaction layer. */
-.entry:not(:has(.black, .haunted, .checkpoint, .interlude, .resolution))::before {
-  content: '';
-  position: absolute;
-  inset: calc(var(--folio-padding) - 8px);
-  z-index: -1;
-  pointer-events: none;
-  border-radius: 6px;
-  background: linear-gradient(110deg, #f4e9d0, #f0e3c7);
-  box-shadow: 0 0 12px 8px #f2e6cd;
 }
 .entry:not(:has(.black, .haunted, .checkpoint, .interlude, .resolution)) :deep(h1) {
   color: #634722;

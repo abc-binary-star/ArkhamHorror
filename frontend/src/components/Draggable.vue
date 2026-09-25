@@ -685,14 +685,19 @@ function moveUp() {
 
 /* Match window chrome to the content family without changing drag behavior. */
 .draggable:has(.skill-test) {
-  background: #e2e5eb url('@/assets/veiled-harbour/arcane-silver-v1.png') center / 100% 100% no-repeat;
-  border-color: #8996a8;
+  background: #121e1e;
+  border-color: #8f7e555e;
+  border-radius: 6px;
 }
 .draggable:has(.skill-test) > header {
-  background: linear-gradient(#516075, #2e394a);
-  border-bottom-color: #a1b1c4;
+  background: linear-gradient(90deg, #152421, #22342d 50%, #152421);
+  border-bottom-color: #ad94503d;
+  border-radius: 6px 6px 0 0;
+  padding: 5px 10px;
 }
-.draggable:has(.skill-test) > header :deep(h1) { color: #e9e8ed; }
+.draggable:has(.skill-test) > header :deep(h2) { margin: 4px 0; color: #ddcba5; font-size: 1rem; font-weight: 500; letter-spacing: .12em; }
+.draggable:has(.skill-test) > header .minimize-btn { background: transparent; border-color: #ad935d33; width: 30px; height: 30px; min-height: 30px; flex-basis: 30px; }
+.draggable:has(.skill-test) > .content { margin: 0; border-radius: 0 0 6px 6px; background: #121e1e; }
 .draggable:has(.amount-modal), .draggable:has(.amount-modal) > .content {
   background: #eee2c9;
   border-color: #a38d60;
