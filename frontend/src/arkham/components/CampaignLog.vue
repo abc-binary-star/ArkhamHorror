@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import * as ArkhamGame from '@/arkham/types/Game'
 import { LogContents, LogKey, formatKey, homebrewScopeFromCampaignId, logContentsDecoder } from '@/arkham/types/Log'
+import { campaignNoteItems, isSectionLogKey, TDC_TASK_KEYS } from '@/arkham/campaignNotes'
 import { toCapitalizedWords, formatContent } from '@/arkham/helpers'
 import { cardArt } from '@/arkham/cardImages'
 import { computed, ref, nextTick, onMounted, onUnmounted, watch, type Component } from 'vue'
@@ -358,50 +359,12 @@ const breakdownInvestigators = (breakdown: XpBreakdownStep) =>
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null
 
-type SectionContents = { tag: string; contents: string }
-type SectionLogKey = { tag: string; contents: SectionContents }
-
-const isSection = (r: LogKey): r is SectionLogKey => {
-  if (!('contents' in r)) return false
-  if (!isRecord(r.contents)) return false
-  return typeof r.contents.tag === 'string' && typeof r.contents.contents === 'string'
-}
+const isSection = isSectionLogKey
 
 const lowerFirst = (s: string) => (s.slice(0, 1).toLowerCase() + s.slice(1)).replace(/'/g, '')
 const clamp6 = (n: unknown) => Math.max(0, Math.min(6, Math.floor(Number(n) || 0)))
 
-// Rendered by ArtifactsEarned as a checklist, so exclude them from Campaign Notes.
-const TDC_ARTIFACT_KEYS = new Set([
-  'BarrierNode',
-  'GrislyMask',
-  'TidalTablet',
-  'ShardOfYchlecht',
-  'ObsidianClaw',
-  'HorrorInClay',
-])
-
-// Tasks are recorded per-investigator (progress counts live in each
-// investigator's log), so exclude them from the shared Campaign Notes; they are
-// shown in the per-investigator sections instead.
-const TDC_TASK_KEYS = new Set([
-  'WalkInFaith',
-  'ToeTheLine',
-  'NoPlaceLikeHome',
-  'GoodMoney',
-  'DoNoHarm',
-  'ProveYourWorth',
-  'DreamsOfDestruction',
-  'PlumbTheDepths',
-])
-
-const recorded = computed(() => {
-  return selectedLog.value.recorded
-    .filter(r => !['Teachings1', 'Teachings2', 'Teachings3'].includes(r.tag))
-    .filter((c) => !isSection(c))
-    .filter((c) => !(c.tag === 'TheDrownedCityKey' && TDC_ARTIFACT_KEYS.has(String((c as any).contents))))
-    .filter((c) => !(c.tag === 'TheDrownedCityKey' && TDC_TASK_KEYS.has(String((c as any).contents))))
-    .map((k: LogKey) => formatKey(k, homebrewScope.value))
-})
+const recorded = computed(() => campaignNoteItems(selectedLog.value, homebrewScope.value))
 
 type SectionModel = {
   key: string

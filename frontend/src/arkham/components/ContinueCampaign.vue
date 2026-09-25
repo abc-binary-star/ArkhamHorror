@@ -8,10 +8,16 @@ import { scenarioIdToI18n } from '@/arkham/types/Scenario'
 import type { Campaign } from '@/arkham/types/Campaign'
 import type { Scenario } from '@/arkham/types/Scenario'
 import type { Investigator } from '@/arkham/types/Investigator'
+import type { XpBreakdownStep } from '@/arkham/types/Xp'
 import { type CampaignStep, campaignStepName, extendWithOptions } from '@/arkham/types/CampaignStep'
+import { campaignNoteItems } from '@/arkham/campaignNotes'
+import { homebrewScopeFromCampaignId } from '@/arkham/types/Log'
 import { useI18n } from 'vue-i18n'
 import InvestigatorRow from '@/arkham/components/InvestigatorRow.vue'
 import InvestigatorStatsPanel from '@/arkham/components/InvestigatorStatsPanel.vue'
+import CampaignLogChaosBag from '@/arkham/components/CampaignLogChaosBag.vue'
+import CampaignLogSection from '@/arkham/components/CampaignLogSection.vue'
+import XpBreakdown from '@/arkham/components/XpBreakdown.vue'
 import LogIcons from '@/arkham/components/LogIcons.vue'
 import SideStoryOption from '@/arkham/components/SideStoryOption.vue'
 import sideStories from '@/arkham/data/side-stories.json'
@@ -100,7 +106,7 @@ const scenario = computed(() => {
   return null
 })
 
-const name = computed(() => campaignStepName(props.game, props.step, props.scenario))
+const name = computed(() => campaignStepName(props.game, props.step, props.scenario, { t, te }))
 const scenarioOverlay = computed(() => props.campaign?.overlays.find(o =>
   o.available && o.scenario.replace(/^c/, '') === scenario.value?.replace(/^c/, '')
 ))
@@ -183,6 +189,46 @@ const kind = computed(() => {
 const investigators = computed(() => {
   return Object.values(props.game.investigators)
 })
+
+/* Read-only excerpts from the campaign log, so the intermission can be read
+ * without leaving for the log page. */
+const campaignLogContents = computed(() =>
+  props.game.campaign?.log ?? props.game.scenario?.standaloneCampaignLog ?? null
+)
+
+const campaignNotes = computed(() =>
+  campaignLogContents.value
+    ? campaignNoteItems(campaignLogContents.value, homebrewScopeFromCampaignId(props.game.campaign?.id))
+    : []
+)
+
+const chaosBag = computed(() => props.game.campaign?.chaosBag ?? [])
+const chaosBagHistory = computed(() => props.game.campaign?.chaosBagHistory ?? [])
+
+const allGameInvestigators = computed(() => ({
+  ...props.game.investigators,
+  ...props.game.otherInvestigators,
+  ...props.game.killedInvestigators,
+}))
+
+/* The scenario just played is the one worth reading; earlier steps stay
+ * behind their collapsed headers, as they are on the log page. */
+const xpBreakdowns = computed<XpBreakdownStep[]>(() => {
+  const campaign = props.game.campaign
+  if (campaign?.xpBreakdown.length) return campaign.xpBreakdown
+  const scenario = props.game.scenario
+  if (scenario?.xpBreakdown?.length) {
+    return [{
+      step: { tag: 'ScenarioStep', contents: scenario.id } as CampaignStep,
+      investigators: Object.keys(props.game.investigators),
+      entries: scenario.xpBreakdown,
+    }]
+  }
+  return []
+})
+
+const breakdownInvestigators = (breakdown: XpBreakdownStep) =>
+  breakdown.investigators.map((id) => allGameInvestigators.value[id]).filter(Boolean)
 
 const usesTime = computed<boolean>(() => {
   if(!props.campaign) return false
@@ -485,45 +531,64 @@ const setIcon = computed(() => {
 
 <template>
   <LogIcons />
-  <div class="continue-campaign scroll-container">
-    <div v-if="chooseSideStory || (addSideStory && standalones.length > 0)" class="side-story-selection">
-      <div class="side-story-header">
-        <h2>{{ $t('sideStory.selectSideScenario') }}</h2>
-      </div>
-      <SideStoryOption
-        v-for="sideStory in standalones"
-        :key="sideStory.id"
-        :side-story="sideStory"
-        :disabled="hasSent"
-        @select="loadSideStory"
-      />
-    </div>
-    <div v-else class="next-scenario">
-      <div class="next-scenario-info">
-        <div class='scenario-info' :class="{ 'scenario-info--overlay': scenarioOverlay }">
-          <h3>{{kind}}</h3>
-          <h2>{{name}}</h2>
-          <p v-if="scenarioOverlay" class="campaign-overlay-label">{{ t('sideStory.variant') }}</p>
+  <div
+    class="continue-campaign scroll-container"
+    :class="{ 'continue-campaign--split': !addSideStory && !chooseSideStory }"
+  >
+    <div class="campaign-column">
+      <div v-if="chooseSideStory || (addSideStory && standalones.length > 0)" class="side-story-selection">
+        <div class="side-story-header">
+          <h2>{{ $t('sideStory.selectSideScenario') }}</h2>
         </div>
-        <div v-if="!readOnly" class="actions">
-          <button @click="startStep" :disable="hasSent">{{t('continue')}}</button>
-          <button v-if="canUpgrade" @click="upgradeDecks" :disable="hasSent">{{t('upgradeDecks')}}</button>
-          <button v-if="canChooseSideStory && standalones.length > 0" @click="addSideStory = true" :disable="hasSent">+ {{t('addSideScenario')}}</button>
-          <SideStoryOption
-            v-for="sideStory in promotedSideStories"
-            :key="sideStory.id"
-            :side-story="sideStory"
-            :disabled="hasSent"
-            @select="loadSideStory"
-          />
-        </div>
+        <SideStoryOption
+          v-for="sideStory in standalones"
+          :key="sideStory.id"
+          :side-story="sideStory"
+          :disabled="hasSent"
+          @select="loadSideStory"
+        />
       </div>
-      <div v-if="setIcon" class="next-step-icon"><img :src="setIcon" /></div>
+      <div v-else class="next-scenario">
+        <div class="next-scenario-info">
+          <div class='scenario-info' :class="{ 'scenario-info--overlay': scenarioOverlay }">
+            <h3>{{kind}}</h3>
+            <h2>{{name}}</h2>
+            <p v-if="scenarioOverlay" class="campaign-overlay-label">{{ t('sideStory.variant') }}</p>
+          </div>
+          <div v-if="!readOnly" class="actions">
+            <button @click="startStep" :disable="hasSent">{{t('continue')}}</button>
+            <button v-if="canUpgrade" @click="upgradeDecks" :disable="hasSent">{{t('upgradeDecks')}}</button>
+            <button v-if="canChooseSideStory && standalones.length > 0" @click="addSideStory = true" :disable="hasSent">+ {{t('addSideScenario')}}</button>
+            <SideStoryOption
+              v-for="sideStory in promotedSideStories"
+              :key="sideStory.id"
+              :side-story="sideStory"
+              :disabled="hasSent"
+              @select="loadSideStory"
+            />
+          </div>
+        </div>
+        <div v-if="setIcon" class="next-step-icon"><img :src="setIcon" /></div>
+      </div>
+
+      <InvestigatorStatsPanel :game="game" :stats="game.stats" :title="t('stats.scenarioTitle')" />
+
+      <template v-if="!addSideStory && !chooseSideStory">
+        <XpBreakdown
+          v-for="(breakdown, idx) in xpBreakdowns"
+          :key="idx"
+          :game="game"
+          :step="breakdown.step"
+          :entries="breakdown.entries"
+          :playerId="playerId"
+          :showAll="true"
+          :investigators="breakdownInvestigators(breakdown)"
+          :defaultCollapsed="idx > 0"
+        />
+      </template>
     </div>
 
-    <InvestigatorStatsPanel :game="game" :stats="game.stats" :title="t('stats.scenarioTitle')" />
-
-    <template v-if="!addSideStory && !chooseSideStory">
+    <div v-if="!addSideStory && !chooseSideStory" class="roster-column">
       <div v-if="investigators.length > 0" id="investigators">
         <section v-if="isScenario" id="investigators-header"><i class="secret"></i> {{t('lead')}}</section>
         <template v-for="investigator in investigators" :key="investigator.id">
@@ -629,7 +694,19 @@ const setIcon = computed(() => {
         </template>
       </div>
 
-    </template>
+      <CampaignLogChaosBag
+        v-if="chaosBag.length > 0"
+        :game="game"
+        :chaosBag="chaosBag"
+        :history="chaosBagHistory"
+      />
+
+      <CampaignLogSection
+        v-if="campaignNotes.length > 0"
+        :title="t('campaignLog.campaignNotes')"
+        :items="campaignNotes.map(note => t(note))"
+      />
+    </div>
   </div>
 </template>
 
@@ -720,6 +797,32 @@ const setIcon = computed(() => {
   flex-direction: column;
   gap: 20px;
   width: 40vw;
+}
+
+/* Intermission: the step card and the scenario stats share the left column,
+   the roster sits beside them. Asking for two ~450px columns means the row
+   wraps into a single column by itself on anything narrower than ~1000px. */
+.continue-campaign--split {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  width: min(1100px, 92vw);
+}
+
+.campaign-column,
+.roster-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.continue-campaign--split .campaign-column {
+  flex: 1 1 470px;
+}
+
+.continue-campaign--split .roster-column {
+  flex: 1 1 430px;
 }
 
 .investigator {
@@ -963,8 +1066,10 @@ button {
 
 @media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
 
-  .continue-campaign { width: 100%; max-width: 640px; min-width: 0; margin: 0 auto; padding: 20px 12px; box-sizing: border-box; gap: 16px; }
+  .continue-campaign { width: 100%; max-width: 640px; min-width: 0; margin: 0 auto; padding: 20px 12px; box-sizing: border-box; gap: 16px; flex-direction: column; flex-wrap: nowrap; }
   .continue-campaign > * { min-width: 0; flex-shrink: 0; }
+  .campaign-column, .roster-column { width: 100%; gap: 16px; }
+  .continue-campaign--split .campaign-column, .continue-campaign--split .roster-column { flex: 1 1 auto; }
   .next-scenario { align-items: stretch; padding: 16px; width: 100%; box-sizing: border-box; }
   .next-scenario-info, .scenario-info { width: 100%; min-width: 0; }
   .next-scenario .actions { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -990,17 +1095,19 @@ button {
 
 .next-scenario,
 #investigators {
-  border: 1px solid #87734e;
-  border-radius: 10px;
-  /* Bundle the texture with the component so deployments cannot omit it. */
-  background: #eee4cd url('@/assets/veiled-harbour/occult-panel-v1.png') center / 100% 100% no-repeat;
-  box-shadow: inset 0 0 0 3px #f5ecd1, inset 0 0 0 4px #94743f66,
-    0 12px 32px #0007;
+  background: linear-gradient(115deg, #ffffff38, transparent 65%), #eee4cd;
+  /* Reserve a real border: square corners keep their aspect ratio; only
+     the edge strips repeat. No artwork or masking layer sits under text. */
+  box-sizing: border-box;
+  border: 20px solid transparent;
+  border-image: url('@/assets/veiled-harbour/occult-panel-v1.png') 300 / 1 / 0 round;
+  border-radius: 0;
+  box-shadow: 0 12px 32px #0007;
   color: #322c24;
 }
 
-.next-scenario { padding: 22px; }
-#investigators { padding: 14px; gap: 12px; }
+.next-scenario { padding: 12px; }
+#investigators { padding: 8px; gap: 12px; }
 .scenario-info h2 { color: #48351f; letter-spacing: 0.06em; }
 .scenario-info h3 { color: #6e5c40; }
 .next-scenario-info { min-width: 0; width: 100%; }
@@ -1061,8 +1168,8 @@ button {
 }
 .continue-campaign :deep(.stat-label) { color: #b5c0af; }
 @media (max-width: 800px) {
-  .next-scenario { padding: 18px; }
-  #investigators { padding: 12px; }
+  .next-scenario { padding: 10px; }
+  #investigators { padding: 6px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .continue-campaign button { transition: none; }
