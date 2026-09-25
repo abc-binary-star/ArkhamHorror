@@ -164,9 +164,9 @@ const basicActions = computed(() => {
     && c.ability.source.contents === props.investigator.location
     && c.ability.index === 103)
   return [
-    { key: 'draw', icon: Layers, index: canAct ? draw : -1 },
-    { key: 'resource', icon: Coins, index: canAct ? resource : -1 },
-    { key: 'investigate', icon: Search, index: canAct ? investigate : -1 },
+    { key: 'draw', shortcut: 'q', icon: Layers, index: canAct ? draw : -1 },
+    { key: 'resource', shortcut: 'w', icon: Coins, index: canAct ? resource : -1 },
+    { key: 'investigate', shortcut: 'e', icon: Search, index: canAct ? investigate : -1 },
   ]
 })
 
@@ -672,7 +672,8 @@ const spadeInjury = computed(() => {
                   type="button"
                   class="basic-action"
                   :class="{ 'basic-action--ready': hasActionsRemaining && basicAction.index !== -1 }"
-                  v-tooltip="t(`investigator.basicActions.${basicAction.key}`)"
+                  v-tooltip="`${t(`investigator.basicActions.${basicAction.key}`)} (${basicAction.shortcut.toUpperCase()})`"
+                  :aria-keyshortcuts="basicAction.shortcut"
                   :aria-label="t(`investigator.basicActions.${basicAction.key}`)"
                   :disabled="basicAction.index === -1"
                   :data-game-actionable="basicAction.index !== -1 || undefined"

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, inject } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { handleEmbeddedI18n } from '@/arkham/i18n';
 import type { Game } from '@/arkham/types/Game';
@@ -18,7 +18,7 @@ import WorldMap, { type MapData } from '@/arkham/components/TheScarletKeys/World
 import BuildSpiritDeck from '@/arkham/components/BuildSpiritDeck.vue';
 import CardImage from '@/arkham/components/CardImage.vue';
 import type { CardDef } from '@/arkham/types/CardDef';
-import { soloKey } from '@/arkham/injectionKeys';
+import { soloKey, uiLockKey, phaseAnnouncementKey } from '@/arkham/injectionKeys';
 
 export interface Props {
   game: Game
@@ -28,6 +28,8 @@ export interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits(['choose'])
 const solo = inject(soloKey)
+const uiLock = inject(uiLockKey, ref(false))
+const phaseAnnouncement = inject(phaseAnnouncementKey, ref(false))
 
 const ownQuestion = computed(() => props.game.question[props.playerId])
 
@@ -120,7 +122,7 @@ const questionImage = computed(() => {
 })
 
 const choose = (idx: number) => {
-  if (viewOnly.value) return
+  if (viewOnly.value || uiLock.value || phaseAnnouncement.value) return
   emit('choose', idx)
 }
 
@@ -177,7 +179,7 @@ const isBuildSpiritDeckQuestion = (q: Question): q is Question & { tag: Question
 </script>
 
 <template>
-  <div :class="['story-question-root', { 'view-only': viewOnly }]">
+  <div v-if="!uiLock && !phaseAnnouncement" :class="['story-question-root', { 'view-only': viewOnly }]">
     <div v-if="viewOnly" class="waiting-banner">
       {{ t('waitingForPlayer', { name: viewerInvestigatorName }) }}
     </div>
@@ -635,8 +637,13 @@ button {
 }
 
 .question-content {
-  background: #eee4cd url('@/assets/veiled-harbour/occult-panel-v1.png') center / 100% 100% no-repeat;
-  border: 1px solid #a38d60;
+  background: linear-gradient(115deg, #ffffff38, transparent 65%), #eee4cd;
+  /* Reserve a real border: square corners keep their aspect ratio; only
+     the edge strips repeat. No artwork or masking layer sits under text. */
+  box-sizing: border-box;
+  border: 20px solid transparent;
+  border-image: url('@/assets/veiled-harbour/occult-panel-v1.png') 300 / 1 / 0 round;
+  border-radius: 0;
   --button: #e2d2b3;
   --button-highlight: #f1e2c5;
   --button-text: #48351f;

@@ -16,7 +16,7 @@ import TriggeredEffectModal from '@/arkham/components/TriggeredEffectModal.vue';
 import EnemyAttackChoiceModal from '@/arkham/components/EnemyAttackChoiceModal.vue';
 import RequiredActionReminder from '@/arkham/components/RequiredActionReminder.vue';
 import { IsMobile } from '@/arkham/isMobile';
-import { processingKey, phaseAnnouncementKey } from '@/arkham/injectionKeys';
+import { processingKey, phaseAnnouncementKey, uiLockKey } from '@/arkham/injectionKeys';
 import { abilityNeedsGhostModal } from '@/arkham/ghostAbility';
 
 export interface Props {
@@ -30,9 +30,12 @@ const emit = defineEmits(['choose'])
 const { t, te } = useI18n()
 const processing = inject(processingKey)
 const phaseAnnouncement = inject(phaseAnnouncementKey, ref(false))
+const uiLock = inject(uiLockKey, ref(false))
+const blocked = computed(() => phaseAnnouncement.value || uiLock.value)
 const isProcessing = computed(() => processing?.value ?? false)
 
 async function choose(idx: number) {
+  if (blocked.value) return
   emit('choose', idx)
 }
 
@@ -221,14 +224,14 @@ const tokenChoices = computed(() => props.game.scenario?.chaosBag.choice)
 const damageAssignmentTokens = computed(() => ArkhamGame.damageAssignmentTokens(props.game, props.playerId))
 
 const requiresModal = computed(() => {
-  if (phaseAnnouncement.value) return false
+  if (blocked.value) return false
   // Nothing inside the modal renders without a question, and undo/step transitions
   // clear the question while focused cards, tokens and search results still hold
   // the old state -- without this the modal stays up completely empty.
   if (!question.value) {
     return false
   }
-  // The reminder explains assignment first, then lets the player click cards.
+  // Damage assignment has its own target list dialog.
   if (damageAssignmentTokens.value) {
     return false
   }
@@ -337,7 +340,7 @@ const title = computed(() => {
     @choose="choose"
   />
   <EnemyAttackChoiceModal
-    v-if="enemyAttackPrompt && !phaseAnnouncement"
+    v-if="enemyAttackPrompt && !blocked"
     :game="game"
     :player-id="playerId"
     :opportunity="enemyAttackPrompt === 'opportunity'"
@@ -345,7 +348,7 @@ const title = computed(() => {
   />
   <template v-else-if="isInlineSkillTestFastWindow(game, playerId)" />
   <TriggeredEffectModal
-    v-else-if="isTriggeredWindow && !phaseAnnouncement"
+    v-else-if="isTriggeredWindow && !blocked"
     :game="game"
     :player-id="playerId"
     @choose="choose"
@@ -826,7 +829,13 @@ const title = computed(() => {
 
 /* General choices keep the warm brass folio family. */
 .choice-modal-wrapper:not(:has(.card-pool-picker, .haunted)) {
-  background: #eee4cd url('@/assets/veiled-harbour/occult-panel-v1.png') center / 100% 100% no-repeat;
+  background: linear-gradient(115deg, #ffffff38, transparent 65%), #eee4cd;
+  /* Reserve a real border: square corners keep their aspect ratio; only
+     the edge strips repeat. No artwork or masking layer sits under text. */
+  box-sizing: border-box;
+  border: 20px solid transparent;
+  border-image: url('@/assets/veiled-harbour/occult-panel-v1.png') 300 / 1 / 0 round;
+  border-radius: 0;
   --button: #e2d2b3;
   --button-highlight: #f1e2c5;
   --button-text: #48351f;

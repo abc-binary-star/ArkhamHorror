@@ -7,7 +7,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 // of in the view.
 export function useFocusLight() {
   // Last pointer position, in client coordinates. Read by callers that need to
-  // know what is under the cursor (the debug 'e' shortcut).
+  // know what is under the cursor (the debug 'E' shortcut).
   const pointer = { x: 0, y: 0 }
 
   const flashlightX = ref(0)
@@ -97,7 +97,7 @@ export function useFocusLight() {
 
   onMounted(() => {
     // The mousemove listener itself is cheap and keeps `pointer` fresh for the
-    // debug 'e' shortcut; the light updates it drives are gated on `enabled`.
+    // debug 'E' shortcut; the light updates it drives are gated on `enabled`.
     document.addEventListener('mousemove', onMove, { passive: true })
   })
 

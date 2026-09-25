@@ -31,8 +31,8 @@ import { useSoundsDisabled } from '@/arkham/composables/useSoundsDisabled';
 const debug = useDebug()
 const { t } = useI18n()
 const { t: flowText } = useI18n({ useScope: 'local', messages: {
-  zh: { autoApply: '结果将在 1.5 秒后自动结算', pause: '暂停查看', paused: '已暂停，查看后点击应用结果' },
-  en: { autoApply: 'Results apply automatically in 1.5 seconds', pause: 'Pause to inspect', paused: 'Paused. Apply results when ready.' },
+  zh: { autoApply: '1.5 秒后结算', pause: '暂停', paused: '已暂停', success: '成功 +{amount}', failure: '失败 {amount}', commit: '投入', reveal: '揭示', result: '结果', resolve: '结算' },
+  en: { autoApply: 'Resolving in 1.5s', pause: 'Pause', paused: 'Paused', success: 'Success +{amount}', failure: 'Failure {amount}', commit: 'Commit', reveal: 'Reveal', result: 'Result', resolve: 'Resolve' },
 } })
 const { menuItems } = useMenu()
 const props = defineProps<{
@@ -57,6 +57,9 @@ const skills = computed(() => {
   return skillTest.skills.map(normalizeSkill)
 })
 const skillTestResults = computed(() => props.game.skillTestResults)
+const assigningDamageOrHorror = computed(() =>
+  ArkhamGame.damageAssignmentTokens(props.game, props.playerId) !== null
+)
 const emit = defineEmits(['choose'])
 
 // The moment the test resolves is the one beat in a turn that wants a sound.
@@ -242,6 +245,19 @@ const sourceCard = computed(() => {
 
 const sourceCardRevealed = computed(() => cardIsRevealed(props.skillTest.sourceCard))
 
+const progressStages = ['commit', 'reveal', 'result', 'resolve'] as const
+const progressStage = computed(() => {
+  switch (props.skillTest.step) {
+    case 'RevealChaosTokenStep':
+    case 'ResolveChaosSymbolEffectsStep': return 1
+    case 'DetermineInvestigatorsModifiedSkillValueStep':
+    case 'DetermineSuccessOrFailureOfSkillTestStep': return 2
+    case 'ApplySkillTestResultsStep':
+    case 'SkillTestEndsStep': return 3
+    default: return 0
+  }
+})
+
 const applyResultsAction = computed(() => {
   return choices.value.findIndex((c) => c.tag === "SkillTestApplyResultsButton");
 })
@@ -309,8 +325,30 @@ watch([canAutoApply, resultKey], () => {
     if (canAutoApply.value && resultKey.value === expectedResult) applyResults()
   }, 1500)
 }, { immediate: true, flush: 'post' })
+// game.skillTest is cleared by the server's SkillTestEnded message, so a window
+// that has shown its result and offers this player nothing can only be waiting on
+// an update that never arrived. Hide it rather than leave a dead panel with no way
+// forward; the hide is derived, so any fresh state with a real question brings the
+// window straight back.
+const isMyTest = computed(() => props.game.investigators[props.skillTest.investigator]?.playerId === props.playerId)
+const spentTest = computed(() => isMyTest.value
+  && !!skillTestResults.value
+  && (props.skillTest.step === 'ApplySkillTestResultsStep' || props.skillTest.step === 'SkillTestEndsStep')
+  && applyResultsAction.value === -1
+  && choices.value.length === 0)
+const hideSpentTest = ref(false)
+let spentTimer: ReturnType<typeof setTimeout> | undefined
+watch(spentTest, value => {
+  clearTimeout(spentTimer)
+  if (!value) {
+    hideSpentTest.value = false
+    return
+  }
+  spentTimer = setTimeout(() => { if (spentTest.value) hideSpentTest.value = true }, 1200)
+}, { immediate: true, flush: 'post' })
 onBeforeUnmount(() => {
   clearApplyTimer()
+  clearTimeout(spentTimer)
   document.removeEventListener('visibilitychange', syncPageVisibility)
 })
 
@@ -393,14 +431,19 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
 </script>
 
 <template>
+  <!-- The reveal lock also covers updates that arrived before the encounter card. -->
   <Draggable
+    v-if="!uiLock && !phaseAnnouncement && !assigningDamageOrHorror && !hideSpentTest"
     avoid-selector=".concealed-card--can-interact, .location-cell--can-interact, .location-cell--can-interact .location-wrapper, .location-cell--can-interact .card-frame"
   >
     <template #handle>
       <h2>{{ $t('skillTestTitle') }}</h2>
     </template>
     <div class="skill-test">
-      <div class="steps">
+      <div v-if="!debug.active" class="test-progress" :aria-label="$t('skillTestTitle')">
+        <span v-for="(stage, index) in progressStages" :key="stage" :class="{ current: index === progressStage, complete: index < progressStage }" :aria-current="index === progressStage ? 'step' : undefined">{{ flowText(stage) }}</span>
+      </div>
+      <div v-else class="steps">
         <div v-tooltip="$t('skillTest.determineSkillOfTestStep')" class="step" :class="{ active: skillTest.step === 'DetermineSkillOfTestStep' }">ST.1</div>
         <div v-tooltip="{content: formatContent($t('skillTest.fastPlayerWindow')), html: true }" class="step" :class="{ active: skillTest.step === 'SkillTestFastWindow1' }" v-html="formatContent('{fast}')" />
         <div v-tooltip="$t('skillTest.commitCardsFromHandToSkillTestStep')" class="step" :class="{ active: skillTest.step === 'CommitCardsFromHandToSkillTestStep' }">ST.2</div>
@@ -616,10 +659,10 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
 
       <div v-if="skillTestResults" class="skill-test-results" :class="{ success: skillTestResults.skillTestResultsSuccess, failure: !skillTestResults.skillTestResultsSuccess}">
         <span v-if="skillTestResults.skillTestResultsSuccess">
-          {{ $t('succeededBy', { amount: (testResult ?? 0) + (skillTestResults.skillTestResultsResultModifiers || 0) }) }}
+          {{ flowText('success', { amount: (testResult ?? 0) + (skillTestResults.skillTestResultsResultModifiers || 0) }) }}
         </span>
         <span v-else-if="testResult !== null">
-          {{ $t('failedBy', { amount: testResult - (skillTestResults.skillTestResultsResultModifiers || 0) }) }}
+          {{ flowText('failure', { amount: testResult - (skillTestResults.skillTestResultsResultModifiers || 0) }) }}
         </span>
       </div>
 
@@ -630,14 +673,14 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
         class="skip-triggers-button"
       >{{ $t('investigator.skipTriggers') }}</button>
       <Question v-if="!inlineFastWindow" :game="game" :playerId="playerId" @choose="choose" :isSkillTest="true" />
-      <div v-if="applyResultsAction !== -1 && (autoApplyPending || resultsPaused)" class="results-continuation" role="status">
+      <div v-if="applyResultsAction !== -1 && (autoApplyPending || resultsPaused)" class="results-continuation" :class="{ 'is-counting': autoApplyPending }" role="status">
         <span>{{ flowText(resultsPaused ? 'paused' : 'autoApply') }}</span>
         <button v-if="autoApplyPending" type="button" @click="pauseResults">{{ flowText('pause') }}</button>
       </div>
       <button
         class="apply-results"
-        v-if="applyResultsAction !== -1"
-        :disabled="resultsBlocked || resultsSubmitted"
+        v-if="applyResultsAction !== -1 && !autoApplyPending"
+        :disabled="resultsBlocked"
         @click="applyResults"
       >{{ $t('label.applyResults') }}</button>
     </div>
@@ -1153,10 +1196,10 @@ i.iconSkillAgility {
   display: grid;
   grid-template-columns: 58px 1fr;
   align-items: stretch;
-  background: rgba(10, 11, 15, 0.66);
+  background: #8a6e350f;
 
   & + .token-effect {
-    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    border-top: 1px solid #a5883f2e;
   }
 }
 
@@ -1164,8 +1207,8 @@ i.iconSkillAgility {
   display: grid;
   place-items: center;
   padding: 8px 0;
-  background: rgba(0, 0, 0, 0.42);
-  border-right: 1px solid rgba(255, 255, 255, 0.09);
+  background: #fffdf540;
+  border-right: 1px solid #a5883f2e;
 
   img {
     width: 34px;
@@ -1180,7 +1223,7 @@ i.iconSkillAgility {
   align-items: center;
   padding: 9px 14px;
   text-align: left;
-  color: #dbe0e7;
+  color: #4a3a26;
   font-family: 'Noto Sans', Avenir, Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.5;
@@ -1224,28 +1267,72 @@ i.iconSkillAgility {
 
 }
 
-/* Skill checks: cool silver instrument face; retain semantic result colors. */
+/* The engraved teal frame stays; the reading area is the app's parchment. */
 .skill-test {
-  --text: #303846;
-  --title: #38495d;
-  --surface-panel: #e1e5ea;
-  --surface-raised: #edf0f2;
-  --panel-inset: #d2d9e0;
-  --button-2: #405267;
-  --button-2-text: #f1eee5;
-  background: #e2e5eb url('@/assets/veiled-harbour/arcane-silver-v1.png') center / 100% 100% no-repeat;
+  --text: #3f3121;
+  --text-dim: #6d5c45;
+  --title: #3d2f1c;
+  --surface-panel: #e7dcc2;
+  --surface-raised: #f7f1e1;
+  --surface-paper: #efe5cf;
+  --surface-table: #e2d7bd;
+  --text-on-table: #4a3a26;
+  --panel-inset: #ded1b4;
+  --edge-dim: #a5883f5c;
+  --button-2: #3d5a4f;
+  --button-2-text: #f2ead4;
+  --select-dark-30: #3d5a4f;
+  --select-dark-20: #4a6b5d;
+  color: var(--text);
+  background: #efe5cf;
+  box-sizing: border-box;
+  border: 18px solid transparent;
+  border-image: url('@/assets/veiled-harbour/skill-test-frame-v1.png') 210 / 1 / 0 stretch;
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px #a5883f59;
 }
+.test-progress { display: flex; gap: 6px; padding: 0 8px 10px; }
+.test-progress span { flex: 1; padding: 5px 0; font-size: .7rem; letter-spacing: .08em; color: #9c8a6d; border-bottom: 1px solid #a5883f33; }
+.test-progress .complete { color: #6d5c45; border-bottom-color: #a5883f66; }
+.test-progress .current { color: #7a5a1e; border-bottom-color: #b99a5f; }
 .skill-test-contents {
-  background: #eef1f385;
-  border-block: 1px solid #7e8c9e66;
-  box-shadow: inset 0 1px #fff8;
+  background: #f7f1e1;
+  border-block: 1px solid #a5883f3d;
+  padding: 10px;
+  box-shadow: none;
 }
-.apply-results, .skip-triggers-button {
-  background: linear-gradient(#51647c, #303e52);
-  border: 1px solid #899ab1;
-  color: #fff3dc;
-  border-radius: 5px;
+.skill-test :deep(.chaos-bag) { background: #8a6e3512; border-radius: 0; box-shadow: none; gap: 8px; }
+.skill-test :deep(.chaos-seal) { display: none; }
+.skill-test :deep(.stats-bar) { background: #8a6e3512; border-color: #a5883f3d; color: #6d5c45; }
+.skill-test :deep(.stats-bar__reveal) { border-radius: 3px; padding: 4px 9px; font-size: .72rem; }
+.skill-test :deep(.token-slot__value) { background: #f7f1e1; color: #3f3121; border-color: #a5883f5c; }
+.skill-test-results { margin-top: 8px; padding: 10px; font: 600 1.12rem/1.4 'Songti SC', 'Noto Serif SC', Georgia, serif; letter-spacing: .06em; border-block: 1px solid; }
+.skill-test-results.success { background: #2d6b4f1f; color: #24553f; border-color: #2d6b4f52; }
+.skill-test-results.failure { background: #9d403c1c; color: #7d2f2b; border-color: #9d403c4d; }
+/* The panel's one action: the same lacquer plaque the table uses. */
+.apply-results {
+  background: var(--plaque-plate);
+  border: var(--plaque-border);
+  color: var(--plaque-ink);
+  text-shadow: var(--plaque-text-shadow);
+  box-shadow: var(--plaque-shadow);
+  border-radius: 4px;
+  font-family: 'Source Han Serif', Arno, serif;
+  letter-spacing: .06em;
 }
-.results-continuation { color: #4e596a; }
-
+.apply-results { margin-top: 8px; }
+.skip-triggers-button { border: 0; border-radius: 4px; background: #8a6e350f; color: #6d5c45; }
+.skip-triggers-button:hover { background: #8a6e351c; color: #43331f; }
+.results-continuation { position: relative; padding: 8px; color: #6d5c45; font-size: .75rem; }
+.results-continuation button { min-height: 30px; padding: 4px 10px; font-size: .72rem; border-radius: 3px; border: 0; background: none; color: #6d5c45; }
+.results-continuation button:hover { background: #8a6e3514; color: #43331f; }
+.results-continuation.is-counting::after { content: ''; position: absolute; inset: auto 0 0; height: 1px; background: #b39a65; transform-origin: left; animation: settle-countdown 1.5s linear forwards; }
+@keyframes settle-countdown { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+@media (prefers-reduced-motion: reduce) { .results-continuation.is-counting::after { animation: none; } }
+.steps .step.active { background: #b99a5f; color: #2f2415; }
+@media (max-width: 800px) and (orientation: portrait) {
+  .skill-test { border-width: 12px; }
+  .skill-test-contents { grid-template-columns: 1fr auto 1fr; gap: 4px; padding: 8px 4px; }
+  .test-status { gap: 8px; padding-inline: 4px; }
+}
 </style>

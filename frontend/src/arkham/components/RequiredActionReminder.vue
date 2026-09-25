@@ -2,25 +2,27 @@
 import { computed, inject, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Game } from '@/arkham/types/Game'
-import type { Question } from '@/arkham/types/Question'
+import type { Message } from '@/arkham/types/Message'
+import QuestionChoices from './QuestionChoices.vue'
 import { choices, damageAssignmentTokens } from '@/arkham/types/Game'
 import { processingKey, uiLockKey, phaseAnnouncementKey } from '@/arkham/injectionKeys'
 import { useDbCardStore } from '@/stores/dbCards'
+import { useCardStore } from '@/stores/cards'
+import { cardArt } from '@/arkham/cardImages'
+import { Brain, Droplet } from '@lucide/vue'
 
 const props = defineProps<{ game: Game; playerId: string; suppressed?: boolean }>()
 const emit = defineEmits<{ choose: [index: number] }>()
 const { t } = useI18n({ useScope: 'local', messages: {
   zh: {
     drawAnnouncement: '{name} 抽取了遭遇卡',
-    assignTitle: '需要分配伤害／恐惧',
-    damage: '{count} 点伤害', horror: '{count} 点恐惧', assign: '开始分配', inspect: '查看牌桌',
-    assignOnTable: '点击高亮的调查员或资产，分配伤害／恐惧',
+    assignTitle: '分配伤害与恐惧',
+    damage: '{count} 点伤害', horror: '{count} 点恐惧', assign: '分配 1 伤害', assignHorror: '分配 1 恐惧', investigator: '调查员', asset: '资产', instruction: '点击对象旁的按钮分配，每次 1 点。', received: '已承受：伤害 {damage} · 恐惧 {horror}', pending: '本次已分配：伤害 {damage} · 恐惧 {horror}', inspect: '查看牌桌',
   },
   en: {
     drawAnnouncement: '{name} drew an encounter card',
     assignTitle: 'Assign damage / horror',
-    damage: '{count} damage', horror: '{count} horror', assign: 'Start assigning', inspect: 'View table',
-    assignOnTable: 'Select a highlighted investigator or asset to assign damage / horror',
+    damage: '{count} damage', horror: '{count} horror', assign: 'Assign 1 damage', assignHorror: 'Assign 1 horror', investigator: 'Investigator', asset: 'Asset', instruction: 'Assign one point at a time using the buttons beside each target.', received: 'Taken: {damage} damage · {horror} horror', pending: 'Assigned: {damage} damage · {horror} horror', inspect: 'View table',
   },
 } })
 const titleId = useId()
@@ -29,18 +31,64 @@ const processing = inject(processingKey, ref(false))
 const uiLock = inject(uiLockKey, ref(false))
 const phaseAnnouncement = inject(phaseAnnouncementKey, ref(false))
 const dbCards = useDbCardStore()
+const cardStore = useCardStore()
+function assetName(code: string): string {
+  const definition = cardStore.cards.find(card => card.cardCode === code)
+  const card = dbCards.getDbCard(cardArt(code))
+    ?? (definition ? dbCards.getDbCard(definition.art) : null)
+  if (card) return card.name
+  return definition ? dbCards.getCardName(definition.name.title, 'asset') : code
+}
 const submitted = ref(false)
 const dismissed = ref(false)
 const tokens = computed(() => damageAssignmentTokens(props.game, props.playerId))
-const enemyDamage = computed(() => {
-  let question: Question | undefined = props.game.question[props.playerId]
-  while (question) {
-    if (question.tag === 'QuestionWithSource' && question.source.tag === 'EnemyAttackSource') return true
-    if (!('question' in question)) break
-    question = question.question
-  }
-  return false
+const assignmentSubmitted = ref(false)
+const assignmentChoices = computed(() => choices(props.game, props.playerId))
+const assignmentRows = computed(() => {
+  const rows = new Map<string, {
+    id: string; name: string; kind: string; owner: string; damage: number; horror: number;
+    assignedDamage: number; assignedHorror: number; damageIndex?: number; horrorIndex?: number
+  }>()
+  assignmentChoices.value.forEach((choice, index) => {
+    if (choice.tag !== 'ComponentLabel') return
+    const component = choice.component
+    if (!('tokenType' in component) || !['DamageToken', 'HorrorToken'].includes(component.tokenType)) return
+    const isInvestigator = component.tag === 'InvestigatorComponent'
+    const id = isInvestigator ? component.investigatorId : component.assetId
+    const entity = isInvestigator ? props.game.investigators[id] : props.game.assets[id]
+    if (!entity) return
+    const key = `${component.tag}:${id}`
+    let row = rows.get(key)
+    if (!row) {
+      const asset = !isInvestigator ? props.game.assets[id] : undefined
+      const owner = asset ? props.game.investigators[asset.controller ?? asset.owner ?? ''] : undefined
+      row = {
+        id: key,
+        name: isInvestigator ? dbCards.getCardName(props.game.investigators[id].name.title, 'investigator')
+          : assetName(entity.cardCode),
+        kind: isInvestigator ? 'investigator' : 'asset',
+        owner: owner ? dbCards.getCardName(owner.name.title, 'investigator') : '',
+        damage: entity.tokens.Damage ?? 0, horror: entity.tokens.Horror ?? 0,
+        assignedDamage: entity.assignedHealthDamage, assignedHorror: entity.assignedSanityDamage,
+      }
+      rows.set(key, row)
+    }
+    if (component.tokenType === 'DamageToken') row.damageIndex = index
+    else row.horrorIndex = index
+  })
+  return [...rows.values()]
 })
+const otherChoices = computed<[Message, number][]>(() => {
+  const indices = new Set(assignmentRows.value.flatMap(row => [row.damageIndex, row.horrorIndex]))
+  return assignmentChoices.value.flatMap((choice, index) => indices.has(index) ? [] : [[choice, index] as [Message, number]])
+})
+const assignmentBusy = computed(() => processing.value || assignmentSubmitted.value || !assignVisible.value)
+function assign(index: number) {
+  if (assignmentBusy.value || !assignmentChoices.value[index]) return
+  assignmentSubmitted.value = true
+  emit('choose', index)
+}
+watch(() => props.game.question[props.playerId], () => { assignmentSubmitted.value = false })
 const assignVisible = computed(() => !!tokens.value && !props.suppressed && !uiLock.value && !phaseAnnouncement.value)
 const drawIndex = computed(() => props.game.phase === 'MythosPhase'
   ? choices(props.game, props.playerId).findIndex(choice => choice.tag === 'TargetLabel' && choice.target.tag === 'EncounterDeckTarget')
@@ -60,15 +108,10 @@ function collapse() {
 }
 async function syncDialog() {
   await nextTick()
-  if (!assignVisible.value || dismissed.value || enemyDamage.value) dialog.value?.close()
+  if (!assignVisible.value || dismissed.value) dialog.value?.close()
   else if (dialog.value?.isConnected && !dialog.value.open) dialog.value.showModal()
 }
-function act() {
-  if (processing.value || !assignVisible.value) return
-  collapse()
-}
-// Preserve dismissal across the brief empty question between assignment clicks;
-// changing remaining counts must not reopen a dialog over the target cards.
+// Keep the user's table-view preference through brief question transitions.
 let resetTimer: ReturnType<typeof setTimeout> | undefined
 let lastAssignVisible = false
 watch(assignVisible, value => {
@@ -105,10 +148,11 @@ watch(drawVisible, active => {
   }
 }, { flush: 'post' })
 watch(() => props.playerId, () => { lastAssignVisible = assignVisible.value; dismissed.value = false; submitted.value = false })
-watch([assignVisible, dismissed, enemyDamage], syncDialog, { flush: 'post' })
+watch([assignVisible, dismissed], syncDialog, { flush: 'post' })
 watch(processing, value => {
   if (value) return
   submitted.value = false
+  assignmentSubmitted.value = false
   if (drawVisible.value) armDrawTimer()
 })
 onBeforeUnmount(() => { clearTimeout(resetTimer); clearTimeout(drawTimer); dialog.value?.close() })
@@ -116,20 +160,32 @@ onBeforeUnmount(() => { clearTimeout(resetTimer); clearTimeout(drawTimer); dialo
 
 <template>
   <Teleport to="body">
-    <div v-if="assignVisible && enemyDamage" class="action-reminder assignment-hint" role="status" aria-live="polite">
-      <strong>{{ t('assignOnTable') }}</strong>
-      <span v-if="tokens">{{ t('damage', { count: tokens.damage }) }} / {{ t('horror', { count: tokens.horror }) }}</span>
-    </div>
-    <button v-else-if="assignVisible && dismissed" class="action-reminder" type="button" @click="dismissed = false">
+    <button v-if="assignVisible && dismissed" class="action-reminder" type="button" @click="dismissed = false">
       {{ t('assignTitle') }}<template v-if="tokens"> · {{ t('damage', { count: tokens.damage }) }} / {{ t('horror', { count: tokens.horror }) }}</template>
     </button>
     <dialog ref="dialog" class="action-dialog" :aria-labelledby="titleId" @cancel.prevent="collapse">
+      <header class="assignment-header">
       <h2 :id="titleId">{{ t('assignTitle') }}</h2>
       <div v-if="tokens" class="token-counts">
-        <span v-if="tokens.damage > 0" class="damage">{{ t('damage', { count: tokens.damage }) }}</span>
-        <span v-if="tokens.horror > 0" class="horror">{{ t('horror', { count: tokens.horror }) }}</span>
+        <span v-if="tokens.damage > 0" class="damage"><Droplet aria-hidden="true" />{{ t('damage', { count: tokens.damage }) }}</span>
+        <span v-if="tokens.horror > 0" class="horror"><Brain aria-hidden="true" />{{ t('horror', { count: tokens.horror }) }}</span>
       </div>
-      <button class="primary" type="button" :disabled="processing" @click="act">{{ t('assign') }}</button>
+      </header>
+      <fieldset :disabled="assignmentBusy" :aria-busy="assignmentBusy" class="assignment-list">
+        <section v-for="row in assignmentRows" :key="row.id" class="assignment-row">
+          <div class="target-info">
+            <strong>{{ row.name }}</strong>
+            <small>{{ t(row.kind) }}<template v-if="row.owner"> · {{ row.owner }}</template></small>
+            <small>{{ t('received', { damage: row.damage, horror: row.horror }) }}</small>
+            <small v-if="row.assignedDamage || row.assignedHorror">{{ t('pending', { damage: row.assignedDamage, horror: row.assignedHorror }) }}</small>
+          </div>
+          <div class="assignment-buttons">
+            <button v-if="row.damageIndex !== undefined" class="assign-damage" type="button" :aria-label="`${row.name}：${t('assign')}`" @click="assign(row.damageIndex)"><Droplet aria-hidden="true" />{{ t('assign') }}</button>
+            <button v-if="row.horrorIndex !== undefined" class="assign-horror" type="button" :aria-label="`${row.name}：${t('assignHorror')}`" @click="assign(row.horrorIndex)"><Brain aria-hidden="true" />{{ t('assignHorror') }}</button>
+          </div>
+        </section>
+        <QuestionChoices v-if="otherChoices.length" :game="game" :choices="otherChoices" @choose="assign" />
+      </fieldset>
       <button class="inspect" type="button" @click="collapse">{{ t('inspect') }}</button>
     </dialog>
     <div v-if="drawVisible" class="draw-interlude" role="status" aria-live="polite">
@@ -144,19 +200,78 @@ onBeforeUnmount(() => { clearTimeout(resetTimer); clearTimeout(drawTimer); dialo
 </template>
 
 <style scoped>
-.action-dialog { position: fixed; inset: 0; margin: auto; box-sizing: border-box; width: min(360px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto; padding: 22px; border: 1px solid #a58cba80; border-radius: 12px; background: linear-gradient(145deg, #302d38, #1b2425); color: #eee5d2; box-shadow: 0 24px 80px #0009; }
-.action-dialog::backdrop { background: #090d12a6; }
-h2 { margin: 0 0 14px; font-size: 1.1rem; color: #dcc6ef; }
-.token-counts { display: flex; flex-wrap: wrap; gap: 10px; }
-.token-counts span { padding: 8px 12px; border-radius: 6px; background: #ffffff08; font-weight: 600; }
-.damage { color: #eea497; } .horror { color: #b7b0ef; }
-button { cursor: pointer; min-height: 42px; padding: 9px 12px; border-radius: 6px; color: #f4eaf5; font-size: .9rem; }
-.primary { width: 100%; border: 1px solid #b8a0c660; background: linear-gradient(#504158, #3b3043); }
-.inspect { display: block; margin: 8px auto 0; border: 0; background: transparent; color: #bcb0c1; }
+.action-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  isolation: isolate;
+  box-sizing: border-box;
+  width: min(520px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  padding: 36px 32px 24px;
+  border: 1px solid #796c5880;
+  border-radius: 4px;
+  color: #e2dbce;
+  background:
+    radial-gradient(ellipse at 0 0, #63252355, transparent 48%),
+    radial-gradient(ellipse at 100% 100%, #50436240, transparent 52%), #141919;
+  box-shadow: 0 28px 90px #000c, inset 0 0 40px #0008;
+}
+/* Tone the existing engraving into the panel; the artwork occupies only its rim. */
+.action-dialog::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  z-index: -1;
+  pointer-events: none;
+  border: 42px solid transparent;
+  border-image: url('@/assets/veiled-harbour/occult-panel-v1.png') 280 / 1 / 0 stretch;
+  filter: invert(.9) grayscale(.8) sepia(.25) brightness(.7);
+  opacity: .65;
+}
+.action-dialog::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 18px;
+  right: 18px;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, #8c443d 18%, #aa8260 50%, #79658c 82%, transparent);
+}
+.action-dialog::backdrop { background: #050a0db8; }
+.assignment-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 18px; border-bottom: 1px solid #b7a27c35; }
+h2 { margin: 0; font: 500 1.12rem/1.5 'Songti SC', 'Noto Serif SC', Georgia, serif; letter-spacing: .06em; color: #e1d0b0; }
+.token-counts { display: flex; flex-wrap: wrap; gap: 12px; }
+.token-counts span { display: inline-flex; align-items: center; gap: 6px; font-size: .85rem; font-weight: 500; }
+.token-counts svg, .assignment-buttons svg { width: 16px; height: 16px; stroke-width: 1.5; flex-shrink: 0; }
+.token-counts .damage { color: #d9a196; }
+.token-counts .horror { color: #bca9d0; }
+button { cursor: pointer; min-height: 40px; padding: 8px 12px; border-radius: 3px; color: #e6dfd6; font-size: .78rem; font-weight: 500; }
+.assignment-list { display: grid; padding: 0; margin: 0; border: 0; min-width: 0; }
+.assignment-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 19px 0; border-bottom: 1px solid #a6977d26; }
+.target-info { display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.target-info strong { margin-bottom: 2px; color: #e7deca; font: 600 1rem/1.4 'Songti SC', 'Noto Serif SC', Georgia, serif; }
+.target-info small { font-size: .7rem; line-height: 1.5; color: #a6a69e; }
+.assignment-buttons { display: grid; gap: 8px; flex-shrink: 0; }
+.assignment-buttons button { display: flex; align-items: center; justify-content: center; gap: 7px; transition: background .15s, border-color .15s; box-shadow: inset 0 1px #ffffff08; }
+.assign-damage { border: 1px solid #925c505c; background: #542f2b66; color: #e1b1a3; }
+.assign-horror { border: 1px solid #88739866; background: #46394e77; color: #cfc0de; }
+.assign-damage:hover:not(:disabled) { background: #683b34; border-color: #b17b69; }
+.assign-horror:hover:not(:disabled) { background: #544260; border-color: #a28bb5; }
+.assignment-list:disabled { opacity: .65; pointer-events: none; }
+.inspect { display: block; margin: 14px auto 0; padding: 5px 16px; min-height: 36px; border: 0; background: transparent; color: #a99d85; font-size: .75rem; }
+.inspect:hover { color: #e4d4b5; background: #bba7790a; }
 button:disabled { opacity: .6; cursor: wait; }
-button:focus-visible { outline: 2px solid #e2c2ff; outline-offset: 3px; }
-.action-reminder { position: fixed; left: 50%; top: calc(84px + env(safe-area-inset-top)); transform: translateX(-50%); z-index: 1100; max-width: calc(100vw - 32px); border: 1px solid #a58cba; background: #342d3c; box-shadow: 0 4px 24px #0008; }
-.assignment-hint { display: flex; flex-direction: column; gap: 6px; width: max-content; box-sizing: border-box; padding: 10px 16px; border-radius: 8px; color: #f4eaf5; font-size: .85rem; text-align: center; pointer-events: none; }
+button:focus-visible { outline: 1px solid #bda985; outline-offset: 3px; }
+.action-reminder { position: fixed; left: 50%; top: calc(84px + env(safe-area-inset-top)); transform: translateX(-50%); z-index: 1100; max-width: calc(100vw - 32px); border: 1px solid #a58b64; background: #282322; box-shadow: 0 4px 24px #0008; color: #e2c9a0; }
+@media (max-width: 480px) {
+  .action-dialog { padding: 28px 22px 18px; }
+  .assignment-row { align-items: stretch; flex-direction: column; gap: 12px; padding: 16px 0; }
+  .assignment-buttons { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+  h2 { font-size: 1.05rem; }
+}
 
 .draw-interlude {
   position: fixed;
