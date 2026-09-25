@@ -14,6 +14,7 @@ export function usePhaseAnnouncement(
   const active = computed(() => current.value !== null)
   let timer: ReturnType<typeof setTimeout> | undefined
   let generation = 0
+  let lastAnnounced: Phase | undefined = phase()
 
   function advance() {
     const run = ++generation
@@ -37,7 +38,8 @@ export function usePhaseAnnouncement(
   // the phase the client already observed.
   function push(phase: Phase) {
     if (!phase || phase === 'CampaignPhase') return
-    if (current.value === phase || pending.includes(phase)) return
+    if (lastAnnounced === phase) return
+    lastAnnounced = phase
     pending.push(phase)
     if (!current.value) advance()
   }
@@ -47,6 +49,7 @@ export function usePhaseAnnouncement(
     clearTimeout(timer)
     timer = undefined
     pending.length = 0
+    lastAnnounced = phase()
     current.value = null
   }
 
@@ -56,9 +59,12 @@ export function usePhaseAnnouncement(
       return
     }
     // Loading/reconnecting does not replay the phase already in progress.
-    if (!previous || next === previous) return
-    pending.push(next)
-    if (!current.value) advance()
+    if (!previous) {
+      lastAnnounced = next
+      return
+    }
+    if (next === previous) return
+    push(next)
   }, { flush: 'sync' })
 
   watch(revelationActive, locked => {

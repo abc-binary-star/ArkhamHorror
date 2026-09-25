@@ -185,7 +185,7 @@ const userStore = useUserStore()
 const eventStore = useEventStore()
 const { addEntry, menuItems } = useMenu()
 const toast = useToast()
-const forcedEffectNotices = ref<{ id: number; name: string }[]>([])
+const forcedEffectNotices = ref<{ id: number; payload: string }[]>([])
 let forcedEffectNoticeId = 0
 
 // "Epic Multiplayer": a group's game can be entered two ways — via the dashboard's
@@ -613,7 +613,7 @@ const choicesByPlayer = computed(() => {
   if (!currentGame) return new Map<string, readonly Message.Message[]>()
 
   return new Map(
-    Object.keys(currentGame.question).map((pid) => [pid, phaseAnnouncement.value ? [] : ArkhamGame.choices(currentGame, pid)]),
+    Object.keys(currentGame.question).map((pid) => [pid, phaseAnnouncement.value || uiLock.value ? [] : ArkhamGame.choices(currentGame, pid)]),
   )
 })
 const choicesSourceByPlayer = computed(() => {
@@ -1298,7 +1298,7 @@ const handleResult = (result: ServerResult) => {
       if (result.contents.startsWith('forcedAbility:')) {
         forcedEffectNotices.value.push({
           id: ++forcedEffectNoticeId,
-          name: handleEmbeddedI18n(result.contents.slice('forcedAbility:'.length), t),
+          payload: result.contents.slice('forcedAbility:'.length),
         })
         return
       }
@@ -1680,7 +1680,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
     return
   }
 
-  if (event.key === 'd') {
+  if (event.key === 'q') {
     const draw = choices.value.findIndex((c) => {
       if (c.tag !== Message.MessageType.COMPONENT_LABEL) return false
       if (c.component.tag !== 'InvestigatorDeckComponent') return false
@@ -1700,7 +1700,7 @@ const handleKeyPress = (event: KeyboardEvent) => {
     return
   }
 
-  if (event.key === 'r') {
+  if (event.key === 'w') {
     const resource = choices.value.findIndex((c) => {
       if (c.tag !== Message.MessageType.COMPONENT_LABEL) return false
       if (c.component.tag !== 'InvestigatorComponent') return false
@@ -1713,6 +1713,20 @@ const handleKeyPress = (event: KeyboardEvent) => {
   }
 
   if (event.key === 'e') {
+    if (!game.value || !playerId.value) return
+    const investigator = game.value.investigators[game.value.activeInvestigatorId]
+    if (!investigator || investigator.playerId !== playerId.value) return
+    const investigate = choices.value.findIndex(c => c.tag === Message.MessageType.ABILITY_LABEL
+      && c.ability.source.sourceTag !== 'ProxySource'
+      && c.ability.source.tag === 'LocationSource'
+      && c.ability.source.contents === investigator.location
+      && c.ability.index === 103)
+    if (investigate !== -1) choose(investigate)
+    return
+  }
+
+  // Keep the debug exhaust/ready action separate from basic investigation.
+  if (event.key === 'E') {
     if (!game.value || !playerId.value) return
     const elementUnderMouse = document.elementFromPoint(pointer.x, pointer.y)
     if (debug.active && elementUnderMouse) {
@@ -1733,12 +1747,17 @@ const handleKeyPress = (event: KeyboardEvent) => {
         return
       }
     }
+    return
+  }
+
+  if (event.key === 'r') {
+    if (!game.value || !playerId.value) return
     const endTurn = choices.value.findIndex((c) => {
       if (c.tag !== Message.MessageType.END_TURN_BUTTON) return false
       return game.value?.investigators[c.investigatorId]?.playerId === playerId.value
     })
     if (endTurn !== -1) {
-      // Mirror the End Turn button's two-step confirm: E alone must not throw
+      // Mirror the End Turn button's two-step confirm: R alone must not throw
       // away unused actions on a stray keypress.
       const choice = choices.value[endTurn]
       const investigator =
@@ -2291,16 +2310,20 @@ onUnmounted(() => {
                 <div class="shortcut-keys"><kbd> </kbd></div>
               </div>
               <div class="shortcut-row">
-                <div class="shortcut-name">{{ $t('gameBar.shortcutEndTurn') }}</div>
+                <div class="shortcut-name">{{ $t('investigator.basicActions.investigate') }}</div>
                 <div class="shortcut-keys"><kbd>e</kbd></div>
               </div>
               <div class="shortcut-row">
+                <div class="shortcut-name">{{ $t('gameBar.shortcutEndTurn') }}</div>
+                <div class="shortcut-keys"><kbd>r</kbd></div>
+              </div>
+              <div class="shortcut-row">
                 <div class="shortcut-name">{{ $t('gameBar.shortcutDraw') }}</div>
-                <div class="shortcut-keys"><kbd>d</kbd></div>
+                <div class="shortcut-keys"><kbd>q</kbd></div>
               </div>
               <div class="shortcut-row">
                 <div class="shortcut-name">{{ $t('gameBar.shortcutTakeResources') }}</div>
-                <div class="shortcut-keys"><kbd>r</kbd></div>
+                <div class="shortcut-keys"><kbd>w</kbd></div>
               </div>
             </div>
           </section>
@@ -2611,7 +2634,7 @@ onUnmounted(() => {
       />
     </div>
     <ForcedEffectAnnouncement
-      :notice="forcedEffectNotices[0]"
+      :notice="uiLock || phaseAnnouncement ? undefined : forcedEffectNotices[0]"
       @finished="forcedEffectNotices.shift()"
     />
     <EventStartBarrier v-if="showStartBarrier" />
