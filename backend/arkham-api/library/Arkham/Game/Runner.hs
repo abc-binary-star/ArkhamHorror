@@ -161,6 +161,8 @@ import Arkham.Window qualified as Window
 import Arkham.Zone qualified as Zone
 import Control.Lens (each, itraverseOf, itraversed, non, over, set)
 import Data.Aeson (Result (..))
+import Data.Aeson.Text (encodeToLazyText)
+import Data.Text.Lazy qualified as TL
 import Data.Data.Lens (biplate)
 import Data.IntMap.Strict qualified as IntMap
 import Data.Map.Strict qualified as Map
@@ -1939,7 +1941,11 @@ runGameMessage msg g = case msg of
           case choice of
             AbilityLabel _ ability _ _ _ -> do
               mcard <- sourceToMaybeCard ability.source
-              sendUI $ "forcedAbility:" <> maybe "" (format . toName) mcard
+              sendUI $ "forcedAbility:" <> TL.toStrict (encodeToLazyText $ object
+                [ "name" .= maybe "" (format . toName) mcard
+                , "cardCode" .= fmap toCardCode mcard
+                , "tooltip" .= abilityTooltip ability
+                ])
             _ -> pure ()
         pushAll $ uiToRun choice : [Do (CheckWindows ws) | notNull ws]
       Nothing -> do

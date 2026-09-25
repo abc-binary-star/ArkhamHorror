@@ -62,7 +62,6 @@ import Arkham.Investigator (lookupInvestigator)
 import Arkham.Investigator.Types (Investigator, investigatorPlacement, investigatorPlayerId)
 import Arkham.Location.CardDefs.TheBlobThatAteEverythingELSE qualified as Locations
 import Arkham.Message
-import Arkham.Phase (Phase)
 import Arkham.Name
 import Arkham.Placement (
   Placement (AtLocation, AttachedToInvestigator, InPlayArea, InThreatArea, StillInHand),
@@ -374,19 +373,6 @@ data EpicOrganizerGateBlocked = EpicOrganizerGateBlocked
   deriving stock Show
   deriving anyclass Exception
 
-{- | The phases to announce, in the order the action actually entered them.
-@entered@ holds every phase whose @Begin@ ran, so an answer that carries the
-game through a whole round announces each phase instead of nothing; the final
-phase is appended for the paths that set it without a @Begin@.
--}
-phaseTransitions :: Phase -> Phase -> [Phase] -> [Phase]
-phaseTransitions oldPhase newPhase entered = go oldPhase (entered <> [newPhase])
- where
-  go _ [] = []
-  go prev (p : ps)
-    | p == prev = go prev ps
-    | otherwise = p : go p ps
-
 {- | Whether a log message records an outcome nobody could have predicted: a
 chaos token drawn or revealed, or an encounter card / enemy drawn. Hardcore undo
 reads this to refuse rewinding such a step, so a revealed token cannot be
@@ -496,7 +482,7 @@ updateGame response gameId mRoom = do
         achievementProgressByRef <- newIORef []
         randomOutcomeRef <- newIORef False
         scenarioResetRef <- newIORef False
-        enteredPhasesRef <- newIORef []
+        announcedPhaseRef <- newIORef oldPhase
         let
           collectStepMetadata msg = do
             when (isRandomOutcomeMessage msg) $ writeIORef randomOutcomeRef True
@@ -505,7 +491,13 @@ updateGame response gameId mRoom = do
               -- story, standalone restart) runs StartScenario; the prior
               -- scenario's log is dropped so the log holds one run only.
               StartScenario {} -> writeIORef scenarioResetRef True
-              Begin phase -> modifyIORef' enteredPhasesRef (phase :)
+              Begin phase -> do
+                previous <- readIORef announcedPhaseRef
+                when (phase /= previous) $ do
+                  writeIORef announcedPhaseRef phase
+                  -- Use the same ordered stream as card reveals. Waiting for
+                  -- the final GameUpdate lets mythos draws overtake banners.
+                  broadcast (encode $ PhaseChanged phase)
               EarnAchievement a -> modifyIORef' achievementsRef (a :)
               EarnAchievementBy iid a -> modifyIORef' achievementsByRef ((iid, a) :)
               AchievementProgress a items -> modifyIORef' achievementProgressRef ((a, items) :)
@@ -545,7 +537,7 @@ updateGame response gameId mRoom = do
         -- handleMessageLog conses for O(1) inserts; reverse here to restore order.
         updatedLog <- reverse <$> readIORef logRef
         hasRandomOutcome <- readIORef randomOutcomeRef
-        enteredPhases <- reverse <$> readIORef enteredPhasesRef
+        lastAnnouncedPhase <- readIORef announcedPhaseRef
 
         now <- liftIO getCurrentTime
         -- A one-player game is created WithFriends, but its player adding a second
@@ -705,7 +697,7 @@ updateGame response gameId mRoom = do
           , actAdvanced
           , newAchievements
           , case ge of
-              Game {gamePhase = newPhase} -> phaseTransitions oldPhase newPhase enteredPhases
+              Game {gamePhase = newPhase} -> [newPhase | newPhase /= lastAnnouncedPhase]
           )
 
   -- Update the per-room cache after the DB transaction has committed,
@@ -728,6 +720,10 @@ updateGame response gameId mRoom = do
     Just (eid, s) -> propagateShared eid Nothing s
     Nothing -> for_ mSharedUpdate \(eid, s) -> propagateShared eid (Just gameId) s
 
+  -- Fallback for phase changes that do not run Begin. Announce before the
+  -- snapshot so it cannot expose the next phase's choices before its banner.
+  for_ mPhaseChanged \phase -> publishToRoom gameId $ PhaseChanged phase
+
   publishToRoom gameId
     $ GameUpdate
     $ PublicGame
@@ -735,9 +731,6 @@ updateGame response gameId mRoom = do
       arkhamGameName
       publishLog
       arkhamGameCurrentData
-
-  -- Achievement unlock toasts, after the rows are durably committed.
-  for_ mPhaseChanged \phase -> publishToRoom gameId $ PhaseChanged phase
 
   for_ newAchievements \achievement ->
     publishToRoom gameId $ GameAchievement (achievementName achievement)
