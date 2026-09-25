@@ -28,6 +28,11 @@
     "successfulInvestigations": "成功调查次数",
     "successfulExplore": "成功探索次数"
   },
+  "playedCard": {
+    "at": "位于{location}",
+    "target": "目标：{target}",
+    "paid": "支付 {n} 资源"
+  },
   "skillResult": {
     "unrun": "尚未进行",
     "succeededBy": "成功，超过难度 {n} 点",

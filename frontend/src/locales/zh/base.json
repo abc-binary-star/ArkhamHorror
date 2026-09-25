@@ -548,6 +548,12 @@
   "fromInvestigatorHand": "从 {name} 的手牌中",
   "fromInvestigatorDiscard": "从 {name} 的弃牌堆中",
   "searchThisDeck": "搜索此牌组（之后将其洗牌）",
+  "putBackInAnyOrder": {
+    "title": "按任意顺序将卡牌放回",
+    "top": "顶部",
+    "bottom": "底部",
+    "takeBack": "取回 {name}"
+  },
   "ok": "确定",
   "back": "返回",
   "join": "加入",
