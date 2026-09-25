@@ -1,72 +1,72 @@
 {
   "setup": {
-    "startAt": "所有调查员从阿卡姆警察局开始游戏。",
-    "rolandClue": "罗兰·班克斯开始游戏时带有1个线索<i>(从供应堆拿取)</i>。",
-    "gatherSets": "找出下列遭遇组中的所有卡牌： <i>照章行事</i>, <i>午夜假面</i>, <i>Agents 的 Shub-Niggurath</i>, <i>Cult 的 Umôrdhoth</i>, <i>Chilling Cold</i>, <i>Dark Cult</i>, <i>Nightgaunts</i>, 和 <i>Striking Fear</i>. 这些 遭遇组图标如下:<section class='encounter-sets'><img src='{setImgPath}/by-the-book.png' /><img src='{setImgPath}/midnight-masks.png' /><img src='{setImgPath}/agents-of-shub.png' /><img src='{setImgPath}/cult-of-umordhoth.png' /><img src='{setImgPath}/chilling-cold.png' /><img src='{setImgPath}/dark-cult.png' /><img src='{setImgPath}/nightgaunts.png' /><img src='{setImgPath}/striking-fear.png' /></section>",
-    "removeCards": "移除  original 冒险参考卡, act 牌组, 和 密谋牌库 从 <i>午夜假面</i> 遭遇 组 从 游戏, 沿着 与你的 宅邸 地点 和 两者 copies 的  Mysterious Chanting treachery. Use  新 冒险 reference, act, 和 密谋 卡牌 provided 在  <i>照章行事</i> 遭遇 组.",
-    "returnToConspirators": "<section style='display: flex; flex-direction: row; gap: 1em;'>如果你的收藏中包含<i>乌默尔多斯的崇拜者(重返)</i>遭遇组，你可以选择一同找出并加入此遭遇组之中的卡牌。这个遭遇组的图标为右边的图示。如果你这么做，将此遭遇组中的3张卡牌与上面的9个_异教徒_敌人混洗，并随机将12张卡牌之中的3张移出游戏，不要查看。然后在场上每个地点底下各放置一个面朝下的敌人，作为同谋。<section class='encounter-sets' style='flex-shrink: 0'><img src='{setImgPath}/return-cult.png' align='right' /></section></section>",
-    "conspirators": "将<i>乌默尔多斯的崇拜者</i>和<i>黑暗异教徒</i>遭遇组之中的9个_异教徒_敌人混洗，在场上每个地点底下各放置一个面朝下的敌人，作为同谋。",
-    "chooseLocations": "将2张商业区和2张南区中，各随机选择一张放置入场，将另一张同名卡牌移出游戏。然后。将北区、东城区、河岸城、圣玛丽医院、墓地、米斯卡塔尼克大学和阿卡姆警察局放置入场。",
-    "placeLocations": "放置北区, 东城区, 河岸城, 圣玛丽医院, 墓地, 米斯卡塔尼克大学, 和 阿卡姆警察局 地点 入场."
+    "startAt": "每名调查员从阿卡姆警察局开始游戏。",
+    "rolandClue": "罗兰·班克斯从标记池获得1个线索开始游戏。",
+    "gatherSets": "收集以下遭遇牌组中的所有卡牌：<i>按部就班</i>、<i>午夜假面</i>、<i>莎布·尼古拉丝的使徒</i>、<i>乌莫德霍斯教团</i>、<i>寒冷刺骨</i>、<i>黑暗异教徒</i>、<i>夜魇</i>、<i>恐惧打击</i>。这些牌组分别用以下图标表示：<section class='encounter-sets'><img src='{setImgPath}/by-the-book.png' /><img src='{setImgPath}/midnight-masks.png' /><img src='{setImgPath}/agents-of-shub.png' /><img src='{setImgPath}/cult-of-umordhoth.png' /><img src='{setImgPath}/chilling-cold.png' /><img src='{setImgPath}/dark-cult.png' /><img src='{setImgPath}/nightgaunts.png' /><img src='{setImgPath}/striking-fear.png' /></section>",
+    "removeCards": "将*午夜假面*遭遇牌组中原本的剧本参照卡、密谋牌堆与密谋牌堆从游戏中移除，连同“你的房子”地点和两张“神秘的吟诵”诡计卡。使用*按部就班*遭遇牌组中提供的新剧本参照卡、密谋卡与密谋卡。",
+    "returnToConspirators": "<section style='display: flex; flex-direction: row; gap: 1em;'>你可以选择性地决定，如果你的收藏中包含*重返乌莫德霍斯教团*遭遇牌组中的卡牌，也一并收集。该牌组以右侧的图标表示。如果你选择收集，将此遭遇牌组中的3张卡牌与上述9名_邪教徒_敌人一起混洗，然后不看牌面随机从12张卡牌中移除3张，置于场外。然后将剩余敌人各1名面朝下放置于场上每个地点之下，作为同谋。<section class='encounter-sets' style='flex-shrink: 0'><img src='{setImgPath}/return-cult.png' align='right' /></section></section>",
+    "conspirators": "将*乌莫德霍斯教团*和*黑暗异教徒*遭遇牌组中的9名_邪教徒_敌人混洗在一起，然后将其中一名面朝下放置于场上每个地点之下，作为同谋。",
+    "chooseLocations": "随机选择两张商业区地点中的一张与两张南区地点中的一张，并将它们放入游戏。将商业区与南区的另一版本从游戏中移除。",
+    "placeLocations": "将北区、东城区、河岸城、圣玛丽医院、墓地、米斯卡塔尼克大学和阿卡姆警察局地点放入游戏。"
   },
   "resolutions": {
     "resolution1": {
-      "title": "结局1",
-      "body": "<p>_结局 1:_ 你的 evidence presented 和  case closed, 你 return 至 你的 typical 白天-to-白天 的 investigating bootleggers 和 common criminals. 那些 responsible 为murders—那些 你 可以 catch, anyway—是 safely 在……后 bars. 与proof 你 collected, 不 even Mr. Grey's extensive influence 可以 pardon 他们的 crimes.</p><p>但事实是，回到日常的情况是很困难的。你的思绪被各种烦扰忧虑牵动著。究竟是什么迫使格雷先生和其他人犯下了这些令人发指的罪行？为了追求什么黑暗、邪恶的目的，能牺牲人的生命？</p><p>在这座城市的表象下，有一些腐烂的东西，就像破败的老房子地基中的霉菌。还有这么多的未知之处，你怎么能确定当局的指导方针能解释你所看到的？如果下一次，你必须打破规则才能了解真相怎么办？你该怎么做？</p><ul><li>罗兰·班克斯获得等同于胜利牌区中所有敌人的胜利点数总值的经验值{rolandXp}。</li><li>每位 其他 调查员 获得 {otherXp} 经验, 等于 至  combined Victory X 数值 的 每位 地点 在 胜利牌区.</li><li>如果 数量为_邪教徒_ 敌人 在 胜利牌区 是 4-5, Roland Banks begins 下一场冒险 与 1 额外 卡牌 在 手牌. 如果 6-7, 2 额外 卡牌. 如果 8-9, 3 额外 卡牌. 如果 10, 3 额外 卡牌, 和 选择 和 移除 任意 non-符号 标记 从混乱袋, 为remainder 的  战役.</li><li>罗兰·班克斯可以将罗兰的.38特制手枪升级到其进阶版，或者将进阶版的掩盖罪证还原成其原始版。</li></ul>"
+      "title": "结局 1",
+      "body": "<p>_结局 1_：你的证据呈上，案件告破，你回到了追查私酒贩子和普通罪犯的日常工作。那些谋杀案的元凶——至少是你抓到的那些——已经被安全关进监狱。有了你收集到的证据，即便是格雷先生那庞大的影响力，也无法赦免他们的罪行。</p><p>但回到你平日处理的案件却变得困难重重。挥之不去的忧虑撕扯着你的思绪。有某种东西驱使格雷先生和其他人犯下这些可怕的罪行，牺牲人的生命，去追寻某个黑暗、险恶的目的。</p><p>这座小镇的表面之下潜藏着腐坏，就像霉菌藏在一座老朽、腐烂房子的地基里。既然还有那么多未知，你又怎能确定联邦调查局的准则能涵盖你所看到的这一切？如果下次，你必须打破规则才能查明真相呢？到那时你会怎么做？</p><ul><li>罗兰·班克斯获得{rolandXp}点经验，等于胜利牌区中每名敌人的*胜利X*数值总和。</li><li>每名其他调查员获得{otherXp}点经验，等于胜利牌区中每个地点的*胜利X*数值总和。</li><li>如果胜利牌区中_邪教徒_敌人的数量为4-5，罗兰·班克斯在下一场冒险开始时手牌多1张。若为6-7，多2张。若为8-9，多3张。若为10，多3张，并从混沌袋中选择并移除任意一个非符号标记，本次战役剩余时间内生效。</li><li>如果格雷先生在胜利牌区，罗兰·班克斯可以选择将罗兰的特制.38手枪升格为进阶版本，或将掩盖的进阶版本降格为原始版本。</li></ul>"
     },
     "resolution2": {
-      "title": "结局2",
-      "body": "<p>再多的手续或培训都无法让你为调查期间出现的怪物做好准备——无论是披著人皮的或是真正的怪物。尽管尽了最大的努力，你还是被迫结案并保持低调。哪怕再涉入一步，都可能是你的末日。格雷先生和他的暴徒们也许永远不用为他们的令人发指的行为负责，承担适当的后果。但至少现在你知道这个城镇表面之下真正的丑恶。不管依照或不依照规则，下次你会准备得更好。</p><ul><li>罗兰·班克斯获得等同于胜利牌区中所有敌人的胜利点数总值的经验值{rolandXp}。</li><li>每位 其他 调查员 获得 {otherXp} 经验值, 等于 至  combined Victory X 数值 的 每位 地点 在 胜利牌区。</li><li>罗兰·班克斯必须将掩盖罪证升级到其进阶版，或者将进阶版的罗兰的.38特制手枪还原成其原始版。.</li></ul>"
+      "title": "结局 2",
+      "body": "<p>_结局 2_：无论多少程序或训练，都无法让你对那些在你调查期间冒出来的怪物做好准备——无论是人类形态的还是字面意义上的怪物。尽管你已竭尽全力，你还是被迫草草结案并低调行事。再进一步介入，可能就是你的死期。格雷先生和他的打手们或许永远不会因其罪行受到应有的惩罚。但至少现在你知道潜伏在这座小镇表面之下的真正腐坏。下一次你会准备得更充分。不管有没有规矩。</p><ul><li>罗兰·班克斯获得{rolandXp}点经验，等于胜利牌区中每名敌人的*胜利X*数值总和。</li><li>每名其他调查员获得{otherXp}点经验，等于胜利牌区中每个地点的*胜利X*数值总和。</li><li>罗兰·班克斯必须选择将掩盖升格为进阶版本，或将罗兰的特制.38手枪的进阶版本降格为原始版本。</li></ul>"
     },
     "label": {
-      "removeChaosToken": "从混乱袋中选择并移除任意一个数字标记，持续到剧本结束。",
-      "advancedReward": "罗兰·班克斯可以将罗兰的.38特制手枪升级到其进阶版，或者将进阶版的掩盖罪证还原成其原始版。",
-      "doNotSwap": "不交换 任意 卡牌",
-      "upgradeRolands38Special": "相关角色 相关角色 .38 特殊"
+      "removeChaosToken": "从混沌袋中选择并移除任意一个非符号标记，本次战役剩余时间内生效",
+      "advancedReward": "格雷先生在胜利牌区。罗兰·班克斯可以选择将罗兰的特制.38手枪升格为进阶版本，或将掩盖的进阶版本降格为原始版本",
+      "doNotSwap": "不进行任何卡牌交换",
+      "upgradeRolands38Special": "将罗兰的特制.38手枪升格为进阶版本"
     },
-    "advancedPenalty": "罗兰·班克斯必须将掩盖罪证升级到其进阶版，或者将进阶版的罗兰的.38特制手枪还原成其原始版。",
-    "downgradeCoverUp": "Downgrade  advanced 版本 的 Cover Up 至 它的 原版 版本",
-    "downgradeRolands38Special": "Downgrade  advanced 版本 的 Roland's .38 特殊 至 它的 原版 版本",
-    "upgradeCoverUp": "相关角色 相关角色"
+    "advancedPenalty": "罗兰·班克斯必须选择将掩盖升格为进阶版本，或将罗兰的特制.38手枪的进阶版本降格为原始版本",
+    "downgradeCoverUp": "将掩盖的进阶版本降格为原始版本",
+    "downgradeRolands38Special": "将罗兰的特制.38手枪的进阶版本降格为原始版本",
+    "upgradeCoverUp": "将掩盖升格为进阶版本"
   },
   "intro": {
-    "body": "<p>繁文缛节简直令人窒息。自从你来到阿卡姆后，你的案件变得越来越难处理。你以为你会对付走私者和暴徒，而不是虚构的怪物。但是，随著这些荒谬案件悬而未决的时间拖得越长，你渐渐开始觉得这些案件没这么荒谬了。也许这意味著怪物不是凭空想像出来的。</p><p>当局有无数的指导方针，能够处理各种案件，但是出奇地缺了献祭人类的方面。所以，当你被通知在黑暗洞窟里发现了尸体时，你不太确定该怎么开始。询问当地人和死者的亲人没有什么结果。洞穴中留下的证据也没甚么价值——供品和文字宣称说这场献祭是赠礼，还描绘了一棵怪物般的树。所以你只能尽你所擅长的事情：嗅出线索，寻找连接所有死亡事件的共通点。</p><p>所有受害者的交集是一名男子：国会议员戴米恩·格雷先生。他不是阿卡姆本地人，在本地没有亲戚或家人，镇上也没有需要他出席的会议。然而，过去几个月他一直待在阿卡姆，目的不明。而且他与每个受害者相连的分隔度都不超过两度，这对你来说相当蹊跷。尽管国会议员没有受到任何威胁，但仍然有位警察——费希尔——全天候贴身护送格雷先生在镇上的行动。</p><p>你得尽快解开这个谜团的真相。现在你到处都看到那棵该死的树。每天都有更多的人失踪，甚至有人声称看到了像山羊一样的怪物在小巷里徘徊。但如果格雷先生真的是这件事的幕后黑手，你就得十分小心。要是错误地指控一个政客，你的职业生涯肯定就完了。该是时候尽你的职责了：挖掘证据、找出真相，把罪魁祸首带回来审问。每个细节都必须一丝不苟。</p><p class='basic right'>前往_设置_.</p>",
-    "title": "挑战剧情: 照章行事"
+    "body": "<p>繁文缛节令人窒息。自从你来到阿卡姆，你的案件就越来越难以推进。你本以为你要追查的是走私犯和黑帮分子，而不是什么想象中的怪物。但你那些荒唐的案件拖得越久，你就越开始怀疑，或许它们并不那么荒唐。而这或许也意味着，那些怪物也并非虚构。</p><p>联邦调查局有数不清的准则来应对各式各样的案件，但在“活人献祭”这件事上却诡异得闭口不言。所以，当你得知黑石窟里发现尸体时，你不知该从何查起。询问当地人和死者的亲属，都问不出任何有价值的东西。石窟里留下的证据也无济于事——那些祭品和文字宣称献祭是“礼物”，还有一棵怪异的树的画像。于是你做了你最擅长的事：你深挖细查，找到了把所有死亡案件串联起来的那条线索。</p><p>一个男人处于所有受害者的中心：达米安·格雷先生。这位国会议员并非阿卡姆人，在当地没有亲属或挚爱，也不在任何需要他留在镇上的委员会任职。然而，过去几个月他一直待在阿卡姆，目的不明。而他与每一位受害者的关联都不超过两层关系，这让你觉得非常可疑。更可疑的是，尽管这位议员的安危并未受到任何威胁，仍有一队警察全天候跟随格雷先生穿过镇上。</p><p>你必须尽快查清这个谜团的真相。如今你到处都能看到那棵该死的树。失踪的人一天天变多，甚至有人声称看到山羊般的怪物在小巷里出没。但如果这一切真的是格雷先生在背后主使，你就得小心行事。诬陷一位政客，那无疑会断送你的职业生涯。是时候去做你本该做的事了：挖出证据、查明真相，并把罪魁祸首带回来审讯。每一点都要做到滴水不漏。</p><p class='basic right'>前往_设置_。</p>",
+    "title": "挑战剧本：按部就班"
   },
   "tooltips": {
     "arkhamPoliceStation": {
-      "moveToConnecting": "{'{'}fast{'}'}: 移动到一个相连地点.",
-      "captureCultist": "{'{'}fast{'}'} 选择 a non-弱点 _邪教徒_ 敌人 于 这 地点 和 花费 线索 等于 至 它的 剩余 生命: 谈判. 加入 该 敌人 加入胜利牌区。"
+      "moveToConnecting": "{'{'}fast{'}'}：移动到一个连接地点。",
+      "captureCultist": "{'{'}fast{'}'}：选择本地点一张非弱点_邪教徒_敌人，并花费等于其剩余生命值的线索：交涉。将该敌人加入胜利牌区。"
     },
     "captureTheConspirators": {
-      "flipConspirator": "{'{'}fast{'}'} 调查员 花费 1 {'{'}perPlayer{'}'} 线索,，作为一组: 翻面 在……上 a 背面朝上 同谋 在你的地点 和 将其放进场 engaged 与 你.",
-      "exhaustCultist": "{'{'}fast{'}'} 花费1资源: 耗竭 a _邪教徒_ 敌人 engaged 与 你 (*它 remains engaged*). 仅 Roland Banks 可以 trigger 这 能力."
+      "flipConspirator": "{'{'}fast{'}'}：调查员们作为团队花费{'{'}perPlayer{'}'}个线索：翻面你所在地点的一张面朝下的同谋，并将其放入游戏，与你交战。",
+      "exhaustCultist": "{'{'}fast{'}'}：花费1个资源：横置一名与你交战的_邪教徒_敌人（*它仍保持交战*）。只有罗兰·班克斯能触发此能力。"
     }
   },
-  "specialRules": "每位 地点 在场 有 a 邪教徒 敌人 背面朝上 beneath 它, as a 同谋. The act allows  调查员 至 花费 线索，作为一组 至 翻面 a conspirator 于 他们的 地点 正面朝上 和 将其放进场, 和 conspirators 可以 是 captured 于  阿卡姆警察局 由 spending 线索 等于 至 他们的 剩余 生命.",
+  "specialRules": "场上的每个地点下方都有一张面朝下的邪教徒敌人，作为同谋。密谋使调查员们能够作为团队花费线索，将所在地点的一名同谋翻为面朝上并放入游戏；同谋也可以在阿卡姆警察局花费等于其剩余生命值的线索加以逮捕。",
   "label": {
     "returnTo": {
-      "include": "Include  _Return 至  乌默尔多斯的异教徒_ 遭遇组",
-      "exclude": "Do 不 include  _Return 至  乌默尔多斯的异教徒_ 遭遇组"
+      "include": "包含_重返乌莫德霍斯教团_遭遇牌组",
+      "exclude": "不包含_重返乌莫德霍斯教团_遭遇牌组"
     }
   },
   "tokens": {
     "easyStandard": {
-      "skull": "-X. X 是 数量为_邪教徒_ 敌人 在 胜利牌区, 至 a maximum 的 5.",
-      "cultist": "-2. 如果 a _邪教徒_ 敌人 是 与你一同, 揭示 额外 标记.",
-      "tablet": "-3. 相关角色 每名 _邪教徒_ 敌人 与你一同.",
-      "elderThing": "-4. 如果 你 失败, 相关角色 相关角色 1 伤害."
+      "skull": "-X。X为胜利牌区中_邪教徒_敌人的数量，至多5。",
+      "cultist": "-2。如果一名_邪教徒_敌人与你交战，则额外揭示一枚混沌标记。",
+      "tablet": "-3。准备每名与你交战的_邪教徒_敌人。",
+      "elderThing": "-4。如果你失败，罗兰·班克斯受到1点伤害。"
     },
     "hardExpert": {
-      "skull": "-X. X 是 1 plus 数量为_邪教徒_ 敌人 在 胜利牌区。",
-      "cultist": "-3. 如果 a _邪教徒_ 敌人 是 与你一同, 揭示 额外 标记.",
-      "tablet": "-4. 相关角色 每名 _邪教徒_ 敌人 与你一同.",
-      "elderThing": "-5. 如果 你 失败, 相关角色 相关角色 1 伤害."
+      "skull": "-X。X为胜利牌区中_邪教徒_敌人的数量加1。",
+      "cultist": "-3。如果一名_邪教徒_敌人与你交战，则额外揭示一枚混沌标记。",
+      "tablet": "-4。准备每名与你交战的_邪教徒_敌人。",
+      "elderThing": "-5。如果你失败，罗兰·班克斯受到1点伤害。"
     }
   },
   "timeHasRunOut": {
-    "body": "<p>\"它's 调查员人数不足,\" 你的 superior scolds 你. \"I'm sorry, 但 它's 只是 too contrived 为 me 至 believe. 和 如果 I don't believe 它,  courts won't, 任一. I mean, honestly. Cults? Human sacrifices?\"</p><p>你 grit 你的 teeth 和 slam 你的 手牌 向下 在  myriad documents 和 证据 你've collected. 它's 所有 那里, 你 insist.</p><p>\"它's 是 weeks 和 你 don't 有 a real case 这里. 只是 a lot 的 circumstantial mumbo-jumbo,\" 他 deflects. \"和 besides, Mr. Grey 是一张cornerstone 的 这 community. 该 你 会 disparage 他 与 这些 accusations...\" The hint 的 derision towards 你 在 他的 voice gives 他 away. 是 他 在 Grey's payroll? 或 worse? 任一 道路, 它's clear arguing won't get 你 anywhere. 你 知道 better 于 至 使 a fuss. 你'll 需要保留 你的 头部 向下 和 做 things 你的 own 道路 如果 你 want 至 使 a difference 在 Arkham.</p><p>移除 a _邪教徒_ 敌人 在 胜利牌区 从 游戏 (Mr. Grey, 如果 able).</p>",
-    "title": "相关角色 有 相关角色 相关角色"
+    "body": "<p>“这还不够，”你的上司训斥道。“抱歉，但这件事太牵强了，我无法相信。如果我不相信，法庭也不会相信。说真的。邪教？活人献祭？”</p><p>你咬紧牙关，把手重重拍在你收集的堆积如山的文件和证据上。你坚持说，一切都在这里。</p><p>“已经好几周了，你却还没有一个像样的案子。只有一堆间接的胡扯，”他搪塞道。“更何况，格雷先生是这个社区的支柱。你却用这些指控去贬低他……”他话语中那丝对你的轻蔑，暴露了他的心思。他是拿了格雷的钱吗？还是更糟？无论怎样，很明显再争吵下去也无济于事。你明白最好不要闹事。若想在这座城市有所作为，你就得把头低下来，用自己的方式做事。</p><p>将胜利牌区中的一名_邪教徒_敌人从游戏中移除（如果可能，选择格雷先生）。</p>",
+    "title": "时间到"
   },
   "placeLocations": "将北区、东城区、河岸城、圣玛丽医院、墓地、米斯卡塔尼克大学和阿卡姆警察局地点入场。"
 }

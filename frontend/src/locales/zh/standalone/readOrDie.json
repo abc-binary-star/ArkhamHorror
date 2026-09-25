@@ -1,80 +1,80 @@
 {
   "investigatorSetup": {
     "title": "调查员设置",
-    "body": "<p class='basic'>从黛西·沃克的牌组中移除所有非弱点的_书籍_支援卡。将这些书籍支援卡放置于场外。</p>"
+    "body": "<p class='basic'>从黛西·沃克的牌组中移除每张非弱点 _典籍_ 支援。将这些支援置于一旁，移出游戏。</p>"
   },
   "setup": {
-    "removeCards": "将下列卡牌移出游戏：教师办公室 (夜色已深 )、炼金实验室、炼金试剂、实验体、沃伦·莱斯教授。这些卡牌不会在挑战冒险中使用。",
-    "placeLocations": "将剩余的地点卡放置入场：大学广场、奥恩图书馆、人文大楼、学生会、科学大楼、管理大楼、宿舍、教师办公室 (夜色未深)。",
-    "daisyWalker": "黛西·沃克从奥恩图书馆开始游戏。",
-    "otherInvestigators": "所有其他调查员从大学广场开始游戏。",
-    "ignoreForced": "<b>由于宿舍与教师办公室已经在场上，且炼金实验室已经移出游戏，忽略任何会将这些地点放置入场的强制能力。</b>",
-    "jazzMulligan": "将“爵士”马利根放置于科学大楼。",
-    "namerOfTheDead": "将亡人呼名者(在下载的<i>死亡阅读</i>遭遇组中)生成于奥恩图书馆，处于未交战且消耗状态。",
-    "drHenryArmitage": "黛西·沃克控制亨利·阿米蒂奇博士。(如果亨利·阿米蒂奇博士已经在某位调查员的牌组之中，搜寻该调查员的牌组，找出亨利·阿米蒂奇博士并且将其置于黛西·沃克的控制下)。",
-    "placeTomes": "将先前从黛西·沃克的牌组移出并置于一旁的_书籍_支援卡面朝下地混洗，在大学广场以外的地点卡下各放置一张，从距离奥恩图书馆最远的地点开始。将所有剩余的_书籍_支援卡面朝下放置于奥恩图书馆下。",
-    "gatherSets": "将下列遭遇组中的所有遭遇卡找出: *死亡阅读*, *课外活动*, *Sorcery*, *异世界*, *毕晓普之徒*, *夜鹰*, *远古恶魔*, *上锁的门*, *犹格索·托斯的使徒*, 和 *阿米蒂奇的命运*. 每位 的 这些 组 except 为 阅读 或 Die 可以 是 发现 在 敦威治遗产 Deluxe Expansion. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/extracurricular-activity.png' /><img src='{setImgPath}/sorcery.png' /><img src='{setImgPath}/the-beyond.png' /><img src='{setImgPath}/bishops-thralls.png' /><img src='{setImgPath}/whippoorwills.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/locked-doors.png' /><img src='{setImgPath}/agents-of-yog.png' /><img src='{setImgPath}/armitages-fate.png' /></section>",
-    "newCards": "将<i>课外活动</i>遭遇组中原本的冒险辅助卡牌移出游戏。使用下载的<i>死亡阅读</i>遭遇组中提供的新冒险辅助卡牌。"
+    "removeCards": "将《教师办公室（*时光已晚*）》地点、《炼金实验室》地点、《炼金药剂》剧情支援、《实验体》敌人和《沃伦·赖斯教授》剧情支援从游戏中移除。这些卡牌不在此挑战场景中使用。",
+    "placeLocations": "将每个剩余地点放入场内：密斯卡托尼克校园、欧恩图书馆、人文楼、学生会、理科楼、行政楼、宿舍楼和教师办公室（*夜色尚浅*）。",
+    "daisyWalker": "黛西·沃克从欧恩图书馆开始游戏。",
+    "otherInvestigators": "每名其他调查员从密斯卡托尼克校园开始游戏。",
+    "ignoreForced": "由于宿舍楼和教师办公室在游戏开始时就在场，且炼金实验室已从游戏中移除，请忽略任何会将这些地点放入场内的强制能力。",
+    "jazzMulligan": "将《“爵士”穆里根》剧情支援放入理科楼。",
+    "namerOfTheDead": "将“命名死者者”敌人（由可下载的《阅读即死》遭遇牌组提供）放入欧恩图书馆，未纠缠且被消耗。",
+    "drHenryArmitage": "黛西·沃克接管《亨利·阿米蒂奇博士》剧情支援。（如果《亨利·阿米蒂奇博士》已在某调查员的牌组中，搜寻该调查员的牌组以找到《亨利·阿米蒂奇博士》，并在黛西·沃克的控制下将其放入场内。）",
+    "placeTomes": "将先前从黛西·沃克牌组移除的每张被置于一旁的 _典籍_ 支援洗匀，从距离欧恩图书馆最远的地点开始，在每个除密斯卡托尼克校园外的地点下方各放置 1 张，面朝下。将每张剩余的置于一旁的 _典籍_ 支援面朝下放在欧恩图书馆下方。",
+    "gatherSets": "收集以下遭遇牌组中的所有卡牌：《阅读即死》《课外活动》《巫术》《彼岸》《主教的爪牙》《夜鹰》《远古邪祟》《上锁的门》《犹格·索托斯的使徒》和《阿米蒂奇之命》。除《阅读即死》外，这些牌组都能在《敦威治遗产》豪华扩展中找到。这些牌组由以下图标标识：<section class='encounter-sets'><img src='{setImgPath}/extracurricular-activity.png' /><img src='{setImgPath}/sorcery.png' /><img src='{setImgPath}/the-beyond.png' /><img src='{setImgPath}/bishops-thralls.png' /><img src='{setImgPath}/whippoorwills.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/locked-doors.png' /><img src='{setImgPath}/agents-of-yog.png' /><img src='{setImgPath}/armitages-fate.png' /></section>",
+    "newCards": "将《课外活动》遭遇牌组中原始的剧本参照卡、行动牌组和议程牌组从游戏中移除。使用可下载的《阅读即死》遭遇牌组中提供的新剧本参照卡、议程卡和行动卡。"
   },
   "resolutions": {
     "resolution1": {
-      "title": "结局1",
-      "body": "<div class='resolution'><p>_Resolution 1_: 当你醒来时，图书馆的地板上满是零散的纸张和书本。《死灵之书》就在你的面前，它的金属扣环再次将其封印。你希望任何已被释放的存在都已经被安全地封存在其中。 但你不能冒险将这本魔典留在这里——独自存放在这里太危险了。你将《死灵之书》塞进自己的手提包，心知只有自己可以保证它的安全……或保护其他人不受它的伤害。</p><ul><li>Daisy Walker 获得 经验 等于 至 任一  combined Victory X 数值 的 每位 卡牌 在 胜利牌区, 或 等于 至 数量为_典籍_ 支援 她 有 在场 于  结束 的 游戏, whichever 是 higher.</li><li>每位 其他 调查员 仅 获得 经验 等于 至  combined Victory X 数值 的 每位 卡牌 在 胜利牌区.<ul><li>_经验_: {xp}</li></ul></li><li>黛西·沃克可以将黛西的手提包升级到其进阶版，或将进阶版的死灵之书(约翰‧迪伊译本)还原成其原始版。</li></ul></div>"
+      "title": "结局 1",
+      "body": "<div class='resolution'><p>_结局 1：_ 当你醒来时，图书馆地上散落着纸张和破损的书。展开的《死灵之书》躺在你面前，它的金属扣环再一次将其封合。但愿那被释放的存在已被妥善封存在内。但你不能冒险让这本魔法书留在这里——它独自留下太危险了。你把典籍塞进托特包，心知只有你能保护好它……或者保护他人免受其害。</p><ul><li>黛西·沃克获得经验值，等于胜利展示区中每张卡牌的综合胜利值 X，或等于游戏结束时她所控制的场上的 _典籍_ 支援数量，取较高者。</li><li>每名其他调查员仅获得等于胜利展示区中每张卡牌的综合胜利值 X 的经验值。<ul><li>_经验_：{xp}</li></ul></li><li>黛西·沃克可以将《黛西的托特包》升级到其进阶版本，或者将《死灵之书（*约翰·迪译本*）》的进阶版本降级为其原始版本。</li></ul></div>"
     },
     "resolution2": {
-      "title": "结局2",
-      "body": "<div class='resolution'><p>_Resolution 2_: 你将《死灵之书》塞回手提包中。你只能祈祷已被释放的存在不会造成进一步的伤害……</p><ul><li>黛西·沃克获得等同于胜利牌区中胜利点数的总值的经验，或等同于冒险结束时场上她所持有的_书籍_总数的经验，两者取较高的数字。</li><li>每位其他调查员获得等同于胜利牌区中所有地点的胜利点数总值的经验。<ul><li>_经验_: {xp}</li></ul></li><li>黛西·沃克必须将死灵之书(约翰‧迪伊译本)升级到其进阶版，或者将进阶版的黛西的手提包还原成其原始版。</li></ul></div>"
+      "title": "结局 2",
+      "body": "<div class='resolution'><p>_结局 2：_ 你把典籍塞回托特包。你只能希望那被释放的存在不会造成进一步的伤害……</p><ul><li>黛西·沃克获得经验值，等于胜利展示区中每张卡牌的综合胜利值 X，或等于游戏结束时她所控制的场上的 _典籍_ 支援数量，取较高者。</li><li>每名其他调查员仅获得等于胜利展示区中每张卡牌的综合胜利值 X 的经验值。<ul><li>_经验_：{xp}</li></ul></li><li>黛西·沃克必须将《死灵之书（*约翰·迪译本*）》升级到其进阶版本，或者将《黛西的托特包》的进阶版本降级为其原始版本。</li></ul></div>"
     },
     "noResolution": {
-      "title": "如果未达成任何结局",
-      "body": "<div class='resolution'><p>__如果未达成任何结局（每位调查员被击败）_:_ 前往_结局2_.</p></div>"
+      "title": "无结局",
+      "body": "<div class='resolution'><p>_若未达成任何结局，因为每位调查员都被击败_：继续至 _结局 2_。</p></div>"
     },
     "label": {
       "doNotSwap": "不交换",
-      "maySwapSignatureCards": "黛西·沃克可以将黛西的手提包升级到其进阶版，或将进阶版的死灵之书(约翰‧迪伊译本)还原成其原始版。",
-      "mustSwapSignatureCards": "黛西·沃克必须将死灵之书(约翰‧迪伊译本)升级到其进阶版，或者将进阶版的黛西的手提包还原成其原始版。",
-      "downgradeTheNecronomicon": "Downgrade The Necronomicon 至 它的 原版 版本",
-      "downgradeDaisysToteBag": "Downgrade Daisy's Tote Bag 至 它的 原版 版本",
-      "upgradeDaisysToteBag": "相关角色 相关角色 相关角色 相关角色",
-      "upgradeTheNecronomicon": "相关角色 相关角色 相关角色"
+      "maySwapSignatureCards": "黛西·沃克可以将《黛西的托特包》升级到其进阶版本，或者将《死灵之书》的进阶版本降级为其原始版本",
+      "mustSwapSignatureCards": "黛西·沃克必须将《死灵之书》升级到其进阶版本，或者将《黛西的托特包》的进阶版本降级为其原始版本",
+      "downgradeTheNecronomicon": "将《死灵之书》降级为其原始版本",
+      "downgradeDaisysToteBag": "将《黛西的托特包》降级为其原始版本",
+      "upgradeDaisysToteBag": "将《黛西的托特包》升级到其进阶版本",
+      "upgradeTheNecronomicon": "将《死灵之书》升级到其进阶版本"
     },
     "xp": {
-      "tomes": "典籍 相关角色 相关角色 在场 结束 的"
+      "tomes": "黛西·沃克在游戏结束时在场上的 _典籍_ 支援"
     }
   },
   "intro": {
-    "body": "<p>你一辈子都在读书。小时候，只是简单地沉浸在无害的故事之中。确切地说，尽管故事很吓人，却是无害的。你对恐怖和惊悚的迷恋使你在朋友和同学中赢得了“吓人精”的绰号。但是随著你的年龄增长，这种迷恋也跟著成长，渐渐地变成了一种痴迷。神秘和虚构开始无法满足你对恐怖的胃口，你渴望更<i>真实</i>的东西。</p><p>当你发现约翰·迪伊的《死灵之书》译本时，你知道自己终于找到了一直暗暗渴望的真正恐怖。只要你读完这本可怕的书，你就会知道有什么正在等待著你。然后你就会将它深锁在奥恩图书馆的亨利·阿米蒂奇的禁忌藏书区，永远不再打开。</p><p>也许，这只是你喜欢的幻想。然而你也无法抗拒《死灵之书》—亡者的典籍—的魅力。这就是为什么当阿米蒂奇博士召唤你到奥恩图书馆时，你所感到的刺骨恐惧精确地预测了发生了什么事。</p><p>「我不知道怎么会发生这种事，」阿米蒂奇博士在调查破坏时说道。整个禁忌收藏都变得乱七八糟。《死灵之书》躺在附近的桌子上，书上的金属扣环断裂。你的手指滑过皮革般、有著皮肤触感的书页。你的眼睛随著每个字跳动，像是跳著一支熟悉的舞蹈：</p><p class='basic center'><center><i>“他们走在偏僻的地方，看不见且污秽，圣言在这里被道出，仪式在他们的季节里喧嚣。狂风鼓噪著他们的声音，大地低语著他们的意识。”</i></center></p><p>当你意识到将要需发生的事情时，你的喉咙一紧。有什么东西已经被释放了，而你是唯一知道该如何阻止它的人……</p><p class='basic right'>前往_设置_.</p>",
-    "title": "挑战剧情: 死亡阅读"
+    "body": "<p>你一生都在阅读。孩提时，那只是对无害故事的单纯兴趣。诚然是些骇人的故事，但终究无害。你对恐怖与死亡之物的迷恋，让你在朋友和同学中赢得“幽灵”的绰号。但随着你长大，这份迷恋也在增长，直到近乎偏执。你对恐怖的胃口，从谜团与虚构演变成了某种更深的东西。某种真实的东西。</p><p>当你发现约翰·迪翻译的《死灵之书》时，你明白自己终于找到了长久以来暗自渴望的真正恐怖。要是你早知道读完那本可怖典籍后会面临什么就好了。你会把它锁回欧恩图书馆里亨利·阿米蒂奇博士的受限藏书中，再也不会打开。</p><p>或者你宁愿这样想。但即便是你，也无法怀疑《阿齐夫之书》的吸引力。死者之书。正因如此，当阿米蒂奇博士把你召唤到欧恩图书馆时，你骨子里的恐惧已然预见到了所发生之事。</p><p>“我不明白这种事怎么会发生，”阿米蒂奇博士审视着眼前的狼藉说道。整个受限藏书区一片混乱。展开的《死灵之书》摊在旁边桌上，金属扣环已断裂。你用手指抚过它那皮革般、如皮肤似的书页。你的目光以熟悉的节律掠过那些文字：</p><p class='basic center'>“在那些荒僻之地，在言语曾被诵念、仪式在季候中嚎叫而过之处，它们无形而不洁地行走。风以它们的声音低语，大地以它们的意识低语。”。</p><p>当你意识到所发生之事时，喉咙一紧。某种东西被释放了，而你是唯一能想出如何阻止它的人……</p><p class='basic right'>继续至 _设置_。</p>",
+    "title": "挑战场景：阅读即死"
   },
   "specialRules": [
     {
-      "body": "<p class='basic'>Challenge scenarios 是 特殊 print-和-游戏 scenarios 该 utilize existing products 在  Arkham 恐惧: The 卡牌 Game 收藏, 沿着 与 额外 print-和-游戏 卡牌, 至 create 新 content. The 阅读 或 Die challenge 冒险 centers around  调查员 Daisy Walker, 和 therefore 有 下列prerequisites:</p><ul><li>Daisy Walker 必须 是 chosen as 1 的  调查员 当 playing 这 冒险.</li><li>黛西·沃克的牌组必须至少包含4张_书籍_支援卡，_书籍_弱点卡不计算在内。</li></ul>",
-      "title": "挑战剧情"
+      "body": "<p class='basic'>挑战场景是特殊的打印即玩场景，利用《诡镇奇谈：卡牌版》收藏中的现有产品，再加上额外的打印即玩卡牌，来创造新内容。《阅读即死》挑战场景围绕调查员黛西·沃克展开，因此有以下先决条件：</p><ul><li>游玩本场景时，必须选择黛西·沃克作为调查员之一。</li><li>黛西·沃克的牌组必须至少包含 4 张 _典籍_ 支援。_典籍_ 弱点不计入这个总数。</li></ul>",
+      "title": "挑战场景"
     }
   ],
   "tokens": {
     "easyStandard": {
-      "cultist": "再抽出一个标记。 如果 你 失败, 弃掉 牌堆顶 2 卡牌 的 你的 牌组.",
-      "skull": "-X. X 是 数量 的 _典籍_ 相关角色 相关角色 .",
-      "tablet": "-2. 如果 是 攻击 或 尝试 相关角色 的 相关角色 和 你 不 成功 由 2, 你.",
-      "elderThing": "-3. 如果 你 失败, 相关角色 相关角色 1 恐惧."
+      "cultist": "额外揭示一个标记。若你失败，弃置你牌组顶部的 2 张卡牌。",
+      "skull": "-X。X 是黛西·沃克控制的 _典籍_ 支援数量。",
+      "tablet": "-2。如果这是对“命名死者者”的一次攻击或闪避尝试，且你没有至少成功 2 点，则它攻击你。",
+      "elderThing": "-3。若你失败，黛西·沃克受到 1 点恐惧。"
     },
     "hardExpert": {
-      "cultist": "再抽出一个标记。 如果 你 失败, 弃掉 牌堆顶 3 卡牌 的 你的 牌组.",
-      "skull": "-X. X 是 1 更多 于 数量 的 _典籍_ 相关角色 相关角色 .",
-      "tablet": "-3. 如果 是 攻击 或 尝试 相关角色 的 相关角色 和 你 不 成功 由 3, 你.",
-      "elderThing": "-5. 如果 你 失败, 相关角色 相关角色 1 恐惧."
+      "cultist": "额外揭示一个标记。若你失败，弃置你牌组顶部的 3 张卡牌。",
+      "skull": "-X。X 是黛西·沃克控制的 _典籍_ 支援数量加 1。",
+      "tablet": "-3。如果这是对“命名死者者”的一次攻击或闪避尝试，且你没有至少成功 3 点，则它攻击你。",
+      "elderThing": "-5。若你失败，黛西·沃克受到 1 点恐惧。"
     }
   },
   "tooltips": {
     "speedReading": {
-      "takeTome": "{'{'}fast{'}'} 如果 你Daisy Walker, 调查员 在你的地点 花费 1{'{'}perPlayer{'}'} 线索: 洗切 1 背面朝上 player 卡牌 beneath 这 地点 进入 你的 牌组."
+      "takeTome": "{'{'}fast{'}'} 如果你是黛西·沃克，你所在位置的调查员花费 1{'{'}perPlayer{'}'} 个线索：将本地点下方的 1 张面朝下的玩家卡牌洗回你的牌组。"
     },
     "mortalInquiry": {
-      "moveJazz": "{'{'}action{'}'}: 移动 至 a _米斯卡塔尼克_ 地点 up 至 3 人脉s away."
+      "moveJazz": "{'{'}action{'}'}：移动到至多相隔 3 个连接的一个 _密斯卡托尼克_ 地点。"
     },
     "namerOfTheDead": {
-      "parley": "{'{'}action{'}'} 如果 你Daisy Walker 和 你 控制 于 至少 4 non-弱点 _典籍_ 支援: _谈判._ 检定 {'{'}willpower{'}'} (18). 这 检定 gets -2 难度 每位_典籍_ 支援 你 控制. 如果 你 成功, advance  act."
+      "parley": "{'{'}action{'}'} 如果你是黛西·沃克，且你控制至少 4 张非弱点 _典籍_ 支援：_交谈。_ 检定 {'{'}willpower{'}'}（18）。你每控制一张 _典籍_ 支援，此检定的难度就 -2。若你成功，推进行动。"
     }
   }
 }

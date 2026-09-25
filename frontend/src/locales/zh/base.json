@@ -217,7 +217,10 @@
   },
   "showCardText": "显示说明",
   "hideCardText": "收起说明",
-  "window": {"minimize": "收起窗口", "restore": "展开窗口"},
+  "window": {
+    "minimize": "收起窗口",
+    "restore": "展开窗口"
+  },
   "serviceUnavailable": "服务不可用",
   "pleaseTryAgainLater": "请稍后再试。",
   "gameLog": {
@@ -225,7 +228,7 @@
     "draws": "抽取了",
     "chaosToken": "混乱标记",
     "chaosTokens": "混乱标记",
-    "discoveredClues": "发现了线索",
+    "discoveredClues": "发现了 {count} 个线索",
     "remember": "记住“{value}”",
     "forgot": "忘记“{value}”",
     "record": "记录“{value}”",
@@ -310,7 +313,7 @@
     "admin": "管理员",
     "cards": "卡牌",
     "myDecks": "我的牌组",
-    "support": "Patreon 赞助",
+    "support": "原作者Patreon赞助",
     "cardBuilder": "卡牌编辑器"
   },
   "activeGames": "进行中的游戏",
@@ -333,7 +336,7 @@
   "invalidEmailOrPassword": "邮箱或密码错误",
   "language": "语言",
   "logIn": "登录",
-  "logOut": "退出登录",
+  "logOut": "退出",
   "signInTagline": "雾起诡镇，档案待启。",
   "newGame": "新游戏",
   "newPassword": "新密码",
@@ -360,10 +363,10 @@
     "loseResources": "失去1资源 | 失去{count}资源"
   },
   "name": "{name}",
-  "shuffleRemainder": "混洗剩余遭遇卡牌来创建遭遇牌堆。",
-  "readyToBegin": "現在你已經準備好開始遊戲了。",
+  "shuffleRemainder": "将剩余的遭遇牌混洗，形成遭遇牌库。",
+  "readyToBegin": "你现在可以开始游戏了。",
   "Yes": "是",
-  "No": "不",
+  "No": "否",
   "On": "开",
   "Off": "关",
   "Back": "返回",
@@ -375,7 +378,7 @@
   "Explore": "探索",
   "Fight": "攻击",
   "Engage": "交战",
-  "Forced": "强制",
+  "Forced": "強制",
   "Use": "使用",
   "Reaction": "反应",
   "discard": "弃掉 {name}",
@@ -391,7 +394,7 @@
   "addToken": "向混乱袋中加入一个 {'{'}{token}{'}'} 混乱标记，并持续直到剧本结束",
   "token": {
     "Aether": "以太",
-    "AlarmLevel": "警报等级",
+    "AlarmLevel": "警觉等级",
     "Ammo": "弹药",
     "Antiquity": "古物",
     "Bounty": "赏金",
@@ -414,10 +417,10 @@
     "Inspiration": "灵感",
     "Key": "钥匙",
     "Kindling": "引火物",
-    "Lead": "線索",
+    "Lead": "队长",
     "Leyline": "地脉",
     "Lock": "锁",
-    "LostSoul": "失魂落魄",
+    "LostSoul": "迷失灵魂",
     "Offering": "祭品",
     "Overgrowth": "疯长",
     "Pillar": "支柱",
@@ -520,7 +523,7 @@
   },
   "upgradeDecks": "升级牌组",
   "addSideScenario": "添加支线剧本",
-  "lead": "線索",
+  "lead": "调查员队长",
   "or2": "{0} 或 {1}",
   "or3": "{0}、{1} 或 {2}",
   "slashOr": "{0}/{1}",
@@ -531,7 +534,7 @@
   "skip": "跳过",
   "handSize": "手牌上限",
   "yes": "是",
-  "no": "不",
+  "no": "否",
   "succeededBy": "成功，超过难度 {amount} 点",
   "failedBy": "失败，低于难度 {amount} 点",
   "chooseLeadInvestigator": "选择调查员队长",
@@ -556,7 +559,7 @@
   "noDecksMatchFilters": "没有符合过滤条件的牌组。",
   "noDecksYet": "还没有牌组——先建一个吧。",
   "deck": {
-    "viewOnArkhamDb": "在 ArkhamDB 查看",
+    "viewOnArkhamDb": "分享卡组",
     "syncDeck": "同步牌组",
     "deleteDeck": "删除牌组",
     "editInBuilder": "在构筑器中编辑",
@@ -584,7 +587,7 @@
     "archiveDescription": "整理你的牌组，为下一场未知的调查做好准备。",
     "collectionLabel": "我的收藏",
     "resultCount": "{count} / {total} 份牌组",
-    "newDeck": "卡组导入",
+    "newDeck": "新牌组",
     "createInBuilder": "本地新建",
     "allDecks": "全部牌组",
     "saveToDeckList": "保存到牌组列表",
@@ -636,7 +639,7 @@
   "game": {
     "yourTurn": "轮到你了",
     "loadOlderLogEntries": "载入更早的记录（还有 {n} 条）",
-    "confirmEndTurnKeyboard": "还有 {n} 个未使用行动——再按一次 E 确认结束回合",
+    "confirmEndTurnKeyboard": "还有 {n} 个未使用行动——再按一次 R 确认结束回合",
     "areYouSureUndoScenario": "你确定要撤销并回到冒险开始时吗？",
     "areYouSureExitSideStory": "确定要退出这个支线剧本吗？支线中发生的一切都会被撤销，包括进入时消耗的经验，如同从未进入过。",
     "playabilityChecks": "可玩性检查",
@@ -727,10 +730,10 @@
     "begin": "开始"
   },
   "campaignSettings": {
-    "title": "战役设置"
+    "title": "剧本设置"
   },
   "sideStory": {
-    "selectSideScenario": "选择要添加的支线剧情",
+    "selectSideScenario": "选择要添加的支线剧情 ",
     "requiresInvestigator": "需要 {name}",
     "xpAsymmetric": "（{name} 获得 {signatureXp} 点经验，其他每位调查员获得 {otherXp} 点经验）",
     "xp": "（{xp} 点经验）",
@@ -768,7 +771,7 @@
   "partnerStatus": {
     "safe": "安全",
     "resolute": "坚决",
-    "eliminated": "已退场"
+    "eliminated": "被击败"
   },
   "campaignLog": {
     "chaosBag": "混乱袋",
@@ -784,11 +787,11 @@
       "investigators": "调查员",
       "rules": "规则"
     },
-    "campaignNotes": "冒险笔记"
+    "campaignNotes": "剧本笔记"
   },
   "campaignLogView": {
     "noEntriesYet": "暂无记录。",
-    "recordedSets": "已记录的条目组",
+    "recordedSets": "已记录的循环",
     "recordedCounts": "已记录的计数"
   },
   "investigatorRow": {
@@ -903,7 +906,14 @@
   },
   "deckToolbar": {
     "sortLabel": "牌组排序",
-    "classes": {"guardian": "守护者", "seeker": "探求者", "rogue": "流浪者", "mystic": "潜修者", "survivor": "求生者", "neutral": "中立"},
+    "classes": {
+      "guardian": "守护者",
+      "seeker": "探求者",
+      "rogue": "流浪者",
+      "mystic": "潜修者",
+      "survivor": "求生者",
+      "neutral": "中立"
+    },
     "searchDecks": "搜索牌组…",
     "sortName": "排序: 名称",
     "sortClass": "排序: 职阶",
@@ -946,14 +956,14 @@
     "copyrightBody": "此应用中提供的关于 <a href=\"https://www.fantasyflightgames.com/en/products/arkham-horror-the-card-game/\">Arkham Horror: The Card Game™（诡镇奇谈：卡牌版）</a> 的文本和图形信息，版权归 Fantasy Flight Games 2024 所有。此应用是一个粉丝项目，不是由 Fantasy Flight Games 制作、认可、支持或与其有任何附属关系。",
     "copyrightArtwork": "所有艺术作品和插图的知识产权归其各自的创作者所有。所有 Arkham Horror: The Card Game™ 图像和图形均由 Fantasy Flight Games 享有版权。",
     "projectTitle": "项目详情",
-    "projectBody": "此应用程序由 <a href=\"https://github.com/halogenandtoast\">halogenandtoast</a> 及贡献者创建，旨在支持 诡镇奇谈社区。此项目的源代码可在 <a href=\"https://github.com/halogenandtoast/ArkhamHorror\">Github</a> 获取。欢迎通过 Github 提议或 Mythos Busters discord 服务器上的专用频道提供反馈和错误报告。"
+    "projectBody": "此应用程序由 <a href=\"https://github.com/halogenandtoast\">halogenandtoast</a> 及贡献者创建，旨在支持 Arkham Horror: The Card Game 社区。此项目的源代码可在 <a href=\"https://github.com/halogenandtoast/ArkhamHorror\">Github</a> 获取。欢迎通过 Github 提议或 Mythos Busters discord 服务器上的专用频道提供反馈和错误报告。"
   },
   "settingsForm": {
     "languageHelp": "这将更改卡牌和应用的语言。如果所选语言中没有可用的卡牌或文本，将默认显示英语。（译者：中文相关bug，请在QQ群里反馈）",
     "enrollInBeta": "加入测试版",
-    "betaWarning": "测试版功能可能存在严重错误，游戏可能无法恢复，请仅在愿意提供反馈的情况下启用此功能。",
-    "epicMultiplayer": "史诗多人模式（开发中）",
-    "epicMultiplayerWarning": "史诗多人模式仍在开发中，尚不能正常使用。请仅为测试启用。",
+    "betaWarning": "开启后将显示第10循环《淹没之城》等测试版内容。测试版可能仍有错误，请仅在愿意提供反馈的情况下启用。",
+    "epicMultiplayer": "史诗多人模式",
+    "epicMultiplayerWarning": "开发中功能，仅在你知道自己需要它时开启。",
     "dangerZone": "危险区域",
     "dangerZoneDescription": "永久删除你的帐户和所有相关数据，包括游戏和牌组。",
     "cannotBeUndone": "此操作无法撤销。",
@@ -969,7 +979,7 @@
   },
   "campaignLogTooltip": {
     "rememberedTitle": "备忘录",
-    "campaignNotesTitle": "冒险笔记"
+    "campaignNotesTitle": "剧本笔记"
   },
   "worldMap": {
     "toggleFullscreen": "切换全屏"
@@ -986,7 +996,7 @@
     "status": "状态"
   },
   "calendar": {
-    "timePassed": "经过的时间"
+    "timePassed": "流逝的时间"
   },
   "keysStatus": {
     "keys": "钥匙",
@@ -1025,8 +1035,8 @@
     "asset": {
       "title": "调试支援",
       "takeControl": "获得控制权",
-      "ready": "重整",
-      "exhaust": "横置",
+      "ready": "准备就绪",
+      "exhaust": "消耗",
       "defeat": "击败",
       "discard": "弃掉",
       "flip": "翻面",
@@ -1040,7 +1050,7 @@
       "increaseDamageDealt": "增加造成的伤害",
       "addHunter": "添加猎手",
       "increaseHealth": "增加生命值",
-      "exhaust": "横置",
+      "exhaust": "消耗",
       "ready": "重整",
       "defeat": "击败",
       "evade": "躲避",

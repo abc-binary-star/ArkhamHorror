@@ -1,157 +1,157 @@
 {
   "setup": {
-    "begin": "現在你已經準備好開始遊戲了。",
-    "gatherSets": "找出所有卡牌：  *致命片场* 遭遇组. 这些遭遇牌如下面图标所示：</p><section class='encounter-sets'><img src='{setImgPath}/cult-of-umordhoth.png' /></section></div><section class='encounter-sets'><img src='{setImgPath}/film-fatale.png' /></section>",
-    "setSetsOutOfPlay": "Set 下列遭遇组 一边, 场外卡牌: *Cosmic Journey*, *失落 岛屿*, 和 *Abominable Contessa*. 这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/the-devourer-below.png' /><img src='{setImgPath}/ancient-evils.png' /><img src='{setImgPath}/striking-fear.png' /><img src='{setImgPath}/ghouls.png' /><img src='{setImgPath}/dark-cult.png' /></section><section class='encounter-sets'><img src='{setImgPath}/cosmic-journey.png' /><img src='{setImgPath}/forgotten-island.png' /><img src='{setImgPath}/abominable-contessa.png' /></section>",
-    "beginPlay": "每位调查员从廷达洛斯开始游戏。",
-    "setOutOfPlay": "Set  André Patel 剧情支援卡 一边, 场外卡牌.",
-    "note": "(Note: *如果 你playing* 致命片场 *as a 面-剧情, use  独立冒险 混乱袋 改为 的 你的 剧本 混乱袋 为duration 的  冒险.*)",
-    "placeLocations": "放置 相关角色 相关角色 至 , (*相关角色 相关角色*) 面 正面朝上. 放置 相关角色 相关角色, 相关角色 相关角色, 和 相关角色 相关角色 至 .",
-    "props": "相关角色 全部 3 _相关角色_ , 洗入 , 和 放置 a , 背面朝上, 相关角色 相关角色."
+    "begin": "你现在可以开始了。",
+    "gatherSets": "收集《电影蛇蝎美人》遭遇牌组的所有卡牌。该牌组由以下图标标识：<section class='encounter-sets'><img src='{setImgPath}/film-fatale.png' /></section>",
+    "setSetsOutOfPlay": "将以下遭遇牌组置于一旁，移出游戏：《宇宙之旅》《被遗忘之岛》和《可怕的女伯爵》。这些牌组由以下图标标识：<section class='encounter-sets'><img src='{setImgPath}/cosmic-journey.png' /><img src='{setImgPath}/forgotten-island.png' /><img src='{setImgPath}/abominable-contessa.png' /></section>",
+    "beginPlay": "每位调查员从中央片场开始游戏。",
+    "setOutOfPlay": "将安德烈·帕特尔剧情支援置于一旁，移出游戏。",
+    "note": "（注：*如果你正将*《电影蛇蝎美人》*作为支线故事进行游戏，请在本场景期间改用独立混沌袋，而不是你的战役混沌袋。）",
+    "placeLocations": "将中央片场放入场内，以（《安静开拍》）一面朝上。将太空布景、丛林布景和哥特布景放入场内。",
+    "props": "收集全部三张 _道具_ 支援，将它们洗匀，并面朝下叠成一叠，置于中央片场下方。"
   },
   "interlude": {
     "aCosmicJourney": {
-      "tokens": "在混乱袋中增加2个{'{'}tablet{'}'}标记。",
-      "body": "<p>_A Cosmic Journey_: “它 always 会 seem as though 我们 是 missing an extra around 这里,” André notes. 所有 是 quiet 在 组 as 你 搜索 为centerpiece prop 为 A Cosmic Journey. According 至 some accounts, several fires 有 mysteriously broken 场外, 每位 的 他们 near  Helios Telescope. 之后 several minutes 的 searching, a low metallic growl cuts 穿过  silence, coming 从rocket ship. André puts 1 手牌 至  wooden hull. “它’s warm,” 他 说 quietly. The vessel rattles as  film star opens  hatch.</p><p>Following André inside, 你 feel 你的 footsteps echo 在 solid metal. What 你 discover within defies explanation. The ship 是 far larger 和 更多 elaborate inside 于 场外; 它的 paneled walls 是 covered 在 metal tubes 和 glowing consoles. 你 follow André 至 a 破碎 lens cap lying 在  floor. “这 是 部分 的  telescope, 但 哪里 是rest?” 他 asks. As 如果 在 answer,  rocket ship judders 至 生命.</p><p>你 rush 至 a glass porthole 和 查看 outside 至 看见  emptiness 的 deep space, dotted 与 群星. André looks outside, disbelieving.</p><p>“I don’t think 我们’re 在 Hollywood anymore.”</p>",
-      "gatherSets": "Gather  *Cosmic Journey* 遭遇组. 这 遭遇 组 是 indicated 由 下列icon:<section class='encounter-sets'><img src='{setImgPath}/cosmic-journey.png' /></section>",
-      "set": "弃掉 每位 敌人 从 游戏. 移动 每位调查员 至 Space Set 和 组 每位 其他 _Set_ 地点 一边, 场外卡牌, discarding 所有 标记 和 卡牌 于 那些 地点.",
-      "locations": "放置 每位 地点 从*Cosmic Journey* 遭遇组 入场",
-      "rocketShip": "放置Rocket Ship 剧情支援卡 入场 于 Space Set. 每位调查员 enters Rocket Ship.",
-      "placeClues": "放置线索s 在 Space Set up 至 它的 线索 数值.",
-      "storyAsset": "放置set-一边 Helios Telescope 剧情支援卡 入场 旁边the act 牌组.",
-      "shuffleRemaining": "洗切 每位 剩余 卡牌 在  *Cosmic Journey* 遭遇组 进入  遭遇牌库, 沿着 与encounter 弃牌堆.",
-      "reelDeck": "Gather 每位 single-sided 遭遇 卡牌 从set-一边 *失落 岛屿* 和 *Abominable Contessa* 遭遇组. 洗切 他们 together 至 使  “Reel 牌组.” 放置Reel 牌组 旁边the 冒险 reference 卡牌.",
-      "continue": "继续 playing.",
-      "saturniteMonarch": "放置 相关角色 相关角色 敌人 至 相关角色 相关角色 相关角色, (*相关角色 相关角色*) 面 正面朝上.",
-      "acts": "加入 2a—A 相关角色 相关角色 和 3a—从 相关角色 相关角色 相关角色 当前场景 牌组."
+      "tokens": "向混沌袋中加入 2 个 {'{'}tablet{'}'} 标记。",
+      "body": "<p>_《宇宙之旅》_：“这里似乎总缺一个帮手，”安德烈说。你在为《宇宙之旅》寻找那件中心道具时，片场一片寂静。据一些说法，曾有数起莫名火灾，每一处都靠近太阳望远镜。搜寻了几分钟后，一声低沉的金属咆哮打破了寂静，来自那枚火箭飞船。安德烈将一只手放在木质船体上。“是温的，”他轻声说。当这位影星打开舱门时，飞船发出咔哒声。</p><p>跟着安德烈进入飞船，你感到自己的脚步在坚实的金属上回响。里面所见的景象无法解释。飞船内部远比外面更大、更精致；镶板墙壁上布满金属管和发光的控制台。你跟着安德烈走到一个落在地上的碎裂镜头盖上。“这是望远镜的一部分，但其余的在哪里？”他问。仿佛在回应，火箭飞船猛然启动。</p><p>你冲到一扇玻璃舷窗前，向外望去，只见深邃太空的空旷与点点繁星。安德烈难以置信地望向外面。</p><p>“我想我们已不在好莱坞了。”</p>",
+      "gatherSets": "收集《宇宙之旅》遭遇牌组。该遭遇牌组由以下图标标识：<section class='encounter-sets'><img src='{setImgPath}/cosmic-journey.png' /></section>",
+      "set": "弃置场上每个敌人。将每位调查员移至太空布景，并将其他每个 _布景_ 地点置于一旁，移出游戏，弃置那些地点上的所有标记和卡牌。",
+      "locations": "将《宇宙之旅》遭遇牌组中的每个地点放入场内。",
+      "rocketShip": "将火箭飞船剧情支援放入太空布景。每位调查员进入火箭飞船。",
+      "placeClues": "在太空布景上放置线索，直到达到其线索值。",
+      "storyAsset": "将置于一旁的太阳望远镜剧情支援放入行动牌组旁。",
+      "shuffleRemaining": "将《宇宙之旅》遭遇牌组中剩余的每张卡牌连同遭遇弃牌堆一起洗入遭遇牌组。",
+      "reelDeck": "收集置于一旁的《被遗忘之岛》和《可怕的女伯爵》遭遇牌组中的每张单面遭遇卡。将它们洗匀，组成“胶卷牌库”。将胶卷牌库置于剧本参照卡旁。",
+      "continue": "继续游戏。",
+      "saturniteMonarch": "将土星王敌人放入高王维塞底（《慷慨好客》一面朝上）。",
+      "acts": "将行动牌 2a——《宇宙之旅》和行动牌 3a——《他们自何而来》加入当前行动牌组。"
     },
     "theForgottenIsland": {
-      "tokens": "在混乱袋中增加2个{'{'}elderThing{'}'}标记。",
-      "body": "<p>_The 失落 岛屿_: André follows 你 穿过  组 dressing 的 The Forgotten 岛屿: plastic foliage, cheap green turf,  hiss 的 a fog machine. According 至 André, 1 member 的  production 是 发现 babbling 在 组 与film’s signature prop,  Staff 的  Serpent, 在 手牌. As 你 搜索 为prop,  ground begins 至 feel softer underfoot. Looking 向下, 你 看见 你的 shoe sinking 在 wet, loamy soil. The 空气 有 grown oppressively humid 和 是 filled 与buzzing 的 cicadas 和  cries 的 distant birds. 你 查看 up 至 看见 thick green leaves partially obscuring a bright blue sky. 你没有 longer 在  jungle 组 但 在  jungle itself.</p><p>“What 是 这 madness?” André wipes 他的 brow, 然后 jumps as a long snake slithers across 他的 shoes 和 进入  underbrush. Recoiling 从serpent, 你 查看 beyond 至 a serpentine 道路 该 leads deeper 进入  jungle. Someone—或 something— retreated away 从 Lot C 和 ventured 进入 这 其他 world. Based 在 什么 你 heard,  missing film prop seems 至 是 于  heart 的 这 strange phenomenon.</p>",
-      "gatherSets": "Gather  *失落 岛屿* 遭遇组. 这 遭遇 组 是 indicated 由 下列icon:<section class='encounter-sets'><img src='{setImgPath}/forgotten-island.png' /></section>",
-      "set": "弃掉 每位 敌人 从 游戏. 移动 每位调查员 至 Jungle 道路 和 组 每位 其他 _Set_ 地点 一边, 场外卡牌, discarding 所有 标记 和 卡牌 于 那些 地点.",
-      "locations": "放置 每位 地点 从*失落 岛屿* 遭遇组 入场.",
-      "seals": "放置 4 资源 在 Ruins 的  Serpent King, as 封印. 放置set-一边 Staff 的  Serpent 剧情支援卡 入场 于 Ruins 的  Serpent King.",
-      "allosaurus": "Spawn  double-sided Allosaurus 敌人 于 Jungle 河流, (*Indomitable 掠食*) 面 正面朝上.",
-      "acts": "加入 act 2a—The 失落 岛屿 和 act 3a—摧毁  Source 至  当前场景 牌组.",
-      "shuffleRemaining": "洗切 每位 剩余 卡牌 在  *失落 岛屿* 遭遇组 进入  遭遇牌库, 沿着 与encounter 弃牌堆.",
-      "reelDeck": "Gather 每位 single-sided 遭遇 卡牌 从set-一边 *Cosmic Journey* 和 *Abominable Contessa* 遭遇组. 洗切 他们 together 至 使  “Reel 牌组.” 放置Reel 牌组 旁边the 冒险 reference 卡牌.",
-      "continue": "继续 playing."
+      "tokens": "向混沌袋中加入 2 个 {'{'}elderThing{'}'} 标记。",
+      "body": "<p>_《被遗忘之岛》_：安德烈跟着你穿过《被遗忘之岛》的布景：塑料植被、廉价的人造草皮，以及雾机的嘶嘶声。据安德烈说，剧组一名成员被发现捧着该片的标志道具——蛇杖，在片场胡言乱语。在你寻找这件道具时，脚下的地面开始变软。低头一看，你的鞋正陷入湿润、肥沃的泥土。空气变得极为潮湿，满是蝉鸣和远处鸟类的啼叫。抬头看，厚实的绿叶半遮着湛蓝的天空。你已不在丛林布景中，而是置身真正的丛林。</p><p>“这是什么疯狂？”安德烈擦了擦额头，随即跳开——一条长蛇从他脚上滑过，钻入灌木丛。你从蛇身旁退开，望向一条蜿蜒通向丛林深处的小径。有人——或某种东西——从 C 片场退去，闯入了这片异世。根据你听到的情况，那件失踪的电影道具似乎正是这一奇异现象的核心。</p>",
+      "gatherSets": "收集《被遗忘之岛》遭遇牌组。该遭遇牌组由以下图标标识：<section class='encounter-sets'><img src='{setImgPath}/forgotten-island.png' /></section>",
+      "set": "弃置场上每个敌人。将每位调查员移至丛林小径，并将其他每个 _布景_ 地点置于一旁，移出游戏，弃置那些地点上的所有标记和卡牌。",
+      "locations": "将《被遗忘之岛》遭遇牌组中的每个地点放入场内。",
+      "seals": "在蛇王遗迹上放置 4 个资源，作为封印。将置于一旁的蛇杖剧情支援放入蛇王遗迹。",
+      "allosaurus": "在丛林河生成双面的异特龙敌人，以（《不可驯服的掠食者》）一面朝上。",
+      "acts": "将行动牌 2a——《被遗忘之岛》和行动牌 3a——《摧毁源头》加入当前行动牌组。",
+      "shuffleRemaining": "将《被遗忘之岛》遭遇牌组中剩余的每张卡牌连同遭遇弃牌堆一起洗入遭遇牌组。",
+      "reelDeck": "收集置于一旁的《宇宙之旅》和《可怕的女伯爵》遭遇牌组中的每张单面遭遇卡。将它们洗匀，组成“胶卷牌库”。将胶卷牌库置于剧本参照卡旁。",
+      "continue": "继续游戏。"
     },
     "theAbominableContessa": {
-      "tokens": "在混乱袋中增加2个{'{'}cultist{'}'}标记。",
-      "body": "<p>_The Abominable Contessa_: “Rumor 有 它 该 some 的  actors 在 这 production 有 gotten a little too 进入 他们的 performances. But 那里’s 更多. 只是 最后 week, an 助理 是 nearly strangled 由  contessa’s Accursed Cape—although 他们 weren’t even wearing 它.” André 说, leading 你 到  组 为 The Abominable Contessa.</p><p>A pale 月亮 shines 在 a matte sky, casting long shadows 在 a field 的 graves. The backdrop depicts a moody gothic castle 与 towering spires, sneering gargoyles, 和 stained-glass windows. 你的 vision begins 至 swim as  scenery warps 之前 你的 眼睛. The castle 和 surroundings come 进入 focus. 你 查看 up 至 看见  组 roof 有 disappeared, replaced 由 a starlit sky, 和  walls 有 是 replaced 与 a sprawling 森林. Looming 在……上 所有 的 它 是dark castle, suddenly real.</p><p>“这 是 impossible,” André looks 于  bleak landscape. 在你可以 reply, a howl breaks  stillness. Several nightmarish forms emerge 从nearby trees. Together, 你 dash up  hill 至 受到 refuge 在  ominous castle. As  massive doors slam 在……后 你,  sound 的 maniacal laughter echoes 穿过  vast foyer. A gorgeous woman 与 pale skin 和 blood-red lips steps 场外 从shadows. 她 holds a large goblet 在 1 手牌. “Welcome 至 my humble home. I am Contessa Demetriou. I assume 你这里 为banquet? Unfortunately, 它 是 你 谁 是 在  menu!” Cackling, 她 vanishes 在 a cloud 的 bats.</p><p>As  sound 的 gnashing 和 clawing intensifies outside, André turns 至 你. “那里’ve 是 some strange rumors 在 组 关于 该 cape, 和 now  Contessa 是 wearing 它. Perhaps 如果 我们 受到 它 从 她的, 我们 可以 是 able 至 结束…所有 的 这,” 他 gestures 于 你的 surroundings.</p>",
-      "gatherSets": "Gather  *Abominable Contessa* 遭遇组. 这 遭遇 组 是 indicated 由 下列icon:<section class='encounter-sets'><img src='{setImgPath}/abominable-contessa.png' /></section>",
-      "set": "弃掉 每位 敌人 从 游戏. 移动 每位调查员 至 Gothic Set 和 组 每位 其他 _Set_ 地点 一边, 场外卡牌, discarding 所有 标记 和 卡牌 于 那些 地点.",
-      "locations": "放置 每位 地点 从*Abominable Contessa* 遭遇组 入场.",
-      "placeClues": "放置线索s 在 Gothic Set up 至 它的 线索 数值.",
-      "shuffleRemaining": "洗切 每位 剩余 卡牌 在  *Abominable Contessa* 遭遇组 进入  遭遇牌库, 沿着 与encounter 弃牌堆.",
-      "reelDeck": "Gather 每位 single-sided 遭遇 卡牌 从set-一边 *Cosmic Journey* 和 *失落 岛屿* 遭遇组. 洗切 他们 together 至 使  “Reel 牌组.” 放置Reel 牌组 旁边the 冒险 reference 卡牌.",
-      "continue": "继续 playing.",
-      "contessa": "相关角色 相关角色 相关角色 相关角色 的 相关角色, (*相关角色 相关角色*) 面 正面朝上.",
-      "acts": "加入 2a—相关角色 相关角色 相关角色 和 3a— 相关角色 牌组."
+      "tokens": "向混沌袋中加入 2 个 {'{'}cultist{'}'} 标记。",
+      "body": "<p>_《可怕的女伯爵》_：“有传言说，这部戏的某些演员有点入戏太深了。但还不止如此。就在上周，一名助理差点被女伯爵的受诅咒披风勒死——尽管他们根本没穿它。”安德烈说着，把你领上《可怕的女伯爵》的片场。</p><p>一轮苍白月色映在哑光的天幕上，在坟场上投下长长的影子。布景描绘着一座阴森的哥特式城堡，有高耸的尖塔、狞笑的石像鬼和彩绘玻璃窗。当眼前的景物扭曲变形时，你的视线开始游离。城堡与四周逐渐清晰。你抬头看去，布景的天花板消失了，取而代之的是一片星幕，而墙壁则化作一片广阔的森林。笼罩这一切的，是那座陡然变得真实的黑暗城堡。</p><p>“这不可能，”安德烈看着这片阴郁的景色开口。你还没来得及回答，一声嚎叫撕破了寂静。几个可怖的身影从附近的树丛中现身。你们一起冲向山坡，躲进那座不祥的城堡。当沉重的大门轰然合上，一阵狂笑回荡在宽阔的门厅中。一个皮肤苍白、唇色血红的美女从阴影中走出。她一只手握着一只巨大的高脚杯。“欢迎来到寒舍。我是德米特里欧女伯爵。我想你们是来赴宴的？不幸的是，你们才是菜单上的菜肴！”她咯咯笑着，在一团蝙蝠中消失。</p><p>当外面的磨牙声和抓挠声愈发猛烈时，安德烈转向你。“片场一直有关于那件披风的奇怪传言，而现在女伯爵正穿着它。也许我们把它从她那里取来，就能终结……这一切，”他指了指你周围。</p>",
+      "gatherSets": "收集《可怕的女伯爵》遭遇牌组。该遭遇牌组由以下图标标识：<section class='encounter-sets'><img src='{setImgPath}/abominable-contessa.png' /></section>",
+      "set": "弃置场上每个敌人。将每位调查员移至哥特布景，并将其他每个 _布景_ 地点置于一旁，移出游戏，弃置那些地点上的所有标记和卡牌。",
+      "locations": "将《可怕的女伯爵》遭遇牌组中的每个地点放入场内。",
+      "placeClues": "在哥特布景上放置线索，直到达到其线索值。",
+      "shuffleRemaining": "将《可怕的女伯爵》遭遇牌组中剩余的每张卡牌连同遭遇弃牌堆一起洗入遭遇牌组。",
+      "reelDeck": "收集置于一旁的《宇宙之旅》和《被遗忘之岛》遭遇牌组中的每张单面遭遇卡。将它们洗匀，组成“胶卷牌库”。将胶卷牌库置于剧本参照卡旁。",
+      "continue": "继续游戏。",
+      "contessa": "在血之宝座生成女伯爵，以（《无谓的自鸣得意》）一面朝上。",
+      "acts": "将行动牌 2a——《可怕的女伯爵》和行动牌 3a——《血洗》加入行动牌组。"
     },
-    "instructions": "检查 胜利牌区。 如果 那里 是 3 Prop 支援 在 胜利牌区, 加入 a “0” 标记 至  混乱袋 和 选择一项 Prop 至 放在一边, 场外卡牌. 然后, 如果…",
-    "heliosTelescope": "… Helios Telescope 是 不 在 胜利牌区, 前往_A Cosmic Journey_",
-    "staffOfTheSerpent": "… Staff 的  Serpent 是 不 在 胜利牌区, 前往_The 失落 岛屿_",
-    "accursedCape": "… Accursed Cape 是 不 在 胜利牌区, 前往_The Abominable Contessa_."
+    "instructions": "检查胜利展示区。如果胜利展示区中有三张 _道具_ 支援，则向混沌袋中加入一个“0”标记，并选择一个道具置于一旁，移出游戏。然后，如果……",
+    "heliosTelescope": "……太阳望远镜不在胜利展示区中，则前往 _《宇宙之旅》_",
+    "staffOfTheSerpent": "……蛇杖不在胜利展示区中，则前往 _《被遗忘之岛》_",
+    "accursedCape": "……被诅咒的披风不在胜利展示区中，则前往 _《可怕的女伯爵》_。"
   },
   "resolutions": {
     "resolution1": {
-      "title": "结局1",
-      "body": "<p>_结局1:_ Furious,  Monarch fires  Helios Telescope wildly 于 组 pieces 和 extras alike. As 你 flee  scene, 你 查看 在……后 你 至 看见 André disappear 在  道路 的 a kaleidoscopic beam. 一次 outside, 所有 你 可以 hear 是一个insidious clicking 从 Lot C. 它 almost sounds 像 laughter.</p><ul><li>移除  André Patel 剧情支援卡 从 游戏.</li><li>前往_Fin_.</li></ul>"
+      "title": "结局 1",
+      "body": "<p>_结局 1：_ 盛怒之下，君主将太阳望远镜疯狂射向布景和群众演员。当你逃离现场时，你回头看见安德烈消失在一道万花筒般的光芒路径中。来到外面，你只能听到从 C 片场传来一种阴险的咔哒声。它几乎像是在笑。</p><ul><li>将安德烈·帕特尔剧情支援从游戏中移除。</li><li>继续至 _《剧终》_。</li></ul>"
     },
     "resolution2": {
-      "title": "结局2",
-      "body": "<p>_结局 2_: André pats 你 在  返回, 然后 rubs 他的 眼睛 与 a sigh. “Bien joué, mon ami. I 可以 不 有 survived 这 不使用 你.” 你 hold  telescope, now inert, 在 你的 hands as 你的 mind wanders 至  amazing things 你’ve 只是 seen. Saturn,  alien creatures, 和  vastness 的 space. 你 won’t need 至 看见 A Cosmic Journey 当 它 releases; 你’ve already lived 它.</p><ul><li>进入<b>结局2</b></li></ul>"
+      "title": "结局 2",
+      "body": "<p>_结局 2：_ 安德烈拍拍你的背，然后叹了口气揉了揉眼睛。“干得漂亮，我的朋友。没有你我撑不过来。”你握着那如今已失效的望远镜，思绪飘向你刚刚目睹的奇景：土星、外星生物，以及浩瀚的宇宙。《宇宙之旅》上映时你无需去看了——你已经亲历过它。</p><ul><li>继续至 _结局 5_。</li></ul>"
     },
     "resolution3": {
-      "title": "结局3",
-      "body": "<p>_结局 3_: “那些 giant creatures!” André exclaims. “I never thought 它 会 是 possible 至 witness such things. 和 你, 你absolutely brilliant. I 不能 thank 你 enough, dear friend.” The film star 会 不 seem rattled 在  至少 于  strange 和 wondrous horrors 你 encountered. The remains 的  staff’s gem lie shattered 于 你的 feet. Maybe 你’re 不 cut 场外 为 Hollywood, 你 think 至 你自己.</p><ul><li>进入<b>结局2</b></li></ul>"
+      "title": "结局 3",
+      "body": "<p>_结局 3：_ “那些巨大的生物！”安德烈惊呼。“我从没想过能亲眼目睹如此事物。而你，你真是太出色了。我真不知该如何感谢你，亲爱的朋友。”这位影星似乎丝毫不为你们遭遇的奇异恐怖所动。蛇杖宝石的碎片散落在你脚边。也许你并不适合好莱坞，你暗自想道。</p><ul><li>继续至 _结局 5_。</li></ul>"
     },
     "resolution4": {
-      "title": "结局4",
-      "body": "<p>_结局 4_: André brushes a heavy dusting 的 grave dirt 离场 他的 vest 和 begins fidgeting 与 他的 cane. “I’m 不 certain, 但 The Abominable Contessa 可以 有 只是 lost 它的 leading lady. I’m still 不 sure quite 什么 happened, 或 为什么, 但 I’m glad 你这里 至 帮助.”</p><ul><li>进入<b>结局2</b></li></ul>"
+      "title": "结局 4",
+      "body": "<p>_结局 4：_ 安德烈刷掉马甲上厚厚的一层墓土，开始摆弄他的手杖。“我不太确定，但《可怕的女伯爵》可能刚失去了它的女主角。我还是不太清楚究竟发生了什么，也不明白为什么，但很高兴你在这里帮忙。”</p><ul><li>继续至 _结局 5_。</li></ul>"
     },
     "resolution5": {
-      "title": "结局5",
-      "body": "<p>_结局5_: Some hours later, 你 找出 André standing 在……上 Erika Strand,  producer. 她 sits against  墙, 头部 held between 她的 hands. “Rough 白天, my friend?” André leans 向下 和 puts a steaming cup 的 tea 旁边她的. 在一场tentative sip, Erika looks 至 André. “What happened? 和 为什么 做 I feel 像 I 只是 lost a wrestling match 与 a train?” 她 asks.</p><p>André looks 在……上 她的 as 他的 apprehension gives 道路 至 好奇. “I’m 不 certain, 但 你 definitely weren’t 你自己. I suppose 我们 有 much 至 discuss.” Erika nods 沿着 as  film star relays  strange 和 fantastical events 的  白天. 之后 finishing  tale, André snatches 他的 hat 和 cane 从 a nearby table. “I 必须 go. 它 appears  mystery 是 不 yet fully unraveled, 但 I bid 你 所有 adieu.” The actor turns 只是 as 他 walks 场外  门 和 smiles mischievously. “Nous nous reverrons, mon ami.”</p><ul><li>前往_Fin_.</li></ul>"
+      "title": "结局 5",
+      "body": "<p>_结局 5：_ 几个小时后，你发现安德烈站在制片人艾丽卡·斯特兰德身旁。她靠着墙而坐，双手抱头。“今天真是糟糕的一天，我的朋友？”安德烈俯下身，把一杯热腾腾的茶放到她身旁。艾丽卡试探地抿了一口，然后看向安德烈。“发生了什么？为什么我感觉自己像是刚跟一列火车打了一场摔跤？”她问道。</p><p>安德烈打量着她，他的疑虑渐渐转为好奇。“我不太确定，但你绝对不像你自己。我想我们有很多事要谈。”艾丽卡点了点头，听着这位影星讲述今天发生的奇异而离奇的事件。讲完这一切后，安德烈从旁边的桌子上抓起帽子和手杖。“我得走了。看来谜团还未完全解开，但我向各位道别。”这位演员转身走向门口，狡黠地笑了笑。“我们后会有期，我的朋友。”</p><ul><li>继续至 _《剧终》_。</li></ul>"
     },
     "fin": {
-      "body": "<p>_Fin_: Somewhere 离场 在  distance, a twisted laugh pierces  空气. 在一场few moments, 它 pauses 和 yells “… 和 cut! 该’s a wrap.”</p><ul><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。<ul><li>如果 “ 调查员 made 他们的 call 时间,” 每位调查员 获得 1 奖励 经验.</li><li>_经验_: {xp}</li></ul></li><li>如果  André Patel 剧情 支援 是 由……控制 的 an 调查员 当  冒险 ended, 任意 调查员可以 加入 他 至 他们的 牌组 为remainder 的 他们的 战役. 这 支援 会 不 数量 朝向 该 调查员’s 牌组 大小.</li><li>如果 你playing 在 战役 Mode, reset 你的 战役 混乱袋.</li></ul>",
-      "title": "相关角色"
+      "body": "<p>_《剧终》_：在远处某处，一声扭曲的笑声划破空气。片刻之后，它停顿下来，喊道“……卡！杀青。”</p><ul><li>每位调查员获得等于胜利展示区中每张卡牌胜利值 X 的经验值。<ul><li>若“调查员们开工准时”，则每位调查员获得 1 点额外经验。</li><li>_经验_：{xp}</li></ul></li><li>若安德烈·帕特尔剧情支援在场景结束时由某位调查员控制，则任何调查员可在其战役剩余时间里将他加入牌组。该支援不计入该调查员的牌组大小。</li><li>若你在战役模式下进行游戏，请重置你的战役混沌袋。</li></ul>",
+      "title": "剧终"
     },
     "noResolution": {
-      "title": "如果未达成任何结局",
-      "body": "<p>_如果 未达成任何结局 (所有调查员都被击败):_ Whatever madness 有 gripped Lot C, 它 有 taken 你 as well. 你 找出 难度 在 remembering 谁 你之前 today’s events. 是 你 你自己? 是 你 只是 playing a 部分? As 你 try 至 找出 真相,  结束 credits begin 至 roll.</p><ul><li>每位调查员 必须 搜索  收藏 为 a 随机 basic _Madness_ 或 _Flaw_ 弱点 和 永久ly 加入 它 至 他们的 牌组. 这 卡牌 会 不 数量 朝向 该 调查员’s 卡牌张数.</li><li>前往_Fin_.</li></ul>"
+      "title": "无结局",
+      "body": "<p>_若未达成任何结局（每位调查员被击败）：_ 无论是什么夺走了 C 片场，它也一并带走了你。你很难记起今天事件之前的自己。你还是你自己吗？还是你只是在扮演一个角色？当你试图寻找真相时，片尾字幕开始滚动。</p><ul><li>每位调查员必须在收藏中寻找一张随机的 _疯狂_ 或 _缺陷_ 基础弱点，并永久将其加入其牌组。该卡牌不计入该调查员的牌组大小。</li><li>继续至 _《剧终》_。</li></ul>"
     },
     "xp": {
       "bonus": {
-        "score": "相关角色"
+        "score": "开工准时"
       }
     }
   },
   "tokens": {
     "easyStandard": {
-      "skull": "-X. X为当前密谋编号+1。",
-      "tablet": "-3. 如果 那里 是一张_Saturnite_ 敌人 在你的地点, 再抽出一个标记。",
-      "cultist": "-3 (-5 改为 如果 那里 是一张_怪物_ 敌人 在你的地点).",
-      "elderThing": "-3. 如果 你 失败 和 那里 是一张_Dinosaur_ 敌人 在你的地点, ready 该 敌人. 该 敌人 攻击 你."
+      "skull": "-X。X 比当前议程编号大 1。",
+      "tablet": "-3。若你所在位置有 _土星人_ 敌人，则额外揭示一个标记。",
+      "cultist": "-3（若你所在位置有 _怪物_ 敌人，则改为 -5）。",
+      "elderThing": "-3。若你失败且你所在位置有 _恐龙_ 敌人，则将该敌人准备。该敌人攻击你。"
     },
     "hardExpert": {
-      "tablet": "-4. 如果 那里 是一张_Saturnite_ 敌人 在你的地点, 再抽出一个标记。",
-      "cultist": "-4 (-6 改为 如果 那里 是一张_怪物_ 敌人 在你的地点).",
-      "elderThing": "-4. 如果 你 失败 和 那里 是一张_Dinosaur_ 敌人 在你的地点, ready 该 敌人. 该 敌人 攻击 你.",
-      "skull": "-X. X 是 2 更多 于 当前 数量."
+      "tablet": "-4。若你所在位置有 _土星人_ 敌人，则额外揭示一个标记。",
+      "cultist": "-4（若你所在位置有 _怪物_ 敌人，则改为 -6）。",
+      "elderThing": "-4。若你失败且你所在位置有 _恐龙_ 敌人，则将该敌人准备。该敌人攻击你。",
+      "skull": "-X。X 比当前议程编号大 2。"
     }
   },
   "intro": {
-    "title": "致命片场",
-    "body": "<p>你 有 arrived 在 Hollywood 于  request 的 你的 contact,  silent film actor André Patel. According 至 André, something strange 是 happening 在 Lot C. Cameras 和 props 有 gone missing, 和 a series 的 accidents nearly halted production. Rumors 有 spread between  cast members 该  films 是 “cursed.” None 的 它 是 taken seriously 直到 1 的  cast members 是 发现 dead.</p><p>The late afternoon sun beats 向下 在  hot pavement as 你 scan  crowd 为 signs 的 André. Half a dozen extras 在 alien masks whisk past 你, followed 由 a stagehand dragging a large dinosaur foot 由 wagon. Across  lot, 你 finally spot 他 standing 与 a trio 的 werewolves. 他的 眼睛 light up, 和 他 strides briskly 穿过  busy lot 一次 他 sees 你.</p><p>“Finally!” 他 受到 a bow. “I thought 你’d never arrive. 和 只是 在 时间, too! Please, follow me.” As  silent film star leads 你 across  lot, 你 catch glimpses 的  various 组. A Cosmic Journey features a cheap-looking rocket, a robed wizard, 和 alien “Saturnites.” Meanwhile, The 失落 岛屿 是 filled 与 crudely painted pyramids 和 gargantuan paper mache dinosaurs. A bloodcurdling scream echoes 场外 的  gothic 恐惧 组 为 The Abominable Contessa as 你 walk past.</p><p>“I don’t think  mishaps lately 是 只是 坏运,” André 说 gravely. “Unfortunately, my reputation 有 made 它 difficult 至 get a straight answer 场外 的  cast 和 crew. Nobody wants 至 tell 他们的 star actor 该 something’s going wrong 在 组. Which 是 为什么 I need 你 至 ask around  film 组. See 什么 他们 think 是 really going 在.” André’s demeanor brightens. “这 可以 是 quite fun, actually. I hope 你’re up 至  任务.”</p>"
+    "title": "电影蛇蝎美人",
+    "body": "<p>你应你的联系人——默片演员安德烈·帕特尔之邀来到好莱坞。据安德烈说，C 片场正发生着奇怪的事。摄像机和道具不断丢失，一连串事故差点让拍摄停摆。剧组之间流传着这些电影被“诅咒”的谣言。没人当回事，直到一名剧组成员被发现死亡。</p><p>午后炙热的阳光照在滚烫的路面上，你在人群中寻找安德烈的踪影。六个戴着外星面具的群众演员匆匆经过，接着是一个用手推车拖着一只巨大恐龙脚的道具员。穿过片场，你终于看到他正与三只狼人站在一起。他一看到你，眼睛一亮，大步穿过繁忙的片场走来。</p><p>“终于来了！”他鞠了个躬。“我还以为你到不了了。来得正好！请跟我来。”当这位默片明星带你穿过片场时，你瞥见了各种布景。《宇宙之旅》里有一枚廉价的火箭、一个身穿长袍的巫师，以及外星“土星人”。而《被遗忘之岛》则满是粗糙涂绘的金字塔和巨大的纸糊恐龙。当你走过时，一阵凄厉的尖叫从《可怕的女伯爵》的哥特恐怖布景中传出。</p><p>“我不觉得最近这些事故只是运气不好，”安德烈凝重地说。“不幸的是，我的名声让剧组很难对我说出真相。没人愿意告诉他们的明星演员片场出了岔子。所以我才需要你到各个片场打听，看看他们究竟觉得是怎么回事。”安德烈的神情明亮起来。“其实，这说不定会很有趣。希望你能胜任。”</p>"
   },
   "label": {
     "andresRequest": {
-      "takeAndre": "Find  set-aside André Patel 剧情支援卡 和 将其放进场 在……下  控制 的 任意 调查员. 他 会 不 受到 up an 盟友 slot 为remainder 的  冒险.",
-      "setAside": "选择一项 Prop 至 放在一边, 场外卡牌"
+      "takeAndre": "找到被置于一旁的安德烈·帕特尔剧情支援，将其放入由任意调查员控制的场上。在本场景剩余时间里，他不占用一个盟友槽位。",
+      "setAside": "选择一个道具置于一旁，移出游戏"
     },
     "action": {
-      "option": "每位调查员 在你的地点 受到 1 伤害 和 1 恐惧"
+      "option": "你所在位置的每个调查员受到 1 点伤害和 1 点恐惧"
     },
     "lostAsteroid": {
-      "pay": "Pay 4 资源 至 自动成功"
+      "pay": "支付 4 个资源以自动成功"
     },
     "jungleRiver": {
-      "option": "弃掉 an _Weapon_ 或 _服装_ 支援 你 控制"
+      "option": "弃置一张你控制的 _武器_ 或 _衣物_ 支援"
     },
     "breakALeg": {
-      "option": "选择 和 弃掉 a 剧情 _物品_ 支援 你"
+      "option": "选择并弃置一张你控制的非剧情 _物品_ 支援"
     },
     "tarPit": {
-      "option": "弃掉 _盟友_ 或 _相关角色_ 支援 你"
+      "option": "弃置一张你控制的 _盟友_ 或 _鞋具_ 支援"
     },
     "allosaurus": {
-      "option": "相关角色 _盟友_ 支援 你"
+      "option": "异特龙击败一张你控制的 _盟友_ 支援"
     }
   },
   "tooltips": {
     "ruinsOfTheSerpentKing": {
-      "exhaustEnemy": "选择一个敌人 于 Ruins 的  Serpent King 和 花费X个线索, 哪里 X 是 该 敌人's 战力 数值: 耗竭 该 敌人.",
-      "attemptToWrestStaff": "你 尝试 从 ."
+      "exhaustEnemy": "选择蛇王遗迹中的一个敌人，花费 X 个线索（X 为该敌人的战斗值）：该敌人被消耗。",
+      "attemptToWrestStaff": "你试图从祭坛上夺取蛇杖。"
     },
     "moonlitGarden": {
-      "haunted": "治愈2点伤害 从nearest 敌人. 如果 没有 伤害 是 healed 由 这 效果, ready The Contessa 和 移动 她的 至 这 地点."
+      "haunted": "恢复最近一个敌人受到的 2 点伤害。若此效果没有恢复任何伤害，则准备女伯爵并将她移动到此位置。"
     },
     "castleHallways": {
-      "haunted": "选择 和 弃掉 1 卡牌 与 于 至少 1 {'{'}intellect{'}'} 技能 icon 从 你的 手牌. 如果 你 不能, ready The Contessa 和 移动 她的 至 这 地点."
+      "haunted": "从你手中选择并弃置 1 张至少带有 1 个 {'{'}intellect{'}'} 技能图标的卡牌。若你无法做到，则准备女伯爵并将她移动到此位置。"
     },
     "rocketShip": {
-      "move": "相关角色 !"
+      "move": "升空！"
     },
     "catacombs": {
-      "haunted": "相关角色 最近的 敌人. 和 如果 是 敌人阶段."
+      "haunted": "准备最近的敌人。该敌人移动并攻击，如同敌人阶段。"
     }
   },
   "remembered": {
-    "theInvestigatorsMadeTheirCallTime": "调查员 made 他们的 call 时间"
+    "theInvestigatorsMadeTheirCallTime": "调查员们开工准时"
   }
 }

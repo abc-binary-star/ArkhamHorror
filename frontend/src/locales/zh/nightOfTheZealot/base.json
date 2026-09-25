@@ -15,11 +15,11 @@
   },
   "label": {
     "offerOfPower": {
-      "drawAndPlaceDoom": "抽 2 张卡牌，并在当前密谋上放置 2 个毁灭标记"
+      "drawAndPlaceDoom": "抽 2 张卡牌，并在议程上放置 2 个毁灭"
     },
     "discipleOfTheDevourer": {
-      "doom": "在吞噬者的门徒上放置 1 个毁灭标记",
-      "clue": "将你的一个线索放置在它所在的地点"
+      "doom": "在《吞噬者门徒》上放置 1 个毁灭",
+      "clue": "将你的一个线索放在它所在位置"
     }
   }
 }

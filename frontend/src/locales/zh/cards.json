@@ -224,8 +224,8 @@
       "playRevealed": "打出1张自己揭示的手牌"
     },
     "crisisOfFaith": {
-      "replaceBlessWithCurse": "将祝福标记替换为诅咒标记",
-      "swap": "将祝福标记替换为诅咒标记"
+      "replaceBlessWithCurse": "将{'{'}bless{'}'}标记替换为{'{'}curse{'}'}标记",
+      "swap": "将{'{'}bless{'}'}标记替换为{'{'}curse{'}'}标记"
     },
     "customGrip": {
       "doNotPlayFirearm": "不打出一张_枪械_支援"
@@ -985,7 +985,7 @@
     },
     "sharpshooter3": {
       "doBoth": "选择两项",
-      "attackUsesAlt": "这次攻击不使用{'{'}战斗{'}'}，改为使用{'{'}敏捷{'}'}。你的{'{'}战斗{'}'}修正值改为修正你的{'{'}敏捷{'}'}",
+      "attackUsesAlt": "这次攻击不使用{'{'}combat{'}'}，改为使用{'{'}agility{'}'}。你的{'{'}combat{'}'}修正值改为修正你的{'{'}agility{'}'}",
       "useEnemyEvadeForAttack": "对于本次攻击期间被攻击敌人，不使用其攻击值，改为使用其躲避值"
     },
     "shrineOfTheMoirai3": {
@@ -1435,12 +1435,12 @@
       "alternativeHypothesis": "你可以结算其强制效果，选择一个你本轮未选择的标准。然后，将其重整"
     },
     "endurance": {
-      "fastSpend1Resource": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}敏捷{'}'}",
-      "fastSpend1Resource2": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}战斗{'}'}"
+      "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}"
     },
     "endurance3": {
-      "fastSpend1Resource": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}敏捷{'}'}",
-      "fastSpend1Resource2": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}战斗{'}'}"
+      "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}combat{'}'}"
     },
     "hardKnocks": {
       "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
@@ -1470,10 +1470,10 @@
       "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+2{'{'}willpower{'}'}"
     },
     "holySpear5": {
-      "fightWithReleaseBless": "{'{'}action{'}'}: _攻击_。你本次攻击得到+2{'{'}willpower{'}'}并造成+1伤害。在你发动本能力时，你可以释放一个封印在圣矛上的{'{'}bless{'}'}标记",
+      "fightWithReleaseBless": "{'{'}action{'}'}: _攻击_。你本次攻击得到+2{'{'}combat{'}'}并造成+1伤害。在你发动本能力时，你可以释放一个封印在圣矛上的{'{'}bless{'}'}标记",
       "fightWithSealBless": "{'{'}action{'}'}查找混乱袋，找出2个{'{'}bless{'}'}标记并将其封印在圣矛上：_攻击_。你本次攻击得到+4{'{'}combat{'}'}并造成+2伤害",
       "actionSearchThe": "{'{'}action{'}'}查找混乱袋，找出2个{'{'}bless{'}'}标记并将其封印在圣矛上：_攻击_。你本次攻击得到+4{'{'}combat{'}'}并造成+2伤害",
-      "actionYouGet2": "{'{'}action{'}'}: _攻击_. 你 get +2 {'{'}willpower{'}'}并造成+1伤害。在你发动本能力时，你可以释放一个封印在圣矛上的{'{'}bless{'}'}标记"
+      "actionYouGet2": "{'{'}action{'}'}: _攻击_。你得到+2 {'{'}combat{'}'}并造成+1伤害。在你发动本能力时，你可以释放一个封印在圣矛上的{'{'}bless{'}'}标记"
     },
     "hyperawareness": {
       "fastSpend1ResourceShort": "1资源 → +1{'{'}agility{'}'}",
@@ -1502,12 +1502,12 @@
       "fastSpend2Resources2": "{'{'}fast{'}'}花费2资源：你本次技能检定得到+1{'{'}intellect{'}'}，直到本阶段结束"
     },
     "levelheaded": {
-      "fastSpend1Resource": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}敏捷{'}'}",
-      "fastSpend1Resource2": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}意志{'}'}"
+      "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
     },
     "levelheaded3": {
-      "fastSpend1Resource": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}敏捷{'}'}",
-      "fastSpend1Resource2": "{'{'}快速{'}'}花费1资源：你本次技能检定得到+1{'{'}意志{'}'}"
+      "fastSpend1Resource": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}agility{'}'}",
+      "fastSpend1Resource2": "{'{'}fast{'}'}花费1资源：你本次技能检定得到+1{'{'}willpower{'}'}"
     },
     "livreDeibon": {
       "fastExhaustLivre": "{'{'}fast{'}'}横置伊波恩之书：将你牌库顶的卡牌投入到你所在地点一位调查员执行的符合条件的技能检定中",

@@ -643,7 +643,7 @@
   "game": {
     "yourTurn": "Your turn",
     "loadOlderLogEntries": "Load older entries ({n} more)",
-    "confirmEndTurnKeyboard": "You still have {n} unused actions — press E again to confirm end turn",
+    "confirmEndTurnKeyboard": "You still have {n} unused actions — press R again to confirm end turn",
     "areYouSureUndoScenario": "Are you sure you wish to undo to the beginning of the scenario?",
     "areYouSureExitSideStory": "Are you sure you wish to exit this side story? Everything that happened within it will be undone, including the XP spent to enter.",
     "playabilityChecks": "Playability Checks",

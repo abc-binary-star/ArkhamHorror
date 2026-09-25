@@ -28,7 +28,7 @@
   "Expert": "专家",
   "includeTarotReadings": "使用塔罗牌解牌",
   "undoMode": {
-    "title": "撤销模式",
+    "title": "回溯模式",
     "standard": "标准",
     "full": "完整",
     "light": "轻量",
@@ -67,8 +67,8 @@
   "variant": "战役变体",
   "fullCampaignOption": {
     "theDreamEaters": "食梦者<br><small>八部分组成的战役</small>",
-    "theDreamQuest": "梦寻秘境<br><small>四部分组成的战役</small>",
-    "theWebOfDreams": "睡梦之网<br><small>四部分组成的战役</small>"
+    "theDreamQuest": "探索梦境<br><small>四部分组成的战役</small>",
+    "theWebOfDreams": "梦之网<br><small>四部分组成的战役</small>"
   },
   "advancedRulesConfiguration": "高级规则配置",
   "rulesPresets": "预设",

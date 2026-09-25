@@ -1,28 +1,28 @@
 {
   "intro": {
-    "title": "永恒沉睡",
-    "body": "<i>见信好：</i>\n<i>很抱歉。我知道自己已经有些时候没写信了。我现在写信给你，是因为在开罗，我压根没人可以相信。我甚至不知道这封信能不能安全抵达你处。我只能期望它能到，这是为了我们所有人好。</i>\n<i>这座城市里有什么地方不对劲。一切是从几周前开始的。埃及博物馆的馆长一觉睡去，就再也没有醒来。一开始，我还不以为意：这只是一种怪病，只要假以时日，医生总归能治好的。但随后这样的事又发生了。层出不穷。越来越多了，整个开罗都有人陷入了昏睡。现在每晚都有更多的人一觉不起……就在我写信给你的时候，他们把我的丈夫约翰带去了医院。</i>\n<i>我怕极了。我不想这样一觉睡过去，就再也不会醒来。此外，我还担心是有人故意对他人施以诅咒。如果真是这样，又是为了什么？</i>\n<i>拜托，我恳求你。我需要你的帮助。</i>\n<i>你真诚的，</i>\n<i>杰西·伯克</i>"
+    "title": "永恒沉眠",
+    "body": "<p class='billenia'>*致意，*</p><p class='billenia'>*很抱歉，我知道距离我上一次写信已经过去很久了。我现在写信给你，是因为在开罗这里，我没有任何可以信任的人。我甚至不知道这封信能否平安送到你手上。我只希望它能送到，为了我们所有人的安危。*</p><p class='billenia'>*这座城市有些不对劲。事情始于几周前。埃及古物博物馆的首席策展人睡着之后，就再也没有醒来。起初我并未多想；这不过是一个医学上的奇闻，一个医生们迟早会解开的谜团。但后来再次发生了……一次又一次。全城越来越多的人开始陷入昏迷。如今每晚都在发生……而在写信给你的此刻，他们正把我的丈夫约翰送往医院。*</p><p class='billenia'>*我很害怕。我不想睡着之后就再也无法醒来。但更让我担心的是，有人在故意把这诅咒施加给别人。如果是这样，那又是为了什么？*</p><p class='billenia'>*求求你，我恳求你。我需要你的帮助。*</p><p class='billenia'>*此致敬礼，*</p><p class='billenia' style='font-weight:500;font-size:1.8em;'>*杰茜·伯克*</p>"
   },
   "setup": {
-    "setAside": "将下列卡牌放在一边，位于场外：奈斯、约翰＆杰西·伯克、古代安可架、2张深渊亡魂，以及所有7张单面地点(尼罗河、代赫舒尔沙漠、撒哈拉沙丘、避世墓穴、狮身无面像、沙漠绿洲、沙尘遗迹)。",
-    "brotherhood": "找出6张双面的_兄弟会_敌人卡(纳撒尼尔·泰勒教授、莱拉·艾尔·马斯瑞博士、温特沃斯·摩尔博士、纳迪娅·尼姆尔、法利得、纳赛尔)。这些敌人卡的另一面均为剧情卡(见第6页的“剧情卡”)。为了获得最佳的游戏体验，请勿查看背面的剧情卡。将这6张敌人卡混洗，放在冒险辅助卡底下。",
-    "strengthOfTheAbyss": "游戏中每有一位调查员，在冒险辅助卡的“深渊之力”下方放置1个资源标记。在本场冒险中，冒险辅助卡上的资源数量表示当前深渊之力的强度<i>(见“深渊之力”)。</i>",
-    "placeLocations": "将以下地点放置入场：开罗街道、开罗市郊、神庙庭院、埃及博物馆、开罗巴扎、探险营地。每位调查员从开罗街道开始游戏。",
-    "gatherSets": "Gather 下列遭遇组: *永恒沉睡*, *埃及之沙*, *恶兽兄弟会*, 和 *深渊祭品*. 这些 遭遇组图标如下, respectively: <section class='encounter-sets'><img src='{setImgPath}/eternal-slumber.png' /><img src='{setImgPath}/sands-of-egypt.png' /><img src='{setImgPath}/brotherhood-of-the-beast.png' /><img src='{setImgPath}/abyssal-tribute.png' /></section>",
-    "startAt": "每位调查员从“起始地点”开始游戏。"
+    "setAside": "将下列卡牌置于一旁，移出游戏：奈斯、约翰与杰茜·伯克、古代安卡、两张深渊亡魂，以及全部7张单面地点（尼罗河、达舒尔之沙、撒哈拉沙丘、未受触碰的密室、无面斯芬克斯、沙漠绿洲和风沙漫卷的遗迹）。",
+    "brotherhood": "找出6张双面_兄弟会_敌人卡（纳撒尼尔·泰勒教授、莱拉·艾尔·马斯里博士、温特沃斯·摩尔博士、娜迪亚·尼姆尔、法里德和纳索尔）。这些敌人卡牌的反面印有故事卡牌。为获得最佳体验，请勿查看其反面的故事卡牌。将这6张敌人卡牌洗混，置于场景参考卡下方。",
+    "strengthOfTheAbyss": "为游戏中每位调查员，在场景参考卡上的\"深渊之力\"下放置1个资源标记。在本场景剩余时间内，场景参考卡上的资源标记代表深渊当前的强度。",
+    "placeLocations": "将下列地点加入游戏：开罗街头、开罗郊外、神庙庭院、埃及古物博物馆、开罗集市和探险营地。",
+    "gatherSets": "收集以下遭遇牌组：*永恒沉眠*、*埃及之沙*、*野兽兄弟会* 和 *深渊献祭*。这些牌组分别由以下图标标示：<section class='encounter-sets'><img src='{setImgPath}/eternal-slumber.png' /><img src='{setImgPath}/sands-of-egypt.png' /><img src='{setImgPath}/brotherhood-of-the-beast.png' /><img src='{setImgPath}/abyssal-tribute.png' /></section>",
+    "startAt": "每位调查员均从开罗街头开始游戏。"
   },
   "resolutions": {
     "resolution1": {
-      "title": "结局1",
-      "body": "<p>_结局 1_: Jessie Burke cries 与 joy as 她的 husband opens 他的 眼睛 为第一 时间 在 weeks. \"J… Jessie?\" John trembles as 他 tries 和 未能stand. 他的 wife 放置 a 手牌 在 他的 shoulder 至 steady 他. \"I thought 你 会 never wake,\" 她 admits, wiping tears 从 她的 眼睛. \"如果 它 weren't 为 我们的 friends 这里, 你'd still 是 在……下.\" John turns 至 你, 他的 expression dire. \"然后 你're  仅 ones 谁 可以 stop 什么 是 coming,\" 他 说 cryptically. \"In my 梦, I saw 他. The 1 他们 called Xzharah.\" 他 swallows hard. \"和 他 是 像 nothing 我们've ever seen 之前.\"</p><ul><li>在冒险日志中，记录下<i>沉睡诅咒已破除</i>。在冒险日志中，划掉所有的<i>“(卡牌名)坠入深渊”</i>。</li><li>任意 1 调查员可以 选择 加入John & Jessie Burke 至 他的 或 她的 牌组. 这 卡牌 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li><li>在冒险日志中，记录下<i>深渊中的沉梦者(X)</i>。X为本场冒险结束时深渊之力的强度。</li><li>In 你的 战役 Log, 记录 *Brotherhood Agents Who Escaped*: 和 list  names 的 每位 unique _邪教徒_ 敌人 该 是 在场 或 beneath  冒险参考卡 当 游戏 ended.</li></ul>"
+      "title": "结局 1",
+      "body": "<p>_结局 1_：杰茜·伯克喜极而泣，因为她的丈夫数周以来第一次睁开了眼睛。“约……约翰？”约翰颤抖着想要站起，却未能如愿。他的妻子将手按在他的肩上扶住他。“我以为你再也不会醒来了，”她一边擦拭眼泪一边说道。“如果不是因为有这里的这些朋友，你还会一直昏迷不醒。”约翰转向你们，神情严峻。“那么你们就是唯一能阻止即将降临之物的人，”他神秘地说道。“在梦里，我见到了他。他们称之为克萨拉的那个人。”他艰难地咽了口唾沫。“他和我们以往见过的任何事物都截然不同。”</p><ul><li>在你的战役日志中记录*沉眠的诅咒已被解除*。勾掉战役日志中所有*“（卡牌名）被深渊吞没”*的记录。</li><li>任意一位调查员可以选择将约翰与杰茜·伯克加入其牌组。此卡牌不计入该调查员的牌组上限。</li><li>每位调查员获得等同于胜利牌区中每张卡牌胜利点（X）的经验值。</li><li>在你的战役日志中记录*深渊中的梦者（X）*。X为场景结束时的深渊之力。</li><li>在你的战役日志中记录*逃脱的兄弟会爪牙*：并列出在游戏结束时位于场上或场景参考卡下方的每张唯一_教徒_敌人卡牌的名称。</li></ul>"
     },
     "resolution2": {
-      "title": "结局2",
-      "body": "<p>_结局 2_: Neith rises 至 她的 feet. Most 的 她的 power 有 是 drained, 但  strength 的 several dreamers still sustains 她的. \"他们 有 planned 为 centuries. 他们的 白天 的 reckoning 是 coming. Nothing 可以 stop 该. 不 I. Certainly 不 你.\" 你 notice 她 speaks as 如果 她 是一张third party, 和 你 press further. \"Do 你 think I 有 a 选择?\" 她 scoffs. \"None 可以 withstand Xzharah. 你 将 看见. 他 将 bend 你的 将 只是 as 他 做了 mine.\" 她的 shadow grows 和 warps, misshapen. \"它 是Abyss 他 wants. 如果 你 wish 至 stop 他, 头部 西. Xzharah awaits beyond  大门.\" Neith's shadow consumes 她的 正文 whole, 和 她 vanishes 从 sight. 仅 她的 amulet remains.</p><ul><li>In 你的 战役 Log, 记录 该 *你aware 的 Xzharah's plans*.</li><li>任意 1 调查员可以 选择 加入the Ancient Ankh 至 他的 或 她的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li><li>在冒险日志中，记录下<i>深渊中的沉梦者(X)</i>。X为本场冒险结束时深渊之力的强度。</li><li>In 你的 战役 Log, 记录 *Brotherhood Agents Who Escaped*: 和 list  names 的 每位 unique _邪教徒_ 敌人 该 是 在场 或 beneath  冒险参考卡 当 游戏 ended.</li></ul>"
+      "title": "结局 2",
+      "body": "<p>_结局 2_：奈斯站起身来。她的大部分力量已被抽干，但数名梦者的力量仍在支撑着她。“他们谋划了数百年。他们的清算之日即将到来。没有什么能阻止它。我也不能。你们更不能。”你注意到她说话时仿佛自己是个局外人，于是进一步追问。“你觉得我有选择的余地吗？”她嗤笑道。“没有人能抵挡克萨拉。你会明白的。他会像扭曲我心志一样扭弯你的意志。”她的影子不断膨胀、扭曲、变形。“他想要的是深渊。若你想阻止他，就向西进发。克萨拉在门扉之外等着你。”奈斯的影子将她的身体整个吞没，她便从眼前消失。只留下她的护身符。</p><ul><li>在你的战役日志中记录*你已了解克萨拉的图谋*。</li><li>任意一位调查员可以选择将古代安卡加入其牌组。此卡牌不计入该调查员的牌组上限。</li><li>每位调查员获得等同于胜利牌区中每张卡牌胜利点（X）的经验值。</li><li>在你的战役日志中记录*深渊中的梦者（X）*。X为场景结束时的深渊之力。</li><li>在你的战役日志中记录*逃脱的兄弟会爪牙*：并列出在游戏结束时位于场上或场景参考卡下方的每张唯一_教徒_敌人卡牌的名称。</li></ul>"
     },
     "noResolution": {
-      "body": "<p>_如果 没有 结局 是 到达 (每位调查员 resigned 或 是 被击败)_: The 城市 的 Cairo sleeps 和 将 never wake. In  西,  Brotherhood rejoices, 为 他们的 prophecy 是 关于 至 是 fulfilled. 和 deep 在  land 的 梦, 他们的 Chosen grips 他的 weapon 为第一 时间.</p><ul><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li><li>在冒险日志中，记录下<i>深渊中的沉梦者(X)</i>。X为本场冒险结束时深渊之力的强度。</li><li>In 你的 战役 Log, 记录 *Brotherhood Agents Who Escaped*: 和 list  names 的 每位 unique _邪教徒_ 敌人 该 是 在场 或 beneath  冒险参考卡 当 游戏 ended.</li><li>In 你的 战役 Log, 记录 该 * Brotherhood's schemes continue unabated*.</li></ul>",
-      "title": "如果未达成任何结局"
+      "body": "<p>_若未能达成任何结局（每位调查员均已撤退或被击败）_：整个开罗陷入沉睡，再也不会醒来。在西方，兄弟会欢欣鼓舞，因为他们的预言即将应验。而在梦境之地的深处，他们口中的「被选中者」首次握紧了他的武器。</p><ul><li>每位调查员获得等同于胜利牌区中每张卡牌胜利点（X）的经验值。</li><li>在你的战役日志中记录*深渊中的梦者（X）*。X为场景结束时的深渊之力。</li><li>在你的战役日志中记录*逃脱的兄弟会爪牙*：并列出在游戏结束时位于场上或场景参考卡下方的每张唯一_教徒_敌人卡牌的名称。</li><li>在你的战役日志中记录*兄弟会的阴谋仍在继续*。</li></ul>",
+      "title": "无结局"
     }
   },
   "specialRules": [
@@ -40,33 +40,33 @@
     },
     {
       "title": "探索",
-      "body": "<p class='basic'><i>深渊守卫</i>中的某些能力带有<b>探索</b>行动标识。此类能力通常会通过“启动”行动发动，用于找出新的地点并将这一地点放置入场。</p><p class='basic'><b>探索</b>能力会指示你抽取“探索牌堆”顶上的1张卡牌。探索牌堆是一个独立的牌堆，在某些冒险的设置阶段构成该牌堆，包含多张单面地点卡和诡计卡。</p><ul><li>每个<b>探索</b>能力会声明你正在寻找并要抽出的一类地点。<b>抽出一个该类地点后，将其放置入场，然后你移动到该地点。</b>这视为一次“成功”的探索。</li><li>如果抽出了其他任何地点，将其放在探索牌堆旁边，然后抽取探索牌堆的下一张卡牌。重复此流程，直到抽出指定类型的地点，或抽出诡计卡。在此行动结束后，将探索牌堆旁的所有地点混洗并放回探索牌堆。</li><li>如果抽出了诡计卡，如常结算。如果该卡牌被弃掉，如常将它放到遭遇弃牌堆。探索牌堆没有弃牌堆。这视为一次“失败”的探索。</li><li>单面地点从探索牌堆放置入场时，在该地点上放置线索，数量等于其线索值。</li></ul>"
+      "body": "<p class='basic'>在*深渊守护者*中，某些能力带有_探索_动作标识符。这类能力通常用于寻找新的地点加入游戏，并借助“激活”动作来发动。</p><p class='basic'>_探索_能力指示你抽取“探索牌堆”顶部的卡牌，该牌堆是本次场景中另行构筑的独立牌堆。该牌堆由若干张单面地点和陷阱卡组成。</p><ul><li>每项_探索_能力都指明你所要寻找的特定地点类型。_若抽到该类型的地点，则将其加入游戏，并移动到该地点。_这被视为一次“成功”的探索。</li><li>若抽到任何其他地点，则将其放在探索牌堆旁，并从探索牌堆再抽一张卡。重复此过程，直到抽到所指定的地点类型，或抽到一张陷阱卡。此行动结束后，将放在探索牌堆旁的每张地点洗回探索牌堆。</li><li>若抽到陷阱卡牌，则照常结算。若其被弃置，则照常放入遭遇牌弃牌堆。探索牌堆没有弃牌堆。这被视为一次“失败”的探索。</li><li>当一张单面地点由探索牌堆加入游戏时，在该地点放置等同于其线索值的线索。</li></ul>"
     }
   ],
   "tokens": {
     "easyStandard": {
-      "cultist": "深渊之力：",
-      "skull": "-X. X 是深渊之力.",
-      "tablet": "0. 为 这 技能检定, ignore 所有 bonuses 至 你的 技能值.",
-      "elderThing": "-5. 你 可以 加入 1 strength 至 无尽深渊 至 自动成功, 改为."
+      "cultist": "再揭示另一个标记。若你失败且深渊之力为3或更低，为深渊增加1点强度。",
+      "skull": "-X。X 为深渊之力。",
+      "tablet": "0。在此技能检定中，忽略你技能值的所有加成。",
+      "elderThing": "-5。作为替代，你可以为深渊增加1点强度以自动成功。"
     },
     "hardExpert": {
-      "cultist": "深渊之力：",
-      "skull": "-X. X 是 1 更多 于  深渊之力.",
-      "tablet": "-2. 为 这 技能检定, ignore 所有 bonuses 至 你的 技能值.",
-      "elderThing": "-6. 你 可以 加入 1 strength 至 无尽深渊 至 自动成功, 改为."
+      "cultist": "再揭示另一个标记。若你失败且深渊之力为5或更低，为深渊增加1点强度。",
+      "skull": "-X。X 比深渊之力多1。",
+      "tablet": "-2。在此技能检定中，忽略你技能值的所有加成。",
+      "elderThing": "-6。作为替代，你可以为深渊增加1点强度以自动成功。"
     }
   },
   "label": {
     "elderThing": {
-      "addStrength": "加入 1 strength 至 无尽深渊 至 自动成功"
+      "addStrength": "为深渊增加1点强度以自动成功"
     }
   },
   "remembered": {
-    "foundADoorMarkedWithBlood": "相关角色 a 门 与",
-    "boughtAnOddTrinket": "相关角色",
-    "discoveredAnAncientTablet": "相关角色 石板",
-    "sabotagedTheTrain": "相关角色",
-    "brokenIntoADesertedTemple": "相关角色 至 a"
+    "foundADoorMarkedWithBlood": "发现了一扇沾有血迹的门",
+    "boughtAnOddTrinket": "买了一件古怪的饰品",
+    "discoveredAnAncientTablet": "发现了一块古代石板",
+    "sabotagedTheTrain": "破坏了火车",
+    "brokenIntoADesertedTemple": "闯入了一座废弃的神庙"
   }
 }

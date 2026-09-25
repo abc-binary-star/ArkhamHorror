@@ -2,57 +2,57 @@
   "label": {
     "usurpTheNight": {
       "refuse": "拒绝",
-      "proceed": "进入<b>结局2</b>",
-      "flipBack": "翻面 卡牌 敌人 面",
-      "acceptMercy": "相关角色 克扎拉' 和"
+      "proceed": "进行至结局 3",
+      "flipBack": "将此卡牌翻回其敌人面",
+      "acceptMercy": "接受克萨拉的仁慈，并立即撤退"
     },
     "defeatingXzharah": {
-      "proceed": "进入_结局2_",
-      "flipBack": "翻面 \"a\" 面"
+      "proceed": "进行至结局 2",
+      "flipBack": "将此场景卡牌翻回其“a”面"
     },
     "theBlackWind": {
-      "discard": "弃掉 The Black Wind 和 抽取遭遇牌库顶的卡牌 至 replace 它. 你 get -1 至 所有 技能 为remainder 的 这 轮.",
-      "addStrength": "在无尽深渊上增加1点力量，并将黑风加入胜利牌区。"
+      "discard": "弃掉黑风，并抽取遭遇牌堆顶的1张卡牌以取代之。在本回合剩余时间内，你所有技能-1。",
+      "addStrength": "为深渊增加1点强度，并将黑风加入胜利牌区。"
     },
-    "lookAtExplorationDeck": "查看探索牌库顶的卡牌",
-    "lookAtEncounterDeck": "查看遭遇牌库顶的卡牌",
+    "lookAtExplorationDeck": "查看探索牌堆顶的卡牌",
+    "lookAtEncounterDeck": "查看遭遇牌堆顶的卡牌",
     "nassor": {
-      "addStrength": "加入 1 strength 至 无尽深渊",
-      "extraDamage": "相关角色 +{count} 伤害 和 +{count} 恐惧 为 攻击"
+      "addStrength": "为深渊增加1点强度",
+      "extraDamage": "纳索尔在此次攻击中造成+{count}点伤害和+{count}点恐惧"
     },
     "fateOfTheDreamers": {
-      "removeStrength": "移除 2 strength 从 无尽深渊.",
-      "addStrength": "加入 2 strength 至 无尽深渊."
+      "removeStrength": "从深渊移除2点强度。",
+      "addStrength": "为深渊增加2点强度。"
     },
     "prisonersOfConquest": {
-      "freeTheCreatures": "检定 {agility} (4) 至 free  生物s.",
-      "slayTheCreatures": "检定 {combat} (4) 至 slay  生物s."
+      "freeTheCreatures": "检定 {'{'}agility{'}'}（4），以释放这些生物。",
+      "slayTheCreatures": "检定 {'{'}combat{'}'}（4），以击杀这些生物。"
     },
     "ruinsOfSarkomand": {
-      "speakToTheDenizens": "检定{intellect}（3）以与居住在这些遗迹中的近似人形生物交谈。",
-      "blockTheTrapdoor": "检定 {combat} (3) ."
+      "speakToTheDenizens": "检定 {'{'}intellect{'}'}（3），与居住在这些废墟中的近乎人形生物交谈。",
+      "blockTheTrapdoor": "检定 {'{'}combat{'}'}（3），以堵住暗门。"
     },
     "effigyOfNodens": {
-      "entreatForAid": "检定{willpower}（2）以请求这座雕像所描绘实体的援助。",
-      "overthrowTheStatue": "检定 {combat} (2) ."
+      "entreatForAid": "检定 {'{'}willpower{'}'}（2），向这座雕像所描绘的实体求援。",
+      "overthrowTheStatue": "检定 {'{'}combat{'}'}（2），以推翻这座雕像。"
     },
     "theHourOfJudgment": {
-      "spareNeith": "放过奈斯，听听她要说什么。选择此项后，你相信自己能进一步了解奈斯所说的Xzharah。",
-      "destroyNeith": "摧毁 奈特 一次 和 为 全部. 由 选项, 你 在……下 诅咒 的 将 ."
+      "spareNeith": "饶恕奈斯，并倾听她的陈述。选择此选项，你相信自己可以更深入地了解奈斯口中的克萨拉。",
+      "destroyNeith": "一劳永逸地摧毁奈斯。选择此选项，你相信那些仍受永恒沉眠诅咒支配的人将获得解放。"
     }
   },
   "rules": {
     "storyCards": {
-      "title": "剧情卡",
-      "body": "剧情卡是在本冒险出现的一种新的卡牌类型。此类卡牌只出现在另一冒险卡的背面，作为另一种叙述的形式出现。在你收到指示要结算一张剧情卡时，阅读该卡上的剧情文本然后结算其游戏文本(如果有的话)。\n<i>(注意：当一个在场的地点或敌人翻至剧情卡一面时，该地点或敌人在剧情卡结算时依然视为在场。)</i>"
+      "title": "故事卡牌",
+      "body": "<p class='basic'>故事卡牌是本场冒险中的一种新卡牌类型。这些卡牌是提供额外叙述的途径，通常会作为另一张场景卡牌的反面出现。当指示你结算一张故事卡牌时，直接阅读其故事文本，并结算其游戏文本（如有）。</p><p class='basic'>（注意：当场上的一张地点或敌人翻到其另一面的故事卡牌时，在该故事卡牌结算期间，该地点或敌人仍被视为在游戏中。）</p>"
     },
     "strengthOfTheAbyss": {
       "title": "深渊之力",
-      "body": "在本场冒险中，冒险辅助卡上的资源数量表示当前深渊之力的强度。当你受到指示，要增强或减弱深渊之力时，相应地调整冒险辅助卡上的资源标记数目。深渊之力本身没有效果；但是，某些遭遇卡的效果根据当前的深渊之力，可能会改变或变得更强。要当心——深渊之力越是强大，你要面临的阻力也会越大。要是它变得过于强大，你就会败在深渊守卫的手上。"
+      "body": "<p class='basic'>在本场冒险期间，场景参考卡上的资源标示着深渊当前的强度。当指示你为深渊增加强度或从深渊移除强度时，相应地调整场景参考卡上的资源标记数量。深渊之力本身没有固有的游戏效果，但某些遭遇卡牌的效果可能会随着深渊当前的强度而增强或改变。注意——随着深渊之力增强，与你作对的势力也将随之增强。若它变得过于强大，你作为深渊守护者必败无疑。</p>"
     },
     "takenByTheAbyss": {
-      "title": "“坠入深渊”",
-      "body": "<p class='basic'>如果一个效果声明一位被击败的调查员或一个被击败的_盟友_支援<i>“坠入深渊”</i>，该角色惨遭诅咒，陷入长久的沉睡。每有一位调查员或一个_盟友_支援<i>“坠入深渊”</i> ，深渊之力增强1点。然后，如果这是一张独特卡牌，在冒险日志上记录下<i>“(卡牌名)坠入深渊。”</i>坠入深渊的调查员视为阵亡或发疯。此外，玩家不能再打出<i>坠入深渊</i>的任何独特_盟友_支援，直到该剧本结束。</p>"
+      "title": "“被深渊吞没”",
+      "body": "<p class='basic'>如果某效果指出一名被击败的调查员或_盟友_支援已被“被深渊吞没”，那么该角色便受到了一种令其陷入昏迷状态的诅咒。当一名调查员或_盟友_支援被深渊吞没时，首先为深渊增加1点强度。然后，如果该卡牌为唯一卡，在剧本日志中记录“（卡牌名）被深渊吞没”。被深渊吞没的调查员视同被击杀或精神失常。此外，在本剧本的剩余时间内，玩家不能打出任何已被深渊吞没的唯一_盟友_支援的复制。</p>"
     }
   },
   "specialRules": [
@@ -70,25 +70,25 @@
     }
   ],
   "intoTheGate": {
-    "ankh": "<p>*你的 Ankh amulet glows 与 a blinding light, causing Xzharah 至 recoil. \"So, Neith 有 废弃 us!\" Xzharah hisses.*</p>"
+    "ankh": "<p>*你的安卡护身符迸发出耀眼的光芒，令克萨拉瑟缩后退。“这么说，奈斯抛弃了我们！”克萨拉嘶声说道。*</p>"
   },
-  "removeStrengthFromTheAbyss": "移除 1 strength 从 无尽深渊.",
+  "removeStrengthFromTheAbyss": "从深渊移除1点强度。",
   "theTranslatorsEvidence": {
-    "benefit": "<p>*你 bring  石板 至 Dr. El Masri, 和 她 translates 它 至  best 的 她的 能力. \"当  选择 是 made, 他 shall 是 强化 由 a thousand sacrifices 从sacred land.\" 她 blinks a few times, trying 至 process 什么 它 means. \"How many coma patients 是 那里 right now?\" 她 asks, wide-eyed.*</p>"
+    "benefit": "<p>*你将石碑带给艾尔·马斯里博士，她尽其所能加以翻译。“当抉择做出之时，祂将因圣地的千次献祭而获得力量。”她眨了几次眼，试图理解其含义。“现在有多少昏迷病人？”她睁大眼睛问道。*</p>"
   },
   "theSupplicantsEvidence": {
-    "benefit": "<p>*你 manage 至 corner Dr. Moore as 他 tries 至 escape  城市 在 foot. \"非常 clever,\" 他 admits. \"But 你're already 场外 的 时间. Lock me up, 它 doesn't matter. The dreamers 将 是 已牺牲, 和 我们的 Chosen 将 队长 us 至 a 新 age.\" But 之后 several hours, 他 是 begging 至 是 let 场外 的  城市. \"Please,  reaper 是 coming! Neith 是 coming 为 us 所有. 我们'll 所有 是 sacrificed, don't 你 understand? 你 和 me 两者! 所有 的 us need 至 flee  城市 当我们 still 可以!\"*</p>"
+    "benefit": "<p>*你设法在摩尔博士徒步逃离城市时堵住了他。“很聪明，”他承认道，“但你们已经没时间了。把我关起来也无所谓。梦者将被献祭，我们的被选中者将带领我们进入一个新时代。”但数小时后，他却哀求放他离开这座城市。“求求你们，收割者要来了！奈斯正在赶来对付我们所有人。我们都会被献祭，你们不明白吗？你我都是！我们所有人都得趁还来得及逃离这座城市！”*</p>"
   },
   "thePriestesssEvidence": {
-    "benefit": "<p>*Using  密钥 Nadia gave 你, 你 enter  marked residence. To 你的 surprise, 那里 是 nobody inside - 仅faint stench 的 rot 和 aged leather. The 地下室 的  residence 是 littered 与 旧 books, records kept 由  兄弟会 和 它的 many agents. 他们 将 受到 some 时间 至 peruse, 但 a 队长 是一张队长.*</p>"
+    "benefit": "<p>*你使用娜迪亚给你的钥匙，进入了那处被标记的住所。令你惊讶的是，里面空无一人——只有淡淡的腐臭味和陈旧皮革的气息。住所的地下室堆满了旧书，都是兄弟会及其众多代理人留下的记录。这些需要花些时间翻阅，但线索终究是线索。*</p>"
   },
   "theSalesmansEvidence": {
-    "benefit": "<p>*Farid grins wide as 他 scoops golden idols 进入 他的 rucksack. 你 press 他 为 资讯 之前 他 gets too excited. \"查看, 他们 promised me wealth beyond my wildest 梦. Even I 有 my price, 你 知道?\" 他 throws up 他的 hands, 已撤退. \"Let me show 你 my records. I've done a lot 的 'business' 在  最后 few months. 该'll point 你 在  right direction.\"*</p>"
+    "benefit": "<p>*法里德一边把黄金神像扫进自己的背囊，一边咧嘴大笑。你在他过于兴奋之前逼问信息。“听着，他们承诺给我超乎想象的财富。你知道，我也有自己的价码？”他摊开双手，无奈地说。“让我给你看我的记录。过去几个月我做了不少‘生意’。那会给你指明正确的方向。”*</p>"
   },
   "theAssassinsEvidence": {
-    "benefit": "<p>*Despite 他的 mortal wounds,  assassin grins wickedly. \"The 白天 是 coming,\" 他 说 between a fit 的 coughs. \"你 think killing me 将 stop 它? Fools! The Beast 将 devour 你 所有!\" 他 cackles 与 他的 final breath, 然后 falls silent.*</p><p>*你quick 至 搜索 他的 belongings 之前 任意 旁人 spot  正文. Among  many strange curios 在 他的 person, 你 找出 a small leather-bound 日志 与 a cryptic inscription:*</p><p class='center'><span class='wolgast' style='line-height:1em;'>*我们的 tribute soaks 无尽深渊al blade<br>A thousand souls never 至 wake<br>与 这 我们的 Chosen shall arise<br>和  白天 是 ever nigh!*</span></p>"
+    "benefit": "<p>*尽管身负致命伤，刺客仍邪恶地咧嘴而笑。“那日将至，”他一边咳嗽一边说。“你以为杀了我就能阻止它？蠢货！巨兽会把你们全部吞噬殆尽！”他在最后一口气中咯咯笑着，随即沉寂下来。*</p><p>*你迅速搜查他的随身物品，以免有旁观者发现尸体。在他身上的诸多奇珍异宝中，你发现一本用皮革装订的小书，上面刻着一行隐晦的铭文：*</p><p class='center'><span class='wolgast' style='line-height:1em;'>*我们的贡品浸透深渊之刃<br>千条灵魂永不苏醒<br>以此我们的被选中者将崛起<br>那日已然逼近！*</span></p>"
   },
   "theProfessorsEvidence": {
-    "benefit": "<p>*你 . 和 . \"相关角色!\" . \"相关角色 有 从 a . 相关角色 .\" 和 你的 手牌. \"相关角色 . 相关角色 如果 的 , I 可以 ,\" 与 a .*</p>"
+    "benefit": "<p>*你将这件小玩意放在教授的桌上。他戴上单片眼镜，仔细端详。“有意思！”他惊呼道。“这只能来自皇家墓穴中的某一座特定陵墓。大多数学者都不相信它存在。”他站起身来，和你握手。“给我一些时间进一步研究。或许如果我们都能活着离开，我就能重新提交我的论文。”他带着病态的笑声说道。*</p>"
   }
 }

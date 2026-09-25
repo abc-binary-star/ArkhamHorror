@@ -1,94 +1,94 @@
 {
   "setup": {
     "startAt": "每位调查员从廷达洛斯开始游戏。",
-    "nobleLegacy": "将伟大遗产(过去)、伟大遗产(现在)和伟大遗产(未来)剧情卡牌依次放置入场，并结算每一张卡牌的<b>冒险设置</b>说明。<i>(提示：进行游戏时，先专注于完成伟大遗产(过去)，接著专注于完成伟大遗产(现在)，最后再完成伟大遗产(未来)。)</i>",
-    "machination": "从三张_骗局_剧情卡牌中随机选择一张，将其放置入场，并结算其<b>冒险设置</b>说明。将另外两张_骗局_剧情卡牌从游戏中移除。",
-    "plot": "从三张_情节_剧情卡牌中随机选择一张，将其放置入场，并结算其<b>冒险设置</b>说明。将另外两张_情节_剧情卡牌从游戏中移除。",
-    "gatherSets": "找出所有卡牌：  <i>时间骗局</i> 和 <i>单组模式</i> 遭遇 组. 这些 组 是 indicated 由 这些 icons:<section class='encounter-sets'><img src='{setImgPath}/machinations-through-time.png'><img src='{setImgPath}/single-group.png'></section>",
-    "placeLocations": "将廷达洛斯地点入场，使用带有<i>单组模式</i>遭遇组图标的一面。将剩余14张地点入场。<i>（参考第16–18页的地点摆放图，忽略廷达洛斯的摆放位置。）</i>",
-    "easy": "如果 它 是 简单, 移除1个毁灭标记 从 密谋1a.",
-    "hard": "如果 它 是 困难, 将1个毁灭标记放置在密谋1a。",
-    "expert": "如果 它 是 专家, 在密谋1a增加2个毁灭标记。",
-    "shuffleRemainder": "将剩余的33张遭遇卡牌混洗，组成遭遇牌库。 現在你已經準備好開始遊戲了。",
-    "corriganIndustries": "将真菌洞穴地点放在一旁，置于场外。",
-    "doom": "加入 1 {'{'}perPlayer{'}'} 毁灭标记 至 密谋1a. 然后, 如果 你不 playing 在 普通, 检查  难度 level:"
+    "nobleLegacy": "将《高贵遗赠（过去）》《高贵遗赠（现在）》和《高贵遗赠（未来）》故事卡一次一张放入场内，并结算它们各自的<b>设置</b>文本。<i>（提示——游玩时，先专注于完成《高贵遗赠（过去）》，然后专注于《高贵遗赠（现在）》，最后是《高贵遗赠（未来）》。）</i>",
+    "machination": "随机选择三张<b>诡计</b>故事卡中的一张，将其放入场内，并结算其<b>设置</b>文本。将另外两张<b>诡计</b>故事卡从游戏中移除。",
+    "plot": "随机选择三张<b>阴谋</b>故事卡中的一张，将其放入场内，并结算其<b>设置</b>文本。将另外两张<b>阴谋</b>故事卡从游戏中移除。",
+    "gatherSets": "收集《时空诡计》和《单人模式》遭遇牌组中的所有卡牌。这些牌组由以下图标标识：<section class='encounter-sets'><img src='{setImgPath}/machinations-through-time.png'><img src='{setImgPath}/single-group.png'></section>",
+    "placeLocations": "使用带有《单人模式》遭遇牌组图标的一面，将廷达洛斯地点放入场内。将其余十四个地点放入场内。<i>（参见第 16–18 页的地点放置，忽略廷达洛斯的放置位置。）</i>",
+    "easy": "如果是简单难度，从议程 1a 移除 1 个毁灭。",
+    "hard": "如果是困难难度，向议程 1a 添加 1 个毁灭。",
+    "expert": "如果是专家难度，向议程 1a 添加 2 个毁灭。",
+    "shuffleRemainder": "将剩余的 33 张遭遇卡洗匀，组成遭遇牌库。你现在可以开始了。",
+    "corriganIndustries": "将科里根工业公司地点置于一旁，移出游戏。",
+    "doom": "向议程 1a 添加 {'{'}perPlayer{'}'} 个毁灭。然后，如果你不是以标准难度进行游戏，请检查难度等级："
   },
   "resolutions": {
     "resolution1": {
-      "title": "结局1",
-      "body": "<p>托马斯·科里根和玛丽·杰林斯基的发现对科学发展影响甚大。有了他们的帮助，你得以封印阿卡姆里所有通向廷达洛斯的次元门，艾德温·贝内特和他的骗局再也无法威胁世界。你买了一份刊登有两名科学家的报纸，突然意识到：你还有一件事没有做。你发动了机器，把报纸放在平台上。你得完成这个循环，不然这一切将会徒劳无功……</p><ul><li>每位of 下列assets 该 是 在场 (Nikola Tesla, Ezra Graves, 和 Dimensional Beam Machine), 任意 1 调查员可以 选择 加入该 支援 至 他们的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+      "title": "结局 1",
+      "body": "<p>_结局 1：_ 托马斯·科里根和玛丽·齐林斯基的发现对科学的发展极具影响力。在他们的帮助下，你得以封住阿卡姆通往廷达洛斯的每道门径，埃德温·贝内特及其诡计不再是世界之患。你买了一份印有这两位科学家照片的报纸，旋即明白：还有最后一件事要做。你启动机器，把报纸放在平台上。你必须闭合这条循环，否则这一切都将白费……</p><ul><li>对于以下每张在场支援（尼古拉·特斯拉、埃兹拉·格雷夫斯和维度光束机器），任意一名调查员可以选择将该支援加入其牌组。它不计入该调查员的牌组大小。</li><li>每位调查员获得等于胜利展示区中每张卡的_胜利值 X_的经验值。</li></ul>"
     },
     "resolution2": {
-      "title": "结局2",
-      "body": "<p>_Resolution 2_: 你使出了千方百计试图逃出野兽的魔掌，但随著它们持续的追捕，你发现自己不可能修复破碎的时间线。希望尚未破灭。尽管你抱有怀疑，但还是选择相信艾德温·贝内特会继续修复破碎的一切。他有这份能力，但他能担起这份责任吗？</p><ul><li>每位of 下列assets 该 是 在场 (Nikola Tesla, Ezra Graves, 和 Dimensional Beam Machine), 任意 1 调查员可以 选择 加入该 支援 至 他们的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+      "title": "结局 2",
+      "body": "<p>_结局 2：_ 尽管困难重重，你仍设法逃脱了野兽的魔爪，但由于它们穷追不舍，你无法修复这条破碎的时间线。希望仍未断绝。尽管心存疑虑，你还是将修复一切的重担托付给埃德温·贝内特。他有能力，但他有操守吗？</p><ul><li>对于以下每张在场支援（尼古拉·特斯拉、埃兹拉·格雷夫斯和维度光束机器），任意一名调查员可以选择将该支援加入其牌组。它不计入该调查员的牌组大小。</li><li>每位调查员获得等于胜利展示区中每张卡的_胜利值 X_的经验值。</li></ul>"
     },
     "resolution3": {
-      "title": "结局3",
-      "body": "你的恐惧让身体僵硬，猎犬的恶臭让你感到恶心，并昏了过去。再次睁开双眼时，你发现自己在绿色月亮发出病态的黑暗光线中，你脑袋以下的部分都被埋在了恶臭的土地里，成为了廷达洛斯最新的居民。人类文明损失惨重。托马斯·科里根和玛丽·杰林斯基也被囚禁在了廷达洛斯，而他们的毕生事业也随著他们一起消失。更糟糕的是，暗中算计的艾德温·贝内特和他的惊天骗局化为波澜影响了时间，畅通无阻。你仅仅是想了想这样的疯子下一步打算计划什么，就感到厌恶无比。"
+      "title": "结局 3",
+      "body": "<p>_结局 3：_ 你被恐惧麻痹，被吠叫着野兽的恶臭熏得作呕，昏了过去。当你再次睁开眼时，你发现自己置身于一片在绿色月亮下的病态幽暗之中，脖子以下埋在恶臭的泥土里，成为廷达洛斯的永久居民。人类遭受了深重的损失。托马斯·科里根和玛丽·齐林斯基也被囚禁在廷达洛斯，他们毕生的成果也随之消失。更糟的是，诡计多端的埃德温·贝内特及其阴谋在时间里肆意蔓延。一想到这个精神病人接下来打算干什么，你就感到厌恶。</p><ul><li>每名幸存的调查员都<b>发疯</b>。</li></ul>"
     },
     "resolution4": {
-      "title": "结局4",
-      "body": "<p>_Resolution 4_: 千方百计，你设法逃脱了野兽的魔掌，但随著牠们的追捕，你不可能修复破碎的时间线。人类遭受了巨大的损失。人类文明损失惨重。托马斯·科里根和玛丽·杰林斯基也被囚禁在了廷达洛斯，而他们的毕生事业也随著他们一起消失。唯一能作为慰藉的是艾德温·贝内特消失了。他的骗局不复存在，世界也会因此而更美好。但你内心深处有个想法挥之不去：他可能会卷土重来。</p><ul><li>每位of 下列assets 该 是 在场 (Nikola Tesla, Ezra Graves, 和 Dimensional Beam Machine), 任意 1 调查员可以 选择 加入该 支援 至 他们的 牌组. 它 会 不 数量 朝向 该 调查员's 牌组 大小.</li><li>每位调查员获得等同于胜利牌区中胜利点数总值的经验。</li></ul>"
+      "title": "结局 4",
+      "body": "<p>_结局 4：_ 尽管困难重重，你仍设法逃脱了野兽的魔爪，但由于它们穷追不舍，你无法修复这条破碎的时间线。人类遭受了深重的损失。托马斯·科里根和玛丽·齐林斯基被囚禁在廷达洛斯，他们毕生的成果也随之消失。唯一的慰藉是埃德温·贝内特不知所踪。他的阴谋已经停止，世界变得更好。但内心深处，一个念头挥之不去：他回归的可能。</p><ul><li>对于以下每张在场支援（尼古拉·特斯拉、埃兹拉·格雷夫斯和维度光束机器），任意一名调查员可以选择将该支援加入其牌组。它不计入该调查员的牌组大小。</li><li>每位调查员获得等于胜利展示区中每张卡的_胜利值 X_的经验值。</li></ul>"
     },
     "noResolution": {
-      "body": "<p>无数猎犬冲破空间的门框和菱角限制，痴狂地逼近你。你不知所措，充满无限恐惧，凝视著即将迎来的死亡……</p><ul><li>剩下的每位调查员，不论所处哪个时代都被击败并受到1点精神创伤。</li><li>如果  Edwin Bennet 支援 是 在场 在 任意 era, 前往<b>结局2</b>.</li><li>如果  Edwin Bennet 敌人 是 在场 在 任意 era, 前往<b>结局3</b>.</li><li>否则, 前往<b>结局4</b>.</li></ul>",
-      "title": "如果未达成任何结局"
+      "body": "<p>无数猎犬冲过空间的门径和转角，将你逼入绝境。困惑而恐惧，你凝视着自己的末日……</p><ul><li>每个时代中剩余的每名调查员都被击败，并受到 1 点精神创伤。</li><li>如果《埃德温·贝内特》支援在任一时代在场，则继续至<b>结局 2</b>。</li><li>如果《埃德温·贝内特》敌人在任一时代在场，则继续至<b>结局 3</b>。</li><li>否则，继续至<b>结局 4</b>。</li></ul>",
+      "title": "无结局"
     }
   },
   "intro": {
-    "body": "<p class='indented'>\"The sciences, 每位 straining 在 它的 own direction, 有 hitherto harmed us little; 但 some 白天  piecing together 的 dissociated 知识 将 open up such terrifying vistas 的 reality, 和 的 我们的 frightful position therein, 该 我们 shall 任一 go mad 从revelation 或 flee 从deadly light 进入  peace 和 safety 的 a 新 dark age.\"</p><p class='basic right'>– H.P. Lovecraft, *The Call 的 Cthulhu*</p><p>报纸头条：“当地科学家荣获诺贝尔奖！”头条下方，画著两位年长的物理学家自豪地站在一台巨型望远镜前。你瞥了一眼报纸上的日期，你哑然张著嘴。阿卡姆报社出版的时间是1956年12月5日，但这怎么可能呢？</p><p>Surprised 和 curious, 你 eagerly 阅读  entire newspaper 和 learn 的 2 remarkable scientists, Thomas Corrigan 和 Mary Zielinski, 和 他们的 journey 至 winning a Nobel Prize 在 physics. 在years, 他们的 research progressed 与 成功 之后 成功, culminating 在  discovery 的 teleportation. 他们 published 他们的 remarkable findings 在 February 23, 1955, 至 much acclaim. 和 now—或 rather, thirty years 从 now—他们 是 是 awarded 与Nobel Prize 在 Physics.</p><p>Though suspect, 你的 intuition tells 你 这 mysterious newspaper 是 real. In awe 的  future notoriety 你 go 至 Miskatonic University 至 meet 他们. However, 你're informed 他们 是 不 affiliated 与University 和, tragically, 两者 的 他们 disappeared years ago.</p><p>在世人尚未知道之时，已经发生了一场巨变。杰出科学家就这么不留痕迹地消失了。重要的科学进展退回原点。历史大发现突然变得无处可寻。人类或许已无回到正轨的可能。</p><p>Within  portals 该 riddle Arkham lies  realm 的 Tindalos, 哪里 countless suspended paths, angular 和 curved, above 和 below, wind away 在 所有 directions. Prowling 沿着 这些 paths 是 malevolent minions: ghastly satyrs 和 Hounds 的 Tindalos, among 其他 monstrosities. The beasts 是 eager 至 savage 他们的 prey, 或, perhaps worse, abduct 和 imprison 他们 在 Tindalos.</p><p>时间出现了乱流，它产生的荡漾也影响到了之后的岁月。这两名科学家如此不幸境遇，而你将要找到他们并修复破碎的时间线。切记，时间穿越可能会导致意料之外的后果，甚至会造成无可挽回的恶果。</p><p class='basic valid'>如果 你playing 在 *Single Group Mode*, 前往_设置 为 Single Group Mode_.</p><p class='basic invalid'>如果 你playing 在 *Epic Multiplayer Mode*, 前往_设置 为 Epic Multiplayer Mode_.</p>",
-    "title": "时间骗局"
+    "body": "<p class='indented'>“各门科学各自向着不同方向用力，迄今尚未给我们带来多少害处；但总有一天，把互不相关的知识拼凑在一起，将开启如此可怕的现实景象、以及我们在其中那骇人的处境，以至于我们要么在启示中发狂，要么逃离那致命的光芒，逃入一个新时代的和平与安全之中。”</p><p class='basic right'>– H.P. 洛夫克拉夫特，《克苏鲁的呼唤》</p><p>报纸头条写着：“本地科学家荣获诺贝尔奖！”下方是两位年迈的物理学家，骄傲地站在一架巨大的望远镜前。你瞥了一眼报纸的日期，下巴张得合不拢。这份《阿卡姆广告报》的日期是 1956 年 12 月 5 日。但这怎么可能？</p><p>既惊讶又好奇，你急切地读完了整份报纸，了解到两位非凡的科学家：托马斯·科里根和玛丽·齐林斯基，以及他们荣获物理学诺贝尔奖的旅程。多年来，他们的研究一个接一个成功，最终发现了传送技术。他们于 1955 年 2 月 23 日发表了这一惊人发现，广受赞誉。而现在——不，更确切地说，是三十年后——他们将获得诺贝尔物理学奖。</p><p>尽管可疑，你的直觉告诉你这份神秘报纸是真的。对未来名声的敬畏让你前往密斯卡托尼克大学拜访他们。然而，你被告知他们并不隶属于该大学，而且可悲的是，两人多年前就已失踪。</p><p>在世人不知情的情况下，一场重大变故已经发生。杰出的科学家们凭空消失。伟大的发明被“抹除”。一项历史性发现突然被“撤销”。人类或许再也不会是原来的样子。</p><p>在遍布阿卡姆的门径之内，是廷达洛斯的领域，那里有无数悬浮的路径，有棱有角、蜿蜒曲折，向上向下，向四面八方延伸。在这些路径上游荡的是邪恶的仆从：可怖的萨提尔和廷达洛斯猎犬，以及其他怪物。这些野兽急于撕裂猎物，或者，更糟的是，把他们掳走囚禁在廷达洛斯。</p><p>时间发生了扭曲，其影响波及其后的岁月。这两位科学家就是这样的不幸者，你必须找到他们，修复这条破碎的时间线。请记住：穿越时间可能会造成意想不到的后果，其中一些将带来严重的连锁反应。</p><p class='basic valid'>如果你正以*单人模式*进行游戏，请继续至_单人模式设置_。</p><p class='basic invalid'>如果你正以*多人史诗模式*进行游戏，请继续至_多人史诗模式设置_。</p>",
+    "title": "时空诡计"
   },
   "tokens": {
     "easyStandard": {
-      "skull": "-X. X 是 1 plus 数量为剧情卡 在 胜利牌区。",
-      "cultist": "-1. 如果 你at 廷达洛斯, 你 自动 失败.",
-      "tablet": "-2 (-4 改为 如果 a _Scientist_ 支援 是 在你的地点).",
-      "elderThing": "-3. 如果 你 失败, deal 1 伤害 或 1 恐惧 至 an _盟友_ 支援 在你的地点."
+      "skull": "-X。X 是胜利展示区中故事卡数量加 1。",
+      "cultist": "-1。若你位于廷达洛斯，你自动失败。",
+      "tablet": "-2（若你所在位置有 _科学家_ 支援，则改为 -4）。",
+      "elderThing": "-3。若你失败，对你所在位置的一张 _盟友_ 支援造成 1 点伤害或 1 点恐惧。"
     },
     "hardExpert": {
-      "skull": "-X. X 是 2 plus 数量为剧情卡 在 胜利牌区。",
-      "cultist": "-2. 如果 你at 廷达洛斯, 你 自动 失败.",
-      "tablet": "-3 (-6 改为 如果 a _Scientist_ 支援 是 在你的地点).",
-      "elderThing": "-4. 如果 你 失败, deal 1 伤害 或 1 恐惧 至 an _盟友_ 支援 在你的地点."
+      "skull": "-X。X 是胜利展示区中故事卡数量加 2。",
+      "cultist": "-2。若你位于廷达洛斯，你自动失败。",
+      "tablet": "-3（若你所在位置有 _科学家_ 支援，则改为 -6）。",
+      "elderThing": "-4。若你失败，对你所在位置的一张 _盟友_ 支援造成 1 点伤害或 1 点恐惧。"
     }
   },
   "label": {
     "oMalleysWatchShop": {
-      "placeTime": "耗竭托马斯·科里根，在_现在_滴答俱乐部上放置1个资源，表示时间流逝。"
+      "placeTime": "消耗托马斯·科里根，以在《_过去_ 滴答俱乐部》上放置 1 个资源，作为时间"
     },
     "tickTockClub": {
-      "placeTime": "耗竭托马斯·科里根，在_未来_滴答俱乐部上放置1个资源，表示时间流逝。"
+      "placeTime": "消耗托马斯·科里根，以在《_未来_ 滴答俱乐部》上放置 1 个资源，作为时间"
     },
     "oldSadieSheldon": {
-      "payTheDebt": "花费 3 资源 每调查员,，作为一组, 加入旧 Sadie Sheldon 加入胜利牌区"
+      "payTheDebt": "作为一组，花费每名调查员 3 个资源，将老萨迪·谢尔顿加入胜利展示区"
     },
     "uneasyAlliance": {
-      "test": "检定{'{'}intellect{'}'}（4）。如果成功，在埃德温·贝内特上再放置1个你的线索"
+      "test": "检定 {'{'}intellect{'}'}（4）。若你成功，将你自己另外 1 个线索放在埃德温·贝内特身上"
     },
     "vanishingHistory": {
-      "discardCards": "选择 和 弃掉 3 non-弱点 卡牌 从 你的 手牌",
-      "discardItem": "弃掉 a 剧情 _物品_ 支援 你"
+      "discardCards": "选择并弃置你手中 3 张非弱点卡牌",
+      "discardItem": "弃置一张你控制的非剧情 _物品_ 支援"
     },
     "dimensionalBeamMachine": {
-      "investigator": "移动 an 调查员 在你的地点 至 任意 已揭示 地点",
-      "enemy": "移动 a non-_精英_ 敌人 在你的地点 至 任意 已揭示 地点"
+      "investigator": "将你所在位置的一名调查员移动到任意已揭示地点",
+      "enemy": "将你所在位置的一个非 _精英_ 敌人移动到任意已揭示地点"
     },
     "mobTroubles": {
-      "search": "搜索 遭遇牌库 或 弃掉"
+      "search": "搜寻遭遇牌库或遭遇弃牌堆"
     }
   },
   "remembered": {
-    "thomasAndMaryAreInspiredByNikolaTesla": "Thomas 和 Mary 有 是 inspired 由 尼古拉·特斯拉",
-    "teleportationResearchHasBegun": "Teleportation 研究 有 begun",
-    "thomasAndMaryHaveMet": "相关角色 和 相关角色 有",
-    "fundingForAnObservatoryHasBegun": "相关角色 为 有",
-    "theObservatoryIsBuilt": "相关角色 是",
-    "corriganIndustriesHasBeenFounded": "相关角色 相关角色 有",
-    "thomasAndMaryHaveMadeAHistoricDiscovery": "相关角色 和 相关角色 有 a",
-    "thomasAndMaryHaveWonANobelPrize": "相关角色 和 相关角色 有 a 相关角色 相关角色",
-    "aTreeSeedHasBeenPlanted": "A 有",
-    "thomasAndMaryHaveMarried": "相关角色 和 相关角色 有",
-    "theDebtHasBeenPaid": "相关角色 有"
+    "thomasAndMaryAreInspiredByNikolaTesla": "托马斯和玛丽受到了尼古拉·特斯拉的启发",
+    "teleportationResearchHasBegun": "传送研究已经开始",
+    "thomasAndMaryHaveMet": "托马斯和玛丽已经相遇",
+    "fundingForAnObservatoryHasBegun": "天文台的资助已经开始",
+    "theObservatoryIsBuilt": "天文台已建成",
+    "corriganIndustriesHasBeenFounded": "科里根工业公司已成立",
+    "thomasAndMaryHaveMadeAHistoricDiscovery": "托马斯和玛丽取得了一项历史性发现",
+    "thomasAndMaryHaveWonANobelPrize": "托马斯和玛丽赢得了诺贝尔奖",
+    "aTreeSeedHasBeenPlanted": "一颗树种子已被种下",
+    "thomasAndMaryHaveMarried": "托马斯和玛丽已经结婚",
+    "theDebtHasBeenPaid": "债务已经偿还"
   }
 }
