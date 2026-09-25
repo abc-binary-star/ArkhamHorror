@@ -7,6 +7,7 @@ import { cardArt } from '@/arkham/cardImages';
 import { cardImage, toCardContents } from '@/arkham/types/Card';
 import type { Game } from '@/arkham/types/Game';
 import Card from '@/arkham/components/Card.vue';
+import { chooseOrderedKey } from '@/arkham/injectionKeys';
 import {
   putBackInAnyOrderPicks,
   putBackArrangement,
@@ -27,7 +28,7 @@ const { t } = useI18n()
 const store = useDbCardStore()
 
 // Provided by the game view, which owns the websocket and the question state.
-const chooseOrdered = inject<(choices: number[]) => void>('chooseOrdered')
+const chooseOrdered = inject(chooseOrderedKey)
 
 // Putting cards back in any order. Every pick is buffered, so cards can be
 // placed and taken back, and Done sends the whole arrangement as one ordered
