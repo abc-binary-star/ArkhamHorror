@@ -314,8 +314,10 @@ const decksError = ref(false)
 
 fetchDecks()
   .then((result) => {
-    decks.value = result;
-    if (result.length == 0) {
+    decks.value = result.filter(
+      (deck) => !ArkhamDeck.deckMetaValue(deck, 'arkham_horror_campaign_game_id')
+    );
+    if (decks.value.length == 0) {
       deckType.value = "LoadNewDeck"
     }
   })

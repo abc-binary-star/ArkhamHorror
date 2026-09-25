@@ -24,6 +24,9 @@ const { customCardsEnabled } = storeToRefs(useSettings())
 if (customCardsEnabled.value) loadLibrary()
 
 const allDecks = ref<ArkhamDeck.Deck[]>([])
+const libraryDecks = computed(() => allDecks.value.filter(
+  (deck) => !ArkhamDeck.deckMetaValue(deck, 'arkham_horror_campaign_game_id')
+))
 const deleteId = ref<string | null>(null)
 const toast = useToast()
 const showNewDeck = ref(false)
@@ -83,7 +86,7 @@ onUnmounted(() => {
 })
 
 const decks = computed(() => {
-  const result = allDecks.value.filter((deck) => {
+  const result = libraryDecks.value.filter((deck) => {
     const matchesClass = filterClasses.value.length === 0 ||
       filterClasses.value.some((k) => ArkhamDeck.deckClass(deck)[k])
     return matchesClass
@@ -131,13 +134,13 @@ async function sync(deck: ArkhamDeck.Deck) {
             <NewDeck always-save @new-deck="addDeck" />
           </div>
           <div v-if="showStarterDecks" id="starter-decks-panel" class="new-deck-panel">
-            <StarterDeckPanel :decks="allDecks" @added="addStarterDeck" />
+            <StarterDeckPanel :decks="libraryDecks" @added="addStarterDeck" />
           </div>
       <LoadState v-if="loadError" error @retry="loadDecks" />
       <LoadState v-else-if="!loaded" />
       <div v-else-if="decks.length === 0" class="empty-state">
         <img class="empty-state-card" src="/assets/veiled-harbour/24-空档案纸牌.avif" alt="" aria-hidden="true" />
-        <p>{{ $t(allDecks.length === 0 ? 'noDecksYet' : 'noDecksMatchFilters') }}</p>
+        <p>{{ $t(libraryDecks.length === 0 ? 'noDecksYet' : 'noDecksMatchFilters') }}</p>
       </div>
       <div v-else class="deck-grid">
         <Deck
