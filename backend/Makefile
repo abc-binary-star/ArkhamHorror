@@ -18,6 +18,20 @@
 #
 GHC_OPTIONS ?= -j12 +RTS -A128m -n4m -qb0 -qg1 -I0 -RTS
 
+# Every target that compiles arkham-api below must pass the SAME ghc-options:
+# --pedantic --fast plus "-DDEVELOPMENT $(GHC_OPTIONS)". GHC fingerprints each
+# module's .hi with the flags and the unit-id, so a single target that differs
+# by one switch (or by the component set it asks for) makes the next standard
+# build recompile all ~8200 modules at once -- "[Flags changed]" on every line.
+# Running the suite is fine (--test vs --test --no-run-tests does not change the
+# compile flags). Targets that build arkham-api only as a dependency (validate)
+# register it without its exes, so prefer the api.* targets when you are working
+# on arkham-api itself.
+#
+# api.prof (--profile) and api.metrics.* (stack clean --full) are deliberately
+# different and WILL be followed by a full rebuild of everything. That is
+# expected -- do not "fix" it by aligning them.
+
 # Extra environment prepended to the dev server's exec line. Empty by default;
 # api.watch.redis uses it to point the app at a Redis instance.
 API_ENV ?=
@@ -213,7 +227,7 @@ api.watch.test.entr.log:
 .PHONY: test
 test:
 	cd arkham-api && \
-	stack build --test --fast arkham-api \
+	stack build --test --pedantic --fast arkham-api \
 	  --ghc-options "-DDEVELOPMENT $(GHC_OPTIONS)" \
 	  --interleaved-output \
 		$(EXTRA_STACK_FLAGS)
