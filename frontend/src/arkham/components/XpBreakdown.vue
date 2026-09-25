@@ -27,7 +27,7 @@ const props = defineProps<{
 const collapsed = ref(props.defaultCollapsed ?? false)
 
 // need to drop the first letter of the scenario code
-const name = computed(() => campaignStepName(props.game, props.step))
+const name = computed(() => campaignStepName(props.game, props.step, undefined, { t, te }))
 
 const unspendableXp = computed(() => {
   if (!props.game.campaign?.meta?.bonusXp) return null;
@@ -194,7 +194,7 @@ const scenarioIcon = computed<string | null>(() => campaignStepIcon(props.step))
           </div>
         </div>
       </section>
-      <section class="group" v-for="([iid, info]) in Object.entries(perInvestigator)" :key="name">
+      <section class="group" v-for="([iid, info]) in Object.entries(perInvestigator)" :key="iid">
         <header class="entry-header"><h3>{{format(allInvestigators[iid]?.name.title ?? iid)}}</h3><span class="amount" :class="{ 'amount--negative': info.total < 0 }">{{ $t('upgrade.xp', {total: info.total}) }}</span></header>
         <div v-for="(entry, idx) in info.entries" :key="idx" class="entry">
           <span v-html="format(entry.details.sourceName)"></span>

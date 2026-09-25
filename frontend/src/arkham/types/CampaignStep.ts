@@ -282,8 +282,25 @@ export function extendWithOptions(step: ScenarioStep | ScenarioStepWithOptions |
   }
 }
 
-export function campaignStepName(game: Game, step: CampaignStep, scenario?: Scenario) {
-  const { t, te } = useI18n();
+/* vue-i18n's useI18n() throws "Must be called at the top of a `setup` function"
+ * when there is no component instance, and a computed can be evaluated outside
+ * a render — a store write flushing an update, for instance. Callers that reach
+ * this from a computed pass the `t`/`te` they captured in setup. */
+export type Translator = {
+  t: (key: string, params?: { [key: string]: any }) => string
+  te: (key: string) => boolean
+}
+
+function componentTranslator(): Translator {
+  const { t, te } = useI18n()
+  return {
+    t: (key, params) => (params ? t(key, params) : t(key)),
+    te: (key) => te(key),
+  }
+}
+
+export function campaignStepName(game: Game, step: CampaignStep, scenario?: Scenario, translator?: Translator) {
+  const { t, te } = translator ?? componentTranslator();
   if (scenario) {
     const scenarioId = scenario.id.replace(/^c/, '')
     if (step.tag === 'CheckpointStep') {

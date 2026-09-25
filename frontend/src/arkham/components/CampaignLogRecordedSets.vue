@@ -22,7 +22,7 @@ const props = defineProps<{
 
 const keyPath = (k: LogKey) => formatKey(k, props.homebrewScope)
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 
 const expanded = ref<Record<string, boolean>>({})
 const toggle = (key: string) => { expanded.value[key] = !expanded.value[key] }
@@ -46,7 +46,7 @@ const histories = computed<Record<string, CountStep[]>>(() => {
       .reverse()
       .map((c, idx) => ({
         key: `${path}:${idx}`,
-        name: campaignStepName(game, c.step),
+        name: campaignStepName(game, c.step, undefined, { t, te }),
         icon: campaignStepIcon(c.step),
         delta: c.after - c.before,
         total: c.after,

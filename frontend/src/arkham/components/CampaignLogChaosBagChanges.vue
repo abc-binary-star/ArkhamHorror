@@ -8,7 +8,7 @@ import { useI18n } from 'vue-i18n'
 
 const props = defineProps<{ game: Game, history: ChaosBagChange[] }>()
 
-const { t } = useI18n()
+const { t, te } = useI18n()
 
 type TokenGroup = { face: TokenFace, count: number }
 
@@ -56,7 +56,7 @@ const entries = computed<Entry[]>(() =>
       const added = tokenFaceDifference(change.after, change.before)
       const removed = tokenFaceDifference(change.before, change.after)
       return {
-        name: campaignStepName(props.game, change.step),
+        name: campaignStepName(props.game, change.step, undefined, { t, te }),
         icon: campaignStepIcon(change.step),
         added: group(added),
         removed: group(removed),
