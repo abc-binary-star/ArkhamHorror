@@ -2083,7 +2083,6 @@ provide(sendKey, message => {
   if (phaseAnnouncement.value || uiLock.value) return
   send(message)
 })
-})
 provide(choosePaymentAmountsKey, choosePaymentAmounts)
 provide(chooseAmountsKey, chooseAmounts)
 provide(scenarioSpecificAnswerKey, scenarioSpecificAnswer)

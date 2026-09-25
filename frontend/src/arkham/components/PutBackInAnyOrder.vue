@@ -2,9 +2,8 @@
 import { computed, inject, onUnmounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useDbCardStore } from '@/stores/dbCards';
-import { imgsrc } from '@/arkham/helpers';
-import { cardArt } from '@/arkham/cardImages';
-import { cardImage, toCardContents } from '@/arkham/types/Card';
+import { cardArt, cardImage } from '@/arkham/cardImages';
+import { toCardContents } from '@/arkham/types/Card';
 import type { Game } from '@/arkham/types/Game';
 import Card from '@/arkham/components/Card.vue';
 import { chooseOrderedKey } from '@/arkham/injectionKeys';
@@ -115,6 +114,9 @@ const putBackName = (pick: PutBackPick) => {
   return store.getDbCard(cardArt(cardCode))?.name ?? ''
 }
 
+// Our cardImage takes a card code, not a Card, and already resolves through imgsrc.
+const putBackThumb = (pick: PutBackPick) => cardImage(toCardContents(pick.card).cardCode)
+
 </script>
 
 <template>
@@ -154,7 +156,7 @@ const putBackName = (pick: PutBackPick) => {
                     :aria-label="t('putBackInAnyOrder.takeBack', { name: putBackName(slot) })"
                     @click="unplacePutBack(slot)"
                   >
-                    <img class="put-back__thumb" :src="imgsrc(cardImage(slot.card))" alt="" />
+                    <img class="put-back__thumb" :src="putBackThumb(slot)" alt="" />
                     <span class="put-back__take-back" aria-hidden="true">
                       <svg viewBox="0 0 24 24">
                         <path d="M9 14 4 9l5-5" />
