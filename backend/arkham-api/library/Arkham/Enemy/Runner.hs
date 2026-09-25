@@ -1727,7 +1727,10 @@ instance RunMessage EnemyAttrs where
                     sanityDamage
 
           pushAll
-            $ [attackMessage | allowAttack && not details.cancelled]
+            -- Aquinnah's "deal that enemy's damage to any enemy, instead" is a
+            -- replacement for this step, so it lives or dies with the attack.
+            $ [m | allowAttack, not details.cancelled, m <- details.damageReplacement]
+            <> [attackMessage | allowAttack && not details.cancelled]
             <> [ScenarioSpecific "enemyAttacked" (toJSON enemyId)]
             <> [ Exhaust (mkExhaustion a a)
                | allowAttack
@@ -2301,6 +2304,7 @@ instance RunMessage EnemyAttrs where
               , attackDealDamage = True
               , attackDespiteExhausted = False
               , attackCancelled = False
+              , attackDamageReplacement = []
               }
       case mtchr of
         Nothing -> handleAttack
