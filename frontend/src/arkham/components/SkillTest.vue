@@ -1314,6 +1314,19 @@ i.iconSkillAgility {
 .apply-results { margin-top: 8px; }
 .skip-triggers-button { border: 0; border-radius: 4px; background: #8a6e350f; color: #b6aa96; }
 .skip-triggers-button:hover { background: #8a6e351c; color: #eee2ca; }
+/* Same plaque as apply-results: the global paper button turns its own ink into
+   the window's light text colour, which leaves it blank on this dark surface. */
+.skill-test :deep(.finish-committing) {
+  background: var(--plaque-plate);
+  border: var(--plaque-border);
+  color: var(--plaque-ink);
+  text-shadow: var(--plaque-text-shadow);
+  box-shadow: var(--plaque-shadow);
+  border-radius: 4px;
+  font-family: 'Source Han Serif', Arno, serif;
+  letter-spacing: .06em;
+}
+.skill-test :deep(.finish-committing:hover:not(:disabled)) { border: var(--plaque-border-hover); filter: brightness(1.08); }
 .results-continuation { position: relative; padding: 8px; color: #b6aa96; font-size: .75rem; }
 .results-continuation button { min-height: 30px; padding: 4px 10px; font-size: .72rem; border-radius: 3px; border: 0; background: none; color: #b6aa96; }
 .results-continuation button:hover { background: #8a6e3514; color: #eee2ca; }
