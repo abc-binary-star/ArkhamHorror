@@ -97,6 +97,7 @@ toPublicGame (Entity gId ArkhamGame {..}) gameLog =
 data ApiResponse
   = GameUpdate (PublicGame ArkhamGameId)
   | PhaseChanged Phase.Phase
+  | PhaseSnapshot (PublicGame ArkhamGameId)
   | GameMessage Text
   | GameError Text
   | GameUI Text

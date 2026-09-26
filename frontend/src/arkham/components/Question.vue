@@ -38,7 +38,6 @@ export interface Props {
 const grunge = `url(${imgsrc('grunge.png')})`
 const black_fleur = `url(${imgsrc('fleurs/fleur.png')})`
 const checkpoint_fleur = `url(${imgsrc('fleurs/checkpoint_fleur.png')})`
-const resolution_fleur = `url(${imgsrc('fleurs/resolution_fleur.png')})`
 const props = withDefaults(defineProps<Props>(), { isSkillTest: false })
 const emit = defineEmits(['choose'])
 const { t } = useI18n()
@@ -2022,76 +2021,41 @@ h2 {
   }
 
 
+  /* Resolution text shares the outer dialog's material. Only the content
+     container scrolls, so nested scrollers cannot strand the action button. */
   &:has(.resolution) {
-    background-color: #BAA597;
-    box-shadow: unset;
-    overflow: hidden;
+    --neutral-extra-dark: #e2dbce;
+    color: #e2dbce;
+    background: #18201e;
+    border: 1px solid #a18b6433;
+    border-radius: 4px;
+    box-shadow: none;
+    max-width: 100%;
     max-height: none;
-    isolation: isolate;
-    position: relative;
-    .intro-text-body {
-      margin-block: 30px;
-      padding-block: 0;
-      max-height: 60vh;
-      overflow-y: auto;
-      scrollbar-color: rgba(25, 33, 79, 0.65) transparent;
-      scrollbar-width: thin;
+    overflow: visible;
+    padding: 20px 24px;
+    font-size: 1rem;
+    line-height: 1.8;
+    text-align: start;
+    letter-spacing: .02em;
 
-      &::-webkit-scrollbar {
-        width: 10px;
-      }
+    > .intro-text-body {
+      margin: 0;
+      padding: 0;
+      max-height: none;
+      overflow: visible;
+    }
+    :deep(.resolution) { padding: 0; }
+    :deep(p) { margin: 0 0 14px; }
+    :deep(ul) { margin-block: 12px 0; padding-inline-start: 1.5em; }
+    :deep(li) { margin-block: 8px; padding-inline-start: .25em; }
+    :deep(li::marker), :deep(li::before) { color: #c5ad80; }
+    :deep(ul ul) { margin-block: 6px 0; }
+    :deep(strong), :deep(b) { color: #ead8b6; }
 
-      &::-webkit-scrollbar-track {
-        background: transparent;
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background-color: rgba(25, 33, 79, 0.65);
-        background-clip: content-box;
-        border: 2px solid transparent;
-        border-radius: 999px;
-      }
-
-      &::-webkit-scrollbar-thumb:hover {
-        background-color: rgba(25, 33, 79, 0.8);
-      }
-    }
-    &::after {
-      border: 20px solid #D4CCC3;
-      border-left-width: 10px;
-      border-right-width: 10px;
-      position: absolute;
-      inset: 0px;
-      box-sizing: border-box;
-      content: "";
-      filter: blur(0.25em);
-      z-index: var(--z-index-neg-2);
-    }
-    h1 {
-      color: #19214F;
-      border-bottom: 1px solid #19214F;
-      &::after {
-        border-bottom: 1px solid #19214F;
-      }
-      font-size: 1.3em;
-      font-weight: 500;
-    }
-    &::before {
-      z-index: var(--z-index-neg-1);
-      pointer-events: none;
-      position: absolute;
-      inset: 10px;
-      border-image-source: v-bind(resolution_fleur);
-      border-image-slice: 49.9%;
-      border-image-repeat: no-repeat;
-      border-image-width: 50px;
-      content: "";
-    }
-    @media (max-width: 800px) and (orientation: portrait)  {
-      padding: 10px;
-      &::before {
-        border-image-width: 20px;
-      }
+    @media (max-width: 600px) {
+      padding: 16px;
+      font-size: .95rem;
     }
   }
   &:has(.black) {
@@ -2329,25 +2293,21 @@ h2 {
 
 }
 
-/* Numeric allocation uses ledger paper, with clear inset inputs. */
+/* Numeric allocation shares the dark dialog plate, without a second frame. */
 .amount-modal .amount-contents {
-  background: linear-gradient(115deg, #ffffff38, transparent 65%), #eee2c9;
-  /* Reserve a real border: square corners keep their aspect ratio; only
-     the edge strips repeat. No artwork or masking layer sits under text. */
+  background: #18201e;
   box-sizing: border-box;
-  border: 20px solid transparent;
-  border-image: url('@/assets/veiled-harbour/story-folio-v1.png') 300 / 1 / 0 round;
-  border-radius: 0;
-  color: #493b28;
+  border: 1px solid #a18b6433;
+  border-radius: 4px;
+  color: #e2dbce;
 }
-.amount-contents legend, .amount-choice label { color: #493b28; }
-.amount-choice { background: #fff6df80; border: 1px solid #ae91614d; border-radius: 6px; }
-.amount-input { background: #fff9eb; color: #382d20; border-color: #ae9161; border-radius: 4px; }
-.amount-input:focus { outline-color: #94713d; }
+.amount-contents legend, .amount-choice label { color: #e2dbce; }
+.amount-choice { background: #ffffff04; border: 1px solid #a18b6433; border-radius: 4px; }
+.amount-input { background: #101715; color: #eee2ca; border-color: #a18b6470; border-radius: 4px; }
+.amount-input:focus { outline-color: #dec394; }
 .choices .amount-form > .amount-submit {
-  background: linear-gradient(#65513a, #382e24);
-  color: #f7ecd5;
-  border-top: 1px solid #a88b58;
+  background: linear-gradient(#2b3933, #1c2823);
+  color: #eee2ca;
+  border-top: 1px solid #a18b6470;
 }
-
 </style>

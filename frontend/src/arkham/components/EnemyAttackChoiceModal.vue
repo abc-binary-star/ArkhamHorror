@@ -63,7 +63,7 @@ onBeforeUnmount(() => dialog.value?.close())
 <template>
   <Teleport to="body">
     <button v-if="collapsed && !blocked" class="attack-reminder" type="button" @click="collapsed = false">{{ t('restore') }}</button>
-    <dialog ref="dialog" class="attack-dialog" :class="{ 'attack-dialog--multiple': entries.length > 1 }" :aria-labelledby="titleId" :aria-describedby="descriptionId" @cancel.prevent="collapse">
+    <dialog ref="dialog" class="attack-dialog occult-frame" :class="{ 'attack-dialog--multiple': entries.length > 1 }" :aria-labelledby="titleId" :aria-describedby="descriptionId" @cancel.prevent="collapse">
       <h2 :id="titleId">{{ t(opportunity ? 'opportunity' : 'regular') }}</h2>
       <p class="verse">{{ t(opportunity ? 'opportunityVerse' : 'regularVerse') }}</p>
       <p :id="descriptionId" class="instruction">{{ t('instruction') }}</p>
@@ -83,9 +83,9 @@ onBeforeUnmount(() => dialog.value?.close())
 </template>
 
 <style scoped>
-.attack-dialog { position: fixed; inset: 0; margin: auto; box-sizing: border-box; width: min(360px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto; padding: 20px; border: 1px solid #a98569; border-radius: 10px; background: radial-gradient(ellipse at top, #34302e, #162422 65%); color: #e9dfcb; box-shadow: 0 24px 80px #000b; }
+/* A single dark plate, framed by the generated copper engraving. */
+.attack-dialog { position: fixed; inset: 0; margin: auto; width: min(360px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto; padding: 40px 38px 28px; }
 .attack-dialog--multiple { width: min(620px, calc(100vw - 32px)); }
-.attack-dialog::backdrop { background: #050d10b3; }
 h2 { margin: 0; color: #dbb990; font: 500 1.12rem 'Songti SC', Georgia, serif; text-align: center; }
 p { line-height: 1.7; }
 .verse { color: #baaa92; font: italic .9rem/1.8 'Songti SC', Georgia, serif; }
@@ -101,28 +101,15 @@ button:focus-visible { outline: 2px solid #e2c59e; outline-offset: 3px; }
 .inspect { display: block; margin: 8px auto 0; background: transparent; border-color: #ad8b6540; }
 .attack-reminder { position: fixed; bottom: calc(84px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 1100; max-width: calc(100vw - 32px); }
 
-/* Threat window: blood-red wax and aged copper on pale parchment. */
-.attack-dialog {
-  background: linear-gradient(#b0503417, #b0503417), #eee2c9;
-  /* Reserve a real border: square corners keep their aspect ratio; only
-     the edge strips repeat. No artwork or masking layer sits under text. */
-  box-sizing: border-box;
-  border: 20px solid transparent;
-  border-image: url('@/assets/veiled-harbour/story-folio-v1.png') 300 / 1 / 0 round;
-  border-radius: 0;
-  color: #49312b;
-  box-shadow: inset 0 3px #864333, inset 0 0 0 3px #f5dfc766, 0 24px 80px #000b;
-}
-.attack-dialog h2 { color: #793b2e; }
-.verse, .instruction { color: #755749; }
-.values { color: #873e31; font-weight: 700; }
+.verse, .instruction { color: #b6aa96; }
+.values { color: #e1b1a3; font-weight: 700; }
 .attack-dialog button, .attack-entry :deep(.question-choices > button) {
   background: linear-gradient(#814637, #4c2924);
   border-color: #b18060;
   color: #fff0da;
 }
 .attack-dialog button:hover:not(:disabled) { filter: brightness(1.12); }
-.attack-dialog .inspect { background: #fff3dd66; color: #754332; border-color: #ae806166; }
-.attack-dialog button:focus-visible { outline-color: #904f34; }
+.attack-dialog .inspect { background: transparent; color: #c9b79d; border-color: #ae806166; }
+.attack-dialog button:focus-visible { outline-color: #dec394; }
 
 </style>

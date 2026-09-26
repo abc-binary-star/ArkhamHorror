@@ -165,7 +165,7 @@ onBeforeUnmount(() => dialog.value?.close())
     <button v-if="collapsed && !blocked" class="trigger-reminder" type="button" @click="open">
       {{ t('triggeredEffect.restore') }}
     </button>
-    <dialog ref="dialog" class="trigger-dialog" :aria-labelledby="titleId" :class="{ 'trigger-dialog--compact': compactLayout }" @cancel.prevent="collapse">
+    <dialog ref="dialog" class="trigger-dialog occult-frame" :aria-labelledby="titleId" :class="{ 'trigger-dialog--compact': compactLayout }" @cancel.prevent="collapse">
       <h2 :id="titleId">{{ responseText('title') }}</h2>
       <p class="collection-hint">{{ responseText('hint') }}</p>
       <p v-if="revealWindow" class="collection-hint">{{ t('cardOption.testFast.beforeDraw') }}</p>
@@ -214,44 +214,31 @@ onBeforeUnmount(() => dialog.value?.close())
 </template>
 
 <style scoped>
-/* Response window: the aged folio the choice modal uses, so every prompt over
-   the table reads as one material. A single border-image supplies the frame. */
+/* The engraving stays outside the reading area. */
 .trigger-dialog {
   position: fixed;
   inset: 0;
   margin: auto;
-  box-sizing: border-box;
   width: min(920px, calc(100vw - 32px));
   max-height: calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   overflow: auto;
   overscroll-behavior: contain;
-  padding: 22px;
-  /* Reserve a real border: square corners keep their aspect ratio; only
-     the edge strips repeat. No artwork or masking layer sits under text. */
-  border: 20px solid transparent;
-  border-image: url('@/assets/veiled-harbour/occult-panel-v1.png') 300 / 1 / 0 round;
-  border-radius: 0;
-  background:
-    radial-gradient(140% 70% at 50% -10%, #fff6e0a8, transparent 72%),
-    radial-gradient(120% 80% at 50% 118%, #b99a5f26, transparent 70%),
-    #efe5cf;
-  color: #3f3121;
-  box-shadow: 0 24px 80px #0009;
+  padding: 40px 42px 30px;
 }
-.trigger-dialog::backdrop { background: radial-gradient(circle at 50% 42%, rgb(9 22 24 / 62%), rgb(3 8 10 / 84%)); }
-h2 { margin: 0; text-align: center; font-size: 1.15rem; color: #3d2f1c; font-family: 'Source Han Serif', Arno, serif; letter-spacing: .08em; }
-.collection-hint { font-size: .85rem; text-align: center; color: #7a6a52; }
+
+h2 { margin: 0; text-align: center; font-size: 1.15rem; color: #e1d0b0; font-family: 'Source Han Serif', Arno, serif; letter-spacing: .08em; }
+.collection-hint { font-size: .85rem; text-align: center; color: #b6aa96; }
 footer { display: flex; justify-content: center; margin-top: 14px; }
 .response-card { position: relative; width: 100%; padding: 0; border: 0; border-radius: 9px; background: none; box-shadow: none; cursor: pointer; transition: transform .15s, filter .15s; }
 .response-card:hover:not(:disabled), .response-card[aria-expanded="true"] { transform: translateY(-2px); filter: drop-shadow(0 0 10px #b99a5f80); }
-.ability-count { display: block; padding: 6px 0 0; font-size: .78rem; letter-spacing: .04em; color: #6b5a41; }
-.trigger-dialog--compact { width: min(360px, calc(100vw - 32px)); padding: 16px; }
+.ability-count { display: block; padding: 6px 0 0; font-size: .78rem; letter-spacing: .04em; color: #c4b79f; }
+.trigger-dialog--compact { width: min(360px, calc(100vw - 32px)); padding: 36px 32px 24px; --occult-border: 28px; }
 /* A full-width skip row otherwise keeps unused auto-fit columns occupied. */
 .trigger-dialog--compact fieldset { grid-template-columns: minmax(0, 1fr); }
 /* One entry needs no inner frame; the dialog already draws the only box. */
 .trigger-dialog--compact .trigger-entry { padding: 0; border: 0; background: transparent; }
 p { line-height: 1.6; }
-.context { padding: 10px 12px; border-left: 2px solid #a5883f; background: #8a6e3512; font-size: .9rem; color: #5b4a33; }
+.context { padding: 10px 12px; border-left: 2px solid #a5883f; background: #b9a07112; font-size: .9rem; color: #d6c9b2; }
 fieldset { border: 0; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(200px, 100%), 1fr)); gap: 14px; min-width: 0; }
 fieldset:disabled { opacity: .65; pointer-events: none; }
 .trigger-entry {
@@ -263,7 +250,7 @@ fieldset:disabled { opacity: .65; pointer-events: none; }
   padding: 12px;
   border: 1px solid #b39a6a42;
   border-radius: 8px;
-  background: #fffdf51f;
+  background: #ffffff04;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -303,7 +290,7 @@ fieldset:disabled { opacity: .65; pointer-events: none; }
 .action-row :deep(button) { flex: 0 1 auto; width: auto; min-width: 0; max-width: 100%; }
 .action-row :deep(.button-label) { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
 .action-row .collapse { flex-shrink: 0; white-space: nowrap; }
-.skip-row { grid-column: 1 / -1; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid #8a6e351f; }
+.skip-row { grid-column: 1 / -1; display: flex; justify-content: center; padding-top: 12px; border-top: 1px solid #b9a0711f; }
 .skip, .collapse {
   cursor: pointer;
   min-height: 40px;
@@ -311,17 +298,17 @@ fieldset:disabled { opacity: .65; pointer-events: none; }
   border: 0;
   border-radius: 4px;
   background: none;
-  color: #6d5c45;
+  color: #b6aa96;
   font-size: .82rem;
   font-weight: 400;
   letter-spacing: .04em;
 }
 .skip { min-width: 160px; }
-.skip:hover, .collapse:hover { background: #8a6e3514; color: #43331f; }
-button:focus-visible, .entry-actions :deep(button:focus-visible) { outline: 2px solid #8a6e35; outline-offset: 3px; }
+.skip:hover, .collapse:hover { background: #b9a07114; color: #eee2ca; }
+button:focus-visible, .entry-actions :deep(button:focus-visible) { outline: 2px solid #b9a071; outline-offset: 3px; }
 .trigger-reminder { position: fixed; bottom: calc(84px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 1100; padding: 10px 18px; border: 1px solid #b39a6a99; border-radius: 6px; background: #23332e; color: #f0e6cd; box-shadow: 0 4px 24px #0008; cursor: pointer; }
 @media (max-width: 600px) {
-  .trigger-dialog { padding: 16px; }
+  .trigger-dialog { padding: 30px 28px 24px; --occult-border: 26px; }
   .trigger-entry img { max-height: 32dvh; }
 }
 </style>

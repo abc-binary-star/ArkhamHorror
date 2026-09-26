@@ -64,7 +64,8 @@ import { useBgm } from '@/arkham/composables/useBgm'
 import { useEventTimer } from '@/arkham/composables/useEventTimer'
 import { useFocusLight } from '@/arkham/composables/useFocusLight'
 import { usePhaseAnnouncement } from '@/arkham/composables/usePhaseAnnouncement'
-import { useGameSocket, useSingleFlight } from '@/arkham/composables/useGameSocket'
+import { useGameSocket } from '@/arkham/composables/useGameSocket'
+import { orderedGameEvents } from '@/arkham/composables/orderedGameEvents'
 import { useImagePreloader } from '@/arkham/composables/useImagePreloader'
 import { useTurnTitleFlash } from '@/arkham/composables/useTurnTitleFlash'
 import { awaitingOrganizer, type SharedEventState } from '@/arkham/types/EpicEvent'
@@ -160,6 +161,7 @@ type ServerResult =
   | { tag: 'GameCardOnly'; contents: string }
   | { tag: 'GameUpdate'; contents: string }
   | { tag: 'PhaseChanged'; contents: Phase }
+  | { tag: 'PhaseSnapshot'; contents: string }
   | { tag: 'GameShowDiscard'; contents: string }
   | { tag: 'GameShowUnder'; contents: string }
   | { tag: 'GameUI'; contents: string }
@@ -422,7 +424,6 @@ const playabilityInfo = ref<PlayabilityInfo | null>(null)
 const gameLog = shallowRef<readonly string[]>(Object.freeze([]))
 const playerId = ref<string | null>(null)
 const ready = ref(false)
-const resultQueue = ref<any>([])
 const navigationBack = provideNavigationBack()
 const showLog = ref(false)
 navigationBack.register({
@@ -451,7 +452,7 @@ watch(showOtherPlayersHands, (v) => {
 })
 const tarotCards = ref<TarotCard[]>([])
 const uiLock = ref<boolean>(false)
-const { current: announcedPhase, active: phaseAnnouncement, push: pushAnnouncedPhase } = usePhaseAnnouncement(
+const { current: announcedPhase, active: phaseAnnouncement, push: pushAnnouncedPhase, reset: resetPhaseAnnouncement } = usePhaseAnnouncement(
   () => game.value?.phase, uiLock,
 )
 const showSettings = ref(false)
@@ -1019,18 +1020,11 @@ const onDisconnect = () => {
   socketError.value = true
 }
 
-let qHead = 0
-const qPush = (x: any) => {
-  resultQueue.value.push(x)
-}
-const qPop = () => {
-  if (qHead >= resultQueue.value.length) {
-    resultQueue.value = []
-    qHead = 0
-    return undefined
-  }
-  return resultQueue.value[qHead++]
-}
+const resultEvents = orderedGameEvents<ServerResult>(
+  () => uiLock.value || phaseAnnouncement.value,
+  async (result, isCurrent) => { await handleResult(result, isCurrent) },
+  error => { void recoverFromFailedDecode(error) },
+)
 
 function entitiesMoved(previous: ArkhamGame.Game, current: ArkhamGame.Game) {
   const placementChanged = (
@@ -1051,19 +1045,22 @@ function entitiesMoved(previous: ArkhamGame.Game, current: ArkhamGame.Game) {
   )
 }
 
-function applyGameUpdate(updatedGame: ArkhamGame.Game, locked: boolean) {
+async function applyGameUpdate(
+  updatedGame: ArkhamGame.Game, locked: boolean, isCurrent: () => boolean = () => true,
+): Promise<void> {
   // skillTest drives the skill-check dialog too: hide it behind a revelation
   // so the reveal is dismissed before the check opens (the queued GameUpdate
   // restores it on unlock).
   const nextGame = locked ? { ...updatedGame, question: {}, skillTest: null } : updatedGame
   const previousGame = game.value
   const apply = async () => {
+    if (!isCurrent()) return
     game.value = nextGame
     storyAnswerPending.value = false
     await nextTick()
   }
   const transitionDocument = document as Document & {
-    startViewTransition?: (callback: () => Promise<void>) => unknown
+    startViewTransition?: (callback: () => Promise<void>) => { updateCallbackDone: Promise<void> }
   }
 
   if (
@@ -1071,18 +1068,18 @@ function applyGameUpdate(updatedGame: ArkhamGame.Game, locked: boolean) {
     entitiesMoved(previousGame, nextGame) &&
     transitionDocument.startViewTransition
   ) {
-    transitionDocument.startViewTransition(apply)
+    await transitionDocument.startViewTransition(apply).updateCallbackDone
   } else {
-    void apply()
+    await apply()
   }
 }
 
-async function applyDecodedUpdate(updatedGame: ArkhamGame.Game): Promise<void> {
+async function applyDecodedUpdate(updatedGame: ArkhamGame.Game, isCurrent: () => boolean): Promise<void> {
   const locked = uiLock.value
-  // Behind a revelation: refresh the board but keep the question hidden so the
-  // player can't act until they dismiss it. On unlock the queued GameUpdate is
-  // replayed (locked === false) and restores the real question + side effects.
-  applyGameUpdate(updatedGame, locked)
+  // The ordered stream releases this snapshot after earlier phase banners and
+  // revelations. Never show future resources/cards behind an older phase.
+  await applyGameUpdate(updatedGame, locked, isCurrent)
+  if (!isCurrent()) return
   updateGameLog(updatedGame.log)
   preloadImages(updatedGame)
   if (!locked) {
@@ -1135,12 +1132,6 @@ async function recoverFromFailedDecode(err: unknown): Promise<void> {
     })
 }
 
-const scheduleApplyUpdate = useSingleFlight(
-  (payload: string) => ArkhamGame.gameDecoder.decodePromise(payload),
-  applyDecodedUpdate,
-  recoverFromFailedDecode,
-)
-
 function continueSkipAll() {
   if (phaseAnnouncement.value || uiLock.value) return
   if (skipAllPending.value.size === 0) return
@@ -1186,7 +1177,12 @@ function skipAllTriggers() {
 const { send, close } = useGameSocket<ServerResult>({
   url: websocketUrl,
   onResult: (result) => {
-    handleResult(result)
+    // Control/error messages must remain available even behind a modal.
+    if (['GameError', 'SharedStateUpdate', 'EventChanged'].includes(result.tag)) {
+      void handleResult(result)
+    } else {
+      resultEvents.push(result)
+    }
     oldQuestion.value = null
   },
   onDisconnect,
@@ -1202,10 +1198,9 @@ const { send, close } = useGameSocket<ServerResult>({
 })
 
 /*
- * A GameUpdate is the only message carrying new board state, and it reaches us
- * over a different path than the log lines do: the server broadcasts log lines
- * in-process, but publishes GameUpdate through Redis pub/sub so it can reach
- * other pods. When that path breaks, the failure is silent and deeply
+ * The committed GameUpdate reaches us over a different path from in-process
+ * phase checkpoints and log lines: it uses Redis pub/sub to reach other pods.
+ * When that path breaks, the failure is silent and deeply
  * confusing -- log lines keep scrolling while the board freezes, so it reads
  * as "the server ignored my click" and invites the player to click again.
  *
@@ -1250,6 +1245,8 @@ let resyncing = false
 async function resyncGame() {
   if (resyncing) return
   resyncing = true
+  resultEvents.clear()
+  resetPhaseAnnouncement()
   try {
     const { game: refetched } = await fetchGame(props.gameId, props.spectate)
     applyGameUpdate(refetched, uiLock.value)
@@ -1271,7 +1268,7 @@ function sendAnswer(payload: string) {
   send(payload)
 }
 
-const handleResult = (result: ServerResult) => {
+const handleResult = async (result: ServerResult, isCurrent: () => boolean = () => true): Promise<void> => {
   processing.value = false
   switch (result.tag) {
     case 'GameError':
@@ -1307,10 +1304,6 @@ const handleResult = (result: ServerResult) => {
         if (props.spectate) return
         const targetPlayer = result.contents.slice('theSilence:'.length)
         if (!(solo.value === true || targetPlayer === playerId.value)) return
-        if (uiLock.value || phaseAnnouncement.value) {
-          qPush(result)
-          return
-        }
         document.dispatchEvent(new CustomEvent('arkham:clear-card-overlay'))
         showTheSilenceModal.value = true
         uiLock.value = true
@@ -1343,15 +1336,11 @@ const handleResult = (result: ServerResult) => {
       }
     case 'GameTarot':
       if (props.spectate) return
-      if (uiLock.value || phaseAnnouncement.value) {
-        qPush(result)
-        return
-      }
-
       uiLock.value = true
       JsonDecoder.array(tarotCardDecoder, 'tarotCards')
         .decodePromise(result.contents)
         .then((r) => {
+          if (!isCurrent()) return
           tarotCards.value = r
         })
         .catch((e) => {
@@ -1380,15 +1369,11 @@ const handleResult = (result: ServerResult) => {
 
     case 'GameCard':
       if (props.spectate) return
-      if (uiLock.value || phaseAnnouncement.value) {
-        qPush(result)
-        return
-      }
-
       uiLock.value = true
       gameCardDecoder
         .decodePromise(result as any)
         .then((r) => {
+          if (!isCurrent()) return
           gameCard.value = r
         })
         .catch((e) => {
@@ -1399,15 +1384,11 @@ const handleResult = (result: ServerResult) => {
 
     case 'GameCardOnly':
       if (props.spectate) return
-      if (uiLock.value || phaseAnnouncement.value) {
-        qPush(result)
-        return
-      }
-
       uiLock.value = true
       gameCardOnlyDecoder
         .decodePromise(result as any)
         .then((r) => {
+          if (!isCurrent()) return
           // if it isn't for us, immediately unlock and continue draining
           if (!(solo.value === true || r.player === playerId.value)) {
             uiLock.value = false
@@ -1434,25 +1415,28 @@ const handleResult = (result: ServerResult) => {
     case 'PhaseChanged':
       pushAnnouncedPhase(result.contents as Phase)
       return
-    case 'GameUpdate':
-      // Flush the latest state onto the board even while a revelation/modal holds
-      // the UI lock, so the table behind it reflects the current situation instead
-      // of freezing on the pre-revelation state (issue #4817). Keep it queued so
-      // the pending question is only restored once every revelation is dismissed.
-      if (uiLock.value) qPush(result)
-      scheduleApplyUpdate(result.contents)
+    case 'PhaseSnapshot': {
+      const checkpoint = await ArkhamGame.gameDecoder.decodePromise(result.contents)
+      if (!isCurrent()) return
+      await applyGameUpdate(checkpoint, false, isCurrent)
+      if (!isCurrent()) return
+      updateGameLog(checkpoint.log)
+      preloadImages(checkpoint)
       return
+    }
+    case 'GameUpdate': {
+      // Decode and render every checkpoint before advancing to a later phase
+      // or reveal. A latest-only decoder loses the completed upkeep snapshot.
+      const updated = await ArkhamGame.gameDecoder.decodePromise(result.contents)
+      if (!isCurrent()) return
+      await applyDecodedUpdate(updated, isCurrent)
+      return
+    }
   }
 }
 
 function drainResultQueue() {
-  if (uiLock.value || phaseAnnouncement.value) return
-  for (;;) {
-    const r = qPop()
-    if (!r) break
-    handleResult(r)
-    if (uiLock.value || phaseAnnouncement.value) break
-  }
+  void resultEvents.drain()
 }
 
 watch(uiLock, () => {
@@ -1464,7 +1448,6 @@ watch(uiLock, () => {
 watch(phaseAnnouncement, (active) => {
   if (!active) {
     drainResultQueue()
-    if (!uiLock.value && !phaseAnnouncement.value) continueSkipAll()
   }
 })
 
@@ -1823,7 +1806,8 @@ async function runUndo(call: (gameId: string) => Promise<void>) {
   processing.value = true
   const oldQuestion = game.value?.question
   if (game.value) setGameQuestion({})
-  resultQueue.value = []
+  resultEvents.clear()
+  resetPhaseAnnouncement()
   gameCard.value = null
   tarotCards.value = []
   uiLock.value = false
@@ -2250,6 +2234,7 @@ onMounted(() => {
 
 onBeforeRouteLeave(() => close())
 onUnmounted(() => {
+  resultEvents.clear()
   workbenchObserver?.disconnect()
   workbenchObserver = null
   document.removeEventListener('keydown', handleKeyPress)
@@ -2289,7 +2274,7 @@ onUnmounted(() => {
     v-else-if="ready && game && playerId"
     :style="{ '--epic-bar-height': epicBarHeight + 'px' }"
   >
-    <dialog v-if="error" class="error-dialog">
+    <dialog v-if="error" class="error-dialog occult-frame">
       <span class="status-seal status-seal--danger" aria-hidden="true"></span>
       <h2>{{ $t('error') }}</h2>
       <p class="error-message">{{ error }}</p>
@@ -4283,13 +4268,9 @@ button:hover .shortcut {
 
 .error-dialog {
   backdrop-filter: blur(3px);
-  background:
-    linear-gradient(180deg, rgb(232 225 210 / 0.97), rgb(218 207 187 / 0.97)),
-    url('/assets/veiled-harbour/17-调查日志纸卷.avif') center / cover no-repeat;
   position: absolute;
-  padding: 0;
-  padding-block: 10px;
-  width: min(50%, 620px);
+  padding: 40px;
+  width: min(calc(100vw - 32px), 620px);
   display: flex;
   z-index: var(--z-index-100);
   display: flex;
@@ -4307,7 +4288,7 @@ button:hover .shortcut {
   h2 {
     font-family: Teutonic;
     font-size: 2em;
-    color: var(--deep-sea, #26373a);
+    color: var(--title);
   }
 
   button {

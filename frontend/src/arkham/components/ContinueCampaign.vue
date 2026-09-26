@@ -296,17 +296,18 @@ const standalones = computed(() => {
     const overlay = props.campaign?.overlays.find(o => o.available && o.scenario.replace(/^c/, '') === s.id)
     const xp = overlay?.xpCost ?? s.xp
     if (s.id === '90094' && !investigators.value.some((i) => hasParallelContent(i.cardCode))) return []
+    // The Scarlet Keys also charges campaign time for side stories, but the
+    // campaign runner still deducts their XP cost. Both budgets must be available.
+    if (usesTime.value && xp > minXp.value) return []
     if (s.requiredInvestigator) {
       // challenge scenarios require their investigator; they pay the full
       // cost while each other investigator only pays 1 xp
       const signature = investigators.value.find((i) => i.name.title === s.requiredInvestigator)
       if (!signature) return []
-      if (usesTime.value) {
-        if (xp > minXp.value) return []
-      } else if (availableXp(signature) < xp || investigators.value.some((i) => i.id !== signature.id && availableXp(i) < 1)) {
+      if (availableXp(signature) < xp || investigators.value.some((i) => i.id !== signature.id && availableXp(i) < 1)) {
         return []
       }
-    } else if (xp > minXp.value) return []
+    } else if (investigators.value.some((i) => availableXp(i) < xp)) return []
     const parts = s.scenarios ?? [{ id: s.id, name: s.name }]
     return parts
       .filter((p) => !completed.includes(p.id))

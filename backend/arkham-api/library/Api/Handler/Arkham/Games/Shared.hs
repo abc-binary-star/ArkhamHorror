@@ -63,6 +63,7 @@ import Arkham.Investigator.Types (Investigator, investigatorPlacement, investiga
 import Arkham.Location.CardDefs.TheBlobThatAteEverythingELSE qualified as Locations
 import Arkham.Message
 import Arkham.Name
+import Arkham.Phase qualified as Phase
 import Arkham.Placement (
   Placement (AtLocation, AttachedToInvestigator, InPlayArea, InThreatArea, StillInHand),
  )
@@ -484,6 +485,24 @@ updateGame response gameId mRoom = do
         scenarioResetRef <- newIORef False
         announcedPhaseRef <- newIORef oldPhase
         let
+          publishPhaseSnapshot snapshot = do
+            entries <- reverse <$> readIORef logRef
+            reset <- readIORef scenarioResetRef
+            let logs = (if reset then [] else oldLogEntries) <> entries
+            -- These are presentation checkpoints, never answerable states.
+            broadcast $ encode $ PhaseSnapshot $ PublicGame gameId arkhamGameName logs
+              (snapshot {gameQuestion = mempty})
+          announcePhase phase = do
+            previous <- readIORef announcedPhaseRef
+            when (phase /= previous) $ do
+              snapshot <- readIORef gameRef
+              -- Preserve the completed phase before publishing the next one:
+              -- upkeep draws/resources must not first appear in an enemy or
+              -- mythos snapshot. The client consumes these without coalescing.
+              publishPhaseSnapshot snapshot
+              writeIORef announcedPhaseRef phase
+              broadcast (encode $ PhaseChanged phase)
+              publishPhaseSnapshot (snapshot {gamePhase = phase, gamePhaseStep = Nothing})
           collectStepMetadata msg = do
             when (isRandomOutcomeMessage msg) $ writeIORef randomOutcomeRef True
             case msg of
@@ -491,13 +510,10 @@ updateGame response gameId mRoom = do
               -- story, standalone restart) runs StartScenario; the prior
               -- scenario's log is dropped so the log holds one run only.
               StartScenario {} -> writeIORef scenarioResetRef True
-              Begin phase -> do
-                previous <- readIORef announcedPhaseRef
-                when (phase /= previous) $ do
-                  writeIORef announcedPhaseRef phase
-                  -- Use the same ordered stream as card reveals. Waiting for
-                  -- the final GameUpdate lets mythos draws overtake banners.
-                  broadcast (encode $ PhaseChanged phase)
+              Begin phase -> announcePhase phase
+              -- This message already changes gamePhase and runs round-start
+              -- reactions before Begin MythosPhase reaches the queue.
+              BeginRoundWindow -> announcePhase Phase.MythosPhase
               EarnAchievement a -> modifyIORef' achievementsRef (a :)
               EarnAchievementBy iid a -> modifyIORef' achievementsByRef ((iid, a) :)
               AchievementProgress a items -> modifyIORef' achievementProgressRef ((a, items) :)

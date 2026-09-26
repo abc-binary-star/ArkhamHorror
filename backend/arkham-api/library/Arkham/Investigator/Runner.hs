@@ -2189,6 +2189,10 @@ runInvestigatorMessage msg a@InvestigatorAttrs {..} = runQueueT $ case msg of
     msgs <- resolveWithWindow (EndTurn iid) (Window.TurnEnds iid)
     pushAll msgs
     pure $ a & endedTurnL .~ True
+  Msg.PhaseStep (UpkeepPhaseStep ResetActionsStep) _ ->
+    -- Reset the investigator's turn marker at 4.2, before readying and drawing.
+    -- Per-round counters and next-round action allowances still reset at BeginRound.
+    pure $ a & endedTurnL .~ False
   Do BeginRound -> do
     actionsForTurn <- getAbilitiesForTurn a
     current <- getMaybeLocation a.id

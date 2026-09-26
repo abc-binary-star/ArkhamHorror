@@ -82,5 +82,5 @@ export function usePhaseAnnouncement(
   }, { flush: 'sync' })
 
   onScopeDispose(reset)
-  return { current, active, push }
+  return { current, active, push, reset }
 }

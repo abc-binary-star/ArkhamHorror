@@ -786,9 +786,8 @@ const title = computed(() => {
   flex-direction: column;
   gap: 10px;
   padding: 18px;
-  background: linear-gradient(120deg, #e7ddc5db, #c9b998b8),
-    url('/assets/veiled-harbour/C02-象牙档案纸微纹理.avif') center / 256px 256px repeat;
-  border: 1px solid #a38d60;
+  background: transparent;
+  border: 0;
   --button-2: #29473e;
   --button-2-highlight: #3c5b49;
   --button-2-text: #f1e7ce;
@@ -833,27 +832,40 @@ const title = computed(() => {
 
 }
 
-/* General choices keep the warm brass folio family. */
+/* The parent provides the only decorative rim; choices sit on quiet ink. */
 .choice-modal-wrapper:not(:has(.card-pool-picker, .haunted)) {
-  background: linear-gradient(115deg, #ffffff38, transparent 65%), #eee4cd;
-  /* Reserve a real border: square corners keep their aspect ratio; only
-     the edge strips repeat. No artwork or masking layer sits under text. */
   box-sizing: border-box;
-  border: 20px solid transparent;
-  border-image: url('@/assets/veiled-harbour/occult-panel-v1.png') 300 / 1 / 0 round;
+  padding: 16px 0 0;
+  background: transparent;
+  border: 0;
   border-radius: 0;
-  --button: #e2d2b3;
-  --button-highlight: #f1e2c5;
-  --button-text: #48351f;
-  --edge: #9b7d4e;
-  --edge-dim: #a58c625e;
+  box-shadow: none;
 }
 .choice-modal-wrapper:not(:has(.card-pool-picker, .haunted)) :deep(.question-choices > button:not(.connection-choice)) {
-  background-image: linear-gradient(#f2e5ca, #dbcaab);
-  border: 1px solid #a38d60;
-  color: #48351f;
-  border-radius: 5px;
-  box-shadow: inset 0 1px #fff7;
+  background: linear-gradient(#2b3933, #1c2823);
+  border: 1px solid #a18b645c;
+  color: #eee2ca;
+  border-radius: 4px;
+  box-shadow: inset 0 1px #ffffff08;
+}
+.choice-modal-wrapper:not(:has(.card-pool-picker, .haunted)) :deep(.question-choices > button:not(.connection-choice):hover:not(:disabled)) {
+  background: #354b40;
+  border-color: #c5ad80;
+}
+.choice-modal-wrapper:has(.resolution) {
+  padding-top: 16px;
+  gap: 14px;
+}
+.choice-modal-wrapper:has(.resolution) :deep(.question-choices) {
+  padding-top: 14px;
+}
+.choice-modal-wrapper:has(.resolution) :deep(.question-choices > button) {
+  min-height: 44px;
+  justify-content: center;
+  text-align: center;
+  white-space: normal;
+  font-size: .95rem;
+  line-height: 1.5;
 }
 
 </style>

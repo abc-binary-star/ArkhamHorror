@@ -255,7 +255,7 @@ button, a.button {
   background-color: var(--button);
   background-image:
     linear-gradient(rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.03)),
-    url('/assets/veiled-harbour/C02-象牙档案纸微纹理.avif');
+    var(--choice-button-texture, url('/assets/veiled-harbour/C02-象牙档案纸微纹理.avif'));
   background-size: 100% 100%, 256px 256px;
   background-repeat: no-repeat, repeat;
   border-radius: var(--control-radius);

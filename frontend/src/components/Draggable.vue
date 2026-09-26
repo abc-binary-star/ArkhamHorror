@@ -8,6 +8,7 @@ const props = withDefaults(defineProps<{
   clickThroughChrome?: boolean
 }>(), { avoidPadding: 8, clickThroughChrome: false })
 
+const emit = defineEmits<{ minimized: [value: boolean] }>()
 const id = useId()
 const draggable = ref<HTMLElement | null>(null)
 const isMinimized = ref(false)
@@ -279,6 +280,7 @@ function minimize() {
       // Restoring
       isMinimized.value = false
     }
+    emit('minimized', isMinimized.value)
   }
 
   if (!document.startViewTransition) {
@@ -290,6 +292,7 @@ function minimize() {
 }
 
 onMounted(async () => {
+  emit('minimized', false)
   const el = draggable.value
   if (el) {
     await nextTick()
@@ -309,6 +312,7 @@ function handleWindowResize() {
 }
 
 onBeforeUnmount(() => {
+  emit('minimized', false)
   const el = draggable.value
   if (el) {
     el.removeEventListener('pointermove', elementDrag as any)
@@ -337,7 +341,7 @@ function moveUp() {
   <Teleport to="#modal">
   <div
     @pointerdown="moveUp"
-    class="draggable"
+    class="draggable occult-frame"
     :class="{ 'click-through-chrome': props.clickThroughChrome }"
     ref="draggable"
     :id="id"
@@ -366,14 +370,10 @@ function moveUp() {
 <style scoped>
 .draggable {
   position: absolute;
-  background: #e9dfc8 url('@/assets/veiled-harbour/occult-panel-v1.png') center / 100% 100%;
-  border-radius: 16px;
-  box-shadow: inset 0 0 0 3px #f1e6cb, inset 0 0 0 4px #9a7c4d66, 0 18px 48px #0009;
-  border: 1px solid #948057;
   z-index: var(--z-index-10);
+  /* Inset the reading area beyond the generated engraving. */
+  padding: 40px 40px 30px;
   overflow: hidden;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
   width: clamp(300px, 50vw, 80%);
   max-width: fit-content;
   max-height: calc(100dvh - 32px);
@@ -404,12 +404,9 @@ function moveUp() {
   &:has(> .content > .shortcuts-modal) {
     width: min(640px, 92vw);
     max-width: 92vw;
-    background: var(--background);
-    border-color: var(--box-border);
 
     > .content {
-      margin: 0;
-      border-radius: 0 0 16px 16px;
+      border-radius: 3px;
       background: var(--background);
       overflow: auto;
       height: auto;
@@ -423,6 +420,8 @@ function moveUp() {
       overflow: visible;
       background: transparent;
       border: none;
+      padding: 0;
+      &::before { display: none; }
       position: relative;
       :deep(.intro-text) {
         box-shadow: 1px 2px 4px rgba(0,0,0,0.7);
@@ -500,14 +499,9 @@ function moveUp() {
   }
 
   &:has(.amount-modal) {
-    background: #735e7b;
-    border-color: rgba(255, 255, 255, 0.18);
-    border-radius: 16px;
-    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
-
     > header {
-      background: rgba(20, 14, 24, 0.72);
-      border-radius: 16px 16px 0 0;
+      background: transparent;
+      border-radius: 3px 3px 0 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
   }
@@ -518,13 +512,13 @@ function moveUp() {
     position: relative;
     padding: 5px 10px;
     font-family: "Source Han Serif", "Arno", serif;
-    background: linear-gradient(180deg, #584a39, #302923);
+    background: transparent;
     border-bottom: 1px solid #b59a5e55;
     color: #e8d9b6;
     text-transform: uppercase;
     font-size: 1.2em;
     cursor: move;
-    border-radius: 16px 16px 0 0;
+    border-radius: 3px 3px 0 0;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
@@ -576,49 +570,27 @@ function moveUp() {
     height: 100%;
     overflow: auto;
     overscroll-behavior: contain;
-    border-radius: 0 0 16px 16px;
+    border-radius: 3px;
     display: flex;
     flex-direction: column;
-    margin: 10px;
-    &:has(button.close) {
-      margin: 0;
-    }
-    &:has(> .skill-test) {
-      margin: 0px;
-    }
+    color: var(--text);
+    background: transparent;
     &:has(.amount-modal) {
-      margin: 0;
-      border-radius: 0 0 16px 16px;
-      background: #735e7b;
-    }
-    &:has(.chaos-bag) {
-      margin: 0px;
-    }
-    &:has(.bug-form) {
-      margin: 0px;
+      background: var(--surface-panel);
     }
     &:has(.haunted) {
-      margin: 0;
-      border-radius: 0 0 16px 16px;
       overflow: hidden;
+      background: #0a0d10;
     }
   }
 
   &:has(.haunted) {
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border: 0;
-    border-radius: 16px;
-    box-shadow: 0 12px 50px rgba(0, 0, 0, 0.85);
     max-width: min(900px, 92vw);
     width: min(900px, 92vw);
 
     > header {
-      border-radius: 16px 16px 0 0;
+      border-radius: 3px 3px 0 0;
       background: #0a0d10;
-      backdrop-filter: none;
-      -webkit-backdrop-filter: none;
 
       :deep(h1) {
         color: #c9d2a8;
@@ -634,9 +606,6 @@ function moveUp() {
   &:has(.card-pool-picker) {
     --pool-accent: var(--seeker);
     --pool-accent-rgb: 239, 163, 69;
-
-    background: rgba(28, 22, 16, 0.82);
-    border: 1px solid rgba(var(--pool-accent-rgb), 0.28);
 
     > header {
       background: rgba(28, 22, 16, 0.95);
@@ -675,6 +644,7 @@ function moveUp() {
 
   /* Override coordinates written by the desktop drag controller. */
   .draggable, .draggable:not(.minimized):has(p.file) { position: fixed !important; left: max(8px, env(safe-area-inset-left)) !important; top: max(8px, env(safe-area-inset-top)) !important; width: calc(100% - max(8px, env(safe-area-inset-left)) - max(8px, env(safe-area-inset-right))) !important; min-width: 0; max-width: none !important; height: auto !important; max-height: calc(100dvh - 84px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); transform: none !important; overflow: hidden; border-radius: 10px; }
+  .draggable { padding: 30px 30px 24px; --occult-border: 26px; }
   .draggable > header { flex: 0 0 auto; min-height: 44px; padding: 6px 8px; touch-action: pan-y; }
   .draggable .header-title { min-width: 0; overflow-wrap: anywhere; }
   .draggable .minimize-btn { min-width: 44px; min-height: 44px; }
@@ -684,27 +654,47 @@ function moveUp() {
 }
 
 /* Match window chrome to the content family without changing drag behavior. */
-.draggable:has(.skill-test) {
-  background: #121e1e;
-  border-color: #8f7e555e;
-  border-radius: 6px;
-}
-.draggable:has(.skill-test) > header {
-  background: linear-gradient(90deg, #152421, #22342d 50%, #152421);
-  border-bottom-color: #ad94503d;
-  border-radius: 6px 6px 0 0;
-  padding: 5px 10px;
-}
 .draggable:has(.skill-test) > header :deep(h2) { margin: 4px 0; color: #ddcba5; font-size: 1rem; font-weight: 500; letter-spacing: .12em; }
 .draggable:has(.skill-test) > header .minimize-btn { background: transparent; border-color: #ad935d33; width: 30px; height: 30px; min-height: 30px; flex-basis: 30px; }
-.draggable:has(.skill-test) > .content { margin: 0; border-radius: 0 0 6px 6px; background: #121e1e; }
-.draggable:has(.amount-modal), .draggable:has(.amount-modal) > .content {
-  background: #eee2c9;
-  border-color: #a38d60;
-}
 .draggable:has(.amount-modal) > header {
-  background: linear-gradient(#65513a, #382e24);
+  background: transparent;
   border-bottom-color: #a88b58;
+}
+
+/* Resolution readers need one compact title bar and a bounded reading width. */
+.draggable:has(.choice-modal-wrapper .resolution) {
+  width: min(760px, calc(100vw - 32px));
+  max-width: calc(100vw - 32px);
+  padding: 32px 32px 24px;
+  --occult-border: 28px;
+}
+.draggable:has(.choice-modal-wrapper .resolution) > header {
+  padding: 0 0 12px;
+  min-height: 36px;
+  background: transparent;
+  font-size: 1rem;
+}
+.draggable:has(.choice-modal-wrapper .resolution) > header .header-title {
+  margin-inline: 36px;
+  transform: none;
+}
+.draggable:has(.choice-modal-wrapper .resolution) > header :deep(h1) {
+  margin: 0;
+  font: 500 1.25rem/1.5 'Source Han Serif', 'Songti SC', serif;
+  letter-spacing: .08em;
+}
+.draggable:has(.choice-modal-wrapper .resolution) > header .minimize-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  align-self: center;
+  background: transparent;
+  border-color: #a18b6440;
+}
+@media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
+  .draggable:has(.choice-modal-wrapper .resolution) { padding: 28px 24px 20px; --occult-border: 22px; }
+  .draggable:has(.choice-modal-wrapper .resolution) > header { min-height: 44px; }
+  .draggable:has(.choice-modal-wrapper .resolution) > .content { padding: 0; }
 }
 
 </style>

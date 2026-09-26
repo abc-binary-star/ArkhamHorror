@@ -267,6 +267,7 @@ const uiLock = inject(uiLockKey, ref(false))
 const phaseAnnouncement = inject(phaseAnnouncementKey, ref(false))
 const spectating = inject(spectateKey, ref(false))
 const minimized = inject(isMinimizedSkillTestKey, ref(false))
+const testIdentity = computed(() => JSON.stringify([props.game.id, props.playerId, props.skillTest.id]))
 const resultsPaused = ref(false)
 const resultsSubmitted = ref(false)
 const autoApplyPending = ref(false)
@@ -280,6 +281,7 @@ let applyTimer: ReturnType<typeof setTimeout> | undefined
 let attemptedResult: string | null = null
 const resultKey = computed(() => JSON.stringify([
   props.game.id, props.playerId, props.skillTest.id,
+  props.game.scenarioSteps,
   props.game.question[props.playerId], skillTestResults.value,
 ]))
 const resultsBlocked = computed(() => processing.value || uiLock.value || phaseAnnouncement.value || spectating.value)
@@ -307,12 +309,18 @@ function applyResults() {
   resultsSubmitted.value = true
   emit('choose', applyResultsAction.value)
 }
-watch(() => [props.game.id, props.playerId, props.skillTest.id].join(':'), () => {
+watch(testIdentity, () => {
   resultsPaused.value = false
   resultsSubmitted.value = false
   attemptedResult = null
 })
-watch(resultKey, () => { resultsSubmitted.value = false })
+watch(resultKey, () => {
+  resultsSubmitted.value = false
+  resultsPaused.value = false
+})
+// Keep the attempt across optimistic question clearing and error restoration.
+// scenarioSteps in resultKey distinguishes a later server decision even if its
+// button and result match, so only that new decision can auto-submit again.
 // Failed submissions remain manually retryable, without an automatic retry loop.
 watch(processing, value => { if (!value) resultsSubmitted.value = false })
 watch([canAutoApply, resultKey], () => {
@@ -325,25 +333,21 @@ watch([canAutoApply, resultKey], () => {
     if (canAutoApply.value && resultKey.value === expectedResult) applyResults()
   }, 1500)
 }, { immediate: true, flush: 'post' })
-// game.skillTest is cleared by the server's SkillTestEnded message, so a window
-// that has shown its result and offers this player nothing can only be waiting on
-// an update that never arrived. Hide it rather than leave a dead panel with no way
-// forward; the hide is derived, so any fresh state with a real question brings the
-// window straight back.
-const isMyTest = computed(() => props.game.investigators[props.skillTest.investigator]?.playerId === props.playerId)
-const spentTest = computed(() => isMyTest.value
-  && !!skillTestResults.value
-  && (props.skillTest.step === 'ApplySkillTestResultsStep' || props.skillTest.step === 'SkillTestEndsStep')
+// Results can remain at ST.6 while another player resolves a response. Retire
+// the non-interactive panel after showing the result, including for teammates;
+// a fresh question restores it without advancing or skipping the server queue.
+const spentTest = computed(() => !!skillTestResults.value
+  && (props.skillTest.step === 'DetermineSuccessOrFailureOfSkillTestStep'
+    || props.skillTest.step === 'ApplySkillTestResultsStep'
+    || props.skillTest.step === 'SkillTestEndsStep')
   && applyResultsAction.value === -1
-  && choices.value.length === 0)
+  && (choices.value.length === 0 || ArkhamGame.activeQuestionIsPlayerWindow(props.game, props.playerId)))
 const hideSpentTest = ref(false)
 let spentTimer: ReturnType<typeof setTimeout> | undefined
-watch(spentTest, value => {
+watch([spentTest, testIdentity], ([value]) => {
   clearTimeout(spentTimer)
-  if (!value) {
-    hideSpentTest.value = false
-    return
-  }
+  hideSpentTest.value = false
+  if (!value) return
   spentTimer = setTimeout(() => { if (spentTest.value) hideSpentTest.value = true }, 1200)
 }, { immediate: true, flush: 'post' })
 onBeforeUnmount(() => {
@@ -434,6 +438,8 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
   <!-- The reveal lock also covers updates that arrived before the encounter card. -->
   <Draggable
     v-if="!uiLock && !phaseAnnouncement && !assigningDamageOrHorror && !hideSpentTest"
+    :key="testIdentity"
+    @minimized="minimized = $event"
     avoid-selector=".concealed-card--can-interact, .location-cell--can-interact, .location-cell--can-interact .location-wrapper, .location-cell--can-interact .card-frame"
   >
     <template #handle>
@@ -680,7 +686,7 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
       <button
         class="apply-results"
         v-if="applyResultsAction !== -1 && !autoApplyPending"
-        :disabled="resultsBlocked"
+        :disabled="resultsBlocked || resultsSubmitted"
         @click="applyResults"
       >{{ $t('label.applyResults') }}</button>
     </div>
@@ -1207,7 +1213,7 @@ i.iconSkillAgility {
   display: grid;
   place-items: center;
   padding: 8px 0;
-  background: #fffdf540;
+  background: #ffffff08;
   border-right: 1px solid #a5883f2e;
 
   img {
@@ -1223,7 +1229,7 @@ i.iconSkillAgility {
   align-items: center;
   padding: 9px 14px;
   text-align: left;
-  color: #4a3a26;
+  color: #e2dbce;
   font-family: 'Noto Sans', Avenir, Helvetica, Arial, sans-serif;
   font-size: 13px;
   line-height: 1.5;
@@ -1267,48 +1273,33 @@ i.iconSkillAgility {
 
 }
 
-/* The engraved teal frame stays; the reading area is the app's parchment. */
+/* The parent owns the astrolabe frame and dark-surface text tokens. */
 .skill-test {
-  --text: #3f3121;
-  --text-dim: #6d5c45;
-  --title: #3d2f1c;
-  --surface-panel: #e7dcc2;
-  --surface-raised: #f7f1e1;
-  --surface-paper: #efe5cf;
-  --surface-table: #e2d7bd;
-  --text-on-table: #4a3a26;
-  --panel-inset: #ded1b4;
-  --edge-dim: #a5883f5c;
-  --button-2: #3d5a4f;
-  --button-2-text: #f2ead4;
-  --select-dark-30: #3d5a4f;
-  --select-dark-20: #4a6b5d;
   color: var(--text);
-  background: #efe5cf;
+  background: transparent;
   box-sizing: border-box;
-  border: 18px solid transparent;
-  border-image: url('@/assets/veiled-harbour/skill-test-frame-v1.png') 210 / 1 / 0 stretch;
-  border-radius: 0;
-  box-shadow: inset 0 0 0 1px #a5883f59;
+  padding: 12px 0 0;
+  border: 0;
+  border-radius: 3px;
 }
 .test-progress { display: flex; gap: 6px; padding: 0 8px 10px; }
 .test-progress span { flex: 1; padding: 5px 0; font-size: .7rem; letter-spacing: .08em; color: #9c8a6d; border-bottom: 1px solid #a5883f33; }
-.test-progress .complete { color: #6d5c45; border-bottom-color: #a5883f66; }
-.test-progress .current { color: #7a5a1e; border-bottom-color: #b99a5f; }
+.test-progress .complete { color: #b6aa96; border-bottom-color: #a5883f66; }
+.test-progress .current { color: #e1d0b0; border-bottom-color: #b99a5f; }
 .skill-test-contents {
-  background: #f7f1e1;
+  background: #202825;
   border-block: 1px solid #a5883f3d;
   padding: 10px;
   box-shadow: none;
 }
 .skill-test :deep(.chaos-bag) { background: #8a6e3512; border-radius: 0; box-shadow: none; gap: 8px; }
 .skill-test :deep(.chaos-seal) { display: none; }
-.skill-test :deep(.stats-bar) { background: #8a6e3512; border-color: #a5883f3d; color: #6d5c45; }
+.skill-test :deep(.stats-bar) { background: #8a6e3512; border-color: #a5883f3d; color: #b6aa96; }
 .skill-test :deep(.stats-bar__reveal) { border-radius: 3px; padding: 4px 9px; font-size: .72rem; }
-.skill-test :deep(.token-slot__value) { background: #f7f1e1; color: #3f3121; border-color: #a5883f5c; }
+.skill-test :deep(.token-slot__value) { background: #202825; color: #e2dbce; border-color: #a5883f5c; }
 .skill-test-results { margin-top: 8px; padding: 10px; font: 600 1.12rem/1.4 'Songti SC', 'Noto Serif SC', Georgia, serif; letter-spacing: .06em; border-block: 1px solid; }
-.skill-test-results.success { background: #2d6b4f1f; color: #24553f; border-color: #2d6b4f52; }
-.skill-test-results.failure { background: #9d403c1c; color: #7d2f2b; border-color: #9d403c4d; }
+.skill-test-results.success { background: #2d6b4f1f; color: #abd3b5; border-color: #2d6b4f52; }
+.skill-test-results.failure { background: #9d403c1c; color: #edb1a6; border-color: #9d403c4d; }
 /* The panel's one action: the same lacquer plaque the table uses. */
 .apply-results {
   background: var(--plaque-plate);
@@ -1321,17 +1312,17 @@ i.iconSkillAgility {
   letter-spacing: .06em;
 }
 .apply-results { margin-top: 8px; }
-.skip-triggers-button { border: 0; border-radius: 4px; background: #8a6e350f; color: #6d5c45; }
-.skip-triggers-button:hover { background: #8a6e351c; color: #43331f; }
-.results-continuation { position: relative; padding: 8px; color: #6d5c45; font-size: .75rem; }
-.results-continuation button { min-height: 30px; padding: 4px 10px; font-size: .72rem; border-radius: 3px; border: 0; background: none; color: #6d5c45; }
-.results-continuation button:hover { background: #8a6e3514; color: #43331f; }
+.skip-triggers-button { border: 0; border-radius: 4px; background: #8a6e350f; color: #b6aa96; }
+.skip-triggers-button:hover { background: #8a6e351c; color: #eee2ca; }
+.results-continuation { position: relative; padding: 8px; color: #b6aa96; font-size: .75rem; }
+.results-continuation button { min-height: 30px; padding: 4px 10px; font-size: .72rem; border-radius: 3px; border: 0; background: none; color: #b6aa96; }
+.results-continuation button:hover { background: #8a6e3514; color: #eee2ca; }
 .results-continuation.is-counting::after { content: ''; position: absolute; inset: auto 0 0; height: 1px; background: #b39a65; transform-origin: left; animation: settle-countdown 1.5s linear forwards; }
 @keyframes settle-countdown { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 @media (prefers-reduced-motion: reduce) { .results-continuation.is-counting::after { animation: none; } }
 .steps .step.active { background: #b99a5f; color: #2f2415; }
 @media (max-width: 800px) and (orientation: portrait) {
-  .skill-test { border-width: 12px; }
+  .skill-test { padding: 8px 0 0; }
   .skill-test-contents { grid-template-columns: 1fr auto 1fr; gap: 4px; padding: 8px 4px; }
   .test-status { gap: 8px; padding-inline: 4px; }
 }

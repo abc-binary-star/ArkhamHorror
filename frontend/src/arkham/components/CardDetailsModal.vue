@@ -65,7 +65,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
 <template>
   <Teleport to="body">
     <div class="backdrop" @click.self="emit('close')">
-      <div class="details" role="dialog" aria-modal="true" :aria-label="title">
+      <div class="details occult-frame" role="dialog" aria-modal="true" :aria-label="title">
         <div class="controls">
           <button
             class="step"
@@ -164,15 +164,12 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
   gap: 20px;
   max-width: min(1320px, 100%);
   max-height: 100%;
-  padding: 20px;
+  padding: 42px;
   overflow: auto;
-  background: var(--surface-panel);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-5);
 
   @media (max-width: 768px) {
     gap: 14px;
-    padding: 14px;
+    padding: 30px;
   }
 }
 

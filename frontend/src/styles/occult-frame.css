@@ -1,0 +1,73 @@
+/* Generated artwork is sliced without fill: ornament never sits under text.
+   Keep the damage assignment reference independent of this shared skin. */
+.occult-frame {
+  --text: #e2dbce;
+  --text-dim: #b6aa96;
+  --title: #e1d0b0;
+  --background: #141919;
+  --background-dark: #101514;
+  --background-mid: #202825;
+  --box-background: #1b2321;
+  --box-border: #796c5880;
+  --surface-chrome: #111817;
+  --surface-panel: #18201e;
+  --surface-raised: #242d29;
+  --surface-paper: #1b2321;
+  --surface-table: #141919;
+  --text-on-table: #e2dbce;
+  --panel-inset: #101715;
+  --edge: #a18b64;
+  --edge-dim: #a18b644d;
+  --border-panel: #796c5880;
+  --choice-button-texture: none;
+  --button: #283a32;
+  --button-highlight: #354b40;
+  --button-text: #eee2ca;
+  --button-1: #283a32;
+  --button-1-highlight: #354b40;
+  --button-1-text: #eee2ca;
+  --button-2: #283a32;
+  --button-2-highlight: #354b40;
+  --button-2-text: #eee2ca;
+  --select-dark-30: #283a32;
+  --select-dark-20: #354b40;
+  --brass: #c5ad80;
+  --brass-dim: #b6aa96;
+  --occult-art: url('../assets/veiled-harbour/dialog-tentacle-v2.png');
+  --occult-border: 38px;
+  position: relative;
+  isolation: isolate;
+  box-sizing: border-box;
+  border: 1px solid #796c5880;
+  border-radius: 4px;
+  color: var(--text);
+  background: radial-gradient(ellipse at 0 0, #633d2826, transparent 48%),
+    radial-gradient(ellipse at 100% 100%, #50436226, transparent 52%), #141919;
+  box-shadow: 0 28px 90px #000c, inset 0 0 40px #0008;
+  color-scheme: dark;
+}
+.occult-frame::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  z-index: -1;
+  pointer-events: none;
+  border: var(--occult-border) solid transparent;
+  border-image: var(--occult-art) 26% / 1 / 0 stretch;
+}
+.occult-frame::backdrop { background: #050a0db8; }
+.occult-frame:has(.skill-test, .chaos-bag) {
+  --occult-art: url('../assets/veiled-harbour/dialog-astrolabe-v2.png');
+}
+.occult-frame :where(input, select, textarea) {
+  color: var(--text);
+  background-color: var(--panel-inset);
+  border-color: var(--edge-dim);
+}
+.occult-frame :where(button, input, select, textarea):focus-visible {
+  outline: 2px solid #dec394;
+  outline-offset: 3px;
+}
+@media (max-width: 600px) {
+  .occult-frame { --occult-border: 28px; }
+}
