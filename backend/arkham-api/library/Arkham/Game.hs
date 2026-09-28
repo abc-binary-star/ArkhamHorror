@@ -5500,6 +5500,7 @@ instance Query ChaosTokenMatcher where
       SealedOnAsset _ _ -> True
       SealedOnEnemy _ _ -> True
       SealedOnInvestigator _ _ -> True
+      SealedOnLocation _ _ -> True
       _ -> False
     includeTokenPool = \case
       IncludeSealed m -> includeTokenPool m
