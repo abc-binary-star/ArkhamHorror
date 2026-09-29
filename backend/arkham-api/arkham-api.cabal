@@ -8598,6 +8598,7 @@ test-suite spec
       Arkham.Event.Events.HotStreak4Spec
       Arkham.Event.Events.IllTakeThatSpec
       Arkham.Event.Events.JoinTheCaravan1Spec
+      Arkham.Event.Events.LessonLearnedSpec
       Arkham.Event.Events.LieInWaitSpec
       Arkham.Event.Events.LiveAndLearnSpec
       Arkham.Event.Events.LookWhatIFoundSpec
@@ -8640,6 +8641,7 @@ test-suite spec
       Arkham.Helpers.EnemySpec
       Arkham.Helpers.InvestigatorSpec
       Arkham.Helpers.QuerySpec
+      Arkham.Helpers.WindowSpec
       Arkham.Homebrew.CircusExMortis.HarmsWaySpec
       Arkham.Homebrew.DarkMatter.Agendas.TheQuantumMaelstromSpec
       Arkham.Homebrew.DarkMatter.FacedownThreatAreaSpec
