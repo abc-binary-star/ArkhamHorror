@@ -269,6 +269,25 @@ resolvingEventId = go
     Retain x -> go (x : ms)
     _ -> go ms
 
+{- | Whether a seat's window ask consists solely of non-blocking reactions (plus the Skip
+Triggers button). Such an ask is dropped unless some other seat is stopping the window
+anyway -- see the @WindowAsk@ handler. A question with no ability choices at all is not
+"only non-blocking": it has something real to offer.
+-}
+questionIsOnlyNonBlocking :: Question Message -> Bool
+questionIsOnlyNonBlocking q = case q of
+  ChooseOne cs -> go cs
+  WindowChooseOne cs -> go cs
+  PlayerWindowChooseOne cs -> go cs
+  _ -> False
+ where
+  go cs = notNull (abilities cs) && all ok cs
+  abilities cs = [ab | AbilityLabel {ability = ab} <- cs]
+  ok = \case
+    AbilityLabel {ability = ab} -> ab.nonBlocking
+    SkipTriggersButton {} -> True
+    _ -> False
+
 runGameMessage :: Runner Game
 runGameMessage msg g = case msg of
   -- ClearUI is pushed exactly once per accepted answer (Api Games.Shared), so
@@ -1987,8 +2006,21 @@ runGameMessage msg g = case msg of
             _ -> pure ()
         pushAll $ uiToRun choice : [Do (CheckWindows ws) | notNull ws]
       Nothing -> do
-        let resolution = if notNull others then AskMap (Map.fromList seatAsks) else Ask pid q
-        pushAll $ resolution : [Do (CheckWindows ws) | notNull ws]
+        -- A non-blocking reaction rides along with any prompt this window raises but never
+        -- creates one. Only here is that decidable: `runWindow` runs per seat and cannot see
+        -- whether another seat is stopping the window, so every seat pushes its ask and the
+        -- purely non-blocking ones are dropped once the whole set is in hand. With nothing
+        -- blocking anywhere the window raises no prompt at all -- and must NOT re-check, or
+        -- the same set would be rebuilt and dropped forever. #5784
+        let anyBlocking = any (not . questionIsOnlyNonBlocking . snd) seatAsks
+        let kept = if anyBlocking then seatAsks else []
+        pushAll
+          $ [ case kept of
+                [(pid', q')] -> Ask pid' q'
+                _ -> AskMap (Map.fromList kept)
+            | notNull kept
+            ]
+          <> [Do (CheckWindows ws) | notNull ws, notNull kept]
 
     pure g
   PlayCard iid card mtarget payment windows' False -> do
