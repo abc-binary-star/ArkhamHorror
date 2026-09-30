@@ -36,9 +36,12 @@ import Arkham.Game.Settings (
   settingsUndoMode,
  )
 import Arkham.GameEnv (getCard)
-import Arkham.Helpers.Playable (getPlayabilityChecks)
+import Arkham.Helpers.Playable (getPlayabilityChecks, getPlayRestrictionSources)
 import Arkham.Id
-import Arkham.Message (Message (HandleOption))
+import Arkham.Message (Message (HandleOption, InitiatePlayCardWithWindows))
+import Arkham.Investigator.Types (Field (InvestigatorPlayerId, InvestigatorHand))
+import Arkham.Projection (field)
+import Arkham.Question qualified as Question
 import Arkham.Queue
 import Arkham.Source
 import Arkham.UltimatumsAndBoons.Types (UltimatumOrBoon)
@@ -282,6 +285,9 @@ data PlayabilityResponse = PlayabilityResponse
   { cardId :: CardId
   , cardCode :: Text
   , checks :: [(Text, Maybe Text)]
+  , restrictionSources :: [Source]
+  , scope :: Text
+  , scenarioSteps :: Int
   }
   deriving stock (Show, Generic)
   deriving anyclass ToJSON
@@ -289,20 +295,62 @@ data PlayabilityResponse = PlayabilityResponse
 postApiV1ArkhamGamePlayabilityR :: ArkhamGameId -> Handler PlayabilityResponse
 postApiV1ArkhamGamePlayabilityR gameId = do
   userId <- getRequestUserId
-  void $ runDB $ getBy404 (UniquePlayer userId gameId)
+  Entity requestingPlayerId _ <- runDB $ getBy404 (UniquePlayer userId gameId)
   PlayabilityRequest {investigatorId = iid, cardId = cid} <- requireCheckJsonBody
   g <- runDB $ get404 gameId
   let gameJson = g.currentData
   gameRef <- newIORef gameJson
   queueRef <- newQueue []
   genRef <- newIORef $ mkStdGen gameJson.gameSeed
-  runGameApp (GameApp gameRef queueRef genRef (pure . const ()) Nothing) do
-    card <- getCard cid
-    let duringTurnWindows = [mkWhen (Window.DuringTurn iid)]
-    checks <- getPlayabilityChecks iid (toSource iid) (UnpaidCost NeedsAction) duringTurnWindows card
-    pure
-      PlayabilityResponse
-        { cardId = cid
-        , cardCode = unCardCode (toCardCode card)
-        , checks
-        }
+  response <- runGameApp (GameApp gameRef queueRef genRef (pure . const ()) Nothing) do
+    owner <- field InvestigatorPlayerId iid
+    hand <- field InvestigatorHand iid
+    -- Diagnostics expose private card conditions. A room member may inspect
+    -- only their own hand; solo games allow the member to control every seat.
+    if (g.variant /= Solo && owner /= coerce requestingPlayerId) || not (any ((== cid) . toCardId) hand)
+      then pure Nothing
+      else do
+        card <- getCard cid
+        let
+          unwrap (Question.QuestionLabel _ _ q) = unwrap q
+          unwrap (Question.QuestionWithSource _ _ q) = unwrap q
+          unwrap q = q
+          currentQuestion = unwrap <$> Map.lookup owner gameJson.gameQuestion
+          cardWindows cs = listToMaybe
+            [ ws
+            | Question.TargetLabel _ msgs <- cs
+            , InitiatePlayCardWithWindows actor _ _ _ ws _ <- msgs
+            , actor == iid
+            ]
+          currentWindows = case currentQuestion of
+            Just (Question.WindowChooseOne cs) ->
+              cardWindows cs <|> (gameJson.gameWindowStack >>= listToMaybe)
+            Just (Question.PlayerWindowChooseOne cs) -> cardWindows cs
+            _ -> Nothing
+          -- A normal-turn fallback is explicitly labelled; it is never used
+          -- for reaction/test windows or an unrelated decision.
+          normalTurn = case currentQuestion of
+            Just Question.PlayerWindowChooseOne {} ->
+              gameJson.gameTurnPlayerInvestigatorId == Just iid && isNothing gameJson.gameSkillTest
+            _ -> False
+          (diagnosticScope, windows) = case currentWindows of
+            Just ws | notNull ws -> ("currentWindow", Just ws)
+            _ | normalTurn -> ("normalTurn", Just [mkWhen (Window.DuringTurn iid)])
+            _ -> ("unavailable", Nothing)
+        checks <- case windows of
+          Just ws -> getPlayabilityChecks iid (toSource iid) (UnpaidCost NeedsAction) ws card
+          Nothing -> pure []
+        restrictionSources <-
+          if any (\(name, detail) -> name == "Play restrictions" && isJust detail) checks
+            then getPlayRestrictionSources iid card
+            else pure []
+        pure $ Just
+          PlayabilityResponse
+            { cardId = cid
+            , cardCode = unCardCode (toCardCode card)
+            , checks
+            , restrictionSources
+            , scope = diagnosticScope
+            , scenarioSteps = gameJson.gameScenarioSteps
+            }
+  maybe (permissionDenied "This hand is not available to the current player") pure response

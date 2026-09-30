@@ -21,6 +21,7 @@ import scenarioJSON from '@/arkham/data/scenarios'
 import sideStoriesJSON from '@/arkham/data/side-stories'
 import { filterDisplayable, isDevBuild } from '@/arkham/displayRules'
 
+import LoadState from '@/components/LoadState.vue'
 import ChooseMode from '@/arkham/components/NewCampaign/ChooseMode.vue'
 import GameOptions from '@/arkham/components/NewCampaign/GameOptions.vue'
 
@@ -48,6 +49,8 @@ const includeTarotReadings = ref(false)
 const strictAsIfAt = ref(false)
 const decks = ref<ArkhamDeck.Deck[]>([])
 const ready = ref(false)
+const decksLoading = ref(false)
+const decksLoadError = ref(false)
 
 const playerCount = ref(1)
 const selectedDifficulty = ref<Difficulty>('Easy')
@@ -302,10 +305,21 @@ watch([selectedCampaign, fullCampaign], () => {
   fullCampaignOptionKey.value = opts?.[0]?.key ?? null
 })
 
-fetchDecks()
-  .then((result) => { decks.value = result })
-  .catch((err) => { console.error('[new-campaign] could not list saved decks', err) })
-  .finally(() => { ready.value = true })
+async function loadDecks() {
+  if (decksLoading.value) return
+  decksLoading.value = true
+  decksLoadError.value = false
+  try {
+    decks.value = await fetchDecks()
+    ready.value = true
+  } catch (err) {
+    console.error('[new-campaign] could not list saved decks', err)
+    decksLoadError.value = true
+  } finally {
+    decksLoading.value = false
+  }
+}
+void loadDecks()
 
 // The toggle is only rendered for supported campaigns; a stale "off" from a
 // supported selection must not leak into an unsupported one. A standalone
@@ -435,7 +449,8 @@ async function createGame() {
       <slot name="cancel" />
     </header>
 
-    <form v-if="ready" id="new-campaign" @submit.prevent="goNext">
+    <LoadState v-if="!ready" :error="decksLoadError" @retry="loadDecks" />
+    <form v-else id="new-campaign" @submit.prevent="goNext">
       <ChooseMode
           v-if="step === 'ChooseMode'"
           v-model:gameMode="gameMode"

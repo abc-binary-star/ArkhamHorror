@@ -28,10 +28,10 @@ instance RunMessage EatLead2 where
       case ability.source.asset of
         Just aid -> do
           uses <- fieldMap AssetUses (findWithDefault 0 Ammo) aid
-          chooseAmounts iid "Additional ammo to spend" (MaxAmountTarget uses) [("Ammo", (0, uses))] attrs
+          chooseAmounts iid "$label.additionalAmmoToSpend" (MaxAmountTarget uses) [("$ammo", (0, uses))] attrs
           pure . EatLead2 $ attrs `with` Metadata (Just aid)
         _ -> error "Invalid source"
-    ResolveAmounts iid (getChoiceAmount "Ammo" -> ammo) target | isTarget attrs target -> do
+    ResolveAmounts iid (getChoiceAmount "$ammo" -> ammo) target | isTarget attrs target -> do
       let aid = fromJustNote "asset must be set" (asset metadata)
       when (ammo > 0) $ do
         withSkillTest \sid -> do

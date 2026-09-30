@@ -68,6 +68,7 @@ const choiceInvestigatorPortrait = computed(() => {
 
 const { t } = useI18n()
 const cardLabelImage = (cardCode: string) => cardImage(cardCode)
+const isContinueLabel = (body: string) => ['continue', 'Continue', '$continue', '$label.continue', t('continue')].includes(body.trim())
 const label = function(body: string) {
   return formatContent(handleEmbeddedI18n(body, t))
 }
@@ -246,16 +247,16 @@ const isBuildSpiritDeckQuestion = (q: Question): q is Question & { tag: Question
           </div>
           <div class="other-labels" v-for="[choice, index] in labelChoices" :key="index">
             <template v-if="choice.tag === MessageType.TOOLTIP_LABEL">
-              <button @click="choose(index)" v-tooltip="choice.tooltip">{{label(choice.label)}}</button>
+              <button :class="{ 'dialog-advance': isContinueLabel(choice.label) }" @click="choose(index)" v-tooltip="choice.tooltip">{{label(choice.label)}}</button>
             </template>
             <template v-if="choice.tag === MessageType.LABEL">
-              <button @click="choose(index)"><span v-html="formatContent(label(choice.label))"></span></button>
+              <button :class="{ 'dialog-advance': isContinueLabel(choice.label) }" @click="choose(index)"><span v-html="formatContent(label(choice.label))"></span></button>
             </template>
             <template v-if="choice.tag === MessageType.INFO">
               <FormattedEntry :entry="entry" v-for="entry in choice.flavor.body" />
             </template>
             <template v-if="choice.tag === MessageType.DONE">
-              <button @click="choose(index)">{{$t(choice.label)}}</button>
+              <button class="dialog-advance" @click="choose(index)">{{$t(choice.label)}}</button>
             </template>
           </div>
         </div>
@@ -298,10 +299,10 @@ const isBuildSpiritDeckQuestion = (q: Question): q is Question & { tag: Question
 
         <template v-for="(choice, index) in choices" :key="index">
           <div v-if="choice.tag === 'Done'">
-            <button @click="choose(index)">{{label(choice.label)}}</button>
+            <button class="dialog-advance" @click="choose(index)">{{label(choice.label)}}</button>
           </div>
           <div v-if="choice.tag === 'Label'" class="choice-label">
-            <button @click="choose(index)"><span v-html="formatContent(label(choice.label))"></span></button>
+            <button :class="{ 'dialog-advance': isContinueLabel(choice.label) }" @click="choose(index)"><span v-html="formatContent(label(choice.label))"></span></button>
           </div>
         </template>
 

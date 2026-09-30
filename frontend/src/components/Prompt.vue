@@ -44,7 +44,7 @@ const format = (str: string) => {
 
 <template>
   <dialog ref="dialogRef" @cancel.prevent="handleCancel">
-    <button class="close-btn" @click.prevent="handleCancel" aria-label="Close">
+    <button class="close-btn dialog-chrome-action" @click.prevent="handleCancel" aria-label="Close">
       <font-awesome-icon icon="times" />
     </button>
     <p class="prompt-text">{{ format(prompt) }}</p>

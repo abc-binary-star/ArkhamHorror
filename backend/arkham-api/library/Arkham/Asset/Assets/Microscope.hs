@@ -49,12 +49,12 @@ instance RunMessage Microscope where
         when (clues > 1) do
           chooseAmounts
             iid
-            "Evidence to spend"
+            "$label.evidenceToSpend"
             (MaxAmountTarget 2)
-            [("Evidence", (0, min 2 $ min clues (attrs.use Evidence)))]
+            [("$evidence", (0, min 2 $ min clues (attrs.use Evidence)))]
             attrs
       pure a
-    ResolveAmounts iid (getChoiceAmount "Evidence" -> n) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$evidence" -> n) (isTarget attrs -> True) -> do
       spendUses (attrs.ability 2) attrs Evidence n
       withSkillTest \sid -> skillTestModifier sid (attrs.ability 2) iid (DiscoveredClues n)
       pure a

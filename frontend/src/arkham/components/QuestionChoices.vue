@@ -26,6 +26,7 @@ const connectionImage = (connection: string) => {
 }
 
 const { t } = useI18n()
+const isContinueLabel = (body: string) => ['continue', 'Continue', '$continue', '$label.continue', t('continue')].includes(body.trim())
 const label = function(body: string) {
   return formatContent(handleEmbeddedI18n(body, t))
 }
@@ -96,7 +97,7 @@ const drownedCityTaskRecommendation = (body: string) => {
           />
       </template>
       <template v-else-if="choice.tag === MessageType.TARGET_LABEL">
-        <button @click="choose(index)">{{ t('continue') }}</button>
+        <button class="dialog-advance" @click="choose(index)">{{ t('continue') }}</button>
       </template>
       <button
         v-else-if="choice.tag === MessageType.CONNECTION_LABEL"
@@ -107,7 +108,7 @@ const drownedCityTaskRecommendation = (body: string) => {
         <img :src="connectionImage(choice.connection)" alt="" />
       </button>
       <template v-else-if="choice.tag === MessageType.TOOLTIP_LABEL">
-        <button @click="choose(index)" v-tooltip="choice.tooltip">{{ t(choice.label) }}</button>
+        <button :class="{ 'dialog-advance': isContinueLabel(choice.label) }" @click="choose(index)" v-tooltip="choice.tooltip">{{ t(choice.label) }}</button>
       </template>
       <div v-else-if="choice.tag === MessageType.LABEL" class="message-label">
         <button v-if="choice.label == 'Choose {skull}'" @click="choose(index)">
@@ -136,7 +137,7 @@ const drownedCityTaskRecommendation = (body: string) => {
             ></span>
           </span>
         </button>
-        <button v-else @click="choose(index)" v-html="label(choice.label)"></button>
+        <button v-else :class="{ 'dialog-advance': isContinueLabel(choice.label) }" @click="choose(index)" v-html="label(choice.label)"></button>
       </div>
       <div v-else-if="choice.tag === MessageType.COST_LABEL" class="message-label">
         <button @click="choose(index)" v-html="label(formatCost(choice.cost, t))"></button>
@@ -165,7 +166,7 @@ const drownedCityTaskRecommendation = (body: string) => {
         <FormattedEntry v-for="(entry, entryIndex) in choice.flavor.body" :key="entryIndex" :entry="entry" />
       </div>
       <div v-else-if="choice.tag === MessageType.DONE" class="message-label">
-        <button @click="choose(index)" v-html="label(choice.label)"></button>
+        <button class="dialog-advance" @click="choose(index)" v-html="label(choice.label)"></button>
       </div>
 
       <a

@@ -7,6 +7,7 @@ export interface Props {
   amount?: number
   tooltip?: string
   image?: string
+  feedbackKey?: string
 }
 const props = defineProps<Props>()
 
@@ -28,7 +29,7 @@ const image = computed(() => {
 </script>
 
 <template>
-  <div class="poolItem" :class="`poolItem-${type}`" @click="emit('choose')" v-tooltip="tooltip">
+  <div :data-feedback-key="feedbackKey" class="poolItem" :class="`poolItem-${type}`" @click="emit('choose')" v-tooltip="tooltip">
     <img :src="image" />
     <span v-if="amount !== null && amount !== undefined">{{amount}}</span>
   </div>
@@ -187,4 +188,9 @@ const image = computed(() => {
     animation: none;
   }
 }
+</style>
+
+<style scoped>
+.pool-risk-damage > span { color: #ffb6a6; text-decoration: underline; text-decoration-style: double; }
+.pool-risk-horror > span { color: #e0c4fa; text-decoration: underline; text-decoration-style: dotted; }
 </style>

@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { cardArt } from '@/arkham/cardImages';
 import { Game } from '@/arkham/types/Game';
 import { handleEmbeddedI18n } from '@/arkham/i18n';
-import { knownTranslationsFor, translateGameLogText } from '@/arkham/gameLogLocalization';
+import { knownTranslationsFor, translateGameLogText, translateSupplementalLogCardName } from '@/arkham/gameLogLocalization';
 import { chaosTokenImage } from '@/arkham/types/ChaosToken';
 import { useDbCardStore } from '@/stores/dbCards';
 
@@ -19,7 +19,8 @@ export default defineComponent({
     const { locale, messages } = useI18n({ useScope: 'global' })
     const dbCards = useDbCardStore()
     const localizeCardName = (name: string, cardCode: string): string =>
-      dbCards.getDbCard(cardArt(cardCode))?.name ?? name
+      dbCards.getDbCard(cardArt(cardCode))?.name
+        ?? translateSupplementalLogCardName(name, cardCode, locale.value, messages.value)
     const localizeInvestigatorName = (name: string, investigatorId: string): string => {
       const dbCard = dbCards.getDbCard(cardArt(investigatorId))
       if (!dbCard) return name

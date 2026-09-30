@@ -16,7 +16,8 @@ import { useI18n } from 'vue-i18n'
 import InvestigatorRow from '@/arkham/components/InvestigatorRow.vue'
 import InvestigatorStatsPanel from '@/arkham/components/InvestigatorStatsPanel.vue'
 import CampaignLogChaosBag from '@/arkham/components/CampaignLogChaosBag.vue'
-import CampaignLogSection from '@/arkham/components/CampaignLogSection.vue'
+import ChapterHandoff, { type HandoffInvestigator } from '@/arkham/components/ChapterHandoff.vue'
+import { chapterXp, hasPendingUpgrade } from '@/arkham/chapterHandoff'
 import XpBreakdown from '@/arkham/components/XpBreakdown.vue'
 import LogIcons from '@/arkham/components/LogIcons.vue'
 import SideStoryOption from '@/arkham/components/SideStoryOption.vue'
@@ -260,6 +261,33 @@ const canUpgrade = computed(() => {
   if (!["ScenarioStep", "ScenarioStepWithOptions", "StandaloneScenarioStep"].includes(props.step.tag)) return false
   return (props.campaign.completedSteps ?? []).some((step: CampaignStep) => ['ScenarioStep', 'ScenarioStepWithOptions', 'StandaloneScenarioStep'].includes(step.tag))
 })
+
+const latestSettlement = computed(() => xpBreakdowns.value[0])
+const latestSettlementName = computed(() => latestSettlement.value
+  ? campaignStepName(props.game, latestSettlement.value.step, undefined, { t, te }) : null)
+const handoffRoster = computed(() => {
+  const active = new Map(investigators.value.map(investigator => [investigator.id, investigator]))
+  for (const id of latestSettlement.value?.investigators ?? []) {
+    if (!active.has(id) && allGameInvestigators.value[id]) active.set(id, allGameInvestigators.value[id])
+  }
+  return [...active.values()]
+})
+const handoffInvestigators = computed<HandoffInvestigator[]>(() => handoffRoster.value.map(investigator => {
+  // The saved campaign deck includes cards drawn/discarded during the scenario.
+  // Never treat a depleted draw pile as the player's complete upgrade budget.
+  const savedDeck = props.game.campaign?.decks[investigator.id]
+    ?? props.game.campaign?.meta?.otherCampaignAttrs?.decks[investigator.id]
+  const slots = deckSlotsFor({ deck: savedDeck })
+  const knownDeck = Array.isArray(savedDeck) && Object.keys(slots).every(code => code.replace(/^c/, '') === '01000' || dbCardStore.getDbCard(code.replace(/^c/, '')))
+  const available = knownDeck ? investigator.xp - deckTotalXp(slots, xpForCode) : null
+  const pending = hasPendingUpgrade(props.game.question, investigator.id, investigator.playerId)
+  const status: HandoffInvestigator['status'] = !props.game.investigators[investigator.id] ? 'notInRoster' : pending ? 'pending' : available === null ? 'unknown'
+    : available < 0 ? 'overBudget' : !canUpgrade.value ? 'unavailable' : available > 0 ? 'available' : 'saved'
+  return { id: investigator.id, code: investigator.cardCode,
+    name: dbCardStore.getCardName(investigator.name.title, 'investigator'),
+    gained: chapterXp(investigator.id, latestSettlement.value), available,
+    physical: investigator.physicalTrauma, mental: investigator.mentalTrauma, status }
+}))
 
 const isScenario = computed(() =>  {
   // We do not yet handle the standalone step
@@ -536,6 +564,11 @@ const setIcon = computed(() => {
     class="continue-campaign scroll-container"
     :class="{ 'continue-campaign--split': !addSideStory && !chooseSideStory }"
   >
+    <ChapterHandoff v-if="!addSideStory && !chooseSideStory"
+      :recent-name="latestSettlementName" :next-name="name" :investigators="handoffInvestigators"
+      :notes="campaignNotes.map(note => t(note))" :can-upgrade="canUpgrade"
+      :busy="hasSent || rosterBusy || overlayBusy" :read-only="!!readOnly"
+      @upgrade="upgradeDecks" />
     <div class="campaign-column">
       <div v-if="chooseSideStory || (addSideStory && standalones.length > 0)" class="side-story-selection">
         <div class="side-story-header">
@@ -557,9 +590,8 @@ const setIcon = computed(() => {
             <p v-if="scenarioOverlay" class="campaign-overlay-label">{{ t('sideStory.variant') }}</p>
           </div>
           <div v-if="!readOnly" class="actions">
-            <button @click="startStep" :disable="hasSent">{{t('continue')}}</button>
-            <button v-if="canUpgrade" @click="upgradeDecks" :disable="hasSent">{{t('upgradeDecks')}}</button>
-            <button v-if="canChooseSideStory && standalones.length > 0" @click="addSideStory = true" :disable="hasSent">+ {{t('addSideScenario')}}</button>
+            <button class="dialog-advance" @click="startStep" :disabled="hasSent || rosterBusy || overlayBusy">{{t('continue')}}</button>
+            <button v-if="canChooseSideStory && standalones.length > 0" @click="addSideStory = true" :disabled="hasSent || rosterBusy || overlayBusy">+ {{t('addSideScenario')}}</button>
             <SideStoryOption
               v-for="sideStory in promotedSideStories"
               :key="sideStory.id"
@@ -702,11 +734,7 @@ const setIcon = computed(() => {
         :history="chaosBagHistory"
       />
 
-      <CampaignLogSection
-        v-if="campaignNotes.length > 0"
-        :title="t('campaignLog.campaignNotes')"
-        :items="campaignNotes.map(note => t(note))"
-      />
+
     </div>
   </div>
 </template>

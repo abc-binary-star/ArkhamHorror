@@ -67,12 +67,12 @@ instance RunMessage Kerosene1 where
 
       chooseAmounts
         iid
-        "Choose amount of horror to heal"
+        "$label.amountOfHorrorToHeal"
         (MaxAmountTarget maxHorror)
-        [("Horror", (0, maxHorror))]
+        [("$horror", (0, maxHorror))]
         (toTarget attrs)
       pure a
-    ResolveAmounts iid (getChoiceAmount "Horror" -> n) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$horror" -> n) (isTarget attrs -> True) -> do
       pushAll
         $ replicate n
         $ UseCardAbilityChoice iid (toSource attrs) 1 NoAbilityMetadata [] NoPayment

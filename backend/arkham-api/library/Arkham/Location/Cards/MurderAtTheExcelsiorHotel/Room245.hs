@@ -6,6 +6,7 @@ import Arkham.Card
 import Arkham.GameValue
 import Arkham.Helpers.Modifiers (ModifierType (..), modified_)
 import Arkham.Helpers.SkillTest (getSkillTestInvestigator, isSkillTestSource)
+import Arkham.I18n
 import Arkham.Investigator.Types (Field (..))
 import Arkham.Location.CardDefs.MurderAtTheExcelsiorHotel qualified as Cards
 import Arkham.Location.Import.Lifted
@@ -52,9 +53,9 @@ instance RunMessage Room245 where
 
       unless (null iids || isNothing timeWornLocket) $ do
         named <- traverse (\(iid', n) -> (,n) <$> field InvestigatorName iid') iids
-        chooseAmounts
+        withI18n $ cardNameVar Assets.timeWornLocket $ chooseAmounts
           iid
-          "number of clues to move to Time-worn Locket"
+          ("$" <> labelKey "numberOfCluesToMoveTo")
           (MinAmountTarget 0)
           (map (\(name, n) -> (toTitle name, (0, n))) named)
           (toTarget attrs)

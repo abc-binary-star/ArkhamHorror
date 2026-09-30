@@ -432,11 +432,28 @@ withEnemyMetadata a = do
   emScarletKeys <- select $ ScarletKeyWithPlacement $ AttachedToEnemy $ toId a
   pure $ a `with` EnemyMetadata {..}
 
-withAgendaMetadata :: HasGame m => Agenda -> m (With Agenda AgendaMetadata)
+withAgendaMetadata :: HasGame m => Agenda -> m (With (With Agenda AgendaMetadata) Value)
 withAgendaMetadata a = do
   agendamModifiers <- getModifiers' (toTarget a)
   agendamTreacheries <- select $ TreacheryIsAttachedTo (toTarget a.id)
-  pure $ a `with` AgendaMetadata {..}
+  -- Display metadata follows AgendaWantsToAdvance, including multi-agenda and
+  -- subtracting-doom rules. It never advances an agenda or creates a message.
+  doomPressure <- do
+    mods <- getModifiers (toTarget a)
+    case attr agendaDoomThreshold a of
+      Just threshold | CannotBeAdvancedByDoomThreshold `notElem` mods -> do
+        base <- getPlayerCountValue threshold
+        let
+          adjust n = \case
+            DoomThresholdModifier d -> max 0 (n + d)
+            _ -> n
+          effective = foldl' adjust base mods
+        other <- getSum <$> selectAgg Sum AgendaDoom (NotAgenda $ AgendaWithId $ toId a)
+        agendaDoomCount <- if OtherDoomSubtracts `elem` mods then getSubtractDoomCount else getDoomCount
+        let total = if OtherDoomSubtracts `elem` mods then a.doom - (agendaDoomCount - a.doom) else agendaDoomCount - other
+        pure $ Just $ object ["total" .= total, "threshold" .= effective]
+      _ -> pure Nothing
+  pure $ a `with` AgendaMetadata {..} `with` object ["doomPressure" .= doomPressure]
 
 withActMetadata :: HasGame m => Act -> m (With Act ActMetadata)
 withActMetadata a = do
@@ -560,7 +577,7 @@ withEnemyLocationAsLocationData el = do
       , "concealedCards" .= emptyArray
       ]
 
-withAssetMetadata :: HasGame m => Asset -> m (With Asset AssetMetadata)
+withAssetMetadata :: HasGame m => Asset -> m (With (With Asset AssetMetadata) Value)
 withAssetMetadata a = do
   amModifiers <- getModifiers' (toTarget a)
   amEvents <- select (EventAttachedToAsset $ AssetWithId $ toId a)
@@ -569,7 +586,10 @@ withAssetMetadata a = do
   amTreacheries <- select (TreacheryIsAttachedTo $ toTarget a)
   amScarletKeys <- select $ ScarletKeyWithPlacement $ AttachedToAsset (toId a) Nothing
   let amPermanent = cdPermanent $ toCardDef a
-  pure $ a `with` AssetMetadata {..}
+  remainingHealth <- field AssetRemainingHealth (toId a)
+  remainingSanity <- field AssetRemainingSanity (toId a)
+  pure $ a `with` AssetMetadata {..} `with` object
+    [ "remainingHealth" .= remainingHealth, "remainingSanity" .= remainingSanity ]
 
 withSkillTestMetadata :: HasGame m => SkillTest -> m (With SkillTest SkillTestMetadata)
 withSkillTestMetadata st = do
@@ -611,6 +631,8 @@ withInvestigatorConnectionData inner@(With target _) = case target of
     combat <- field InvestigatorBaseCombat (toId investigator')
     agility <- field InvestigatorBaseAgility (toId investigator')
     handSize <- getHandSize (toAttrs investigator')
+    remainingHealth <- field InvestigatorRemainingHealth (toId investigator')
+    remainingSanity <- field InvestigatorRemainingSanity (toId investigator')
     let
       additionalData =
         object
@@ -625,6 +647,8 @@ withInvestigatorConnectionData inner@(With target _) = case target of
           , "combat" .= combat
           , "agility" .= agility
           , "handSize" .= handSize
+          , "remainingHealth" .= remainingHealth
+          , "remainingSanity" .= remainingSanity
           , "scarletKeys" .= scarletKeys
           ]
     case mLocation of

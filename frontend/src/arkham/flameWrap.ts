@@ -491,11 +491,17 @@ export function createFlameWrap(
     }
     const outRect = output.getBoundingClientRect()
     const boxRect = content.getBoundingClientRect()
-    if (outRect.width > 0 && boxRect.width > 0) {
-      rect.cx = (boxRect.left + boxRect.right) / 2 - outRect.left
-      rect.cy = outRect.bottom - (boxRect.top + boxRect.bottom) / 2
-      rect.hx = boxRect.width / 2
-      rect.hy = boxRect.height / 2
+    if (outRect.width > 0 && outRect.height > 0 && boxRect.width > 0) {
+      // DOM rectangles include the map's CSS scale, but the canvas backing
+      // store and flame options use local CSS pixels. Undo the shared scale
+      // here; the browser then scales the card and its fire together, including
+      // zoom changes that do not trigger ResizeObserver.
+      const toLocalX = output.clientWidth / outRect.width
+      const toLocalY = output.clientHeight / outRect.height
+      rect.cx = ((boxRect.left + boxRect.right) / 2 - outRect.left) * toLocalX
+      rect.cy = (outRect.bottom - (boxRect.top + boxRect.bottom) / 2) * toLocalY
+      rect.hx = boxRect.width / 2 * toLocalX
+      rect.hy = boxRect.height / 2 * toLocalY
     }
   }
 

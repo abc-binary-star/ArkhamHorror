@@ -12,6 +12,8 @@ import { Customization, customizationsDecoder } from '@/arkham/types/Customizati
 import { Modifier, modifierDecoder } from '@/arkham/types/Modifier';
 
 export type Asset = {
+  remainingHealth?: number | null;
+  remainingSanity?: number | null;
   id: string;
   cardCode: string;
   cardId: string;
@@ -54,6 +56,8 @@ export const assetDecoder = JsonDecoder.object<Asset>({
   owner: JsonDecoder.nullable(JsonDecoder.string()),
   controller: JsonDecoder.nullable(JsonDecoder.string()),
   slots: JsonDecoder.array<string>(JsonDecoder.string(), 'SlotType[]'),
+  remainingHealth: v2Optional(JsonDecoder.nullable(JsonDecoder.number())),
+  remainingSanity: v2Optional(JsonDecoder.nullable(JsonDecoder.number())),
   health: JsonDecoder.nullable(JsonDecoder.number()),
   tokens: tokensDecoder,
   sanity: JsonDecoder.nullable(JsonDecoder.number()),

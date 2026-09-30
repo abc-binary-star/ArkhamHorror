@@ -1,4 +1,7 @@
 <script lang="ts" setup>
+import { decisionGuidance } from '@/arkham/decisionGuidance'
+import FeedbackHistory from '@/arkham/components/FeedbackHistory.vue'
+import { useVisualFeedback } from '@/arkham/composables/useVisualFeedback'
 import { useStorage } from '@vueuse/core'
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import type { Game } from '@/arkham/types/Game'
@@ -16,6 +19,7 @@ import { gameLocalStorageKey } from '@/arkham/localStorage'
 import { IsMobile } from '@/arkham/isMobile'
 import {
   processingKey,
+  phaseAnnouncementKey,
   soloKey,
   spectateKey,
   switchInvestigatorKey,
@@ -34,6 +38,7 @@ export interface Props {
 }
 
 const props = defineProps<Props>()
+const visualFeedback = useVisualFeedback()
 const { t } = useI18n()
 
 const storageKey = computed(() => gameLocalStorageKey(props.game.id, 'selected-tab'))
@@ -44,6 +49,7 @@ const solo = inject(soloKey)
 const spectate = inject(spectateKey, ref(false))
 const processing = inject(processingKey, ref(false))
 const uiLock = inject(uiLockKey, ref(false))
+const phaseAnnouncement = inject(phaseAnnouncementKey, ref(false))
 const switchInvestigator = inject(switchInvestigatorKey)
 // Hand visibility inherits the table setting; choices still use the local playerId.
 const hasChoices = (iid: string) => ArkhamGame.choices(props.game, iid).length > 0
@@ -69,6 +75,39 @@ const viewedInvestigator = computed(() =>
     (investigator) => investigator.playerId === selectedTab.value,
   ) ?? null,
 )
+const operatorContexts = computed(() => {
+  const name = (id: string) => {
+    const investigator = props.game.investigators[id]
+    return investigator ? getInvestigatorName(investigator.name.title) : ''
+  }
+  const entries: string[] = []
+  const turn = props.game.turnPlayerInvestigatorId ? name(props.game.turnPlayerInvestigatorId) : ''
+  if (props.game.phase === 'InvestigationPhase' && turn) entries.push(t('visualFeedback.turn', { name: turn }))
+  if (props.game.skillTest) entries.push(t('visualFeedback.test', { name: name(props.game.skillTest.investigator) }))
+  return entries
+})
+const guidanceBusy = computed(() => Boolean(processing.value || uiLock.value || phaseAnnouncement.value))
+const guidanceStatus = computed(() => phaseAnnouncement.value ? 'phase' : uiLock.value ? 'reading' : processing.value ? 'processing' : 'idle')
+const pendingDecisions = computed(() => Object.entries(props.game.question).flatMap(([pid, question]) => {
+  const kind = decisionGuidance(question, ArkhamGame.choices(props.game, pid))
+  if (!kind) return []
+  const seats = Object.values(props.players).filter(investigator => investigator.playerId === pid)
+  if (!seats.length) return []
+  return [{ playerId: pid, kind, name: seats.map(seat => getInvestigatorName(seat.name.title)).join(' / '),
+    canAct: !spectate.value && (solo?.value === true || pid === props.playerId) }]
+}))
+
+async function locateDecision(pid: string) {
+  if (guidanceBusy.value || !pendingDecisions.value.some(entry => entry.playerId === pid)) return
+  if (solo?.value && !spectate.value) selectTabExtended(pid)
+  else selectTab(pid)
+  await nextTick()
+  const tab = Array.from(playerInfo.value?.querySelectorAll<HTMLElement>('[data-player-seat]') ?? [])
+    .find(element => element.dataset.playerSeat === pid)
+  tab?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' })
+  tab?.focus({ preventScroll: true })
+}
+
 const actionContext = computed(() => {
   const viewed = viewedInvestigator.value
   const acting = actingInvestigator.value
@@ -121,7 +160,7 @@ function instructions(investigator: Investigator) {
   return null
 }
 
-type SwitchReason = 'baseline' | 'tab-action' | 'sole-question' | 'covered-question'
+type SwitchReason = 'baseline' | 'tab-action' | 'sole-question' | 'covered-question' | 'skill-test'
 interface SwitchFrame {
   tab: string
   perspective: string
@@ -157,7 +196,7 @@ function selectTab(i: string) {
   resetSwitchStack(i, props.playerId)
 }
 
-// The eye button is the only way to act as another seat, so an explicit perspective
+// The eye button and decision guide explicitly select a seat, so a perspective
 // switch must outrank automatic routing for the current game step -- otherwise a
 // declinable fast window on the destination seat is filtered out of
 // focusQuestionPlayers() and the sole-question rule immediately routes back to the
@@ -307,7 +346,10 @@ function frameIsStillNeeded(frame: SwitchFrame, tabs: Set<string>) {
 function applyFrame(frame: SwitchFrame) {
   // Online browsing never changes the answering identity or follows other seats.
   if (!solo?.value) return
+  const changed = selectedTab.value !== frame.tab || props.playerId !== frame.perspective
   selectedTab.value = frame.tab
+  const target = Object.values(props.players).find(i => i.playerId === frame.tab)
+  if (changed && target) void visualFeedback?.focus(target.id)
   if (solo?.value === true && props.playerId !== frame.perspective && switchInvestigator) {
     pendingPerspective.value = frame.perspective
     switchInvestigator(frame.perspective)
@@ -380,6 +422,7 @@ let actionObserver: MutationObserver | null = null
 let inspectionFrame: number | null = null
 let automaticSwitchCandidate: string | null = null
 let automaticSwitchCandidateSince = 0
+let focusedSkillTest: string | null = null
 
 function scheduleActionInspection() {
   if (inspectionFrame !== null) cancelAnimationFrame(inspectionFrame)
@@ -419,6 +462,24 @@ function inspectActions() {
     return
   }
 
+  // A test can offer commit/fast windows to several seats at once. Follow the
+  // actual test taker once per test, even after a manual tab selection in the
+  // same scenario step. Later updates must still allow manual assistance.
+  const skillTestPlayer = skillTestPlayerId()
+  const skillTest = props.game.skillTest
+  const skillTestKey = skillTest && skillTestPlayer
+    ? `${skillTest.id}:${skillTest.investigator}`
+    : null
+  if (skillTestKey !== focusedSkillTest) {
+    focusedSkillTest = skillTestKey
+    if (skillTestPlayer) {
+      manualSelectionAtStep = null
+      automaticSwitchCandidate = null
+      pushAutomaticFrame(skillTestPlayer, skillTestPlayer, 'skill-test')
+      return
+    }
+  }
+
   // Clicking a tab mutates the observed DOM. Keep the user's selection stable
   // for the current game state rather than immediately routing away and back.
   if (manualSelectionAtStep === props.game.scenarioSteps) {
@@ -437,8 +498,7 @@ function inspectActions() {
     questionPlayers.length > 1 && answerableQuestionPlayers.length === 1
       ? answerableQuestionPlayers[0]
       : null
-  const skillTestPlayer = skillTestPlayerId()
-  const activeQuestionPlayer = activeInvestigatorPlayerId()
+  const activeQuestionPlayer = skillTestPlayer ?? activeInvestigatorPlayerId()
   const activePlayerCoversOtherQuestions =
     solo?.value === true &&
     questionPlayers.length > 1 &&
@@ -574,6 +634,8 @@ watch(
       props.playerId,
       props.game.scenarioSteps,
       props.game.question,
+      props.game.skillTest?.id,
+      props.game.skillTest?.investigator,
       processing.value,
       uiLock.value,
     ] as const,
@@ -589,7 +651,9 @@ watch(
       <ul class="tabs__header">
         <li
           v-for="investigator in investigators"
-          :key="investigator.name.title"
+          :key="investigator.id"
+          :data-feedback-key="`tab:${investigator.id}`"
+          :data-player-seat="investigator.playerId"
           role="button"
           tabindex="0"
           :aria-pressed="selectedTab === investigator.playerId"
@@ -625,7 +689,9 @@ watch(
         </li>
         <li
           v-for="investigator in inactiveInvestigators"
-          :key="investigator.name.title"
+          :key="investigator.id"
+          :data-feedback-key="`tab:${investigator.id}`"
+          :data-player-seat="investigator.playerId"
           role="button"
           tabindex="0"
           :aria-pressed="selectedTab === investigator.playerId"
@@ -666,6 +732,23 @@ watch(
         {{ $t('multiplayerTable.myArea') }}<span v-if="hasChoices(playerId)"> · {{ $t('multiplayerTable.pendingChoice') }}</span>
       </button>
     </div>
+    <div v-if="operatorContexts.length" class="operator-context" role="status">
+      <span v-for="context in operatorContexts" :key="context">{{ context }}</span>
+    </div>
+    <div class="decision-guidance" :aria-label="$t('decisionGuide.title')">
+      <p v-if="guidanceBusy || !pendingDecisions.length" role="status" aria-live="polite">{{ $t(`decisionGuide.${guidanceStatus}`) }}</p>
+      <template v-else>
+        <p class="sr-only" role="status" aria-live="polite">{{ pendingDecisions.map(entry => `${entry.name}：${$t(`decisionGuide.${entry.kind}`)}`).join('；') }}</p>
+        <button v-for="entry in pendingDecisions" :key="entry.playerId" type="button"
+          :aria-label="`${$t('decisionGuide.locate', { name: entry.name })} · ${$t(`decisionGuide.${entry.kind}`)}`"
+          @click="locateDecision(entry.playerId)">
+          <strong>{{ entry.name }}</strong>
+          <span>{{ $t(`decisionGuide.${entry.kind}`) }}</span>
+          <small>{{ $t(entry.canAct ? 'decisionGuide.go' : 'decisionGuide.view') }}</small>
+        </button>
+      </template>
+    </div>
+    <FeedbackHistory />
     <!-- Own prompts stay visible while inspecting another investigator's cards. -->
     <ChoiceModal :game="game" :playerId="playerId" @choose="$emit('choose', $event)" />
     <Tab
@@ -1055,4 +1138,17 @@ ul.tabs__header > li.inactive {
   .tabs__header li { flex: 0 0 auto; min-height: 44px; padding: 10px 12px; font-size: 14px; }
 
 }
+</style>
+
+<style scoped>
+.operator-context { display: flex; flex-wrap: wrap; gap: 4px 16px; padding: 4px 10px; color: #dfd0ae; font-size: 12px; pointer-events: none; }
+</style>
+
+<style scoped>
+.decision-guidance { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 10px; color: var(--text); }
+.decision-guidance p { margin: 0; font-size: 13px; }
+.decision-guidance button { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; max-width: 100%; padding: 6px 10px; min-height: 36px; font: inherit; font-size: 13px; color: inherit; background: var(--panel-inset); border: 1px solid var(--edge-dim); border-radius: 4px; cursor: pointer; text-align: left; overflow-wrap: anywhere; }
+.decision-guidance small { color: var(--text-dim); }
+.decision-guidance button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+@media (pointer: coarse) { .decision-guidance button { min-height: 44px; } }
 </style>

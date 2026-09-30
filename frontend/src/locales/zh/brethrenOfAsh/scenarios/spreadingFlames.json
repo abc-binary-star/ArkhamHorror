@@ -35,7 +35,7 @@
     }
   },
   "setup": {
-    "gatherSets": "收齐以下遭遇组的所有卡牌：*烈火渐起*、*灰烬朝圣者*、*旁人*、*宇宙恶魔*、*惊悚典籍*、*着火了！*、*幻象*、*疯狂科学*、*米斯卡塔尼克大学*。这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/spreading-flames.png' /><img src='{setImgPath}/ashen-pilgrims.png' /><img src='{setImgPath}/bystanders.png' /><img src='{setImgPath}/cosmic-evils.png' /><img src='{setImgPath}/eldritch-lore.png' /><img src='{setImgPath}/fire-ch2.png' /><img src='{setImgPath}/hallucinations.png' /><img src='{setImgPath}/mad-science.png' /><img src='{setImgPath}/miskatonic-university.png' /></section>",
+    "gatherSets": "收齐以下遭遇组的所有卡牌：*烈火渐起*、*灰烬朝圣者*、*旁人*、*宇宙恶魔*、*惊悚典籍*、*着火了！*、*幻象*、*疯狂科学*、*米斯卡塔尼克大学*。这些遭遇牌如下面图标所示：<section class='encounter-sets'><img src='{setImgPath}/spreading-flames.png' /><img src='{setImgPath}/ashen-pilgrims.png' /><img src='{setImgPath}/bystanders.png' /><img src='{setImgPath}/cosmic-evils.png' /><img src='{setImgPath}/eldritch-lore.png' /><img src='{setImgPath}/fire.png' /><img src='{setImgPath}/hallucinations.png' /><img src='{setImgPath}/mad-science.png' /><img src='{setImgPath}/miskatonic-university.png' /></section>",
     "placeLocations": "将【朋友的房间】地点卡牌放置入场。将其他所有地点卡放在一旁。",
     "startAt": "每位调查员从【朋友的房间】开始游戏。",
     "setOutOfPlay": "将5张【着火了！】诡计、【亨利·阿米蒂奇博士】剧情支援、【烈焰仆从】敌人放在一边，位于场外。"

@@ -111,7 +111,7 @@ initDeckTrauma deck' iid target = do
   chooseMsg <-
     chooseAmounts
       pid
-      ("Suffer " <> tshow anyTrauma <> " total physical and/or mental trauma")
+      ("$label.sufferTotalTrauma count=i:" <> tshow anyTrauma)
       (TotalAmountTarget anyTrauma)
       [("$physical", (0, anyTrauma)), ("$mental", (0, anyTrauma))]
       (LabeledTarget "Purchase Trauma" target)

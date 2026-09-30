@@ -38,10 +38,10 @@ instance RunMessage Blur4 where
           charges <- namedUUID "Charges"
           push $ ResolveAmounts iid [(charges, 1)] (toTarget attrs)
         (min 2 -> x) ->
-          chooseAmounts iid "Amount of Charges to Spend" (MaxAmountTarget x) [("Charges", (1, x))] attrs
+          chooseAmounts iid "$label.amountOfChargesToSpend" (MaxAmountTarget x) [("$charge", (1, x))] attrs
       when (n == 0) $ assignDamage iid (attrs.ability 1) 2
       pure a
-    ResolveAmounts iid (getChoiceAmount "Charges" -> n) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$charge" -> n) (isTarget attrs -> True) -> do
       push $ SpendUses (attrs.ability 1) (toTarget attrs) Charge n
       gainActions iid (attrs.ability 1) n
       pure a

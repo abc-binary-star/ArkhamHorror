@@ -1,0 +1,121 @@
+/* Generated companion materials to the original harbour tabletop.
+   Activate only while the actual scenario board is mounted in the main view.
+   Campaign interludes, deck upgrades, setup and the full campaign log must not
+   inherit these palette variables, even if game state still retains a scenario.
+   Scope skin overrides to alternative themes only. Important backgrounds bridge
+   the existing scoped desktop/mobile/multiseat rules (including ID selectors).
+   No ancestor filters: card artwork and gameplay status colours stay untouched. */
+.tabletop-shell:has(.game-main .scenario-body)[data-tabletop-theme="zealot"] {
+  --theme-map: url('../assets/tabletop-themes/zealot-map-v2.jpg');
+  --theme-leather: url('../assets/tabletop-themes/zealot-leather-v2.jpg');
+  --theme-chrome: url('../assets/tabletop-themes/zealot-chrome-v2.jpg');
+  --theme-base: #1e1011;
+  --theme-panel: #2c1919;
+  --theme-raised: #422b27;
+  --theme-accent: #cfac79;
+  --theme-muted: #c8b6a8;
+  --theme-glow: #8e513d;
+  --theme-wash: rgb(21 8 9 / 0.36);
+}
+.tabletop-shell:has(.game-main .scenario-body)[data-tabletop-theme="dunwich"] {
+  --theme-map: url('../assets/tabletop-themes/dunwich-map-v2.jpg');
+  --theme-leather: url('../assets/tabletop-themes/dunwich-leather-v2.jpg');
+  --theme-chrome: url('../assets/tabletop-themes/dunwich-chrome-v2.jpg');
+  --theme-base: #19151e;
+  --theme-panel: #29232d;
+  --theme-raised: #3a303c;
+  --theme-accent: #c5a68a;
+  --theme-muted: #c4b8be;
+  --theme-glow: #786376;
+  --theme-wash: rgb(16 12 21 / 0.36);
+}
+.tabletop-shell:has(.game-main .scenario-body):is([data-tabletop-theme="zealot"], [data-tabletop-theme="dunwich"]) {
+  --background: var(--theme-base);
+  --background-dark: var(--theme-base);
+  --background-mid: var(--theme-panel);
+  --box-background: var(--theme-panel);
+  --button-1: var(--theme-raised);
+  --button-1-highlight: var(--theme-glow);
+  --button-1-text: #f3e5d7;
+  --surface-table: var(--theme-base);
+  --surface-chrome: var(--theme-base);
+  --surface-panel: var(--theme-panel);
+  --surface-raised: var(--theme-raised);
+  --brass: var(--theme-accent);
+  --brass-dim: var(--theme-muted);
+  --edge: var(--theme-accent);
+  --edge-dim: color-mix(in srgb, var(--theme-accent) 38%, transparent);
+  --text: #e9e0d6;
+  --text-dim: var(--theme-muted);
+  --title: #ecdbc1;
+  background: var(--theme-chrome) center / cover no-repeat var(--theme-base) !important;
+}
+
+/* Match the original map's edge overscan rather than cover-cropping away the
+   illustrated corners on wide or tall maps. Card placement is unaffected. */
+.tabletop-shell:has(.game-main .scenario-body):is([data-tabletop-theme="zealot"], [data-tabletop-theme="dunwich"]) .location-cards-container {
+  background: var(--theme-map) center / 101.3% 102.2% no-repeat var(--theme-base) !important;
+}
+
+/* A single continuous leather mat beneath the investigator, equipment and hand. */
+.tabletop-shell:has(.game-main .scenario-body):is([data-tabletop-theme="zealot"], [data-tabletop-theme="dunwich"]) :is(
+  #player-zone, .player-zone--fullscreen, .hand-area-IsMobile
+) {
+  background: linear-gradient(var(--theme-wash), var(--theme-wash)),
+    var(--theme-leather) center / 104% 104% no-repeat var(--theme-base) !important;
+  border-color: var(--edge-dim);
+}
+.tabletop-shell:has(.game-main .scenario-body):is([data-tabletop-theme="zealot"], [data-tabletop-theme="dunwich"]) #player-zone :is(
+  .hand-area:not(.hand-area-IsMobile), .in-play-row, .workbench-encounter-piles
+) {
+  background: transparent !important;
+}
+
+/* Short rails use the centre of the tray: the texture stays tactile without
+   stretching the corner art or repeating large ornaments beneath labels. */
+.tabletop-shell:has(.game-main .scenario-body):is([data-tabletop-theme="zealot"], [data-tabletop-theme="dunwich"]) :is(
+  .game-bar, .phases, .scenario-seat__heading, .workbench-label, .tabs-row,
+  .table-shelf-header, .sidebar__title, .map-corner-controls, .in-play-toggle,
+  .mobile-table-nav, .mobile-turn-summary, .mobile-hand-handle
+) {
+  background: linear-gradient(var(--theme-wash), var(--theme-wash)),
+    var(--theme-chrome) center 42% / cover no-repeat var(--theme-base) !important;
+  border-color: var(--edge-dim);
+}
+
+/* Tall shelves keep a consistent grain size, with a quiet reading layer. */
+.tabletop-shell:has(.game-main .scenario-body):is([data-tabletop-theme="zealot"], [data-tabletop-theme="dunwich"]) :is(
+  .scenario-cards, .game-tools-drawer, .campaign-log-panel, .sidebar,
+  .teammate-detail, .teammate-card:not(.active)
+) {
+  background: linear-gradient(var(--theme-wash), var(--theme-wash)),
+    var(--theme-chrome) center / auto 720px repeat-y var(--theme-base) !important;
+  border-color: var(--edge-dim);
+}
+.tabletop-shell:has(.game-main .scenario-body):is([data-tabletop-theme="zealot"], [data-tabletop-theme="dunwich"]) .game-log {
+  --text: #e9e0d6;
+  --text-dim: var(--theme-muted);
+  --brass: var(--theme-accent);
+  background: color-mix(in srgb, var(--theme-base) 64%, transparent) !important;
+  border-color: var(--edge-dim);
+}
+
+/* Preserve the existing brass slot corner assets; replace their sea-green wash. */
+.tabletop-shell:has(.game-main .scenario-body):is([data-tabletop-theme="zealot"], [data-tabletop-theme="dunwich"]) .scenario-body {
+  --table-brass: var(--theme-accent);
+  --table-rule: color-mix(in srgb, var(--theme-accent) 36%, transparent);
+}
+.tabletop-shell:has(.game-main .scenario-body):is([data-tabletop-theme="zealot"], [data-tabletop-theme="dunwich"]) #player-zone :is(
+  .discard-empty, .equip-slots .slot, .threat-enemy-slot
+) {
+  background:
+    url('/assets/veiled-harbour/C04-黄铜压线角件-左上.svg') left top / 52px 52px no-repeat,
+    url('/assets/veiled-harbour/C04-黄铜压线角件-右上.svg') right top / 52px 52px no-repeat,
+    url('/assets/veiled-harbour/C04-黄铜压线角件-左下.svg') left bottom / 52px 52px no-repeat,
+    url('/assets/veiled-harbour/C04-黄铜压线角件-右下.svg') right bottom / 52px 52px no-repeat,
+    radial-gradient(ellipse at 50% 10%, color-mix(in srgb, var(--theme-glow) 22%, transparent), transparent 75%),
+    color-mix(in srgb, var(--theme-base) 65%, transparent) !important;
+}
+.tabletop-shell:has(.game-main .scenario-body):is([data-tabletop-theme="zealot"], [data-tabletop-theme="dunwich"]) .phases .active-phase {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--theme-accent) 30%, transparent), color-mix(in srgb, var(--theme-accent) 12%, transparent)) !important;
+}

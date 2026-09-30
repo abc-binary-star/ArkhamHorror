@@ -1,5 +1,13 @@
 <script lang="ts" setup>
-import { computed, inject, onMounted, ref, watch } from 'vue'
+import { computed, inject, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { onClickOutside, useEventListener } from '@vueuse/core'
+import { visibleRestrictionSource } from '@/arkham/restrictionSource'
+import type { Source } from '@/arkham/types/Source'
+import { useDbCardStore } from '@/stores/dbCards'
+import { useI18n } from 'vue-i18n'
+import { fetchPlayability } from '@/arkham/api'
+import { playabilityExplanation, isPlayabilityWindow, playabilityResponseIsCurrent } from '@/arkham/playabilityExplanation'
+import { processingKey, uiLockKey, phaseAnnouncementKey, spectateKey } from '@/arkham/injectionKeys'
 import { CardContents, type Card } from '@/arkham/types/Card'
 import type { Game } from '@/arkham/types/Game'
 import type { AbilityLabel, AbilityMessage, Message } from '@/arkham/types/Message'
@@ -22,6 +30,37 @@ export interface Props {
 }
 
 const props = defineProps<Props>()
+const { t } = useI18n()
+const processing = inject(processingKey, ref(false))
+const uiLock = inject(uiLockKey, ref(false))
+const phaseAnnouncement = inject(phaseAnnouncementKey, ref(false))
+const spectate = inject(spectateKey, ref(false))
+const explanationOpen = ref(false)
+const explanationLoading = ref(false)
+const explanationError = ref(false)
+const explanationScope = ref<'currentWindow' | 'normalTurn' | 'unavailable'>('normalTurn')
+const explanationStale = ref(false)
+const restrictionSources = ref<Source[]>([])
+const expandedSource = ref<string | null>(null)
+const dbCards = useDbCardStore()
+const visibleSources = computed(() => {
+  const sources = new Map<string, { key: string; code: string }>()
+  for (const source of restrictionSources.value) {
+    const visible = visibleRestrictionSource(source, props.game)
+    if (visible) sources.set(visible.key, visible)
+  }
+  return [...sources.values()]
+})
+const restrictionName = (code: string) => dbCards.getDbCard(code.replace(/^c/, ''))?.name ?? t('handExplanation.sourceCard')
+const explanation = ref<ReturnType<typeof playabilityExplanation>>([])
+let explanationRequest = 0
+const explanationPanel = ref<HTMLElement | null>(null)
+const explanationStyle = ref<Record<string, string>>({})
+onClickOutside(explanationPanel, () => clearExplanation(), { ignore: ['.explain-card', '.card.in-hand'] })
+useEventListener(window, 'keydown', (event: KeyboardEvent) => {
+  if (event.key === 'Escape' && explanationOpen.value) clearExplanation()
+})
+useEventListener(window, 'resize', () => clearExplanation())
 const debug = useDebug()
 const cardStore = useCardStore()
 
@@ -119,6 +158,59 @@ const classObject = computed(() => {
   }
 })
 
+const canExplain = computed(() => !spectate.value && investigatorId.value === props.ownerId
+  && cardAction.value === -1 && abilities.value.length === 0)
+const explanationContext = computed(() => {
+  if (processing.value || uiLock.value || phaseAnnouncement.value) return 'busy'
+  if (!props.game.question[props.playerId]) return 'waiting'
+  if (!isPlayabilityWindow(props.game.question[props.playerId])) return 'otherChoice'
+  return null
+})
+function clearExplanation() {
+  explanationRequest++
+  explanationOpen.value = false
+  explanationLoading.value = false
+  explanationError.value = false
+  explanation.value = []
+  restrictionSources.value = []
+  expandedSource.value = null
+  explanationStale.value = false
+}
+watch(() => [props.game.scenarioSteps, props.game.question, props.playerId, id.value, canExplain.value, explanationContext.value, props.mobileHandOpen], clearExplanation)
+onBeforeUnmount(clearExplanation)
+async function explainCard() {
+  if (!canExplain.value || explanationLoading.value) return
+  const rect = cardFrame.value?.getBoundingClientRect()
+  explanationStyle.value = {
+    left: `${Math.max(8, Math.min(rect?.left ?? 8, window.innerWidth - 304))}px`,
+    bottom: `${Math.max(8, Math.min(window.innerHeight - (rect?.top ?? 0) + 8, window.innerHeight / 2))}px`,
+  }
+  explanationOpen.value = true
+  if (explanationContext.value) return
+  const request = ++explanationRequest
+  explanationLoading.value = true
+  explanationError.value = false
+  explanationStale.value = false
+  try {
+    const result = await fetchPlayability(props.game.id, investigatorId.value!, id.value)
+    if (request !== explanationRequest) return
+    if (!playabilityResponseIsCurrent(result, id.value, props.game.scenarioSteps)) {
+      explanationStale.value = true
+      return
+    }
+    // An older server can only provide a normal-turn diagnostic, never label
+    // its synthetic DuringTurn result as a live response-window diagnosis.
+    explanationScope.value = result.scope ?? 'normalTurn'
+    explanation.value = playabilityExplanation(result.checks)
+    restrictionSources.value = result.checks.some(([name, detail]) => name === 'Play restrictions' && detail !== null)
+      ? result.restrictionSources ?? [] : []
+  } catch {
+    if (request === explanationRequest) explanationError.value = true
+  } finally {
+    if (request === explanationRequest) explanationLoading.value = false
+  }
+}
+
 function handleCardClick() {
   if (cardAction.value !== -1) {
     emit('choose', cardAction.value)
@@ -126,6 +218,8 @@ function handleCardClick() {
     emit('choose', abilities.value[0].index)
   } else if (abilities.value.length > 1) {
     showAbilities.value = !showAbilities.value
+  } else if (canExplain.value) {
+    void explainCard()
   }
 }
 
@@ -300,6 +394,34 @@ function oilPaintEffect(canvas, radius, intensity) {
       <font-awesome-icon icon="wrench" />
     </button>
 
+    <button v-if="canExplain" class="explain-card" type="button" :aria-expanded="explanationOpen"
+      @click.stop="explanationOpen ? clearExplanation() : explainCard()">{{ t('handExplanation.why') }}</button>
+    <Teleport to="body">
+    <div v-if="explanationOpen" ref="explanationPanel" :style="explanationStyle" class="hand-explanation" @click.stop @pointerdown.stop>
+      <p v-if="explanationContext" role="status">{{ t(`handExplanation.${explanationContext}`) }}</p>
+      <p v-else-if="explanationLoading" role="status">{{ t('handExplanation.loading') }}</p>
+      <p v-else-if="explanationStale" role="status">{{ t('handExplanation.stale') }}</p>
+      <template v-else-if="explanationError">
+        <p role="alert">{{ t('handExplanation.error') }}</p>
+        <button type="button" @click="explainCard">{{ t('loadState.retry') }}</button>
+      </template>
+      <template v-else>
+        <p>{{ t(explanationScope === 'currentWindow' ? 'handExplanation.currentScope' : explanationScope === 'unavailable' ? 'handExplanation.unavailable' : 'handExplanation.scope') }}</p>
+        <ul v-if="explanationScope !== 'unavailable' && explanation.length"><li v-for="(reason, index) in explanation" :key="index">{{ t(`handExplanation.${reason.key}`, reason.values) }}</li></ul>
+        <p v-else-if="explanationScope !== 'unavailable'">{{ t(explanationScope === 'currentWindow' ? 'handExplanation.currentNoReason' : 'handExplanation.noReason') }}</p>
+      </template>
+      <section v-if="!explanationLoading && !explanationError && !explanationStale && !explanationContext && visibleSources.length" class="restriction-sources">
+        <p>{{ t('handExplanation.restrictionSources') }}</p>
+        <div v-for="source in visibleSources" :key="source.key">
+          <button type="button" :aria-expanded="expandedSource === source.key"
+            @click="expandedSource = expandedSource === source.key ? null : source.key">{{ t('handExplanation.viewSource', { name: restrictionName(source.code) }) }}</button>
+          <img v-if="expandedSource === source.key" :src="cardImage(source.code)" :alt="restrictionName(source.code)" class="restriction-source-image" />
+        </div>
+      </section>
+      <button type="button" @click="clearExplanation">{{ t('close') }}</button>
+    </div>
+    </Teleport>
+
     <CardSilenceBell
       v-if="investigatorId && investigatorId === ownerId"
       class="hand-silence-bell"
@@ -378,4 +500,19 @@ function oilPaintEffect(canvas, radius, intensity) {
 .debug-customize:hover {
   background: #fff;
 }
+</style>
+
+<style scoped>
+.explain-card { position: absolute; bottom: 4px; left: 4px; right: 4px; z-index: 2; font-size: 11px; padding: 4px; color: var(--text); background: var(--panel); border: 1px solid var(--edge-dim); border-radius: 4px; cursor: pointer; }
+.hand-explanation { position: fixed; z-index: 10000; box-sizing: border-box; width: min(296px, calc(100vw - 16px)); max-height: 48dvh; overflow: auto; padding: 12px; background: var(--panel, #eee5d4); color: var(--text); border: 1px solid var(--edge-dim); border-radius: 5px; box-shadow: 0 4px 16px #0005; font-size: 13px; line-height: 1.6; }
+.hand-explanation p { margin: 0 0 8px; }
+.hand-explanation ul { margin: 0 0 8px; padding-left: 20px; }
+.hand-explanation button { min-height: 32px; }
+.explain-card:focus-visible, .hand-explanation button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+</style>
+
+<style scoped>
+.restriction-sources { border-top: 1px solid var(--edge-dim); padding-top: 8px; margin: 8px 0; }
+.restriction-sources button { width: 100%; text-align: left; white-space: normal; }
+.restriction-source-image { display: block; width: 100%; height: auto; margin-top: 8px; border-radius: 8px; }
 </style>

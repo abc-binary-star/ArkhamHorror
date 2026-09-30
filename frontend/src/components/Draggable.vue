@@ -351,7 +351,7 @@ function moveUp() {
         <span class="header-title">
           <slot name="handle"></slot>
         </span>
-        <button class="minimize-btn" type="button" :aria-label="isMinimized ? $t('window.restore') : $t('window.minimize')" :aria-expanded="!isMinimized" @click.stop="minimize">
+        <button class="minimize-btn dialog-chrome-action" type="button" :title="isMinimized ? $t('window.restore') : $t('window.minimize')" :aria-label="isMinimized ? $t('window.restore') : $t('window.minimize')" :aria-expanded="!isMinimized" @click.stop="minimize">
           <svg v-if="isMinimized" width="12" height="12" viewBox="0 0 24 24">
             <path d="M12 9l-6 6h12l-6-6z" fill="currentColor" />
           </svg>
@@ -371,8 +371,9 @@ function moveUp() {
 .draggable {
   position: absolute;
   z-index: var(--z-index-10);
-  /* Inset the reading area beyond the generated engraving. */
-  padding: 40px 40px 30px;
+  /* Keep a narrow engraving gutter without wasting reading space. */
+  padding: 10px 24px 8px;
+  --occult-border: 22px;
   overflow: hidden;
   width: clamp(300px, 50vw, 80%);
   max-width: fit-content;
@@ -510,7 +511,7 @@ function moveUp() {
     display: flex;
     align-items: center;
     position: relative;
-    padding: 5px 10px;
+    padding: 0;
     font-family: "Source Han Serif", "Arno", serif;
     background: transparent;
     border-bottom: 1px solid #b59a5e55;
@@ -519,8 +520,6 @@ function moveUp() {
     font-size: 1.2em;
     cursor: move;
     border-radius: 3px 3px 0 0;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
 
     .header-title {
       flex: 1;
@@ -531,7 +530,7 @@ function moveUp() {
       transform: translateX(12px);
     }
 
-    :deep(h1) { color: #e8d9b6; letter-spacing: 0.04em; }
+    :deep(h1) { margin: 0; font-size: 1.25rem; line-height: 1.3; color: #e8d9b6; letter-spacing: 0.04em; }
 
     .minimize-btn {
       border: 1px solid #ad935d66;
@@ -644,11 +643,11 @@ function moveUp() {
 
   /* Override coordinates written by the desktop drag controller. */
   .draggable, .draggable:not(.minimized):has(p.file) { position: fixed !important; left: max(8px, env(safe-area-inset-left)) !important; top: max(8px, env(safe-area-inset-top)) !important; width: calc(100% - max(8px, env(safe-area-inset-left)) - max(8px, env(safe-area-inset-right))) !important; min-width: 0; max-width: none !important; height: auto !important; max-height: calc(100dvh - 84px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); transform: none !important; overflow: hidden; border-radius: 10px; }
-  .draggable { padding: 30px 30px 24px; --occult-border: 26px; }
-  .draggable > header { flex: 0 0 auto; min-height: 44px; padding: 6px 8px; touch-action: pan-y; }
+  .draggable { padding: 10px 18px 8px; --occult-border: 16px; }
+  .draggable > header { flex: 0 0 auto; min-height: 44px; padding: 0; touch-action: pan-y; }
   .draggable .header-title { min-width: 0; overflow-wrap: anywhere; }
   .draggable .minimize-btn { min-width: 44px; min-height: 44px; }
-  .draggable > .content, .draggable:has(> .content > .settings) > .content, .draggable:has(> .content > .shortcuts-modal) > .content { min-height: 0; max-height: none; overflow: auto; margin: 0; padding: 12px; overscroll-behavior: contain; }
+  .draggable > .content, .draggable:has(> .content > .settings) > .content, .draggable:has(> .content > .shortcuts-modal) > .content { min-height: 0; max-height: none; overflow: auto; margin: 0; padding: 8px 0 0; overscroll-behavior: contain; }
   .draggable.minimized { top: auto !important; bottom: calc(68px + env(safe-area-inset-bottom)); }
 
 }
@@ -665,12 +664,12 @@ function moveUp() {
 .draggable:has(.choice-modal-wrapper .resolution) {
   width: min(760px, calc(100vw - 32px));
   max-width: calc(100vw - 32px);
-  padding: 32px 32px 24px;
-  --occult-border: 28px;
+  padding: 10px 24px 8px;
+  --occult-border: 22px;
 }
 .draggable:has(.choice-modal-wrapper .resolution) > header {
-  padding: 0 0 12px;
-  min-height: 36px;
+  padding: 0;
+  min-height: 44px;
   background: transparent;
   font-size: 1rem;
 }
@@ -692,7 +691,7 @@ function moveUp() {
   border-color: #a18b6440;
 }
 @media (max-width: 800px), (max-width: 1199px) and (pointer: coarse) {
-  .draggable:has(.choice-modal-wrapper .resolution) { padding: 28px 24px 20px; --occult-border: 22px; }
+  .draggable:has(.choice-modal-wrapper .resolution) { padding: 10px 18px 8px; --occult-border: 16px; }
   .draggable:has(.choice-modal-wrapper .resolution) > header { min-height: 44px; }
   .draggable:has(.choice-modal-wrapper .resolution) > .content { padding: 0; }
 }

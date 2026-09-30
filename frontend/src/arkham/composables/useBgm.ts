@@ -41,6 +41,10 @@ const TRACKS: Record<string, string> = {
   'c12105': '/audio/bgm/spreading-flames.mp3',
   'c12133': '/audio/bgm/smoke-and-mirrors.mp3',
   'c12168': '/audio/bgm/queen-of-ash.mp3',
+  // Children of Blood
+  'c13001': '/audio/bgm/river-of-blood.mp3',
+  'c13031': '/audio/bgm/new-horizons.mp3',
+  'c13068': '/audio/bgm/blood-money.mp3',
   // The Forgotten Age
   'c04043': '/audio/bgm/the-untamed-wilds.mp3',
   'c53016': '/audio/bgm/the-untamed-wilds.mp3',
@@ -109,6 +113,7 @@ const CAMPAIGN_THEMES: Record<string, string> = {
   '05': '/audio/bgm/circle-undone-theme.mp3',
   '06': '/audio/bgm/dream-eaters-theme.mp3',
   '12': '/audio/bgm/brethren-of-ash-theme.mp3',
+  '13': '/audio/bgm/children-of-blood-theme.mp3',
 }
 
 const BGM_VOLUME = 0.35
@@ -128,6 +133,10 @@ let resumeListener: (() => void) | null = null
 export function toggleBgm() {
   bgmDisabled.value = !bgmDisabled.value
   localStorage.setItem(KEY, bgmDisabled.value ? 'true' : 'false')
+}
+
+export function useBgmControls() {
+  return { bgmDisabled, toggleBgm }
 }
 
 function startPlayback() {

@@ -1,4 +1,12 @@
 {
+  "revelationInvestigator": "抽卡调查员：{name}",
+  "themeTitle": "更换主题",
+  "themeHarbour": "幽绿海港",
+  "themeZealot": "狂欢之夜",
+  "themeDunwich": "敦威治遗产",
+  "themeHarbourHint": "幽绿海图 · 旧金与皮革",
+  "themeZealotHint": "暗红仪式 · 烛光与余烬",
+  "themeDunwichHint": "荒野丘陵 · 灰紫与旧铜",
   "closeLog": "关闭战役日志",
   "viewLog": "查看战役日志",
   "sounds": "音效",
@@ -12,6 +20,7 @@
   "leaveGame": "退出牌局",
   "fullscreen": "全屏",
   "narration": {
+  "revelationInvestigator": "抽卡调查员：{name}",
     "title": "朗读",
     "autoRead": "自动朗读新内容",
     "readCurrent": "朗读当前",
@@ -27,11 +36,13 @@
     "csvLoaded": "卡牌 CSV 已载入（{count} 张）",
     "csvReload": "重新读取",
     "groups": {
+  "revelationInvestigator": "抽卡调查员：{name}",
       "content": "剧情内容",
       "scenarioCards": "游戏卡牌",
       "cardFields": "卡牌字段"
     },
     "categories": {
+  "revelationInvestigator": "抽卡调查员：{name}",
       "story": "引言与剧情",
       "interlude": "幕间故事",
       "resolution": "结局",
@@ -48,6 +59,7 @@
       "cardFlavor": "背景文字"
     },
     "references": {
+  "revelationInvestigator": "抽卡调查员：{name}",
       "card": "卡牌 {code}",
       "tarot": "塔罗牌 {name}",
       "chaosToken": "混乱标记 {name}",
@@ -99,6 +111,7 @@
   "viewChaosBag": "查看混乱袋",
   "chaosBag": "混乱袋",
   "chaosBagStats": {
+  "revelationInvestigator": "抽卡调查员：{name}",
     "tokens": "{count}个标记",
     "chanceOfSuccess": "成功率",
     "showOdds": "查看概率",

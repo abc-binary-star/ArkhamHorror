@@ -835,7 +835,7 @@ const title = computed(() => {
 /* The parent provides the only decorative rim; choices sit on quiet ink. */
 .choice-modal-wrapper:not(:has(.card-pool-picker, .haunted)) {
   box-sizing: border-box;
-  padding: 16px 0 0;
+  padding: 4px 0 0;
   background: transparent;
   border: 0;
   border-radius: 0;
@@ -853,8 +853,8 @@ const title = computed(() => {
   border-color: #c5ad80;
 }
 .choice-modal-wrapper:has(.resolution) {
-  padding-top: 16px;
-  gap: 14px;
+  padding-top: 4px;
+  gap: 8px;
 }
 .choice-modal-wrapper:has(.resolution) :deep(.question-choices) {
   padding-top: 14px;

@@ -40,7 +40,7 @@ instance RunMessage OldSadieSheldon where
             spendResources iid' 3
             addToVictory iid attrs
             remember TheDebtHasBeenPaid
-          iids -> chooseInvestigatorAmounts iid "Resources to spend" total iids attrs
+          iids -> chooseInvestigatorAmounts iid "$label.resourcesToSpend" total iids attrs
       pure e
     ResolveAmounts iid choices (isTarget attrs -> True) -> do
       withInvestigatorAmounts choices spendResources

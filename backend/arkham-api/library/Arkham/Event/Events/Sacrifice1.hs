@@ -25,9 +25,9 @@ instance RunMessage Sacrifice1 where
       chooseMsg <-
         chooseAmounts
           player
-          "Number of cards and resources"
+          "$label.numberOfCardsAndResources"
           (TotalAmountTarget 3)
-          [("Cards", (0, 3)), ("Resources", (0, 3))]
+          [("$cards", (0, 3)), ("$resources", (0, 3))]
           attrs
 
       pushAll
@@ -36,8 +36,8 @@ instance RunMessage Sacrifice1 where
         ]
       pure e
     ResolveAmounts iid choices (isTarget attrs -> True) -> do
-      let drawAmount = getChoiceAmount "Cards" choices
-      let resourcesAmount = getChoiceAmount "Resources" choices
+      let drawAmount = getChoiceAmount "$cards" choices
+      let resourcesAmount = getChoiceAmount "$resources" choices
       let drawing = drawCards iid attrs drawAmount
       pushAll
         $ [drawing | drawAmount > 0]

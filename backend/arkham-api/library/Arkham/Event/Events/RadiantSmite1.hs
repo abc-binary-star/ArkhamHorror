@@ -25,15 +25,15 @@ instance RunMessage RadiantSmite1 where
       when (n > 0) do
         chooseAmounts
           iid
-          "Number of Bless tokens to seal"
+          "$label.numberOfBlessTokensToSeal"
           (MaxAmountTarget n)
-          [("Bless Tokens", (0, n))]
+          [("$blessTokens", (0, n))]
           attrs
 
       sid <- getRandom
       chooseFightEnemyWithSkillChoice sid iid (toSource attrs) [#combat, #willpower]
       pure e
-    ResolveAmounts iid (getChoiceAmount "Bless Tokens" -> n) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$blessTokens" -> n) (isTarget attrs -> True) -> do
       blessedTokens <- take n <$> select (ChaosTokenFaceIs #bless)
       for_ blessedTokens $ \blessedToken -> do
         pushAll [SealChaosToken blessedToken, SealedChaosToken blessedToken (Just iid) (toTarget attrs)]

@@ -7,6 +7,7 @@ import type { User } from '@/types'
 import { OnClickOutside } from '@vueuse/components'
 import { storeToRefs } from 'pinia'
 import { useSettings } from '@/stores/settings'
+import { useBgmControls } from '@/arkham/composables/useBgm'
 import {
   Layers,
   SquarePen,
@@ -20,6 +21,7 @@ import {
   UserRound,
   Settings,
   LogOut,
+  Music,
 } from '@lucide/vue'
 
 const expanded = ref(false)
@@ -29,6 +31,7 @@ const route = useRoute()
 const store = useUserStore()
 const currentUser = computed<User | null>(() => store.currentUser)
 const { customCardsEnabled } = storeToRefs(useSettings())
+const { bgmDisabled, toggleBgm } = useBgmControls()
 
 // The embedded deck builder is a separate static SPA served by nginx at
 // /build/, not a router route, and it is only packaged into a distribution.
@@ -148,6 +151,17 @@ async function logout() {
 
       <OnClickOutside class="account-menu" @trigger="expanded = false">
         <div class="user-links">
+          <button
+            class="nav-music-toggle"
+            type="button"
+            :class="{ 'is-off': bgmDisabled }"
+            v-tooltip="$t('gameBar.music')"
+            :aria-label="$t('gameBar.music')"
+            :aria-pressed="!bgmDisabled"
+            @click="toggleBgm"
+          >
+            <Music aria-hidden="true" />
+          </button>
           <template v-if="currentUser">
             <button
               type="button"
@@ -647,6 +661,39 @@ async function logout() {
     outline: 2px solid var(--accent-brass-bright, #c8ad78);
     outline-offset: 2px;
   }
+}
+
+.nav-music-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  box-shadow: none;
+  color: var(--accent-brass-bright, #c8ad78);
+  cursor: pointer;
+}
+.nav-music-toggle.is-off {
+  color: var(--text-dim-on-dark, #c7cfcc);
+  opacity: 0.55;
+}
+.nav-music-toggle:hover {
+  background: rgba(244, 239, 228, 0.08);
+  opacity: 1;
+}
+.nav-music-toggle:focus-visible {
+  outline: 2px solid var(--accent-brass-bright, #c8ad78);
+  outline-offset: 2px;
+}
+.nav-music-toggle svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.6;
 }
 
 .account-icon {

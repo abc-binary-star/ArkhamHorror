@@ -31,12 +31,12 @@ instance RunMessage TakadaHirokoAeroplaneMechanicResolute where
       gainResourcesIfCan iid (attrs.ability 1) 1
       chooseAmounts
         iid
-        "Resources"
+        "$label.resources"
         (MaxAmountTarget 3)
-        [("Resources", (0, min 3 (attrs.use Resource)))]
+        [("$resources", (0, min 3 (attrs.use Resource)))]
         attrs
       pure a
-    ResolveAmounts iid (getChoiceAmount "Resources" -> n) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$resources" -> n) (isTarget attrs -> True) -> do
       moveTokens (attrs.ability 1) attrs iid Resource n
       pure a
     _ -> TakadaHirokoAeroplaneMechanicResolute <$> liftRunMessage msg attrs

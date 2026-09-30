@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import AttachmentEffects from '@/arkham/components/AttachmentEffects.vue'
 import { ComputedRef, computed, ref, watch } from 'vue'
 import { Dropdown } from 'floating-vue'
 import { useCardStore } from '@/stores/cards'
@@ -565,6 +566,7 @@ const chooseFromStoryCollection = (choice: number) => {
             :src="displayedImage"
             ref="frame"
           />
+          <AttachmentEffects v-if="!flipping" :game="game" :host="{ type: 'act', id: act.id }" />
           <PoolItem
             v-if="showClueBadge"
             class="act-clue-badge"

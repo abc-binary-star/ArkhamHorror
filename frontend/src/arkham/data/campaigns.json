@@ -2855,7 +2855,6 @@
   {
     "id": "13",
     "name": "Children of Blood",
-    "alpha": true,
     "difficultyLevels": {
       "Easy": [
         "PlusOne",

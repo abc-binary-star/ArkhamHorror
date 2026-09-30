@@ -14,7 +14,7 @@
     }
   },
   "setup": {
-    "gatherSets": "收齐以下遭遇组的所有卡牌：<section class='encounter-sets grid'><div><img src='{setImgPath}/queen-of-ash.png' /><span>灰烬女王</span></div><div><img src='{setImgPath}/ashen-pilgrims.png' /><span>灰烬朝圣者</span></div><div><img src='{setImgPath}/cosmic-evils.png' /><span>宇宙恶魔</span></div><div><img src='{setImgPath}/cultists-ch2.png' /><span>异教徒</span></div><div><img src='{setImgPath}/fire-ch2.png' /><span>着火了！</span></div><div><img src='{setImgPath}/hallucinations.png' /><span>幻觉</span></div><div><img src='{setImgPath}/reeking-decay.png' /><span>恶臭腐败</span></div><div><img src='{setImgPath}/sewers.png' /><span>下水道</span></div><div><img src='{setImgPath}/torment.png' /><span>折磨</span></div></section>",
+    "gatherSets": "收齐以下遭遇组的所有卡牌：<section class='encounter-sets grid'><div><img src='{setImgPath}/queen-of-ash.png' /><span>灰烬女王</span></div><div><img src='{setImgPath}/ashen-pilgrims.png' /><span>灰烬朝圣者</span></div><div><img src='{setImgPath}/cosmic-evils.png' /><span>宇宙恶魔</span></div><div><img src='{setImgPath}/cultists.png' /><span>异教徒</span></div><div><img src='{setImgPath}/fire.png' /><span>着火了！</span></div><div><img src='{setImgPath}/hallucinations.png' /><span>幻觉</span></div><div><img src='{setImgPath}/reeking-decay.png' /><span>恶臭腐败</span></div><div><img src='{setImgPath}/sewers.png' /><span>下水道</span></div><div><img src='{setImgPath}/torment.png' /><span>折磨</span></div></section>",
     "placeUndergroundCistern": "将【地下水库】放置入场。",
     "sewers": "将_下水道_遭遇组中的每张地点洗牌，使你无法分辨，然后将它们未揭示地放置入场。",
     "sluiceControl": "将【水闸控制室】放在一边，位于场外。",

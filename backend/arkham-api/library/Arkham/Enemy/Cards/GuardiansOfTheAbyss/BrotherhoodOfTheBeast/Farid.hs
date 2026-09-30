@@ -26,12 +26,12 @@ instance RunMessage Farid where
       resources <- field InvestigatorResources iid
       chooseAmounts
         iid
-        "Amount of resources to spend"
+        "$label.amountOfResourcesToSpend"
         (MaxAmountTarget 5)
-        [("Resources", (0, min 5 resources))]
+        [("$resources", (0, min 5 resources))]
         attrs
       pure e
-    ResolveAmounts iid (getChoiceAmount "Resources" -> n) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$resources" -> n) (isTarget attrs -> True) -> do
       sid <- getRandom
       when (n > 0) $ push $ SpendResources iid n
       beginSkillTest sid iid (attrs.ability 1) attrs #intellect (Fixed $ max 0 (7 - n))

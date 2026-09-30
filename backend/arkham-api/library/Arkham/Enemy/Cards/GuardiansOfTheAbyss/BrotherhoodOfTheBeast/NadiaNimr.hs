@@ -21,9 +21,9 @@ instance HasAbilities NadiaNimr where
 instance RunMessage NadiaNimr where
   runMessage msg e@(NadiaNimr attrs) = runQueueT $ case msg of
     UseThisAbility iid (isSource attrs -> True) 1 -> do
-      chooseAmounts iid "Amount of horror to take" (MaxAmountTarget 3) [("Horror", (0, 3))] attrs
+      chooseAmounts iid "$label.amountOfHorrorToTake" (MaxAmountTarget 3) [("$horror", (0, 3))] attrs
       pure e
-    ResolveAmounts iid (getChoiceAmount "Horror" -> n) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$horror" -> n) (isTarget attrs -> True) -> do
       sid <- getRandom
       when (n > 0) $ assignHorror iid (attrs.ability 1) n
       beginSkillTest sid iid (attrs.ability 1) attrs #willpower (Fixed $ max 0 (7 - 2 * n))

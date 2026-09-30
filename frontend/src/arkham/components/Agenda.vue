@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { doomPressureLevel } from '@/arkham/visualFeedback'
+import AttachmentEffects from '@/arkham/components/AttachmentEffects.vue'
 import { TokenType } from '@/arkham/types/Token';
 import { ComputedRef, computed, ref, watch } from 'vue';
 import { useCardStore } from '@/stores/cards';
@@ -366,12 +368,16 @@ const wards = computed(() => props.agenda.tokens[TokenType.Ward])
           <img
             :class="{ 'agenda--can-progress': interactAction !== -1, 'card--sideways': !isVertical, 'card--flipping': flipping, 'card--flipping-diagonal': flippingDiagonally }"
             class="card card--agenda"
+            :data-feedback-key="`agenda:${agenda.id}`"
+            :data-doom-pressure="!agenda.flipped && agenda.doomPressure ? doomPressureLevel(agenda.doomPressure) : undefined"
             @click="$emit('choose', interactAction)"
             @load="updateOrientation"
             :src="displayedImage"
             :data-errata="backErrata ?? undefined"
           />
+          <AttachmentEffects v-if="!flipping" :game="game" :host="{ type: 'agenda', id: agenda.id }" />
           <div class="pool" v-if="!agenda.flipped">
+            <span v-if="agenda.doomPressure" class="doom-pressure-count" :title="$t('visualFeedback.doomPressureHint')">{{ agenda.doomPressure.total }} / {{ agenda.doomPressure.threshold }}</span>
             <template v-if="debug.active">
               <button @click="debug.send(game.id, {tag: 'TokenMessage', contents: {tag: 'RemoveTokens_', contents: [{'tag': 'GameSource'}, {'tag': 'AgendaTarget', 'contents': id}, 'Doom', 1]}})">-</button>
             </template>
@@ -675,4 +681,10 @@ const wards = computed(() => props.agenda.tokens[TokenType.Ward])
   opacity: 1;
   pointer-events: auto;
 }
+</style>
+
+<style scoped>
+.card--agenda[data-doom-pressure="near"] { outline: 2px solid #a77b56; outline-offset: -4px; }
+.card--agenda[data-doom-pressure="reached"] { outline: 3px double #ca8677; outline-offset: -5px; }
+.doom-pressure-count { color: #e7ccb5; background: #211b19e8; border-radius: 3px; padding: 2px 5px; font-size: 12px; white-space: nowrap; pointer-events: auto; }
 </style>

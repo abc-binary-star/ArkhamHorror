@@ -3594,7 +3594,7 @@ runGameMessage msg g = case msg of
     case toCardType card of
       AssetType -> do
         pid <- getPlayer iid
-        sendRevelation pid (toJSON $ toCard card)
+        sendInvestigatorRevelation iid pid (toJSON $ toCard card)
         assetId <- getRandom
         let asset = createAsset card assetId
         -- Asset is assumed to have a revelation ability if drawn from encounter deck
@@ -3602,7 +3602,7 @@ runGameMessage msg g = case msg of
         pure $ g & (entitiesL . assetsL . at assetId ?~ asset)
       EventType -> do
         pid <- getPlayer iid
-        sendRevelation pid (toJSON $ toCard card)
+        sendInvestigatorRevelation iid pid (toJSON $ toCard card)
         eventId <- getRandom
         pushAll $ resolve $ Revelation iid (EventSource eventId)
         push $ ObtainCard card.id
@@ -3698,7 +3698,7 @@ runGameMessage msg g = case msg of
           $ investigatorRef investigator
           $ withVar "card" (String $ format $ toCard card)
           $ ikey' "gameLog.investigatorDrawsEncounterCard"
-        let uiRevelation = getPlayer iid >>= (`sendRevelation` (toJSON $ toCard card))
+        let uiRevelation = getPlayer iid >>= (\pid -> sendInvestigatorRevelation iid pid (toJSON $ toCard card))
         case toCardType card of
           EnemyType -> do
             let hasPeril = (DrawGainsPeril `elem` mods) || (Keyword.Peril `elem` cdKeywords (toCardDef card))
@@ -3810,7 +3810,7 @@ runGameMessage msg g = case msg of
             <> ": "
             <> show card
   ResolveRevelation iid card -> do
-    getPlayer iid >>= (`sendRevelation` (toJSON $ toCard card))
+    getPlayer iid >>= (\pid -> sendInvestigatorRevelation iid pid (toJSON $ toCard card))
     let
       deleteCard = filter (/= card)
       g' =

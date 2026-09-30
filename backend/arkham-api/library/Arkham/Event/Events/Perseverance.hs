@@ -37,17 +37,17 @@ instance RunMessage Perseverance where
       pushM
         $ chooseAmounts
           player
-          "Cancel up to 4 damage and or horror"
+          "$label.cancelUpTo4DamageOrHorror"
           (MaxAmountTarget 4)
-          ( [("Damage", (0, assignedDamage)) | assignedDamage > 0]
-              <> [("Horror", (0, assignedHorror)) | assignedHorror > 0]
+          ( [("$damage", (0, assignedDamage)) | assignedDamage > 0]
+              <> [("$horror", (0, assignedHorror)) | assignedHorror > 0]
           )
           (toTarget attrs)
       pure e
     ResolveAmounts iid choices target | isTarget attrs target -> do
       let
-        damageAmount = getChoiceAmount "Damage" choices
-        horrorAmount = getChoiceAmount "Horror" choices
+        damageAmount = getChoiceAmount "$damage" choices
+        horrorAmount = getChoiceAmount "$horror" choices
       ignoreWindow <-
         checkWindows [mkAfter (Window.CancelledOrIgnoredCardOrGameEffect (toSource attrs) Nothing)]
       pushAll

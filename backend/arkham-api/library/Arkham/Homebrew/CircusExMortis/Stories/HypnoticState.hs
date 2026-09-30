@@ -35,10 +35,10 @@ instance RunMessage HypnoticState where
         iid
         (campaignI18n $ scope "hypnoticState" $ "$" <> labelKey "chooseHorror")
         (MaxAmountTarget n)
-        [("Horror", (0, n))]
+        [("$horror", (0, n))]
         attrs
       pure (HypnoticState attrs)
-    ResolveAmounts iid (getChoiceAmount "Horror" -> hor) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$horror" -> hor) (isTarget attrs -> True) -> do
       mLoc <- getLocationOf attrs.placement
       for_ mLoc \loc -> do
         n <- perPlayer 1

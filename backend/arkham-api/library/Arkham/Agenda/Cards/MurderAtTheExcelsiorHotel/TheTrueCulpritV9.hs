@@ -53,12 +53,12 @@ instance RunMessage TheTrueCulpritV9 where
       when (clues > 0) do
         chooseAmounts
           iid
-          "Choose amount of clues to move"
+          "$label.amountOfCluesToMove"
           (MaxAmountTarget n)
-          [("Clues", (0, min n clues))]
+          [("$clues", (0, min n clues))]
           (toTarget attrs)
       pure a
-    ResolveAmounts _ (getChoiceAmount "Clues" -> n) (isTarget attrs -> True) -> do
+    ResolveAmounts _ (getChoiceAmount "$clues" -> n) (isTarget attrs -> True) -> do
       tomeOfRituals <- selectJust $ assetIs Cards.tomeOfRituals
       harvestedBrain <- selectJust $ treacheryIs Cards.harvestedBrain
       moveTokens (attrs.ability 1) tomeOfRituals harvestedBrain #clue n

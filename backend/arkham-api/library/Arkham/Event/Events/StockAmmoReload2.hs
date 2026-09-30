@@ -19,7 +19,7 @@ instance RunMessage StockAmmoReload2 where
       case ammoAssets of
         [] -> pure ()
         [asset] -> addUses attrs asset Ammo 5
-        assets -> chooseAssetAmounts iid "Distribute 5 Ammo" 5 assets attrs
+        assets -> chooseAssetAmounts iid "$label.distributeAmmo count=i:5" 5 assets attrs
       pure e
     ResolveAmounts _ choices (isTarget attrs -> True) -> do
       for_ choices \(nu, n) -> addUses attrs (AssetId nu.nuUUID) Ammo n

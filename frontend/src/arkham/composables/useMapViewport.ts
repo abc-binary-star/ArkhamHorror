@@ -53,8 +53,8 @@ export function useMapViewport(options: MapViewportOptions) {
   function zoomStep(value: number): number {
     const center = 1.5 // peak step around the middle of the normal range
     const sigma = 1.0 // controls how quickly the step tapers off
-    const max = 0.15
-    const min = 0.01
+    const max = 0.105
+    const min = 0.007
     return Math.max(min, max * Math.exp(-Math.pow(value - center, 2) / (2 * sigma * sigma)))
   }
 

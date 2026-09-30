@@ -27,12 +27,12 @@ instance RunMessage DanforthBrilliantStudent where
     UseThisAbility iid (isSource attrs -> True) 1 -> do
       chooseAmounts
         iid
-        "Number of cards to draw from the top of the Tekeli-li deck"
+        "$label.cardsToDrawFromTekeliliDeck"
         (MaxAmountTarget 2)
-        [("Cards", (0, 2))]
+        [("$cards", (0, 2))]
         attrs
       pure e
-    ResolveAmounts iid (getChoiceAmount "Cards" -> n) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$cards" -> n) (isTarget attrs -> True) -> do
       drawTekelili iid (attrs.ability 1) n
       placeTokens (attrs.ability 1) attrs #resource n
       doStep 2 msg

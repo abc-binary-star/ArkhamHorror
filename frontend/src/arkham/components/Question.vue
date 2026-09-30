@@ -1190,7 +1190,7 @@ const filteredCards = computed<{ choice: CardLabel; index: number }[]>(() => {
       </div>
     </template>
     <div v-if="doneLabel && doneIsFooter">
-      <button class="done" @click="$emit('choose', doneLabel.index)" v-html="label(doneLabel.label)"></button>
+      <button class="done dialog-advance" @click="$emit('choose', doneLabel.index)" v-html="label(doneLabel.label)"></button>
     </div>
   </div>
 </template>

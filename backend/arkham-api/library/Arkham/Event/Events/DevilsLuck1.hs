@@ -18,17 +18,17 @@ instance RunMessage DevilsLuck1 where
       let (damage, horror) = (dealtDamage &&& dealtHorror) attrs.windows
       chooseAmounts
         iid
-        "Amount of Damage/Horror to cancel"
+        "$label.amountOfDamageOrHorrorToCancel"
         (MaxAmountTarget 10)
-        ([("Damage", (0, damage)) | damage > 0] <> [("Horror", (0, horror)) | horror > 0])
+        ([("$damage", (0, damage)) | damage > 0] <> [("$horror", (0, horror)) | horror > 0])
         attrs
       pure e
     ResolveAmounts iid choices target | isTarget attrs target -> do
-      let damageAmount = getChoiceAmount "Damage" choices
+      let damageAmount = getChoiceAmount "$damage" choices
       when (damageAmount > 0) do
         push $ CancelDamage iid damageAmount
 
-      let horrorAmount = getChoiceAmount "Horror" choices
+      let horrorAmount = getChoiceAmount "$horror" choices
       when (horrorAmount > 0) do
         push $ CancelHorror iid horrorAmount
 

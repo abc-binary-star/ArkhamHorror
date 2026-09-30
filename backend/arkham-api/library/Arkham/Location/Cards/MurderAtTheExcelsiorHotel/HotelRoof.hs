@@ -3,6 +3,7 @@ module Arkham.Location.Cards.MurderAtTheExcelsiorHotel.HotelRoof (hotelRoof) whe
 import Arkham.Ability
 import Arkham.Asset.Cards qualified as Assets
 import Arkham.GameValue
+import Arkham.I18n
 import Arkham.Investigator.Types (Field (..))
 import Arkham.Location.CardDefs.MurderAtTheExcelsiorHotel qualified as Cards
 import Arkham.Location.CardDefs.MurderAtTheExcelsiorHotel qualified as Locations
@@ -54,9 +55,9 @@ instance RunMessage HotelRoof where
 
       unless (null iids || isNothing alienDevice) $ do
         named <- traverse (\(iid', n) -> (,n) <$> field InvestigatorName iid') iids
-        chooseAmounts
+        withI18n $ cardNameVar Assets.alienDevice $ chooseAmounts
           iid
-          "number of clues to move to Alien Device"
+          ("$" <> labelKey "numberOfCluesToMoveTo")
           (MinAmountTarget 0)
           (map (\(name, n) -> (toTitle name, (0, n))) named)
           attrs

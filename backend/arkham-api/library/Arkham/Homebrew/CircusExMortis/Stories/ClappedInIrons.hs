@@ -35,10 +35,10 @@ instance RunMessage ClappedInIrons where
         iid
         (campaignI18n $ scope "clappedInIrons" $ "$" <> labelKey "chooseDamage")
         (MaxAmountTarget n)
-        [("Damage", (0, n))]
+        [("$damage", (0, n))]
         attrs
       pure (ClappedInIrons attrs)
-    ResolveAmounts iid (getChoiceAmount "Damage" -> dmg) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$damage" -> dmg) (isTarget attrs -> True) -> do
       mLoc <- getLocationOf attrs.placement
       for_ mLoc \loc -> do
         n <- perPlayer 1

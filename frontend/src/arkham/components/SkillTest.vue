@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import SkillTestBreakdown from '@/arkham/components/SkillTestBreakdown.vue'
 import SkillTestFastActions from '@/arkham/components/SkillTestFastActions.vue'
 import { isInlineSkillTestFastWindow } from '@/arkham/skillTestFastWindow'
 import AbilityButton from '@/arkham/components/AbilityButton.vue'
@@ -336,12 +337,16 @@ watch([canAutoApply, resultKey], () => {
 // Results can remain at ST.6 while another player resolves a response. Retire
 // the non-interactive panel after showing the result, including for teammates;
 // a fresh question restores it without advancing or skipping the server queue.
+// Only a cleared question counts as spent: questions whose fields live outside
+// `choices` (amount prompts such as "I've Had Worse", for one) leave the choice
+// list empty while still owing this player an answer.
 const spentTest = computed(() => !!skillTestResults.value
   && (props.skillTest.step === 'DetermineSuccessOrFailureOfSkillTestStep'
     || props.skillTest.step === 'ApplySkillTestResultsStep'
     || props.skillTest.step === 'SkillTestEndsStep')
   && applyResultsAction.value === -1
-  && (choices.value.length === 0 || ArkhamGame.activeQuestionIsPlayerWindow(props.game, props.playerId)))
+  && (props.game.question[props.playerId] === undefined
+    || ArkhamGame.activeQuestionIsPlayerWindow(props.game, props.playerId)))
 const hideSpentTest = ref(false)
 let spentTimer: ReturnType<typeof setTimeout> | undefined
 watch([spentTest, testIdentity], ([value]) => {
@@ -672,6 +677,7 @@ const adjustDebugSkillValue = (event: MouseEvent, direction: 1 | -1) => {
         </span>
       </div>
 
+      <SkillTestBreakdown v-if="skillTestResults" :key="testIdentity" :results="skillTestResults" @inspect="pauseResults" />
       <div v-if="skillTestResults" class="skill-test-results-break"></div>
       <button
         v-if="skipTriggersAction !== -1 && !inlineFastWindow"

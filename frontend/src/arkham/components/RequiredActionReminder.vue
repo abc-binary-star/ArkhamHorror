@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { assignmentPreview } from '@/arkham/visualFeedback'
 import { computed, inject, nextTick, onBeforeUnmount, ref, useId, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import type { Game } from '@/arkham/types/Game'
@@ -17,11 +18,13 @@ const { t } = useI18n({ useScope: 'local', messages: {
   zh: {
     drawAnnouncement: '{name} 抽取了遭遇卡',
     assignTitle: '分配伤害与恐惧',
+    capacity: '当前余量：生命 {health} · 理智 {sanity}', after: '按当前分配结算后：生命 {health} · 理智 {sanity}', nextDamage: '再分配 1 伤害后，生命余量 {count}', nextHorror: '再分配 1 恐惧后，理智余量 {count}', unknown: '—', atLimit: '当前分配将达到生命或理智上限；最终按规则结算。', healing: '本次待治疗：伤害 {damage} · 恐惧 {horror}',
     damage: '{count} 点伤害', horror: '{count} 点恐惧', assign: '分配 1 伤害', assignHorror: '分配 1 恐惧', investigator: '调查员', asset: '资产', instruction: '点击对象旁的按钮分配，每次 1 点。', received: '已承受：伤害 {damage} · 恐惧 {horror}', pending: '本次已分配：伤害 {damage} · 恐惧 {horror}', inspect: '查看牌桌',
   },
   en: {
     drawAnnouncement: '{name} drew an encounter card',
     assignTitle: 'Assign damage / horror',
+    capacity: 'Remaining: {health} health · {sanity} sanity', after: 'After current assignments: {health} health · {sanity} sanity', nextDamage: 'After assigning 1 more damage: {count} health remaining', nextHorror: 'After assigning 1 more horror: {count} sanity remaining', unknown: '—', atLimit: 'Current assignments reach a health or sanity limit. Final resolution follows the rules.', healing: 'Pending healing: {damage} damage · {horror} horror',
     damage: '{count} damage', horror: '{count} horror', assign: 'Assign 1 damage', assignHorror: 'Assign 1 horror', investigator: 'Investigator', asset: 'Asset', instruction: 'Assign one point at a time using the buttons beside each target.', received: 'Taken: {damage} damage · {horror} horror', pending: 'Assigned: {damage} damage · {horror} horror', inspect: 'View table',
   },
 } })
@@ -47,6 +50,8 @@ const assignmentChoices = computed(() => choices(props.game, props.playerId))
 const assignmentRows = computed(() => {
   const rows = new Map<string, {
     id: string; name: string; kind: string; owner: string; damage: number; horror: number;
+    healthPreview: ReturnType<typeof assignmentPreview>; sanityPreview: ReturnType<typeof assignmentPreview>;
+    healingDamage: number; healingHorror: number; nextHealth: number | null; nextSanity: number | null;
     assignedDamage: number; assignedHorror: number; damageIndex?: number; horrorIndex?: number
   }>()
   assignmentChoices.value.forEach((choice, index) => {
@@ -70,6 +75,11 @@ const assignmentRows = computed(() => {
         owner: owner ? dbCards.getCardName(owner.name.title, 'investigator') : '',
         damage: entity.tokens.Damage ?? 0, horror: entity.tokens.Horror ?? 0,
         assignedDamage: entity.assignedHealthDamage, assignedHorror: entity.assignedSanityDamage,
+        healingDamage: entity.assignedHealthHeal, healingHorror: entity.assignedSanityHeal,
+        nextHealth: assignmentPreview(entity.remainingHealth, entity.tokens.Damage, entity.assignedHealthDamage + 1, entity.assignedHealthHeal)?.after ?? null,
+        nextSanity: assignmentPreview(entity.remainingSanity, entity.tokens.Horror, entity.assignedSanityDamage + 1, entity.assignedSanityHeal)?.after ?? null,
+        healthPreview: assignmentPreview(entity.remainingHealth, entity.tokens.Damage, entity.assignedHealthDamage, entity.assignedHealthHeal),
+        sanityPreview: assignmentPreview(entity.remainingSanity, entity.tokens.Horror, entity.assignedSanityDamage, entity.assignedSanityHeal),
       }
       rows.set(key, row)
     }
@@ -178,15 +188,19 @@ onBeforeUnmount(() => { clearTimeout(resetTimer); clearTimeout(drawTimer); dialo
             <small>{{ t(row.kind) }}<template v-if="row.owner"> · {{ row.owner }}</template></small>
             <small>{{ t('received', { damage: row.damage, horror: row.horror }) }}</small>
             <small v-if="row.assignedDamage || row.assignedHorror">{{ t('pending', { damage: row.assignedDamage, horror: row.assignedHorror }) }}</small>
+            <small v-if="row.healingDamage || row.healingHorror">{{ t('healing', { damage: row.healingDamage, horror: row.healingHorror }) }}</small>
+            <small v-if="row.healthPreview || row.sanityPreview">{{ t('capacity', { health: row.healthPreview?.remaining ?? t('unknown'), sanity: row.sanityPreview?.remaining ?? t('unknown') }) }}</small>
+            <small v-if="(row.healthPreview || row.sanityPreview) && (row.assignedDamage || row.assignedHorror || row.healingDamage || row.healingHorror)">{{ t('after', { health: row.healthPreview?.after ?? t('unknown'), sanity: row.sanityPreview?.after ?? t('unknown') }) }}</small>
+            <small v-if="row.healthPreview?.after === 0 || row.sanityPreview?.after === 0" class="assignment-limit">{{ t('atLimit') }}</small>
           </div>
           <div class="assignment-buttons">
-            <button v-if="row.damageIndex !== undefined" class="assign-damage" type="button" :aria-label="`${row.name}：${t('assign')}`" @click="assign(row.damageIndex)"><Droplet aria-hidden="true" />{{ t('assign') }}</button>
-            <button v-if="row.horrorIndex !== undefined" class="assign-horror" type="button" :aria-label="`${row.name}：${t('assignHorror')}`" @click="assign(row.horrorIndex)"><Brain aria-hidden="true" />{{ t('assignHorror') }}</button>
+            <button v-if="row.damageIndex !== undefined" class="assign-damage" type="button" :title="row.nextHealth != null ? t('nextDamage', { count: row.nextHealth }) : undefined" :aria-label="`${row.name}：${t('assign')}`" @click="assign(row.damageIndex)"><Droplet aria-hidden="true" />{{ t('assign') }}</button>
+            <button v-if="row.horrorIndex !== undefined" class="assign-horror" type="button" :title="row.nextSanity != null ? t('nextHorror', { count: row.nextSanity }) : undefined" :aria-label="`${row.name}：${t('assignHorror')}`" @click="assign(row.horrorIndex)"><Brain aria-hidden="true" />{{ t('assignHorror') }}</button>
           </div>
         </section>
         <QuestionChoices v-if="otherChoices.length" :game="game" :choices="otherChoices" @choose="assign" />
       </fieldset>
-      <button class="inspect" type="button" @click="collapse">{{ t('inspect') }}</button>
+      <button class="inspect dialog-chrome-action" type="button" @click="collapse">{{ t('inspect') }}</button>
     </dialog>
     <div v-if="drawVisible" class="draw-interlude" role="status" aria-live="polite">
       <div class="draw-interlude__veil" aria-hidden="true"></div>
@@ -200,6 +214,7 @@ onBeforeUnmount(() => { clearTimeout(resetTimer); clearTimeout(drawTimer); dialo
 </template>
 
 <style scoped>
+.assignment-limit { color: #e7aa99; }
 .action-dialog {
   position: fixed;
   inset: 0;

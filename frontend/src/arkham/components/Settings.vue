@@ -30,6 +30,10 @@ const showOtherHands = computed({
 })
 
 const settings = useSettings()
+const visualExperience = computed({
+  get: () => settings.visualExperience,
+  set: (value: 'simple' | 'standard' | 'atmosphere') => settings.setVisualExperience(value),
+})
 
 // Global player preference, and a per-scenario override that can defer to it.
 // Both live in the settings store; prefers-reduced-motion is folded in there
@@ -305,6 +309,17 @@ onBeforeUnmount(() => {
             </div>
           </div>
 
+          <div class="toggle-row">
+            <div class="toggle-text">
+              <label class="toggle-name" for="visual-experience">{{ $t('visualFeedback.experience') }}</label>
+              <div class="toggle-desc">{{ $t('visualFeedback.experienceHint') }}</div>
+            </div>
+            <select id="visual-experience" v-model="visualExperience">
+              <option value="simple">{{ $t('visualFeedback.simple') }}</option>
+              <option value="standard">{{ $t('visualFeedback.standard') }}</option>
+              <option value="atmosphere">{{ $t('visualFeedback.atmosphere') }}</option>
+            </select>
+          </div>
           <div class="toggle-row">
             <div class="toggle-text">
               <div class="toggle-name">{{ $t('gameBar.viewSettingExtraAnimationsTitle') }}</div>

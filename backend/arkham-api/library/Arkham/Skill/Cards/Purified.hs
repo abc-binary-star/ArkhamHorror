@@ -31,15 +31,15 @@ instance RunMessage Purified where
         | otherwise -> skillTestCardOption attrs do
             chooseAmounts
               iid
-              "Add Bless Tokens or Remove Curse Tokens"
+              "$label.addBlessOrRemoveCurseTokens"
               (TotalAmountTarget $ min n (bless + curse))
-              [("Add Bless Tokens", (0, bless)), ("Remove Curse Tokens", (0, curse))]
+              [("$addBlessTokens", (0, bless)), ("$removeCurseTokens", (0, curse))]
               attrs
       pure s
     ResolveAmounts _iid choices (isTarget attrs -> True) -> do
       let
-        bless = getChoiceAmount "Add Bless Tokens" choices
-        curse = getChoiceAmount "Remove Curse Tokens" choices
+        bless = getChoiceAmount "$addBlessTokens" choices
+        curse = getChoiceAmount "$removeCurseTokens" choices
 
       repeated curse $ removeChaosToken #curse
       repeated bless $ addChaosToken #bless

@@ -20,6 +20,7 @@ export function useGameSocket<T>(options: GameSocketOptions<T>) {
   const { send, close } = useWebSocket(options.url, {
     autoReconnect: true,
     onError: () => options.onDisconnect(),
+    onDisconnected: () => options.onDisconnect(),
     onConnected: () => {
       options.onConnect(hasConnectedOnce)
       hasConnectedOnce = true

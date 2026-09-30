@@ -128,6 +128,7 @@ export type Game = {
   settings: GameSettings;
 
   activeInvestigatorId: string;
+  turnPlayerInvestigatorId?: string | null;
   acts: Record<string, Act>;
   agendas: Record<string, Agenda>;
   assets: Record<string, Asset>;
@@ -389,6 +390,7 @@ export const gameDecoder: JsonDecoder.Decoder<Game> = JsonDecoder.object(
     gameSettings: v2Optional(gameSettingsDecoder),
 
     activeInvestigatorId: JsonDecoder.string(),
+    turnPlayerInvestigatorId: v2Optional(JsonDecoder.nullable(JsonDecoder.string())),
     acts: JsonDecoder.record<Act>(actDecoder, 'Dict<UUID, Act>'),
     agendas: JsonDecoder.record<Agenda>(agendaDecoder, 'Dict<UUID, Agenda>'),
     assets: JsonDecoder.record<Asset>(assetDecoder, 'Dict<UUID, Asset>'),

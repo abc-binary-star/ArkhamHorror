@@ -5,6 +5,7 @@ import Arkham.Asset.Cards qualified as Assets
 import Arkham.Asset.Types (Field (AssetClues, AssetController))
 import Arkham.GameValue
 import Arkham.Helpers.Modifiers
+import Arkham.I18n
 import Arkham.Investigator.Types (Field (..))
 import Arkham.Location.CardDefs.MurderAtTheExcelsiorHotel qualified as Cards
 import Arkham.Location.Import.Lifted
@@ -64,9 +65,9 @@ instance RunMessage Office where
 
       unless (null iids || isNothing managersKey) do
         named <- traverse (\(iid', x) -> (,x) <$> field InvestigatorName iid') iids
-        chooseAmounts
+        withI18n $ cardNameVar Assets.managersKey $ chooseAmounts
           iid
-          "number of clues to move to Manager's Key"
+          ("$" <> labelKey "numberOfCluesToMoveTo")
           (MaxAmountTarget n)
           (map (\(name, x) -> (toTitle name, (0, x))) named)
           (toTarget attrs)

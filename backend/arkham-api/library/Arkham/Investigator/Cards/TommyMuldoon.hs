@@ -49,9 +49,9 @@ instance RunMessage TommyMuldoon where
           then do
             chooseAmounts
               iid
-              ("Distribute " <> tshow (damage + horror) <> " Resources")
+              ("$label.distributeResources count=i:" <> tshow (damage + horror))
               (TotalAmountTarget $ damage + horror)
-              [("Tommy Muldoon Resources", (0, damage + horror)), ("Becky Resources", (0, damage + horror))]
+              [("$tommyMuldoonResources", (0, damage + horror)), ("$beckyResources", (0, damage + horror))]
               (toTarget iid)
           else do
             gainResources iid (attrs.ability 1) (damage + horror)
@@ -124,8 +124,8 @@ instance RunMessage TommyMuldoon where
       pure i
     ResolveAmounts iid choices (isTarget attrs -> True) -> do
       let
-        tommyResources = getChoiceAmount "Tommy Muldoon Resources" choices
-        beckyUses = getChoiceAmount "Becky Resources" choices
+        tommyResources = getChoiceAmount "$tommyMuldoonResources" choices
+        beckyUses = getChoiceAmount "$beckyResources" choices
 
       becky <- selectJust $ assetIs Assets.becky
 

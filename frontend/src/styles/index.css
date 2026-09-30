@@ -22,3 +22,4 @@
 @import './utilities.css' layer(utilities);
 
 @import './mobile.css';
+@import './dialog-actions.css';

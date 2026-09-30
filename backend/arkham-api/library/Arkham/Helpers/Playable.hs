@@ -25,6 +25,7 @@ import Arkham.Helpers.Investigator (getAsIfInHandCards)
 import Arkham.Helpers.Location (getLocationOf)
 import Arkham.Helpers.Modifiers (
   getModifiers,
+  getFullModifiers,
   hasModifier,
   toModifiers,
   withModifiers,
@@ -269,6 +270,39 @@ getOtherPlayersPlayableCards iid costStatus windows' = do
       pure $ guard playable $> c
     _ -> pure Nothing
 
+-- Shared by the legality check and its explanation so source attribution cannot
+-- drift from the actual restriction predicate (including the weakness exception).
+playRestrictionMatches :: Card -> ModifierType -> Bool
+playRestrictionMatches c = \case
+  CanOnlyUseCardsInRole role ->
+    isNothing (cdCardSubType $ toCardDef c)
+      && null (intersect (cdClassSymbols $ toCardDef c) (setFromList [Mythos, Neutral, role]))
+  CannotPlay matcher -> cardMatch c matcher
+  CannotPutIntoPlay matcher -> cardMatch c matcher
+  _ -> False
+
+getPlayRestrictionSources :: HasGame m => InvestigatorId -> Card -> m [Source]
+getPlayRestrictionSources iid c = asActive iid do
+  modifiers <- getFullModifiers iid
+  pure $ nub $ mapMaybe (playRestrictionEntitySource . modifierSource)
+    [m | m <- modifiers, playRestrictionMatches c (modifierType m)]
+
+-- Return entity references only, never embedded cards or raw card-code sources.
+-- The client resolves the reference only if its public face is already visible.
+playRestrictionEntitySource :: Source -> Maybe Source
+playRestrictionEntitySource = \case
+  AbilitySource source _ -> playRestrictionEntitySource source
+  UseAbilitySource _ source _ -> playRestrictionEntitySource source
+  IndexedSource _ source -> playRestrictionEntitySource source
+  PaymentSource source -> playRestrictionEntitySource source
+  ProxySource source _ -> playRestrictionEntitySource source
+  source@AssetSource {} -> Just source
+  source@EnemySource {} -> Just source
+  source@TreacherySource {} -> Just source
+  source@LocationSource {} -> Just source
+  source@InvestigatorSource {} -> Just source
+  _ -> Nothing
+
 getPlayabilityChecks
   :: ( HasCallStack
      , HasGame m
@@ -277,10 +311,19 @@ getPlayabilityChecks
      , IdOf investigator ~ InvestigatorId
      )
   => investigator -> source -> CostStatus -> [Window] -> Card -> m [(Text, Maybe Text)]
-getPlayabilityChecks (asId -> iid) source costStatus windows' c = do
+getPlayabilityChecks (asId -> iid) source costStatus windows' c = asActive iid do
   availableResources <- getSpendableResources iid
-  -- Diagnostic path: compute every check so the UI can report all reasons.
-  getPlayabilityChecksWithResources False False iid source availableResources costStatus windows' c
+  ignoreContexts <- hasModifier iid IgnorePlayableModifierContexts
+  contexts :: [(CardMatcher, [ModifierType])] <-
+    concat . mapMaybe (preview _PlayableModifierContexts) <$> getModifiers iid
+  -- An alternate play context may change costs and restrictions. Reporting only
+  -- the base-context failures would mislead players; use the authoritative union
+  -- check and give a general failure until per-context diagnostics are available.
+  if not ignoreContexts && any (cardMatch c . fst) contexts
+    then do
+      playable <- getIsPlayable iid source costStatus windows' c
+      pure [("Alternate play context", guard (not playable) $> "No valid alternate play context")]
+    else getPlayabilityChecksWithResources False False iid source availableResources costStatus windows' c
 
 getPlayabilityChecksWithResources
   :: forall m source
@@ -336,15 +379,7 @@ getPlayabilityChecksWithResources
     -- Play restrictions check
     modifiers <- getModifiers iid
     let
-      -- Weaknesses do not interact with the class system (FAQ 1.35)
-      prevents (CanOnlyUseCardsInRole role) =
-        isNothing (cdCardSubType pcDef)
-          && null (intersect (cdClassSymbols pcDef) (setFromList [Mythos, Neutral, role]))
-      prevents (CannotPlay matcher) = cardMatch c matcher
-      prevents (CannotPutIntoPlay matcher) = cardMatch c matcher
-      prevents _ = False
-    let
-      playRestrictionsOk = none prevents modifiers
+      playRestrictionsOk = none (playRestrictionMatches c) modifiers
       playRestrictionsDetail =
         if playRestrictionsOk then Nothing else Just "A modifier is preventing this card from being played"
 

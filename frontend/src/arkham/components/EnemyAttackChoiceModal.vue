@@ -77,7 +77,7 @@ onBeforeUnmount(() => dialog.value?.close())
           <QuestionChoices v-else :game="game" :choices="[[entry.choice, entry.index]]" @choose="choose" />
         </section>
       </fieldset>
-      <button class="inspect" type="button" @click="collapse">{{ t('inspect') }}</button>
+      <button class="inspect dialog-chrome-action" type="button" @click="collapse">{{ t('inspect') }}</button>
     </dialog>
   </Teleport>
 </template>

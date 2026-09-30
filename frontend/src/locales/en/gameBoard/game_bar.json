@@ -1,4 +1,12 @@
 {
+  "revelationInvestigator": "Drawn by: {name}",
+  "themeTitle": "Tabletop theme",
+  "themeHarbour": "Veiled Harbour",
+  "themeZealot": "Night of the Zealot",
+  "themeDunwich": "The Dunwich Legacy",
+  "themeHarbourHint": "Sea charts · Aged gold and leather",
+  "themeZealotHint": "Crimson ritual · Candlelight and embers",
+  "themeDunwichHint": "Wild hills · Ash violet and old copper",
     "closeLog": "Close Campaign Log",
     "viewLog": "View Campaign Log",
     "sounds": "Sounds",
@@ -12,6 +20,7 @@
     "leaveGame": "Leave game",
     "fullscreen": "Fullscreen",
     "narration": {
+  "revelationInvestigator": "Drawn by: {name}",
         "title": "Narration",
         "autoRead": "Read new content automatically",
         "readCurrent": "Read current content",
@@ -27,11 +36,13 @@
         "csvLoaded": "Loaded {count} card narration entries",
         "csvReload": "Reload",
         "groups": {
+  "revelationInvestigator": "Drawn by: {name}",
             "content": "Story content",
             "scenarioCards": "Scenario cards",
             "cardFields": "Card fields"
         },
         "categories": {
+  "revelationInvestigator": "Drawn by: {name}",
             "story": "Story",
             "interlude": "Interlude",
             "resolution": "Resolution",
@@ -48,6 +59,7 @@
             "cardFlavor": "Flavor text"
         },
         "references": {
+  "revelationInvestigator": "Drawn by: {name}",
             "card": "Card {code}",
             "tarot": "Tarot card {name}",
             "chaosToken": "Chaos token {name}",
@@ -103,6 +115,7 @@
     "viewChaosBag": "View Chaos Bag",
     "chaosBag": "Chaos Bag",
     "chaosBagStats": {
+  "revelationInvestigator": "Drawn by: {name}",
         "tokens": "{count} tokens",
         "chanceOfSuccess": "chance of success",
         "showOdds": "Show odds",

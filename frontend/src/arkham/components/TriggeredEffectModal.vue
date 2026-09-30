@@ -176,7 +176,7 @@ onBeforeUnmount(() => dialog.value?.close())
             v-if="group.entries.length === 1 && group.entries[0].choice.tag === 'SkipTriggersButton'"
             class="skip-row"
           >
-            <button type="button" class="skip" @click="choose(group.entries[0].index)">
+            <button type="button" class="skip dialog-advance" @click="choose(group.entries[0].index)">
               {{ t(revealWindow ? 'cardOption.testFast.reveal' : 'triggeredEffect.skip') }}
             </button>
           </div>
@@ -208,7 +208,7 @@ onBeforeUnmount(() => dialog.value?.close())
           </div>
         </template>
       </fieldset>
-      <footer><button type="button" class="collapse" @click="collapse">{{ t('triggeredEffect.inspect') }}</button></footer>
+      <footer><button type="button" class="collapse dialog-chrome-action" @click="collapse">{{ t('triggeredEffect.inspect') }}</button></footer>
     </dialog>
   </Teleport>
 </template>

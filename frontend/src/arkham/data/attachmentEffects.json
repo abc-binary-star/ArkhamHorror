@@ -1,0 +1,442 @@
+{
+  "01168": {
+    "name": "Obscuring Fog",
+    "kind": "fog"
+  },
+  "02007": {
+    "name": "Smite the Wicked",
+    "kind": "hunt"
+  },
+  "01174": {
+    "name": "Locked Door",
+    "kind": "lock"
+  },
+  "02011": {
+    "name": "Searching for Izzie",
+    "kind": "evidence"
+  },
+  "81025": {
+    "name": "Spectral Mist",
+    "kind": "fog",
+    "variant": "spectral"
+  },
+  "81036": {
+    "name": "Insatiable Bloodlust",
+    "kind": "blood"
+  },
+  "02085": {
+    "name": "Light of Aforgomon",
+    "kind": "doom"
+  },
+  "02089": {
+    "name": "Sordid and Silent",
+    "kind": "haunt"
+  },
+  "02096": {
+    "name": "Altered Beast",
+    "kind": "growth"
+  },
+  "02102": {
+    "name": "Arcane Barrier",
+    "kind": "barrier"
+  },
+  "82037": {
+    "name": "Acrid Miasma",
+    "kind": "fog"
+  },
+  "02220": {
+    "name": "Kidnapped!",
+    "kind": "evidence"
+  },
+  "02256": {
+    "name": "Towering Beasts",
+    "kind": "growth"
+  },
+  "03091": {
+    "name": "Spires of Carcosa",
+    "kind": "doom"
+  },
+  "03094": {
+    "name": "Spirit's Torment",
+    "kind": "haunt"
+  },
+  "03262": {
+    "name": "The Pit Below",
+    "kind": "rubble"
+  },
+  "98012": {
+    "name": "To Fight the Black Wind",
+    "kind": "doom"
+  },
+  "04076": {
+    "name": "Overgrowth",
+    "kind": "vines"
+  },
+  "04145": {
+    "name": "Nobody's Home",
+    "kind": "evidence"
+  },
+  "04146": {
+    "name": "Conspiracy of Blood",
+    "kind": "blood",
+    "variant": "doom"
+  },
+  "50043": {
+    "name": "Mask of Umôrdhoth",
+    "kind": "haunt"
+  },
+  "04216": {
+    "name": "Poisonous Spores",
+    "kind": "spores"
+  },
+  "04228": {
+    "name": "No Turning Back",
+    "kind": "rubble"
+  },
+  "04342": {
+    "name": "Creeping Darkness",
+    "kind": "doom"
+  },
+  "51023": {
+    "name": "Dark Bidding",
+    "kind": "haunt"
+  },
+  "51046": {
+    "name": "Imperceptible Creature",
+    "kind": "haunt"
+  },
+  "51063": {
+    "name": "Infinite Doorway",
+    "kind": "barrier"
+  },
+  "51065": {
+    "name": "Secret Door",
+    "kind": "lock",
+    "variant": "exit"
+  },
+  "51067": {
+    "name": "Oppressive Mists",
+    "kind": "fog"
+  },
+  "05342": {
+    "name": "Ultimate Chaos",
+    "kind": "doom"
+  },
+  "05307": {
+    "name": "Primordial Gateway",
+    "kind": "rift"
+  },
+  "06019": {
+    "name": "Bloodlust",
+    "kind": "blood"
+  },
+  "52070": {
+    "name": "The Sign of Hastur",
+    "kind": "doom",
+    "variant": "yellow"
+  },
+  "06100": {
+    "name": "Threads of Reality",
+    "kind": "threads"
+  },
+  "06103": {
+    "name": "Sickening Webs",
+    "kind": "web"
+  },
+  "06104": {
+    "name": "Hunted by Corsairs",
+    "kind": "hunt"
+  },
+  "06153": {
+    "name": "Song of the Magah Bird",
+    "kind": "song"
+  },
+  "06154": {
+    "name": "Wondrous Lands",
+    "kind": "song"
+  },
+  "06232": {
+    "name": "Lunar Patrol",
+    "kind": "hunt"
+  },
+  "06272": {
+    "name": "Dhole Tunnel",
+    "kind": "rubble"
+  },
+  "84024": {
+    "name": "Driven to Madness",
+    "kind": "haunt"
+  },
+  "84026": {
+    "name": "Incriminating Evidence",
+    "kind": "evidence"
+  },
+  "06352": {
+    "name": "The Spinner in Darkness",
+    "kind": "web"
+  },
+  "53074": {
+    "name": "Resentful Wilds",
+    "kind": "vines"
+  },
+  "07040": {
+    "name": "Day of Reckoning",
+    "kind": "doom"
+  },
+  "07099": {
+    "name": "Malfunction",
+    "kind": "sparks"
+  },
+  "86028": {
+    "name": "Predator's Call",
+    "kind": "hunt"
+  },
+  "85050": {
+    "name": "Sticky Feet",
+    "kind": "barrier"
+  },
+  "85053": {
+    "name": "Alien Food Chain",
+    "kind": "growth"
+  },
+  "07259": {
+    "name": "Worth His Salt",
+    "kind": "hunt"
+  },
+  "07299": {
+    "name": "Stone Barrier",
+    "kind": "rubble",
+    "readyOnly": true
+  },
+  "54068": {
+    "name": "Unstable Energies",
+    "kind": "electric"
+  },
+  "54070": {
+    "name": "Vice and Villainy",
+    "kind": "threads"
+  },
+  "54073": {
+    "name": "Mists from Beyond",
+    "kind": "fog",
+    "variant": "spectral"
+  },
+  "08585": {
+    "name": "Evanescent Mist",
+    "kind": "fog",
+    "variant": "spectral"
+  },
+  "08691": {
+    "name": "Kindred Mist",
+    "kind": "fog",
+    "variant": "spectral"
+  },
+  "08692": {
+    "name": "Antarctic Wind",
+    "kind": "snow"
+  },
+  "08693": {
+    "name": "Whiteout",
+    "kind": "snow"
+  },
+  "08694": {
+    "name": "Polar Vortex",
+    "kind": "vortex"
+  },
+  "08699": {
+    "name": "Through the Ice",
+    "kind": "ice"
+  },
+  "08702": {
+    "name": "Abandoned to Madness",
+    "kind": "haunt"
+  },
+  "08706": {
+    "name": "Miasmatic Torment",
+    "kind": "fog"
+  },
+  "08707": {
+    "name": "Nebulous Miasma",
+    "kind": "fog"
+  },
+  "08712": {
+    "name": "Polar Mirage",
+    "kind": "vortex"
+  },
+  "09560": {
+    "name": "Calling Card",
+    "kind": "evidence"
+  },
+  "09658": {
+    "name": "Locus Pulse",
+    "kind": "electric"
+  },
+  "09721": {
+    "name": "In Plain Sight",
+    "kind": "hunt"
+  },
+  "09729": {
+    "name": "Bound in Red",
+    "kind": "blood"
+  },
+  "09738": {
+    "name": "Matter Inversion",
+    "kind": "rift"
+  },
+  "09741": {
+    "name": "Splintered Space",
+    "kind": "rift"
+  },
+  "09742": {
+    "name": "Beyond the Pale",
+    "kind": "rift"
+  },
+  "09743": {
+    "name": "Warped Reality",
+    "kind": "rift"
+  },
+  "90061": {
+    "name": "Smite the Wicked",
+    "kind": "hunt"
+  },
+  "10018": {
+    "name": "\"Where's Pa?\"",
+    "kind": "hunt"
+  },
+  "88039a": {
+    "name": "Arcane Spotlight",
+    "kind": "spotlight"
+  },
+  "88039b": {
+    "name": "Arcane Spotlight",
+    "kind": "spotlight"
+  },
+  "88039c": {
+    "name": "Arcane Spotlight",
+    "kind": "spotlight"
+  },
+  "88051a": {
+    "name": "Dimensional Hypnosis",
+    "kind": "barrier"
+  },
+  "88051b": {
+    "name": "Dimensional Hypnosis",
+    "kind": "barrier"
+  },
+  "88051c": {
+    "name": "Dimensional Hypnosis",
+    "kind": "barrier"
+  },
+  "87051": {
+    "name": "Dimensional Breach",
+    "kind": "rift"
+  },
+  "87056": {
+    "name": "Temporal Distortion",
+    "kind": "rift"
+  },
+  "90086": {
+    "name": "Searching for Izzie",
+    "kind": "evidence"
+  },
+  "10587": {
+    "name": "Luminous Growth",
+    "kind": "spores",
+    "variant": "luminous"
+  },
+  "10727": {
+    "name": "Fungal Rot",
+    "kind": "rot"
+  },
+  "10736": {
+    "name": "Wall of Thorns",
+    "kind": "vines",
+    "variant": "thorns"
+  },
+  "10741": {
+    "name": "Sudden Mutation",
+    "kind": "growth"
+  },
+  "10743": {
+    "name": "Fire!",
+    "kind": "fire"
+  },
+  "71060": {
+    "name": "Secret Door",
+    "kind": "lock",
+    "variant": "exit"
+  },
+  "10520": {
+    "name": "Cave-In",
+    "kind": "rubble"
+  },
+  "11731": {
+    "name": "Elder Mist",
+    "kind": "fog"
+  },
+  "11516": {
+    "name": "End of Negotiations",
+    "kind": "hunt"
+  },
+  "11531": {
+    "name": "Seafloor Frieze [tdc_rune_w]",
+    "kind": "glyph"
+  },
+  "11576": {
+    "name": "Hungry Walls",
+    "kind": "vines"
+  },
+  "11608": {
+    "name": "Ancient Vault [tdc_rune_o]",
+    "kind": "glyph"
+  },
+  "11609": {
+    "name": "Ancient Vault [tdc_rune_n]",
+    "kind": "glyph"
+  },
+  "11610": {
+    "name": "Ancient Vault [tdc_rune_p]",
+    "kind": "glyph"
+  },
+  "11632": {
+    "name": "Ancient Vault [tdc_rune_g]",
+    "kind": "glyph"
+  },
+  "11633": {
+    "name": "Ancient Vault [tdc_rune_i]",
+    "kind": "glyph"
+  },
+  "11634": {
+    "name": "Ruined Orrery [tdc_rune_h]",
+    "kind": "glyph"
+  },
+  "11664": {
+    "name": "Eroded Frieze [tdc_rune_e]",
+    "kind": "glyph"
+  },
+  "11665": {
+    "name": "St. Elmo's Fire",
+    "kind": "electric"
+  },
+  "12129": {
+    "name": "Fire!",
+    "kind": "fire"
+  },
+  "12157": {
+    "name": "Arcane Lock",
+    "kind": "lock",
+    "variant": "arcane"
+  },
+  "12159": {
+    "name": "Flash Flood",
+    "kind": "water"
+  },
+  "71046": {
+    "name": "The Pale Lantern",
+    "kind": "lantern"
+  },
+  "71046b": {
+    "name": "The Pale Lantern",
+    "kind": "lantern"
+  }
+}

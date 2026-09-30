@@ -130,6 +130,8 @@ export const cardSettingsDecoder = JsonDecoder.object<CardSettings>({
 }, 'CardSettings');
 
 export type Investigator = {
+  remainingHealth?: number | null;
+  remainingSanity?: number | null;
   deckSize?: number;
   connectedLocations: string[];
   modifiers?: Modifier[];
@@ -251,6 +253,8 @@ export const investigatorDecoder = JsonDecoder.object({
   cardCode: JsonDecoder.string(),
   art: JsonDecoder.string(),
   class: classSymbolDecoder,
+  remainingHealth: v2Optional(JsonDecoder.nullable(JsonDecoder.number())),
+  remainingSanity: v2Optional(JsonDecoder.nullable(JsonDecoder.number())),
   health: JsonDecoder.number(),
   sanity: JsonDecoder.number(),
   willpower: JsonDecoder.number(),

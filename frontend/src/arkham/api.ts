@@ -1,3 +1,4 @@
+import { sourceDecoder } from '@/arkham/types/Source'
 import { clientLog, clientError } from '@/utils/clientLog'
 import api from '@/api';
 import { Game, GameDetailsEntry, UndoMode, gameDecoder, gameDetailsEntryDecoder } from '@/arkham/types/Game';
@@ -102,7 +103,7 @@ export const fetchGames = async (): Promise<GameDetailsEntry[]> => {
 }
 
 export const fetchDecks = async (): Promise<Deck[]> => {
-  const { data } = await api.get('arkham/decks')
+  const { data } = await api.get('arkham/decks', { timeout: 30000 })
   return JsonDecoder.array(deckDecoder, 'ArkhamDeck[]').decodePromise(data);
 }
 
@@ -373,14 +374,22 @@ export const setCardResponseMode = (
   updateGameRaw(gameId, { tag: 'SetCardResponseMode', contents: [investigatorId, cardCode, mode] })
 
 export interface PlayabilityResponse {
+  restrictionSources?: Source[]
+  scope?: 'currentWindow' | 'normalTurn' | 'unavailable'
+  scenarioSteps?: number
   cardId: string
   cardCode: string
   checks: [string, string | null][]
 }
 
 export const fetchPlayability = async (gameId: string, investigatorId: string, cardId: string): Promise<PlayabilityResponse> => {
-  const { data } = await api.post(`arkham/games/${gameId}/playability`, { investigatorId, cardId })
-  return data
+  const { data } = await api.post(`arkham/games/${gameId}/playability`, { investigatorId, cardId }, { timeout: 15000 })
+  const restrictionSources: Source[] = []
+  for (const source of data.restrictionSources ?? []) {
+    // An unknown source must not discard otherwise useful failure reasons.
+    try { restrictionSources.push(await sourceDecoder.decodePromise(source)) } catch { /* unsupported source */ }
+  }
+  return { ...data, restrictionSources }
 }
 
 export const newGame = async (
@@ -484,7 +493,7 @@ export const importGame = async (formData: FormData, multiplayerVariant: string)
 }
 
 export const fetchOpenSeats = async (gameId: string): Promise<string[]> => {
-  const { data } = await api.get(`arkham/games/${gameId}/open-seats`)
+  const { data } = await api.get(`arkham/games/${gameId}/open-seats`, { timeout: 15000 })
   return data as string[]
 }
 

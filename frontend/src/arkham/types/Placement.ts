@@ -25,7 +25,9 @@ export type Placement
   | { tag: "NextToAgenda" }
   | { tag: "NextToAct" }
   | { tag: "NextToScenarioReference" }
-  | { tag: "AttachedToAgenda" }
+  | { tag: "AttachedToAgenda", contents: string }
+  | { tag: "AttachedToAct", contents: string }
+  | { tag: "AttachedToEnemy", contents: string }
   | { tag: "InTheShadows" }
   | { tag: "OtherPlacement", contents: string }
 
@@ -45,7 +47,9 @@ export const placementDecoder = JsonDecoder.oneOf<Placement>([
   JsonDecoder.object<Placement>({ tag: JsonDecoder.literal("NextToAgenda")}, 'NextToAgenda'),
   JsonDecoder.object<Placement>({ tag: JsonDecoder.literal("NextToAct")}, 'NextToAct'),
   JsonDecoder.object<Placement>({ tag: JsonDecoder.literal("NextToScenarioReference")}, 'NextToScenarioReference'),
-  JsonDecoder.object<Placement>({ tag: JsonDecoder.literal("AttachedToAgenda")}, 'AttachedToAgenda'),
+  JsonDecoder.object<Placement>({ tag: JsonDecoder.literal("AttachedToAgenda"), contents: JsonDecoder.string() }, 'AttachedToAgenda'),
+  JsonDecoder.object<Placement>({ tag: JsonDecoder.literal("AttachedToAct"), contents: JsonDecoder.string() }, 'AttachedToAct'),
+  JsonDecoder.object<Placement>({ tag: JsonDecoder.literal("AttachedToEnemy"), contents: JsonDecoder.string() }, 'AttachedToEnemy'),
   JsonDecoder.object<Placement>({ tag: JsonDecoder.literal("Limbo")}, 'Limbo'),
   JsonDecoder.object<Placement>({ tag: JsonDecoder.literal("AtLocation"), contents: JsonDecoder.string() }, 'AtLocation'),
   JsonDecoder.object<Placement>({ tag: JsonDecoder.literal("InVehicle"), contents: JsonDecoder.string() }, 'InVehicle'),

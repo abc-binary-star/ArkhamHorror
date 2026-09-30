@@ -1,4 +1,5 @@
-/* Generated artwork is sliced without fill: ornament never sits under text.
+/* The central 48% of both frame images is clean ink, without ornament.
+   Fill with that same material to avoid a second rectangular surface inside.
    Keep the damage assignment reference independent of this shared skin. */
 .occult-frame {
   --text: #e2dbce;
@@ -41,8 +42,7 @@
   border: 1px solid #796c5880;
   border-radius: 4px;
   color: var(--text);
-  background: radial-gradient(ellipse at 0 0, #633d2826, transparent 48%),
-    radial-gradient(ellipse at 100% 100%, #50436226, transparent 52%), #141919;
+  background: #0d1514;
   box-shadow: 0 28px 90px #000c, inset 0 0 40px #0008;
   color-scheme: dark;
 }
@@ -53,7 +53,17 @@
   z-index: -1;
   pointer-events: none;
   border: var(--occult-border) solid transparent;
-  border-image: var(--occult-art) 26% / 1 / 0 stretch;
+  border-image: var(--occult-art) 26% fill / 1 / 0 stretch;
+}
+/* Image slicing can shrink the engraved vertical strokes below one pixel.
+   Keep the side rails crisp at every window size, between the corner ornaments. */
+.occult-frame:not(:has(p.file))::after {
+  content: '';
+  position: absolute;
+  inset: calc(var(--occult-border) + 3px) 4px;
+  z-index: -1;
+  pointer-events: none;
+  border-inline: 1px solid #a18b64b3;
 }
 .occult-frame::backdrop { background: #050a0db8; }
 .occult-frame:has(.skill-test, .chaos-bag) {

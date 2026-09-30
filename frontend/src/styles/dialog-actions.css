@@ -1,0 +1,80 @@
+/* Shared window controls. These explicit opt-in classes override legacy scoped
+   button skins, including mobile and special-story variants. */
+.dialog-chrome-action,
+.dialog-advance {
+  background: transparent !important;
+  border: 0 !important;
+  border-image: none !important;
+  border-radius: 2px !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  color: var(--title, #e1d0b0) !important;
+  cursor: pointer;
+  transition: color 160ms ease, opacity 160ms ease !important;
+}
+
+.dialog-chrome-action {
+  min-width: 44px !important;
+  min-height: 44px !important;
+  color: #b69a64 !important;
+}
+
+.dialog-advance {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: .65em;
+  flex: 0 0 auto !important;
+  width: fit-content !important;
+  max-width: 100%;
+  min-height: 44px !important;
+  margin-inline-start: auto !important;
+  padding: 8px 12px !important;
+  text-align: right !important;
+  white-space: normal !important;
+  font-family: 'Source Han Serif', 'Songti SC', serif !important;
+}
+
+.dialog-advance::before,
+.dialog-chrome-action::before {
+  content: none !important;
+}
+
+.dialog-advance::after {
+  content: '→' !important;
+  position: static !important;
+  flex: 0 0 auto;
+  color: #b69a64;
+  font-family: sans-serif;
+  transition: transform 160ms ease;
+}
+
+.dialog-advance:hover:not(:disabled),
+.dialog-chrome-action:hover:not(:disabled) {
+  color: #e2c58f !important;
+  transform: none !important;
+}
+.dialog-advance:hover:not(:disabled)::after { transform: translateX(3px); }
+.dialog-advance:active:not(:disabled),
+.dialog-chrome-action:active:not(:disabled) { opacity: .72; }
+
+/* Mouse clicks do not leave a persistent frame; keyboard focus stays visible. */
+.dialog-advance:focus:not(:focus-visible),
+.dialog-chrome-action:focus:not(:focus-visible) { outline: none !important; }
+.dialog-advance:focus-visible,
+.dialog-chrome-action:focus-visible {
+  outline: 1px solid #dec394 !important;
+  outline-offset: 2px !important;
+}
+.dialog-advance:disabled,
+.dialog-chrome-action:disabled {
+  opacity: .4 !important;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog-advance,
+  .dialog-chrome-action,
+  .dialog-advance::after { transition: none !important; }
+  .dialog-advance:hover:not(:disabled)::after { transform: none; }
+}

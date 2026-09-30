@@ -37,7 +37,7 @@ function choose(index: number) {
           <AbilityButton :game="game" :ability="entry.choice" tooltip-is-button-text @click="choose(entry.index)" />
         </template>
       </div>
-      <button v-if="continueIndex !== undefined" type="button" class="continue-test" @click="choose(continueIndex)">
+      <button v-if="continueIndex !== undefined" type="button" class="continue-test dialog-advance" @click="choose(continueIndex)">
         {{ t(beforeDraw ? 'cardOption.testFast.reveal' : 'cardOption.testFast.commit') }}
       </button>
     </fieldset>

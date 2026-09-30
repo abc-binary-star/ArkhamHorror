@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { useDamagePreview } from '@/arkham/composables/useDamagePreview'
+import { nearDefeat } from '@/arkham/visualFeedback'
 import { computed } from 'vue'
 import { TokenType } from '@/arkham/types/Token'
 import { keyToId } from '@/arkham/types/Key'
@@ -24,6 +26,7 @@ export interface Props {
   playerId: string
 }
 
+const damagePreview = useDamagePreview()
 const props = withDefaults(defineProps<Props>(), { portrait: false })
 const debug = useDebug()
 
@@ -146,6 +149,7 @@ const hiGradId = computed(() => `auxMagentaHi-${iid.value}`)
 
     <PoolItem
       type="resource"
+      :feedback-key="`investigators:${iid}:Resource`"
       :amount="resources"
       :class="{ 'resource--can-take': takeResourceAction !== -1 }"
       @choose="$emit('choose', takeResourceAction)"
@@ -168,6 +172,7 @@ const hiGradId = computed(() => `auxMagentaHi-${iid.value}`)
 
     <PoolItem
       type="clue"
+      :feedback-key="`investigators:${iid}:Clue`"
       :amount="clues"
       :class="{ 'clue--can-spend': spendCluesAction !== -1 }"
       @choose="$emit('choose', spendCluesAction)"
@@ -190,8 +195,10 @@ const hiGradId = computed(() => `auxMagentaHi-${iid.value}`)
 
     <PoolItem
       type="health"
+      :tooltip="damagePreview(investigator, 'Damage')"
+      :feedback-key="`investigators:${iid}:Damage`"
       :amount="damage"
-      :class="{ 'health--can-interact': healthAction !== -1 }"
+      :class="{ 'pool-risk-damage': nearDefeat(investigator.remainingHealth, investigator.tokens.Damage), 'health--can-interact': healthAction !== -1 }"
       @choose="$emit('choose', healthAction)"
     />
 
@@ -217,8 +224,10 @@ const hiGradId = computed(() => `auxMagentaHi-${iid.value}`)
     >
       <PoolItem
         type="sanity"
+        :tooltip="damagePreview(investigator, 'Horror')"
+      :feedback-key="`investigators:${iid}:Horror`"
         :amount="horror"
-        :class="{ 'sanity--can-interact': sanityAction !== -1 }"
+        :class="{ 'pool-risk-horror': nearDefeat(investigator.remainingSanity, investigator.tokens.Horror), 'sanity--can-interact': sanityAction !== -1 }"
         @choose="choose(sanityAction)"
       />
 

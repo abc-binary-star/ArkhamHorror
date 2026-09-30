@@ -61,7 +61,7 @@ instance RunMessage EmbezzledTreasure where
       named <- forToSnd investigators \i -> toTitle <$> field InvestigatorName i
       chooseAmounts
         iid
-        "Distribute starting resources"
+        "$label.distributeStartingResources"
         (TotalAmountTarget total)
         [(name, (0, total)) | (_, name) <- named]
         (ProxyTarget (toTarget attrs) (toTarget attrs))

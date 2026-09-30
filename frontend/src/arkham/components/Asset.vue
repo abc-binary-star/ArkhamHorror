@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import { useDamagePreview } from '@/arkham/composables/useDamagePreview'
+import { nearDefeat } from '@/arkham/visualFeedback'
+import RiskCorners from '@/arkham/components/RiskCorners.vue'
+import AttachmentEffects from '@/arkham/components/AttachmentEffects.vue'
 import { computed, defineAsyncComponent, inject, watch, ref } from 'vue'
 import { Dropdown } from 'floating-vue'
 import useHighlighter from '@/arkham/composables/useHighlighter'
@@ -43,6 +47,7 @@ import { useCardStore } from '@/stores/cards'
 // Debug-only editor: opened from the debug menu, never on the play path.
 const DebugAsset = defineAsyncComponent(() => import('@/arkham/components/debug/Asset.vue'))
 
+const damagePreview = useDamagePreview()
 const props = withDefaults(
   defineProps<{
     game: Game
@@ -320,20 +325,22 @@ const forcedTokenItems = computed<TokenPoolItem[]>(() => [
   {
     key: 'health',
     type: 'health',
+    tooltip: damagePreview(props.asset, 'Damage'),
     amount: damage.value || 0,
     force:
       !isSpirit.value &&
       (cardCode.value == 'c07189' || props.asset.health !== null || (damage.value || 0) > 0),
-    class: { 'health--can-interact': healthAction.value !== -1 },
+    class: { 'pool-risk-damage': nearDefeat(props.asset.remainingHealth, props.asset.tokens.Damage), 'health--can-interact': healthAction.value !== -1 },
   },
   {
     key: 'sanity',
     type: 'sanity',
+    tooltip: damagePreview(props.asset, 'Horror'),
     amount: horror.value || 0,
     force:
       !isSpirit.value &&
       (cardCode.value == 'c07189' || props.asset.sanity !== null || (horror.value || 0) > 0),
-    class: { 'sanity--can-interact': sanityAction.value !== -1 },
+    class: { 'pool-risk-horror': nearDefeat(props.asset.remainingSanity, props.asset.tokens.Horror), 'sanity--can-interact': sanityAction.value !== -1 },
   },
 ])
 
@@ -508,6 +515,7 @@ function startDrag(event: DragEvent) {
           class="card-wrapper"
           :class="{ 'asset--can-interact': canInteract, 'asset--pending': pending, 'asset--doomed': doomed }"
         >
+          <RiskCorners v-if="!isSpirit && !cannotBeDefeated" :entity="asset" />
           <MissingCardBadge :card-code="cardCode" />
           <span v-if="doomed && !showDiscardMark" class="doomed-mark" v-tooltip="'Will be defeated'">
             <svg viewBox="0 0 24 24" fill="currentColor">
@@ -546,6 +554,7 @@ function startDrag(event: DragEvent) {
             :data-customizations="JSON.stringify(asset.customizations)"
             :data-chained="asset.chained || undefined"
           />
+          <AttachmentEffects v-if="!flipping" :game="game" :host="{ type: 'asset', id: asset.id }" />
           <span v-if="showDiscardMark" class="discard-mark" aria-hidden="true" @click="clicked">
             <svg
               viewBox="0 0 24 24"
@@ -584,7 +593,7 @@ function startDrag(event: DragEvent) {
               @choose="choose"
             />
           </div>
-          <TokenPool
+          <TokenPool :feedback-entity="`assets:${asset.id}`"
             :tokens="assetTokens"
             :extra-items="forcedTokenItems"
             @choose="chooseTokenPoolItem"

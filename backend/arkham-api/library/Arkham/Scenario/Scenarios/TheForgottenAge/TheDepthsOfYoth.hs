@@ -257,13 +257,13 @@ instance RunMessage TheDepthsOfYoth where
           "The investigators may choose how many tally marks are under “Yig’s Fury.” The lower the number chosen, the safer and easier the scenario will be."
           lead
         $ ChooseAmounts
-          "Fury"
+          "$label.fury"
           (MaxAmountTarget 9000)
-          [AmountChoice choiceId "Fury" 0 9000]
+          [AmountChoice choiceId "$fury" 0 9000]
           (toTarget attrs)
       pure . TheDepthsOfYoth $ attrs & standaloneCampaignLogL .~ standaloneCampaignLog
     Setup -> runScenarioSetup TheDepthsOfYoth attrs $ setupTheDepthsOfYoth attrs
-    ResolveAmounts _ (getChoiceAmount "Fury" -> n) ScenarioTarget -> do
+    ResolveAmounts _ (getChoiceAmount "$fury" -> n) ScenarioTarget -> do
       recordCount YigsFury n
       pure s
     CreatedEnemyAt harbingerId _ (isTarget attrs -> True) -> do

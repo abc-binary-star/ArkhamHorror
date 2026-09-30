@@ -103,7 +103,7 @@ data ApiResponse
   | GameUI Text
   | GameAudio Text
   | GameCard {title :: Text, card :: Aeson.Value}
-  | GameCardOnly {player :: PlayerId, title :: Text, card :: Aeson.Value}
+  | GameCardOnly {player :: PlayerId, title :: Text, card :: Aeson.Value, investigator :: Maybe InvestigatorId}
   | GameTarot Aeson.Value
   | GameShowDiscard InvestigatorId
   | GameShowUnder InvestigatorId

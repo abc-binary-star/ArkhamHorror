@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import RiskCorners from '@/arkham/components/RiskCorners.vue'
 import { CircleCheck, SkipForward, Layers, Coins, Search } from '@lucide/vue'
 import { useSettings } from '@/stores/settings';
 import { storeToRefs } from 'pinia';
@@ -603,14 +604,15 @@ const spadeInjury = computed(() => {
 </script>
 
 <template>
-  <div v-if="portrait" class="portrait-container">
+  <div v-if="portrait" class="portrait-container" :data-feedback-key="`portrait:${investigator.id}`">
+    <RiskCorners :entity="investigator" />
     <span v-if="isMobile">
-      <i class="action" v-for="n in investigator.remainingActions" :key="n"></i>
-      <template v-for="action in investigator.additionalActions" :key="action">
+      <i class="action" v-for="n in investigator.remainingActions" :key="n" :data-feedback-key="`investigators:${investigator.id}:Action:${n}`"></i>
+      <template v-for="(action, actionIndex) in investigator.additionalActions" :key="action">
         <button @click="useEffectAction(action)" v-if="action.tag === 'EffectAction'" v-tooltip="action.contents[0]" :class="[{ activeButton: isActiveEffectAction(action)}, `${investigatorClass.toLowerCase()}ActionButton`]">
-          <i class="action"></i>
+          <i class="action" :data-feedback-key="`investigators:${investigator.id}:AdditionalAction:${actionIndex}`"></i>
         </button>
-        <i v-else class="action" :class="`${investigatorClass.toLowerCase()}Action`"></i>
+        <i v-else class="action" :data-feedback-key="`investigators:${investigator.id}:AdditionalAction:${actionIndex}`" :class="`${investigatorClass.toLowerCase()}Action`"></i>
       </template>
     </span>
     <span
@@ -685,12 +687,12 @@ const spadeInjury = computed(() => {
               <i class="heart" v-if="heartInjury"></i>
               <i class="diamond" v-if="diamondInjury"></i>
               <i class="club" v-if="clubInjury"></i>
-              <i class="action" v-for="n in investigator.remainingActions" :key="n"></i>
-              <template v-for="action in investigator.additionalActions" :key="action">
+              <i class="action" v-for="n in investigator.remainingActions" :key="n" :data-feedback-key="`investigators:${investigator.id}:Action:${n}`"></i>
+              <template v-for="(action, actionIndex) in investigator.additionalActions" :key="action">
                 <button @click="useEffectAction(action)" v-if="action.tag === 'EffectAction'" v-tooltip="action.contents[0]" :class="[{ activeButton: isActiveEffectAction(action)}, `${investigatorClass.toLowerCase()}ActionButton`]">
-                  <i class="action"></i>
+                  <i class="action" :data-feedback-key="`investigators:${investigator.id}:AdditionalAction:${actionIndex}`"></i>
                 </button>
-                <i v-else class="action" :class="`${investigatorClass.toLowerCase()}Action`"></i>
+                <i v-else class="action" :data-feedback-key="`investigators:${investigator.id}:AdditionalAction:${actionIndex}`" :class="`${investigatorClass.toLowerCase()}Action`"></i>
               </template>
               <i v-for="n in spentActionSlots" :key="`spent-${n}`" class="action action--spent-slot" aria-hidden="true"></i>
               <span
@@ -706,7 +708,8 @@ const spadeInjury = computed(() => {
               </span>
             </span>
         </div>
-        <div class="investigator-image">
+        <div class="investigator-image" :data-feedback-key="`portrait:${investigator.id}`">
+          <RiskCorners :entity="investigator" />
           <div
             class="card-flip"
             :class="{ 'card-flip--flipped': flipped }"

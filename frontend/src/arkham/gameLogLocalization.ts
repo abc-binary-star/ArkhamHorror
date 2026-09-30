@@ -28,6 +28,22 @@ export function buildKnownTranslations(
   return result
 }
 
+// Children of Blood is absent from the ArkhamDB dumps. Restrict its name
+// fallback to its own codes: other scenarios can have a different Main Street.
+export function translateSupplementalLogCardName(
+  name: string,
+  cardCode: string,
+  locale: string,
+  messages: Record<string, unknown>,
+): string {
+  if (locale === 'en' || !/^c?13\d{3}[ab]?$/.test(cardCode)) return name
+
+  type CampaignMessages = { childrenOfBlood?: { cardNames?: Record<string, string> } }
+  const source = (messages.en as CampaignMessages | undefined)?.childrenOfBlood?.cardNames
+  const target = (messages[locale] as CampaignMessages | undefined)?.childrenOfBlood?.cardNames
+  return buildKnownTranslations(source, target).get(normalized(name)) ?? name
+}
+
 // The log is split around {card:…}/{location:…} references before translation,
 // so the fixed table keys are the fragments that surround those references.
 const fixedFragments = [

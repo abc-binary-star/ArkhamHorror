@@ -35,14 +35,14 @@ instance RunMessage AncientVaultN where
         _ -> pure 0
       chooseAmounts
         iid
-        "Take a combined total of damage and/or horror"
+        "$label.takeCombinedDamageOrHorror"
         (TotalAmountTarget x)
-        [("Damage", (0, x)), ("Horror", (0, x))]
+        [("$damage", (0, x)), ("$horror", (0, x))]
         (toTarget attrs)
       pure t
     ResolveAmounts iid choices (isTarget attrs -> True) -> do
-      let damage = getChoiceAmount "Damage" choices
-      let horror = getChoiceAmount "Horror" choices
+      let damage = getChoiceAmount "$damage" choices
+      let horror = getChoiceAmount "$horror" choices
       assignDamageAndHorror iid (attrs.ability 1) damage horror
       flipOver iid attrs
       pure t

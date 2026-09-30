@@ -15,13 +15,13 @@ instance RunMessage IveHadWorse2 where
   runMessage msg e@(IveHadWorse2 attrs) = runQueueT $ case msg of
     PlayThisEvent iid (is attrs -> True) -> do
       (damage, horror) <- getDamageAmounts iid
-      let amounts = [("Damage", (0, damage)) | damage > 0] <> [("Horror", (0, horror)) | horror > 0]
-      chooseAmounts iid "Amount of Damage/Horror to cancel" (MaxAmountTarget 2) amounts attrs
+      let amounts = [("$damage", (0, damage)) | damage > 0] <> [("$horror", (0, horror)) | horror > 0]
+      chooseAmounts iid "$label.amountOfDamageOrHorrorToCancel" (MaxAmountTarget 2) amounts attrs
       pure e
     ResolveAmounts iid choices target | isTarget attrs target -> do
       let
-        damageAmount = getChoiceAmount "Damage" choices
-        horrorAmount = getChoiceAmount "Horror" choices
+        damageAmount = getChoiceAmount "$damage" choices
+        horrorAmount = getChoiceAmount "$horror" choices
       pushAll
         $ [CancelDamage iid damageAmount | damageAmount > 0]
         <> [CancelHorror iid horrorAmount | horrorAmount > 0]

@@ -33,6 +33,7 @@ function measure(url: string, done: (sideways: boolean | null) => void) {
 export function useCardFlip<T>(
   image: Readonly<Ref<T>>,
   shouldFlip: (nextImage: T, previousImage: T) => boolean = () => true,
+  onSettled?: (nextImage: T, previousImage: T) => void,
 ) {
   const displayedImage = ref<T>(image.value)
   const flipping = ref(false)
@@ -56,6 +57,7 @@ export function useCardFlip<T>(
       displayedImage.value = nextImage
       flipping.value = false
       flippingDiagonally.value = false
+      onSettled?.(nextImage, previousImage)
       return
     }
 
@@ -67,8 +69,10 @@ export function useCardFlip<T>(
         displayedImage.value = nextImage
       }, 225)
       animationTimer = window.setTimeout(() => {
+        if (token !== flipToken) return
         flipping.value = false
         flippingDiagonally.value = false
+        onSettled?.(nextImage, previousImage)
       }, 450)
     }
 
@@ -84,6 +88,7 @@ export function useCardFlip<T>(
   })
 
   onBeforeUnmount(() => {
+    ++flipToken // invalidate outstanding image measurements too
     window.clearTimeout(imageSwapTimer)
     window.clearTimeout(animationTimer)
   })

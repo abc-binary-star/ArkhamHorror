@@ -41,6 +41,7 @@ data ClientMessage
   | ClientError Text
   | ClientCard Text Value
   | ClientCardOnly PlayerId Text Value
+  | ClientInvestigatorRevelation PlayerId InvestigatorId Value
   | ClientTarot Value
   | ClientShowDiscard InvestigatorId
   | ClientShowUnder InvestigatorId
@@ -86,6 +87,11 @@ sendRevelation :: HasGameLogger m => PlayerId -> Value -> m ()
 sendRevelation pid msg = do
   f <- getLogger
   liftIO $ f (ClientCardOnly pid "Revelation" msg)
+
+sendInvestigatorRevelation :: HasGameLogger m => InvestigatorId -> PlayerId -> Value -> m ()
+sendInvestigatorRevelation iid pid msg = do
+  f <- getLogger
+  liftIO $ f (ClientInvestigatorRevelation pid iid msg)
 
 sendReveal :: HasGameLogger m => Value -> m ()
 sendReveal msg = do

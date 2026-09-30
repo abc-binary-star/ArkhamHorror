@@ -21,6 +21,9 @@ const props = defineProps<{
 const route = useRoute()
 const router = useRouter()
 const openSeats = ref<string[]>([])
+const seatsLoading = ref(false)
+const seatsLoaded = ref(false)
+const seatsError = ref(false)
 const myClaimed = ref<string | null>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
@@ -29,7 +32,7 @@ const isHost = computed(() =>
   getGameLocalStorageItem(props.gameId, 'host') === 'true'
   || localStorage.getItem(`gameHost_${props.gameId}`) === 'true'
 )
-const allClaimed = computed(() => openSeats.value.length === 0)
+const allClaimed = computed(() => seatsLoaded.value && !seatsError.value && openSeats.value.length === 0)
 const investigators = computed(() => Object.values(props.game.investigators))
 const pendingPlayerIds = computed(() =>
   props.game.gameState.tag === 'IsPending' ? props.game.gameState.contents : []
@@ -74,7 +77,17 @@ function isOpen(investigatorId: string) {
 }
 
 async function poll() {
-  try { openSeats.value = await fetchOpenSeats(props.gameId) } catch { /* ignore */ }
+  if (seatsLoading.value) return
+  seatsLoading.value = true
+  try {
+    openSeats.value = await fetchOpenSeats(props.gameId)
+    seatsLoaded.value = true
+    seatsError.value = false
+  } catch {
+    seatsError.value = true
+  } finally {
+    seatsLoading.value = false
+  }
 }
 
 poll()
@@ -82,12 +95,14 @@ const interval = setInterval(poll, 3000)
 onUnmounted(() => clearInterval(interval))
 
 async function claim(investigatorId: string) {
+  if (loading.value || !seatsLoaded.value || seatsError.value) return
   loading.value = true
   error.value = null
   const normalized = investigatorId.startsWith('c') ? investigatorId : `c${investigatorId}`
   try {
     await claimSeat(props.gameId, normalized)
     myClaimed.value = normalized
+    await poll()
   } catch {
     error.value = t('lobby.couldNotClaimSeat')
   } finally {
@@ -145,6 +160,10 @@ async function takeSeat() {
       </div>
     </div>
 
+    <div v-if="!isJoinStyleLobby && (!seatsLoaded || seatsError)" role="status" aria-live="polite">
+      <p>{{ $t(seatsError ? 'playRecovery.seatsFailed' : 'loadState.loading') }}</p>
+      <button v-if="seatsError" type="button" :disabled="seatsLoading" @click="poll">{{ $t('loadState.retry') }}</button>
+    </div>
     <div v-if="investigators.length > 0" class="investigators">
       <InvestigatorRow
         v-for="investigator in investigators"
@@ -153,8 +172,9 @@ async function takeSeat() {
         :game="game"
       >
         <template #back>
+          <span v-if="!seatsLoaded || seatsError" class="status-pill">{{ $t('playRecovery.seatsUnknown') }}</span>
           <button
-            v-if="isOpen(investigator.id) && !hasPlayerClaimed"
+            v-else-if="isOpen(investigator.id) && !hasPlayerClaimed"
             class="claim-btn"
             :disabled="loading"
             @click="claim(investigator.id)"
@@ -180,7 +200,7 @@ async function takeSeat() {
     </div>
 
     <div v-else-if="allClaimed" class="actions">
-      <button class="continue-btn" @click="onContinue" type="button">{{ $t('continue') }}</button>
+      <button class="continue-btn dialog-advance" @click="onContinue" type="button">{{ $t('continue') }}</button>
     </div>
 
   </div>

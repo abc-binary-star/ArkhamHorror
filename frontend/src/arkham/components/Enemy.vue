@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import AttachmentEffects from '@/arkham/components/AttachmentEffects.vue'
 import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { Dropdown } from 'floating-vue'
 import { BugAntIcon } from '@heroicons/vue/20/solid'
@@ -518,6 +519,7 @@ function onDrop(event: DragEvent) {
               @dragover.prevent="dragover"
               @dragenter.prevent
             />
+            <AttachmentEffects v-if="!flipping" :game="game" :host="{ type: 'enemy', id: enemy.id }" />
           </div>
 
           <div class="pool">
@@ -534,9 +536,10 @@ function onDrop(event: DragEvent) {
             <PoolItem
               v-if="!omnipotent && !attached && showDamage"
               type="health"
+              :feedback-key="`enemies:${enemy.id}:Damage`"
               :amount="enemyDamage"
             />
-            <TokenPool :tokens="enemyTokens" />
+            <TokenPool :feedback-entity="`enemies:${enemy.id}`" :tokens="enemyTokens" />
             <PoolItem
               v-if="enemy.cardsUnderneath.length > 0"
               type="card"

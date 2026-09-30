@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import FeedbackHistory from '@/arkham/components/FeedbackHistory.vue'
+import { useVisualFeedback } from '@/arkham/composables/useVisualFeedback'
 import { clientLog } from '@/utils/clientLog'
 import { BookOpen, Zap, Skull, Layers, Archive } from '@lucide/vue'
 import { useMediaQuery } from '@vueuse/core'
@@ -152,6 +154,26 @@ const revealingCards = ref(false)
 const cardRowTitle = ref('')
 
 const mapTranslation = ref({ x: 0, y: 0 })
+const visualFeedback = useVisualFeedback()
+const unregisterMapFocus = visualFeedback?.registerMapFocus(async id => {
+  if (!props.game.locations[id]) return false
+  const scroller = scrollerRef.value
+  const location = scroller?.querySelector<HTMLElement>(`[data-feedback-key="location:${CSS.escape(id)}"]`)
+  if (!scroller || !location || !location.getClientRects().length) return false
+  // This is an explicit Locate click. Preserve zoom and move only the map.
+  scroller.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'instant' })
+  await nextTick()
+  const viewport = scroller.getBoundingClientRect()
+  const target = location.getBoundingClientRect()
+  mapTranslation.value = {
+    x: mapTranslation.value.x + viewport.left + viewport.width / 2 - target.left - target.width / 2,
+    y: mapTranslation.value.y + viewport.top + viewport.height / 2 - target.top - target.height / 2,
+  }
+  await nextTick()
+  return true
+})
+onBeforeUnmount(() => unregisterMapFocus?.())
+
 const mapMoveMode = ref(false)
 const mapResetting = ref(false)
 let stagePan: {
@@ -2851,6 +2873,7 @@ async function addChaosToken(face: any) {
           }"
           @dblclick.passive="toggleZoom"
         >
+          <FeedbackHistory map-only />
           <ScenarioMapControls
             v-model:map-move-mode="mapMoveMode"
             :locations-unlocked="locationsUnlocked"
@@ -4830,6 +4853,8 @@ async function addChaosToken(face: any) {
        as the cap, the cards shrink, and the two frames part. The workbench's
        seam is derived from this same width, so the clamp lives here alone. */
     --shelf-width: clamp(248px, 26vw, 372px);
+    --map-left-overhang: 10px;
+    --workbench-column-gap: 14px;
     grid-template-columns: var(--shelf-width) minmax(0, 1fr);
     /* The workbench is sized by its own contents. A fixed height squeezed the
        in-play and hand rows (both clip with overflow: hidden), which cut the
@@ -4872,7 +4897,7 @@ async function addChaosToken(face: any) {
      meet their neighbours. This must equal that padding — any less and the
      sliver reappears, any more and the map starts eating the frames. */
   .scenario-body.scenario-body--multiseat > .location-cards-container {
-    margin-left: -10px;
+    margin-left: calc(-1 * var(--map-left-overhang));
   }
 
   /* ---- scenario shelf ---- */
@@ -5259,13 +5284,10 @@ async function addChaosToken(face: any) {
     overflow: hidden;
     border-top: 1px solid rgb(205 175 107 / 0.58);
     border-right: 0;
-    /* The character-card column runs from the screen's left edge to the x the
-       card had before, which is also where the workbench's dashed seam belongs:
-       the seam is the map plate's left edge carried down the table, so the
-       column follows the shelf column rather than a hand-tuned clamp. 17px =
-       the 14px column gap + the 3px the map overhangs its own column (the
-       grid's own 12px inset is gone — see .player-cards' padding). */
+    /* Preserve the character card's width; align the threat divider within
+       the column gap without resizing the card or the rest of the workbench. */
     --identity-width: calc(var(--shelf-width) - 17px);
+    --threat-divider-offset: calc(var(--identity-width) + var(--workbench-column-gap) - var(--shelf-width) + var(--map-left-overhang));
     --pile-width: clamp(70px, 5.4vw, 92px);
     --card-width: min(82px, calc((100cqw - var(--identity-width) - 3 * var(--pile-width) - 92px) / 10 - 5px));
     container-type: inline-size;
@@ -5498,7 +5520,7 @@ async function addChaosToken(face: any) {
       'identity threat in-play deck discard'
       'identity threat hand    deck discard';
     align-content: start;
-    column-gap: 14px;
+    column-gap: var(--workbench-column-gap);
     row-gap: 4px;
     flex: 1 1 auto;
     width: 100%;
@@ -5527,7 +5549,7 @@ async function addChaosToken(face: any) {
     flex-direction: column;
     grid-area: identity;
     width: 100%;
-    gap: 4px;
+    gap: 0;
     min-width: 0;
     min-height: 0;
     overflow: hidden;
@@ -6421,11 +6443,11 @@ async function addChaosToken(face: any) {
   .scenario-body.scenario-body--multiseat > #player-zone :deep(.threat-zone) {
     grid-area: threat;
     position: relative;
-    width: 100%;
+    width: calc(100% + var(--threat-divider-offset));
     max-width: none;
     min-height: 0;
-    margin: 0;
-    padding: 0;
+    margin: 0 0 0 calc(-1 * var(--threat-divider-offset));
+    padding: 0 0 0 var(--threat-divider-offset);
     box-sizing: border-box;
     /* This column's leading edge carries the same dashed rule and wash as the
        ones beside the hand and the piles, instead of the solid stroke the narrow

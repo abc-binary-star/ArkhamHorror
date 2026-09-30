@@ -1,10 +1,15 @@
 <script lang="ts" setup>
+import { provideVisualFeedback } from '@/arkham/composables/useVisualFeedback'
+import VisualFeedback from '@/arkham/components/VisualFeedback.vue'
+import TabletopThemePicker from '@/arkham/components/TabletopThemePicker.vue'
+import { useTabletopTheme } from '@/stores/tabletopTheme'
+import '@/styles/tabletop-themes.css'
 import { clientLog, clientError } from '@/utils/clientLog'
 import { isTabletopFrame, TABLETOP_DISMISS, tabletopDocument, useFixedTabletop } from '@/arkham/composables/useFixedTabletop'
 import NavigationBack from '@/components/NavigationBack.vue'
 import { provideNavigationBack } from '@/composables/useNavigationBack'
 import { useGameAudio } from '@/arkham/composables/useGameAudio'
-import { Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight, Monitor, Eye, EyeOff, BookOpen } from '@lucide/vue'
+import { Palette, Music, Volume2, VolumeX, SlidersHorizontal, Minimize, Maximize, PanelRight, Monitor, Eye, EyeOff, BookOpen } from '@lucide/vue'
 import {
   computed,
   markRaw,
@@ -80,6 +85,7 @@ import { deckMetaValue, type ArkhamDbDecklist, type Deck } from '@/arkham/types/
 import { deckTotalXp, investigatorEarnedXp } from '@/arkham/deckXp'
 import { subscribeToDeckSaves } from '@/arkham/deckSaveNotifications'
 import { useDbCardStore } from '@/stores/dbCards'
+import { cardArt } from '@/arkham/cardImages'
 import {
   choicesByPlayerKey,
   choicesSourceByPlayerKey,
@@ -141,11 +147,13 @@ import Prompt from '@/components/Prompt.vue'
 import LoadState from '@/components/LoadState.vue'
 
 interface GameCard {
+  investigator?: string | null
   title: string
   card: Card
 }
 
 interface GameCardOnly {
+  investigator?: string | null
   player: string
   title: string
   card: Card
@@ -309,6 +317,7 @@ interface PlayabilityInfo {
 }
 
 const game = shallowRef<ArkhamGame.Game | null>(null)
+const visualFeedback = provideVisualFeedback()
 
 /* A custom card someone else created shows up in the game payload before this
  * client has its def; refetch the game's custom cards when an unknown one
@@ -399,6 +408,14 @@ watch(
 )
 
 const gameCard = ref<GameCard | null>(null)
+const revealDbCards = useDbCardStore()
+const revelationInvestigatorName = computed(() => {
+  const iid = gameCard.value?.investigator
+  if (!iid) return null
+  const investigator = game.value?.investigators[iid]
+  const dbCard = revealDbCards.getDbCard(cardArt(investigator?.cardCode ?? iid))
+  return dbCard?.name ?? investigator?.name.title ?? null
+})
 const cthulhuDeckCardCodes = new Set([
   '11705',
   '11706',
@@ -431,6 +448,19 @@ navigationBack.register({
   get: () => showLog.value ? { label: t('navigationBack.table'), run: () => { showLog.value = false } } : null,
 })
 const showTools = ref(false)
+const showThemes = ref(false)
+const themeButton = ref<HTMLButtonElement | null>(null)
+const themePanel = ref<HTMLElement | null>(null)
+function closeThemes() {
+  showThemes.value = false
+  themeButton.value?.focus()
+}
+watch(showThemes, async (open) => {
+  if (!open) return
+  showTools.value = false
+  await nextTick()
+  themePanel.value?.querySelector<HTMLButtonElement>('[aria-pressed="true"]')?.focus()
+})
 const showShortcuts = ref(false)
 const isMobileViewport = () =>
   typeof window !== 'undefined' && window.matchMedia('(max-width: 800px)').matches
@@ -440,6 +470,9 @@ const showSidebar = ref(
     : JSON.parse(getGameLocalStorageItem(props.gameId, 'showSidebar') ?? 'true'),
 )
 const socketError = ref(false)
+const socketConnected = ref(false)
+const resyncing = ref(false)
+let connectionRevision = 0
 const error = ref<string | null>(null)
 const solo = ref(false)
 const soundsDisabled = ref(localStorage.getItem('arkhamSoundsDisabled') === 'true')
@@ -455,6 +488,7 @@ const uiLock = ref<boolean>(false)
 const { current: announcedPhase, active: phaseAnnouncement, push: pushAnnouncedPhase, reset: resetPhaseAnnouncement } = usePhaseAnnouncement(
   () => game.value?.phase, uiLock,
 )
+const { theme: tabletopTheme } = storeToRefs(useTabletopTheme())
 const showSettings = ref(false)
 const showHistory = ref(false)
 const processing = ref(false)
@@ -527,6 +561,7 @@ const toolbarHidden = computed(
     toolbarAutoHide.value &&
     !toolbarRevealed.value &&
     !showTools.value &&
+    !showThemes.value &&
     !showSettings.value &&
     !showShortcuts.value &&
     !showLog.value,
@@ -552,9 +587,10 @@ watch(toolbarAutoHide, (active) => {
 // run their own outside-press detection, but in the fixed tabletop the frame
 // cannot see presses on the surrounding table field, so the host replays one
 // (see TABLETOP_DISMISS) and mousedown+click on the document root closes them.
-const POPOUT_KEEP_OPEN_SELECTOR = '.game-tools-drawer, .draggable, .game-bar-tools--primary'
+const POPOUT_KEEP_OPEN_SELECTOR = '.game-tools-drawer, .draggable, .game-bar-tools--primary, .tabletop-theme-panel'
 
 function dismissTabletopPopouts() {
+  showThemes.value = false
   showTools.value = false
   showSettings.value = false
   showShortcuts.value = false
@@ -683,6 +719,7 @@ async function pollChooseDecksState() {
     if (step !== chooseDecksStep) {
       chooseDecksStep = step
       const latest = await fetchGame(props.gameId, props.spectate)
+      visualFeedback.baseline(latest.game)
       game.value = latest.game
       if (latest.playerId && !latest.game.question[playerId.value ?? '']) {
         playerId.value = latest.playerId
@@ -933,6 +970,7 @@ onUnmounted(() => {
 
 let loadSequence = 0
 const loadGame = async () => {
+  visualFeedback.reset()
   const request = ++loadSequence
   const started = performance.now()
   clientLog('game.load.start', { request, spectate: props.spectate, superseding: Boolean(loadController) })
@@ -953,6 +991,7 @@ const loadGame = async () => {
     clientLog('game.load.decoded', { request, elapsedMs: Math.round(performance.now() - started), hasPlayer: Boolean(newPlayerId), mode: multiplayerMode, state: newGame.gameState.tag })
     preloadImages(newGame)
     ;(window as Window & { g?: ArkhamGame.Game }).g = newGame
+    visualFeedback.baseline(newGame)
     game.value = newGame
     solo.value = multiplayerMode === 'Solo'
     // Engage the Epic event this game belongs to even when the URL lacks
@@ -997,6 +1036,7 @@ const gameCardDecoder = JsonDecoder.object<GameCard>(
   {
     title: JsonDecoder.string(),
     card: cardDecoder,
+    investigator: JsonDecoder.optional(JsonDecoder.nullable(JsonDecoder.string())),
   },
   'GameCard',
 )
@@ -1006,12 +1046,16 @@ const gameCardOnlyDecoder = JsonDecoder.object<GameCardOnly>(
     player: JsonDecoder.string(),
     title: JsonDecoder.string(),
     card: cardDecoder,
+    investigator: JsonDecoder.optional(JsonDecoder.nullable(JsonDecoder.string())),
   },
   'GameCard',
 )
 
 // Socket Handling
 const onDisconnect = () => {
+  socketConnected.value = false
+  connectionRevision += 1
+  visualFeedback.reset()
   processing.value = false
   storyAnswerPending.value = false
   if (game.value && oldQuestion.value) {
@@ -1055,9 +1099,10 @@ async function applyGameUpdate(
   const previousGame = game.value
   const apply = async () => {
     if (!isCurrent()) return
+    const presentFeedback = visualFeedback.prepare(game.value, nextGame)
     game.value = nextGame
     storyAnswerPending.value = false
-    await nextTick()
+    await presentFeedback()
   }
   const transitionDocument = document as Document & {
     startViewTransition?: (callback: () => Promise<void>) => { updateCallbackDone: Promise<void> }
@@ -1118,18 +1163,20 @@ async function applyDecodedUpdate(updatedGame: ArkhamGame.Game, isCurrent: () =>
 }
 
 async function recoverFromFailedDecode(err: unknown): Promise<void> {
+  const resumeFeedback = visualFeedback.pause()
   // A dropped update used to be an unhandled rejection: the board silently stayed on
   // the previous state, which looks exactly like "the server ignored me" and invites
   // the player to submit the same action again (#5256). Re-fetch instead.
   console.error('Failed to decode game update, refetching', err)
   await fetchGame(props.gameId, props.spectate)
-    .then(({ game: refetched }) => {
-      applyGameUpdate(refetched, uiLock.value)
+    .then(async ({ game: refetched }) => {
+      await applyGameUpdate(refetched, uiLock.value)
       updateGameLog(refetched.log)
     })
     .catch(() => {
       socketError.value = true
     })
+    .finally(resumeFeedback)
 }
 
 function continueSkipAll() {
@@ -1187,13 +1234,12 @@ const { send, close } = useGameSocket<ServerResult>({
   },
   onDisconnect,
   onConnect: (reconnected) => {
-    socketError.value = false
-    processing.value = false
+    socketConnected.value = true
     // Anything published while the socket was down is gone -- the server drops
     // updates for rooms with no subscriber rather than buffering them. On a
     // RECONNECT (not the initial connect, which the page load already fetched
     // for) pull the current state so we can't sit on a stale board.
-    if (reconnected) void resyncGame()
+    if (reconnected || socketError.value) void resyncGame()
   },
 })
 
@@ -1234,7 +1280,6 @@ const { send, close } = useGameSocket<ServerResult>({
  * self-limiting -- probe a few bytes of current step and only fetch the whole
  * game when it actually advanced, with jitter so clients cannot synchronise.
  */
-let resyncing = false
 
 /*
  * Pull current state over REST and apply it. Called on reconnect, where whatever
@@ -1243,20 +1288,29 @@ let resyncing = false
  * subscriber rather than buffering them.
  */
 async function resyncGame() {
-  if (resyncing) return
-  resyncing = true
+  if (resyncing.value || !socketConnected.value) return
+  resyncing.value = true
+  socketError.value = true
+  const revision = connectionRevision
+  const resumeFeedback = visualFeedback.pause()
   resultEvents.clear()
   resetPhaseAnnouncement()
   try {
     const { game: refetched } = await fetchGame(props.gameId, props.spectate)
-    applyGameUpdate(refetched, uiLock.value)
+    if (revision !== connectionRevision || !socketConnected.value) return
+    await applyGameUpdate(refetched, uiLock.value, () => revision === connectionRevision && socketConnected.value)
+    if (revision !== connectionRevision || !socketConnected.value) return
     updateGameLog(refetched.log)
+    socketError.value = false
     processing.value = false
     storyAnswerPending.value = false
   } catch (e) {
     console.error('Resync after reconnect failed', e)
   } finally {
-    resyncing = false
+    resumeFeedback()
+    resyncing.value = false
+    // A newer connection needs its own snapshot; do not retry ordinary failures.
+    if (revision !== connectionRevision && socketConnected.value) void resyncGame()
   }
 }
 
@@ -1264,8 +1318,14 @@ async function resyncGame() {
 // change if answering ever needs to do more than flip `processing`.
 function sendAnswer(payload: string) {
   if (phaseAnnouncement.value || uiLock.value) return
+  if (socketError.value || resyncing.value) {
+    if (game.value && oldQuestion.value) setGameQuestion(oldQuestion.value)
+    storyAnswerPending.value = false
+    return
+  }
   processing.value = true
-  send(payload)
+  // Never replay an answer buffered while offline against a newer question.
+  if (!send(payload, false)) onDisconnect()
 }
 
 const handleResult = async (result: ServerResult, isCurrent: () => boolean = () => true): Promise<void> => {
@@ -1801,8 +1861,9 @@ const undoLock = ref(false)
  * timeout (see api.ts) so the promise always settles and this `finally` can run.
  */
 async function runUndo(call: (gameId: string) => Promise<void>) {
-  if (undoLock.value) return
+  if (undoLock.value || socketError.value || resyncing.value) return
   undoLock.value = true
+  const resumeFeedback = visualFeedback.pause()
   processing.value = true
   const oldQuestion = game.value?.question
   if (game.value) setGameQuestion({})
@@ -1816,8 +1877,12 @@ async function runUndo(call: (gameId: string) => Promise<void>) {
   } catch (e) {
     processing.value = false
     if (game.value && oldQuestion) setGameQuestion(oldQuestion)
-    console.log(e)
+    console.error(e)
+    toast.error(t('playRecovery.undoFailed'))
+    socketError.value = true
+    void resyncGame()
   } finally {
+    resumeFeedback()
     undoLock.value = false
   }
 }
@@ -1916,7 +1981,7 @@ function isStoryQuestion(question: Question | null | undefined): boolean {
 
 // Callbacks
 async function choose(idx: number) {
-  if (processing.value || phaseAnnouncement.value || uiLock.value) return
+  if (processing.value || socketError.value || resyncing.value || phaseAnnouncement.value || uiLock.value) return
   if (idx !== -1 && game.value && !props.spectate) {
     oldQuestion.value = game.value.question
     const questionVersion = game.value.scenarioSteps
@@ -2022,6 +2087,7 @@ async function chooseAmounts(amounts: Record<string, number>): Promise<void> {
 }
 
 async function update(state: ArkhamGame.Game) {
+  visualFeedback.baseline(state)
   game.value = state
   followPendingUpgradeQuestion(state)
 }
@@ -2065,7 +2131,8 @@ provide(chooseDeckKey, chooseDeck)
 provide(chooseDeckListKey, chooseDeckList)
 provide(sendKey, message => {
   if (phaseAnnouncement.value || uiLock.value) return
-  send(message)
+  if (socketError.value || resyncing.value) return
+  if (!send(message, false)) onDisconnect()
 })
 provide(choosePaymentAmountsKey, choosePaymentAmounts)
 provide(chooseAmountsKey, chooseAmounts)
@@ -2258,6 +2325,7 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <VisualFeedback />
   <div v-if="submittingBug" class="column page-container">
     <div class="page-content column">
       <h2 class="title">{{ $t('gameBar.bugSubmittingTitle') }}</h2>
@@ -2270,6 +2338,7 @@ onUnmounted(() => {
   <LoadState v-else-if="!ready" />
   <div
     class="tabletop-shell"
+    :data-tabletop-theme="tabletopTheme"
     :class="{ 'tabletop-shell--toolbar-hidden': toolbarHidden, 'tabletop-shell--fixed': fixedTabletopFrame }"
     v-else-if="ready && game && playerId"
     :style="{ '--epic-bar-height': epicBarHeight + 'px' }"
@@ -2449,9 +2518,10 @@ onUnmounted(() => {
     </Draggable>
     <div v-if="socketError" class="socketWarning">
       <!-- frontend/src/locales/en/gameBoard/base.json -->
-      <div class="socket-warning-card">
+      <div class="socket-warning-card" role="status" aria-live="polite">
         <span class="status-seal status-seal--waiting" aria-hidden="true"></span>
-        <p>{{ $t('outOfSyncHint') }}</p>
+        <p>{{ $t(resyncing ? 'playRecovery.syncing' : socketConnected ? 'playRecovery.syncFailed' : 'playRecovery.reconnecting') }}</p>
+        <button v-if="socketConnected && !resyncing" type="button" @click="resyncGame">{{ $t('loadState.retry') }}</button>
       </div>
     </div>
     <aside v-if="showTools" class="game-tools-drawer" :aria-label="$t('gameBar.tabletopTools')">
@@ -2556,6 +2626,16 @@ onUnmounted(() => {
         </template>
       </div>
     </aside>
+    <section
+      v-if="showThemes"
+      id="tabletop-theme-panel"
+      ref="themePanel"
+      class="tabletop-theme-panel"
+      :aria-label="$t('gameBar.themeTitle')"
+      @keydown.esc.stop.prevent="closeThemes"
+    >
+      <TabletopThemePicker @select="closeThemes" />
+    </section>
     <div class="game-bar">
       <NavigationBack />
       <div class="game-bar-item game-bar-item--sounds">
@@ -2586,12 +2666,25 @@ onUnmounted(() => {
       </div>
       <div class="game-bar-tools game-bar-tools--primary">
         <button
+          id="tabletop-theme-button"
+          ref="themeButton"
+          type="button"
+          :class="{ active: showThemes }"
+          :aria-expanded="showThemes"
+          aria-controls="tabletop-theme-panel"
+          @click="showThemes = !showThemes"
+          @keydown.esc.stop.prevent="closeThemes"
+        >
+          <Palette aria-hidden="true" />
+          <span>{{ $t('gameBar.themeTitle') }}</span>
+        </button>
+        <button
           type="button"
           :class="{ active: showTools }"
           v-tooltip="$t('gameBar.tabletopTools')"
           :aria-label="$t('gameBar.tabletopTools')"
           :aria-expanded="showTools"
-          @click="showTools = !showTools"
+          @click="showTools = !showTools; showThemes = false"
         >
           <SlidersHorizontal aria-hidden="true" />
         </button>
@@ -2701,7 +2794,7 @@ onUnmounted(() => {
                 <strong>driven insane</strong>.
               </p>
               <div class="the-silence-modal__actions">
-                <button type="button" class="the-silence-modal__confirm" @click="continueUI">
+                <button type="button" class="the-silence-modal__confirm dialog-advance" @click="continueUI">
                   {{ $t('ok') }}
                 </button>
               </div>
@@ -2715,6 +2808,9 @@ onUnmounted(() => {
         >
           <div class="revelation-container">
             <h2>{{ format(gameCard.title) }}</h2>
+            <p v-if="revelationInvestigatorName" class="revelation-investigator">
+              {{ $t('gameBar.revelationInvestigator', { name: revelationInvestigatorName }) }}
+            </p>
             <div class="revelation-card-container">
               <div
                 class="revelation-card"
@@ -2737,7 +2833,7 @@ onUnmounted(() => {
                 <img v-else :src="imgsrc('backs/back_encounter.jpg')" class="card back" />
               </div>
               <span v-if="isCthulhuDeckReveal" class="cthulhu-revelation-hint">Click to enact</span>
-              <button v-else @click="continueUI">{{ $t('ok') }}</button>
+              <button v-else class="dialog-advance" @click="continueUI">{{ $t('ok') }}</button>
             </div>
           </div>
         </div>
@@ -2798,7 +2894,7 @@ onUnmounted(() => {
                   <img :src="imgsrc('tarot/back.jpg')" class="card back" />
                 </div>
               </div>
-              <button @click="continueUI">{{ $t('ok') }}</button>
+              <button class="dialog-advance" @click="continueUI">{{ $t('ok') }}</button>
             </div>
           </div>
         </div>
@@ -3626,6 +3722,17 @@ header {
   }
 }
 
+.revelation-investigator {
+  margin: 0;
+  max-width: min(90vw, 420px);
+  color: #ead9ae;
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  text-shadow: 0 2px 6px #000;
+}
+
 .revelation-container {
   display: flex;
   flex-direction: column;
@@ -4024,6 +4131,13 @@ header {
     gap: 6px;
   }
   justify-content: flex-start;
+}
+
+/* Keep navigation icons frameless, including the shared back button and
+   the inset rim applied globally to pressed audio/fullscreen controls. */
+.game-bar :deep(button) {
+  border: 0 !important;
+  box-shadow: none !important;
 }
 
 .game-bar-item.active,
@@ -4492,6 +4606,33 @@ dialog {
 
 /* The game bar is deliberately quiet; infrequent actions live in one drawer so
    they cannot compete with the board or cover the phase rail. */
+.tabletop-theme-panel {
+  position: fixed;
+  left: 12px;
+  bottom: calc(var(--game-bar-height) + env(safe-area-inset-bottom) + 8px);
+  z-index: var(--z-index-199);
+  width: min(360px, calc(100vw - 24px));
+  max-height: calc(100dvh - var(--game-bar-height) - 32px);
+  overflow-y: auto;
+  padding: 16px;
+  box-sizing: border-box;
+  color: #e9e0d6;
+  --text: #e9e0d6;
+  background: linear-gradient(rgb(8 18 18 / 0.55), rgb(8 18 18 / 0.7)),
+    var(--theme-chrome, url('/assets/veiled-harbour/T05-底部行动托盘纹理-v1.avif')) center / cover;
+  border: 1px solid var(--theme-accent, #c5ad80);
+  border-radius: 5px;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.45);
+}
+.tabletop-theme-panel :deep(.theme-picker) { margin-bottom: 0; }
+@media (min-width: 801px) {
+  .tabletop-theme-panel {
+    top: calc(var(--game-bar-height) + 8px);
+    bottom: auto;
+    left: 100px;
+  }
+}
+
 .game-tools-drawer {
   position: fixed;
   top: 0;

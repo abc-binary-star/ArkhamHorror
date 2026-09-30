@@ -69,6 +69,7 @@ const TOKEN_CONFIG: Partial<Record<Token, { type: string; tooltip?: string }>> =
 }
 
 const props = withDefaults(defineProps<{
+  feedbackEntity?: string
   tokens?: Tokens
   order?: readonly Token[]
   overrides?: Partial<Record<Token, TokenPoolOverride>>
@@ -80,6 +81,9 @@ const props = withDefaults(defineProps<{
 })
 
 const emit = defineEmits<{ choose: [key: string] }>()
+const feedbackAliases: Record<string, string> = { health: 'Damage', sanity: 'Horror' }
+const feedbackKey = (item: TokenPoolItem) => props.feedbackEntity
+  ? `${props.feedbackEntity}:${feedbackAliases[item.key] ?? item.key}` : undefined
 
 const tokenKeys = computed<Token[]>(() => {
   if (props.order) return [...props.order]
@@ -286,6 +290,7 @@ onUnmounted(() => {
     <PoolItem
       v-for="(item, i) in items"
       :key="item.key"
+      :feedback-key="feedbackKey(item)"
       :type="item.type"
       :amount="item.amount"
       :tooltip="item.tooltip"
@@ -316,6 +321,7 @@ onUnmounted(() => {
       <PoolItem
         v-for="(item, i) in items"
         :key="item.key"
+        :feedback-key="feedbackKey(item)"
         :type="item.type"
         :amount="item.amount"
         :tooltip="item.tooltip"

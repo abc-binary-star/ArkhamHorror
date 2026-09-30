@@ -25,7 +25,7 @@ instance RunMessage ThoroughInquiry where
         _ ->
           chooseAmounts
             iid
-            "Cards each player should draw"
+            "$label.cardsEachPlayerShouldDraw"
             (TotalAmountTarget 5)
             (map (\(_, name) -> (toTitle name, (0, 5))) investigators)
             attrs

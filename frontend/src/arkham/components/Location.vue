@@ -1,6 +1,7 @@
 <script lang="ts" setup>
+import AttachmentEffects from '@/arkham/components/AttachmentEffects.vue'
 import { useI18n } from 'vue-i18n'
-import { onBeforeUnmount, ComputedRef, defineAsyncComponent, ref, computed, watch, nextTick } from 'vue'
+import { onMounted, onBeforeUnmount, ComputedRef, defineAsyncComponent, ref, computed, watch, nextTick } from 'vue'
 import { useDebug } from '@/arkham/debug'
 import { Game } from '@/arkham/types/Game'
 import { imgsrc } from '@/arkham/helpers'
@@ -9,6 +10,7 @@ import { keyToId } from '@/arkham/types/Key'
 import { useGameChoices, useStickyChoicesSource } from '@/arkham/composables/useGameChoices'
 import { proxyOriginId } from '@/arkham/types/Source'
 import { useGameIndexes } from '@/arkham/composables/useGameIndexes'
+import { useVisualFeedback } from '@/arkham/composables/useVisualFeedback'
 import { useCardFlip } from '@/arkham/composables/useCardFlip'
 import { AbilityLabel, AbilityMessage, Message, MessageType } from '@/arkham/types/Message'
 import { actionsToList } from '@/arkham/types/Action'
@@ -78,8 +80,13 @@ const image = computed(() => {
   if (enemyLocation) return cardImage(cardCode)
   return cardImage(cardCode, revealed ? '' : 'b')
 })
-const { displayedImage, flipping } = useCardFlip(image)
+const visualFeedback = useVisualFeedback()
+const { displayedImage, flipping } = useCardFlip(image,
+  () => !!visualFeedback?.transitionAllowed.value && settings.visualExperience !== 'simple' && settings.extraAnimations,
+  () => { if (props.location.revealed) void visualFeedback?.completeReveal(props.location.id) },
+)
 
+onMounted(() => { if (props.location.revealed) void visualFeedback?.completeReveal(props.location.id) })
 const id = computed(() => props.location.id)
 const isExhausted = computed(() => props.location.enemyLocation && props.location.exhausted)
 const choices = useGameChoices(
@@ -657,6 +664,7 @@ const hasAnyLocationVehicleAssets = computed(() =>
 
           <div
             ref="innerFrame"
+            :data-feedback-key="`location:${location.id}`"
             class="card-frame-inner"
             :class="{
               highlighted,
@@ -684,6 +692,7 @@ const hasAnyLocationVehicleAssets = computed(() =>
               ></div>
               <img
                 :data-id="id"
+                :data-feedback-key="location.revealed && !flipping ? `revealed:${location.id}` : undefined"
                 class="card card--locations"
                 :src="displayedImage"
                 :class="{
@@ -700,6 +709,7 @@ const hasAnyLocationVehicleAssets = computed(() =>
           </div>
 
           <FlameWrap v-if="onFire" class="on-fire" :target="innerFrame" :options="fireOptions" />
+          <AttachmentEffects v-if="!flipping" :game="game" :host="{ type: 'location', id: location.id }" :target="innerFrame" :has-fire="onFire" />
 
           <div v-if="!flipping && cluesAroundPositions.length > 0" class="clues-around">
             <img
@@ -715,7 +725,7 @@ const hasAnyLocationVehicleAssets = computed(() =>
             class="clues pool location-pool"
             v-if="!flipping && ((clues ?? 0) > 0 || displayedFloodLevel)"
           >
-            <PoolItem v-if="clues && clues > 0" type="clue" :amount="clues" />
+            <PoolItem v-if="clues && clues > 0" type="clue" :amount="clues" :feedback-key="`locations:${location.id}:Clue`" />
             <img
               v-if="displayedFloodLevel"
               :src="displayedFloodLevel"
@@ -734,7 +744,7 @@ const hasAnyLocationVehicleAssets = computed(() =>
               @choose="choose"
             />
             <Seal v-for="seal in seals" :key="seal.sealKind" :seal="seal" />
-            <TokenPool :tokens="locationTokens" />
+            <TokenPool :feedback-entity="`locations:${location.id}`" :tokens="locationTokens" />
             <PoolItem v-if="breaches > 0" type="resource" :amount="breaches" />
             <PoolItem
               v-if="location.brazier && location.brazier === 'Lit'"

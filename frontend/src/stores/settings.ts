@@ -46,6 +46,14 @@ function loadVariants(): string[] {
 
 export const useSettings = defineStore("settings", () => {
   const gameId = ref<string | null>(null)
+  const savedExperience = localStorage.getItem('arkhamVisualExperience')
+  const visualExperience = ref<'simple' | 'standard' | 'atmosphere'>(
+    savedExperience === 'simple' || savedExperience === 'atmosphere' ? savedExperience : 'standard',
+  )
+  function setVisualExperience(value: 'simple' | 'standard' | 'atmosphere') {
+    visualExperience.value = value
+    localStorage.setItem('arkhamVisualExperience', value)
+  }
   const splitView = ref(false)
   const useVariants = ref<string[]>(loadVariants())
 
@@ -152,6 +160,8 @@ export const useSettings = defineStore("settings", () => {
     localStorage.setItem(AUTO_HIDE_TOOLBAR_KEY, String(enabled))
   }
   return {
+    visualExperience,
+    setVisualExperience,
     useVariants,
     setUseVariants,
     splitView,

@@ -39,9 +39,9 @@ instance RunMessage GhastlyRevelation where
         chooseMsg <-
           chooseAmounts
             player
-            "Clues to give"
+            "$label.cluesToGive"
             (MaxAmountTarget clues)
-            [("Clues", (0, clues))]
+            [("$clues", (0, clues))]
             (ProxyTarget (toTarget attrs) (InvestigatorTarget iid'))
         pure $ targetLabel iid' [chooseMsg]
 
@@ -49,9 +49,9 @@ instance RunMessage GhastlyRevelation where
         chooseMsg <-
           chooseAmounts
             player
-            "Clues to give"
+            "$label.cluesToGive"
             (MaxAmountTarget clues)
-            [("Clues", (0, clues))]
+            [("$clues", (0, clues))]
             (ProxyTarget (toTarget attrs) (LocationTarget lid))
         pure $ targetLabel lid [chooseMsg]
 
@@ -62,7 +62,7 @@ instance RunMessage GhastlyRevelation where
           ]
         <> [Label "$cards.label.ghastlyRevelation.placeClues" [chooseOrRunOne player choices2]]
       pure e
-    ResolveAmounts iid (getChoiceAmount "Clues" -> n) (ProxyTarget (isTarget attrs -> True) target) ->
+    ResolveAmounts iid (getChoiceAmount "$clues" -> n) (ProxyTarget (isTarget attrs -> True) target) ->
       do
         pushAll
           [ InvestigatorSpendClues iid n

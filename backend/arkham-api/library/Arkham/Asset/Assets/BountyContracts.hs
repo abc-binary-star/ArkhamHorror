@@ -40,13 +40,13 @@ instance RunMessage BountyContracts where
       pushM
         $ chooseAmounts
           player
-          "Number of bounties to place"
+          "$label.numberOfBountiesToPlace"
           (MaxAmountTarget maxAmount)
-          [("Bounties", (1, maxAmount))]
+          [("$bounties", (1, maxAmount))]
           (ProxyTarget (toTarget attrs) (toTarget enemy))
       pure a
     ResolveAmounts _ choices (ProxyTarget (isTarget attrs -> True) (EnemyTarget enemy)) -> do
-      let bounties = getChoiceAmount "Bounties" choices
+      let bounties = getChoiceAmount "$bounties" choices
       pushAll
         [ SpendUses (attrs.ability 1) (toTarget attrs) Bounty bounties
         , PlaceTokens (attrs.ability 1) (toTarget enemy) Token.Bounty bounties

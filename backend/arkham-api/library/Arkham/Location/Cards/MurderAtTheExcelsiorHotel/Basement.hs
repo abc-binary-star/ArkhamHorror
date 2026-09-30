@@ -3,6 +3,7 @@ module Arkham.Location.Cards.MurderAtTheExcelsiorHotel.Basement (basement) where
 import Arkham.Ability
 import Arkham.Asset.Cards qualified as Assets
 import Arkham.GameValue
+import Arkham.I18n
 import Arkham.Investigator.Types (Field (..))
 import Arkham.Location.CardDefs.MurderAtTheExcelsiorHotel qualified as Cards
 import Arkham.Location.Import.Lifted
@@ -50,9 +51,9 @@ instance RunMessage Basement where
 
       unless (null iids || isNothing tomeOfRituals) $ do
         named <- traverse (\(iid', x) -> (,x) <$> field InvestigatorName iid') iids
-        chooseAmounts
+        withI18n $ cardNameVar Assets.tomeOfRituals $ chooseAmounts
           iid
-          "number of clues to move to Tome of Rituals"
+          ("$" <> labelKey "numberOfCluesToMoveTo")
           (MinAmountTarget 0)
           (map (\(name, x) -> (toTitle name, (0, x))) named)
           attrs

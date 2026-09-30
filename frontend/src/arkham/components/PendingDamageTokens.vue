@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n'
 import { computed, ref, watch, onUnmounted } from 'vue'
 import type { Game } from '@/arkham/types/Game'
 import * as ArkhamGame from '@/arkham/types/Game'
@@ -9,6 +10,7 @@ const props = defineProps<{
   playerId: string
 }>()
 
+const { t } = useI18n()
 const pending = computed(() => ArkhamGame.damageAssignmentTokens(props.game, props.playerId))
 
 // Between assignment steps the client briefly clears `question` (game "lock"),
@@ -37,8 +39,9 @@ const horrorToken = imgsrc('tokens/horror-token.png')
     <div
       v-if="tokens && (tokens.damage > 0 || tokens.horror > 0)"
       class="pending-damage-tokens"
-      v-tooltip="'Tokens to assign'"
+      :aria-label="t('visualFeedback.toAssign')"
     >
+      <span class="pending-label">{{ t('visualFeedback.toAssign') }}</span>
       <span v-if="tokens.damage > 0" class="token-entry">
         <img :src="damageToken" class="token" />
         <span class="count">{{ tokens.damage }}</span>

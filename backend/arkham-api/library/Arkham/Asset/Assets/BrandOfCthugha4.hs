@@ -38,9 +38,9 @@ instance RunMessage BrandOfCthugha4 where
           push $ ResolveAmounts iid [(charges, 1)] (toTarget attrs)
         (min 3 -> x) ->
           pushM
-            $ chooseAmounts player "Amount of Charges to Spend" (MaxAmountTarget x) [("Charges", (1, x))] attrs
+            $ chooseAmounts player "$label.amountOfChargesToSpend" (MaxAmountTarget x) [("$charge", (1, x))] attrs
       pure a
-    ResolveAmounts iid (getChoiceAmount "Charges" -> n) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$charge" -> n) (isTarget attrs -> True) -> do
       withSkillTest \sid -> do
         enabled <- skillTestModifier sid (attrs.ability 1) iid (DamageDealt n)
         pushAll

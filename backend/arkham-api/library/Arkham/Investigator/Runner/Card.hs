@@ -856,7 +856,7 @@ handleDoDrawCardsV2 a@InvestigatorAttrs {..} iid cardDraw = do
 
 handleInvestigatorDrewPlayerCardFrom a@InvestigatorAttrs {..} iid card mDeck msg = do
   hasForesight <- hasModifier iid (Foresight $ toTitle card)
-  let uiRevelation = getPlayer iid >>= (`sendRevelation` (toJSON $ toCard card))
+  let uiRevelation = getPlayer iid >>= (\pid -> sendInvestigatorRevelation iid pid (toJSON $ toCard card))
   -- Non-treachery revelation cards are shown when their CardIdSource
   -- revelation resolves. Showing them here as well makes the client display
   -- the same revelation twice during a normal draw. Player treacheries go

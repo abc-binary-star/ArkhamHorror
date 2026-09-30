@@ -28,9 +28,9 @@ instance HasAbilities CrystalPendulum where
 instance RunMessage CrystalPendulum where
   runMessage msg a@(CrystalPendulum attrs) = runQueueT $ case msg of
     UseThisAbility iid (isSource attrs -> True) 1 -> do
-      chooseAmounts iid "Name a number" (MaxAmountTarget 1000) [("Number", (0, 1000))] attrs
+      chooseAmounts iid "$label.nameANumber" (MaxAmountTarget 1000) [("$number", (0, 1000))] attrs
       pure a
-    ResolveAmounts iid (getChoiceAmount "Number" -> n) (isTarget attrs -> True) -> do
+    ResolveAmounts iid (getChoiceAmount "$number" -> n) (isTarget attrs -> True) -> do
       createCardEffect Cards.crystalPendulum (effectInt n) (attrs.ability 1) iid
       pure a
     _ -> CrystalPendulum <$> liftRunMessage msg attrs

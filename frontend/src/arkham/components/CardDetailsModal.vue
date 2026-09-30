@@ -83,7 +83,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
             v-tooltip="$t('cardDetails.next')"
             @click="emit('next')"
           >&#9660;</button>
-          <button class="close" type="button" :aria-label="$t('cardDetails.close')" @click="emit('close')">&times;</button>
+          <button class="close dialog-chrome-action" type="button" :aria-label="$t('cardDetails.close')" @click="emit('close')">&times;</button>
         </div>
 
         <div class="faces">

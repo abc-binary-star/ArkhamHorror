@@ -19,17 +19,17 @@ instance RunMessage YouveHadWorse4 where
       let iid = damagedInvestigator attrs.windows
       resources <- iid.resources
       (damage, horror) <- getDamageAmounts iid
-      let amounts = [("Damage", (0, damage)) | damage > 0] <> [("Horror", (0, horror)) | horror > 0]
+      let amounts = [("$damage", (0, damage)) | damage > 0] <> [("$horror", (0, horror)) | horror > 0]
       chooseAmounts
         iid
-        "Amount of Damage/Horror to cancel"
+        "$label.amountOfDamageOrHorrorToCancel"
         (MaxAmountTarget $ min 5 resources)
         amounts
         attrs
       pure e
     ResolveAmounts iid choices (isTarget attrs -> True) -> do
-      let damageAmount = getChoiceAmount "Damage" choices
-      let horrorAmount = getChoiceAmount "Horror" choices
+      let damageAmount = getChoiceAmount "$damage" choices
+      let horrorAmount = getChoiceAmount "$horror" choices
       when (iid /= attrs.owner) do
         moveTokens attrs iid attrs.owner #resource (damageAmount + horrorAmount)
       pushAll
