@@ -1974,7 +1974,6 @@ runGameMessage msg g = case msg of
       WindowAsk ws' _ _ -> ws == ws'
       _ -> False
 
-<<<<<<< HEAD
     -- Resolve one currently legal automatic trigger, then rebuild every seat's
     -- offers. Never execute a stale list: the first ability may invalidate the
     -- next. Costs, targets and nested windows still use the normal queue.
