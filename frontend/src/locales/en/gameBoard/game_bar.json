@@ -100,7 +100,7 @@
     "viewSettingSoundsTitle": "Sounds",
     "viewSettingSounds": "Play sound effects in this browser.",
     "viewSettingExtraAnimationsTitle": "Extra Animations",
-    "viewSettingExtraAnimations": "Decorative effects like burning locations and the Cosmic Emissary beams. Never affects anything you need to see to play.",
+    "viewSettingExtraAnimations": "Decorative effects like act and agenda entrance cutins, burning locations and the Cosmic Emissary beams. Never affects anything you need to see to play.",
     "viewSettingExtraAnimationsReducedMotion": "Currently off anyway, because this device asks for reduced motion.",
     "viewSettingScenarioAnimationsTitle": "Extra Animations (this scenario)",
     "viewSettingScenarioAnimations": "Override the setting above for this game only.",

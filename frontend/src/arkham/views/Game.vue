@@ -69,6 +69,10 @@ import { useBgm } from '@/arkham/composables/useBgm'
 import { useEventTimer } from '@/arkham/composables/useEventTimer'
 import { useFocusLight } from '@/arkham/composables/useFocusLight'
 import { usePhaseAnnouncement } from '@/arkham/composables/usePhaseAnnouncement'
+import { useScenarioCutins } from '@/arkham/composables/useScenarioCutins'
+import ScenarioCutin from '@/arkham/components/ScenarioCutin.vue'
+import EnemyEntrance from '@/arkham/components/EnemyEntrance.vue'
+import enemyEntranceArtwork from '@/arkham/data/enemyEntrances.json'
 import { useGameSocket } from '@/arkham/composables/useGameSocket'
 import { orderedGameEvents } from '@/arkham/composables/orderedGameEvents'
 import { useImagePreloader } from '@/arkham/composables/useImagePreloader'
@@ -485,9 +489,21 @@ watch(showOtherPlayersHands, (v) => {
 })
 const tarotCards = ref<TarotCard[]>([])
 const uiLock = ref<boolean>(false)
-const { current: announcedPhase, active: phaseAnnouncement, push: pushAnnouncedPhase, reset: resetPhaseAnnouncement } = usePhaseAnnouncement(
-  () => game.value?.phase, uiLock,
+const cutinSettings = useSettings()
+const scenarioCutins = useScenarioCutins(
+  () => game.value,
+  () => cutinSettings.extraAnimations && ready.value && !socketError.value && !resyncing.value,
+  uiLock,
+  enemyEntranceArtwork,
 )
+const { current: currentCutin, active: cutinActive } = scenarioCutins
+const scenarioCutin = computed(() => currentCutin.value?.kind === 'enemy' ? null : currentCutin.value)
+const enemyEntrance = computed(() => currentCutin.value?.kind === 'enemy' ? currentCutin.value : null)
+const { current: announcedPhase, active: phaseBannerActive, push: pushAnnouncedPhase, reset: resetPhaseAnnouncement } = usePhaseAnnouncement(
+  () => game.value?.phase, computed(() => uiLock.value || cutinActive.value),
+)
+// Both presentations reserve the existing choice/dialog and ordered-event barrier.
+const phaseAnnouncement = computed(() => phaseBannerActive.value || cutinActive.value)
 const { theme: tabletopTheme } = storeToRefs(useTabletopTheme())
 const showSettings = ref(false)
 const showHistory = ref(false)
@@ -1294,6 +1310,7 @@ async function resyncGame() {
   const revision = connectionRevision
   const resumeFeedback = visualFeedback.pause()
   resultEvents.clear()
+  scenarioCutins.reset()
   resetPhaseAnnouncement()
   try {
     const { game: refetched } = await fetchGame(props.gameId, props.spectate)
@@ -1868,6 +1885,7 @@ async function runUndo(call: (gameId: string) => Promise<void>) {
   const oldQuestion = game.value?.question
   if (game.value) setGameQuestion({})
   resultEvents.clear()
+  scenarioCutins.reset()
   resetPhaseAnnouncement()
   gameCard.value = null
   tarotCards.value = []
@@ -2326,6 +2344,18 @@ onUnmounted(() => {
 
 <template>
   <VisualFeedback />
+  <EnemyEntrance
+    :entrance="enemyEntrance"
+    @skip="scenarioCutins.skip"
+    @ready="scenarioCutins.imageReady"
+    @failed="scenarioCutins.imageFailed"
+  />
+  <ScenarioCutin
+    :cutin="scenarioCutin"
+    @skip="scenarioCutins.skip"
+    @ready="scenarioCutins.imageReady"
+    @failed="scenarioCutins.imageFailed"
+  />
   <div v-if="submittingBug" class="column page-container">
     <div class="page-content column">
       <h2 class="title">{{ $t('gameBar.bugSubmittingTitle') }}</h2>

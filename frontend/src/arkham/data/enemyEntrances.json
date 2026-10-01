@@ -1,0 +1,197 @@
+[
+  {
+    "code": "12114",
+    "scenario": "12105",
+    "title": {
+      "zh": "烈焰仆从",
+      "en": "Servant of Flame"
+    },
+    "subtitle": {
+      "zh": "暴怒肆虐",
+      "en": "Raging Fury"
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/servant-of-flame.png",
+    "tone": "flame",
+    "boss": true
+  },
+  {
+    "code": "12138",
+    "scenario": "12133",
+    "title": {
+      "zh": "烈焰仆从",
+      "en": "Servant of Flame"
+    },
+    "subtitle": {
+      "zh": "一路奔逃",
+      "en": "On the Run"
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/servant-of-flame.png",
+    "tone": "flame",
+    "boss": true
+  },
+  {
+    "code": "12139",
+    "scenario": "12133",
+    "title": {
+      "zh": "大卫·伦费尔德",
+      "en": "David Renfield"
+    },
+    "subtitle": {
+      "zh": "幻灭末世学家",
+      "en": "Disillusioned Eschatologist"
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/david-renfield.png",
+    "tone": "occult",
+    "boss": false
+  },
+  {
+    "code": "12140",
+    "scenario": "12133",
+    "title": {
+      "zh": "柯妮丽娅·阿克里",
+      "en": "Cornelia Akely"
+    },
+    "subtitle": {
+      "zh": "疲惫的领班",
+      "en": "Exhausted Supervisor"
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/cornelia-akely.png",
+    "tone": "noir",
+    "boss": false
+  },
+  {
+    "code": "12141",
+    "scenario": "12133",
+    "title": {
+      "zh": "内奥米·欧巴尼恩",
+      "en": "Naomi O'Bannion"
+    },
+    "subtitle": {
+      "zh": "地头蛇",
+      "en": "Runs This Town"
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/naomi-obannion.png",
+    "tone": "noir",
+    "boss": false
+  },
+  {
+    "code": "12142",
+    "scenario": "12133",
+    "title": {
+      "zh": "厄尔·门罗警司",
+      "en": "Sgt. Earl Monroe"
+    },
+    "subtitle": {
+      "zh": "腐败的警察",
+      "en": "Dirty Cop"
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/earl-monroe.png",
+    "tone": "noir",
+    "boss": false
+  },
+  {
+    "code": "12143",
+    "scenario": "12133",
+    "title": {
+      "zh": "阿比盖尔·福尔曼",
+      "en": "Abigail Foreman"
+    },
+    "subtitle": {
+      "zh": "谨慎的图书馆员",
+      "en": "Wary Librarian"
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/abigail-foreman.png",
+    "tone": "occult",
+    "boss": false
+  },
+  {
+    "code": "12144",
+    "scenario": "12133",
+    "title": {
+      "zh": "柳玛丽",
+      "en": "Margaret Liu"
+    },
+    "subtitle": {
+      "zh": "摄魂歌手",
+      "en": "Beguiling Lounge Singer"
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/margaret-liu.png",
+    "tone": "noir",
+    "boss": false
+  },
+  {
+    "code": "12177",
+    "scenario": "12168",
+    "title": {
+      "zh": "女王的骑士",
+      "en": "Queen's Knight"
+    },
+    "subtitle": {
+      "zh": "",
+      "en": ""
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/queens-knight.png",
+    "tone": "flame",
+    "boss": false
+  },
+  {
+    "code": "12178",
+    "scenario": "12168",
+    "title": {
+      "zh": "烈焰兆使",
+      "en": "Herald of Flame"
+    },
+    "subtitle": {
+      "zh": "",
+      "en": ""
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/herald-of-flame.png",
+    "tone": "flame",
+    "boss": false
+  },
+  {
+    "code": "12179",
+    "scenario": "12168",
+    "title": {
+      "zh": "俄洛寇斯",
+      "en": "Elokoss"
+    },
+    "subtitle": {
+      "zh": "余烬黯淡",
+      "en": "Faint Embers"
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/elokoss.png",
+    "tone": "ash",
+    "boss": true
+  },
+  {
+    "code": "12179b",
+    "scenario": "12168",
+    "title": {
+      "zh": "俄洛寇斯",
+      "en": "Elokoss"
+    },
+    "subtitle": {
+      "zh": "烈焰之母",
+      "en": "Mother of Flame"
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/elokoss.png",
+    "tone": "flame",
+    "boss": true
+  },
+  {
+    "code": "12180",
+    "scenario": "12168",
+    "title": {
+      "zh": "烈焰仆从",
+      "en": "Servant of Flame"
+    },
+    "subtitle": {
+      "zh": "自愿牺牲",
+      "en": "A Willing Sacrifice"
+    },
+    "image": "/assets/enemy-entrances/brethren-of-ash/servant-of-flame.png",
+    "tone": "flame",
+    "boss": true
+  }
+]

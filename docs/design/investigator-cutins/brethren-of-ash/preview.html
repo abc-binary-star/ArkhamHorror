@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>灰烬兄弟会 · 调查员特写设计</title>
+<style>
+:root{color-scheme:dark;--ink:#ece3d2;--muted:#a69d91;--accent:#77b8e0}
+*{box-sizing:border-box}body{margin:0;background:#121517;color:var(--ink);font-family:system-ui,-apple-system,"PingFang SC",sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:5px}
+main{max-width:1220px;margin:auto;padding:40px 30px}header{display:flex;align-items:baseline;justify-content:space-between;gap:24px;border-bottom:1px solid #343637;padding-bottom:22px}
+h1{font-family:Georgia,"Songti SC",serif;font-size:29px;margin:0;font-weight:600}header p{color:var(--muted);font-size:13px;margin:0}
+.roster{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:24px 0}
+.person{border:1px solid #3b3e3e;background:#1c2021;text-align:left;padding:0;overflow:hidden;border-radius:4px}
+.person[aria-pressed=true]{border-color:var(--accent);box-shadow:inset 0 -2px var(--accent)}
+.person img{width:100%;height:110px;object-fit:cover;object-position:50% 20%;filter:saturate(.72)}
+.person span{display:block;padding:11px 12px;font-size:13px;white-space:nowrap}.person small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+.controls{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:18px 0 10px}
+.controls h2{font-family:Georgia,"Songti SC",serif;font-size:23px;margin:0}
+.controls nav{display:flex;gap:9px;flex-wrap:wrap}.controls button{padding:10px 17px;border:1px solid #555851;background:#242828;border-radius:3px;font-size:13px}
+.controls button:hover{border-color:var(--accent);background:#303535}
+#trigger{font-size:13px;color:var(--muted);line-height:1.7;min-height:25px;margin:8px 0 22px}
+.table{height:370px;position:relative;border:1px solid #393b36;border-radius:6px;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,#293333,#151b1d 70%);box-shadow:inset 0 0 80px #0007;display:grid;place-items:center}
+.location{height:220px;width:146px;border:1px solid #6e6d5c;border-radius:6px;background:linear-gradient(15deg,#161d20e8,#1c2b31a8),url('../../../..//frontend/public/assets/scenario-cutins/brethren-of-ash/12106.jpg') center/cover;box-shadow:0 9px 28px #0008;position:absolute;top:57px}
+.location:nth-child(1){left:calc(50% - 225px);transform:rotate(-6deg)}.location:nth-child(2){left:calc(50% - 73px);z-index:1}.location:nth-child(3){left:calc(50% + 78px);transform:rotate(6deg)}
+.location span{position:absolute;bottom:18px;left:0;right:0;text-align:center;font-family:"Songti SC",serif;color:#ded8c8;font-size:17px}
+.table-note{position:absolute;bottom:24px;font-size:12px;color:#91988f}.notes{display:flex;gap:30px;color:var(--muted);font-size:12px;line-height:1.8;margin:18px 0 32px}
+.gallery{border-top:1px solid #343637;padding-top:24px}.gallery summary{cursor:pointer;font-size:16px}.gallery p{color:var(--muted);font-size:12px}
+.boards{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px}.boards figure{margin:0}.boards img{width:100%;border:1px solid #41423b;display:block}.boards figcaption{font-size:12px;padding:10px 0}
+.presentation{position:fixed;inset:0;z-index:50;pointer-events:none;display:grid;place-items:center;--accent:#77b8e0}
+.presentation[hidden]{display:none}.veil{position:absolute;inset:0;background:#050709b0;opacity:0}
+.stage{position:relative;overflow:hidden;background:#121417;opacity:0;isolation:isolate}
+.sheet{position:absolute;display:block;width:100%;height:auto;left:0;top:50%;transform:translateY(var(--offset));max-width:none}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,#03050a75,transparent 40%),linear-gradient(0deg,#02050cd9,transparent 48%);z-index:1}
+.caption{position:absolute;z-index:2;left:6%;bottom:12%;text-shadow:0 2px 8px #000}.caption small{color:var(--accent);font-size:13px;letter-spacing:.12em}.caption strong{display:block;font-size:clamp(24px,5vw,64px);font-family:"Songti SC",Georgia,serif;line-height:1.3;font-weight:600;margin-top:5px}
+.sweep{position:absolute;inset:0;z-index:3;background:linear-gradient(110deg,transparent 35%,#ffffff27 49%,transparent 64%);transform:translateX(-110%)}
+.presentation--ability .stage{width:min(920px,90vw);height:clamp(110px,16vw,190px);border-block:1px solid var(--accent);clip-path:polygon(1% 0,100% 0,99% 100%,0 100%);box-shadow:0 8px 25px #0007}
+.presentation--ability .veil{display:none}.presentation--ability .caption{left:5%;bottom:17%}.presentation--ability .caption small{font-size:11px}.presentation--ability .caption strong{font-size:clamp(17px,2.6vw,29px);margin-top:2px}
+.presentation--ability.play .stage{animation:band 1000ms cubic-bezier(.2,.8,.2,1) both}
+.presentation--ability.play .sweep{animation:sweep 750ms 70ms ease-out both}
+.presentation--elder-sign .stage,.presentation--auto-fail .stage{width:100vw;height:100dvh;border:0}
+.presentation--elder-sign .sheet,.presentation--auto-fail .sheet{--art-width:max(100vw,calc(100dvh * var(--panel-ratio,1.77778)));width:var(--art-width);left:clamp(calc(100vw - var(--art-width)),calc(50vw - var(--art-width) * var(--focus-x,.5)),0px);transform:translateY(var(--offset))}
+.presentation--elder-sign.play .veil,.presentation--auto-fail.play .veil{animation:veil 1600ms ease both}
+.presentation--elder-sign.play .stage{animation:boon 1600ms ease-out both}
+.presentation--auto-fail.play .stage{animation:reversal 1600ms ease-out both}
+.presentation--elder-sign.play .sweep{animation:sweep 1000ms ease-out both}
+.presentation--auto-fail .sweep{background:radial-gradient(ellipse at 50% 50%,transparent 20%,#461c2780 90%);transform:none}
+.presentation--auto-fail .caption small{color:#dda0a2}
+.loading{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:100;background:#11181be8;padding:10px 18px;border:1px solid #66716a;border-radius:4px;font-size:13px}.loading[hidden]{display:none}
+@keyframes band{0%{opacity:0;transform:translateX(-12%)}18%,70%{opacity:1;transform:translateX(0)}100%{opacity:0;transform:translateX(7%)}}
+@keyframes sweep{from{transform:translateX(-110%)}to{transform:translateX(110%)}}
+@keyframes boon{0%{opacity:0;transform:scale(.97)}13%,62%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.018)}}
+@keyframes reversal{0%{opacity:0;transform:scale(1.025)}14%,60%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(.985)}}
+@keyframes veil{0%,100%{opacity:0}12%,62%{opacity:1}}
+@media(max-width:700px){main{padding:24px 16px}header,.controls{align-items:flex-start;flex-direction:column;gap:14px}h1{font-size:23px}.roster{gap:6px}.person img{height:78px}.person span{font-size:10px;padding:8px 4px;white-space:normal}.person small{display:none}.notes{display:block}.boards{grid-template-columns:repeat(2,1fr)}.table{height:300px}.location{top:40px;width:115px;height:180px}.location:nth-child(1){left:calc(50% - 155px)}.location:nth-child(2){left:calc(50% - 57px)}.location:nth-child(3){left:calc(50% + 40px)}.caption{left:6%;bottom:17%}}
+@media(prefers-reduced-motion:reduce){.presentation.play .stage{animation:none;opacity:1;transform:none}.presentation.play .veil{animation:none;opacity:1}.sweep{display:none}}
+.controls button:disabled{opacity:.4;cursor:default}.pending-art{aspect-ratio:16/27;display:grid;place-items:center;border:1px dashed #444843;background:#171b1c;color:var(--muted);font-size:12px;text-align:center}
+</style>
+</head>
+<body><main>
+<header><h1>灰烬兄弟会 · 调查员特写</h1><p>设计预览 · 技能横条 / 旧印与失败大屏</p></header>
+<div class="roster" id="roster" aria-label="选择调查员"></div>
+<div class="controls"><h2 id="name"></h2><nav aria-label="播放特写">
+<button type="button" data-state="ability">技能发动 · 1.0s</button><button type="button" data-state="elder-sign">旧印 · 1.6s</button><button type="button" data-state="auto-fail">自动失败 · 1.6s</button>
+</nav></div><p id="trigger"></p>
+<div class="table" aria-label="用于观察特写占屏比例的示意牌桌"><div class="location"><span>旧街道</span></div><div class="location"><span>密斯卡托尼克</span></div><div class="location"><span>阴暗巷道</span></div><span class="table-note">技能发动时，牌桌继续可见</span></div>
+<div class="notes"><span>技能：中央细长条迅速掠过，不压暗整桌。</span><span>旧印 / 失败：同一意象的正反画面，快速大屏闪现。</span><span>设计预览，尚未接入实际游戏。</span></div>
+<details class="gallery"><summary>五人三态设计板</summary><p>每张从上到下：技能发动 / 旧印 / 自动失败。长条预览取画面中央区域，最终技能素材另做宽幅构图。</p><div class="boards" id="boards"></div></details>
+</main>
+<div class="presentation" id="presentation" hidden aria-hidden="true"><div class="veil"></div><div class="stage"><img class="sheet" id="sheet" alt=""><div class="shade"></div><div class="caption"><small id="state-name"></small><strong id="character-name"></strong></div><div class="sweep"></div></div></div>
+<div class="loading" id="status" role="status" hidden></div>
+<script>
+const people=[{"code":"12001","name":"丹妮拉·雷耶斯","english":"Daniela Reyes","color":"#77b8e0","trigger":"同地点调查员被敌人攻击后，接受丹妮拉的角色响应并开始反击时。"},{"code":"12004","name":"乔·戴蒙德","english":"Joe Diamond","color":"#d4b470","trigger":"成功调查后，角色响应实际抽牌时。"},{"code":"12007","name":"崔西·斯卡伯勒","english":"Trish Scarborough","color":"#73c5a3","trigger":"实际消耗她提供的额外闪避行动并开始闪避时；普通闪避不播。"},{"code":"12010","name":"德克斯特·德雷克","english":"Dexter Drake","color":"#b493df","trigger":"打出资产后，接受角色响应并完成“返回资产／打出另一资产”的选择时。"},{"code":"12013","name":"伊莎贝尔·巴恩斯","english":"Isabelle Barnes","color":"#d18f92","trigger":"确认支付 1 点直接恐惧，并从弃牌堆投入合法技能牌时。"}];
+for(const p of people)p.ready=["12001", "12004", "12007", "12010", "12013"].includes(p.code);
+const panelBounds={"12001": [[0, 530], [536, 1064], [1070, 1635]], "12004": [[0, 538], [541, 1078], [1080, 1632]], "12007": [[0, 537], [541, 1073], [1076, 1635]], "12010": [[0, 491], [495, 985], [989, 1536]], "12013": [[0, 472], [480, 1001], [1008, 1536]]};
+const states={'ability':{index:0,label:'技能发动',duration:1000},'elder-sign':{index:1,label:'旧印',duration:1600},'auto-fail':{index:2,label:'自动失败',duration:1600}};
+const roster=document.querySelector('#roster'),boards=document.querySelector('#boards'),presentation=document.querySelector('#presentation'),sheet=document.querySelector('#sheet'),status=document.querySelector('#status');
+let selected=people[0],run=0,timer;
+for(const p of people){
+  const button=document.createElement('button');button.type='button';button.className='person';button.dataset.code=p.code;button.setAttribute('aria-pressed','false');
+  const portrait=document.createElement('img');portrait.src='references/'+p.code+'.jpg';portrait.alt='';portrait.loading='lazy';
+  const caption=document.createElement('span');caption.textContent=p.name;const sub=document.createElement('small');sub.textContent=p.english;caption.append(sub);button.append(portrait,caption);
+  button.addEventListener('click',()=>select(p));roster.append(button);
+  const figure=document.createElement('figure'),label=document.createElement('figcaption');label.textContent=p.name+(p.ready?'':' · 未生成');
+  if(p.ready){const link=document.createElement('a'),img=document.createElement('img');link.href=p.code+'-concept.png';link.target='_blank';link.rel='noopener';img.src=link.href;img.alt=p.name+'：技能、旧印、自动失败三态设计板';img.loading='lazy';link.append(img);figure.append(link)}
+  else{const placeholder=document.createElement('div');placeholder.className='pending-art';placeholder.textContent='三态插画未完成';figure.append(placeholder)}
+  figure.append(label);boards.append(figure);
+}
+function stop(){run++;clearTimeout(timer);presentation.hidden=true;presentation.classList.remove('play');status.hidden=true}
+function select(p){stop();selected=p;document.documentElement.style.setProperty('--accent',p.color);document.querySelector('#name').textContent=p.name;document.querySelector('#trigger').textContent=p.trigger+(p.ready?'':' 此角色三态插画尚未生成。');for(const b of roster.children)b.setAttribute('aria-pressed',String(b.dataset.code===p.code));for(const b of document.querySelectorAll('[data-state]'))b.disabled=!p.ready}
+async function play(state){
+  stop();const token=run,p=selected,config=states[state];status.textContent='正在准备画面…';status.hidden=false;
+  const source=p.code+'-concept.png',asset=new Image();
+  try{await new Promise((resolve,reject)=>{asset.onload=resolve;asset.onerror=reject;asset.src=source;timer=setTimeout(()=>reject(new Error('timeout')),5000)})}
+  catch{if(run===token){status.textContent='画面暂时无法加载，请查看设计板文件。';timer=setTimeout(()=>{status.hidden=true},2500)}return}
+  if(run!==token)return;clearTimeout(timer);status.hidden=true;
+  const bounds=panelBounds[p.code][config.index],panelHeight=bounds[1]-bounds[0];
+  sheet.src=source;sheet.style.setProperty('--offset',(state==='ability'?-11.5:-(bounds[0]+panelHeight/2)*100/asset.naturalHeight)+'%');
+  sheet.style.setProperty('--focus-x',String({'12001':.34,'12004':.43,'12007':.33,'12010':.58,'12013':.49}[p.code]??.5));
+  presentation.className='presentation presentation--'+state;presentation.style.setProperty('--accent',p.color);
+  presentation.style.setProperty('--panel-ratio',String(asset.naturalWidth/panelHeight));
+  document.querySelector('#state-name').textContent=config.label;document.querySelector('#character-name').textContent=p.name;
+  presentation.hidden=false;void presentation.offsetWidth;presentation.classList.add('play');
+  timer=setTimeout(()=>{if(run===token){presentation.hidden=true;presentation.classList.remove('play')}},config.duration);
+}
+for(const button of document.querySelectorAll('[data-state]'))button.addEventListener('click',()=>play(button.dataset.state));
+document.addEventListener('keydown',event=>{if(event.key==='Escape')stop()});
+select(people.find(p=>p.ready)||selected);
+</script></body></html>

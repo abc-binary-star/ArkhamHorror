@@ -1,0 +1,125 @@
+{
+  "generator": "Built-in image_gen",
+  "assets": [
+    {
+      "code": "12106",
+      "title": "宵禁时分",
+      "englishTitle": "Past Curfew",
+      "sourceFilename": "exec-c728778d-eab0-4746-a7e7-08245ceee0df.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12106.jpg",
+      "prompt": "Use case: illustration-story. Asset type: a landscape 16:9 anime manga ultimate-attack cut-in for the Arkham Horror campaign Brethren of Ash, card 12106 Past Curfew. Primary request: atmospheric anime close-up entrance illustration. Night at a 1920s New England university campus; several mysterious hooded robed figures silently stand under harsh electric street lamps while anxious students hurry past. The dormitory is still intact, with only a faint suggestion of smoke, no fire yet. Style: mature cinematic Japanese anime horror, expressive ink outlines, detailed hand-drawn cel shading, dramatic angular framing and perspective, dark beautiful painted environment, vivid but restrained amber lamp light and deep blue night. Wide cinematic composition, primary subjects in central 75% so image can crop safely. Full-bleed finished illustration only, no letters, captions, logos, frames, UI or watermark, no modern objects, no gore. This is one individual card illustration, not a collage or sprite sheet."
+    },
+    {
+      "code": "12107",
+      "title": "火起",
+      "englishTitle": "Lit Up",
+      "sourceFilename": "exec-20880a40-d406-4e0e-a5b0-6a49b90092dc.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12107.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12107 Lit Up. Primary scene: The university campus fire has just broken out; orange fire pours from one dormitory window, a billowing smoke column behind it, startled students in 1920s clothes turning toward the blaze. Low angle dramatic close-up, orange sky contrasting indigo stone buildings. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12108",
+      "title": "野火遍地",
+      "englishTitle": "Wild Flames",
+      "sourceFilename": "exec-41363104-2325-4ed2-b59d-aa1db836aab0.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12108.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12108 Wild Flames. Primary scene: A university campus overwhelmed by a raging wildfire, immense flames roaring across gothic stone buildings, wind driving burning embers toward the viewer, alarmed students fleeing as silhouettes. Powerful diagonal inferno composition, no injuries or gore. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12109",
+      "title": "有烟处……",
+      "englishTitle": "Where There's Smoke...",
+      "sourceFilename": "exec-2aef1fd3-7bf4-45bf-aa97-940acbe0a64f.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12109.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12109 Where There's Smoke.... Primary scene: Inside an eerie 1920s university dormitory, a young woman investigator with wavy brown bob haircut wearing a brown coat and a male investigator with fedora inspect a missing friend's abandoned room, scattered papers and clues, faint smoke curling under a door. Close-up of the woman's determined eyes and hand lifting an old satchel. No fire monster yet, no reveal of future events. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12110",
+      "title": "逃出宿舍",
+      "englishTitle": "Escape the Dorms",
+      "sourceFilename": "exec-62d1e80a-a5a7-47f3-b3b0-affb63d5300a.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12110.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12110 Escape the Dorms. Primary scene: The same young woman investigator with wavy brown bob and brown coat and a male investigator in fedora sprint toward the viewer down a burning university dormitory corridor. Behind them a sinister masked humanoid servant wreathed in flames bars the stairwell. Strong foreshortening, windblown coats, terrified determined expressions, shards of ember light, no gore. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12111",
+      "title": "寻找阿米蒂奇博士",
+      "englishTitle": "Searching for Dr. Armitage",
+      "sourceFilename": "exec-ab2fa48f-2536-45ba-82cc-796b86a33afb.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12111.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12111 Searching for Dr. Armitage. Primary scene: The brown bob-haired woman investigator in brown coat and male fedora investigator search a dark university library for an elderly bespectacled white-haired scholar. Foreground investigator holding an oil lantern, towering wooden bookshelves, old open research books, cautious curious expressions, warm light against cool shadows. No monster confrontation yet. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12112",
+      "title": "炽热辉煌",
+      "englishTitle": "Blaze of Glory",
+      "sourceFilename": "exec-644b331e-6929-4b3c-8120-a96f3ffbd4d0.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12112.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12112 Blaze of Glory. Primary scene: A heroic ultimate-attack anime confrontation in a university quadrangle on fire: a determined woman investigator with wavy brown bob and brown coat and a fedora-wearing investigator face a masked humanoid servant completely wreathed in orange fire. An elderly white-haired bespectacled scholar supports them with an open ancient tome. Dynamic close-up of the flame servant clashing with the investigators, no guns aimed at viewer, no gore. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12134",
+      "title": "阿卡姆热火朝天",
+      "englishTitle": "Arkham Alive",
+      "sourceFilename": "exec-c303fd85-b746-4264-864f-8614154135be.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12134.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12134 Arkham Alive. Primary scene: A smoky 1920s New England town street at autumn dusk; the air glows with an unnatural warmth and orange sunset haze. Foreground a wary brown bob-haired woman investigator in a brown coat watches locals through curling smoke, old brick storefronts, vintage automobiles and distant hills dimly glowing. No huge active city fire, no skin injuries. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12135",
+      "title": "邪恶渐起",
+      "englishTitle": "Emergent Evils",
+      "sourceFilename": "exec-d3dbe1e2-95d9-4da2-a861-572e9a9a6d0b.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12135.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12135 Emergent Evils. Primary scene: A rain-soaked 1920s Arkham street at night, thick steam rises from wet pavements as if the earth beneath is burning. Angular low angle close-up of boots and an anxious investigator in a fedora glancing down; unnatural red-orange fissure glow beneath a manhole, cold blue rain, occult dread, dynamic anime linework. No specific final goddess revealed. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12136",
+      "title": "烈焰预言",
+      "englishTitle": "Augurs of Flame",
+      "sourceFilename": "exec-5f604a3d-64d7-4464-bf62-1799a2bb5b8c.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12136.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12136 Augurs of Flame. Primary scene: The brown bob-haired woman investigator in brown coat and a fedora-wearing investigator hunt occult suspects across a foggy 1920s town. Dramatic foreground close-up of determined face and a hand holding a list with illegible abstract ink marks; behind them multiple suspicious hooded figures lurk in a dim alley lit by eerie red embers. The scene focuses on investigating a list of suspects, no future finale reveal, no readable writing. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12169",
+      "title": "聚集于此",
+      "englishTitle": "A Gathering",
+      "sourceFilename": "exec-2f79eca2-4893-440d-86a9-f5c194202602.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12169.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12169 A Gathering. Primary scene: Deep beneath Arkham inside ancient brick sewer tunnels, a procession of black-and-red robed cultists kneels and chants, distant red fire glow reflects in foul shallow water. Foreground close-up of a hooded cultist's clasped hands, ominous hidden face, others receding into the tunnels. No final queen visible yet. Atmospheric anime horror entrance. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12170",
+      "title": "重生",
+      "englishTitle": "A Ritual",
+      "sourceFilename": "exec-b7f62858-0adf-467c-b28a-1ee37f3d5392.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12170.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12170 A Ritual. Primary scene: An occult rebirth ritual intensifies in a dry underground sewer cistern: dozens of black-and-red robed cultists chant around a burning birch-tree effigy, acrid poisonous smoke coils upward, red embers and ritual light cast grotesque shadows on brick arches. Tight dramatic anime composition of raised hands and the burning tree. The actual final transformed queen has not appeared yet. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12171",
+      "title": "灰烬同袍会",
+      "englishTitle": "Brethren of Ash",
+      "sourceFilename": "exec-17c61263-015f-4b4b-bfa9-0bb69574c691.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12171.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12171 Brethren of Ash. Primary scene: An epic anime villain entrance close-up: Elokoss, the ancient Queen of Ash, a terrifying female-shaped goddess made of charred birch bark, black ash and white-hot fire, gnarled claw-like hands and a furnace glow within her torso, towers over black-and-red robed cultists in an underground dry cistern. Monstrous tree-like figure rather than human queen, powerful angular silhouette, explosive orange-white embers, menacing eyes, no gore, no sexualization. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12172",
+      "title": "搜查下水道",
+      "englishTitle": "Search the Sewers",
+      "sourceFilename": "exec-80f9f758-26b8-4a70-a44d-4c8222f721f8.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12172.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12172 Search the Sewers. Primary scene: The brown bob-haired woman investigator wearing brown coat and a male fedora investigator cautiously explore a maze of old brick sewers under Arkham, holding lanterns, dirty shallow water, branching tunnels, searching for a kidnapped friend and secret cult ritual. Dramatic close-up of faces with reflected amber lantern light, far tunnel faintly red, deep shadows. No queen reveal. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    },
+    {
+      "code": "12173",
+      "title": "阻止仪式",
+      "englishTitle": "Stop the Rite",
+      "sourceFilename": "exec-dc2adf16-4aba-4334-9bb3-9e47336a61aa.png",
+      "file": "frontend/public/assets/scenario-cutins/brethren-of-ash/12173.jpg",
+      "prompt": "Use case: illustration-story. Asset type: one individual landscape 16:9 anime manga ultimate-attack cut-in for Arkham Horror campaign Brethren of Ash, card 12173 Stop the Rite. Primary scene: A powerful anime action cut-in: the brown bob-haired woman investigator in a brown coat raises an axe toward a burning birch-tree idol in a dry underground cistern while a fedora-wearing investigator reaches for a sluice control wheel; black-and-red robed cultists surround the ritual, dynamic foreshortening, sparks and churning water, fighting to interrupt a summoning before the tree goddess fully awakens. No mature queen yet, no gore. Style: mature cinematic Japanese anime horror, expressive bold ink outlines, detailed hand-drawn cel shading, striking character close-ups and exaggerated foreshortening, dynamic directional ink accents, richly painted 1920s New England environment, beautiful dramatic dark lighting, warm amber and red-orange embers against deep indigo shadows. Wide cinematic full-bleed composition, keep focal subjects within central 75% for safe cropping, reserve a dark lower edge for a separate UI title overlay. No text, letters, captions, logos, border, panel collage, UI, watermark, modern objects or gore. Produce a finished polished illustration, not a screenshot."
+    }
+  ]
+}

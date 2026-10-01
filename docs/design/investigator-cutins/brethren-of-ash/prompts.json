@@ -1,0 +1,163 @@
+{
+  "generator": "Built-in image_gen",
+  "stage": "design complete: all 5 investigator concept boards saved; independent preview complete; not connected to game",
+  "references": "references/<code>.jpg and frontend/public/assets/scenario-cutins/brethren-of-ash/12112.jpg",
+  "assets": [
+    {
+      "code": "12001",
+      "name": "丹妮拉·雷耶斯",
+      "english": "Daniela Reyes",
+      "color": "#77b8e0",
+      "identity": "Athletic adult Latina mechanic, dark hair tightly tied in a high bun, medium tan skin, rolled-sleeve blue plaid work shirt, dark work trousers, tattooed forearms, heavy steel wrench. No hat, no armor.",
+      "scenes": "TOP: In a smoky 1920s garage she steps protectively between an out-of-focus ally and a shadowy claw, draws back her wrench for a decisive counterattack. Electric steel-blue sparks trace one clean striking diagonal. MIDDLE: SAME mechanic and garage, wrench swing shatters a threatening shadow shape, sharp warm gold and cool blue highlights, steady confident gaze, one bounded impact burst; no magic wielded by her. BOTTOM: mirror the middle viewpoint, the wrench swing meets an immovable mass of darkness, impact turns into cold fragmented sparks and her stance recoils, jaw clenched, rust-red emergency light extinguishing behind her; she is imperiled but alive, no broken wrench or injury asserted.",
+      "prompt": "Use case: stylized-concept. Asset type: one investigator animation DESIGN BOARD, three stacked horizontal cinematic 16:9 illustrations, making a vertical 16:27 triptych. Three equally tall panels edge to edge: TOP personal ability activation, MIDDLE Elder Sign boon, BOTTOM auto-fail reversal. No text or letters anywhere. This is intentionally a concept triptych for one investigator, not a final runtime sprite. Subject identity reference is Image 1, preserve haircut, age, skin tone, facial structure and signature clothes. Image 2 is STYLE reference only: match its mature Japanese anime horror, fine expressive ink outlines, detailed cel shading and painted 1920s New England environments. No childlike faces, no modern equipment, no UI, captions, watermark, arbitrary glowing runes, gore or caricature. Each panel has clear waist-up or close-up face, dynamic dramatic perspective, an atmospheric background and readable silhouette. Keep same face, costume and characteristic prop in all three panels. Elder Sign and auto-fail panels deliberately mirror one another: same camera axis, prop and backdrop, illumination versus shadow, control versus peril. Leave bottom 15% of each panel dark for a separately rendered title. Heroic but ominous Lovecraftian mood, very high quality. Investigator: Daniela Reyes, card 12001, new core set 2026. Identity: Athletic adult Latina mechanic, dark hair tightly tied in a high bun, medium tan skin, rolled-sleeve blue plaid work shirt, dark work trousers, tattooed forearms, heavy steel wrench. No hat, no armor. Three panel narratives: TOP: In a smoky 1920s garage she steps protectively between an out-of-focus ally and a shadowy claw, draws back her wrench for a decisive counterattack. Electric steel-blue sparks trace one clean striking diagonal. MIDDLE: SAME mechanic and garage, wrench swing shatters a threatening shadow shape, sharp warm gold and cool blue highlights, steady confident gaze, one bounded impact burst; no magic wielded by her. BOTTOM: mirror the middle viewpoint, the wrench swing meets an immovable mass of darkness, impact turns into cold fragmented sparks and her stance recoils, jaw clenched, rust-red emergency light extinguishing behind her; she is imperiled but alive, no broken wrench or injury asserted.",
+      "status": "complete",
+      "finalPrompt": "Use case: stylized-concept. Create ONE vertical concept board, 960x1632, three equal horizontal cinematic panels stacked vertically. No text. Image 1 is Daniela Reyes identity reference; image 2 is anime horror style reference. Adult Latina mechanic, tan skin, dark high bun, blue plaid rolled sleeves, tattooed forearms, heavy steel wrench. Preserve same face and clothes in every panel. 1920s shadowy garage. TOP: protective counterattack, draws back wrench in front of an ally, cool steel-blue sparks. MIDDLE: same camera, wrench cuts through a threatening shadow, blue-gold impact, confident gaze. BOTTOM: mirror middle, wrench blocked by darkness, cold red scattered sparks, recoiling determined face. Mature expressive anime ink and cel shading, restrained eerie lighting. Faces clear near upper-middle of each panel for later thin-banner cropping. No UI, captions, watermark, modern objects, gore, death, broken equipment or giant spell symbols. A readable design draft for ability / Elder Sign / auto-fail.",
+      "file": "12001-concept.png",
+      "sourceFilename": "exec-970939eb-fe63-422a-91ce-a16e23851984.png",
+      "imageSize": [
+        962,
+        1635
+      ],
+      "panelBounds": [
+        [
+          0,
+          530
+        ],
+        [
+          536,
+          1064
+        ],
+        [
+          1070,
+          1635
+        ]
+      ]
+    },
+    {
+      "code": "12004",
+      "name": "乔·戴蒙德",
+      "english": "Joe Diamond",
+      "color": "#d4b470",
+      "identity": "Broad-faced sturdy adult male private detective, light skin, dark hair, dark fedora, high-collar charcoal trench coat over white dress shirt and black necktie. Clean-shaven. A compact paper dossier and magnifying glass; no pistol needed.",
+      "scenes": "TOP: His gloved hand lifts one overlooked photograph from an old desk, keen eyes realizing a connection, a warm lamp lights scraps of evidence; investigative intuition, not supernatural magic. MIDDLE: at SAME desk and angle, coherent sheets and photographs form a clear trail toward an unlocked archive doorway, golden lamp light opens into the darkness, confident focused expression. BOTTOM: mirror the middle shot, the promising trail breaks into disconnected blank scraps, archive door is shut under a huge looming shadow, magnifying lens reflects obscuring blackness, lamp is almost out, jaw tense. No legible writing on documents.",
+      "prompt": "Use case: stylized-concept. Asset type: one investigator animation DESIGN BOARD, three stacked horizontal cinematic 16:9 illustrations, making a vertical 16:27 triptych. Three equally tall panels edge to edge: TOP personal ability activation, MIDDLE Elder Sign boon, BOTTOM auto-fail reversal. No text or letters anywhere. This is intentionally a concept triptych for one investigator, not a final runtime sprite. Subject identity reference is Image 1, preserve haircut, age, skin tone, facial structure and signature clothes. Image 2 is STYLE reference only: match its mature Japanese anime horror, fine expressive ink outlines, detailed cel shading and painted 1920s New England environments. No childlike faces, no modern equipment, no UI, captions, watermark, arbitrary glowing runes, gore or caricature. Each panel has clear waist-up or close-up face, dynamic dramatic perspective, an atmospheric background and readable silhouette. Keep same face, costume and characteristic prop in all three panels. Elder Sign and auto-fail panels deliberately mirror one another: same camera axis, prop and backdrop, illumination versus shadow, control versus peril. Leave bottom 15% of each panel dark for a separately rendered title. Heroic but ominous Lovecraftian mood, very high quality. Investigator: Joe Diamond, card 12004, new core set 2026. Identity: Broad-faced sturdy adult male private detective, light skin, dark hair, dark fedora, high-collar charcoal trench coat over white dress shirt and black necktie. Clean-shaven. A compact paper dossier and magnifying glass; no pistol needed. Three panel narratives: TOP: His gloved hand lifts one overlooked photograph from an old desk, keen eyes realizing a connection, a warm lamp lights scraps of evidence; investigative intuition, not supernatural magic. MIDDLE: at SAME desk and angle, coherent sheets and photographs form a clear trail toward an unlocked archive doorway, golden lamp light opens into the darkness, confident focused expression. BOTTOM: mirror the middle shot, the promising trail breaks into disconnected blank scraps, archive door is shut under a huge looming shadow, magnifying lens reflects obscuring blackness, lamp is almost out, jaw tense. No legible writing on documents.",
+      "status": "complete",
+      "sourceFilename": "exec-5bffef8f-4e32-4661-84e2-56b1854b2363.png",
+      "file": "12004-concept.png",
+      "imageSize": [
+        964,
+        1632
+      ],
+      "panelBounds": [
+        [
+          0,
+          538
+        ],
+        [
+          541,
+          1078
+        ],
+        [
+          1080,
+          1632
+        ]
+      ]
+    },
+    {
+      "code": "12007",
+      "name": "崔西·斯卡伯勒",
+      "english": "Trish Scarborough",
+      "color": "#73c5a3",
+      "identity": "Adult blonde woman former spy, straight shoulder-length blonde bob with side part, fair skin, tan trench coat, mustard yellow tied scarf, green and black horizontally striped top, black leather gloves. No fedora, no brunette hair.",
+      "scenes": "TOP: On a wet 1920s alley she pivots sideways through the narrow gap between a pursuer and brick doorway, coat and yellow scarf leave a clean jade motion arc, controlled alert glance back. This depicts an additional evade action, not a triggered combat power. MIDDLE: SAME alley, she slips through an open side doorway toward a warmly lit connected street, pursuing shadows lose her on the opposite side, green-gold rim light, clean route of escape. BOTTOM: mirror the middle view, side doorway is shut and dense overlapping pursuer shadows obstruct the street, motion arc fractures into dim red streaks, sudden tense glance and braced stance. Never depict captured, bound, dead or injured as a guaranteed rule outcome.",
+      "prompt": "Use case: stylized-concept. Asset type: one investigator animation DESIGN BOARD, three stacked horizontal cinematic 16:9 illustrations, making a vertical 16:27 triptych. Three equally tall panels edge to edge: TOP personal ability activation, MIDDLE Elder Sign boon, BOTTOM auto-fail reversal. No text or letters anywhere. This is intentionally a concept triptych for one investigator, not a final runtime sprite. Subject identity reference is Image 1, preserve haircut, age, skin tone, facial structure and signature clothes. Image 2 is STYLE reference only: match its mature Japanese anime horror, fine expressive ink outlines, detailed cel shading and painted 1920s New England environments. No childlike faces, no modern equipment, no UI, captions, watermark, arbitrary glowing runes, gore or caricature. Each panel has clear waist-up or close-up face, dynamic dramatic perspective, an atmospheric background and readable silhouette. Keep same face, costume and characteristic prop in all three panels. Elder Sign and auto-fail panels deliberately mirror one another: same camera axis, prop and backdrop, illumination versus shadow, control versus peril. Leave bottom 15% of each panel dark for a separately rendered title. Heroic but ominous Lovecraftian mood, very high quality. Investigator: Trish Scarborough, card 12007, new core set 2026. Identity: Adult blonde woman former spy, straight shoulder-length blonde bob with side part, fair skin, tan trench coat, mustard yellow tied scarf, green and black horizontally striped top, black leather gloves. No fedora, no brunette hair. Three panel narratives: TOP: On a wet 1920s alley she pivots sideways through the narrow gap between a pursuer and brick doorway, coat and yellow scarf leave a clean jade motion arc, controlled alert glance back. This depicts an additional evade action, not a triggered combat power. MIDDLE: SAME alley, she slips through an open side doorway toward a warmly lit connected street, pursuing shadows lose her on the opposite side, green-gold rim light, clean route of escape. BOTTOM: mirror the middle view, side doorway is shut and dense overlapping pursuer shadows obstruct the street, motion arc fractures into dim red streaks, sudden tense glance and braced stance. Never depict captured, bound, dead or injured as a guaranteed rule outcome.",
+      "status": "complete",
+      "sourceFilename": "exec-e8ed4cb0-5fbb-47ed-adc5-a74e1b03cd8b.png",
+      "file": "12007-concept.png",
+      "imageSize": [
+        962,
+        1635
+      ],
+      "panelBounds": [
+        [
+          0,
+          537
+        ],
+        [
+          541,
+          1073
+        ],
+        [
+          1076,
+          1635
+        ]
+      ]
+    },
+    {
+      "code": "12010",
+      "name": "德克斯特·德雷克",
+      "english": "Dexter Drake",
+      "color": "#b493df",
+      "identity": "Adult male stage magician with fair skin, narrow dark mustache and dark eyebrows, black top hat, black tuxedo tailcoat, white dress shirt and white bow tie, white gloves. Preserve debonair stage-magician identity.",
+      "scenes": "TOP: Close-up in a dark velvet-curtained 1920s stage, one real brass pocket watch disappears in lavender smoke from his left hand and a different occult tome appears in his right hand; theatrical swap of assets, not floating ordinary playing cards only. MIDDLE: SAME magician and shot, a coherent violet-gold ribbon neatly carries the solid book back into his gloved hand, luminous precise flourish, assured smile, spectral smoke contained. BOTTOM: mirror the middle, that same ribbon twists around its own path and collapses into dark violet shards, the book is blurred by black smoke, curtain shadows bend inward, magician looks alarmed while regaining control. No pentagram, no giant demon, no damage or permanent asset loss implied.",
+      "prompt": "Use case: stylized-concept. Asset type: one investigator animation DESIGN BOARD, three stacked horizontal cinematic 16:9 illustrations, making a vertical 16:27 triptych. Three equally tall panels edge to edge: TOP personal ability activation, MIDDLE Elder Sign boon, BOTTOM auto-fail reversal. No text or letters anywhere. This is intentionally a concept triptych for one investigator, not a final runtime sprite. Subject identity reference is Image 1, preserve haircut, age, skin tone, facial structure and signature clothes. Image 2 is STYLE reference only: match its mature Japanese anime horror, fine expressive ink outlines, detailed cel shading and painted 1920s New England environments. No childlike faces, no modern equipment, no UI, captions, watermark, arbitrary glowing runes, gore or caricature. Each panel has clear waist-up or close-up face, dynamic dramatic perspective, an atmospheric background and readable silhouette. Keep same face, costume and characteristic prop in all three panels. Elder Sign and auto-fail panels deliberately mirror one another: same camera axis, prop and backdrop, illumination versus shadow, control versus peril. Leave bottom 15% of each panel dark for a separately rendered title. Heroic but ominous Lovecraftian mood, very high quality. Investigator: Dexter Drake, card 12010, new core set 2026. Identity: Adult male stage magician with fair skin, narrow dark mustache and dark eyebrows, black top hat, black tuxedo tailcoat, white dress shirt and white bow tie, white gloves. Preserve debonair stage-magician identity. Three panel narratives: TOP: Close-up in a dark velvet-curtained 1920s stage, one real brass pocket watch disappears in lavender smoke from his left hand and a different occult tome appears in his right hand; theatrical swap of assets, not floating ordinary playing cards only. MIDDLE: SAME magician and shot, a coherent violet-gold ribbon neatly carries the solid book back into his gloved hand, luminous precise flourish, assured smile, spectral smoke contained. BOTTOM: mirror the middle, that same ribbon twists around its own path and collapses into dark violet shards, the book is blurred by black smoke, curtain shadows bend inward, magician looks alarmed while regaining control. No pentagram, no giant demon, no damage or permanent asset loss implied.",
+      "status": "complete",
+      "finalPrompt": "Use case: stylized-concept. ONE vertical anime-horror design board: three equal wide panels stacked vertically, no text. Identity from Image 1, art style from Image 2. Dexter Drake is an adult stage magician with thin dark mustache, black top hat and tailcoat, white shirt, white bow tie and white gloves. Same face and clothes throughout. In a shadowy 1920s velvet-curtain stage: TOP he swaps a brass pocket watch for an old book in a restrained violet smoke flourish; MIDDLE the book returns neatly to his open hand in a violet-gold smoke ribbon, confident smile; BOTTOM same camera and book, ribbon fractures into dark smoke, worried face and encroaching shadows. Upper-middle faces clear for thin-banner cropping. Mature ink outlines and cel shading, dark elegant atmosphere. No letters, UI, watermark, giant demon, gore, death, destroyed objects or neon spectacle. Readable concept draft for ability, Elder Sign and auto-fail.",
+      "file": "12010-concept.png",
+      "sourceFilename": "exec-3385aebc-81d3-4054-a17c-79fef79b9ec6.png",
+      "imageSize": [
+        1024,
+        1536
+      ],
+      "panelBounds": [
+        [
+          0,
+          491
+        ],
+        [
+          495,
+          985
+        ],
+        [
+          989,
+          1536
+        ]
+      ]
+    },
+    {
+      "code": "12013",
+      "name": "伊莎贝尔·巴恩斯",
+      "english": "Isabelle Barnes",
+      "color": "#d18f92",
+      "identity": "Adult woman with pale skin, very short blonde pixie hair swept to one side, serious angular features, fitted dark green jacket over dusty rose blouse, dark trousers, brown leather gloves, holstered twin .45 pistols. NOT her sister Jenny: no black hair, no dress, no wide hat. Do not replace the short blonde cut.",
+      "scenes": "TOP: Dark old Arkham hallway, she reaches into a cloud of faded paper memory fragments and retrieves one sharply defined translucent skill-memory sheet toward her chest, a thin crimson thread and tense pained face convey the cost in sanity; pistols remain holstered, no shooting pose for this skill. MIDDLE: SAME character, paper fragment and viewpoint, gold light steadies her face and the fading echo becomes coherent behind her shoulder, broken crimson thread reconnects, quiet resilience and relief. BOTTOM: mirror the middle, echo dissolves into gray fragments, crimson thread frays and dissolves toward deep blackness, her expression shaken but determined, dark green jacket still exact. No extra person presented as a resurrected sister, no death, injury or madness asserted.",
+      "prompt": "Use case: stylized-concept. Asset type: one investigator animation DESIGN BOARD, three stacked horizontal cinematic 16:9 illustrations, making a vertical 16:27 triptych. Three equally tall panels edge to edge: TOP personal ability activation, MIDDLE Elder Sign boon, BOTTOM auto-fail reversal. No text or letters anywhere. This is intentionally a concept triptych for one investigator, not a final runtime sprite. Subject identity reference is Image 1, preserve haircut, age, skin tone, facial structure and signature clothes. Image 2 is STYLE reference only: match its mature Japanese anime horror, fine expressive ink outlines, detailed cel shading and painted 1920s New England environments. No childlike faces, no modern equipment, no UI, captions, watermark, arbitrary glowing runes, gore or caricature. Each panel has clear waist-up or close-up face, dynamic dramatic perspective, an atmospheric background and readable silhouette. Keep same face, costume and characteristic prop in all three panels. Elder Sign and auto-fail panels deliberately mirror one another: same camera axis, prop and backdrop, illumination versus shadow, control versus peril. Leave bottom 15% of each panel dark for a separately rendered title. Heroic but ominous Lovecraftian mood, very high quality. Investigator: Isabelle Barnes, card 12013, new core set 2026. Identity: Adult woman with pale skin, very short blonde pixie hair swept to one side, serious angular features, fitted dark green jacket over dusty rose blouse, dark trousers, brown leather gloves, holstered twin .45 pistols. NOT her sister Jenny: no black hair, no dress, no wide hat. Do not replace the short blonde cut. Three panel narratives: TOP: Dark old Arkham hallway, she reaches into a cloud of faded paper memory fragments and retrieves one sharply defined translucent skill-memory sheet toward her chest, a thin crimson thread and tense pained face convey the cost in sanity; pistols remain holstered, no shooting pose for this skill. MIDDLE: SAME character, paper fragment and viewpoint, gold light steadies her face and the fading echo becomes coherent behind her shoulder, broken crimson thread reconnects, quiet resilience and relief. BOTTOM: mirror the middle, echo dissolves into gray fragments, crimson thread frays and dissolves toward deep blackness, her expression shaken but determined, dark green jacket still exact. No extra person presented as a resurrected sister, no death, injury or madness asserted.",
+      "status": "complete",
+      "finalPrompt": "Use case: stylized-concept. Create one portrait-format concept board with THREE equal wide illustration panels STACKED VERTICALLY, no writing. Reference is Isabelle Barnes: preserve adult pale face, short swept blonde pixie, dark green jacket, dusty pink blouse and brown gloves. Change her pose: pistols holstered, hands recalling a memory near her chest. All panels have same woman and dark 1920s corridor. TOP: retrieves one glowing faded skill-memory fragment from scattered papers, crimson thread and pained determined eyes. MIDDLE: same camera, memory and thread cohere under warm golden light, expression steadies. BOTTOM: same composition, memory dissolves into cold gray fragments and red thread frays, shaken but defiant face. Mature cinematic Japanese anime horror, expressive fine ink lines, detailed cel shading and painted backdrop. Clear faces near upper-middle of each panel. Restrained elegant light. No UI, captions, watermark, firing guns, other people, death or madness. These are ability, Elder Sign and auto-fail design concepts.",
+      "file": "12013-concept.png",
+      "imageSize": [
+        1024,
+        1536
+      ],
+      "panelBounds": [
+        [
+          0,
+          472
+        ],
+        [
+          480,
+          1001
+        ],
+        [
+          1008,
+          1536
+        ]
+      ],
+      "sourceFilename": "exec-52c97f52-2418-4bc5-9766-85d065e95db9.png",
+      "referenceImages": [
+        "references/12013.jpg"
+      ]
+    }
+  ]
+}

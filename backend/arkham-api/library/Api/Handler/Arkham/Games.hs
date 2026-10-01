@@ -47,14 +47,14 @@ import Arkham.Source
 import Arkham.UltimatumsAndBoons.Types (UltimatumOrBoon)
 import Arkham.Window (mkWhen)
 import Arkham.Window qualified as Window
-import Conduit
+import Conduit hiding (Source)
 import Control.Monad.Random (mkStdGen)
 import Control.Monad.Random.Class (getRandom)
 import Data.Aeson (withObject, (.!=), (.:?))
 import Data.Coerce
 import Data.Map.Strict qualified as Map
 import Data.Time.Clock
-import Database.Esqueleto.Experimental hiding (update, (=.))
+import Database.Esqueleto.Experimental hiding (isNothing, update, (=.))
 import Entity.Answer
 import Entity.Arkham.GameRaw
 import Entity.Arkham.Step
@@ -334,7 +334,7 @@ postApiV1ArkhamGamePlayabilityR gameId = do
               gameJson.gameTurnPlayerInvestigatorId == Just iid && isNothing gameJson.gameSkillTest
             _ -> False
           (diagnosticScope, windows) = case currentWindows of
-            Just ws | notNull ws -> ("currentWindow", Just ws)
+            Just ws | not (null ws) -> ("currentWindow", Just ws)
             _ | normalTurn -> ("normalTurn", Just [mkWhen (Window.DuringTurn iid)])
             _ -> ("unavailable", Nothing)
         checks <- case windows of
